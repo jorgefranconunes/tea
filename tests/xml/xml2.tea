@@ -1,0 +1,77 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+#
+#
+#
+
+define nativeParserClass "org.apache.xerces.parsers.SAXParser"
+
+
+
+
+
+class TestHandler (
+)
+
+
+method TestHandler constructor () {
+}
+
+
+method TestHandler startElement ( name attribs ) {
+    $stdout write "<" $name
+    foreach attr [$attribs getKeys] {
+	$stdout write " " $attr "=\"" [$attribs get $attr] "\""
+    }
+    $stdout write ">"
+}
+
+
+method TestHandler endElement ( name ) {
+    $stdout write "</" $name ">"
+}
+
+
+method TestHandler characters ( contents ) {
+    $stdout write $contents
+}
+
+
+method TestHandler startDocument () {
+    $stdout writeln "*** Starting document processing..."
+}
+
+
+method TestHandler endDocument () {
+    $stdout writeln "*** End of document processing"
+}
+
+
+
+
+
+define argCount [length $argv]
+define input $null
+
+cond {
+    == $argCount 1 } {
+        set! input [nth $argv 0]
+    } {
+    == $argCount 0 } {
+        set! input $stdin
+    } {
+        $stderr writeln "Args: [xmlFile]"
+        exit 0
+    }
+
+define handler [new TestHandler]
+define parser  [new TXmlParser $nativeParserClass]
+$parser setHandler $handler
+$parser parse $input
+
+$stdout flush
+

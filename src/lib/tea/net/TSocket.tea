@@ -1,0 +1,505 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+###########################################################################
+#
+# $Id: TSocket.tea,v 1.4 2002/11/02 16:05:02 jfn Exp $
+#
+#
+# Revisions:
+#
+# 2002/10/19
+# The TSocketPlain class was renamed to TSocketBase. (jfn)
+#
+# 2001/05/12
+# Created. (jfn)
+#
+###########################################################################
+
+
+
+
+
+###########################################################################
+## 
+## <TeaClass name="TSocket"
+##           module="tea.net">
+## 
+## <Overview>
+## Client socket that can be used as an input stream and output stream.
+## </Overview>
+## 
+## <Description>
+## Instances of <Class name="TSocket"/> are used as client sockets. This
+## class responds to the same interface as classes <ClassRef name="TInput"/>
+## and <ClassRef name="TOutput"/>. That means that a <Class name="TSocket"/>
+## can be used wherever a <ClassRef name="TInput"/> or
+## <ClassRef name="TOutput"/> are used.
+## </Description>
+##
+## </TeaClass>
+## 
+###########################################################################
+
+class TSocket (
+
+    _sock
+    _input
+    _output
+)
+
+
+
+
+
+###########################################################################
+## 
+## <TeaMethod name="constructor"
+##            className="TSocket">
+## 
+## <Prototype arguments="host port"/>
+## 
+## <Overview>
+## Initializes the socket by connecting to a remote server.
+## </Overview>
+##
+## <Parameter name="host">
+## A string representing the name of the remote server to connect to.
+## </Parameter>
+##
+## <Parameter name="port">
+## An integer representing the port number on the remote server to connect
+## to.
+## </Parameter>
+## 
+## <Description>
+## If called with no arguments the socket will not be connected. The
+## <MethodRef name="open"/> method must then be called to establish
+## the connection with a remote server.
+## 
+## <P>When the two <Arg name="host"/>, <Arg name="port"/> arguments are
+## received a connection to that remote server is imediatly attempted.</P>
+## 
+## <P>
+## If the connection can not be successfully established then a runtime
+## error will occur.
+## </P>
+## </Description>
+## 
+## </TeaMethod>
+## 
+###########################################################################
+
+method TSocket constructor args {
+
+    define argCount [length $args]
+
+    cond {
+        == $argCount 0 } {
+        # Nothing to to.
+    } {
+	== $argCount 1 } {
+	set! _sock   [nth $args 0]
+        set! _input  [$_sock getInput]
+        set! _output [$_sock getOutput]
+    } {
+	== $argCount 2 } {
+        apply $this open $args
+    } {
+	error "Args: [host port]"
+    }
+}
+
+
+
+
+
+###########################################################################
+## 
+## <TeaMethod name="close"
+##            className="TSocket">
+## 
+## <Overview>
+## Closes the socket by severing the connection with the remote server.
+## </Overview>
+## 
+## <Description>
+## After the socket is closed it can no longer be used to perform
+## any operation. This method should always be called to release alocated
+## resources, like I/O buffers and file descriptors.
+## </Description>
+## 
+## </TeaMethod>
+## 
+###########################################################################
+
+method TSocket close () {
+
+    if { not-null? $_sock } {
+        $_sock close
+        set! _sock $null
+    }
+}
+
+
+
+
+
+###########################################################################
+## 
+## <TeaMethod name="copyTo"
+##            arguments="output [byteCount]"
+##            className="TSocket">
+## 
+## <Overview>
+## Copies the contents of the socket input stream into an
+## output stream.
+## </Overview>
+## 
+## <Parameter name="output">
+## A <ClassRef name="TOutput"/> object into which the stream contents
+## will be copied.
+## </Parameter>
+##
+## <Parameter name="byteCount">
+## Integer representing the maximum number of bytes to copy into the
+## the <ClassRef name="TOutput"/>.
+## </Parameter>
+##
+## <Returns>
+## A reference to the object it was called for.
+## </Returns>
+## 
+## <Description>
+## The copy procedure continues either until the end of file condition is
+## reached in the socket input stream or until <Arg name="byteCount"/>
+## bytes have been read.  If there is no <Arg name="byteCount"/>
+## argument then the copy proceeds until the end of file on the input
+## stream.
+## </Description>
+## 
+## </TeaMethod>
+## 
+###########################################################################
+
+method TSocket copyTo args {
+
+    validate-socket $_sock
+    apply $_input copyTo $args
+}
+
+
+
+
+
+###########################################################################
+## 
+## <TeaMethod name="readln"
+##            className="TSocket">
+## 
+## <Overview>
+## Reads a line from the socket input stream.
+## </Overview>
+##
+## <Returns>
+## The string containing the line that was read. The null object if
+## the socket input stream has reached the end of file condition.
+## </Returns>
+## 
+## <Description>
+## </Description>
+## 
+## </TeaMethod>
+## 
+###########################################################################
+
+method TSocket readln () {
+
+    validate-socket $_sock
+    $_input readln
+}
+
+
+
+
+
+###########################################################################
+## 
+## <TeaMethod name="flush"
+##            className="TSocket">
+## 
+## <Overview>
+## Flushes the output internal buffers by sending its contents into the
+## socket output stream.
+## </Overview>
+##
+## <Returns>
+## A reference to the object it was called for.
+## </Returns>
+## 
+## <Description>
+## </Description>
+## 
+## </TeaMethod>
+## 
+###########################################################################
+
+method TSocket flush () {
+
+    validate-socket $_sock
+    $_output flush
+}
+
+
+
+
+
+###########################################################################
+## 
+## <TeaMethod name="printf"
+##            arguments="formatString [arg1 ...]"
+##            className="TSocket">
+## 
+## <Overview>
+## Outputs into the socket output stream a string built from a
+## template string, in the same way as the C printf function.
+## </Overview>
+##
+## <Parameter name="formatString">
+## A string object representing the format string in the way of the C printf
+## function.
+## </Parameter>
+##
+## <Parameter name="arg1">
+## Object of type dependent on the format string.
+## </Parameter>
+## 
+## <Description>
+## </Description>
+## 
+## </TeaMethod>
+## 
+###########################################################################
+
+method TSocket printf args {
+
+    validate-socket $_sock
+    apply $_output printf $args
+}
+
+
+
+
+
+###########################################################################
+## 
+## <TeaMethod name="setLineBuffering"
+##            arguments="flag"
+##            className="TSocket">
+## 
+## <Overview>
+## Sets the buffering mode in the socket output stream.
+## </Overview>
+## 
+## <Parameter name="flag">
+## A boolean object signaling if the buffering mode should be line
+## buffered.
+## </Parameter>
+##
+## <Returns>
+## A reference to the object it was called for.
+## </Returns>
+## 
+## <Description>
+## When this method is called with a <Arg name="flag"/>
+## argument of true the buffering mode is set to line buffered. In
+## line buffered mode, after a call to the
+# <MethodRef tosClass="TSocket" name="writeln"/> method
+## a flush is implicitly performed. When <Arg name="flag"/> is false
+## then the stream is set to fully buffered mode.
+## </Description>
+## 
+## </TeaMethod>
+## 
+###########################################################################
+
+method TSocket setLineBuffering ( flag ) {
+
+    validate-socket $_sock
+    $_output setLineBuffering $flag
+}
+
+
+
+
+
+###########################################################################
+## 
+## <TeaMethod name="write"
+##            arguments="[arg1 ...]"
+##            className="TSocket">
+## 
+## <Overview>
+## Sends the contents of a string into the socket output stream.
+## </Overview>
+## 
+## <Parameter name="arg1">
+## The object to be written. It may be either a string, integer or
+## float object.
+## </Parameter>
+##
+## <Returns>
+## A reference to the object it was called for.
+## </Returns>
+## 
+## <Description>
+## This methods concatenates the contents of its arguments and sends the
+## the result to the socket output stream. If one of the arguments is an
+## integer or a float than its decimal representation is used.
+## </Description>
+## 
+## </TeaMethod>
+## 
+###########################################################################
+
+method TSocket write args {
+
+    validate-socket $_sock
+    apply $_output write $args
+}
+
+
+
+
+
+###########################################################################
+## 
+## <TeaMethod name="writeln"
+##            arguments="[arg1 ...]"
+##            className="TSocket">
+## 
+## <Overview>
+## Sends the contents of a string into the socket output stream
+## followed by an "end of line" sequence.
+## </Overview>
+## 
+## <Parameter name="arg1">
+## The object to be written. It may be either a string, integer or
+## float object.
+## </Parameter>
+##
+## <Returns>
+## A reference to the object it was called for.
+## </Returns>
+## 
+## <Description>
+## This methods concatenates the contents of its arguments and sends the
+## the result to the socket output stream. If one of the arguments is an
+## integer or a float than its decimal representation is used.
+## After writing all of the arguments it sends an "end of line" sequence.
+## </Description>
+## 
+## </TeaMethod>
+## 
+###########################################################################
+
+method TSocket writeln args {
+
+    validate-socket $_sock
+    apply $_output writeln $args
+}
+
+
+
+
+
+###########################################################################
+## 
+## <TeaMethod name="open"
+##            arguments="host port"
+##            className="TSocket">
+## 
+## <Overview>
+## Connects the socket to a remote server.
+## </Overview>
+##
+## <Parameter name="host">
+## A string representing the name of the remote server to connect to.
+## It may be in the form of an IP address.
+## </Parameter>
+##
+## <Parameter name="port">
+## An integer representing the port number on the remote server to connect
+## to.
+## </Parameter>
+## 
+## <Description>
+## If the socket was already opened then it is closed before attempting
+## to connect to the remote server.
+## 
+## <P>
+## If the connection can not be successfully established then a runtime
+## error will occur.
+## </P>
+## </Description>
+## 
+## </TeaMethod>
+## 
+###########################################################################
+
+method TSocket open args {
+    
+    if { not-null? $_sock } {
+        $this close
+    }
+    
+    define argCount [length $args]
+
+    cond {
+	== $argCount 1 } {
+	set! _sock [nth $args 0]
+    } {
+	== $argCount 2 } {
+        map define ( host port ) $args
+        set! _sock [new TSocketBase]
+        $_sock connect $host $port
+    } {
+	error "Args: host port"
+    }
+    
+    set! _input  [$_sock getInput]
+    set! _output [$_sock getOutput]
+    
+    is $this
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define validate-socket ( sock ) {
+    
+    if { null? $sock } {
+        error "socket has not been opened"
+    }
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+

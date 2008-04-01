@@ -1,0 +1,138 @@
+/**************************************************************************
+ *
+ * Copyright (c) 2001, 2002, 2003, 2004 PDM&FC, All Rights Reserved.
+ *
+ **************************************************************************/
+
+/**************************************************************************
+ *
+ * $Id: stylesheet.css,v 1.6 2005/01/20 17:44:58 jfn Exp $
+ *
+ *
+ * Revisions:
+ *
+ * 2004/10/19 Minor revisions to improve visual quality. (jfn)
+ *
+ * 2004/08/13 Simplified the specification of font family. (jfn)
+ *
+ **************************************************************************/
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+.docBody {
+	background: #FFFFFF;
+	font-family: Verdana, sans-serif;
+	font-size: small;
+}
+
+tt, code {
+	font-size: larger;
+}
+
+
+
+
+
+/**************************************************************************
+ *
+ * Definitions relevant to the header containing the navigation bar.
+ *
+ **************************************************************************/
+
+.docHeader {
+	background: #CCCCFF;
+	border: solid 1px gray;
+}
+
+.docHeaderCell, .docHeaderCellSelected, .docHeaderTitle {
+	padding: .2em .5em .2em .5em;
+	font-weight: bold;
+}
+
+.docHeaderCell {
+	color: black;
+	background: #CCCCFF;
+}
+
+.docHeaderCell a {
+	color: black;
+	text-decoration: none;
+}
+
+.docHeaderCellSelected {
+	color:      white;
+	background: #00008B;
+}
+
+.docHeaderTitle {
+	color: black;
+	background: #CCCCFF;
+	font-style: italic;
+	text-align: right;
+}
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+.docTitle {
+}
+
+
+
+
+
+.docTableHeader {
+	text-align: left;
+	font-weight: bold;
+	font-size: large;
+	background: #CCCCFF;
+}
+
+.docTableRow {
+	background: white;
+}
+
+.docTableLabel {
+	font-style: italic;
+	text-align: left;
+	font-weight: bold;
+	background: white;
+}
+
+
+
+
+
+.docParamLabel {
+	font-weight: bold;
+}
+
+.docParamName {
+	font-style: italic;
+}
+
+.docParamDescription {
+}
+
+
+
+
+
+.docText {
+}
+

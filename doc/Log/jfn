@@ -1,0 +1,890 @@
+2006/07/11
+
+Resumo:
+
+1. Released the 3.2.1 version.
+
+
+
+
+
+2005/10/31
+
+Resumo:
+
+1. Alterada funcionalida em "com.pdmfc.tea.modules.tos.SJavaClass"
+   que resultava em comportamento não desejado quando o código corria
+   dentro do JavaWebStart. Foi substituida uma chamada a
+   "Class.getDeclaredMethods()" por "Class.getMethods()".
+
+2. Recriada a release 3.1.12. Apenas possível porque não tinha sido
+   ainda anunciada publicamente.
+
+
+
+
+
+2005/10/26
+
+Resumo:
+
+1. Created release 3.1.12.
+
+
+
+
+
+2005/10/25
+
+Resumo:
+
+1. Added the function "tea-set-system-property" to the "tea.lang"
+   module. Required for the COL project.
+
+2. Corrected the behaviour of "com.pdmfc.tea.modules.tos.SJavaClass"
+   such that methods in derived classes override * methods in base
+   classes.
+
+
+
+
+
+2005/02/16
+
+Resumo:
+
+1. The gnu.regexp and Xerces JAR files are now part of the development
+   tree. The "--jars-to-include" option of the "bin/configure" tool
+   was removed.
+
+
+
+
+
+2005/02/15
+
+Resumo:
+
+1. Refactored the build infrastructure makefiles in order not to
+   require the "jdeps" tool.
+
+
+
+
+
+2005/02/14
+
+Resumo:
+
+1. Corrected bug in the implementation of the "import" function that
+might generate stack overflows when doing recursive imports.
+
+2. Lançada a versão 3.1.11.
+
+
+
+
+2005/01/20
+
+Resumo:
+
+1. 
+
+
+
+
+
+Por cada ficheiro importado terá de ser guardada informação
+descriminada em seguida. Chmar-lhe-emos ImportItemData.
+
+a) _importPath - Path tal como passado à função "import".
+
+b) _fullPath - Path tal como usado para ser lido. Trata-se da
+contatenação do path de directoria (ou prefixo de URL) correspondendo
+a um dos elementos da lista guardada em "TEA_LIBRARY" com o path
+passado à função "import".
+
+c) _lastImportDate - Data da última vez que foi importado.
+
+d) _isFile - Flag indicando se se trata de um ficheiro ou de uma URL.
+
+
+Os passos realizados pela função "import" são os seguintes:
+
+a) Procurar em _itemsByPath pelo ImportItemData correspondente.
+
+b) Se existir pedir a esse ImportItemData para efectuar o import e
+termina aqui o processamento. Esse import só acontecerá efectivamente
+se: i) _isFile é true e ii) o _lastImportDate precede a data de
+alteração do ficheiro.
+
+c) Para cada entrada na lista "TEA_LIBRARY":
+
+c.i) Criar um ImportItemData, passando-lhe directoria base (a entrada
+de "TEA_LIBRARY" que está a ser analisada) e o path passado ao import.
+
+c.ii) Pedir o fullPath ao ImportItemData. Se existir um ImportItemData
+correspondente em _itemsByFullPath guardá-lo em _itemsByPath (com o
+path passado a "import") e pedir-lhe para efectuar o import (como no
+ponto b acima).
+
+c.iii) Pedir ao ImportItemData criado em c.i para TENTAR efectuar o
+import. Se tiver sucesso (i.e. retornou true e não estourou) guardá-lo
+em _itemsByPath e _itemsByFullPath.
+
+
+
+
+
+2005/01/14
+
+Resumo:
+
+1. Iniciada análise da extensão da função "import" para voltar a reler
+   o conteúdo do ficheiro caso este tenha sido modificado desde a
+   última vez que foi imported.
+
+
+
+
+
+Pretende-se que a função "import" execute o conteúdo do ficheiro cujo
+nome é dado como argumento quando ocorre alguma das seguintes
+circunstâncias:
+
+a) É a primeira vez que o nome do ficheiro é passado à função
+"import".
+
+b) A data de alteração do ficheiro é mais recente que o momento em que
+o ficheiro foi executado pela função "import" da última vez.
+
+Este comportamento apenas existe para ficheiros encontratos em
+directorias especificadas em TEA_LIBRARY. Caso o ficheiro seja lido a
+partir de uma URL este comportamento não existirá.
+
+
+Este é o comportamento que existia no Tea 1. Desde a versão 2 e até às
+versões correntes (3.3.10) a função "import" apenas executa o ficheiro
+da primeira vez que o nome é recebido.
+
+
+
+
+
+2004/12/13
+
+Resumo:
+
+1. New function "tos-obj?".
+
+
+
+
+
+2004/11/09
+
+Resumo:
+
+1. Solved bug in the implementation of the "TInput copyTo" method that
+   prevented some valid arguments from being accepted.
+
+
+
+
+
+2004/11/05
+
+Resumo:
+
+1. Improved the messages for the errors thrown by the "str-join"
+   function.
+
+
+
+
+
+2004/11/03
+
+Resumo:
+
+1. Resolvido bug com os métodos "TVector setAt", "TVector getAt": The
+   "TVector setAt", "TVector getAt" methods no longer generate an
+   internal error when the index is invalid. Now they generate a
+   regular runtime error.
+
+
+
+
+
+2004/11/02
+
+Resumo: 
+
+1. The "TDate format" method no longer generates an internal error
+   when the format string is invalid. Now it generates a regular
+   runtime error.
+
+
+
+
+
+2004/10/19
+
+Resumo:
+
+1. Melhorado o aspecto visual dos teadoc. Iniciado refactoring ligeiro
+   da geração do HTML dos teadoc por forma a simplificar o HTML que é
+   gerado.
+
+
+
+
+
+2004/10/06
+
+Resumo:
+
+1. Lançada a release 3.1.9.
+
+
+
+
+
+2004/08/13
+
+Resumo:
+
+1. The "teadoc" utility is now much faster when processing source
+   files that do not contain any embeded Tea documentation.
+
+2. It is now possible to use arbitrary HTML tags inside the teadoc
+   documentation.
+
+
+
+
+
+2004/06/23
+
+Resumo:
+
+1. Lançada a release 3.1.8.
+
+
+
+
+
+2004/05/07
+
+Resumo:
+
+1. Lançada a release 3.1.7.
+
+
+
+
+
+2003/12/07
+
+Resumo:
+
+1. 
+
+
+
+
+
+2003/11/04
+
+Resumo:
+
+1. Lançada a release 3.1.5.
+
+
+
+
+
+2003/10/22
+
+Resumo:
+
+1. Corrected bug in "TCallableStatement registerDate". A
+   java.sql.Timestamp instance was being stored in the specified
+   variable instead of the com.pdmfc.tea.util.SDate as expected.
+
+
+
+
+
+2003/10/05
+
+Resumo:
+
+1. A função "str-fmt" já trata usa correctamente instâncias de TDate
+   como objectos de formatação.
+
+
+
+
+
+2003/09/30
+
+Resumo:
+
+1. Resolvido problema com "TResultSet getDate" quando o campo estava
+   NULL na BD.
+
+2. Criada release oficiosa 3.1.5-20030930 para testes no projecto COL.
+
+
+
+
+
+2003/09/13
+
+Resumo:
+
+1. Adicionado método "getDate" à classe "TResultSet".
+
+2. Adicionado método "setDate" à classe "TPreparedStatement".
+
+3. Adicionado os métodos "registerDate", "registerFloat" à classe
+   "TCallableStatement".
+
+4. Documentado que "TStatement execute" devolve um booleano.
+
+5. Adicionados os métodos "getResultSet", "getMoreResults" à classe
+   "TResultSet".
+
+
+
+
+
+Objectivos:
+
+1. Novo método "TResultSet getDate".
+
+2. Novo método "TPreparedStatement setDate".
+
+3. Novo método "TCallableStatement registerFloat".
+
+4. Novo método "TCallableStatement registerDate".
+
+5. Método "TStatement execute" deve devolver um booleano que indica se
+   há TResultSet para devolver.
+
+6. Novo método "TStatement getResultSet".
+
+7. Novo métofo "TStatement getMoreResults".
+
+8. Nova função "sql-format".
+
+
+
+
+
+2003/05/21
+
+Resumo:
+
+1. Novas funcções "tdbc-get-open-connections-count",
+   "tdbc-close-all-connections".
+
+
+2. Lançada a release 3.1.4 do Tea:
+
+	cvs tag TEA030104
+	make release
+
+
+
+
+
+Novas funções:
+
+tdbc-get-open-connections-count
+
+Retrieves the number of currently open connections. Open connections
+are TConnection objects which have not yet been closed.
+
+
+tdbc-close-all-connections
+
+Closes all the currently open connections. An open connection is a
+TConnection object which has not yet been closed.
+
+
+
+
+
+2003/02/24
+
+Resumo:
+
+1. Corrected a bug that prevented the files opened by the "import"
+function from being explicitly closed.
+
+
+
+
+
+2003/02/20
+
+Resumo:
+
+1. Corrected bug that prevented some database connections from being
+automatically closed when the Tea runtime was stoped. This only
+happened for "TConnection" objects created through the static method
+"TConnection.newInstance(SContext, Connection)".
+
+
+
+
+
+2003/02/17
+
+Resumo:
+
+1. Now when the "--jre" option is specified and is empty it
+is the same as not being specified.
+
+
+
+
+
+2003/02/13
+
+Resumo:
+
+1. The Tea JAR file now has a manifest specifying the main class. That
+   is the same main class as used by the "tsh" utility.
+
+2. When using the "tsh" utility the current directory is no longer
+   added to the classpath of the JVM running the Tea interpreter.
+
+3. A adicção automática ao TEA_LIBRARY da biblioteca do próprio Tea é
+   agora mais robusta. Dentro do JAR a directoria com código Tea tem
+   um nome da forma "/lib/tea-x.y.z". Desta forma é minimizada a
+   possiblidade de colisão de nomes com outras entradas do CLASSPATH
+   da JVM que corre o interpretador de Tea.
+
+4. The "teadoc" utility now continues processing even when the
+   processing of a particular file failed.
+
+
+
+
+
+2003/02/12
+
+Resumo:
+
+1. Corrected bug that generated a Java ClassCastException when
+   invoking "TPreparedStatement close".
+
+2. Corrected bug that prevented the "TPreparedStatement setInt" method
+   from being accessible.
+
+
+
+
+
+2003/02/11
+
+Resumo:
+
+1. Simplificado o mecanismo de configurações baseados em ficheiros.
+
+2. Já não é necessário especificar a opção "--sax-parser" nas alturas
+   da configuração para desenvolvimento e instalação do Tea.
+
+3. O JAR da biblioteca gnu.regexp é agora incluido na directoria
+   "lib", em vez do seu conteúdo ser colocado no JAR do Tea.
+
+4. Adaptados os utilitário "configure", "setup", "tsh", "teadoc",
+   "make-release" para usarem o novo mecanismo de configuração baseado
+   em ficheiros.
+
+5. Lançada a release 3.1.2 do Tea:
+
+	cvs tag TEA030102
+	make release
+
+
+
+
+
+Tea 3.1.2 Release Notes
+
+It is no longer necessary to specify a "--sax-parser" option during
+instalation.
+
+
+The "TDate format" method is now oficially documented.
+
+
+The Java API for the "TVector" Tea class was extended in order to make
+it possible to supply an external "java.util.List" object as
+repository.
+
+
+The Java API for the "THashtable" Tea class was extended in order to
+make it possible to supply an external "java.util.List" object as
+repository.
+
+
+Solved a bug in the "++", "--", "+=", "-=", "*=", "/=", "%=" that
+prevented a runtime error from ocurring when the contents of the
+variable being acted upon were not of the correct type.
+
+
+Added support for client SSL sockets. Requires the Sun JSSE 1.0.2 JAR
+to be on the classpath.
+
+
+It is no longer needed to specify in the TEA_LIBRARY the URL for the
+Tea core library.
+
+
+The Java implementation of the Tea functions in the "Regexp" module
+was simplified.
+
+
+When parsing an XML file with the TOS class TXmlParser the
+"processingInstruction" method is now called as expected when a
+processing instruction is found in the XML document.
+
+
+Java runtime errors in TOS methods implemented in Java now dump the
+JVM stacktrace.
+
+
+Corrected subtle bug in "tea/util/tea-autoload.tea" that lead to the
+same "index.tea" file being read more than once in some circumstances.
+
+
+
+
+
+2002/11/01
+
+map echo [[[apply [new TVector] init [glob "." ".*"]] sort str-cmp] getElements]
+
+
+
+
+
+2002/10/19
+
+Suporte para sockets SSL cliente.
+
+Classes a criar:
+
+TSslSocket
+
+Derivada de TSocket. Limita-se a passar ao construtor da classe base
+uma instância de TSslSocketPlain.
+
+
+TSslSocketPlain
+
+
+
+
+
+2002/09/07
+
+Suporte para expressões aritméticas.
+
+`expressão` - Representa uma expressão aritmética. O valor é
+avaliado na altura em que o literal é encontrado no código.
+
+Seria interessante ter as seguintes possibilidades:
+
+a) Um bloco cuja execução corresponde à avaliação de uma expressão
+aritmética.
+
+Sugestão de sintaxe: {` expressão `}
+
+
+b) Uma função cuja execução corresponde à avaliação de uma expressão
+aritmética:
+
+Sugestão de utilização: define f ( x ) {` expressão `}
+
+
+
+
+
+2002/07/16
+
+tea-at-stop func
+
+Registers a function to be executed when the interpreter is
+stoped. Functions so registered will be called in the reverse order of
+their registration. No arguments are passed to the functions.
+
+If one of the functions generates a runtime error then no further
+functions will be called.
+
+
+tea-at-end func
+
+
+
+
+
+2002/06/24
+
+Objectivos
+
+Simplificar a criação de classes TOS implementadas como código Java.
+
+Correspondência directa entre classes TOS e classes Java. Uma
+instância de uma classe TOS é também uma instância da classe Java
+correspondente (só que também implementará a interface STosObj).
+
+
+
+
+
+interface STosClass
+
+STosClass getSuperClass();
+
+SObjSymbol[] getMemberNames();
+
+STosMethod getMetod(SObjSymbol name);
+
+Iterator getMethods();
+
+STosObj newInstance(SContext, Object[] constructorArgs);
+
+String getName();
+
+
+
+
+
+interface STosObj extends SObjFunction
+
+void init(STosClass myClass, SContext context, Object[] constructorArgs);
+
+STosClass getTosClass();
+
+SContext getMembers(int level);
+
+
+
+
+
+interface STosMethod extends SObjFunction
+
+String getName();
+
+STosClass getDeclaringClass();
+
+
+
+
+
+class STosJavaClass implements STosClass;
+
+
+
+
+
+class STosJavaMethod implements STosMethod;
+
+
+
+
+
+class STosTeaClass implements STosClass;
+
+
+
+
+
+class STosTeaMethod extends STosMethod;
+
+
+
+
+
+2002/06/14
+
+Widgets:
+
+TPanel
+TFrame
+TButton
+TComboBox
+TLabel
+TTextField
+TTitledPane
+TTabbedPane
+TRadioButton
+TRadioButtonSet
+
+Cada widget têm a sua própria colecção de atributos.
+
+Certos widgets (e.g. TButton, TComboBox) podem ter acções
+associadas. Uma acção corresponde a uma função. Um mesmo widget pode
+ter diferentes tipos de acção. NOTA: poderá uma acção ser um atributo?
+
+Exemplo de aplicação: inspeccionador de BD por JDBC.
+
+
+
+
+
+2002/03/28
+
+Na máquina "pink" (Celeron 900 MHz):
+
+10000 - Recursive factorial of 10
+1044ms
+
+10000 - Iterative factorial of 10 (with 'set!')
+827ms
+
+10000 - Iterative factorial of 10 (with '*=', '--')
+586ms
+
+
+
+
+
+
+2002/03/06
+
+Funções correspondendo a operadores binários:
+
+~
+&
+|
+^
+<<
+>>
+&=
+|=
+^=
+<<=
+>>=
+
+
+
+
+
+2002/01/26
+
+
+--javac=PATH
+        Path to a Java compiler executable. It must accept the "-d"
+        option. This option is not mandatory. When not specified it will
+        default to "\$JAVAHOME/bin/javac", where "JAVAHOME" was the
+value
+        of the --java-home option.
+--jar=PATH
+        Path to an executable that is expected to behave like the Sun's
+        JDK Java archiver. This option is not mandatory. When not
+        specified it will default to "\$JAVAHOME/bin/jar", where
+        "JAVAHOME" was the value of the --java-home option.
+--javadoc=PATH
+        Path to an executable that is expected to behave like the Sun's
+        JDK javadoc utility. This option is not mandatory. When not
+        specified it will default to "\$JAVAHOME/bin/javadic", where
+        "JAVAHOME" was the value of the --java-home option.
+
+
+
+
+
+2001/09/24
+
+Tea 3.0.0 was released.
+
+Tea 3.0.0 has been released. You can download it from
+http://www.pdmfc.com/tea-site/info/download.html. This is a new major
+release. Compatibility with Tea code written for previous releases is
+mantained. Some highlights on the new features:
+
+- Complete rewrite from the ground up.
+
+- Major performance improvements.
+
+- Designed for making even easier creating Java extensions.
+
+- Improved documentation for the Tea API and the Tea Java Runtime API.
+
+- New tool for automatic documentation generation from Tea and Java
+source files.
+
+
+
+
+
+
+
+2001/09/21
+
+1. No "bin/tsh.bat" o comentário referindo "lib/tea/classes" tal deverá
+ser substituido por "lib/tea-3.0.0.jar".
+
+2. Quando é usado o "setup" em windows (cygwin) este deve usar ";" como
+o separador de paths. Provavelmente será necessária uma opção de linha
+de comando.
+
+3. Confirmar que "TVector getElements" funciona como esperado.
+
+
+
+
+
+
+
+2001/09/17
+
+Ficheiros e directorias e incluir no pacote a ser distribuido:
+
+00README
+apps
+bin/setup
+bin/teadoc
+bin/tsh
+bin/tsh.bat
+doc/javadoc
+doc/teadoc
+doc/tea-mode.el
+doc/WhitePapers/TeaOverview.pdf
+lib/Tea.jar
+
+
+
+
+
+2001/09/14
+
+Removidos os numéricos mutáveis.
+
+SObjInt.java
+SObjFloat.java
+SObjMutableNumber.java
+SObjMutableInt.java
+SObjMutableFloat.java
+
+
+
+
+
+
+TZipFile
+
+method TZipFile constructor ( filePath )
+method TZipFile open filePath
+method TZipFile close
+method TZipFile getEntryNames
+method TZipFile getInput ( entryName )
+method TZipFile isDirectory? ( entryName )
+

@@ -1,0 +1,36 @@
+#
+# Tests the "import" function.
+#
+# a) Run this script in this directory.
+#
+# b) To test that "import" does check for file changes do a manual
+# "touch" on "test-import-dummy.tea" when this script is sleepling.
+#
+
+
+# Pause between consecutive imports in milliseconds.
+define PAUSE_TIME 5000
+
+# Number of times the import is performed.
+define LOOP_COUNT 3
+
+define IMPORT_TEST_FILE "test-import-dummy.tea"
+
+
+
+
+
+echo "Importing \"" $IMPORT_TEST_FILE "\"..."
+import $IMPORT_TEST_FILE
+
+int i 0
+
+while { < $i $LOOP_COUNT } {
+    echo "Pausing for " $PAUSE_TIME "ms..."
+    sleep $PAUSE_TIME
+    echo "Importing \"" $IMPORT_TEST_FILE "\"..."
+    import $IMPORT_TEST_FILE
+    
+    ++ i
+}
+

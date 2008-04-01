@@ -1,0 +1,49 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+#
+# Does an GET on a remote HTTP server
+# arguments.
+#
+# Args: host port URI outputFile byteCount
+#
+
+#define TSocketPlain [load-class "com.pdmfc.teapackages.net.socket.STSocketClass"]
+#import "net/TSocket.tea"
+
+
+
+#define sockClass TSslSocket
+define sockClass TSocket
+
+define host      [nth $argv 0]
+define port      [string->int [nth $argv 1]]
+define byteCount [string->int [nth $argv 4]]
+define uri       [nth $argv 2]
+define file      [nth $argv 3]
+
+define sock [new $sockClass]
+define out  [new TFileOutput $file]
+define line $null
+
+$sock open $host $port
+$sock writeln "GET " $uri " HTTP/1.0"
+$sock writeln "User-Agent: Mozilla/5.0 (X11; U; Linux i686; en-US; rv:0.9.4) Gecko/20011126 Netscape6/6.2.1"
+$sock writeln
+
+while { not-null? [set! line [$sock readln]] } {
+    echo $line
+    if { str-empty? $line } {
+	break
+    }
+}
+$sock copyTo $out $byteCount
+
+$sock close
+$out close
+
+
+

@@ -1,0 +1,329 @@
+How to extend a Tea interpreter with your own Java functions
+------------------------------------------------------------
+
+In this example we will assume that we just want to add
+one simple function that converts currency amounts, for example,
+from US Dollar to Euro.
+
+Assume its a simple multiplication operation by a constant.
+
+
+
+
+
+
+1 - The Java code
+-----------------
+
+You will need to write two files, with the following code:
+
+-------------- file: Converter.java ---------------
+    import solsuni.tea.runtime.STContext;
+    import solsuni.tea.runtime.STObj;
+    import solsuni.tea.STException;
+    import solsuni.tea.runtime.STNumArgException;
+    import solsuni.tea.runtime.STRuntimeException;
+    import solsuni.tea.runtime.STObjFloat;
+    import solsuni.tea.runtime.STObjProc;
+
+    public class Converter extends STObjProc {
+
+        // core functionality
+        protected static double toUSDollar(double euro) {
+            return euro * 0.75;
+        }
+        // Tea interface
+        public STObj exec (STContext context,
+                           STObj[] args)
+        throws STException {
+            if ( args.length != 2 ) {
+               throw new STNumArgException(args[0], "value");
+            }
+            double euro = getNumeric(args, 1).getFloatValue();
+            if ( euro < 0.0 ) {
+               throw new STRuntimeException(args[0],
+                   "value must be positive or zero");
+            }
+            return new STObjFloat(toUSDollar(euro));
+        }
+
+        // main for testing functionality
+        public static void main(String args[]) {
+            System.out.println(
+                toUSDollar(Double.valueOf(args[0]).doubleValue()));
+        }
+    }
+-----------------------------------------------------
+
+----------------file: MyPackage.java ----------------
+import Converter;
+import solsuni.tea.runtime.STProgramContext;
+import solsuni.tea.packages.STPackage;
+
+public class MyPackage extends STPackage {
+
+    public MyPackage() {};
+
+    public void init(STProgramContext context) {
+        context.newProc("my-converter", new Converter());
+        // Add more functions here if you have.
+    }
+}
+--------------------------------------------------------
+
+Converter.java is your main code file. Its has your functionality
+isolated into the protected method toUSDollars.
+(Of course, you can import and use other Java classes
+for more complicated purposes).
+
+The public exec method is the one that will get called by Tea.
+It usually follows a structure like this:
+1 - validate the number of arguments (the length of the array args).
+2 - convert the argument's values, represented by Tea Java API objects,
+    to the required representation, validating them if required.
+3 - perform the required operation.
+4 - convert the operation result back into a Tea API object and
+    return it.
+The Tea Java API object returned by the method will represent the value
+that the Tea function will return.
+To learn more about Tea Java API objects, please check the next section.
+
+The main method is just there to help you test you code from the
+command line, before attempting to glue it with Tea, if you want to.
+
+MyPackage.java is a Java class that declares a Tea language module.
+In this case, it just declares that a Tea function called
+"my-converter" is implemented by an instance of the class Converter.
+
+
+
+
+
+
+2 - Compiling the Code
+----------------------
+
+Compile your .java source into .class files.
+Assuming that you have JDK 1.2 in your path, and the Tea Development Kit
+installed under /usr/local/tdk1.2.0, the compilation command line
+will look like:
+
+    javac -classpath .:/usr/local/tdk1.2.0/lib/classes \
+          Converter.java MyPackage.java
+
+Running this in the same directory as the .java source files should work, and
+you should get the file Converter.class and MyPackage.class in your
+working directory.
+
+Notes for different Java/tdk versions:
+If you have JDK 1.1, then just add the path to the Java runtime
+support classes to the classpath.
+If you have the Tea Development Kit installed elsewere, just change the
+path to the Tea classes appropriately.
+Take care on this on the following section also.
+
+
+
+
+
+
+3 - Running the code from Tea
+-----------------------------
+
+Write a small Tea program, called myProgram.tea:
+------ file: myProgram.tea -------
+load "MyPackage"
+echo [my-converter 200]
+----------------------------------
+
+Your usual Tea init.sh shell script is probably not configured to
+load classes from the current path. If that is the case, you should
+attempt to run tsh with the following command line:
+
+    java -classpath .:/usr/local/tdk1.2.0/lib/classes \
+         -DTEA_LIBRARY=usr/local/tdk1.2.0/lib/tea \
+         solsuni.tea.apps.tsh myProgram.tea
+
+and you should see the output:
+    150
+
+
+
+
+
+
+
+Introduction to the Tea Java API
+================================
+
+The next section enumerates the Tea objects you would be required
+to use when extending the Tea language with your own java functions.
+For a complete description on those objects, please consult
+the Javadocs of this API.
+
+Note: In the present release, The Tea API Javadocs are only available
+      together with the full source code.
+
+
+
+
+
+Functions
+---------
+
+tea.runtime.STObjProc - base class for Tea functions
+
+You add new functions to Tea by writing STObjProc derived classes
+and overriding the exec method to do what you want. The exec
+method has the following signature:
+
+public STObj exec(STContext context, STObj[] args) throws STException;
+
+    context - is the Tea program context where this function is being
+        called. At this level, this only interests you to pass this
+        to some other API methods that require the current context.
+
+    args - an array of STObj with the arguments being passed to the
+        function. args.length gives the number of arguments.
+
+The value returned by the function must be a Tea Java API object that
+represents the value you want returned by the function.
+Don't call the base class exec. It will generate a runtime error.
+Runtime errors are signaled by throwing STRuntimeException (or derived
+exceptions).
+
+The STObjProc provides some methods to access the function arguments.
+Some of them are:
+
+static protected STObjNumeric getNumeric(STObj[] args, int index)
+    throws STException;
+
+    args - the same array received by the method exec.
+
+    index - argument position. Argument 0 is the usually the function
+        object itself. The rest of the arguments start at index 1.
+
+    Used to get numeric arguments (integers or floating point).
+
+static protected STObjInt getInt(STObj[] args, int index)
+    throws STException;
+
+    Similar to getNumeric but will generate a type error if the
+    argument is not an integer number object. No automatic coercion of
+    floating point to integer is performed.
+
+static protected STObjFloat getFloat(STObj[] args, int index)
+    throws STException;
+
+    Similar to getNumeric but will generate a type error if the
+    argument is not an floating point number object. No automatic
+    promotion of integer to floating point is performed.
+
+static protected STObjBool getBool(STObj[] args, int index)
+    throws STException;
+
+    Gets a boolean object argument. Will generate a type error if
+    the argument is not a boolean. No automatic conversion occurs.
+
+static protected STObjString getString(STObj[] args int index)
+    throws STException;
+
+    Gets a string object argument. Will generate a type error if
+    the argument is not a string.
+
+
+
+
+
+Basic Data Type Objects
+-----------------------
+
+The basic data types integer, floating point, boolean, and, strings,
+are mapped between Java and Tea through the following table:
+
+Java Type      Tea Java API Class
+or Class
+-------------+------------------------------
+null           solsuni.tea.runtime.STObjNull
+int            solsuni.tea.runtime.STObjInt
+double         solsuni.tea.runtime.STObjFloat
+bool           solsuni.tea.runtime.STObjBool
+String         solsuni.tea.runtime.STObjString
+
+To allow instantiation of Tea values form Java values,
+all of these Tea Java API classes have a constructor with one
+argument of the Java type required.
+
+Examples of Java code to create Tea objects:
+
+    new STObjInt(123);      // Create an integer with the value 123.
+    new STObjFloat(3.1416); // Create an floating point with the value 3.1416.
+    new STObjBool(true);    // Create a boolean with the value true.
+    new STObjString("Hello"); // Create a string with the value "Hello".
+
+The special null object is implemented by the static member
+STObjNull.NULL
+(You cannot instantiate more STObjNull objects).
+
+For boolean constants you can use the special static members
+STObjBool.TRUE and STObjBool.FALSE to a true or a false object.
+
+For STObjInt and STObjFloats, you can access their values
+through the methods
+    public int getIntValue();
+    public double getFloatValue();
+Promotion and coercion will be performed as necessary.
+
+String values can be retrieved through the method
+    public String getStringValue();
+
+
+
+
+
+
+Exceptions
+----------
+
+Under Tea, every exception you throw should inherit from STException.
+
+solsuni.tea.STException                - the base class of all exceptions.
+
+   Don't throw them. Just catch and access them using the
+   getMessage() method.
+
+   Example:
+       try {
+           ...
+       } catch ( STException e ) {
+           String error = e.getMessage();
+           ...
+       }
+
+solsuni.tea.runtime.STRuntimeException - exceptions generated on runtime.
+
+    Your code should convert all exception it gets into
+    STRuntimeExceptions. Otherwise the usual Tea error handling
+    behaviour will not work (ie. you will not get the stack dump,
+    and the "catch" function will not work properly with your
+    function).
+
+    Example:
+        try {
+            socketStream.write("... content ... blah blah ...");
+        } catch ( IOException e ) {
+            throw STRuntimeException( e.getMessage() );
+        }
+
+solsuni.tea.runtime.STNumArgException - wrong number of arguments to functions
+
+     Throw it when your function has received the wrong number of
+     arguments.
+
+     Example:
+            if ( args.length != 4 ) {
+               throw new STNumArgException(args[0], "value value string");
+            }
+
+
+

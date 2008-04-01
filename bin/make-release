@@ -1,0 +1,105 @@
+#!/bin/sh
+###########################################################################
+#
+# Copyright (c) 2001-2005 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+#########################################################################
+#
+# $Id: make-release,v 1.10 2005/02/15 17:38:10 jfn Exp $
+#
+#
+# Creates the package for release.
+#
+#
+# Revisions:
+#
+# 2003/02/10 The release bundle is now obtained from the contents
+# of the current development tree instead of retrieving it from
+# the CVS root. (jfn)
+#
+# 2001/09/24
+# Created. (jfn)
+#
+#########################################################################
+
+SCRIPT_DIR=`dirname $0`
+SCRIPT_NAME=`basename $0` 
+
+teaBaseDir=`cd $SCRIPT_DIR/..; pwd`
+pathSep=":"
+isUnix=1
+
+case "$OSTYPE" in
+    cygwin )
+	pathSep=";"
+	teaBaseDir=`cygpath --windows "$teaBaseDir" | sed 's/\\\/\\//g'`
+	isUnix=0
+    ;;
+esac
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+#
+# Makes utility functions available.
+#
+. ${teaBaseDir}/bin/tea-utils
+
+teaReadCoreConfig $teaBaseDir
+. ${teaBaseDir}/config/tea-develop.conf
+
+teaPackageName=tea-${TEA_VERSION}
+teaPackageFile=${teaBaseDir}/${teaPackageName}.tar.gz
+tmpDir=/tmp/tea-release.$$
+teaReleaseDir=
+tmpReleaseDir=${tmpDir}/${teaPackageName}
+
+mkdir $tmpDir
+trap "rm -rf $tmpDir" EXIT
+
+#
+#
+#
+echo
+echo "Copying JARs to include in the release bundle..."
+
+mkdir -p ${tmpReleaseDir}/lib
+for jarFile in `echo $TEA_JARS_TO_INCLUDE | sed "s/$pathSep/ /g"`
+  do
+  cp $jarFile ${tmpReleaseDir}/lib
+done
+
+
+#
+#
+#
+echo "Creating release tree..."
+rm -rf $tmpReleaseDir
+mkdir $tmpReleaseDir
+(cd $teaBaseDir; tar cf - "$@") | (cd $tmpReleaseDir; tar xf -)
+
+#
+# Remove unwanted files. This is because the list of files to include
+# in the release may contain directories and that means all its
+# contents have been copied to the staging release tree.
+#
+find $tmpReleaseDir -name \*~ -exec rm -f {} \;
+rm -rf `find $tmpReleaseDir -type d -name CVS -print`
+
+
+#
+#
+#
+echo "Creating release package..."
+(cd $tmpDir; tar cf - ./${teaPackageName}) | gzip -9 > $teaPackageFile
+
+echo "Done"

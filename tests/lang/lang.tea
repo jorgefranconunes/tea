@@ -1,0 +1,53 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+#
+# Defines a new procedure
+#
+global proc (name args body) {
+      global $name [lambda $args $body]
+   }
+
+
+
+
+
+
+#
+# The for loop.
+#
+global for (init-block cond-block update-block body-block) {
+    exec $init-block
+    while $cond-block {
+	exec -deeper $body-block
+	exec $update-block
+    }
+}
+
+
+
+
+
+#
+# Creates a function from the composition of functions given as argument.
+#
+global compose [
+    define compose-proc (proc-list args) {
+        define func [car $proc-list]
+        define rest [cdr $proc-list]
+	if { empty? $rest } { 
+	    apply $func $args
+	} {
+	    $func [compose-proc $rest $args]
+	}
+    }
+
+    lambda proc-list {
+        lambda args {
+            compose-proc $proc-list $args
+        }
+    }
+]

@@ -1,0 +1,396 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+###########################################################################
+#
+# FunctionDoc.tea
+#
+# 2000/02
+#
+#
+# Revisions:
+#
+# 2006/08/02
+# Added support for the Since tag. (jpsl).
+#
+# 2000/05/29
+# Added support for multiple function prototypes (req-0049). (jfn)
+#
+# 2000/02/05
+# created. (jfn)
+#
+###########################################################################
+
+
+
+
+
+define _classNeedsInit $true
+
+define _printerFunction $null
+
+
+
+
+
+###########################################################################
+#
+# Instances of this class represent the documentation for a Tea
+# class.
+#
+###########################################################################
+
+class FunctionDoc (
+
+    _functionName
+    _moduleName
+    _prototypesList
+    _overview
+    _description
+    _parametersList
+    _returnInfo
+    _since
+)
+
+
+
+
+
+###########################################################################
+#
+# @param functionName
+#	String representing the function name.
+#
+# @param formalArgs
+#	String representing the function formal parameters.
+#
+###########################################################################
+
+method FunctionDoc constructor ( functionName formalArgs ) {
+
+    if $_classNeedsInit {
+	FunctionDoc::init
+    }
+
+    set! _prototypesList ()
+    set! _functionName   $functionName
+    set! _parametersList ()
+    $this addPrototype $formalArgs
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method FunctionDoc addPrototype ( formalArgs ) {
+
+    append [if {null? $formalArgs} "" $formalArgs] $_prototypesList
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method FunctionDoc getPrototypes () {
+
+    is $_prototypesList
+}
+
+
+
+
+
+###########################################################################
+#
+# Retrieves the function name defined at constructor time.
+#
+###########################################################################
+
+method FunctionDoc getName () {
+
+    is $_functionName
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method FunctionDoc setModuleName ( moduleName ) {
+
+    set! _moduleName $moduleName
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method FunctionDoc getModuleName () {
+
+    if { null? $_moduleName } {
+	set! _moduleName "General"
+    }
+
+    is $_moduleName
+}
+
+
+
+
+
+###########################################################################
+#
+# Specifies the "Overview" object representing the function short
+# description.
+#
+# @param anOverview
+#	An instance of "Overview".
+#
+###########################################################################
+
+method FunctionDoc setOverview ( anOverview ) {
+
+    set! _overview $anOverview
+}
+
+
+
+
+
+###########################################################################
+#
+# Fecthes the "Overview" instance specified by the call to the
+# "setOverview" method.
+#
+###########################################################################
+
+method FunctionDoc getOverview () {
+
+    is $_overview
+}
+
+
+
+
+
+###########################################################################
+#
+# Specifies the "Description" object representing the funtion long
+# description.
+#
+# @param aDescription
+#	An instance of "Description".
+#
+###########################################################################
+
+method FunctionDoc setDescription ( aDescription ) {
+
+    set! _description $aDescription
+}
+
+
+
+
+
+###########################################################################
+#
+# Fetches the "Description" object specified by the call to the
+# "setDescription" method.
+#
+###########################################################################
+
+method FunctionDoc getDescription () {
+
+    is $_description
+}
+
+
+
+
+
+###########################################################################
+#
+# Adds the representation of the description of a formal parameter.
+#
+# @param aParameter
+#	An instance of "Parameter".
+#
+###########################################################################
+
+method FunctionDoc addParameter ( aParameter ) {
+
+    append $aParameter $_parametersList
+}
+
+
+
+
+
+###########################################################################
+#
+# Retrieves a list with the "Paremeter" instance specified by the calls
+# to the "addParameter" method. The order of the "Parameter" instances
+# in the list is the same as the order they were added.
+#
+###########################################################################
+
+method FunctionDoc getParameters () {
+
+    is $_parametersList
+}
+
+
+
+
+
+###########################################################################
+#
+# Specifies the "ReturnInfo" object representing the description of
+# the function return value.
+#
+###########################################################################
+
+method FunctionDoc setReturnInfo ( aReturnInfo ) {
+
+    set! _returnInfo $aReturnInfo
+}
+
+
+
+
+
+###########################################################################
+#
+# Fetches the "ReturnInfo" object specified by the call to the
+# setReturnInfo" object.
+#
+###########################################################################
+
+method FunctionDoc getReturnInfo () {
+
+    is $_returnInfo
+}
+
+
+
+
+
+###########################################################################
+#
+# Specifies the "Since" object representing the description of
+# the function return value.
+#
+###########################################################################
+
+method FunctionDoc setSince ( aSince ) {
+
+    set! _since $aSince
+}
+
+
+
+
+
+###########################################################################
+#
+# Fetches the "Since" object specified by the call to the
+# "setSince" method.
+#
+###########################################################################
+
+method FunctionDoc getSince () {
+
+    is $_since
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method FunctionDoc print ( outputStream ) {
+    
+    define ok       $true
+    define errorMsg $null
+    
+    if $ok {
+        if { null? $_description } {
+            set! ok $false
+            set! errorMsg "Missing \"Description\" element"
+        }
+    }
+    if $ok {
+        if { null? $_overview } {
+            set! ok $false
+            set! errorMsg "Missing \"Overview\" element"
+        }
+    }
+
+    if $ok {
+        $_printerFunction $outputStream $this
+    } {
+        $stdout writeln \
+                "*** Problems with function \"" $_functionName "\" - " $errorMsg
+    }
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define FunctionDoc::init () {
+
+    define conf [tea-conf-get-configuration FunctionDoc]
+
+    set! _printerFunction [$conf get printerFunction]
+
+    set! _classNeedsInit $false
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+

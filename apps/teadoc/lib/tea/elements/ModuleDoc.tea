@@ -1,0 +1,311 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+###########################################################################
+#
+# ModuleDoc.tea
+#
+# 2000/01
+#
+#
+# Revisions:
+#
+# 2006/10/11
+# Added support for the Since tag. (jpsl).
+#
+# 2000/01/09
+# Created. (jfn)
+#
+###########################################################################
+
+
+
+
+
+define _classNeedsInit $true
+
+define _printerFunction $null
+
+
+
+
+
+###########################################################################
+#
+# Represents documentation of a Tea module.
+#
+###########################################################################
+
+class ModuleDoc (
+
+    _name
+    _funcSet
+    _funcList
+    _funcListIsOrdered
+    _classSet
+    _classListIsOrdered
+    _classList
+    _overview
+    _description
+    _since
+)
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method ModuleDoc constructor ( moduleName ) {
+
+    if $_classNeedsInit {
+	ModuleDoc::init
+    }
+
+    set! _name               $moduleName
+    set! _funcSet            [new TVector]
+    set! _funcList           ()
+    set! _funcListIsOrdered  $true
+    set! _classSet           [new TVector]
+    set! _classListIsOrdered $true
+    set! _classList          ()
+    set! _overview           $null
+    set! _description        $null
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method ModuleDoc getName () {
+
+    if { null? $_name } "General" $_name
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method ModuleDoc setOverview ( anOverview ) {
+
+    set! _overview $anOverview
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method ModuleDoc getOverview () {
+
+    if { null? $_overview } {
+	set! _overview [new Overview]
+    }
+
+    is $_overview
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method ModuleDoc setDescription ( aDescription ) {
+
+    set! _description $aDescription
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method ModuleDoc getDescription () {
+
+    if { null? $_description } {
+	set! _description [new Description]
+    }
+
+    is $_description
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method ModuleDoc addFunctionDoc ( aFunctionDoc ) {
+
+    $_funcSet append $aFunctionDoc
+    set! _funcListIsOrdered $false
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method ModuleDoc getFunctionDocs () {
+
+    if { not $_funcListIsOrdered } {
+	$_funcSet sort [lambda (a b) { str-cmp [$a getName] [$b getName] }]
+	set! _funcList [$_funcSet getElements]
+	set! _funcListIsOrdered $true
+    }
+    is $_funcList
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method ModuleDoc addClassDoc ( aClassDoc ) {
+
+    $_classSet append $aClassDoc
+    set! _classListIsOrdered $false
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method ModuleDoc getClassDocs () {
+
+    if { not $_classListIsOrdered } {
+	$_classSet sort [lambda (a b) { str-cmp [$a getName] [$b getName] }]
+	set! _classList          [$_classSet getElements]
+	set! _classListIsOrdered $true
+    }
+    is $_classList
+}
+
+
+
+
+
+###########################################################################
+#
+#
+#
+###########################################################################
+
+method ModuleDoc setSince ( aSince ) {
+
+    set! _since $aSince
+}
+
+
+
+
+
+###########################################################################
+#
+#
+#
+###########################################################################
+
+method ModuleDoc getSince () {
+
+    is $_since
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method ModuleDoc print ( outputDir ) {
+
+    $_printerFunction $this $outputDir
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define ModuleDoc::init () {
+
+    define conf [tea-conf-get-configuration ModuleDoc]
+
+    set! _printerFunction [$conf get printerFunction]
+
+    set! _classNeedsInit $false
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+

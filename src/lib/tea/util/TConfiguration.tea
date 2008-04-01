@@ -1,0 +1,125 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+###########################################################################
+#
+# $Id: TConfiguration.tea,v 1.1 2001/09/17 23:14:35 jfn Exp $
+#
+#
+# Revisions:
+#
+# 2001/05/12
+# Created. (jfn)
+#
+###########################################################################
+
+
+
+
+
+###########################################################################
+#
+# Represents the configuration of a module. A configuration is a set
+# of parameters. A paremeter has a name (identifier) and a value.
+#
+###########################################################################
+
+class TConfiguration (
+
+    _paramTable	# THashtable
+)
+
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method TConfiguration constructor () {
+
+    set! _paramTable [new THashtable]
+}
+
+
+
+
+
+
+###########################################################################
+#
+# Fetches the value of a parameter.
+#
+# @param paramName
+#    An object representing the identifer of a parameter.
+#
+# @return
+#    An object representing the value of a parameter.
+#    The null object if the parameter has not been created yet.
+#
+###########################################################################
+
+method TConfiguration get ( paramName ) {
+
+    $_paramTable get $paramName
+}
+
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method TConfiguration getWithDefault ( paramName defaultValue ) {
+
+    define paramValue [$_paramTable get $paramName]
+
+    if { null? $paramValue } $defaultValue $paramValue
+}
+
+
+
+
+
+
+###########################################################################
+#
+# Sets the value of a paremeter. If the parameter did not exist
+# one is created. If it already existed its value is altered.
+#
+# @param paramName
+#    The identifier of the parameter being changed.
+#
+# @param paramValue
+#    The new value of the parameter.
+#
+###########################################################################
+
+method TConfiguration set ( paramName paramValue ) {
+
+    $_paramTable put $paramName $paramValue
+}
+
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+

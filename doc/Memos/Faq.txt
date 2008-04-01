@@ -1,0 +1,258 @@
+Tea FAQ
+-------
+
+
+Contents
+1. Tea Syntax
+2. TOS (Tea Object System)
+3. IO
+4. Misc (Lists, etc...)
+
+
+
+
+
+1. Tea Syntax
+
+1.1 Q: Why must I open {, [ or ( in the same line as the previous word ?
+
+or
+
+     Why doesn't (a) works and (b) does ?
+
+
+Line        (a)                      (a)
+number
+  1:  if { < $x 0 }                 class A
+  2:     {                             (
+  3:        echo "x negative"              _aMember
+  4:     }                             )
+
+
+            (b)                      (b)
+
+  1:  if { < $x 0 } {               class A (
+  2:        echo "x negative"              _aMember
+  3:  }                             )
+
+
+
+A: Statements in Tea are separated by an EOL (End Of Line) marker.
+Every statement that your write in Tea must conform to the following
+form:
+
+    arg0 arg1 arg2 ... arg<n>
+
+Each arg<n> is one of a symbol, a numerical representation, a string,
+a list, a code block, a variable substitution or a command substitution
+expression.
+
+arg0 is a symbol with the function or object name, or a reference to
+a function or an object.
+
+arg1 to arg<n> depend on the function.  As everything you do in Tea is
+done by invoking functions (note that even statements like "if" and
+"class"  have function invocation semantics), please consult the
+reference documentation for information the arguments expected for
+predefined functions. 
+
+Each argument is separated from the next by "white space characters"
+(space or tabs). So, if you introduce an EOL between arguments, you
+are starting a new statement.
+
+Note that Tea argument expressions like strings "...", lists  (...),
+code blocks {...}, and, command substitution [...] may contain EOL
+markers inside and, as such, span several lines.
+
+
+
+
+
+1.2. Q: Why using and not using $ before the procedure name or
+        object reference works ?
+
+        Example:
+            # With functions
+            echo "Hello world!"  # Works as expected
+            $echo "Hello world!" # Works the same as above
+
+            # Or with objects
+            class A ()
+            method A sayHello () { echo "Hello!" }
+            define a [new A]
+            $a sayHello # prints "Hello!"
+            a sayHello  # Works the same as above
+
+A: Both ways are legal.
+As explained in the previous question, tea syntax requires that 
+every statement conforms to:
+
+    arg0 arg1 arg2 ... arg<n>
+
+After command substitution (conceptual replacement of [...] by the
+resulting value) and fetching of symbol bindings (conceptual replacement
+of $var by the value), arg0 to arg<n> can represent symbols, numeric
+values, string values, code blocks, or lists.
+
+arg0 must be a symbol, or, a function or an object value.
+
+If it is a symbol, Tea will additionally fetch the value binded to
+the symbol in the current context, and it must be a function or an
+object value.
+
+For the rest of the arguments no implicit fetching of symbol-value
+binding is performed.
+
+The reason for this is mere code esthetic. Using $ for object
+references and not using $ for functions is just a coding convention.
+
+
+
+
+
+2. TOS - Tea Object System
+
+2.1. Q: Is there any way of forcing a member in a class to public,
+or a method to private? 
+
+A: No. Every member is private. Every method is public.
+
+Suggestion: To access private members of a base class, write methods
+to manipulate them. To write private (or protected) methods, simply
+regard them as such (a mere convention by the programmer).
+
+
+
+
+
+3. IO
+
+3.1. Q: Does Tea supports File IO ?
+
+A: Yes. File IO is provided by predefined classes TFileInput
+and TFileOutput.
+
+
+
+
+
+3.2. Q: Does Tea supports Network IO ?
+
+A: Tea supports TCP/IP client sockets through predefined class TSocket.
+
+
+
+
+
+3.3. Q: Does Tea support UDP sockets ?
+
+A: No, as far as version 1.2.0.
+
+
+
+
+
+3.4. Q: Can I write a network service in Tea ?
+
+A: Tea supports server side sockets from version version 1.2.0 final
+(not the pre-releases). Earlier versions only support client side sockets,
+which means that a "100% pure Tea" solution cannot provide network
+services.
+
+
+
+
+
+3.5. Q: How binary transfers work using readln and writeln ? 
+
+A: Stream methods readln and writeln are intended for ASCII transfers.
+Support for binary transfers is provided by the copyTo method.
+Example:
+
+    # To get a web page from a server, you can write this code which
+    # assumes that the output of the server is text.
+    define aSocket [new TSocket "www.yahoo.com" 80]
+    define aLine   $null
+    $aSocket writeln "GET / HTTP/1.0"
+    $aSocket writeln
+    while { not-null? [set! aLine [$aSocket readln]] } {
+        $stdout writeln $aLine
+    }
+    $aSocket close
+
+    # But if binary data is a possibility, then the following
+    # version is recommended instead
+    define aSocket [new TSocket "www.yahoo.com" 80]
+    $aSocket writeln "GET / HTTP/1.0"
+    $aSocket writeln
+    $aSocket copyTo $stdout
+    $aSocket close
+
+
+
+
+
+
+4. Misc
+
+4.1. Q: Can I manipulate lists with car and cdr ?
+
+A: Yes.
+
+For example, the list constructed as
+
+    ( 1 2 3 )
+
+is equivalent to
+
+    [cons 1 [cons 2 [cons 3 ()]]]
+
+where () is the empty list object.
+
+So the two following code examples are equivalent.
+
+     # pair details hidden by using list related functions.
+     define aList   ( 1 2 3 )
+     foreach anElement $aList {
+         echo $anElement
+     }
+
+     # the same knowing the pair structure of a list.
+     define aList   ( 1 2 3 )
+     define aCursor $aList
+     while { not [empty? $aCursor] } {
+         echo [car $aCursor]
+         set! aCursor [cdr $aCursor]
+     }
+         
+Check the reference documentation on the "Lang" and "Lists"
+module for more information on list manipulation functions.
+
+
+
+
+4.2. Q: Is there a statement in Tea like "switch" in C ?
+
+A: The "cond" function is what you are looking for. It behaves just
+like a set of nested "IF...THEN...ELSE".
+Example:
+
+    define x 7
+
+    cond {
+        < $x 0 } {
+     echo "Negative"
+    } {
+        < $x 5 } {
+     echo "0<=x<5"
+    } {
+        < $x 10 } {
+     echo "5<=x<10"
+    } {
+     echo "x>=10"
+    }
+
+
+
+
+

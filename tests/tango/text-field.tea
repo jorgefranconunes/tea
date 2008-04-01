@@ -1,0 +1,91 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+
+load "com.pdmfc.tea.modules.tango.STModuleTango"
+
+global TBoxPanel [load-class "com.pdmfc.tea.modules.tango.boxPanel.STBoxPanelClass"]
+global TButton [load-class "com.pdmfc.tea.modules.tango.button.STButtonClass"]
+global TFrame  [load-class "com.pdmfc.tea.modules.tango.frame.STFrameClass"]
+global TLabel  [load-class "com.pdmfc.tea.modules.tango.label.STLabelClass"]
+global TTitledPanel [load-class "com.pdmfc.tea.modules.tango.titledPanel.STTitledPanelClass"]
+global TComboBox [load-class "com.pdmfc.tea.modules.tango.comboBox.STComboBoxClass"]
+global TTextField [load-class "com.pdmfc.tea.modules.tango.textField.STTextFieldClass"]
+global TGridBagPanel [load-class "com.pdmfc.tea.modules.tango.gridBagPanel.STGridBagPanelClass"]
+
+
+
+
+
+define TITLE_WINDOW   "Text Field Demo"
+define TITLE_CONTROLS "Controls"
+define TITLE_DATA     "Inserted Text"
+define LABEL_INPUT    "Input"
+define LABEL_ALIGN    "Alignment"
+define LABEL_COUNTER  "Counter"
+define LABEL_INCR     ">"
+define LABEL_DECR     "<"
+
+define INFO_ALIGN (
+	( LEFT    "Left" )
+	( CENTER  "Center" )
+	( RIGHT   "Right" )
+)
+
+
+
+
+
+define tfInput [new TTextField "" 20]
+define cbAlign [new TComboBox $INFO_ALIGN]
+define btIncr  [new TButton $LABEL_INCR]
+define btDecr  [new TButton $LABEL_DECR]
+define lbData  [new TLabel "..."]
+int    counter 0
+
+$tfInput set actionCallback [
+	lambda() {
+	    $lbData set text [$tfInput get text]
+	}
+]
+
+$cbAlign set actionCallback [
+	lambda () {
+	    $tfInput set align [$cbAlign get selectedItem]
+	}
+]
+
+$btIncr set actionCallback [
+	lambda () {
+	    $tfInput set text [int->string [++ $counter]]
+	}
+]
+
+$btDecr set actionCallback [
+	lambda () {
+	    $tfInput set text [int->string [-- $counter]]
+	}
+]
+
+
+define panel1 [new TGridBagPanel]
+define panel  [new TGridBagPanel]
+
+$panel1 add [new TLabel $LABEL_INPUT] ( (gridx 0) (gridy 0) (anchor EAST) )
+$panel1 add $tfInput                  ( (gridx 1) (gridy 0) (fill HORIZONTAL) )
+
+$panel1 add [new TLabel $LABEL_ALIGN] ( (gridx 0) (gridy 1) (anchor EAST) )
+$panel1 add $cbAlign                  ( (gridx 1) (gridy 1) (anchor WEST) )
+
+$panel1 add [new TLabel $LABEL_COUNTER] ( (gridx 0) (gridy 2) (anchor EAST) )
+$panel1 add [[new TBoxPanel] add $btDecr $btIncr] ( (gridx 1) (gridy 2)  (anchor WEST) )
+
+
+$panel add [new TTitledPanel $TITLE_CONTROLS $panel1] ( ( gridx 0) (gridy 0) (fill HORIZONTAL) )
+$panel add [new TTitledPanel $TITLE_DATA $lbData] ( (gridx 0) (gridy 1) (fill HORIZONTAL) )
+
+[new TFrame $TITLE_WINDOW $panel] setVisible $true
+

@@ -1,0 +1,244 @@
+###########################################################################
+#
+# Copyright (c) 2001, 2002, 2003, 2004 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+###########################################################################
+#
+# $Id: index.tea,v 1.13 2006/01/19 19:02:05 jfn Exp $
+#
+#
+# Tea autoload index file.
+#
+#
+# Revisions:
+#
+# 2003/05/21 Added the functions "tdbc-get-open-connections-count",
+# "tdbc-close-all-connections" to the TDBC module. (jfn)
+#
+# 2001/05/12 Created. (jfn)
+#
+###########################################################################
+
+
+
+
+
+#
+# Configuration module.
+#
+tea-autoload tea-conf-set               "util/tea-conf.tea"
+tea-autoload tea-conf-set-configuration "util/tea-conf.tea"
+tea-autoload tea-conf-get-configuration "util/tea-conf.tea"
+tea-autoload tea-conf-get               "util/tea-conf.tea"
+tea-autoload tea-conf-get-default       "util/tea-conf.tea"
+tea-autoload tea-conf-meta              "util/tea-conf.tea"
+tea-autoload TConfiguration             "util/TConfiguration.tea"
+
+
+tea-autoload tea-autoload         "util/tea-autoload.tea"
+tea-autoload TEA_NOFUNC_CALLBACK  "util/tea-autoload.tea"
+tea-autoload TEA_NOCLASS_CALLBACK "util/tea-autoload.tea"
+
+
+
+
+
+#
+# TOS module.
+#
+tea-autoload-module class "com.pdmfc.tea.modules.tos.SModuleTos"
+tea-autoload-module new "com.pdmfc.tea.modules.tos.SModuleTos"
+tea-autoload-module method "com.pdmfc.tea.modules.tos.SModuleTos"
+tea-autoload-module load-class "com.pdmfc.tea.modules.tos.SModuleTos"
+tea-autoload-module class-base-of "com.pdmfc.tea.modules.tos.SModuleTos"
+tea-autoload-module class-of "com.pdmfc.tea.modules.tos.SModuleTos"
+tea-autoload-module class-is-a "com.pdmfc.tea.modules.tos.SModuleTos"
+tea-autoload-module class-get-name "com.pdmfc.tea.modules.tos.SModuleTos"
+ 
+
+
+
+
+
+#
+# Deprecated I/O module.
+#
+define deprecatedIOModuleFile [file-join "deprecated" "io.tea"]
+
+tea-autoload write             $deprecatedIOModuleFile
+tea-autoload writeln           $deprecatedIOModuleFile
+tea-autoload flush             $deprecatedIOModuleFile
+tea-autoload readln            $deprecatedIOModuleFile
+tea-autoload open-input-file   $deprecatedIOModuleFile
+tea-autoload close-input-file  $deprecatedIOModuleFile
+tea-autoload open-output-file  $deprecatedIOModuleFile
+tea-autoload open-append-file  $deprecatedIOModuleFile
+tea-autoload close-output-file $deprecatedIOModuleFile
+
+
+
+
+
+#
+# TDBC module.
+#
+define tdbcModuleSrc [file-join "tdbc" "tdbc.tea"]
+define tdbcModuleBin "com.pdmfc.tea.modules.tdbc.SModuleTdbc"
+
+tea-autoload tdbc-set-default                $tdbcModuleSrc
+tea-autoload tdbc-default-connection         $tdbcModuleSrc
+tea-autoload tdbc-default-statement          $tdbcModuleSrc
+tea-autoload tdbc-connection                 $tdbcModuleSrc
+tea-autoload tdbc-statement                  $tdbcModuleSrc
+
+tea-autoload-module tdbc-get-open-connections-count $tdbcModuleBin
+tea-autoload-module tdbc-close-all-connections      $tdbcModuleBin
+tea-autoload-module TConnection                     $tdbcModuleBin
+tea-autoload-module sql-encode                      $tdbcModuleBin
+tea-autoload-module tdbc-register-driver            $tdbcModuleBin
+
+
+
+
+
+##
+## <TeaModule name="tea.util">
+## 
+## <Overview>
+## Utility classes and functions.
+## </Overview>
+##
+## <Description>
+## Utility classes and functions.
+## </Description>
+##
+## </TeaModule>
+##
+
+tea-autoload THashtable "util/THashtable.tea"
+
+tea-autoload-native-class TDate      "com.pdmfc.tea.modules.util.SDate"
+tea-autoload-native-class TVector    "com.pdmfc.tea.modules.util.SVector"
+tea-autoload-native-class TZipFile   "com.pdmfc.tea.modules.util.SZipFile"
+
+
+
+
+
+#
+# I/O module.
+#
+tea-autoload-native-class TFileInput  "com.pdmfc.tea.modules.io.SFileInput"
+tea-autoload-native-class TFileOutput "com.pdmfc.tea.modules.io.SFileOutput"
+tea-autoload-native-class TUrlInput   "com.pdmfc.tea.modules.io.SUrlInput"
+
+tea-autoload-module glob "com.pdmfc.tea.modules.SModuleRegexp"
+tea-autoload file-unlink-recursive "io/io.tea"
+tea-autoload file-make-path "io/io.tea"
+
+
+
+
+
+
+#
+# XML module
+#
+
+tea-autoload-module xml-encode "com.pdmfc.tea.modules.xml.SModuleXml"
+
+tea-autoload-native-class TXmlParser "com.pdmfc.tea.modules.xml.SXmlParser"
+
+tea-autoload TDomParser             "xml/TDomParser.tea"
+tea-autoload TDocument              "xml/TDocument.tea"
+tea-autoload TText                  "xml/TText.tea"
+tea-autoload TElement               "xml/TElement.tea"
+tea-autoload TNode                  "xml/TNode.tea"
+tea-autoload TProcessingInstruction "xml/TProcessingInstruction.tea"
+
+tea-autoload xml-get-first-element       "xml/utils.tea"
+tea-autoload xml-get-first-element-named "xml/utils.tea"
+tea-autoload xml-get-next-element        "xml/utils.tea"
+
+
+
+
+
+#
+# HTML module
+#
+
+tea-autoload-module html-encode "com.pdmfc.tea.modules.SModuleHtml"
+tea-autoload-module url-encode  "com.pdmfc.tea.modules.SModuleHtml"
+tea-autoload url-build "html/url.tea"
+
+
+
+
+
+#
+# RegExp module.
+#
+
+tea-autoload-module regexp-pattern "com.pdmfc.tea.modules.SModuleRegexp"
+tea-autoload-module regsub "com.pdmfc.tea.modules.SModuleRegexp"
+tea-autoload-module matches? "com.pdmfc.tea.modules.SModuleRegexp"
+tea-autoload-module matches "com.pdmfc.tea.modules.SModuleRegexp"
+tea-autoload-module regexp "com.pdmfc.tea.modules.SModuleRegexp"
+tea-autoload-module str-split "com.pdmfc.tea.modules.SModuleRegexp"
+
+
+
+
+
+#
+# Net module.
+#
+
+## 
+## <TeaModule name="tea.net">
+##
+## <Overview>
+## Network programming.
+## </Overview>
+##
+## <Description>
+## Classes and function for network programming.
+## </Description>
+## 
+## </TeaModule>
+## 
+
+tea-autoload-native-class TSocketBase "com.pdmfc.tea.modules.net.SPlainSocketBase"
+tea-autoload-native-class TSslSocketBase "com.pdmfc.tea.modules.net.SSslSocketBase"
+tea-autoload-native-class TServerSocketPlain "com.pdmfc.tea.modules.net.SPlainServerSocket"
+
+tea-autoload TSocket       "net/TSocket.tea"
+tea-autoload TSslSocket    "net/TSslSocket.tea"
+tea-autoload TServerSocket "net/TServerSocket.tea"
+
+
+
+
+
+#
+# Reflect module.
+#
+
+tea-autoload-module java-get-value    "com.pdmfc.tea.modules.reflect.SModuleReflect"
+tea-autoload-module java-get-method   "com.pdmfc.tea.modules.reflect.SModuleReflect"
+tea-autoload-module java-exec-method  "com.pdmfc.tea.modules.reflect.SModuleReflect"
+tea-autoload-module java-new-instance "com.pdmfc.tea.modules.reflect.SModuleReflect"
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+

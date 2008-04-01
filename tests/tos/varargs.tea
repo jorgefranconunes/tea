@@ -1,0 +1,44 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+
+
+
+
+
+
+define varargs args {
+
+    map echo $args
+}
+
+
+
+
+
+class C (
+    _m1
+)
+
+method C constructor () {
+    set! _m1 "======"
+}
+
+method C mVarArgs args {
+
+    echo $_m1
+    map echo $args
+}
+
+
+
+
+
+apply varargs $argv
+
+define obj [new C]
+apply $obj mVarArgs $argv
+

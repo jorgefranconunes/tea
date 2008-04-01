@@ -1,0 +1,70 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+#
+#
+#
+
+define nativeParserClass "org.apache.xerces.parsers.SAXParser"
+
+
+
+
+
+class TestParser TXmlParser (
+)
+
+
+method TestParser constructor () {
+    
+    $super constructor $nativeParserClass
+}
+
+
+method TestParser startElement ( name attribs ) {
+    $stdout write "<" $name
+    foreach attr [$attribs getKeys] {
+	$stdout write " " $attr "=\"" [$attribs get $attr] "\""
+    }
+    $stdout write ">"
+}
+
+
+method TestParser endElement ( name ) {
+    $stdout write "</" $name ">"
+}
+
+
+method TestParser characters ( contents ) {
+    $stdout write $contents
+}
+
+
+method TestParser startDocument () {
+    $stdout writeln "*** Starting document processing..."
+}
+
+
+method TestParser endDocument () {
+    $stdout writeln "*** End of document processing"
+}
+
+
+method TestParser processingInstruction ( target data ) {
+    $stdout write "<?" $target " " $data "?>"
+}
+
+
+
+
+
+if { != [length $argv] 1 } {
+    $stderr writeln "Args: xml-file"
+    exit 0
+}
+
+define parser [new TestParser]
+$parser parse [nth $argv 0]

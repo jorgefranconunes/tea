@@ -1,0 +1,76 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+###########################################################################
+#
+# $Id: THashtable.tea,v 1.1 2002/03/26 21:47:06 jfn Exp $
+#
+#
+# Revisions:
+#
+# 2001/05/12
+# Created. (jfn)
+#
+###########################################################################
+
+
+
+
+
+global THashtable [load-class "com.pdmfc.tea.modules.util.SHashtable"]
+
+
+
+
+
+###########################################################################
+##
+## <TeaMethod name="addElements"
+##            arguments="elementData"
+## 	      className="THashtable">
+## 
+## <Overview>
+## Adds multiple elements to this table.
+## </Overview>
+##
+## <Parameter name="elementData">
+## A list containing the elements to add.
+## </Parameter>
+##
+## <Returns>
+## A reference to the <Class name="THashtable"/> object for which
+## the method was called.
+## </Returns>
+## 
+## <Description>
+## The <Arg name="elementData"/> argument defines the objects to
+## add to this table. Each element in the <Arg name="elementData"/>
+## is a two element list. The first is used as the key and the second
+## is used as the value.
+##
+## <P>This method could be implemented in the following way:</P>
+## <Code>
+## method THashtable addElements ( elemList ) {
+##    foreach elemData $elemList {
+##        apply $this put $elemData
+##    }
+##    is $this
+## }
+## </Code>
+## </Description>
+## 
+## </TeaMethod>
+## 
+###########################################################################
+
+method THashtable addElements ( elemList ) {
+    
+    foreach elemData $elemList {
+        apply $this put $elemData
+    }
+
+    is $this
+}

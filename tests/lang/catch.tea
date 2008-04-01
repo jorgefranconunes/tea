@@ -1,0 +1,55 @@
+###########################################################################
+#
+# Copyright (c) 2006 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+if {not [catch {/ 1 0}]} {
+    echo "catch of division by zero failed"
+    exit 1
+}
+
+define aMsg $null
+
+if {catch {/ 8 4} aMsg} {
+    echo "catch of division 8/4 failed"
+    exit 1
+}
+
+echo "You should see 2 : " $aMsg
+if {!= $aMsg 2} {
+    echo "8/4!=2 : " $aMsg
+    exit 1
+}
+
+if {not [catch {/ 1 0} aMsg]} {
+    echo "catch of division by zero failed"
+    exit 1
+}
+
+if {not [string? $aMsg]} {
+    echo "error message is not a string"
+    exit 1
+}
+
+echo "This is a div by zero error message : " $aMsg
+
+define aStack $null
+
+if {not [catch {/ 1 0} aMsg aStack]} {
+    echo "catch of division by zero failed"
+    exit 1
+}
+
+if {not [string? $aStack]} {
+    echo "stack trace is not a string"
+    exit 1
+}
+
+echo "This is a stack trace (may be multiline) "
+echo "------ start stack trace ----"
+echo $aStack
+echo "------ end stack trace ----"
+echo "catch test succeeded"
+
+exit 0

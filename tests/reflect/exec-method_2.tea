@@ -1,0 +1,19 @@
+###########################################################################
+#
+# Copyright (c) 2005 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+
+
+#
+# Testing the java-new-instance function and warpping of arguments.
+#
+
+define obj1 [java-new-instance "ReflectTest" 32]
+define obj2 [java-new-instance "ReflectTest" 23]
+
+define value [$obj2 adder 30 $obj1]
+
+echo "Result should be (23+(32+30))=85"
+echo $value

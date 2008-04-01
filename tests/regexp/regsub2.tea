@@ -1,0 +1,23 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+#
+# Test for "regsub" function implemented with the GNU regex library.
+#
+# Args: regex substitution input
+#
+
+
+
+
+
+if { != [length $argv] 3 } {
+    echo "Args: regex substitution input"
+    exit 0
+}
+
+echo [apply regsub $argv]
+

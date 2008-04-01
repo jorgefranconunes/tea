@@ -1,0 +1,272 @@
+###########################################################################
+#
+# Copyright (c) 2001, 2002, 2003 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+###########################################################################
+#
+# $Id: doc-html.tea,v 1.7 2006/10/11 13:35:58 jpsl Exp $
+#
+#
+# Utility to produce Tea documentation from comments embeded in
+# Tea and Java source files.
+#	
+#
+# Revisions:
+#
+# 2006/08/02 Added the Since tag. (jpsl).
+#
+# 2003/05/23 Added a "--version" option.
+#
+# 2001/04/05 Now uses a more flexible way to receive options from the
+# command line. (jfn)
+#
+# 2001/01/10 Added support for the "Class", "ClassRef", "MethodRef",
+# "FuncRef" elements. (jfn)
+#
+# 2000/09/24 Added support for the "Enumeration" element. (req-0056) (jfn)
+#
+# 2000/05/29 Added support for multiple method and function
+# prototypes (req-0049). (jfn)
+#
+# 2000/03/25 Created. (jfn)
+#
+###########################################################################
+
+import "DocProducer.tea"
+
+import "drivers/html/printer-html-DocSet.tea"
+import "drivers/html/printer-html-ClassDoc.tea"
+import "drivers/html/printer-html-FunctionDoc.tea"
+import "drivers/html/printer-html-MethodDoc.tea"
+import "drivers/html/printer-html-ModuleDoc.tea"
+import "drivers/html/printer-html.tea"
+
+
+
+
+
+tea-conf-set Enumeration      printerFunction printer-html-Enumeration
+tea-conf-set ArgElement       printerFunction printer-html-ArgElement
+tea-conf-set ClassDoc         printerFunction printer-html-ClassDoc
+tea-conf-set CodeElement      printerFunction printer-html-CodeElement
+tea-conf-set Description      printerFunction printer-html-Description
+tea-conf-set FuncElement      printerFunction printer-html-FuncElement
+tea-conf-set FuncRefElement   printerFunction printer-html-FuncRefElement
+tea-conf-set ClassRefElement  printerFunction printer-html-ClassRefElement
+tea-conf-set MethodRefElement printerFunction printer-html-MethodRefElement
+tea-conf-set FunctionDoc      printerFunction printer-html-FunctionDoc
+tea-conf-set MethodDoc        printerFunction printer-html-MethodDoc
+tea-conf-set ModuleDoc        printerFunction printer-html-ModuleDoc
+tea-conf-set Overview         printerFunction printer-html-Overview
+tea-conf-set PElement         printerFunction printer-html-PElement
+tea-conf-set Parameter        printerFunction printer-html-Parameter
+tea-conf-set ReturnInfo       printerFunction printer-html-ReturnInfo
+tea-conf-set SinceElement     printerFunction printer-html-SinceElement
+tea-conf-set TextElement      printerFunction printer-html-TextElement
+tea-conf-set VarElement       printerFunction printer-html-VarElement
+tea-conf-set DocSet           printerFunction printer-html-DocSet
+tea-conf-set GenericElement   printerFunction printer-html-generic
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define show-header () {
+    
+    echo
+    echo "TeaDoc " $TEA_VERSION
+    echo "Copyright (c) 2001, 2002, 2003, 2004 PDM&FC, All Rights Reserved."
+    echo
+    echo "Tool for Generating Tea Documentation from Source Files"
+    echo
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define show-help () {
+    
+    show-header
+    
+    echo "Usage: teadoc [option=value ...]
+
+Available options:
+--path-list=DIRLIST
+	List of colon separated names of files or directories to be
+	processed. If a path refers to a directory then every file
+	having a \".java\" or \".tea\" extension in that directory and
+	every child directory will be processed. This is a mandatory
+	option.
+--output-dir=DIR
+	Name of directory where the genarated HTML files will be
+	placed. If not specified it will default to the current
+	directory.
+--native-parser=JAVA_CLASS
+	Name of the Java class that will be used to parse XML files.
+	This Java class must implement the SAX interface. This is a
+	mandatory option.
+--header=TEXT
+	Specifies the text to be placed at the top of each generated
+	HTML file. This text will be placed at the extreme right of
+	the top navigation bar. It may contain HTML tags. If not
+	specified it will default to an empty string.
+--footer=TEXT
+	Specifies the text to be placed at the bottom of each
+	generated HTML file. This text will be placed at the extreme
+	right of the bottom navigation bar. It may contain HTML
+	tags. If not specified it will default to the same value
+	specified for the --header option.
+--bottom=TEXT
+	Text that will be placed at the bottom of every HTML page. The
+	text will be placed bellow the bottom navigation bar. It may
+	contain HTML tags.
+--doc-title=TEXT
+	The title presented at the entry page for the
+	documentation. The TEXT is placed imediatly bellow the top
+	navigation bar inside a level 1 heading element. It may
+	contain HTML tags.
+--window-title=TEXT
+	The title to be used for each HTML page. It may not contain
+	HTML tags. Quotation marks within TEXT must be escaped if they
+	are HTML significant.
+--version
+	Print version information and exits.
+--help
+	Prints this help text and exits.
+"
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define fetch-option-value ( optionName optionValue ) {
+    
+    define expr    [str-cat $optionName "(.*)"]
+    define matches [regexp $expr $optionValue]
+    
+    if { not-empty? $matches } {
+        nth [car $matches] 1
+    } {
+        is $null
+    }
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define pathList      ()
+define outputDir     "."
+define nativeParser  $null
+define teadocBaseDir [file-dirname $argv0]
+define dtdFile       [file-join $teadocBaseDir "../../TeaDoc.dtd"]
+define stylesFile    [file-join $teadocBaseDir "../../stylesheet.css"]
+
+
+
+
+
+define opt $null
+
+foreach cliArg $argv {
+    if { not-null? [set! opt [fetch-option-value "--path-list=" $cliArg]] } {
+        set! pathList [file-split-path-list $opt]
+        continue
+    }
+    if { not-null? [set! opt [fetch-option-value "--output-dir=" $cliArg]] } {
+        set! outputDir $opt
+        continue
+    }
+    if { not-null? [set! opt [fetch-option-value "--native-parser=" $cliArg]] } {
+        set! nativeParser $opt
+        continue
+    }
+    if { not-null? [set! opt [fetch-option-value "--header=" $cliArg]] } {
+        printer-html-set header $opt
+        continue
+    }
+    if { not-null? [set! opt [fetch-option-value "--footer=" $cliArg]] } {
+        printer-html-set footer $opt
+        continue
+    }
+    if { not-null? [set! opt [fetch-option-value "--bottom=" $cliArg]] } {
+        printer-html-set bottom $opt
+        continue
+    }
+    if { not-null? [set! opt [fetch-option-value "--doc-title=" $cliArg]] } {
+        printer-html-set documentTitle $opt
+        continue
+    }
+    if { not-null? [set! opt [fetch-option-value "--window-title=" $cliArg]] } {
+        printer-html-set windowTitle $opt
+        continue
+    }
+    if { not-null? [set! opt [fetch-option-value "--help" $cliArg]] } {
+        show-help
+        exit 0
+    }
+    if { not-null? [set! opt [fetch-option-value "--version" $cliArg]] } {
+        show-header
+        exit 0
+    }
+    echo "*** Unrecognized option (" $cliArg "). Use --help for details."
+    exit 0
+}
+
+if { empty? $pathList } {
+    echo "*** Missing --path-list option. Use --help for details."
+    exit 0
+}
+if { null? $nativeParser } {
+    echo "*** Missing --native-parser option. Use --help for details."
+    exit 0
+}
+    
+    
+    
+    
+    
+define _docProducer [new DocProducer $nativeParser]
+
+file-copy $dtdFile [file-join $outputDir [file-basename $dtdFile]]
+file-copy $stylesFile [file-join $outputDir [file-basename $stylesFile]]
+$_docProducer generateDocs $pathList $outputDir
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+

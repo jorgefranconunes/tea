@@ -1,0 +1,40 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+
+
+#
+# Testing the THashtable TOS Class.
+#
+
+
+
+
+define aTable [new THashtable]
+
+foreach item ( (1 "um") (2 "dois") (3 "tres") ("quatro" 4) ("cinco" 5) ) {
+    define key   [nth $item 0]
+    define value [nth $item 1]
+    $aTable put $key $value
+}
+
+foreach key [$aTable getKeys] {
+    echo $key " -> " [$aTable get $key]
+}
+
+map echo [map [lambda (x) { $aTable get $x}] (3 "quatro" "cinco")]
+
+$aTable addElements (
+    ( "key1" 1 )
+    ( "key2" 2 )
+    ( "key3" 3 )
+    ( "key4" 4 )
+    ( "key5" 5 )
+)
+
+define keys [$aTable getKeys]
+map echo [map [lambda (k v) {str-fmt "\"{0}\" => \"{1}\"" $k $v}] $keys [map [lambda (k) {$aTable get $k}] $keys]]
+

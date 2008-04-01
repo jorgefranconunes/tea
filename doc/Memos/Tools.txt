@@ -1,0 +1,62 @@
+Tools
+=====
+
+This document describes the tools that come with the Tea package.
+
+
+
+
+
+tsh
+===
+
+*** TBD: Environment variables that affect the functioning of "tsh".
+
+
+The "tsh" tool understands the following options:
+
+--library=DIRLIST
+
+	Colon separated list of directory pathnames or URLs. These are
+	the locations where the Tea 'import' function will look for
+	files. In the case of an URL all the colons must be replaced
+	by the '|' character. This option is not mandatory.
+
+
+--classpath=DIRLIST
+
+	Colon separated list of directories or JAR files pathnames. These
+	will be added to the CLASSPATH of the JVM running the Tea script.
+	This option is needed when using external Java libraries (e.g. for
+	a JDBC driver). This option is not mandatory.
+
+
+--jre=PATH
+
+	Path to your Java runtime environment executable. It must accept
+	the "-classpath" and "-D" options. This option is not mandatory.
+	When not specified it will default to the value specified at
+        instalation time.
+
+
+--jre-options=STRING
+
+	Set of options passed as argument to the JRE. This option is
+	not mandatory. It defaults to an empty string, that is, the JRE
+	is invoked with no aditional options.
+
+
+--help
+
+	Prints this help text and exits.
+
+
+*** TBD: Tea global variables created when running Tea scrips from
+    "tsh".
+
+
+
+
+
+teadoc
+======

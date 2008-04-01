@@ -1,0 +1,96 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+
+load "com.pdmfc.tea.modules.tango.STModuleTango"
+global TFrame  [load-class "com.pdmfc.tea.modules.tango.frame.STFrameClass"]
+global TButton [load-class "com.pdmfc.tea.modules.tango.button.STButtonClass"]
+global TBoxPanel  [load-class "com.pdmfc.tea.modules.tango.boxPanel.STBoxPanelClass"]
+global TLabel  [load-class "com.pdmfc.tea.modules.tango.label.STLabelClass"]
+global TTitledPanel [load-class "com.pdmfc.tea.modules.tango.titledPanel.STTitledPanelClass"]
+global TComboBox [load-class "com.pdmfc.tea.modules.tango.comboBox.STComboBoxClass"]
+global TTextField [load-class "com.pdmfc.tea.modules.tango.textField.STTextFieldClass"]
+global TGridBagPanel [load-class "com.pdmfc.tea.modules.tango.gridBagPanel.STGridBagPanelClass"]
+
+
+
+
+
+define panel [new TBoxPanel]
+define bt1   [new TButton "Press Me"]
+define bt2   [new TButton "0"]
+define frame [new TFrame "Tango Test" [new TTitledPanel "Tango Sample" $panel]]
+define cb    [new TComboBox ( (1 "One") (2 "Two") (3 "Three"))]
+define tf    [new TTextField "Anything goes..."]
+
+$panel add [new TLabel "Widgets "] $bt1 $bt2 $cb $tf
+$frame setVisible $true
+
+
+int i 0
+$bt1 set actionCallback [lambda () { echo "Hello, world! (" [++ $i] ")" }]
+
+int j 0
+$bt2 set actionCallback [lambda () { $bt2 set text [int->string [++ $j]] }]
+
+
+$cb set actionCallback [lambda () {
+    echo "*** Selected item " [$cb get selectedIndex] " (" [$cb get selectedItem] ")"
+}]
+
+
+$tf setAction [lambda () {
+    echo "*** Selected text '" [$tf getText] "'"
+}]
+
+
+
+
+
+define create-buttons () {
+
+    map create-one-button ( 0 1 2 3 4 5 6 7 8 9 )
+}
+
+
+
+
+
+define create-one-button ( x ) {
+
+    define button [new TButton [int->string $x]]
+    $button set actionCallback [lambda () { press-digit $x }]
+    is $button
+}
+
+
+
+
+
+define press-digit ( x ) {
+
+    echo $x
+}
+
+
+
+
+map define (b0 b1 b2 b3 b4 b5 b6 b7 b8 b9) [create-buttons]
+define entry [new TTextField]
+
+define p1 [new TBoxPanel $false]
+define p2 [new TGridBagPanel]
+
+$p1 add	[[new TBoxPanel] add $b7 $b8 $b9]	\
+	[[new TBoxPanel] add $b4 $b5 $b6]	\
+	[[new TBoxPanel] add $b1 $b2 $b3]	\
+	[[new TBoxPanel] add $b0]
+
+$p2 add $entry ( (fill HORIZONTAL) )
+$p2 add $p1 ( (gridy 1) )
+
+[new TFrame "Calculator" $p2] setVisible $true
+

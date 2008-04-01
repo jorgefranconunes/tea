@@ -1,0 +1,215 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+#############################################################################
+#
+# $Id: io.tea,v 1.1 2002/02/20 11:56:28 jfn Exp $
+#
+# Some deprecated commands related with io.
+#
+#
+# Revisions:
+#
+# 1998/12/29
+# Created. (jfn)
+#
+#############################################################################
+
+
+
+
+
+#############################################################################
+#
+# Writes a string into a stream.
+#
+# @param aStream
+#    A TOutput object.
+#
+# @param aString
+#    The string to be written.
+#
+#############################################################################
+
+global write ( aStream aString ) {
+
+    $aStream write $aString
+}
+
+
+
+
+
+#############################################################################
+#
+# Writes a string into a stream and appends an eol sequence.
+#
+# @param aStream
+#    A TOutput object.
+#
+# @param aString
+#    The string to be written.
+#
+#############################################################################
+
+global writeln ( aStream aString ) {
+
+    $aStream writeln $aString
+}
+
+
+
+
+
+#############################################################################
+#
+# Flushes the internal buffers of an output stream.
+#
+# @param aStream
+#    A TOutput object.
+#
+#############################################################################
+
+global flush ( aStream ) {
+
+    $aStream flush
+}
+
+
+
+
+
+#############################################################################
+#
+# Reads a line from an input stream. On eof a null object will be returned.
+#
+# @param aStream
+#    A TInput object.
+#
+# @return
+#    A string with the line just read, or null if at eof.
+#
+#############################################################################
+
+global readln ( aStream ) {
+
+    $aStream readln
+}
+
+
+
+
+
+#############################################################################
+#
+# Opens a file for reading.
+#
+# @param fileName
+#    The name of the file to be opened for reading.
+#
+# @return
+#    A TFileInput object that can be used as a TInput.
+#
+#############################################################################
+
+global open-input-file ( fileName ) {
+
+    new TFileInput $fileName
+}
+
+
+
+
+
+#############################################################################
+#
+# Closes an input stream previously opened witha a call to open-input-file.
+# From now on no further operations will be permited on the stream.
+#
+# @param aStream
+#    A TInput object.
+#
+#############################################################################
+
+global close-input-file ( aStream ) {
+
+    $aStream close
+}
+
+
+
+
+
+#############################################################################
+#
+# Opens a file for writing. If the file does not exist it is created.
+# An error is thrown if the process has no permissions to write to or
+# create the file.
+#
+# @param fileName
+#    The name of the file to be opened for writing.
+#
+# @return
+#     A TFileOutput object that can be used as a TOutput.
+#
+#############################################################################
+
+global open-output-file ( fileName ) {
+
+    new TFileOutput $fileName
+}
+
+
+
+
+
+#############################################################################
+#
+# Opens a file for writing in append mode. if the file does not exist it
+# is created.
+#
+# @param fileName
+#    The name of the file to be opened in append mode.
+#
+# @return
+#    A TFileOutput object that can be used as a TOutput.
+#
+#############################################################################
+
+global open-append-file ( fileName ) {
+
+    new TFileOutput $fileName $true
+}
+
+
+
+
+
+#############################################################################
+#
+# Closes an output stream previously opened with a call to open-input-file
+# or open-output-file. From now on the stream can no longer be used.
+#
+# @param aStream
+#    A TOuput object.
+#
+#############################################################################
+
+global close-output-file ( aStream ) {
+
+    $aStream close
+}
+
+
+
+
+
+#############################################################################
+#
+# 
+#
+#############################################################################
+

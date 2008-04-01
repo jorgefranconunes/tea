@@ -1,0 +1,13 @@
+This document explains how to create the tarball for a new Tea
+release.
+
+
+1. Check out the most current version from the CVS repository.
+
+2. Follow the instructions on the "00README" file on setting up the
+   development environment and building.
+
+3. Create a tag in the CVS repository for the current version.
+
+4. Use the "make/make-tar-ball" tool to create the tar ball.
+

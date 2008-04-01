@@ -1,0 +1,72 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+
+
+class Base (
+)
+
+
+method Base constructor () {
+    echo "Entrada de Base::constructor"
+    $this umMetodo
+    echo "Saida de Base::constructor"
+}
+
+
+method Base umMetodo () {
+    echo "Base::umMethodo"
+}
+
+
+
+class Derivada1 Base (
+)
+
+
+method Derivada1 constructor () {
+    $super constructor
+    echo "Entrada de Derivada1::constructor"
+    $this umMetodo
+    echo "Saida de Derivada1::constructor"
+}
+
+
+method Derivada1 umMetodo () {
+    echo "Entrada de Derivada1::umMetodo"
+    $super umMetodo
+    echo "Saida de Derivada1::umMetodo"
+}
+
+
+
+class Derivada2 Derivada1 (
+)
+
+
+method Derivada2 umMetodo () {
+    echo "Entrada de Derivada2::umMetodo"
+    $super umMetodo
+    echo "Saida de Derivada2::umMetodo"
+}
+
+
+method Derivada2 constructor () {
+    $super constructor
+    echo "Entrada de Derivada2::constructor"
+    $this umMetodo
+    echo "Saida de Derivada2::constructor"
+}
+
+
+
+
+
+define obj [new Derivada2]
+echo
+$obj umMetodo
+
+

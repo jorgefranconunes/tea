@@ -1,0 +1,66 @@
+Jorge,
+
+estou com um problema em correr uma aplicacao em I*Tea na turquoise,
+cujo problema e' um ficheiro ja' importado estar a ser importado
+novamente.
+
+O bug esta' no Tea, na SFunctionImport.java:
+...
+private class ImportItem
+...
+public Object tryToPerformImport()
+...
+   if ( input != null ) {
+        _lastImportTime = System.currentTimeMillis();
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ERRADO - deve ser o file.lastModified(); - caso seja um ficheiro.
+
+Isto porque mais a' frente onde ...
+
+        long    lastModified  = file.lastModified();
+        boolean fileExists    = lastModified != 0;
+
+        if ( fileExists ) {
+            if ( lastModified > _lastImportTime ) {
+
+o lastModified d'a mais recente.
+
+Isto porque o codigo esta' a executar na turquoise
+onde o relogio e':
+
+Fri Nov 18 13:39:44 WET 2005
+
+e os ficheiros estao a ser editados na red, onde o relogio e':
+
+Fri Nov 18 13:52:28 WET 2005
+
+Ou seja, o Tea esta' a importar 2 vezes o mesmo ficheiro,
+porque, a data onde importou o ficheiro e' inferior
+a' data da ultima alteracao do ficheiro.
+
+Ou seja, a verificacao de importacao pela data de alteracao esta'
+dependente do relogio.
+
+Uma segunda importacao so' devera' ser efectuada se o
+file.lastModified() actual for mais recente que o
+file.lastModified() de quando o ficheiro foi importado pela
+primeira vez (e nao do que o System.currentTimeMillis()
+de quando ocorreu a primeira importacao).
+
+Queres corrigir, ou queres que corrija eu ?
+
+
+
+2 ficheiros.
+Colocas a data do i.tea no futuro (editas o ficheiro na red),
+e corres o main.tea na turquoise
+/opt/local/tea-3.1.12/bin/tsh main.tea
+
+Obervas 2 imports.
+
+---- main.tea -----
+import "i.tea"
+import "i.tea"
+
+--- i.tea ----
+echo "Importing i.tea"

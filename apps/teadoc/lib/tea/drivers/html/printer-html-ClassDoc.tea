@@ -1,0 +1,282 @@
+###########################################################################
+#
+# Copyright (c) 2000, 2001, 2002, 2003, 2004 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+###########################################################################
+#
+# $Id: printer-html-ClassDoc.tea,v 1.6 2006/10/11 13:35:58 jpsl Exp $
+#
+#
+# Revisions:
+#
+# 2004/10/19 Simplified the HTML for the navigation bar. (jfn)
+#
+# 2000/06/18 Now prints the inheritance tree. (req-0050) (jfn)
+#
+# 2000/05/29 Added support for multiple method prototypes (req-0049). (jfn)
+#
+# 2000/03/25 Created. (jfn)
+#
+###########################################################################
+
+import "drivers/html/html-utils.tea"
+
+
+
+
+
+define NAVIGATION_BAR "
+<table class=\"docHeader\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%%\">
+  <tr>
+    <td class=\"docHeaderCell\"><a href=\"index.html\">Overview</a></td>
+    <td class=\"docHeaderCell\"><a href=\"module-%s.html\">Module</a></td>
+    <td class=\"docHeaderCell\">Function</td>
+    <td class=\"docHeaderCellSelected\">Class</td>
+    <td width=\"100%%\" class=\"docHeaderTitle\">%s</td>
+  </tr>
+</table>
+"
+
+define DESCRIPTION_PREFIX "
+<h1 class=\"docTitle\">
+Class <code>%s</code>
+</h1>
+"
+
+define DESCRIPTION_SUFFIX "
+<p></p>
+"
+
+define SUMMARY_PREFIX "
+<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%%\">
+<tr><td bgcolor=\"gray\">
+
+<table border=\"0\" cellpadding=\"3\" cellspacing=\"1\" width=\"100%%\">
+<tr>
+<td class=\"docTableHeader\">%s</td>
+</tr>
+"
+
+define SUMMARY_LINE_PREFIX "
+<TR>
+<TD CLASS=\"docTableRow\">
+"
+
+define PROTOTYPES_ITEM "
+<TT><A HREF=\"#%s\">%s</A> <I>%s</I></TT><BR>
+"
+
+define WHITE_SPACE "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+
+define SUMMARY_LINE_SUFFIX "
+</TD>
+</TR>
+"
+
+define SUMMARY_SUFFIX "
+</table>
+
+</td></tr>
+</table>
+
+<br>
+"
+
+define DETAIL_PREFIX "
+<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%%\">
+<tr><td bgcolor=\"gray\">
+
+<table border=\"0\" cellpadding=\"3\" cellspacing=\"1\" width=\"100%%\">
+<tr>
+<td class=\"docTableHeader\">%s</td>
+</tr>
+</table>
+
+</td></tr>
+</table>
+
+<br>
+"
+
+define DETAIL_SUFFIX "
+<br>
+"
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+global printer-html-ClassDoc ( outputStream classDoc ) {
+
+    print-header      $outputStream $classDoc
+    print-description $outputStream $classDoc
+    print-summary     $outputStream $classDoc
+    print-detail      $outputStream $classDoc
+    print-footer      $outputStream $classDoc
+}
+
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define print-header ( outputStream classDoc ) {
+
+    define now    [new TDate]
+    define header [printer-html-get header]
+
+    $outputStream write [str-fmt $HTML_DOC_PREFIX $now [$classDoc getName]]
+    $outputStream printf $NAVIGATION_BAR	\
+				[$classDoc getModuleName]	\
+				$header
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define print-description ( outputStream classDoc ) {
+
+    $outputStream printf $DESCRIPTION_PREFIX [$classDoc getName]
+    print-inheritance-tree $outputStream $classDoc
+    [$classDoc getDescription] print $outputStream
+    define since       [$classDoc getSince]
+    if {not-null? $since} {
+        $outputStream writeln "<p></p>"
+        $outputStream writeln "\n<DL>"
+        $outputStream writeln "<DT><SPAN CLASS=\"docParamLabel\">Since:</SPAN>"
+        $since print $outputStream
+        $outputStream writeln "</DL>"
+    }
+    $outputStream printf $DESCRIPTION_SUFFIX
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define print-inheritance-tree ( outputStream classDoc ) {
+
+    define baseClass [$classDoc getBaseClass]
+
+    if { not-null? $baseClass } {
+	$outputStream writeln "<P><TT>"
+	$outputStream write [html-encode [$classDoc getName]]
+	while { not-null? $baseClass } {
+	    define name [$baseClass getName]
+	    $outputStream printf " -> <A HREF=\"class-%s.html\">%s</A>"	\
+					[url-encode $name]		\
+					[html-encode $name]
+	    set! baseClass [$baseClass getBaseClass]
+	}
+	$outputStream writeln "</TT></P>"
+    }
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define print-summary ( outputStream classDoc ) {
+
+    $outputStream printf $SUMMARY_PREFIX "Method Summary"
+    foreach methodDoc [$classDoc getMethodDocs] {
+	define methodName [$methodDoc getName]
+
+	$outputStream printf $SUMMARY_LINE_PREFIX
+	foreach formalArgs [$methodDoc getPrototypes] {
+	    $outputStream printf $PROTOTYPES_ITEM			\
+					[url-encode $methodName]	\
+					[html-encode $methodName]	\
+					[html-encode $formalArgs]
+	}
+	$outputStream write $WHITE_SPACE
+	[$methodDoc getOverview] print $outputStream
+	$outputStream write $SUMMARY_LINE_SUFFIX
+    }
+    $outputStream printf $SUMMARY_SUFFIX
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define print-detail ( outputStream classDoc ) {
+
+    $outputStream printf $DETAIL_PREFIX "Method Detail"
+    foreach methodDoc [$classDoc getMethodDocs] {
+	$methodDoc print $outputStream
+    }
+    $outputStream printf $DETAIL_SUFFIX
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define print-footer ( outputStream classDoc ) {
+    
+    define footer [printer-html-get footer]
+    define bottom [printer-html-get bottom]
+
+    $outputStream printf $NAVIGATION_BAR			\
+				[$classDoc getModuleName]	\
+				$footer
+    $outputStream writeln $bottom
+    $outputStream write $HTML_DOC_SUFIX
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+

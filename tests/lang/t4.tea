@@ -1,0 +1,19 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+import "lang.tea"
+
+
+define in  [open-input-file "\\config.sys"]
+define out [open-output-file "lixo.txt"]
+define aLine
+
+while { not [null? [set! aLine [readln $in]]] } {
+    writeln $out [str-lower $aLine]
+}
+
+close-input-file $in
+close-output-file $out

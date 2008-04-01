@@ -1,0 +1,50 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+#
+# Tests the method call eficiency, depending on the number of arguments.
+#
+
+
+
+
+
+class C (
+)
+
+method C m0 () {}
+method C m1 ( a1 ) {}
+method C m2 ( a1 a2 ) {}
+method C m3 ( a1 a2 a3 ) {}
+method C m4 ( a1 a2 a3 a4 ) {}
+method C m5 ( a1 a2 a3 a4 a5 ) {}
+method C m6 ( a1 a2 a3 a4 a5 a6 ) {}
+method C m7 ( a1 a2 a3 a4 a5 a6 a7 ) {}
+method C m8 ( a1 a2 a3 a4 a5 a6 a7 a8 ) {}
+method C m9 ( a1 a2 a3 a4 a5 a6 a7 a8 a9 ) {}
+
+
+
+
+
+define obj         [new C]
+define count       1000
+int    i           0
+define methodNames ( m0 m1 m2 m3 m4 m5 m6 m7 m8 m9 )
+
+echo "Call with 0 args: " [time { $obj m0 } $count] " per " $count " iterations."
+echo "Call with 1 args: " [time { $obj m1 ""} $count] " per " $count " iterations."
+echo "Call with 2 args: " [time { $obj m2 "" "" } $count] " per " $count " iterations."
+echo "Call with 3 args: " [time { $obj m3 "" "" "" } $count] " per " $count " iterations."
+echo "Call with 4 args: " [time { $obj m4 "" "" "" "" } $count] " per " $count " iterations."
+echo "Call with 5 args: " [time { $obj m5 "" "" "" "" "" } $count] " per " $count " iterations."
+echo "Call with 6 args: " [time { $obj m6 "" "" "" "" "" "" } $count] " per " $count " iterations."
+echo "Call with 7 args: " [time { $obj m7 "" "" "" "" "" "" "" } $count] " per " $count " iterations."
+echo "Call with 8 args: " [time { $obj m8 "" "" "" "" "" "" "" "" } $count] " per " $count " iterations."
+echo "Call with 9 args: " [time { $obj m9 "" "" "" "" "" "" "" "" "" } $count] " per " $count " iterations."
+
+
+

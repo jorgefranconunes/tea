@@ -1,0 +1,28 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+#
+# Copy one file into another.
+#
+
+
+load "com.pdmfc.teapackages.tos.STModuleTOS"
+
+
+
+
+
+define in  [new TFileInput [nth $argv 0]]
+define out [new TFileOutput [nth $argv 1] $true]
+define aLine $null
+
+while { not-null? [set! aLine [$in readln]] } {
+    $out writeln $aLine
+}
+
+$in close
+$out close
+

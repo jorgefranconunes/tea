@@ -1,0 +1,42 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+
+load "com.pdmfc.teapackages.tos.STModuleTOS"
+
+
+class Xpto (_member1 _member2)
+
+method Xpto constructor () { set! _member1 0; echo "Xpto constructor" }
+method Xpto show () { echo $_member1 }
+method Xpto inc (x)  { set! _member1 [+ $_member1 $x] }
+method Xpto get ()  { return $_member1 }
+method Xpto ola () { echo "Xpto::Ola" }
+method Xpto adeus () { $this ola; echo "Adeus" }
+
+
+class Abcd  Xpto ()
+method Abcd constructor () { $super constructor }
+method Abcd ola () { echo "Abcd::Ola" }
+method Abcd adeus() { $super adeus; echo "..." }
+
+
+define obj1 [new Xpto]
+$obj1 ola
+
+define obj2 [new Abcd]
+$obj2 ola
+
+echo
+$obj1 adeus
+$obj2 adeus
+
+
+while { < [$obj2 get] 5 } {
+    $obj2 inc 2
+    $obj2 show
+}
+$obj1 show

@@ -1,0 +1,838 @@
+###########################################################################
+#
+# Copyright (c) 2000, 2001, 2002, 2003, 2004 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+###########################################################################
+#
+# $Id: DocSet.tea,v 1.5 2006/10/11 13:35:58 jpsl Exp $
+#
+#
+# Revisions:
+#
+# 2006/08/02 Added the Since tag. (jpsl)
+#
+# 2004/08/13 Unrecognized tags are now stored without any special
+# processing. This makes it possible to use arbitrary HTML tags inside
+# the teadoc documentation. (jfn)
+#
+# 2001/01/10 Added support for the "Class", "ClassRef", "MethodRef",
+# "FuncRef" elements. (jfn)
+#
+# 2000/10/04
+# The "characters" method now calls "addText" for the current
+# element (instead of "addElement"). (jfn)
+#
+# 2000/09/24
+# Added support for the "Enumeration" element. (req-0056) (jfn)
+#
+# 2000/06/18
+# The "startTeaClass" method was modified to use the new
+# "ClassDoc setBaseClass" method. (req-0050) (jfn)
+#
+# 2000/05/29
+# Added support for multiple function and method prototypes (req-0049). (jfn)
+#
+# 2000/03/11
+# Created. (jfn)
+#
+###########################################################################
+
+import "elements/ArgElement.tea"
+import "elements/ClassDoc.tea"
+import "elements/ClassRefElement.tea"
+import "elements/CodeElement.tea"
+import "elements/Description.tea"
+import "elements/ElementList.tea"
+import "elements/Enumeration.tea"
+import "elements/FuncElement.tea"
+import "elements/FuncRefElement.tea"
+import "elements/FunctionDoc.tea"
+import "elements/GenericElement.tea"
+import "elements/MethodRefElement.tea"
+import "elements/MethodDoc.tea"
+import "elements/ModuleDoc.tea"
+import "elements/Overview.tea"
+import "elements/PElement.tea"
+import "elements/Parameter.tea"
+import "elements/ReturnInfo.tea"
+import "elements/SinceElement.tea"
+import "elements/TextElement.tea"
+import "elements/VarElement.tea"
+
+
+
+
+
+
+define START_ELEMENT_METHODS (
+	( "TeaDoc"		$null )
+	( "TeaModule"		startTeaModule )
+	( "TeaClass"		startTeaClass )
+	( "TeaMethod"		startTeaMethod )
+	( "TeaFunction"		startTeaFunction )
+	( "Prototype"   	startPrototype )
+	( "Overview"		startOverview )
+	( "Parameter"		startParameter )
+	( "Returns"		startReturns )
+	( "Since"		startSince )
+	( "Description"		startDescription )
+	( "Func"		startFunc )
+	( "FuncRef"		startFuncRef )
+	( "Class"		startFunc )
+	( "ClassRef"		startClassRef )
+	( "MethodRef"		startMethodRef )
+	( "Arg"			startArg )
+	( "Code"		startCode )
+	( "Var"			startVar )
+	( "P"			startP )
+	( "Enumeration" 	startEnumeration )
+	( "EnumItem"		$null )
+	( "EnumLabel"		startEnumLabel )
+	( "EnumDescription"	startEnumDescription )
+)
+
+define END_ELEMENT_METHODS (
+	( "TeaDoc"		$null )
+	( "TeaModule"		endDocElement )
+	( "TeaClass"		endDocElement )
+	( "TeaMethod"		endDocElement )
+	( "TeaFunction"		endDocElement )
+	( "Prototype"   	$null )
+	( "Overview"		endDocElement )
+	( "Parameter"		endDocElement )
+	( "Returns"		endDocElement )
+	( "Since"		$null )
+	( "Description"		endDocElement )
+	( "Func"		$null )
+	( "FuncRef"		$null )
+	( "Class"		$null )
+	( "ClassRef"		$null )
+	( "MethodRef"		$null )
+	( "Arg"			$null )
+	( "Code"		endDocElement )
+	( "Var"			$null )
+	( "P"			endDocElement )
+	( "Enumeration" 	endDocElement )
+	( "EnumItem"		$null )
+	( "EnumLabel"		endDocElement )
+	( "EnumDescription"	endDocElement )
+)
+
+
+
+
+
+define _classNeedsInit $true
+
+define _startElementMethods $null
+define _endElementMethods   $null
+define _printerFunction     $null
+
+
+
+
+
+###########################################################################
+#
+# Creates a model representing the documentation.
+#
+###########################################################################
+
+class DocSet TXmlParser (
+
+    _elementStack
+    _currentElement
+    _moduleDocs
+    _moduleSet
+    _moduleList
+    _moduleListIsOrdered
+    _classDocs
+)
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method DocSet constructor () {
+
+    if $_classNeedsInit {
+	DocSet::init
+    }
+    set! _elementStack        [new TVector]
+    set! _currentElement      $null
+    set! _moduleDocs          [new THashtable]
+    set! _moduleSet           [new TVector]
+    set! _moduleList          $null
+    set! _moduleListIsOrdered $false
+    set! _classDocs           [new THashtable]
+}
+
+
+
+
+
+###########################################################################
+#
+# Reads the XML file whose name was given as argument and processes
+# it, filling the internal data structures.
+#
+###########################################################################
+
+method DocSet process ( fileName ) {
+
+    $this parse $fileName
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method DocSet getModuleDocs () {
+
+    if { not $_moduleListIsOrdered } {
+	$_moduleSet sort [lambda (a b) { str-cmp [$a getName] [$b getName] }]
+	set! _moduleList          [$_moduleSet getElements]
+	set! _moduleListIsOrdered $true
+    }
+    is $_moduleList
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method DocSet startDocument () {
+
+    $_elementStack clear
+    set! _currentElement $null
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method DocSet endDocument () {
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method DocSet startElement ( name attribs ) {
+
+    define aMethod [$_startElementMethods get $name]
+
+    if { not-null? $aMethod } {
+	$this $aMethod $attribs
+    } {
+        if { $_startElementMethods isKey $name } {
+            # Nothing to do if the tag name is registered.
+        } {
+            define element [new GenericElement $name $attribs]
+            $_currentElement addElement $element
+            $this setCurrentElement $element
+        }
+    }
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method DocSet endElement ( name ) {
+
+    define aMethod [$_endElementMethods get $name]
+
+    if { not-null? $aMethod } {
+        $this $aMethod $name
+    } {
+        if { $_endElementMethods isKey $name } {
+            # Nothing to do if the tag name is registered.
+        } {
+            if { not-null? $_currentElement } {
+                if { class-is-a [class-of $_currentElement] GenericElement } {
+                    set! _currentElement [$_elementStack pop]
+                }
+            }
+        }
+    }
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method DocSet characters ( contents ) {
+
+    $_currentElement addText $contents
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method DocSet setCurrentElement ( anElement ) {
+
+    $_elementStack push $_currentElement
+    set! _currentElement $anElement
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method DocSet endDocElement ( name ) {
+
+    set! _currentElement [$_elementStack pop]
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method DocSet startTeaModule ( attribs ) {
+
+    define moduleName [$attribs get "name"]
+    define moduleDoc  [$this fetchModuleDoc $moduleName]
+
+    $this setCurrentElement $moduleDoc
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method DocSet startTeaClass ( attribs ) {
+
+    define className     [$attribs get "name"]
+    define baseClassName [$attribs get "baseClass"]
+    define moduleName    [$attribs get "module"]
+    define classDoc      [$this fetchClassDoc $className]
+    define moduleDoc     [$this fetchModuleDoc $moduleName]
+
+    if { not-null? $baseClassName } {
+	$classDoc setBaseClass [$this fetchClassDoc $baseClassName]
+    }
+    $classDoc setModuleName $moduleName
+    $moduleDoc addClassDoc $classDoc
+    $this setCurrentElement $classDoc
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method DocSet startTeaMethod ( attribs ) {
+
+    define methodName [$attribs get "name"]
+    define className  [$attribs get "className"]
+    define argsText   [$attribs get "arguments"]
+    define methodDoc  [new MethodDoc $className $methodName $argsText]
+    define classDoc   [$this fetchClassDoc $className]
+
+    $classDoc addMethodDoc $methodDoc
+    $this setCurrentElement $methodDoc
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method DocSet startTeaFunction ( attribs ) {
+
+    define functionName [$attribs get "name"]
+    define argsText     [$attribs get "arguments"]
+    define moduleName   [$attribs get "module"]
+    define functionDoc  [new FunctionDoc $functionName $argsText]
+    define moduleDoc    [$this fetchModuleDoc $moduleName]
+
+    $functionDoc setModuleName $moduleName
+    $moduleDoc addFunctionDoc $functionDoc
+    $this setCurrentElement $functionDoc
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method DocSet startPrototype ( attribs ) {
+
+    define formalArgs [$attribs get "arguments"]
+
+    $_currentElement addPrototype $formalArgs
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method DocSet startOverview ( attribs ) {
+
+    define overview [new Overview]
+
+    $_currentElement setOverview $overview
+    $this setCurrentElement $overview
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method DocSet startParameter ( attribs ) {
+
+    define name      [$attribs get "name"]
+    define parameter [new Parameter $name]
+
+    $_currentElement addParameter $parameter
+    $this setCurrentElement $parameter
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method DocSet startReturns ( attribs ) {
+
+    define returnInfo [new ReturnInfo]
+
+    $_currentElement setReturnInfo $returnInfo
+    $this setCurrentElement $returnInfo
+}
+
+
+
+
+###########################################################################
+#
+#
+#
+###########################################################################
+
+method DocSet startSince ( attribs ) {
+
+    define versionName [$attribs get "version"]
+
+    define since   [new SinceElement $versionName]
+
+    $_currentElement setSince $since
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method DocSet startDescription ( attribs ) {
+
+    define description [new Description]
+
+    $_currentElement setDescription $description
+    $this setCurrentElement $description
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method DocSet startFunc ( attribs ) {
+
+    define name        [$attribs get "name"]
+    define funcElement [new FuncElement $name]
+
+    $_currentElement addElement $funcElement
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method DocSet startFuncRef ( attribs ) {
+
+    define name           [$attribs get "name"]
+    define funcRefElement [new FuncRefElement $name]
+
+    $_currentElement addElement $funcRefElement
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method DocSet startClassRef ( attribs ) {
+
+    define name            [$attribs get "name"]
+    define classRefElement [new ClassRefElement $name]
+
+    $_currentElement addElement $classRefElement
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method DocSet startMethodRef ( attribs ) {
+
+    define methodName       [$attribs get "name"]
+    define className        [$attribs get "tosClass"]
+    define methodRefElement [new MethodRefElement $className $methodName]
+
+    $_currentElement addElement $methodRefElement
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method DocSet startArg ( attribs ) {
+
+    define name       [$attribs get "name"]
+    define argElement [new ArgElement $name]
+
+    $_currentElement addElement $argElement
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method DocSet startCode ( attribs ) {
+
+    define codeElement [new CodeElement]
+
+    $_currentElement addElement $codeElement
+    $this setCurrentElement $codeElement
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method DocSet startVar ( attribs ) {
+
+    define name       [$attribs get "name"]
+    define varElement [new VarElement $name]
+
+    $_currentElement addElement $varElement
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method DocSet startP ( attribs ) {
+
+    define pElement [new PElement]
+
+    $_currentElement addElement $pElement
+    $this setCurrentElement $pElement
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method DocSet startEnumeration ( attribs ) {
+
+    define enumElement [new Enumeration]
+
+    $_currentElement addElement $enumElement
+    $this setCurrentElement $enumElement
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method DocSet startEnumLabel ( attribs ) {
+
+    define labelElement [new ElementList]
+
+    $_currentElement addLabel $labelElement
+    $this setCurrentElement $labelElement
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method DocSet startEnumDescription ( attribs ) {
+
+    define descElement [new ElementList]
+
+    $_currentElement addDescription $descElement
+    $this setCurrentElement $descElement
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method DocSet fetchModuleDoc ( moduleName ) {
+
+    define moduleDoc [$_moduleDocs get $moduleName]
+
+    if { null? $moduleDoc } {
+	set! moduleDoc [new ModuleDoc $moduleName]
+	$_moduleDocs put $moduleName $moduleDoc
+	$_moduleSet append $moduleDoc
+	set! _moduleListIsOrdered $false
+    }
+    is $moduleDoc
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method DocSet fetchClassDoc ( className ) {
+
+    define classDoc [$_classDocs get $className]
+
+    if { null? $classDoc } {
+        set! classDoc [new ClassDoc $className]
+        $_classDocs put $className $classDoc
+    }
+
+    is $classDoc
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method DocSet print ( outputDir ) {
+
+    $_printerFunction $this $outputDir
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define DocSet::init () {
+
+    define conf [tea-conf-get-configuration DocSet]
+
+    set! _printerFunction     [$conf get printerFunction]
+    set! _startElementMethods [new THashtable]
+    set! _endElementMethods   [new THashtable]
+
+    foreach methodInfo $START_ELEMENT_METHODS {
+	apply $_startElementMethods put $methodInfo
+    }
+    foreach methodInfo $END_ELEMENT_METHODS {
+	apply $_endElementMethods put $methodInfo
+    }
+
+    set! _classNeedsInit $false
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+

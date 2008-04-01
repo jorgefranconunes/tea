@@ -1,0 +1,27 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+#
+# Reads a file and dumps its contents to stdout.
+#
+
+import "tea-autoload.tea"
+
+
+
+
+
+define fileName [nth $argv 0]
+define in       [open-input-file $fileName]
+define aLine    $null
+
+while { not-null? [set! aLine [readln $in]] } {
+    writeln $stdout $aLine
+}
+
+close-output-file $stdout
+close-input-file $in
+

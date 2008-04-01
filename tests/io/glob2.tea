@@ -1,0 +1,25 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+#
+# Test for the "glob" function implemented with the GNU regex library.
+#
+# Args: dir-name pattern
+#
+
+load "com.pdmfc.teapackages.gnuregexp.STModuleRegexp"
+
+
+
+
+
+if { != [length $argv] 2 } {
+    echo "Args: dir-name pattern"
+    exit 0
+}
+
+map echo [apply glob $argv]
+

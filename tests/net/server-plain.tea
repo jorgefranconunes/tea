@@ -1,0 +1,40 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+#
+# Listens for connections in the port given as argument.
+#
+# For each connection reads lines and echoes them to stdout until
+# an empty line is found. Then sends to the client socket the number
+# of lines read and an empty line.
+# 
+
+define serverSock [new TServerSocketPlain [string->int [nth $argv 0]]]
+define sock       [$serverSock accept]
+define in         [$sock getInput]
+define out        [$sock getOutput]
+define line       $null
+int    count      0
+define running    $true
+
+
+while { is $running } {
+    set! line    [$in readln]
+    set! running [and {not-null? $line} {str-not-empty? $line}]
+    if $running {
+	echo $line
+	++ $count
+    }
+}
+
+$out writeln $count
+$out writeln
+
+$in close
+$out close
+$sock close
+$serverSock close
+

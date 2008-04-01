@@ -1,0 +1,152 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+###########################################################################
+#
+# $Id: TServerSocket.tea,v 1.2 2002/08/02 17:47:25 jfn Exp $
+#
+#
+# Revisions:
+#
+# 2001/05/12
+# Created. (jfn)
+#
+###########################################################################
+
+
+
+
+
+###########################################################################
+## 
+## <TeaClass name="TServerSocket"
+##           module="tea.net">
+## 
+## <Overview>
+## Server socket that can be used to listen for incoming connections 
+## in a given TCP/IP port.
+## </Overview>
+## 
+## <Description>
+## A <Func name="TServerSocket"/> is used as a server socket. It can
+## listen for incoming connections in a given TCP/IP port. Each
+## <Func name="TServerSocket"/> is bound to a port number passed to
+## its constructor. The <Func name="accept"/> method is used to
+## receive an incoming connection. This method returns a
+## <Func name="TSocket"/> instance that can be used to read to and
+## write from the connection with the client side of the socket.
+## </Description>
+##
+## </TeaClass>
+## 
+###########################################################################
+
+class TServerSocket (
+
+    _serverSockPlain
+)
+
+
+
+
+
+###########################################################################
+## 
+## <TeaMethod name="constructor"
+##            arguments="port"
+##            className="TServerSocket">
+## 
+## <Overview>
+## Initializes the server socket by specifying the port it will be
+## bound to.
+## </Overview>
+##
+## <Parameter name="port">
+## An integer representing the TCP/IP port number the server socket
+## will be bound to.
+## </Parameter>
+## 
+## <Description>
+## </Description>
+## 
+## </TeaMethod>
+## 
+###########################################################################
+
+method TServerSocket constructor ( port ) {
+
+    set! _serverSockPlain [new TServerSocketPlain $port]
+}
+
+
+
+
+
+###########################################################################
+## 
+## <TeaMethod name="accept"
+##            className="TServerSocket">
+## 
+## <Overview>
+## Listens for incoming client connections on the port the server socket
+## is bound to.
+## </Overview>
+##
+## <Returns>
+## An instance of <Func name="TSocket"/> associated with the connection
+## that was accepted.
+## </Returns>
+## 
+## <Description>
+## This method blocks until a connection is a client initiated
+## connection is established.
+## </Description>
+## 
+## </TeaMethod>
+## 
+###########################################################################
+
+method TServerSocket accept () {
+
+    new TSocket [$_serverSockPlain accept]
+}
+
+
+
+
+
+###########################################################################
+## 
+## <TeaMethod name="close"
+##            className="TServerSocket">
+## 
+## <Overview>
+## Closes the server socket.
+## </Overview>
+## 
+## <Description>
+## After the socket is closed it can no longer accept new connections.
+## </Description>
+## 
+## </TeaMethod>
+## 
+###########################################################################
+
+method TServerSocket close () {
+
+    $_serverSockPlain close
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+

@@ -1,0 +1,189 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+###########################################################################
+#
+# DocGenerator.tea
+#
+# 2000/02
+#
+#
+# Revisions:
+#
+# 2000/02/26
+# Created. (jfn)
+#
+###########################################################################
+
+import "DocExtractor.tea"
+
+
+
+
+
+define _knownFileTypes ".*((\\.tea)|(\\.java))$"
+
+define _docGenerator $null
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+class DocGenerator (
+
+    _outputDir
+)
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method DocGenerator constructor () {
+
+    set! _outputDir "."
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method DocGenerator setOutputDir ( dirName ) {
+
+    set! _outputDir $dirName
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method DocGenerator process ( name ) {
+
+    if { file-is-dir? $name } {
+	$this processDir $name
+    } {
+	$this processFile $name
+    }
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method DocGenerator processDir ( dirName ) {
+
+    $stdout writeln "Processing directory " $dirName
+
+    foreach fileName [glob $dirName ".*"] {
+	define path [file-join $dirName $fileName]
+
+	if { file-is-dir? $path } {
+	    $this processDir $path
+	} {
+	    if { matches? $_knownFileTypes $fileName } {
+		$this processFile $path
+	    }
+	}
+    }
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method DocGenerator processFile ( inFileName ) {
+
+    $stdout writeln "Processing file" $inFileName
+
+    define inFileBaseName  [file-basename $inFileName]
+    define outFileBaseName [regsub "\\..*$" ".xml" $inFileBaseName]
+    define outFileName     [file-join $_outputDir $outFileBaseName]
+
+    DocExtractor::processFile $inFileName $outFileName
+}
+
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+global DocGenerator::setOutputDir ( dirName ) {
+
+    if { null? $_docGenerator } {
+	set! _docGenerator [new DocGenerator]
+    }
+    $_docGenerator setOutputDir $dirName
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+global DocGenerator::process ( fileName ) {
+
+    if { null? $_docGenerator } {
+	set! _docGenerator [new DocGenerator]
+    }
+    $_docGenerator process $fileName
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+

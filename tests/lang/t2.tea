@@ -1,0 +1,161 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+
+set! TEA_LIBRARY ( "." )
+
+
+import "lang.tea"
+
+
+
+
+proc say (str) { echo $str }
+
+define adder [
+    lambda (value) {
+        lambda (x) {
+	   + $x $value
+	}
+    }
+]
+
+proc factorial (n) {
+    if {<= $n 1} 1 {* $n [factorial [- $n 1]]}
+}
+
+
+
+proc fact-iterative (n) {
+    define result 1
+    while {> $n 1 } {
+	set! result [* $result $n]
+        set! n [- $n 1]
+    }
+#    return $result
+    is $result
+}
+
+
+
+proc fact-iterative2 (n) {
+    define result 1
+    while { > $n 1 } {
+        set! result [* $result $n]
+        set! n [- $n 1]
+    }
+    is $result
+}
+
+
+
+proc fact-iterative3 (n) {
+
+    int result 1
+    int i      $n
+
+    while { > $i 1 } {
+	*= result $i
+	-- i
+    }
+    is $result
+}
+
+
+
+say "Hello"
+
+define add3 [adder 3]
+define add5 [adder 5]
+
+#for {define i 0} {< $i 5} {set! i [+ $i 1]} {
+#    echo $i " " [add5 $i] " " [add3 $i]
+#    define abcd $i
+#}
+
+
+
+define print-node [
+    lambda (node) {
+	if { pair? $node } {
+	    print-list $node
+	} {
+	    echo $node
+	}
+    }
+]
+
+
+
+define print-list [
+
+    lambda (aList) {
+        foreach node $aList {
+	    print-node $node
+	} 
+    }
+]
+
+
+
+define print-list-rec [
+    lambda (aList) {
+	if { empty? $aList } {
+	    return
+	}
+	print-node [car $aList]
+	print-list-rec [cdr $aList]
+    }
+]
+
+
+
+
+
+proc echo-all args {
+    print-list $args
+}
+
+
+
+
+define aList [list "uma" "palavra" "e" "numeros" 1 2 3 56]
+
+print-list $aList
+
+set-car! $aList "outra"
+set-cdr! $aList ("coisa" "qualquer")
+
+print-list $aList
+
+set! aList [cons "ainda" ("mais" ("coisas" "e") "lousas")]
+print-list-rec $aList
+
+print-list [map echo ("ola" "adeus" 1) (" ate" " sim" " nao" )]
+apply echo [list "Isto" " e " "uma" " lista" " de " "palavras"]
+echo-all "Este " "comado " "aceita " "varios " "argumentos: " 1
+
+
+
+
+
+define caar [compose car cdr]
+define caaar [compose car cdr cdr]
+
+echo [caar [list 1 2 3 4 5 6]]
+echo [caaar [list 1 2 3 4 5 6]]
+
+echo "factorial 10       = " [factorial 10]
+echo "fact-iterative  10 = " [fact-iterative 10]
+echo "fact-iterative2 10 = " [fact-iterative2 10]
+echo "fact-iterative3 10 = " [fact-iterative3 10]
+
+define count 1000
+echo "recursivo : " [/ [time { factorial 10 } $count] 10] " ms por 100 iteracões"
+echo "iterativo : " [/ [time { fact-iterative 10 } $count] 10] " ms por 100 iteracões"
+echo "iterativo2: " [/ [time { fact-iterative2 10 } $count] 10] " ms por 100 iteracões"
+echo "iterativo3: " [/ [time { fact-iterative3 10 } $count] 10] " ms por 100 iteracões"
+

@@ -1,0 +1,196 @@
+###########################################################################
+#
+# Copyright (c) 2000, 2001, 2002, 2003, 2004 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+###########################################################################
+#
+# $Id: printer-html-DocSet.tea,v 1.5 2004/10/19 13:46:49 jfn Exp $
+#
+#
+# Revisions:
+#
+# 2004/10/19 Simplified the HTML for the navigation bar. (jfn)
+#
+# 2000/03/25 Created. (jfn)
+#
+###########################################################################
+
+import "drivers/html/html-utils.tea"
+
+
+
+
+
+define NAVIGATION_BAR "
+<table class=\"docHeader\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%%\">
+  <tr>
+    <td class=\"docHeaderCellSelected\">Overview</td>
+    <td class=\"docHeaderCell\">Module</td>
+    <td class=\"docHeaderCell\">Function</td>
+    <td class=\"docHeaderCell\">Class</td>
+    <td width=\"100%%\" class=\"docHeaderTitle\">%s</td>
+  </tr>
+</table>
+"
+
+define DESCRIPTION_PREFIX "
+<H1 CLASS=\"docTitle\">
+%s
+</H1>
+"
+
+define DESCRIPTION_SUFFIX "
+"
+
+define TABLE_HEADER "
+<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%%\">
+<tr><td bgcolor=\"gray\">
+
+<table border=\"0\" cellpadding=\"3\" cellspacing=\"1\" width=\"100%%\">
+<tr>
+<td colspan=\"2\" class=\"docTableHeader\">%s</td>
+</tr>
+"
+
+define TABLE_FOOTER "
+</table>
+
+</td></tr>
+</table>
+
+<br>
+"
+
+define LINE_HEADER "
+<TR>
+<TD WIDTH=\"15%%\" CLASS=\"docTableLabel\"><A HREF=\"module-%s.html\" CLASS=\"docTableLabel\">%s</A></TD>
+<TD CLASS=\"docTableRow\">
+"
+
+define LINE_FOOTER "
+</TD>
+</TR>
+"
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+global printer-html-DocSet ( docSet outputDir ) {
+
+    define outputStream [new TFileOutput [file-join $outputDir "index.html"]]
+
+    print-header      $outputStream $docSet
+    print-description $outputStream $docSet
+    print-modules     $outputStream $docSet
+    print-footer      $outputStream $docSet
+    $outputStream close
+
+    foreach moduleDoc [$docSet getModuleDocs] {
+        $moduleDoc print $outputDir
+    }
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define print-header ( outputStream docSet ) {
+
+    define now         [new TDate]
+    define windowTitle [printer-html-get windowTitle]
+    define header      [printer-html-get header]
+
+    $outputStream write [str-fmt $HTML_DOC_PREFIX $now $windowTitle]
+    $outputStream printf $NAVIGATION_BAR $header
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define print-description ( outputStream docSet ) {
+    
+    define docTitle [printer-html-get documentTitle]
+
+    $outputStream printf $DESCRIPTION_PREFIX $docTitle
+    $outputStream printf $DESCRIPTION_SUFFIX
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define print-modules ( outputStream docSet ) {
+
+    define moduleDocs [$docSet getModuleDocs]
+
+    if { not-empty? $moduleDocs } {
+	$outputStream printf $TABLE_HEADER "Modules"
+	foreach moduleDoc $moduleDocs {
+	    $outputStream printf $LINE_HEADER				     \
+					[html-encode [$moduleDoc getName]] \
+					[html-encode [$moduleDoc getName]]
+	    [$moduleDoc getOverview] print $outputStream
+	    $outputStream printf $LINE_FOOTER
+	}
+	$outputStream printf $TABLE_FOOTER
+    }
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define print-footer ( outputStream docSet ) {
+    
+    define footer [printer-html-get footer]
+    define bottom [printer-html-get bottom]
+
+    $outputStream printf $NAVIGATION_BAR $footer
+    $outputStream writeln $bottom
+    $outputStream write $HTML_DOC_SUFIX
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+

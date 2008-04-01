@@ -1,0 +1,44 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+
+
+
+define multiple-of ( base ) {
+
+    lambda ( n ) {
+	== [% $n $base] 0
+    }
+}
+
+
+define multiple-of-4 [multiple-of 4]
+define multiple-of-3 [multiple-of 3]
+define multiple-of-2 [multiple-of 2]
+
+
+
+
+
+int n 10
+while { > [-- $n] 0 } {
+    define value [% [abs [rand-int]] 100]
+
+    cond {
+	multiple-of-4 $value } {
+	    echo $value " é múltiplo de 4"
+        } {
+	multiple-of-3 $value } {
+	    echo $value " é múltiplo de 3"
+        } {
+	multiple-of-2 $value } {
+	    echo $value " é múltiplo de 2"
+        } {
+	    echo $value " não é múltiplo de 2, 3, 4"
+	}
+	
+}
+

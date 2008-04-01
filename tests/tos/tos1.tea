@@ -1,0 +1,49 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+
+
+
+
+define print-inheritance ( aClass ) {
+
+    while { not-null? $aClass } {
+	$stdout write [class-get-name $aClass]
+	set! aClass [class-base-of $aClass]
+	if { not-null? $aClass } {
+	    $stdout write " -> "
+	}
+    }
+    $stdout writeln
+}
+
+define print-is-a ( class1 class2 ) {
+
+    if { class-is-a $class1 $class2 } {
+	$stdout writeln [class-get-name $class1] " is a " [class-get-name $class2]
+    } {
+	$stdout writeln [class-get-name $class1] " is not a " [class-get-name $class2]
+    }
+}
+
+
+
+
+
+class Class1 ()
+class Class2 Class1 ()
+class Class3 Class2 ()
+class Class4 Class2 ()
+
+print-inheritance Class1
+print-inheritance Class2
+print-inheritance Class3
+
+print-inheritance [class-of [new Class3]]
+
+print-is-a Class3 Class2
+print-is-a Class4 Class3
+

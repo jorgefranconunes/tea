@@ -1,0 +1,247 @@
+#!/bin/sh
+###########################################################################
+#
+# Copyright (c) 2001, 2002, 2003, 2004 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+#########################################################################
+#
+# $Id: tea-utils,v 1.4 2005/02/11 17:15:32 jfn Exp $
+#
+#
+# Utility functions. This script is not meant to be executed by
+# itself. Instead it is tipically sourced from within other scripts
+# using the "." operator.
+#
+#
+# Revisions:
+#
+# 2004/09/29 The "teaParseTemplate" function now handles comments in
+# the template files. (jfn)
+#
+# 2004/09/29 Added the functions "teaWhoAmI", "teaHostname",
+# "teaDate". (jfn)
+#
+# 2003/02/10 Created. (jfn)
+#
+#########################################################################
+
+
+
+
+
+###########################################################################
+#
+# Displays a message to stderr and exits the process.
+#
+# Arguments:
+#
+# 1. The message to be displayed.
+#
+###########################################################################
+
+teaError () {
+
+    echo "***" $1 >&2
+    exit 1
+}
+
+
+
+
+
+###########################################################################
+#
+# Determines the process current working directory.
+#
+###########################################################################
+
+teaCwd () {
+
+    case "$OSTYPE" in
+	cygwin )
+	    cygpath --windows `pwd` | sed 's/\\\/\\//g'
+	    ;;
+	* )
+	    pwd
+	    ;;
+    esac
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+teaNormalizePath () {
+
+    case "$OSTYPE" in
+	cygwin )
+	    cygpath --windows "$1" | sed 's/\\\/\\//g'
+	    ;;
+	* )
+	    echo $1
+    esac
+}
+
+
+
+
+
+###########################################################################
+#
+# Makes the core configuration parameters available.
+#
+# Arguments:
+#
+# 1. Tea installation base directory.
+#
+###########################################################################
+
+teaReadCoreConfig () {
+
+    # The path of the core configuration parameters file.
+    trcc_configFile=$1/config/tea-core.conf
+
+    # If it does not exist it means the installation tree is broken.
+    # This is not supposed to happen.
+    if [ -f $trcc_configFile ]
+	then
+	. $trcc_configFile
+    else
+	teaError "Tea core configuration file \"$trcc_configFile\" not found."
+    fi
+}
+
+
+
+
+
+###########################################################################
+#
+# Makes the installation configuration parameters available.
+#
+# Arguments:
+#
+# 1. Tea installation base directory.
+#
+###########################################################################
+
+teaReadInstallConfig () {
+
+    teaReadCoreConfig $1
+
+    # The path of the installation specific configuration parameters
+    # file
+    tric_configFile=$1/config/tea-install.conf
+
+    # If it does not exist it means someone forgot to run "setup".
+    if [ -f $tric_configFile ]
+	then
+	. $tric_configFile
+    else
+	teaError "Tea installation configuration file \"$tric_configFile\" not found."
+    fi
+}
+
+
+
+
+
+###########################################################################
+#
+# Arguments:
+#
+# 1. The path for the template file.
+#
+###########################################################################
+
+teaParseTemplate () {
+
+    tpt_tmpScript=/tmp/tea-parse-template.$$
+
+    echo "cat <<EOF" > $tpt_tmpScript
+    sed '/^%%/d' "$1" >> $tpt_tmpScript
+    echo "EOF" >> $tpt_tmpScript
+
+    . $tpt_tmpScript
+
+    rm -f $tpt_tmpScript
+}
+
+
+
+
+
+###########################################################################
+#
+# Echos the username of the user running the current process.
+#
+###########################################################################
+
+teaWhoAmI () {
+
+    expr "`id`" : "uid=[0-9]*(\([^)]*\).*"
+}
+
+
+
+
+
+###########################################################################
+#
+# Echos the hosname of the machine running the current process.
+#
+###########################################################################
+
+teaHostname () {
+
+    uname -n
+}
+
+
+
+
+
+###########################################################################
+#
+# Echoes the system current time in a format apropriate for display.
+#
+###########################################################################
+
+teaDate () {
+
+    date "+%Y/%m/%d %H:%M:%S"
+}
+
+
+
+
+
+###########################################################################
+#
+# Retrieves the operating system type.
+#
+###########################################################################
+
+teaOsType () {
+
+    uname -s
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+

@@ -1,0 +1,148 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+###########################################################################
+#
+# $Id: io.tea,v 1.3 2003/02/25 13:23:50 jfn Exp $
+#
+#
+# Definition of functions related to the Tea I/O package.
+#
+#
+# Revisions:
+#
+# 2003/02/25 Removed the "load"ing of the Tea module. Its name was
+# incorrect and it is not actualy needed. (jfn)
+#
+# 2001/05/12 Created. (jfn)
+#
+###########################################################################
+
+
+
+
+
+###########################################################################
+##
+## <TeaFunction name="file-unlink-recursive"
+##              arguments="pathName"
+##              module="tea.io">
+## 
+## <Overview>
+## Recursively removes all the contents of a directory.
+## </Overview>
+## 
+## <Parameter name="pathName">
+## String representing the name of the directory to delete. It may
+## also refer to a file.
+## </Parameter>
+##
+## <Returns>
+## True if all the directory contents and the directory itself were
+## successfully removed. False otherwise.
+## </Returns>
+## 
+## <Description>
+## If it fails to remove one of the directory entries then it immediatly
+## ends and does not try to remove the remaining entries. The order
+## in which the entries get removed is not specified. Removal of a
+## directory entry may fail for a variety of reasons, the most common
+## being insuficient permissions.
+## <P>
+## Do be cautious when using this function. It is a mass destruction weapon.
+## </P>
+## </Description>
+##
+## </TeaFunction>
+##
+###########################################################################
+
+global file-unlink-recursive ( pathName ) {
+
+    if { file-is-dir? $pathName } {
+	and {apply and [map [lambda (b) {is {file-unlink-recursive [file-join $pathName $b]} }] [glob $pathName ".*"]]} { file-unlink $pathName }
+    } {
+	file-unlink $pathName
+    }
+}
+
+
+
+
+
+###########################################################################
+## 
+## <TeaFunction name="file-make-path"
+## 		arguments="[path ...]"
+##              module="tea.io">
+##
+## <Overview>
+## Creates a directory and every missing parent directory.
+## </Overview>
+##
+## <Parameter name="path">
+## String representing the path name of the directory to create.
+## </Parameter>
+##
+## <Returns>
+## True if all the directories specified as arguments were
+## successfully created or already existed. False otherwise.
+## </Returns>
+##
+## <Description>
+## You can think of the <Func name="file-make-path"/> function as a sort
+## of recursive <FuncRef name="file-mkdir"/>. It creates every parent
+## directory of <Arg name="path"/> if they do not yet exist and then
+## the directory identified by <Arg name="path"/> itself.
+##
+## <P>The creation of a directory may fail due to lack of
+## permissions by the user running the process or because the
+## <Arg name="path"/> root directory may not exist. This last case
+## will only happen in a windows environment as the unix the root
+## directory of a <Arg name="path"/> always exists (it is "/").</P>
+## </Description>
+## 
+## </TeaFunction>
+## 
+###########################################################################
+
+global file-make-path args {
+
+    apply and [map mkdir-p $args]
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define mkdir-p ( path ) {
+
+    if { not [file-exists? $path] } {
+	define parentDir [file-dirname $path]
+
+	if { and {not-null? $parentDir} {mkdir-p $parentDir} } {
+	    file-mkdir $path
+	} $false
+    } $true
+}
+
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+

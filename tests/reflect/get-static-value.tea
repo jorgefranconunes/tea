@@ -1,0 +1,28 @@
+###########################################################################
+#
+# Copyright (c) 2005 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+
+
+#
+# Testing the java-get-value function.
+#
+
+define echoValue (anIndent aValue) {
+    cond {pair? $aValue} {
+        foreach item $aValue {
+            echoValue [str-cat "  " $anIndent] $item
+        }
+    } {
+        echo $anIndent $aValue
+    }
+}
+
+
+
+
+define value [java-get-value [nth $argv 0] [nth $argv 1]]
+
+echoValue "" $value

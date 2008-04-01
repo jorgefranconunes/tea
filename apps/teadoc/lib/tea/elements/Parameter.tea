@@ -1,0 +1,128 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+###########################################################################
+#
+# Parameter.tea
+#
+# 2000/02
+#
+#
+# Revisions:
+#
+# 2000/02/05
+# Created. (jfn)
+#
+###########################################################################
+
+import "elements/ElementList.tea"
+
+
+
+
+
+define _classNeedsInit $true
+
+define _printerFunction $null
+
+
+
+
+
+###########################################################################
+#
+# Represents de description of the formal parameter of a function or
+# method.
+#
+###########################################################################
+
+class Parameter ElementList (
+
+    _name
+)
+
+
+
+
+
+###########################################################################
+#
+# @param name
+#	String representing the name of the formal parameter.
+#
+###########################################################################
+
+method Parameter constructor ( name ) {
+
+    if $_classNeedsInit {
+	Parameter::init
+    }
+
+    $super constructor
+
+    set! _name $name
+}
+
+
+
+
+
+###########################################################################
+#
+# Fetches the name of the formal parameter specified at constructor
+# time.
+#
+###########################################################################
+
+method Parameter getName () {
+
+    is $_name
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method Parameter print ( outputStream ) {
+
+    $_printerFunction $outputStream $this
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define Parameter::init () {
+
+    define conf [tea-conf-get-configuration Parameter]
+
+    set! _printerFunction [$conf get printerFunction]
+
+    set! _classNeedsInit $false
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+

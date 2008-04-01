@@ -1,0 +1,77 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+
+load "com.pdmfc.tea.modules.tango.STModuleTango"
+global TFrame  [load-class "com.pdmfc.tea.modules.tango.frame.STFrameClass"]
+global TLabel  [load-class "com.pdmfc.tea.modules.tango.label.STLabelClass"]
+global TTitledPanel [load-class "com.pdmfc.tea.modules.tango.titledPanel.STTitledPanelClass"]
+global TComboBox [load-class "com.pdmfc.tea.modules.tango.comboBox.STComboBoxClass"]
+global TTextField [load-class "com.pdmfc.tea.modules.tango.textField.STTextFieldClass"]
+global TGridBagPanel [load-class "com.pdmfc.tea.modules.tango.gridBagPanel.STGridBagPanelClass"]
+
+
+
+
+
+define titleInfo "Titled Panel"
+
+define alignInfo (
+	( DEFAULT "Default" )
+	( LEFT    "Left" )
+	( CENTER  "Center" )
+	( RIGHT   "Right" )
+)
+
+define positionInfo (
+	( DEFAULT      "Default" )
+	( ABOVE_TOP    "Above Top" )
+	( TOP          "Top" )
+	( BELOW_TOP    "Below Top" )
+	( ABOVE_BOTTOM "Above Bottom" )
+	( BOTTOM       "Bottom" )
+	( BELOW_BOTTOM "Below Bottom" )
+)
+
+define cbAlign    [new TComboBox  $alignInfo]
+define cbPosition [new TComboBox  $positionInfo]
+define tfTitle    [new TTextField $titleInfo]
+define panel      [new TGridBagPanel]
+define tp         [new TTitledPanel $titleInfo]
+define frame      [new TFrame $titleInfo $tp]
+
+
+$cbAlign set actionCallback [
+	lambda () {
+	    $tp set align [$cbAlign get selectedItem]
+	}
+]
+
+$cbPosition set actionCallback [
+	lambda () {
+	    $tp set position [$cbPosition get selectedItem]
+	}
+]
+
+$tfTitle set actionCallback [
+	lambda () {
+	    $tp set text [$tfTitle get text]
+	}
+]
+
+
+$panel add [new TLabel "Title"]     ( (gridx 0) (gridy 0) (anchor EAST) )
+$panel add $tfTitle                 ( (gridx 1) (gridy 0) (fill HORIZONTAL) )
+
+$panel add [new TLabel "Alignment"] ( (gridx 0) (gridy 1) (anchor EAST) )
+$panel add $cbAlign                 ( (gridx 1) (gridy 1) (anchor WEST) )
+
+$panel add [new TLabel "Position"]  ( (gridx 0) (gridy 2) (anchor EAST) )
+$panel add $cbPosition              ( (gridx 1) (gridy 2) (anchor WEST) )
+
+$tp set contents $panel
+$frame setVisible $true
+

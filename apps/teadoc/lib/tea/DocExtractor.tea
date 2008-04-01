@@ -1,0 +1,344 @@
+###########################################################################
+#
+# Copyright (c) 2000, 2001, 2002, 2003, 2004 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+###########################################################################
+#
+# $Id: DocExtractor.tea,v 1.3 2004/08/13 17:06:35 jfn Exp $
+#
+#
+# Revisions:
+#
+# 2004/08/13 The XML file is now only created by "DocExtractor process"
+# if the source file being processed actually has embeded teadoc
+# documentation. This makes it possible for the callers of
+# "DocExtractor::processFile" not to process the XML file, there by
+# improving performance. (jfn)
+#
+# 2000/02/26 Created. (jfn)
+#
+###########################################################################
+
+
+
+
+
+define _docPrologue "<?xml version=\"1.0\"  encoding=\"ISO-8859-1\"?> 
+<!DOCTYPE TeaDoc SYSTEM \"TeaDoc.dtd\">
+"
+
+define _docInfoFromFile "
+<!--
+Automatically generated.
+Input file : '%s'
+Date       : %s
+-->
+
+<TeaDoc>
+"
+
+define _docInfo "
+<!--
+Automatically generated.
+Date : %s
+-->
+
+<TeaDoc>
+"
+
+define _docEpilogue "
+</TeaDoc>
+"
+
+define _unsupportedFileTypeMsg "Unsupported file type."
+
+define _fileTypes (
+	( "tea"	 "## "  )
+	( "java" "//* " )	
+)
+
+define _fileTypeInfo $null
+
+
+
+
+
+###########################################################################
+## 
+## <TeaClass name="DocExtractor">
+##
+## <Overview>
+## Used to extract documentation from source files.
+## </Overview>
+##
+## <Description>
+## Instances of this class are used to extract documentation from
+## source files. Java and Tea source files are currently supported.
+## Documentation is imbeded in lines that start with a certain prefix.
+## </Description>
+##
+## </TeaClass>
+## 
+###########################################################################
+
+class DocExtractor (
+
+    _linePrefix
+    _prefixSize
+    _inputFileName
+)
+
+
+
+
+
+###########################################################################
+## 
+## <TeaMethod name="constructor"
+## 	      className="DocExtractor"
+## 	      arguments="linePrefix">
+## 
+## <Overview>
+## Initializes the object and specifies the string to be used as prefix
+## while searching for embeded documentation.
+## </Overview>
+## 
+## <Parameter name="linePrefix">
+## The string that will be used as prefix when searching for embeded
+## documentation.
+## </Parameter>
+## 
+## <Description>
+## Initializes the object and specifies the string to be used as prefix
+## while searching for embeded documentation. When processing a file,
+## lines that start with the <Arg name="linePrefix"/> string are considered
+## to be part of the embeded documentation.
+## </Description>
+## 
+## </TeaMethod>
+## 
+###########################################################################
+
+method DocExtractor constructor ( linePrefix ) {
+
+    set! _linePrefix    $linePrefix
+    set! _prefixSize    [str-len $linePrefix]
+    set! _inputFileName $null
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method DocExtractor process ( in outFileName ) {
+
+    define aLine $null
+    define now   [new TDate]
+    define out   $null
+    
+    define processFirstLine ( aLine ) {
+        set! out [if {null? $outFileName} $stdout {new TFileOutput $outFileName}]
+        # Generates start of the output document.
+        $out write $_docPrologue
+        if { null? $_inputFileName } {
+            $out printf $_docInfo [format-date $now]
+        } {
+            $out printf $_docInfoFromFile $_inputFileName [format-date $now]
+        }
+        set! processLine $processNotFirstLine
+        processLine $aLine
+    }
+    
+    define processNotFirstLine ( aLine ) {
+        $out writeln [str-substring $aLine $_prefixSize]
+    }
+    
+    define processLine $processFirstLine
+
+    # Generates the innards of the output document.
+    while { not-null? [set! aLine [$in readln]] } {
+	if { str-starts-with? $aLine $_linePrefix } {
+	    processLine $aLine
+	}
+    }
+
+    if { not-null? $out } {
+        # Generates the end of the document.
+        $out writeln $_docEpilogue
+        
+        if { not-same? $out $stdout } {
+            $out close
+        }
+        is $true
+    } {
+        is $false
+    }
+}
+
+
+
+
+
+###########################################################################
+#
+# Returns true if the file contained embeded teadoc documentation and
+# was successfully processed. Returns false otherwise.
+#
+###########################################################################
+
+method DocExtractor processFile ( inFileName outFileName ) {
+
+    define in     [new TFileInput $inFileName]
+    define result $true
+
+    set! _inputFileName $inFileName
+    set! result [$this process $in $outFileName]
+    set! _inputFileName $null
+
+    $in close
+    
+    is $result
+}
+
+
+
+
+
+###########################################################################
+## 
+## <TeaFunction name="DocExtractor::processFile"
+## 		arguments="inFileName outFileName">
+##
+## <Overview>
+## Extracts embeded documentation from a source file.
+## </Overview>
+##
+## <Parameter name="inFileName">
+## String with the name of the source file to be processed.
+## </Parameter>
+##
+## <Parameter name="outFileName">
+## String with the name of the file where the results will be stored.
+## If it is null the results are sent to standard output.
+## </Parameter>
+##
+## <Returns>
+## True if the file extension is supported, the input file contained
+## embeded teadoc documentation and the input file was successfully
+## processed. False otherwise.
+## </Returns>
+##
+## <Description>
+## Extracts from a source file the embeded documentation. The output is
+## a XML document containing the documentation extracted from the source
+## file.
+## <P>
+## The documentation is embeded in comments in the source file.
+## For Tea source files, all lines starting with the "## " sequence
+## are considered part of the embeded documentation. For Java source files
+## lines starting with "//* " contain the documentation.
+## </P>
+## </Description>
+## 
+## </TeaFunction>
+## 
+###########################################################################
+
+global DocExtractor::processFile ( inFileName outFileName ) {
+
+    define fileProcessor [get-processor [file-extension $inFileName]]
+
+    if { not-null? $fileProcessor } {
+	$fileProcessor processFile $inFileName $outFileName
+    } {
+        # File is not to be processed.
+        is $false
+    }
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define get-processor ( fileExtension ) {
+
+    if { null? $_fileTypeInfo } {
+	init-file-type-info
+    }
+    define fileProcessor [$_fileTypeInfo get $fileExtension]
+
+#    if { null? $fileProcessor } {
+#	error [str-format "%s ('%s')" $_unsupportedFileTypeMsg $fileExtension]
+#    }
+    is $fileProcessor
+}
+
+
+
+
+
+###########################################################################
+#
+# This functions is supposed to be called a single time. It stores
+# a reference to a "THashtable" in the "_fileTypeInfo" local variable
+# and fills the hashtable with "_fileTypes" data.
+#
+###########################################################################
+
+define init-file-type-info () {
+
+    set! _fileTypeInfo [new THashtable]
+
+    foreach info $_fileTypes {
+	map define (extension prefix) $info
+	$_fileTypeInfo put $extension [new DocExtractor $prefix]
+    }
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define format-date ( aDate ) {
+    
+    $aDate format "yyyy/mm/dd HH:MM:ss"
+
+#    str-printf "%d/%02d/%02d %02d:%02d:%02d"	\
+#		[$aDate getYear]	\
+#		[$aDate getMonth]	\
+#		[$aDate getDay]		\
+#		[$aDate getHour]	\
+#		[$aDate getMinute]	\
+#		[$aDate getSecond]
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+

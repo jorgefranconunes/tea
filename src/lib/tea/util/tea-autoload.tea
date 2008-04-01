@@ -1,0 +1,298 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+###########################################################################
+#
+# $Id: tea-autoload.tea,v 1.3 2002/08/02 17:47:25 jfn Exp $
+#
+#
+# Revisions:
+#
+# 2001/05/12
+# Created. (jfn)
+#
+###########################################################################
+
+load "com.pdmfc.tea.modules.tos.SModuleTos"
+
+define THashtable [load-class "com.pdmfc.tea.modules.util.SHashtable"]
+define TUrlInput  [load-class "com.pdmfc.tea.modules.io.SUrlInput"]
+
+
+
+
+
+#
+# Name of the file containing list of (function, fileName) associations.
+#
+define AUTOLOAD_INDEX_FILE "index.tea"
+
+
+#
+# Table of loaders (functions) indexed by symbols.
+#
+define _loaders [new THashtable]
+
+
+#
+# Directories remaining to be inspected.
+#
+define _dirsToSearch $TEA_LIBRARY
+
+
+
+
+
+###########################################################################
+## 
+## <TeaFunction name="tea-autoload"
+## 		arguments="name sourceFile"
+##              module="tea.util">
+##
+## <Overview>
+## Registers the name of a function or TOS class to be
+## automatically defined the first time it is used.
+## </Overview>
+##
+## <Parameter name="name">
+## A symbol identifying the function or class.
+## </Parameter>
+##
+## <Parameter name="sourceFile">
+## A string with the name of the file that will be sourced when
+## the first reference to the function or class is made. The path name is
+## relative to one of the <Var name="TEA_LIBRARY"/> directorys.
+## </Parameter>
+##
+## <Description>
+## Registers the file where a Tea function or TOS class is defined. This
+## information
+## will be used by the auto loading facility to read the file when
+## the given function or class is needed for the first time. The file should
+## contain code that defines the function or class, of course. The path of
+## the file is taken as being relative to one of the directorys in the
+## list stored in the <Var name="TEA_LIBRARY"/> variable.
+## </Description>
+## 
+## </TeaFunction>
+## 
+###########################################################################
+
+global tea-autoload ( functionName sourceFile ) {
+
+    $_loaders put $functionName [lambda () { import $sourceFile }]
+}
+
+
+
+
+
+###########################################################################
+## 
+## <TeaFunction name="tea-autoload-native-function"
+## 		arguments="functioName nativeCodeFunction"
+##             module="tea.util">
+##
+## <Overview>
+## Registers the name of a function to be
+## automatically loaded the first time it is used.
+## </Overview>
+##
+## <Parameter name="functioName">
+## A symbol identifying the Tea function that is implemented in
+## native code.
+## </Parameter>
+##
+## <Parameter name="nativeCodeFunction">
+## A string representing the name of the Java class that implements
+## the function.
+## </Parameter>
+##
+## <Description>
+## The <Func name="tea-autoload-native-function"/> is similar to
+## <Func name="tea-autoload"/> but for Tea functions that are
+## implemented in Java.
+## </Description>
+## 
+## </TeaFunction>
+## 
+###########################################################################
+
+global tea-autoload-native-function ( functionName nativeCodeFunction ) {
+
+    $_loaders put $functionName [
+	lambda () {
+	    global $functionName [load-function $nativeCodeFunction]
+ 	}
+    ]
+}
+
+
+
+
+
+###########################################################################
+## 
+## <TeaFunction name="tea-autoload-native-class"
+## 		arguments="className nativeCodeClass"
+##             module="tea.util">
+##
+## <Overview>
+## Registers the name of a TOS class to be
+## automatically loaded the first time it is used.
+## </Overview>
+##
+## <Parameter name="className">
+## A symbol identifying the TOS class that is implemented in
+## native code.
+## </Parameter>
+##
+## <Parameter name="nativeCodeClass">
+## A string representing the name of the Java class that implements
+## the TOS class.
+## </Parameter>
+##
+## <Description>
+## The <Func name="tea-autoload-native-function"/> is similar to
+## <Func name="tea-autoload"/> but for TOS classes that are
+## implemented in Java.
+## </Description>
+## 
+## </TeaFunction>
+## 
+###########################################################################
+
+global tea-autoload-native-class ( className nativeCodeClass ) {
+
+    $_loaders put $className [
+	lambda () {
+	    global $className [load-class $nativeCodeClass]
+ 	}
+    ]
+}
+
+
+
+
+
+###########################################################################
+## 
+## <TeaFunction name="tea-autoload-module"
+## 		arguments="symbol packageClass"
+##             module="tea.util">
+##
+## <Overview>
+## Registers the name of a Tea function or TOS class to be
+## automatically loaded from a Tea package the first time it is used.
+## </Overview>
+##
+## <Parameter name="symbol">
+## A symbol identifying the Tea function or TOS class that is defined
+## inside a package.
+## </Parameter>
+##
+## <Parameter name="packageClass">
+## A string representing the name of the Java class that is a Tea package.
+## </Parameter>
+##
+## <Description>
+## 
+## </Description>
+## 
+## </TeaFunction>
+## 
+###########################################################################
+
+global tea-autoload-module ( symbol packageClass ) {
+
+    $_loaders put $symbol [
+	lambda () {
+	    load $packageClass
+ 	}
+    ]
+}
+
+
+
+
+
+###########################################################################
+#
+# Called automatically by the Tea runtime when a function is not
+# defined.
+#
+# If the named function has not yet been registered with a call to
+# the "tea-autoload" function than every directory in the "TEA_LIBRARY"
+# list is searched for a "index.tea" file and this file is sourced.
+# The search for "index.tea" files stops when the named function is
+# registered with a call to "tea-autoload".
+#
+# If the named function is now registered then its associated file
+# is executed with the "import" function. This file should contain Tea
+# code that defines the function.
+#
+# If all went well, when this function returns there will be a global
+# variable, identifyed by the symbol "functionName", containing
+# a function object.
+#
+# @param functionName
+#    Symbol identifying an undefined function.
+#
+###########################################################################
+
+define tea-autoload-callback ( functionName ) {
+
+    define loader [$_loaders get $functionName]
+
+    if { null? $loader } {
+	while { not-empty? $_dirsToSearch } {
+	    define urlPrefix [car $_dirsToSearch]
+	    set! _dirsToSearch [cdr $_dirsToSearch]
+	    define fullUrl   [str-cat $urlPrefix "/" $AUTOLOAD_INDEX_FILE]
+            define input     $null
+
+            catch { set! input [new TUrlInput $fullUrl] }
+
+	    if { not-null? $input } {
+		source $input
+                $input close
+		set! loader [$_loaders get $functionName]
+		if { not-null? $loader } {
+		    break
+		}
+	    }
+	}
+    }
+
+    if { not-null? $loader } {
+	$loader
+	$_loaders remove $functionName
+    }
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+global TEA_NOFUNC_CALLBACK  $tea-autoload-callback
+global TEA_NOCLASS_CALLBACK $tea-autoload-callback
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+

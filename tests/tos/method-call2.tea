@@ -1,0 +1,66 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+#
+# Tests the method call eficiency, depending on the number of arguments.
+#
+
+
+
+
+
+class C0 ()
+class C1 (v1)
+class C2 (v1 v2)
+class C3 (v1 v2 v3)
+class C4 (v1 v2 v3 v4)
+class C5 (v1 v2 v3 v4 v5)
+class C6 (v1 v2 v3 v4 v5 v6)
+class C7 (v1 v2 v3 v4 v5 v6 v7)
+class C8 (v1 v2 v3 v4 v5 v6 v7 v8)
+class C9 (v1 v2 v3 v4 v5 v6 v7 v8 v9)
+
+method C0 m () {}
+method C1 m () {}
+method C2 m () {}
+method C3 m () {}
+method C4 m () {}
+method C5 m () {}
+method C6 m () {}
+method C7 m () {}
+method C8 m () {}
+method C9 m () {}
+
+define o0 [new C0]
+define o1 [new C1]
+define o2 [new C2]
+define o3 [new C3]
+define o4 [new C4]
+define o5 [new C5]
+define o6 [new C6]
+define o7 [new C7]
+define o8 [new C8]
+define o9 [new C9]
+
+
+
+
+
+define count       1000
+
+echo "Call with 0 members: " [time { $o0 m } $count] " per " $count " iterations."
+echo "Call with 1 members: " [time { $o1 m } $count] " per " $count " iterations."
+echo "Call with 2 members: " [time { $o2 m } $count] " per " $count " iterations."
+echo "Call with 3 members: " [time { $o3 m } $count] " per " $count " iterations."
+echo "Call with 4 members: " [time { $o4 m } $count] " per " $count " iterations."
+echo "Call with 5 members: " [time { $o5 m } $count] " per " $count " iterations."
+echo "Call with 6 members: " [time { $o6 m } $count] " per " $count " iterations."
+echo "Call with 7 members: " [time { $o7 m } $count] " per " $count " iterations."
+echo "Call with 8 members: " [time { $o8 m } $count] " per " $count " iterations."
+echo "Call with 9 members: " [time { $o9 m } $count] " per " $count " iterations."
+
+
+

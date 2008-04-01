@@ -1,0 +1,92 @@
+#
+# Tests the "import" function.
+#
+# Run this script in this directory as
+# ../../bin/tsh --library=./lib test-import2.tea 
+#
+
+
+# Pause between consecutive imports in milliseconds.
+define PAUSE_TIME 1000
+
+# Number of times the import is performed.
+define IMPORT_TEST_FILE "test-import-dummy2.tea"
+
+# Number of times the import is performed.
+define IMPORT_TEST_FILE_PATH [str-cat "./lib/" $IMPORT_TEST_FILE]
+
+
+# Number of times the import is performed.
+global IMPORT_TEST_FILE_A "test-import-dummy2a.tea"
+
+# Number of times the import is performed.
+global IMPORT_TEST_FILE_PATH_A [str-cat "./lib/" $IMPORT_TEST_FILE_A]
+
+# Number of times the import is performed.
+global IMPORT_TEST_FILE_B "test-import-dummy2b.tea"
+
+# Number of times the import is performed.
+global IMPORT_TEST_FILE_PATH_B [str-cat "./lib/" $IMPORT_TEST_FILE_B]
+
+
+
+echo "$TEA_LIBRARY=(" \
+      [str-join [map [lambda (s) {str-cat "\"" $s "\""}] $TEA_LIBRARY] \
+                " "] \
+     ")"
+
+echo "Importing \"" [str-cat "lib/" $IMPORT_TEST_FILE] "\"..."
+import [str-cat "lib/" $IMPORT_TEST_FILE]
+
+echo "Pausing for " $PAUSE_TIME "ms..."
+sleep $PAUSE_TIME
+
+echo "Importing \"" $IMPORT_TEST_FILE "\"..."
+import $IMPORT_TEST_FILE
+echo "If you see '*** Now executing inside \"test-import-dummy2.tea\"' in the precedent line, it is a bug!"
+
+echo "Pausing for " $PAUSE_TIME "ms..."
+sleep $PAUSE_TIME
+
+echo "Importing \"" $IMPORT_TEST_FILE "\"..."
+import $IMPORT_TEST_FILE
+
+echo "Pausing for " $PAUSE_TIME "ms..."
+sleep $PAUSE_TIME
+
+echo "touch --no-create \"" $IMPORT_TEST_FILE "\"..."
+echo [if [== [system "touch" "--no-create" $IMPORT_TEST_FILE_PATH] 0] "OK" "NOK"]
+
+echo "Pausing for " $PAUSE_TIME "ms..."
+sleep $PAUSE_TIME
+
+echo "Importing \"" $IMPORT_TEST_FILE_PATH "\"..."
+import $IMPORT_TEST_FILE_PATH
+ 
+echo "Pausing for " $PAUSE_TIME "ms..."
+sleep $PAUSE_TIME
+
+echo "touch --no-create -t 199901010000.00 \"" $IMPORT_TEST_FILE "\"..."
+echo [if [== [system "touch" "--no-create" "-t" "199901010000.00" $IMPORT_TEST_FILE_PATH] 0] "OK" "NOK"]
+
+echo "Pausing for " $PAUSE_TIME "ms..."
+sleep $PAUSE_TIME
+
+echo "Importing \"" $IMPORT_TEST_FILE "\"..."
+import $IMPORT_TEST_FILE
+echo "If you DON'T see '*** Now executing inside \"test-import-dummy2.tea\"' in the precedent line, it is a bug!"
+
+    
+echo "Pausing for " $PAUSE_TIME "ms..."
+sleep $PAUSE_TIME
+
+echo "touch --no-create -f 5 \"" $IMPORT_TEST_FILE "\"..."
+echo [if [== [system "touch" "--no-create" "-f" "5" $IMPORT_TEST_FILE_PATH] 0] "OK" "NOK"]
+
+echo "Pausing for " $PAUSE_TIME "ms..."
+sleep $PAUSE_TIME
+
+echo "Importing \"" $IMPORT_TEST_FILE "\"..."
+import $IMPORT_TEST_FILE
+ 
+ 

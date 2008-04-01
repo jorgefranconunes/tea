@@ -1,0 +1,47 @@
+#
+# Testing the TVector TOS Class.
+#
+
+
+
+define print-vector ( vec ) {
+
+    define size [$vec getSize]
+    int i 0
+
+    while { < $i $size } {
+	echo [$vec getAt $i]
+	++ $i
+    }
+}
+
+
+define print-list ( aList ) {
+
+    foreach element $aList {
+	echo $element
+    }
+}
+
+
+
+define vec [new TVector]
+
+$vec init "Ola" "Adeus" 5 4 "Qualquer coisa..."
+print-vector $vec
+
+
+$vec resize 0
+foreach obj ( "Strings" "do" "segundo" "teste" "he" "ho" ) {
+    $vec append $obj
+}
+print-vector $vec
+
+
+echo "*** Printing from list ***"
+print-list [$vec getElements]
+
+
+echo "*** Printing sorted vector ***"
+print-vector [$vec sort str-cmp]
+

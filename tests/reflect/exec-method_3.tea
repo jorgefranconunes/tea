@@ -1,0 +1,23 @@
+###########################################################################
+#
+# Copyright (c) 2005 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+
+
+#
+# Testing the java-new-instance function and warpping of arguments.
+#
+
+define obj1 [java-new-instance "ReflectTest" 32]
+define obj2 [java-new-instance ReflectTest 23]
+
+define obj3 [$obj2 getAdder 30 $obj1]
+
+echo "New object is a " [[$obj3 "getClass"] getName]
+
+define value [$obj3 adder 15]
+
+echo "Result should be ((23+(32+30))+15)=100"
+echo $value

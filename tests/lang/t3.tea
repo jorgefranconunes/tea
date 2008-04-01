@@ -1,0 +1,42 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+import "lang.tea"
+
+
+map define (var1 var2 var3) (1 2 3)
+echo $var1
+echo $var2
+echo $var3
+
+
+
+define str "A resposta é sim, sam sum"
+echo "Antes : '" $str "'"
+echo "Depois: '" [regsub "s(.m)" "n$1" $str] "'"
+
+
+for {define i 0} {< $i 10} {set! i [+ $i 1]} {
+    if { and {> $i 2} {< $i 6} } {
+	echo $i
+    }
+}
+
+for {define i 0} {< $i 10} {set! i [+ $i 1]} {
+    if { or {< $i 2} {> $i 6} } {
+	echo $i
+    }
+}
+
+define str "Uma string++ ++com \"Algumas    Palavras\""
+echo
+echo [str-cat "Upper  : " [str-upper $str]]
+echo "Lower  : " [str-lower $str]
+echo "Size   : " [str-len $str]
+echo "Substr : " [str-substring $str 4 10]
+echo [str-join [str-split $str "[^A-Za-z]+"] "-"]
+
+write $stdout "Um teste..."

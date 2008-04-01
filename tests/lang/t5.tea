@@ -1,0 +1,172 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+import "lang.tea"
+
+
+
+#
+#
+#
+define tree-node (word) {
+
+    define _word $word
+    define _count 0
+    define _left
+    define _right
+
+    define get-word  () { get _word }
+    define get-count () { get _count }
+    define inc-count () { set! _count [+ 1 $_count] }
+
+    define get-left-node  () { get _left }
+    define get-right-node () { get _right }
+
+    define set-left-node  (node) { set! _left $node }
+    define set-right-node (node) { set! _right $node }
+
+    lambda args { apply [car $args] [cdr $args] }
+}
+
+
+
+
+
+#
+# Adds a word to the tree.
+# Returns the new root of the tree.
+#
+define add-word (node word) {
+
+    if { null? $node } {
+	return [tree-node $word]
+    }
+    define comp [str-comp $word [$node get-word]]
+    if { == $comp 0 } {
+	$node inc-count
+    }
+    if { < $comp 0 } {
+	$node set-left-node [add-word [$node get-left-node] $word]
+    }
+    if { > $comp 0 } {
+	$node set-right-node [add-word [$node get-right-node] $word]
+    }
+    return $node
+}
+
+
+
+
+
+#
+# 
+#
+define node-count (node) {
+
+    if { null? $node } 0 { + 1 [node-count [$node get-left-node]] [node-count [$node get-right-node]] }
+}
+
+
+
+
+
+#
+# 
+#
+define word-count (node) {
+
+    if { null? $node } 0 { + [$node get-count] [word-count [$node get-left-node]] [word-count [$node get-right-node]] }
+}
+
+
+
+
+
+#
+#
+#
+define tree-depth (node) {
+
+    if { null? $node } {
+	return 0
+    }
+    define left-depth  [tree-depth [$node get-left-node]]
+    define right-depth [tree-depth [$node get-right-node]]
+
+    + 1 [if {> $left-depth $right-depth} $left-depth $right-depth]
+}
+
+
+
+
+
+#
+#
+#
+define print-tree (node indent) {
+
+    if { null? $node } {
+	return
+    }
+    print-tree [$node get-right-node] [+ 1 $indent]
+    for {define i 0} {< $i $indent} {set! i [+ 1 $i]} {
+	write $stdout "  "
+    }
+    writeln $stdout [$node get-word]
+    print-tree [$node get-left-node] [+ 1 $indent]
+}
+
+
+
+
+
+#
+# Prints the words in the tree
+#
+define print-words (node) {
+
+    if { null? $node } {
+	return
+    }
+    print-words [$node get-left-node]
+    echo [$node get-word] "	" [$node get-count]
+    print-words [$node get-right-node]
+}
+
+
+
+
+define root $null
+
+define in  $stdin
+define out $stdout
+define aLine
+
+define pattern [regexp-pattern "[^A-Za-z]+"]
+
+define processing-time [time {
+while { not [null? [set! aLine [readln $in]]] } {
+    foreach word [str-split $aLine $pattern] {
+        set! root [add-word $root $word]
+    }
+}
+} 1]
+
+echo "Node count: " [node-count $root]
+echo "Tree depth: " [tree-depth $root]
+echo "Word count: " [word-count $root]
+
+echo "Processing:     " $processing-time
+echo "Counting nodes: " [time {node-count $root} 50]
+echo "Finding depth:  " [time {tree-depth $root} 50]
+echo "Counting words: " [time {word-count $root} 50]
+
+#print-words $root
+#print-tree $root 0
+
+close-input-file $in
+close-output-file $out
+

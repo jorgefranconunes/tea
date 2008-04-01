@@ -1,0 +1,18 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+#
+# Creates the directories specified as command line arguments.
+# All the parent directories of the named directories are also created.
+#
+
+foreach path $argv {
+    if { file-make-path $path } {
+	echo $path " created successfully."
+    } {
+	echo $path " creation failed."
+    }
+}

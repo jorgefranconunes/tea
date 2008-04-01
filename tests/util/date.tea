@@ -1,0 +1,58 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+
+
+#
+# Testing the TVector TOS Class.
+#
+
+#load "com.pdmfc.teapackages.tos.STModuleTOS"
+#load "com.pdmfc.teapackages.util.STModuleUtil"
+
+
+
+define date [new TDate]
+
+echo "Current time: " [$date format "yyyy/MM/dd HH:mm:ss"]
+echo "Year   : " [$date getYear]
+echo "Month  : " [$date getMonth]
+echo "Day    : " [$date getDay]
+echo "Hour   : " [$date getHour]
+echo "Minute : " [$date getMinute]
+echo "Second : " [$date getSecond]
+
+echo
+
+$date setDate 1969 6 10
+echo "Year   : " [$date getYear]
+echo "Month  : " [$date getMonth]
+echo "Day    : " [$date getDay]
+echo "Hour   : " [$date getHour]
+echo "Minute : " [$date getMinute]
+echo "Second : " [$date getSecond]
+
+echo "New date: " [$date format "yyyy/MM/dd HH:mm:ss"]
+
+echo
+
+define date2 [new TDate "20000603"]
+echo "Year   : " [$date2 getYear]
+echo "Month  : " [$date2 getMonth]
+echo "Day    : " [$date2 getDay]
+echo "Hour   : " [$date2 getHour]
+echo "Minute : " [$date2 getMinute]
+echo "Second : " [$date2 getSecond]
+
+echo
+
+$date2 setDate "200002181627"
+echo "Year   : " [$date2 getYear]
+echo "Month  : " [$date2 getMonth]
+echo "Day    : " [$date2 getDay]
+echo "Hour   : " [$date2 getHour]
+echo "Minute : " [$date2 getMinute]
+echo "Second : " [$date2 getSecond]

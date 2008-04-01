@@ -1,0 +1,37 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+
+
+load "com.pdmfc.teapackages.tos.STModuleTOS"
+load "com.pdmfc.teapackages.tdbc.STModuleTDBC"
+
+
+
+#define driverName    "weblogic.jdbc.oci.Driver"
+#define connectionURL "jdbc:weblogic:oracle:solsuni"
+define driverName    "oracle.jdbc.driver.OracleDriver"
+define connectionURL "jdbc:oracle:thin:@scorpion:1521:oracle"
+define username      "solsuni"
+define password      "solsuni"
+
+tdbc-register-driver $driverName
+
+
+
+
+define conn [new TConnection $connectionURL $username $password]
+define stat [$conn statement]
+define rSet [$stat query "select table_name from tabs"]
+
+
+if { $rSet hasRows } {
+    while { $rSet next } {
+	echo [$rSet getString 1]
+    }
+} {
+    echo "No rows in result"
+}

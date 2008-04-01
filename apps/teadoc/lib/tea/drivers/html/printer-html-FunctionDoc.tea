@@ -1,0 +1,213 @@
+###########################################################################
+#
+# Copyright (c) 2000, 2001, 2002, 2003, 2004 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+###########################################################################
+#
+# $Id: printer-html-FunctionDoc.tea,v 1.8 2006/10/11 13:35:58 jpsl Exp $
+#
+#
+# Revisions:
+#
+# 2004/10/19 Simplified the HTML for the navigation bar. (jfn)
+#
+# 2000/05/29 Added support for multiple method prototypes (req-0049). (jfn)
+#
+# 2000/03/25 Created. (jfn)
+#
+###########################################################################
+
+import "drivers/html/html-utils.tea"
+
+
+
+
+
+define NAVIGATION_BAR "
+<table class=\"docHeader\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%%\">
+  <tr>
+    <td class=\"docHeaderCell\"><a href=\"index.html\">Overview</a></td>
+    <td class=\"docHeaderCell\"><a href=\"module-%s.html\">Module</a></td>
+    <td class=\"docHeaderCellSelected\">Function</td>
+    <td class=\"docHeaderCell\">Class</td>
+    <td width=\"100%%\" class=\"docHeaderTitle\">%s</td>
+  </tr>
+</table>
+"
+
+define PARAMS_HEADER "
+<H1 CLASS=\"docTitle\">
+Function <TT>%s</TT>
+</H1>
+
+<P>
+"
+
+define PROTOTYPES_ITEM "
+<TT>%s <I>%s</I></TT><BR>
+"
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+global printer-html-FunctionDoc ( outputStream functionDoc ) {
+
+    print-header      $outputStream $functionDoc
+    print-params      $outputStream $functionDoc
+    print-description $outputStream $functionDoc
+    print-footer      $outputStream $functionDoc
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define print-header ( outputStream functionDoc ) {
+
+    define now    [new TDate]
+    define header [printer-html-get header]
+
+    $outputStream write [str-fmt $HTML_DOC_PREFIX $now [$functionDoc getName]]
+    $outputStream printf $NAVIGATION_BAR			\
+				[$functionDoc getModuleName]	\
+				$header
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define print-params ( outputStream functionDoc ) {
+
+    define params     [$functionDoc getParameters]
+    define returnInfo [$functionDoc getReturnInfo]
+    define funcName   [html-encode [$functionDoc getName]]
+
+    $outputStream printf $PARAMS_HEADER $funcName
+
+    foreach formalArgs [$functionDoc getPrototypes] {
+	$outputStream printf $PROTOTYPES_ITEM $funcName $formalArgs
+    }
+
+    $outputStream write "</P><DL><DD><P>"
+    [$functionDoc getOverview] print $outputStream
+    $outputStream writeln "</P></DD>"
+
+    if { or {not-empty? $params} {not-null? $returnInfo} } {
+	$outputStream writeln "<DD><DL>"
+	if { not-empty? $params } {
+	    $outputStream writeln "<DT><SPAN CLASS=\"docParamLabel\">Parameters:</SPAN>"
+	    foreach paramInfo $params {
+		$outputStream write "<DD>"
+		$paramInfo print $outputStream
+		$outputStream writeln "</DD>"
+	    }
+	    $outputStream writeln "</DT>"
+	}
+	if { not-null? $returnInfo } {
+	    $outputStream writeln "<DT><SPAN CLASS=\"docParamLabel\">Returns:</SPAN><DD>"
+	    $returnInfo print $outputStream
+	    $outputStream writeln "</DD>"
+	}
+	$outputStream writeln "</DL></DD>"
+    }
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define print-description ( outputStream functionDoc ) {
+
+    define description [$functionDoc getDescription]
+    define since       [$functionDoc getSince]
+
+    $outputStream writeln "<DD>"
+    $outputStream writeln "<p></p>"
+    if { not-null? $description } {
+        $description print $outputStream
+    }
+    if { not-null? $since } {
+        $outputStream writeln "<p></p>"
+        $outputStream writeln "\n<DL>"
+        $outputStream writeln "<DT><SPAN CLASS=\"docParamLabel\">Since:</SPAN>"
+        $since print $outputStream
+        $outputStream writeln "</DL>"
+    }
+    $outputStream writeln "</DD>\n\n</DL>"
+    $outputStream writeln "<br>"
+}
+
+
+
+
+
+###########################################################################
+#
+#
+#
+###########################################################################
+
+define print-since ( outputStream functionDoc ) {
+
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define print-footer ( outputStream functionDoc ) {
+    
+    define footer [printer-html-get footer]
+    define bottom [printer-html-get bottom]
+
+    $outputStream printf $NAVIGATION_BAR			\
+				[$functionDoc getModuleName]	\
+				$footer
+    $outputStream writeln $bottom
+    $outputStream write $HTML_DOC_SUFIX
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+

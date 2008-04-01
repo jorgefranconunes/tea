@@ -1,0 +1,175 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+###########################################################################
+#
+# $Id: TDocument.tea,v 1.2 2002/08/02 17:47:25 jfn Exp $
+#
+# Revisions:
+#
+# 2002/03/16
+# Created.
+#
+###########################################################################
+
+
+
+
+
+###########################################################################
+## 
+## <TeaClass name="TDocument"
+##           module="tea.xml">
+## 
+## <Overview>
+## A DOM XML document.
+## </Overview>
+## 
+## <Description>
+## </Description>
+##
+## </TeaClass>
+## 
+###########################################################################
+
+class TDocument (
+
+    _root
+)
+
+
+
+
+
+###########################################################################
+## 
+## <TeaMethod name="constructor"
+##            className="TDocument">
+## 
+## <Overview>
+## Initializes the object internal state.
+## </Overview>
+## 
+## <Description>
+## </Description>
+## 
+## </TeaMethod>
+## 
+###########################################################################
+
+method TDocument constructor () {
+}
+
+
+
+
+
+###########################################################################
+## 
+## <TeaMethod name="addNode"
+##            arguments="node"
+##            className="TDocument">
+## 
+## <Overview>
+## Specifies the root element for the XML document.
+## </Overview>
+## 
+## <Parameter name="node">
+## The root element for this XML document.
+## </Parameter>
+##
+## <Returns>
+## A reference to the object for which this method was called.
+## </Returns>
+## 
+## <Description>
+## </Description>
+## 
+## </TeaMethod>
+## 
+###########################################################################
+
+method TDocument addNode ( node ) {
+    
+    set! _root $node
+    
+    is $this
+}
+
+
+
+
+
+###########################################################################
+## 
+## <TeaMethod name="getRoot"
+##            className="TDocument">
+## 
+## <Overview>
+## Fetches root element of this XML document.
+## </Overview>
+##
+## <Returns>
+## The root element of this XML document.
+## </Returns>
+## 
+## <Description>
+## The root element was specified in the last call to the
+## <MethodRef name="addNode"/> method. If no calls to
+## <MethodRef name="addNode"/> have been made then a null will be
+## returned.
+## </Description>
+## 
+## </TeaMethod>
+## 
+###########################################################################
+
+method TDocument getRoot () {
+    
+    is $_root
+}
+
+
+
+
+
+###########################################################################
+## 
+## <TeaMethod name="getNodeType"
+##            className="TDocument">
+## 
+## <Overview>
+## Retrieves the type of this node object.
+## </Overview>
+##
+## <Returns>
+## A symbol representing the type of this node object.
+## </Returns>
+## 
+## <Description>
+## For the case of a <Class name="TText"/> the symbol <Func name="Document"/>
+## is returned.
+## </Description>
+## 
+## </TeaMethod>
+## 
+###########################################################################
+
+method TDocument getNodeType () {
+    
+    is Document
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+

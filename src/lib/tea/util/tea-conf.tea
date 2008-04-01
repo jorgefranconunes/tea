@@ -1,0 +1,220 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+###########################################################################
+#
+# $Id: tea-conf.tea,v 1.1 2001/09/17 23:14:35 jfn Exp $
+#
+#
+# Revisions:
+#
+# 2001/05/12
+# Created. (jfn)
+#
+###########################################################################
+
+
+
+
+
+define _metaConfModuleId TConfiguration
+define _modules          [new THashtable]
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+global tea-conf-set ( moduleId paramId paramValue ) {
+
+    define module [$_modules get $moduleId]
+
+    if { null? $module } {
+	set! module [new TConfiguration]
+	$_modules put $moduleId $module
+    }
+    $module set $paramId $paramValue
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+global tea-conf-set-configuration ( moduleId param-list ) {
+
+    define module [$_modules get $moduleId]
+
+    if { null? $module } {
+	set! module [new TConfiguration]
+	$_modules put $moduleId $module
+    }
+    foreach param $param-list {
+	define paramId    [nth $param-list 0]
+	define paramValue [nth $paran-list 1]
+	$module set $paramId $paramValue
+    }
+}
+
+
+
+
+
+###########################################################################
+#
+# Fecthes the "TConfiguration" object that represents the configuration
+# of the given module.
+#
+# @param moduleId
+#    The identifier of the module whose configuration is sought.
+#
+# @return
+#    The "Tconfiguration" object associated with the given module.
+#    The null object if no configuration for this module has been
+#    defined.
+#
+###########################################################################
+
+global tea-conf-get-configuration ( moduleId ) {
+
+    define module [$_modules get $moduleId]
+
+    if { null? $module } {
+	load-module $moduleId
+	set! module [$_modules get $moduleId]
+        if { null? $module } {
+	    set! module [new TConfiguration]
+	    $_modules put $moduleId $module
+        }
+    }
+    is $module
+}
+
+
+
+
+
+###########################################################################
+#
+# Fetches a parameter value for the given module.
+#
+# @param moduleId
+#    The module identification.
+#
+# @param paramId
+#    The parameter identification.
+#
+# @return
+#    An object representing the parameter value.
+#    The null object if that parameter is not registered.
+#
+###########################################################################
+
+global tea-conf-get ( moduleId paramId ) {
+
+    tea-conf-get-default $moduleId $paramId $null
+}
+
+
+
+
+
+###########################################################################
+#
+# Fetches a parameter value for the given module. If the parameter is
+# not defined returns the value passed as the "defaultValue" argument.
+#
+# @param moduleId
+#    The module identification.
+#
+# @param paramId
+#    The parameter identification.
+#
+# @return
+#    An object representing the parameter value.
+#    The contents of "defaultValue" if that parameter is not registered.
+#
+###########################################################################
+
+global tea-conf-get-default ( moduleId paramId defaultValue ) {
+
+    define module [tea-conf-get-configuration $moduleId]
+    define value  [$module get $paramId]
+
+    if { null? $module } $defaultValue $value
+}
+
+
+
+
+
+###########################################################################
+#
+# Sets meta-configuration for a module. The meta-configuration is just
+# the name of the file with the configuration for a given module.
+#
+# @param moduleId
+#    A module identifier.
+#
+# @param fileName
+#    Name of file with the module configurations.
+#
+###########################################################################
+
+global tea-conf-meta ( moduleId fileName ) {
+
+    tea-conf-set $_metaConfModuleId $moduleId $fileName
+}
+
+
+
+
+
+###########################################################################
+#
+# Processes the file associated with the given module.
+#
+# A file name must have been associated with the given module, through
+# the "TConfiguration" module, otherwise nothing is done.
+#
+# The "Tconfiguration" module must exist, otherwise nothing is done.
+#
+# @param moduleId
+#    The identifier of the module whose associated file will be
+#    processed.
+#
+###########################################################################
+
+define load-module ( moduleId ) {
+
+    define metaConf [$_modules get $_metaConfModuleId]
+    define fileName [if { null? $metaConf } $null { $metaConf get $moduleId }]
+
+    if { not-null? $fileName } {
+	import $fileName
+    }
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+

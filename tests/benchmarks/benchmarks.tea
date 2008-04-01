@@ -1,0 +1,73 @@
+###########################################################################
+#
+# Copyright (c) 2001, 2002 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+import "BenchmarkTest.tea"
+
+
+
+
+
+define COUNT 100000
+
+
+
+
+
+define factorial-recursive (n) {
+    if {<= $n 1} 1 {* $n [factorial-recursive [- $n 1]]}
+}
+
+BenchmarkTest::add \
+	"Recursive factorial of 10"	\
+	{ factorial-recursive 10 }	\
+	$COUNT
+
+
+
+
+define factorial-iterative-1 (n) {
+    define result 1
+    while {> $n 1 } {
+	set! result [* $result $n]
+        set! n [- $n 1]
+    }
+    is $result
+}
+
+BenchmarkTest::add \
+	"Iterative factorial of 10 (with 'set!')"	\
+	{ factorial-iterative-1 10 }			\
+	$COUNT
+
+
+
+
+
+define factorial-iterative-2 (n) {
+
+    int result 1
+    int i      $n
+
+    while { > $i 1 } {
+	*= result $i
+	-- i
+    }
+    is $result
+}
+
+BenchmarkTest::add \
+	"Iterative factorial of 10 (with '*=', '--')"	\
+	{ factorial-iterative-2 10 }			\
+	$COUNT
+
+
+
+
+
+BenchmarkTest::perform
+
+
+

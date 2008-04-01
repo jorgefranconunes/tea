@@ -1,0 +1,38 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+
+
+
+
+
+
+class D TFileInput (
+)
+
+method D constructor ( fileName ) {
+    $super constructor $fileName
+}
+
+method D readln () {
+    define line [$super readln]
+    if { not-null? $line } {
+	str-upper $line
+    } $null
+}
+
+
+
+
+
+define obj [new D [nth $argv 0]]
+define line
+
+while { not-null? [set! line [$obj readln]] } {
+    echo $line
+}
+$obj close
+

@@ -1,0 +1,365 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+###########################################################################
+#
+# ClassDoc.tea
+#
+# 2000/02
+#
+#
+# Revisions:
+#
+# 2000/06/18
+# The base class is now specified by its associated
+# "ClassDoc".
+# The "setBaseClassName" was removed.
+# Added the "getBaseClass", "setBaseClass" methods. (req-0050) (jfn)
+#
+# 2000/02/05
+# Created. (jfn)
+#
+###########################################################################
+
+
+
+
+
+define _classNeedsInit $true
+
+define _printerFunction $null
+
+
+
+
+
+###########################################################################
+#
+# Represents the documentation of a Tea class.
+#
+###########################################################################
+
+class ClassDoc (
+
+    _className
+    _baseClass
+    _moduleName
+    _overview
+    _description
+    _since
+    _methodSet
+    _methodList
+    _methodListIsOrdered
+)
+
+
+
+
+
+###########################################################################
+#
+# @param className
+#	String representing the class name.
+#
+###########################################################################
+
+method ClassDoc constructor ( className ) {
+
+    if $_classNeedsInit {
+	ClassDoc::init
+    }
+
+    set! _className           $className
+    set! _baseClass           $null
+    set! _methodSet           [new TVector]
+    set! _methodList          ()
+    set! _methodListIsOrdered $false
+}
+
+
+
+
+
+###########################################################################
+#
+# Fecthes the name of the class specified to the constructor.
+#
+###########################################################################
+
+method ClassDoc getName () {
+
+    is $_className
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method ClassDoc setBaseClass ( baseClass ) {
+
+    set! _baseClass $baseClass
+}
+
+
+
+
+
+###########################################################################
+#
+# Fetches the name of the base class specified to the
+# constructor. It may be null.
+#
+###########################################################################
+
+method ClassDoc getBaseClassName () {
+
+    if { null? $_baseClass } \
+	$null {
+	$_baseClass getName
+    }
+}
+
+
+
+
+
+###########################################################################
+#
+# Fetches the representation of the base class.
+#
+###########################################################################
+
+method ClassDoc getBaseClass () {
+
+    is $_baseClass
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method ClassDoc setModuleName ( moduleName ) {
+
+    set! _moduleName $moduleName
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method ClassDoc getModuleName () {
+
+    if { null? $_moduleName } {
+	set! _moduleName "General"
+    }
+
+    is $_moduleName
+}
+
+
+
+
+
+###########################################################################
+#
+# Specifies the "Overview" object representing the function short
+# description.
+#
+# @param anOverview
+#	An instance of "Overview".
+#
+###########################################################################
+
+method ClassDoc setOverview ( anOverview ) {
+
+    set! _overview $anOverview
+}
+
+
+
+
+
+###########################################################################
+#
+# Fecthes the "Overview" instance specified by the call to the
+# "setOverview" method.
+#
+###########################################################################
+
+method ClassDoc getOverview () {
+
+    is $_overview
+}
+
+
+
+
+
+###########################################################################
+#
+# Specifies the "Description" object representing the funtion long
+# description.
+#
+# @param aDescription
+#	An instance of "Description".
+#
+###########################################################################
+
+method ClassDoc setDescription ( aDescription ) {
+
+    set! _description $aDescription
+}
+
+
+
+
+
+###########################################################################
+#
+# Fetches the "Description" object specified by the call to the
+# "setDescription" method.
+#
+###########################################################################
+
+method ClassDoc getDescription () {
+
+    is $_description
+}
+
+
+
+
+
+###########################################################################
+#
+# Adds an instance of a "MethodDoc" representing the documentation of
+# a class method.
+#
+# @param aMethodDoc
+#	An instance of "MethodDoc".
+#
+###########################################################################
+
+method ClassDoc addMethodDoc ( aMethodDoc ) {
+
+    _methodSet append $aMethodDoc
+    set! _methodListIsOrdered $false
+}
+
+
+
+
+
+###########################################################################
+#
+# Retrieves a list of the "MethodDoc" instances received by the
+# "addMethodDoc" method. The elements in the list are ordered
+# alphabetically by the method names.
+#
+###########################################################################
+
+method ClassDoc getMethodDocs () {
+
+    if { not $_methodListIsOrdered } {
+	$_methodSet sort [lambda (a b) { str-cmp [$a getName] [$b getName] }]
+	set! _methodList          [$_methodSet getElements]
+	set! _methodListIsOrdered $true
+    }
+    is $_methodList
+}
+
+
+
+
+
+###########################################################################
+#
+#
+#
+###########################################################################
+
+method ClassDoc setSince ( aSince ) {
+
+    set! _since $aSince
+}
+
+
+
+
+
+###########################################################################
+#
+#
+#
+###########################################################################
+
+method ClassDoc getSince () {
+
+    is $_since
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method ClassDoc print ( outputStream ) {
+
+    $_printerFunction $outputStream $this
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define ClassDoc::init () {
+
+    define conf [tea-conf-get-configuration ClassDoc]
+
+    set! _printerFunction [$conf get printerFunction]
+
+    set! _classNeedsInit $false
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+

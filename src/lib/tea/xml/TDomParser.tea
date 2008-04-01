@@ -1,0 +1,307 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+###########################################################################
+#
+# $Id: TDomParser.tea,v 1.3 2002/08/02 17:47:25 jfn Exp $
+#
+# Revisions:
+#
+# 2002/03/15
+# Created.
+#
+###########################################################################
+
+
+
+
+
+###########################################################################
+## 
+## <TeaClass name="TDomParser"
+##           module="tea.xml">
+## 
+## <Overview>
+## Creates a DOM representation of an XML document from its textual
+## representation.
+## </Overview>
+## 
+## <Description>
+## </Description>
+##
+## </TeaClass>
+## 
+###########################################################################
+
+class TDomParser (
+
+    _parser
+    _stack    # Used during parsing.
+    _currElem
+)
+
+
+
+
+
+###########################################################################
+## 
+## <TeaMethod name="constructor"
+##            className="TDomParser">
+## 
+## <Overview>
+## Initializes the object internal state.
+## </Overview>
+## 
+## <Description>
+## </Description>
+## 
+## </TeaMethod>
+## 
+###########################################################################
+
+method TDomParser constructor () {
+}
+
+
+
+
+
+###########################################################################
+## 
+## <TeaMethod name="parse"
+##            arguments="fileName"
+##            className="TDomParser">
+##
+## <Prototype arguments="inputStream"/>
+## 
+## <Overview>
+## Parses the textual representation of an XML and produces the
+## DOM representation as a <ClassRef name="TDocument"/> object.
+## </Overview>
+## 
+## <Parameter name="fileName">
+## String repersenting the name of the file to parse.
+## </Parameter>
+##
+## <Parameter name="inputStream">
+## A <ClassRef name="TInput"/> where the textual representation of
+## the XML document will be read from.
+## </Parameter>
+##
+## <Returns>
+## A reference to a newly created <ClassRef name="TDocument"/> object
+## with the DOM representation of the XML document.
+## </Returns>
+## 
+## <Description>
+## Prior to calling this method the apropriate XML parser must have
+## been set by a call to one of the <MethodRef name="setParser"/> or
+## <MethodRef name="setNativeParser"/> methods.
+## </Description>
+## 
+## </TeaMethod>
+## 
+###########################################################################
+
+method TDomParser parse ( input ) {
+    
+    set! _stack    ()
+    set! _currElem $null
+    
+    $_parser setHandler $this
+    $_parser parse $input
+    
+    is $_currElem
+}
+
+
+
+
+
+###########################################################################
+## 
+## <TeaMethod name="setParser"
+##            arguments="parser"
+##            className="TDomParser">
+## 
+## <Overview>
+## Specifies the XML parser to use during the DOM construction.
+## </Overview>
+## 
+## <Parameter name="parser">
+## A <ClassRef name="TXmlParser"/>.
+## </Parameter>
+##
+## <Returns>
+## A reference to the object for which this method was called.
+## </Returns>
+## 
+## <Description>
+## 
+## <P>Either this method or the <MethodRef name="setParser"/> method
+## must be called prior to invoking <MethodRef name="parse"/>.</P>
+## </Description>
+## 
+## </TeaMethod>
+## 
+###########################################################################
+
+method TDomParser setParser ( parser ) {
+    
+    set! _parser $parser
+    
+    is $this
+}
+
+
+
+
+
+###########################################################################
+## 
+## <TeaMethod name="setNativeParser"
+##            arguments="javaClassName"
+##            className="TDomParser">
+## 
+## <Overview>
+## Specifies the Java XML parser to use during the DOM construction.
+## </Overview>
+##
+## <Parameter name="javaClassName">
+## Name of a Java class that must implement the
+## <Func name="org.xml.sax.Parser"/> interface.
+## </Parameter>
+##
+## <Returns>
+## A reference to the object for which this method was called.
+## </Returns>
+## 
+## <Description>
+## A <ClassRef name="TXmlParser"/> will be created internally to be used
+## as XML parser. This <ClassRef name="TXmlParser"/> will use the
+## <Arg name="javaClassName"/> native parser .
+## 
+## <P>Either this method or the <MethodRef name="setParser"/> method
+## must be called prior to invoking <MethodRef name="parse"/>.</P>
+## </Description>
+## 
+## </TeaMethod>
+## 
+###########################################################################
+
+method TDomParser setNativeParser ( javaClassName ) {
+    
+    set! _parser [new TXmlParser $javaClassName]
+    
+    is $this
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method TDomParser characters ( str ) {
+    
+    $_currElem addNode [new TText $str]
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method TDomParser startDocument () {
+    
+    set! _currElem [new TDocument]
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method TDomParser endDocument () {
+    
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method TDomParser processingInstruction ( target data ) {
+    
+    $_currElem addNode [new TProcessingInstruction $target $data]
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method TDomParser startElement ( tagName attrs ) {
+    
+    define newElem [new TElement $tagName $attrs]
+    
+    $_currElem addNode $newElem
+    
+    set! _stack    [cons $_currElem $_stack]
+    set! _currElem $newElem
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method TDomParser endElement ( tagName ) {
+    
+    set! _currElem [car $_stack]
+    set! _stack    [cdr $_stack]
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+

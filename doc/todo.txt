@@ -1,0 +1,97 @@
+2007/02/23 BUG - Writing with a TFileOutput into a full file system
+never generates an exception. If a write operation fails it would be
+expected to generate an exception.
+
+
+
+
+
+2006/01/14 BUG - The invocation 'str-split "abcd" ""' should return the
+list ("a" "b" "c" "d").
+
+
+
+
+
+2006/01/14 New function "pow x y".
+
+
+
+
+
+2003/05/22 Em "make release" deverão ser sempre compiladas todas as
+sources com um único comando.
+
+
+
+
+
+Descrição das variáveis definidas no módulo Lang (e restantes?).
+
+
+
+
+
+Documentação do utilitário "tsh". Esta documentação deverá também
+estar incluida no javadoc de "com.pdmfc.tea.apps.STeaShell".
+
+
+
+
+
+A implementação Java de todas as funções Tea do módulo "Lang" deverá
+estar centralizada na classe "com.pdmfc.tea.modules.lang.SModuleLang".
+
+
+
+
+
+STypes deverá ter um método para verificar o número de argumentos de
+uma função ou método Tea.
+
+
+
+
+
+API para gerar ficheiros Flash.
+
+
+
+
+
+API para geração de HTML de acordo com a especificação DOM do W3C.
+
+
+
+
+
+Criação de um test suite.
+
+
+
+
+
+API para processamento de ficheiros semelhante ao Perl.
+
+
+
+
+
+########################################################################
+
+
+
+
+
+2003/05/22 Opção "--version" para os utilitários "tsh", "teadoc".
+
+DONE 2003/05/23
+
+
+
+
+
+2003/05/22 O utilitário "teadoc" deveria indicar a versão no texto de
+help.
+
+DONE 2003/05/23

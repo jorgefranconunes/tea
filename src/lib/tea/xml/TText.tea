@@ -1,0 +1,146 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+###########################################################################
+#
+# $Id: TText.tea,v 1.3 2002/08/02 17:47:25 jfn Exp $
+#
+# Revisions:
+#
+# 2002/03/16
+# Created.
+#
+###########################################################################
+
+
+
+
+
+###########################################################################
+## 
+## <TeaClass name="TText"
+##           module="tea.xml">
+## 
+## <Overview>
+## A piece of text in a DOM XML document.
+## </Overview>
+## 
+## <Description>
+## </Description>
+##
+## </TeaClass>
+## 
+###########################################################################
+
+class TText TNode (
+
+    _contents
+)
+
+
+
+
+
+###########################################################################
+## 
+## <TeaMethod name="constructor"
+##            arguments="contents"
+##            className="TText">
+## 
+## <Overview>
+## Initializes the object internal state and specifies the string it
+## represents.
+## </Overview>
+##
+## <Parameter name="contents">
+## A string that will be used as the contents for this node.
+## </Parameter>
+## 
+## <Description>
+## </Description>
+## 
+## </TeaMethod>
+## 
+###########################################################################
+
+method TText constructor ( contents ) {
+    
+    $super constructor
+    
+    set! _contents $contents
+}
+
+
+
+
+
+###########################################################################
+## 
+## <TeaMethod name="getData"
+##            className="TText">
+## 
+## <Overview>
+## Fetches the contents of this node.
+## </Overview>
+##
+## <Returns>
+## The string representing the contents of this node. This is the same
+## string that was received at constructor time.
+## </Returns>
+## 
+## <Description>
+## </Description>
+## 
+## </TeaMethod>
+## 
+###########################################################################
+
+method TText getData () {
+    
+    is $_contents
+}
+
+
+
+
+
+###########################################################################
+## 
+## <TeaMethod name="getNodeType"
+##            className="TText">
+## 
+## <Overview>
+## Retrieves the type of this node object.
+## </Overview>
+##
+## <Returns>
+## A symbol representing the type of this node object.
+## </Returns>
+## 
+## <Description>
+## For the case of a <Class name="TText"/> the symbol <Func name="Text"/>
+## is returned.
+## </Description>
+## 
+## </TeaMethod>
+## 
+###########################################################################
+
+method TText getNodeType () {
+    
+    is Text
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+

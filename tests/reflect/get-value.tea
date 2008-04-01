@@ -1,0 +1,36 @@
+###########################################################################
+#
+# Copyright (c) 2005 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+
+
+#
+# Testing the java-get-value function.
+#
+
+define echoValue (anIndent aValue) {
+    cond {pair? $aValue} {
+        define i 0
+        foreach item $aValue {
+            echoValue [str-cat "  " $anIndent [int->string $i] " - "] $item
+            set! i [+ $i 1]
+        }
+    } {and {tos-obj? $aValue} {class-is-a [class-of $aValue] $THashtable}} {
+        foreach key [$aValue getKeys] {
+            echo $anIndent $key "->"
+            echoValue [str-cat "  " $anIndent] [$aValue get $key]
+        }
+    } {
+        echo $anIndent $aValue
+    }
+}
+
+
+
+define obj [java-new-instance "ReflectTest" 3.4]
+
+define value [java-get-value $obj [nth $argv 0]]
+
+echoValue "" $value

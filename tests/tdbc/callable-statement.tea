@@ -1,0 +1,55 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+#
+# A test for TCallableStatement
+#
+# Calls in the database a stored procedure named "adder(int4,int4)"
+# that returns an int4.
+#
+#
+# Command line arguments:
+#	- JDBC driver Java class name.
+#	- Database connectivity URL.
+#	- User name for database access.
+#	- Password for this database user.
+#
+
+
+
+
+
+define SQL "{? = call adder(?, ?)}"
+
+
+
+
+
+if { != [length $argv] 4 } {
+    $stdout writeln "Args: driver-class url username password"
+    exit 0
+}
+
+map define ( driverClass url username password ) $argv
+
+tdbc-register-driver $driverClass
+
+define result   0
+define conn     [new TConnection $url $username $password]
+define callStat [$conn prepareCall $SQL]
+
+$callStat registerInt 1 result
+$callStat setInt 2 5
+$callStat setInt 3 8
+$callStat execute
+
+echo "Result: " $result
+
+$callStat close
+$conn close
+
+
+

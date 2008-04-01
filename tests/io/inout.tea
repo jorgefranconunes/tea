@@ -1,0 +1,25 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+#
+# Copy one file into another.
+#
+
+
+
+
+
+define in  [new TFileInput [nth $argv 0]]
+define out [new TFileOutput [nth $argv 1]]
+define aLine $null
+
+while { not-null? [set! aLine [$in readln]] } {
+    $out writeln $aLine
+}
+
+$in close
+$out close
+

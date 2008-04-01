@@ -1,0 +1,61 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+import "lang.tea"
+
+load "com.pdmfc.teapackages.sql.STModuleSQL"
+
+
+
+define max values {
+
+    define bigest [car $values]
+    foreach x [cdr $values] {
+	if {> $x $bigest} {
+	    set! bigest $x
+	}
+    }
+    return $bigest
+}
+
+
+
+define money ( value ) {
+
+    define escudos  [floor $value]
+    define centavos [round [* 100 [- $value $escudos]]]
+
+    define strEscudos ""
+
+    while $true {
+	define milena [% $escudos 1000]
+        set! escudos [/ $escudos 1000]
+	if { > $escudos 0 } {
+	    set! strEscudos [str-cat "." [str-format "%03d" $milena] $strEscudos]
+	} {
+	    set! strEscudos [str-cat [str-format "%d" $milena] $strEscudos]
+	    break
+	}
+    }
+
+    str-format "%s$%02d" $strEscudos $centavos
+}
+
+
+
+
+for {define i 0; define x 0.1} {< $i 16} {set! i [+ $i 1]; set! x [/ $x 0.17]} {
+    echo [str-format "Linha %02d (0x%x, 0%o) - '%7.5f', %d -> " $i $i $i $x [round $x]] [money $x]
+}
+
+define index 0
+define wordList ("uma" "lista" "de" "palavras")
+foreach item $wordList {
+    echo [str-format "Palavra %d : '%-8s'" $index $item]
+    set! index [+ $index 1]
+}
+
+echo "Maior palavra: " [apply max [map str-len $wordList]]

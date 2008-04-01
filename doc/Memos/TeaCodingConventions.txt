@@ -1,0 +1,490 @@
+GSU Tea Coding Conventions
+==========================
+
+[These conventions are for Tea coding. For Java source, please follow
+http://java.sun.com/docs/codeconv/html/CodeConvTOC.doc.html
+plus the _ preffix for member names and, the 5 blank lines spacing]
+
+
+
+
+
+I - File conventions
+====================
+
+
+
+
+
+
+File Names
+----------
+
+Files defining an object class have the same filename as the class name.
+
+Example: A class named GsuHostingService should be defined in a file
+named GsuHostingService.tea
+
+
+
+
+
+Files names defining a traditional functional API start with a lowercase
+letter.
+
+APIs can be organized by table name and/or functional area.
+
+Example: An API for changing passwords of services is defined in
+servicePassword.tea
+
+
+
+
+
+See also name convention rules for forming class names.
+
+See also pageConventions.tea and objectConventions.tea
+for conventions specific to the GSU operator (oper) application.
+
+
+
+
+
+File headers
+------------
+
+Contain the following information:
+
+1. Filename (with or without directory prefix as appropriate).
+2. Creation date in the format YYYY/MM
+3. Comments (optional).
+4. List of public methods/functions if appropriate
+5. List of protected methods if appropriate
+6. List of abstract methods if appropriate
+7. Revision list. Latest revisions come first.
+7.1. Revision format consists typically of two lines
+     like "YYYY/MM/DD \n Comment. (GSU-REQ/BUG-ID) (username)".
+
+Example:
+------------ CUT HERE -------------------------------
+#############################################################################
+#
+# GsuHostingService.tea
+#
+# An object representing a HostingService.
+#
+# 1998/11
+#
+# Public methods:
+#       initWithId
+#       setPassword
+#       setQuota
+#       isQuotaChangeAllowed
+#       deleteSite
+#       sendSite
+#
+#
+# Revisions:
+#
+# 1999/04/16
+# added sendSite. (GSU-REQ-0033). (johanna)
+#
+# 1998/11/26
+# Created. (jfn)
+#
+#############################################################################
+------------ CUT HERE -------------------------------
+
+
+
+
+Library directory conventions
+-----------------------------
+
+Directory paths containing lib/itea are reserved for I*Tea libraries.
+Which means that the objects or APIs defined in these libraries
+are only usable under an I*Tea application server.
+
+Directory paths containing lib/tea  are reserved for Tea libraries.
+Which means that the objects or APIs defined in these libraries
+are both usable under an I*Tea application server or in a Tea application.
+
+Before creating new APIs or object classes check their scope of usage
+and consult the directory structure for the appropriate place to save
+it.
+
+
+
+
+
+II - Code Identation and Spacing
+================================
+
+Funtion/method comment headers follow conventions used by the
+javadoc tool but adapted to Tea. (Tea uses '#' as a comment marker).
+See documentation on Javadoc on
+http://java.sun.com/products/jdk/javadoc/writingdoccomments.html
+
+1 blank line separates the header comment from the function/method
+declaration.
+
+1 blank line separates the function/method body from the function/method
+header.
+
+5 blank lines separate the end of a function/body from the beggining
+of the next function/method header comment.
+
+Identation is made up of 4 spaces.
+The use of tabs is not consensual, so nothing is written about it.
+
+Example:
+
+------------ CUT HERE -------------------------------
+#############################################################################
+#
+# Initializes the object with data relative to the web hosting
+# account whose HostingService.hs_id is given as argument.
+#
+# @param stat
+#    The TStatement used to access the database.
+#
+# @param anId
+#    An integer, representing HostingService.hs_id of the web hosting
+#    account.
+#
+# @return
+#    True if the service actually exists.
+#    False otherwise.
+#
+#############################################################################
+
+method GsuHostingService initWithId ( stat anId ) {
+
+    $this clear
+
+    and {$super initWithId $stat $anId} \
+        {$this getData $stat $anId}
+}
+
+
+
+
+
+#############################################################################
+#
+# ...
+------------ CUT HERE -------------------------------
+
+
+
+
+
+II - Variable/Function/Method Name formation rules
+==================================================
+
+
+
+Name Semantics
+--------------
+
+A function "does" something. The name should be based on the verb
+that better describes what the function does.
+
+Besides the verb, a (set of) noun(s) can be concatenated
+to specify what is involved. If no nouns are involved, the verb by
+itself should hint on whats beeing done.
+
+Example:
+
+    $this getCounter
+
+    $anPkObject initWithId $pkId
+
+    $anObject update
+
+    pk-set-state $aStat $pkId $aState
+
+
+
+Variable names represent something. They should be based on the noun.
+It is up to the programmer to decide to give hint on the Tea data type
+or not.
+
+Usually, the singular form of the noun is used, (not plural).
+Using plural can be a vague hint that the object is a list or some other
+kind of collection. It is preferable to give a specific data type
+hint like "keyValueHash" or "keyList", other than using plural.
+
+Example:
+
+   $aCounter
+
+   $counter
+
+   $aPkId
+
+   $anIdStr
+
+   $aPackage
+
+   $aPackageState
+
+   $aPackageList
+
+
+
+
+Name concatenation rules
+------------------------
+
+Names consisting of more than one word, are formed by concatenating
+words. The first letter of each word is in upper case, and the
+following letters are in lower case.
+
+The case of the first letter of the name depends on how the name is
+used.
+
+Example:
+
+   setState
+   commitAndLog
+   PackageState
+   activateWithStId
+
+If one of the words is an abbreviation, the same rules apply in the
+abbreviated words, ie. only the first letter can be in upper case.
+
+Example:
+
+   HtmlNbsp  # where Nbsp stands for "non breaking space".
+
+
+Exception for global constants, in which all letters are in upper case,
+and the words are separated by underscores.
+
+Example:
+
+   CATEG_EMAIL
+
+
+
+
+
+Code block local variable/function names
+----------------------------------------
+
+If you override any pre-defined Tea/I*Tea names, it's
+your problem, but at least that problem is local to the block
+where the variable is defined.
+
+If a local variable represents the value of a DB table column,
+then the name of that local variable should be based on
+the concatenation of the table prefix with the field name.
+
+DB Object IDs are typically represented by integer Tea objects.
+If strings are used, please hint that on the variable name using an
+"Str" suffix.
+
+Examples:
+
+  define stName "Email"
+      # stName - A string representing a value for ServiceType.st_name
+
+  define pkId 12021
+      # pkId   - An integer representing a value for Package.pk_id
+
+  define pkIdStr "12021"
+      # pkIdStr - A string representing a value for Package.pk_id.
+
+
+
+
+Tea module local variables
+--------------------------
+
+
+Example:
+
+    define _listBoxSize 20
+
+
+
+
+
+Global constants
+----------------
+
+All letters are in upper case.
+Words are separated by undercore "_".
+
+Example:
+
+   global CATEG_EMAIL "EMAIL"
+      # Declares a global string constant.
+
+
+
+
+
+Global variable/function names
+------------------------------
+
+DON'T OVERRIDE PRE-DEFINED Tea/I*Tea GLOBAL NAMES!
+You don't have to know them all. It is just recommended to define
+some kind of prefix guidelines.
+
+Functions names on a given table should be prefixed
+with the table prefix name, and then followed by "-"
+
+Example:
+
+   pk-set-state $stat $pkId $pkState - A function to set the state
+                                       field of a package.
+
+
+
+
+
+Class Names
+-----------
+
+Class names are global variables.
+First first letter is upper case.
+
+Class names ARE ALWAYS singular nouns (such as table names).
+
+See also objectConventions.txt.
+
+Example:
+
+    class GsuHostingService GsuService (
+    )
+
+
+
+
+
+
+Class member variable names
+---------------------------
+
+Are prefixed by "_", just like module variables.
+
+Same semantic rules for variable names apply.
+
+Example:
+
+    class GsuHostingService GsuService (
+        _id
+        _quota
+        _url
+        _domainName
+        _stId
+        _pkSerialNumber
+    )
+
+
+
+
+
+Class member method names
+-------------------------
+
+Same semantic rules for function names apply.
+
+Example:
+
+method GsuHostingService getQuota () { ... }
+
+
+
+
+
+
+Page parameter variables
+------------------------
+
+See pageConventions.txt.
+
+Example:
+
+    parID
+    parPackageID
+    parPackageSerialNumber
+
+
+
+
+
+III - Misc
+==========
+
+
+Looping limits
+--------------
+
+[
+  jpsl: This is just general common programming sense, it shouldn't be in
+  a guide like this, but as so many violate this common practice... :-(
+]
+
+When defining looping limits, use inclusive starting limits
+and excluding upper limits.
+
+Ex1: Counting ten items from 0 to 9.
+
+   define i 0
+   while { < $i 10 } { set! i [+ $i 1] }
+
+Not
+
+   define i 0
+   while { <= $i 9 } { set! [+ $i 1] }
+
+
+
+Ex2: Do something beween two dates.
+
+   ./generateBilling -start 2001/01/01 -end 2001/02/01
+
+Not
+
+   ./generateBilling -start 2001/01/01 -end 2001/01/31
+
+   
+Why ?
+
+- The difference between the exclusive upper bound and the inclusive
+  upper bound always gives the distance between the two points.
+  Adding the distance to the lower bound point gives the next point
+  on the upper bound point yet to be processed.
+
+  The distance of the iteration variable to the lower bound is 0 (zero)
+  at the beginning, and "upper-1" at the last iteration point. This is
+  useful when converting to vector indexes or list indexes (which are
+  zero based). This property is also very useful for linear scaling...
+  (see next reason).
+
+- Refining iteration step resolution does not affect the range covered.
+
+   Ex: Changing the integer count to float with a 0.1 step
+
+      define i 0.0
+      while { < $i 10.0 } { set! i [+ $i 0.1] }
+
+    The range 0 to 10 is still covered (to 9.9), while the "<= $i 9"
+    would now just cover the range 0 to 9.0, which is probably not
+    what was wanted by increasing resolution.
+
+  Ex: Increasing the time resolution between two dates
+
+  ./generateBilling -start 2001/01/01 -end 2001/02/01 -resolution 1second
+
+  would be OK if using "less than" to check iteration againts the upper
+  bound. If using
+
+  ./generateBilling -start 2001/01/01 -end 2001/01/31 -resolution 1second
+
+  last day (31 of January) would probably be lost if the code was not
+  smart enough.
+

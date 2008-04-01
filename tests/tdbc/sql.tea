@@ -1,0 +1,183 @@
+###########################################################################
+#
+# Copyright (c) 2001-2005 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+#######################################################################
+#
+# $Id: sql.tea,v 1.8 2005/05/12 16:04:29 jfn Exp $
+#
+#
+# Executes arbitrary SQL commands in a database.
+#
+# Command line arguments:
+#	- JDBC driver Java class name.
+#	- Database connectivity URL.
+#	- User name for database access.
+#	- Password for this database user.
+#	- SQL command to execute.
+#
+#
+# Revisions:
+#
+# 2005/08/11 Better handling of null value fields. (jfn)
+#
+# 2001/04/04 Created. (jfn)
+#
+########################################################################
+
+
+
+
+
+#######################################################################
+#
+# 
+#
+########################################################################
+
+define perform-command ( conn stat sql ) {
+    
+    define firstWord [str-upper [fetch-first-word $sql]]
+    
+    cond { str== $firstWord "SELECT" } {
+        perform-select $stat $sql
+    } {
+        str== $firstWord "INSERT"
+    } {
+        perform-update $conn $stat $sql
+    } {
+        str== $firstWord "UPDATE"
+    } {
+        perform-update $conn $stat $sql
+    } {
+        str== $firstWord "DELETE"
+    } {
+        perform-update $conn $stat $sql
+    }
+}
+
+
+
+
+
+#######################################################################
+#
+# 
+#
+########################################################################
+
+define fetch-first-word ( str ) {
+    
+    define words [str-split $str " +"]
+    
+    if { empty? $words } "" { nth $words 0 }
+}
+
+
+
+
+
+#######################################################################
+#
+# 
+#
+########################################################################
+
+define perform-select ( stat sql ) {
+    
+    define rSet        [$stat query $sql]
+    define colCount    [$rSet getColumnCount]
+    int    recordCount 0
+    
+    # Display the columns labels.
+    $stdout write [$rSet getColumnName 1]
+    int i 2
+    while { <= $i $colCount } {
+        $stdout write "\t" [$rSet getColumnName $i]
+        ++ i
+    }
+    $stdout writeln "\n"
+    
+    # Display the columns values.
+    while { $rSet next } {
+        $stdout write [escape-string [$rSet getString 1]]
+        int i 2
+        while { <= $i $colCount } {
+            define value [$rSet getString $i]
+            $stdout write "\t" [escape-string $value]
+            ++ i
+        }
+        $stdout writeln
+        ++ recordCount
+    }
+    $rSet close
+    
+    $stdout writeln "\nTotal records: " $recordCount
+}
+
+
+
+
+
+#######################################################################
+#
+# 
+#
+########################################################################
+
+define escape-string ( str ) {
+    
+    if { null? $str } "NULL" $str
+}
+
+
+
+
+
+#######################################################################
+#
+# 
+#
+########################################################################
+
+define perform-update ( conn stat sql ) {
+    
+    define recordCount [$stat update $sql]
+    
+    $conn commit
+    
+    $stdout writeln "\nRecords involved: " $recordCount
+}
+
+
+
+
+
+#######################################################################
+#
+# 
+#
+########################################################################
+
+if { != [length $argv] 5 } {
+    $stdout writeln "Args: driver-class url username password sql"
+    exit 0
+}
+
+map define ( driverClass url username password sql ) $argv
+
+tdbc-register-driver $driverClass
+
+define conn [new TConnection $url $username $password]
+define stat [$conn statement]
+define msg  $null
+
+if { catch { perform-command $conn $stat $sql } msg } {
+    $stdout writeln "*** SQL command failed: " $msg
+}
+
+$stat close
+$conn close
+

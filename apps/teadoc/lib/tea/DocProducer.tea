@@ -1,0 +1,196 @@
+###########################################################################
+#
+# Copyright (c) 2001, 2002, 2003, 2004 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+##########################################################################
+#
+# $Id: DocProducer.tea,v 1.8 2005/12/07 16:49:28 jfn Exp $
+#
+#
+# Revisions:
+#
+# 2004/08/13 The "DocProducer processFile" now only processes the XML
+# file if it was actually created by "DocExtractor::processFile".
+# Performance has been thus increased. (jfn)
+#
+# 2002/01/20 Directories named "CVS" are now skipped. (jfn)
+#
+# 2001/05/12 Created. (jfn)
+#
+###########################################################################
+
+import "DocExtractor.tea"
+import "DocSet.tea"
+
+
+
+
+
+#
+# Regexp for names of regular files that will be processed.
+#
+define _knownFileTypes [regexp-pattern ".*((\\.tea)|(\\.java))$"]
+
+#
+# Regexp for names of directories that will be skiped.
+#
+define _namesToSkip [regexp-pattern "CVS"]
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+class DocProducer (
+
+    _docSet
+    _outputDir
+    _mustStop
+)
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method DocProducer constructor ( nativeParser ) {
+
+    set! _docSet   [new DocSet]
+    $_docSet setNativeParser $nativeParser
+    set! _mustStop $false
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method DocProducer generateDocs ( fileList outputDir ) {
+
+    set! _outputDir $outputDir
+    set! _mustStop  $false
+
+    foreach file $fileList {
+        define msg $null
+        if { catch { $this process $file } msg } {
+            $stdout writeln "*** Failed to process " $file " (" $msg ")"
+        }
+        if $_mustStop {
+            break
+        }
+    }
+    if { not $_mustStop } {
+        $_docSet print $outputDir
+    }
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method DocProducer process ( name ) {
+
+    if { file-is-dir? $name } {
+	$this processDir $name
+    } {
+	$this processFile $name
+    }
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method DocProducer processDir ( dirName ) {
+
+    $stdout writeln "Processing directory " $dirName
+
+    foreach fileName [glob $dirName ".*"] {
+	if $_mustStop {
+	    break
+	}
+	define path [file-join $dirName $fileName]
+
+	if { file-is-dir? $path } {
+            if { matches? $_namesToSkip $fileName } {
+	        $stdout writeln "Skipping directory " $path
+            } {
+	        $this processDir $path
+            }
+	} {
+	    if { matches? $_knownFileTypes $fileName } {
+		$this processFile $path
+	    }
+	}
+    }
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method DocProducer processFile ( inFileName ) {
+
+    $stdout writeln "Processing file " $inFileName
+
+    define inFileBaseName  [file-basename $inFileName]
+    define outFileBaseName [regsub "\\..*$" ".xml" $inFileBaseName]
+    define outFileName     [file-join $_outputDir $outFileBaseName]
+    define msg             $null
+
+    if { DocExtractor::processFile $inFileName $outFileName } {
+        if { catch { $_docSet process $outFileName } msg } {
+            $stdout writeln "*** Failed to process " $inFileName " (" $msg ")"
+        } {
+            file-unlink $outFileName
+        }
+    } {
+        # File did not contain any embeded teadoc documentation.
+    }
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+

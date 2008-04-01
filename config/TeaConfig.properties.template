@@ -1,0 +1,108 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 
+%% Copyright (c) 2003, 2004 PDM&FC, All Rights Reserved.
+%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 
+%% $Id: TeaConfig.properties.template,v 1.1 2004/09/29 13:48:44 jfn Exp $
+%% 
+%% 
+%% Revisions:
+%%
+%% 2004/09/29 Added template comments. (jfn)
+%%
+%% 2003/02/13 The "TeaConfig.properties" file is now generated from
+%% a template file when the development tree is configured. (jfn)
+%%
+%% 2002/10/28 Added the "com.pdmfc.tea.initFile",
+%% "com.pdmfc.tea.coreImportDir" properties. (jfn)
+%%
+%% 2002/07/24 Added the "com.pdmfc.tea.argv0VarName",
+%% "com.pdmfc.tea.argvVarName" properties. (jfn)
+%%
+%% 2002/07/18 Added the "com.pdmfc.tea.libraryVarName" property. (jfn)
+%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+###########################################################################
+#
+# Copyright (c) 2001, 2002, 2003, 2004 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+###########################################################################
+#
+# Some configuration parameters used by the Tea Java API. This file
+# is in the Java properties format. It is read by the
+# "com.pdmfc.tea.SConfigInfo" class. Values defined here are overriden
+# by Java system properties. These are tipically defined in the
+# command line.
+#
+###########################################################################
+
+#
+# The Tea version.
+#
+com.pdmfc.tea.version=$TEA_VERSION
+
+
+#
+# Name of the variable that stores a list of strings representing
+# the names of directories that are searched for by the Tea
+# "import" function.
+#
+com.pdmfc.tea.libraryVarName=TEA_LIBRARY
+
+
+#
+# Name of the variable that will receive the path name of the script
+# being executed. This variable will be only available on a Tea 
+# program being run by the "tsh" utility. If the script was read from
+# stdout then this variable will not be defined.
+#
+com.pdmfc.tea.argv0VarName=argv0
+
+
+#
+# Name of the variable that will receive a list of strings
+# corresponding to the command line arguments. This variable will
+# be only available on a Tea program being run by the "tsh"
+# utility. If the script was read from stdout then this variable
+# will not be defined.
+#
+com.pdmfc.tea.argvVarName=argv
+
+
+#
+# Name of the system property that when defined signals to the Tea
+# shell it should consider as Java resources the script name and
+# the components in the import dir list.
+#
+com.pdmfc.tea.useJavaResources=TEA_USE_JAVA_RESOURCES
+
+
+#
+# Name of the file read from each directory in the TEA_LIBRARY
+# directory list.
+#
+com.pdmfc.tea.initFile=init.tea
+
+
+#
+# Name of the Java resource to be used as the last element in the
+# TEA_LIBRARY directory and URL list.
+#
+com.pdmfc.tea.coreImportDir=/lib/tea-$TEA_VERSION
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+

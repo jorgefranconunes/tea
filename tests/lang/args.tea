@@ -1,0 +1,21 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+
+
+define argc [length $argv]
+
+echo "Script file: " $argv0
+echo
+
+if { > $argc 0 } {
+    echo [if { == $argc 1 } "Foi dado um argumento." { str-format "Foram dados %d argumentos:" $argc }]
+    foreach arg $argv {
+	echo "\t'" $arg "'"
+    }
+} {
+    echo "Nao foram dados quaisquer argumentos"
+}

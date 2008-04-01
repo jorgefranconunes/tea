@@ -1,0 +1,421 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+###########################################################################
+#
+# $Id: TElement.tea,v 1.3 2002/08/02 17:47:25 jfn Exp $
+#
+# Revisions:
+#
+# 2002/03/16
+# Created.
+#
+###########################################################################
+
+
+
+
+
+###########################################################################
+## 
+## <TeaClass name="TElement"
+##           module="tea.xml">
+## 
+## <Overview>
+## An element in a DOM XML document.
+## </Overview>
+## 
+## <Description>
+## An element in a DOM XML document. An element is characterized by
+## its tag name and by a set of attributes. Each attribute has a name and
+## a value.
+## </Description>
+##
+## </TeaClass>
+## 
+###########################################################################
+
+class TElement TNode (
+
+    _tagName	# String
+    _attrs	# THashtable
+    _children   # Reference to the first pair in the children list.
+    _tail	# Reference to the last Pair in the "children" list.
+)
+
+
+
+
+
+###########################################################################
+## 
+## <TeaMethod name="constructor"
+##            className="TElement">
+##
+## <Prototype arguments="tagName"/>
+## <Prototype arguments="tagName attrs"/>
+## 
+## <Overview>
+## Initializes the object internal state and specifies its tag name.
+## </Overview>
+##
+## <Parameter name="tagName">
+## A string representing the tag name for this element.
+## </Parameter>
+##
+## <Parameter name="attrs">
+## A <ClassRef name="THashtable"/> containing the attributes for this
+## element.
+## </Parameter>
+## 
+## <Description>
+## </Description>
+## 
+## </TeaMethod>
+## 
+###########################################################################
+
+method TElement constructor args {
+    
+    $super constructor
+    
+    define argc [length $args]
+    
+    cond {
+        == $argc 0 } {
+            #
+        } {
+        == $argc 1 } {
+            map set! ( _tagName ) $args
+        } {
+        == $argc 2 } {
+            map set! ( _tagName _attrs ) $args
+        } {
+            error "too many arguments"
+    }
+    set! _children ()
+    set! _tail     $null
+}
+
+
+
+
+
+###########################################################################
+## 
+## <TeaMethod name="getTagName"
+##            className="TElement">
+## 
+## <Overview>
+## Fetches the tag name for this element.
+## </Overview>
+##
+## <Returns>
+## The tag name for this element specified at constructor time.
+## </Returns>
+## 
+## <Description>
+## </Description>
+## 
+## </TeaMethod>
+## 
+###########################################################################
+
+method TElement getTagName () {
+    
+    is $_tagName
+}
+
+
+
+
+
+###########################################################################
+## 
+## <TeaMethod name="getAttribute"
+##            arguments="attrName"
+##            className="TElement">
+## 
+## <Overview>
+## Fetches the value of one of the elements' attributes.
+## </Overview>
+##
+## <Parameter name="attrName">
+## A string representing the name of the attribute to retrieved.
+## </Parameter>
+##
+## <Returns>
+## The value of the attribute named <Arg name="attrName"/>
+## </Returns>
+## 
+## <Description>
+## If this element has no attribute named <Arg name="attrName"/> then
+## a null is returned.
+## </Description>
+## 
+## </TeaMethod>
+## 
+###########################################################################
+
+method TElement getAttribute ( attrName ) {
+    
+    $_attrs get $attrName
+}
+
+
+
+
+
+###########################################################################
+## 
+## <TeaMethod name="getAttributes"
+##            className="TElement">
+## 
+## <Overview>
+## Fetches the set of all current attributes.
+## </Overview>
+##
+## <Returns>
+## A <ClassRef name="THashtable"/> containing the attributes.
+## </Returns>
+## 
+## <Description>
+## </Description>
+## 
+## </TeaMethod>
+## 
+###########################################################################
+
+method TElement getAttributes () {
+    
+    is $_attrs
+}
+
+
+
+
+
+###########################################################################
+## 
+## <TeaMethod name="getAttributeNames"
+##            className="TElement">
+## 
+## <Overview>
+## Fetches the names of all current attributes.
+## </Overview>
+##
+## <Returns>
+## A list of strings representing the names of the current attributes.
+## </Returns>
+## 
+## <Description>
+## The strings in the list are not guaranteed to be in the same order
+## the attributes were added with calls to <MethodRef name="addAttribute"/>.
+## </Description>
+## 
+## </TeaMethod>
+## 
+###########################################################################
+
+method TElement getAttributeNames () {
+    
+    $_attrs getKeys
+}
+
+
+
+
+
+###########################################################################
+## 
+## <TeaMethod name="setAttributes"
+##            parameters="attrs"
+##            className="TElement">
+## 
+## <Overview>
+## Specifies the set of attributes for this element.
+## </Overview>
+##
+## <Parameter name="attrs">
+## A <ClassRef name="THashtable"/> containing the attributes for this
+## element.
+## </Parameter>
+##
+## <Returns>
+## A reference to the object for which this method was called.
+## </Returns>
+## 
+## <Description>
+## </Description>
+## 
+## </TeaMethod>
+## 
+###########################################################################
+
+method TElement setAttributes ( attrs ) {
+    
+    set! _attrs $attrs
+    
+    is $this
+}
+
+
+
+
+
+###########################################################################
+## 
+## <TeaMethod name="addAttribute"
+##            parameters="attrname attrValue"
+##            className="TElement">
+## 
+## <Overview>
+## Specifies the value of an attribute for the element.
+## </Overview>
+##
+## <Parameter name="attrName">
+## A string representing the name of the attribute to add.
+## </Parameter>
+##
+## <Parameter name="attrValue">
+## A string representing the value of the attribute being added.
+## </Parameter>
+##
+## <Returns>
+## A reference to the object for which this method was called.
+## </Returns>
+## 
+## <Description>
+## </Description>
+## 
+## </TeaMethod>
+## 
+###########################################################################
+
+method TElement addAttribute ( attrName attrValue ) {
+    
+    $_attrs put $attrName $attrValue
+    
+    is $this
+}
+
+
+
+
+
+###########################################################################
+## 
+## <TeaMethod name="addNode"
+##            parameters="node"
+##            className="TElement">
+## 
+## <Overview>
+## Adds a node to the list of children of this element.
+## </Overview>
+##
+## <Parameter name="node">
+## The new child node to add.
+## </Parameter>
+##
+## <Returns>
+## A reference to the object for which this method was called.
+## </Returns>
+## 
+## <Description>
+## </Description>
+## 
+## </TeaMethod>
+## 
+###########################################################################
+
+method TElement addNode ( node ) {
+    
+    define newTailPair [cons $node ()]
+    
+    if { null? $_tail } {
+        set! _children $newTailPair
+        set! _tail     $newTailPair
+    } {
+        [car $_tail] setNextSibling $node
+        set-cdr! $_tail $newTailPair
+        set! _tail $newTailPair
+    }
+    
+    is $this
+}
+
+
+
+
+
+###########################################################################
+## 
+## <TeaMethod name="getChildren"
+##            className="TElement">
+## 
+## <Overview>
+## Fetches the list of children of the element.
+## </Overview>
+##
+## <Returns>
+## A list containing the children of this element.
+## </Returns>
+## 
+## <Description>
+## The order of child nodes in the returned list is the same they were
+## added by calls to the <MethodRef name="addNode"/> method.
+## </Description>
+## 
+## </TeaMethod>
+## 
+###########################################################################
+
+method TElement getChildren () {
+    
+    is $_children
+}
+
+
+
+
+
+###########################################################################
+## 
+## <TeaMethod name="getNodeType"
+##            className="TElement">
+## 
+## <Overview>
+## Retrieves the type of this node object.
+## </Overview>
+##
+## <Returns>
+## A symbol representing the type of this node object.
+## </Returns>
+## 
+## <Description>
+## For the case of a <Class name="TElement"/> the symbol
+## <Func name="Element"/> is returned.
+## </Description>
+## 
+## </TeaMethod>
+## 
+###########################################################################
+
+method TElement getNodeType () {
+    
+    is Element
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+

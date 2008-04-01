@@ -1,0 +1,405 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+###########################################################################
+#
+# printer-html.tea
+#
+# 2000/03
+#
+#
+# Revisions:
+#
+# 2001/01/10
+# Added the "printer-html-FuncRef", "printer-html-ClassRef",
+# "printer-html-MethodRefElement" functions. (jfn)
+#
+# 2000/10/04
+# The "printer-html-CodeElement" function was adapted to the new
+# interface of class "CodeElement". (jfn)
+#
+# 2000/09/24
+# Added the function "printer-html-enumeration". (req-0056) (jfn)
+#
+# 2000/03/24
+# Created. (jfn)
+#
+###########################################################################
+
+
+
+
+
+define header        ""
+define footer        ""
+define documentTitle ""
+define windowTitle   ""
+define bottom        ""
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+global printer-html-set ( optionName optionValue ) {
+
+    set! $optionName $optionValue
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+global printer-html-get ( optionName ) {
+
+    get $optionName
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+global printer-html-ArgElement ( outputStream anElement ) {
+
+    $outputStream write \
+            "<code><i>"				\
+            [html-encode [$anElement getName]]	\
+            "</i></code>"
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+global printer-html-CodeElement ( outputStream anElement ) {
+
+    $outputStream write "<pre>"
+    $outputStream writeln [html-encode [$anElement getText]]
+    $outputStream writeln "</pre>"
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+global printer-html-Description ( outputStream anElement ) {
+
+#    $outputStream writeln "<BR>"
+    print-all-elements $outputStream $anElement
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+global printer-html-FuncElement ( outputStream anElement ) {
+
+    $outputStream write "<code>" [html-encode [$anElement getName]] "</code>"
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+global printer-html-FuncRefElement ( outputStream anElement ) {
+
+    define funcName [$anElement getName]
+
+    $outputStream printf \
+            "<code><a href=\"function-%s.html\">%s</a></code>"	\
+            [url-encode [url-encode $funcName]]		\
+            [html-encode $funcName]
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+global printer-html-ClassRefElement ( outputStream anElement ) {
+
+    define className [$anElement getName]
+
+    $outputStream printf "<tt><a href=\"class-%s.html\">%s</a></tt>"	\
+			[url-encode [url-encode $className]]		\
+			[html-encode $className]
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+global printer-html-MethodRefElement ( outputStream anElement ) {
+
+    define className  [$anElement getClassName]
+    define methodName [$anElement getMethodName]
+
+    if { null? $className } {
+        $outputStream printf "<tt><a href=\"#%s\">%s</a></tt>"\
+			[url-encode [url-encode $methodName]]		\
+			[html-encode $methodName]
+    } {
+        $outputStream printf "<tt><a href=\"class-%s.html#%s\">%s %s</a></tt>"\
+			[url-encode [url-encode $className]]		\
+			[url-encode [url-encode $methodName]]		\
+			[html-encode $className]			\
+			[html-encode $methodName]
+    }
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+global printer-html-Overview ( outputStream anElement ) {
+
+    print-all-elements $outputStream $anElement
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+global printer-html-PElement ( outputStream anElement ) {
+
+    $outputStream writeln "<p>"
+    print-all-elements $outputStream $anElement
+    $outputStream writeln "</p>"
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+global printer-html-Parameter ( outputStream anElement ) {
+
+    $outputStream write "<SPAN CLASS=\"docParamName\"><TT><I>" [html-encode [$anElement getName]] "</I></TT></SPAN> - <SPAN CLASS=\"docParamDescription\">"
+    print-all-elements $outputStream $anElement
+    $outputStream write "</SPAN>"
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+global printer-html-ReturnInfo ( outputStream anElement ) {
+
+    $outputStream write "<SPAN CLASS=\"docParamDescription\">"
+    print-all-elements $outputStream $anElement
+    $outputStream write "</SPAN>"
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+global printer-html-SinceElement ( outputStream anElement ) {
+
+    $outputStream write "<code>" [html-encode [$anElement getVersionName]] "</code>"
+}
+
+
+
+
+###########################################################################
+#
+#
+#
+###########################################################################
+
+global printer-html-TextElement ( outputStream anElement ) {
+#    $outputStream write "<SPAN CLASS=\"docText\">"
+    $outputStream write [html-encode [$anElement getContents]]
+#    $outputStream write "</SPAN>"
+}
+
+
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+global printer-html-VarElement ( outputStream anElement ) {
+
+    $outputStream write "<TT>" [html-encode [$anElement getName]] "</TT>"
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+global printer-html-Enumeration ( outputStream anElement ) {
+
+    $outputStream writeln "<UL>"
+    foreach item [$anElement getItems] {
+	map define ( label desc ) $item
+	$outputStream write "<LI><B>"
+	print-all-elements $outputStream $label
+	$outputStream write "</B>&nbsp;-&nbsp;"
+	print-all-elements $outputStream $desc
+	$outputStream writeln "</LI>"
+    }
+    $outputStream writeln "</UL>"
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+global printer-html-generic ( outputStream anElement ) {
+    
+    define tagName  [$anElement getTagName]
+    define attrs    [$anElement getAttributes]
+    define attrKeys [$attrs getKeys]
+    
+    $outputStream write "<" $tagName
+    
+    if { > [length $attrKeys] 0 } {
+        foreach key $attrKeys {
+            $outputStream write " " $key "=\"" [$attrs get $key] "\""
+        }
+    }
+    
+    
+    define childElements [$anElement getElements]
+    if { > [length $childElements] 0 } {
+        $outputStream write ">"
+        foreach childElement $childElements {
+            $childElement print $outputStream
+        }
+        $outputStream write "</" $tagName ">"
+    } {
+        $outputStream write " />"
+    }
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define print-all-elements ( outputStream anElement ) {
+
+    foreach element [$anElement getElements] {
+	$element print $outputStream
+    }
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+

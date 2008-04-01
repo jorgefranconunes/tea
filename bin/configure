@@ -1,0 +1,376 @@
+#!/bin/sh
+###########################################################################
+#
+# Copyright (c) 2001, 2002, 2003, 2004, 2005 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+#########################################################################
+#
+# $Id: configure,v 1.28 2005/10/31 15:33:34 jfn Exp $
+#
+#
+# Configures the development tree.
+#
+#
+# Revisions:
+#
+# 2005/02/16 Removed the "--jars-to-include" option. All JARs required
+# for compiling and running Tea are already included in the
+# distribution. (jfn)
+#
+# 2005/01/18 Solved issues with detecting Cygwin. (jfn)
+#
+# 2004/09/29 The templates files were renamed to better follow current
+# naming practices. (jfn)
+#
+# 2003/02/11 Rewriten to use template files for generating the
+# configuration files. (jfn)
+#
+# 2002/10/28 The "--tea-version" option was renamed "--version". The
+# old name is still recognized to maintain compatibility with previous
+# releases. (jfn)
+#
+# 2002/10/18 The configuration data file is now named "configure.conf",
+# instead of "configure.config". (jfn)
+#
+# 2001/02/03 Created. (jfn)
+#
+#########################################################################
+
+SCRIPT_DIR=`dirname $0`
+SCRIPT_NAME=`basename $0`
+
+teaBaseDir=`cd $SCRIPT_DIR/..; pwd`
+pathSep=":"
+
+# The following should be considered a kludge, because it is only
+# required when parsing the "config/Makefile.template".
+isUnix=1
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+#
+# Makes utility functions available.
+#
+. ${teaBaseDir}/bin/tea-utils
+
+case `teaOsType` in
+    *CYGWIN* )
+	pathSep=";"
+	teaBaseDir=`cygpath --windows "$teaBaseDir" | sed 's/\\\/\\//g'`
+	isUnix=0
+    ;;
+esac
+
+teaCoreConfigFile=${teaBaseDir}/config/tea-core.conf
+teaCoreConfigTemplate=${teaCoreConfigFile}.template
+teaDevelopConfigFile=${teaBaseDir}/config/tea-develop.conf
+teaDevelopConfigTemplate=${teaDevelopConfigFile}.template
+teaRuntimeConfigFile=${teaBaseDir}/src/com/pdmfc/tea/TeaConfig.properties
+teaRuntimeConfigTemplate=${teaBaseDir}/config/TeaConfig.properties.template
+teaMakefile=${teaBaseDir}/Makefile
+teaMakefileTemplate=${teaBaseDir}/config/Makefile.template
+setupApp=${teaBaseDir}/bin/setup
+
+TEA_VERSION=
+TEA_JRE=
+TEA_JAVAC=
+TEA_JAVADOC=
+TEA_JAR=
+TEA_CORE_JARS=
+TEA_MAKEFILE_CLASSPATH=
+TEA_CLASSPATH=
+libDir=${teaBaseDir}/lib
+
+if [ -r $teaDevelopConfigFile ]
+then
+    . $teaDevelopConfigFile
+fi
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+displayHeader () {
+
+    cat <<EOF
+
+Tea Development Environment Configuration Tool
+Copyright (c) 2003, 2004, 2005 PDM&FC, All Rights Reserved.
+
+EOF
+}
+
+
+
+
+
+###########################################################################
+#
+# Displays an help messages describing the configuration options.
+#
+###########################################################################
+
+displayHelp () {
+
+    displayHeader
+
+    cat <<EOF
+Configures your Tea development environment at "$teaBaseDir".
+
+Available options:
+
+--version=STRING
+	The Tea release version number. It will be used to create the
+	name of the Tea JAR file and of the release bundle.
+--java-home=PATH
+	Base directory of your Java instalation. PATH is supposed to be a
+	directory containing a "bin" directory with a "java" executable.
+	This option is not mandatory. When not specified it will default
+	to "/usr".
+--jre=PATH
+	Path to your Java runtime environment executable. It must accept
+	the "-classpath" and "-D" options. This option is not mandatory.
+	When not specified it will default to "JAVAHOME/bin/java", were
+	"JAVAHOME" was the value of the --java-home option.
+--javac=PATH
+        Path to a Java compiler executable. It must accept the "-d"
+        option. This option is not mandatory. When not specified it will
+        default to "\$JAVAHOME/bin/javac", where "JAVAHOME" was the
+	value of the --java-home option.
+--jar=PATH
+        Path to an executable that is expected to behave like the Sun's
+        JDK Java archiver. This option is not mandatory. When not
+        specified it will default to "\$JAVAHOME/bin/jar", where
+        "JAVAHOME" was the value of the --java-home option.
+--javadoc=PATH
+        Path to an executable that is expected to behave like the Sun's
+        JDK javadoc utility. This option is not mandatory. When not
+        specified it will default to "\$JAVAHOME/bin/javadoc", where
+        "JAVAHOME" was the value of the --java-home option.
+--classpath=DIRLIST
+	Colon separated directory and JAR list. These are added to the
+	classpath of the JVM running the Tea interpreter launched by
+	the "tsh" utility.
+--help
+	Displays this text and exits.
+		  
+EOF
+}
+
+
+
+
+
+###########################################################################
+#
+# Processes the command line options.
+#
+###########################################################################
+
+for option in "$@"
+  do
+  case $option in
+      --java-home=* )
+	  javaHome=`expr "$option" : '--java-home=\(.*\)'`
+	  TEA_JRE=${javaHome}/bin/java
+	  TEA_JAVAC=${javaHome}/bin/javac
+	  TEA_JAR=${javaHome}/bin/jar
+	  TEA_JAVADOC=${javaHome}/bin/javadoc
+	  ;;
+      --jre=* )
+	  TEA_JRE=`expr "$option" : '--jre=\(.*\)'`
+	  ;;
+      --javac=* )
+	  TEA_JAVAC=`expr "$option" : '--javac=\(.*\)'`
+	  ;;
+      --jar=* )
+	  TEA_JAR=`expr "$option" : '--jar=\(.*\)'`
+	  ;;
+      --javadoc=* )
+	  TEA_JAVADOC=`expr "$option" : '--javadoc=\(.*\)'`
+	  ;;
+      --classpath=* )
+	  TEA_CLASSPATH=`expr "$option" : '--classpath=\(.*\)'`
+	  ;;
+      --version=* )
+	  TEA_VERSION=`expr "$option" : '--version=\(.*\)'`
+	  ;;
+      --help )
+	  displayHelp
+	  exit 0
+	  ;;
+      --*=* )
+	  option=`expr $option : '\(--.*\)=.*'`
+	  teaError "$option : unrecognized option. Use --help for details."
+	  ;;
+      * )
+	  teaError "$option : unrecognized option. Use --help for details."
+	  ;;
+  esac
+done
+
+if [ -z "$TEA_VERSION" ]
+    then
+    teaError "Missing mandatory --version option. Use --help for details."
+fi
+
+if [ -z "$TEA_JRE" ]
+    then
+    teaError "Missing --jre or --java-home option. Use --help for details."
+fi
+
+if [ -z "$TEA_JAVAC" ]
+    then
+    teaError "Missing --javac or --java-home option. Use --help for details."
+fi
+
+if [ -z "$TEA_JAVADOC" ]
+    then
+    teaError "Missing --javadoc or --java-home option. Use --help for details."
+fi
+
+if [ -z "$TEA_JAR" ]
+    then
+    teaError "Missing --jar or --java-home option. Use --help for details."
+fi
+
+
+#
+# 
+#
+TEA_CORE_JARS="tea-${TEA_VERSION}.jar"
+
+#
+# Builds ths list of dirs to use as classpath during compilation.
+#
+TEA_MAKEFILE_CLASSPATH=$TEA_CLASSPATH
+
+# The names of the following two jars should probably come from a
+# configuration file.
+extensionJars="gnu-regexp-1.0.8.jar xerces-1.4.4.jar"
+
+for path in $extensionJars ; do
+    jarPath=${teaBaseDir}/lib/$path
+    TEA_MAKEFILE_CLASSPATH="${TEA_MAKEFILE_CLASSPATH}${pathSep}$jarPath"
+done
+
+
+
+
+
+###########################################################################
+#
+# Display the specified options
+#
+###########################################################################
+
+displayHeader
+
+cat <<EOF
+Tea $TEA_VERSION development environment configured with the following options:
+
+Java runtime
+	$TEA_JRE
+Java compiler
+	$TEA_JAVAC
+Jar tool
+	$TEA_JAR
+Javadoc tool
+	$TEA_JAVADOC
+Classpath:
+EOF
+for path in `echo $TEA_CLASSPATH | sed "s/$pathSep/ /g"`
+do
+    echo "	$path"
+done
+echo
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+#
+# Creates the core configuration file.
+#
+echo "Creating core configuration file \"`basename $teaCoreConfigFile`\"..."
+
+teaParseTemplate $teaCoreConfigTemplate > $teaCoreConfigFile
+
+
+#
+# Creates the development environment configuration file. It will
+# contain all the configuration parameters passed to the "configure"
+# tool.
+#
+echo "Creating development tree configuration file \"`basename $teaDevelopConfigFile`\"..."
+
+teaParseTemplate $teaDevelopConfigTemplate > $teaDevelopConfigFile
+
+
+#
+# Updates the version information on the Tea source files.
+#
+echo "Updating version information in source files..."
+
+teaParseTemplate $teaRuntimeConfigTemplate > $teaRuntimeConfigFile
+
+
+#
+# Creates the main "Makefile" for the development environment.
+#
+echo "Creating main Makefile..."
+
+. $teaCoreConfigFile
+
+teaParseTemplate $teaMakefileTemplate > $teaMakefile
+
+
+#
+# Sets up the development tree as an installation tree.
+#
+echo "Seting up development tree as an installation tree..."
+
+$setupApp \
+    --quiet \
+    --classpath="$TEA_CLASSPATH" \
+    --jre="$TEA_JRE"
+
+
+#
+# Done.
+#
+echo "Done!"
+echo
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+

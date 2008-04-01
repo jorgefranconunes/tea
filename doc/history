@@ -1,0 +1,479 @@
+2001/04/05
+
+In a Tea program run by the "tsh" utility a global variable named
+"argv0" is now created right before executing the Tea script
+file. This variable contains the path to the script file that is being
+executed.
+
+
+
+
+
+2001/02/17
+
+Tea 2 has been officialy launched. The Tea home page will soon be
+updated with the news and a link to the download page.
+
+CVS tag: TEA020000
+
+
+
+
+
+2001/02/15
+
+Started development on Tea version 2. A new CVS repository was setup
+having CVSROOT=:pserver:tdk@red.solsuni.pt:/opt/develop/cvsroot
+
+
+
+
+
+2001/02/08
+
+Added the "file-make-path" function. (jfn)
+
+
+
+
+
+2001/01/19
+
+Added the "tea-autoload-package" function.
+
+Tea functions and classes of the TDBC module are now loaded on demand.
+
+
+
+
+
+2001/01/10
+
+The TeaDoc DTD has the following new elements:
+
+Class
+ClassRef
+MethodRef
+FuncRef
+
+The "teadoc" tool was updated to support these new elements.
+
+
+
+
+
+2000/12/15
+
+The "and" function now may accept no arguments, as mentioned in the
+documentation.
+
+Added the "file-unlink-recursive" function. It removes a directory and
+all its contents.
+
+
+
+
+
+2000/12/10
+
+Added support for variables shared among all the Tea interpreters
+running in a JVM. New functions in the "Lang" module:
+
+tea-shared-define
+tea-shared-defined?
+tea-shared-get
+tea-shated-set!
+
+
+Added support for synchronization between different Tea interpreters
+running in different threads. New functions in the "Lang" module:
+
+tea-lock-acquire
+tea-lock-release
+
+
+The Tea site (http://www.devweb.pt/tea) uses these features to
+maintain track of the current number of visitors to the site.
+
+
+
+
+
+
+2000/11/27
+
+The "TInput copyTo" method can now receive an aditional argument
+containing the maximum number of bytes to read from the input stream.
+
+The "TSocket copyTo" method can also receive that aditional argument.
+
+
+Released the Tea Development Kit version 1.2.2. Major differences from
+the previous release:
+
+    <ul>
+    <li>The <code>TInput</code> and <code>TSocket</code> classes
+    <code>copyTo</code> methods now accept an aditional optional byte
+    count argument.</li>
+    <li>The utilities provided with the TDK (tsh, teadoc) have been
+    moved to a single bin directory (<code>apps/bin</code>).</li>
+    </ul>
+
+
+
+
+
+2000/11/18
+
+bug-0012 (copyTo pending flush) solved.
+
+
+
+
+
+2000/11/17
+
+Released the Tea Development Kit version 1.2.1. Major differences from
+the previous release:
+
+    <ul>
+    <li>Solved vicious bug that prevented the correct flush of
+    <code>TOutput</code> streams in some particular
+    circumstances. This also affected <code>TSocket</code>.</li>
+    <li>New reflection functions in the TOS module
+    (<code>class-of</code>, <code>class-base-of</code>,
+    <code>class-is-a</code>, <code>class-get-name</code>).</li>
+    <li>Runtime error messages envolving TOS classes are now much more
+    informative.</li>
+    </ul>
+
+
+
+
+
+
+2000/11/15
+
+All classes of the Tea language now have a name. Error messages
+envolving classes are now much more clear.
+
+Added new functions in the TOS module:
+
+class-of
+class-base-of
+class-is-a
+class-get-name
+
+
+
+
+
+2000/11/11
+
+Released the Tea Development Kit 1.2.0.  Major differences from
+the previous release:
+
+    <ul>
+    <li>Added support for server side sockets
+    (<code>TServerSocket</code>).</li>
+    <li>The Tea parser now supports the same escape sequences as the
+    Java language.</li>
+    <li>New <code>str-unescape</code> function for transforming a
+    string containing Tea escape sequences.</li>
+    </ul>
+
+
+
+
+
+2000/11/09
+
+Tea error messages in a Tea program about unknown methods now refer
+the name of the TOS class invoved.
+
+Consider the following piece of code:
+
+class x () ; [new x] abc
+
+When running this code the error message would have been:
+
+class 'STOSClass' has no method 'abc'
+
+Now it is the following:
+
+class 'x' has no method 'abc'
+
+
+
+
+
+2000/11/08
+
+Added the "str-unescape" function ("String" module).
+
+Added the class "TServerSocket" ("Net" module) for using TCP/IP server
+sockets.
+
+
+
+
+
+2000/11/05
+
+The following escape sequences are now supported by the Tea compiler:
+
+       \b backspace
+       \f form feed
+       \n newline
+       \r carriage return
+       \t horizontal tab
+       \" double quote
+       \' single quote
+       \\ backslash
+       \xxx character, in octal (000-377)
+       \uxxxx Unicode character, in hexadecimal (0000-FFFF)
+
+
+
+
+
+2000/10/05
+
+Added the "file-size" function ("IO" module).
+
+
+
+
+
+2000/10/03
+
+Added support for methods with a variable number of arguments.
+
+Added runtime support to byte arrays.
+
+The "TInput copyTo" now only requires the object received as argument
+to have a method named "write" that takes a byte array as argument.
+
+Created new classes "TSocketPlain", "TSocket" for network programming.
+
+
+
+
+
+2000/10/02
+
+The "teadoc" tool now generates HTML files with names that can be read
+in Windows systems. The "*" character in file names is now replaced
+with an apropriate encoding.
+
+The Tea parser now correctly handles the "\" just before the end of a
+line in systems where the EOL sequence is "\r\n".
+
+
+
+
+
+2000/09/28
+
+The implementation of TOS classes "TInput", "TFileInput" now only uses
+"InputStream". This was done in order to simplify reading lines and
+binary data from the same file. A line is taken as a sequence of
+characters ended by "\n" or "\r\n".
+
+The "TInput" method has a new "copyTo" method. This method is used to
+copy the remaining contents of the "TInput" into a "TOutput".
+
+
+
+
+
+2000/09/27
+
+The Tango widgets now support the attribute concept. Each type of
+widget has its own set of attributes. An attribute relates to some
+particular behaviour of the widget.
+
+
+
+
+
+2000/09/24
+
+The TeaDoc DTD now has three new elements: "Enumeration", "EnumLabel",
+"EnumDescription". These are used to produce itemized descriptions,
+where each item has a label.
+
+
+
+
+
+2000/09/05
+
+Released version tea-1.1.5. CVS tag: "TEA010105".
+
+
+
+
+
+2000/06/18
+
+The documents generated by the TeaDoc tool now display information on
+the class hierarchy. (req-0050)
+
+
+
+
+
+2000/06/04
+
+Implemented TEA-REQ-0051 Procom SProcomMessage::sendWithTimeout. (jpsl)
+
+
+
+
+
+2000/05/13
+
+Implemented req-0045 (Procom escape of \n and \r). (jpsl)
+
+
+
+2000/03/28
+
+Added the "url-encode" function. (jfn)
+
+
+
+
+
+2000/03/12
+
+Added the "html-encode" function. (jfn)
+
+
+
+
+
+2000/03/12
+
+Added the "clear", "push" and "pop" methods to the "TVector"
+class. (jfn)
+
+Added the "getElements" method to the "THashtable" class. (jfn)
+
+When invoking the "TXmlParser parse" method, errors detected while
+parsing the XML document are now caught and generate a Tea runtime
+error. (jfn)
+
+
+
+
+
+2000/02/26
+
+Added a new function: "error". It just generates a runtime error. (jfn)
+
+Added a new function: "not-same?". Checks if two objects are not the
+same. (jfn)
+
+
+
+
+
+2000/02/16
+
+The "THashtable get" method now may receive more than one
+argument. When that happens it returns a list with the values
+associated with each of the keys passed as argument.
+
+
+
+
+
+2000/02/07
+
+Added the "map-apply" function to the "Lang" module. (jfn)
+
+
+
+
+
+2000/01/16
+
+Added the "getElements" method to the "TVector" class (req-0034). (jfn)
+
+
+
+
+
+2000/01/02
+
+Added the "printf" method to the "TOutput" class (req-0023). (jfn)
+
+
+
+
+
+1999/11/20
+
+The "import" Tea function was reimplemented to be more performant
+(req-0003). (jfn)
+
+
+
+
+
+1999/11/15
+
+The "write", "writeln" methods of the "TOutput" class now accept a
+variable number of arguments. The arguments can either be strings or
+numeric objects. (req-0024). (jfn)
+
+
+
+
+
+1999/11/14
+
+New package for XML processing (req-0022). (jfn)
+
+
+
+
+
+1999/11/07
+
+Tea functions using regular expressions were reimplemented using the
+GNU Java regex library (gnu.regexp-1.0.8). This was necessary since
+the previouls used regex library (OROMatcher-1.0.5) was no longer
+being supported, no sources were available and gcj was unable to
+compile the OROMatcher class files. (req-0021). (jfn)
+
+
+
+
+
+1999/10/16
+
+Added support for autoloading of Tea functions and TOS classes
+implemented in native code (req-0009). (jfn)
+
+Corrected bug (bug-0001) that made the Tea interpreter thrown a Java
+exception everytime a symbol referencing a variable containg a TOS
+object was used as argument zero. (jfn)
+
+
+
+
+
+1999/09/24
+
+Started the "history" file. (jfn)
+
+Added function "load-class" to instantiate TOS class objects
+implemented in Java (req-0007). (jfn)
+
+The "tea-autoload.tea" module at start up now only loads the minimal
+set of Tea functions and TOS classes needed to perform its duties
+(req-0008). (jfn)
+

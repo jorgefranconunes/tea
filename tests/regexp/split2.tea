@@ -1,0 +1,25 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+#
+# Test for "str-split" function implemented with the GNU regex library.
+#
+# Args: string separator
+#
+
+#load "com.pdmfc.teapackages.gnuregexp.STModuleRegexp"
+
+
+
+
+
+if { != [length $argv] 2 } {
+    echo "Args: string separator"
+    exit 0
+}
+
+map [lambda (s) { echo "'" $s "'" }] [apply str-split $argv]
+

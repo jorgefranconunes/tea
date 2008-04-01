@@ -1,0 +1,17 @@
+###########################################################################
+#
+# Copyright (c) 2005 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+
+
+#
+# Testing the java-get-value function.
+#
+
+define mtd [java-get-method "ReflectTest" adder "long" "long"]
+
+define value [$mtd 40 30]
+
+echo $value

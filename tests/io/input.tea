@@ -1,0 +1,27 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+
+
+
+
+
+define cat-file ( fileName ) {
+
+    define in [new TFileInput $fileName]
+    define aLine $null
+
+    while { not-null? [set! aLine [$in readln]] } {
+	echo $aLine
+    }
+    $in close
+}
+
+
+
+
+map cat-file $argv
+

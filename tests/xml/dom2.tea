@@ -1,0 +1,95 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+#
+# Outputs just the tags, with no text elements.
+#
+
+define nativeParserClass "org.apache.xerces.parsers.SAXParser"
+#define nativeParserClass "com.ibm.xml.parsers.SAXParser"
+
+
+
+
+define print-doc ( doc ) {
+    
+    $stdout writeln "<?xml version=\"1.0\">"
+    print-node [$doc getRoot]
+}
+
+
+
+
+
+define print-node ( node ) {
+    
+    define nodeType [$node getNodeType]
+    
+    cond {
+        same? $nodeType Element } {
+            print-element $node
+    } {
+        same? $nodeType Text } {
+            $stdout write [xml-encode [$node getData]]
+    } {
+        $stdout writeln "****** " [symbol->string $nodeType]
+    }
+}
+
+
+
+
+
+define print-element ( element ) {
+    
+    define name  [$element getTagName]
+    define attrNames [$element getAttributeNames]
+    
+    $stdout write "<" $name
+    
+    foreach attrName $attrNames {
+        define attrValue [$element getAttribute $attrName]
+        $stdout write " " $attrName "=\"" [xml-encode $attrValue] "\""
+    }
+    
+    $stdout write ">"
+    
+    define child [xml-get-first-element $element]
+    
+    while { not-null? $child } {
+        print-element $child
+        set! child [xml-get-next-element $child]
+    }
+    $stdout write "</" $name ">"
+}
+
+
+
+
+
+define argCount [length $argv]
+define input $null
+
+cond {
+    == $argCount 1 } {
+        set! input [nth $argv 0]
+    } {
+    == $argCount 0 } {
+        set! input $stdin
+    } {
+        $stderr writeln "Args: [xmlFile]"
+        exit 0
+    }
+
+define parser [new TDomParser]
+define doc    $null
+
+$parser setNativeParser $nativeParserClass
+set! doc [$parser parse $input]
+
+print-doc $doc
+
+$stdout flush

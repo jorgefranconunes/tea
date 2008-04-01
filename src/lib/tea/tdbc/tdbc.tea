@@ -1,0 +1,180 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+#############################################################################
+#
+# $Id: tdbc.tea,v 1.4 2006/11/20 15:06:31 jpsl Exp $
+#
+#
+# Revisions:
+#
+# 2001/05/12
+# Created. (jfn)
+#
+#############################################################################
+
+
+
+
+
+define _url    $null
+define _user   $null
+define _passwd $null
+
+
+
+
+
+#############################################################################
+##
+## <TeaFunction name="tdbc-set-default"
+##              arguments="url user pass"
+##              module="tea.tdbc">
+## 
+## <Overview>
+## Specifies the connection parameters to be used by the 
+## <FuncRef name="tdbc-connection"/> function.
+## </Overview>
+## 
+## <Parameter name="url">
+## A string representing the JDBC connection URL.
+## </Parameter>
+## 
+## <Parameter name="user">
+## A string representing the username for the JDBC connection.
+## </Parameter>
+## 
+## <Parameter name="passwd">
+## A string representing the password for the JDBC connection.
+## </Parameter>
+##
+## <Returns>
+## A list of three elements containing the values passed to this
+## function the last time it was called.
+## </Returns>
+## 
+## <Description>
+## 
+## </Description>
+##
+## </TeaFunction>
+##
+#############################################################################
+
+global tdbc-set-default ( url user passwd ) {
+    
+    define previousValues ( $_url $_user $_passwd )
+
+    set! _url    $url
+    set! _user   $user
+    set! _passwd $passwd
+    
+    is $previousValues
+}
+
+
+
+
+
+#############################################################################
+## 
+## <TeaFunction name="tdbc-get-default"
+##              module="tea.tdbc">
+## 
+## <Overview>
+## Retrieves the parameters set with a call to the
+## <FuncRef name="tdbc-set-default"/> function.
+## </Overview>
+##
+## <Returns>
+## A list of three elements containing the values passed to the
+## <FuncRef name="tdbc-set-default"/> function the last time it was called.
+## </Returns>
+## 
+## <Description>
+## If <FuncRef name="tdbc-set-default"/> has not yet been called then
+## a list of three null objects will be returned.
+## </Description>
+## 
+## </TeaFunction>
+##
+#############################################################################
+
+global tdbc-get-default () {
+
+    is ( $_url $_user $_passwd )
+}
+
+
+
+
+
+#############################################################################
+## 
+## <TeaFunction name="tdbc-connection"
+##              module="tea.tdbc">
+## 
+## <Overview>
+## Creates and initializes a <ClassRef name="TConnection"/> with the
+## parameters previously passed to the <FuncRef name="tdbc-set-default"/>
+## function.
+## </Overview>
+##
+## <Returns>
+## A newly created <ClassRef name="TConnection"/>.
+## </Returns>
+## 
+## <Description>
+##
+## Tipically in a Tea program only connections to a single database are
+## established. This function, in conjunction with
+## <FuncRef name="tdbc-set-default"/>, makes it easier to create
+## connections to that single database. At the start of the Tea program
+## a call to <FuncRef name="tdbc-set-default"/> is made to define the
+## database connection parameters. From then on calls to
+## <Func name="tdbc-connection"/> will create
+## <ClassRef name="TConnection"/> instances connected to that particular
+## database.
+## <P>
+## It is the caller responsability to explicitly close the 
+## <ClassRef name="TConnection"/> obtained in this way.
+## </P>
+## </Description>
+## 
+## </TeaFunction>
+##
+#############################################################################
+
+global tdbc-connection () {
+
+    new TConnection $_url $_user $_passwd
+}
+
+
+
+
+
+#############################################################################
+#
+# This function is deprecated. It is not documented and should not be used.
+#
+#############################################################################
+
+global tdbc-statement () {
+
+    [new TConnection $_url $_user $_passwd] statement
+}
+
+
+
+
+
+#############################################################################
+#
+# 
+#
+#############################################################################
+

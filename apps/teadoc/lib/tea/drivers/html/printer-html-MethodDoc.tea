@@ -1,0 +1,169 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+###########################################################################
+#
+# printer-html-MethodDoc.tea
+#
+# 2000/03
+#
+#
+# Revisions:
+#
+# 2000/10/02
+# The "print-description" function now correctly behaves if there
+# is no "Description" element for the "Method" element. This works
+# around incorrect XML parsers. (jfn)
+#
+# 2000/05/29
+# Added support for multiple method prototypes (req-0049). (jfn)
+#
+# 2000/03/25
+# Created. (jfn)
+#
+###########################################################################
+
+
+
+
+
+define HEADER "
+<A NAME=\"%s\"></A>
+<H2>%s</H2>
+
+<P>
+"
+
+define PROTOTYPE_ITEM "
+<TT><I>%s</I> %s <I>%s</I></TT><BR>
+"
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+global printer-html-MethodDoc ( outputStream methodDoc ) {
+
+    print-header      $outputStream $methodDoc
+    print-params      $outputStream $methodDoc
+    print-description $outputStream $methodDoc
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define print-header ( outputStream methodDoc ) {
+
+    define methodName [$methodDoc getName]
+
+    $outputStream printf $HEADER					\
+				[url-encode [$methodDoc getName]]	\
+				[html-encode [$methodDoc getName]]
+
+    foreach formalArgs [$methodDoc getPrototypes] {
+	$outputStream printf $PROTOTYPE_ITEM 	\
+				[html-encode [$methodDoc getClassName]]	\
+				[html-encode $methodName]	\
+				[html-encode $formalArgs]
+    }
+
+    $outputStream write "</P><DL><DD><P>"
+    [$methodDoc getOverview] print $outputStream
+    $outputStream writeln "</P></DD>"
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define print-params ( outputStream methodDoc ) {
+
+    define params     [$methodDoc getParameters]
+    define returnInfo [$methodDoc getReturnInfo]
+
+    if { or {not-empty? $params} {not-null? $returnInfo} } {
+	$outputStream writeln "<DD><DL>"
+	if { not-empty? $params } {
+	    $outputStream writeln "<DT><SPAN CLASS=\"docParamLabel\">Parameters:</SPAN>"
+	    foreach paramInfo $params {
+		$outputStream write "<DD>"
+		$paramInfo print $outputStream
+		$outputStream writeln "</DD>"
+	    }
+	    $outputStream writeln "</DT>"
+	}
+	if { not-null? $returnInfo } {
+	    $outputStream writeln "<DT><SPAN CLASS=\"docParamLabel\">Returns:</SPAN><DD>"
+	    $returnInfo print $outputStream
+	    $outputStream writeln "</DD>"
+	}
+	$outputStream writeln "</DL></DD>"
+    }
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define print-description ( outputStream methodDoc ) {
+
+    define description [$methodDoc getDescription]
+    define since       [$methodDoc getSince]
+
+    if { or {not-null? $description} {not-null? $since} } {
+        $outputStream writeln "<DD>"
+        $outputStream writeln "<p></p>"
+        if { not-null? $description } {
+            $description print $outputStream
+        }
+        if { not-null? $since } {
+            $outputStream writeln "<p></p>"
+            $outputStream writeln "\n<DL>"
+            $outputStream writeln "<DT><SPAN CLASS=\"docParamLabel\">Since:</SPAN>"
+            $since print $outputStream
+            $outputStream writeln "</DL>"
+        }
+        $outputStream writeln "\n</DD>\n"
+    }
+    $outputStream writeln "\n</DL>\n\n<HR>"
+}
+
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+

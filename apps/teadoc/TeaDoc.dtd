@@ -1,0 +1,257 @@
+<?xml encoding="US-ASCII"?>
+<!--
+/**************************************************************************
+ *
+ * Copyright (c) 2001, 2002, 2003, 2004 PDM&amp;FC, All Rights Reserved.
+ *
+ **************************************************************************/
+-->
+
+<!--
+
+ $Id: TeaDoc.dtd,v 1.7 2006/12/06 16:51:14 jpsl Exp $
+
+
+ Revisions:
+ 
+ 2006/10/11 Added Since tag. (jpsl)
+ 
+ 2001/05/12 Created. (jfn)
+
+-->
+
+
+
+
+
+<!--
+Entitys reused in the definition of several elements.
+-->
+
+<!ENTITY % SimpleText    "#PCDATA | Func | FuncRef | Class | ClassRef | MethodRef | Arg | Var">
+<!ENTITY % ParagraphText "%SimpleText; | Code | Enumeration">
+<!ENTITY % FullText      "%ParagraphText; | P">
+
+
+
+
+
+<!--
+A TeaDoc document is a sequence of descriptions of modules,
+classes, methods, functions.
+-->
+
+<!ELEMENT TeaDoc ( TeaModule | TeaClass | TeaMethod | TeaFunction )*>
+
+
+
+
+
+<!--
+Documention for a Tea module consists of a short description and a longer
+description.
+
+name	  - Name of the module.
+-->
+
+<!ELEMENT TeaModule ( Overview, Description )>
+
+<!ATTLIST TeaModule
+  name      CDATA #REQUIRED
+>
+
+
+
+
+
+<!--
+Documention for a Tea class consists of a short description and a longer
+description.
+
+name	  - Name of the class.
+baseClass - Name of the base class. It is not required.
+module    - Name of the module the class belongs to. It is not required.
+-->
+
+<!ELEMENT TeaClass ( Overview, Description )>
+
+<!ATTLIST TeaClass 
+  name      CDATA #REQUIRED
+  baseClass CDATA #IMPLIED
+  module    CDATA #IMPLIED
+>
+
+
+
+
+
+<!--
+Documentation for a Tea method consists of a short description, a list
+of parameters, description of return value, full description.
+
+className - Name of class method belongs to.
+name      - Name of method.
+arguments - Formal parameters.
+-->
+
+<!ELEMENT TeaMethod ( Prototype*,
+		      Overview,
+		      Parameter*,
+		      Returns?,
+	 	      Description,
+                      Since? )>
+
+<!ATTLIST TeaMethod 
+  className CDATA #REQUIRED 
+  name      CDATA #REQUIRED
+  arguments CDATA #IMPLIED
+>
+
+
+
+
+
+<!--
+Documentation for a Tea function consists of a short description, a list
+of parameters, description of return value, full description.
+
+name      - Name of function.
+arguments - Formal parameters.
+module    - Name of module the function belongs to. It is not required.
+-->
+
+<!ELEMENT TeaFunction ( Prototype*,
+			Overview,
+			Parameter*,
+			Returns?,
+			Description,
+                        Since? )>
+
+<!ATTLIST TeaFunction 
+  name      CDATA #REQUIRED
+  arguments CDATA #IMPLIED
+  module    CDATA #IMPLIED
+>
+
+
+
+
+
+<!--
+Aditional formal arguments.
+-->
+<!ELEMENT Prototype EMPTY >
+<!ATTLIST Prototype arguments CDATA #REQUIRED>
+
+
+
+
+
+<!--
+Short description of Tea class, method or function.
+-->
+
+<!ELEMENT Overview ( %SimpleText; )*>
+
+
+
+
+
+<!--
+Short description of formal argument of Tea function or method.
+
+name - The name of the formal parameter.
+-->
+
+<!ELEMENT Parameter   ( #PCDATA )>
+
+<!ATTLIST Parameter 
+  name CDATA #REQUIRED 
+>
+
+
+
+
+
+<!--
+Short description for the return value of Tea functions and methods.
+-->
+
+<!ELEMENT Returns ( %SimpleText; )*>
+
+
+
+
+
+<!--
+Long description of Tea class, method or function. Contains elements
+related with presentation.
+-->
+
+<!ELEMENT Description ( %FullText; )*>
+
+
+
+
+
+<!--
+An enumeration is a sequence of items. Each item has a label and a
+description.
+-->
+
+<!ELEMENT Enumeration ( EnumLabel, EnumDescription )*>
+
+<!ELEMENT EnumLabel ( %SimpleText; )*>
+
+<!ELEMENT EnumDescription ( %SimpleText; )*>
+
+
+
+
+
+<!--
+Elements related with presentation. Used inside descriptions.
+-->
+
+<!-- Reference to a function or method.-->
+<!ELEMENT Func EMPTY >
+<!ATTLIST Func name CDATA #REQUIRED>
+
+<!-- Link to a function.-->
+<!ELEMENT FuncRef EMPTY >
+<!ATTLIST FuncRef name CDATA #REQUIRED>
+
+<!-- Reference to a TOS class.-->
+<!ELEMENT Class EMPTY >
+<!ATTLIST Class name CDATA #REQUIRED>
+
+<!-- Link to a TOS class.-->
+<!ELEMENT ClassRef EMPTY >
+<!ATTLIST ClassRef name CDATA #REQUIRED>
+
+<!-- Link to a TOS class method.-->
+<!ELEMENT MethodRef EMPTY >
+<!ATTLIST MethodRef name     CDATA #REQUIRED>
+<!ATTLIST MethodRef tosClass CDATA #IMPLIED>
+
+<!-- Reference to a function or method argument. -->
+<!ELEMENT Arg EMPTY >
+<!ATTLIST Arg name CDATA #REQUIRED>
+
+<!-- Sample code. -->
+<!ELEMENT Code ( #PCDATA )>
+
+<!-- Variable name. -->
+<!ELEMENT Var EMPTY >
+<!ATTLIST Var name CDATA #REQUIRED>
+
+<!-- Paragraph. -->
+<!ELEMENT P ( %ParagraphText; )*>
+
+<!-- Release Version Information. This feature exists since the
+     releases with the version identification given.
+     For the Tea product, the version identification should be
+     like "3.2.1", not "Tea 3.2.1" or "tea-3.2.1"
+-->
+<!ELEMENT Since EMPTY >
+<!ATTLIST Since version     CDATA #REQUIRED>

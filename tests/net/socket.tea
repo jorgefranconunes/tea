@@ -1,0 +1,57 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+#
+# Does an HTTP "GET /" request on the host, port passed as command line
+# arguments.
+#
+# Args: host port [byteCount]
+#
+
+#define TSocketPlain [load-class "com.pdmfc.teapackages.net.socket.STSocketClass"]
+#import "net/TSocket.tea"
+
+
+
+
+
+define host      $null
+define port      $null
+define byteCount $null
+
+
+
+
+
+cond {
+    == [length $argv] 2 } {
+	set! host [nth $argv 0]
+	set! port [string->int [nth $argv 1]]
+} {
+    == [length $argv] 3 } {
+	set! host      [nth $argv 0]
+	set! port      [string->int [nth $argv 1]]
+	set! byteCount [string->int [nth $argv 2]]
+} {
+	echo "Args: host port [byteCount]"
+	exit 0
+}
+
+
+
+
+define sock [new TSocket $host $port]
+define line $null
+
+$sock writeln "GET / HTTP/1.0"
+$sock writeln
+
+while { not-null? [set! line [$sock readln]] } {
+    echo $line
+}
+
+$sock close
+

@@ -1,0 +1,66 @@
+###########################################################################
+#
+# Copyright (c) 2005 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+###########################################################################
+#
+# $Id: Makefile,v 1.1 2005/02/15 17:42:46 jfn Exp $
+#
+# Makefile for the "com.pdmfc.tea.runtime" package.
+#
+# The following variables are expected to be defined:
+#
+# BASE_DIR - The project root directory.
+#
+#
+# Revisions:
+#
+# 2005/02/15 Created. (jfn)
+#
+###########################################################################
+
+
+
+
+
+SOURCES = \
+	SBreakException.java \
+	SContext.java \
+	SContinueException.java \
+	SEmptyListException.java \
+	SExitException.java \
+	SFlowControlException.java \
+	SLambdaFunction.java \
+	SLambdaFunctionVarArg.java \
+	SMalformedListException.java \
+	SNoSuchFunctionException.java \
+	SNoSuchVarException.java \
+	SNumArgException.java \
+	SObjBlock.java \
+	SObjByteArray.java \
+	SObjFunction.java \
+	SObjNull.java \
+	SObjPair.java \
+	SObjSymbol.java \
+	SObjVar.java \
+	SReturnException.java \
+	SRuntimeException.java \
+	STeaRuntime.java \
+	STypeException.java \
+	STypes.java \
+	SUtils.java \
+
+include $(BASE_DIR)/make/package.make
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+

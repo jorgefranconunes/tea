@@ -1,0 +1,57 @@
+###########################################################################
+#
+# Copyright (c) 2001 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+#
+# A test for TPreparedStatement.
+#
+# Reads lines from stdin and inserts data into a DB table named "Client".
+#
+# Command line arguments:
+#	- JDBC driver Java class name.
+#	- Database connectivity URL.
+#	- User name for database access.
+#	- Password for this database user.
+#
+
+
+
+
+
+define SQL "
+INSERT INTO
+	Client
+	(id, username, name)
+VALUES (NEXTVAL('IDSequence'), ?, ?)
+"
+
+
+
+
+
+if { != [length $argv] 4 } {
+    $stdout writeln "Args: driver-class url username password"
+    exit 0
+}
+
+map define ( driverClass url username password ) $argv
+
+tdbc-register-driver $driverClass
+
+define line     $null
+define conn     [new TConnection $url $username $password]
+define prepStat [$conn prepare $SQL]
+
+while { not-null? [set! line [$stdin readln]] } {
+    map define ( username name ) [str-split $line " +"]
+    $stdout writeln "Inserting: " $username "\t" $name
+    
+    $prepStat setString 1 $username
+    $prepStat setString 2 $name
+    $prepStat update
+}
+
+$conn commit
+

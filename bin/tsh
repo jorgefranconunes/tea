@@ -1,0 +1,254 @@
+#!/bin/sh
+###########################################################################
+#
+# Copyright (c) 2001, 2002, 2003, 2004, 2005 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+###########################################################################
+#
+# $Id: tsh,v 1.23 2006/07/03 15:15:28 jfn Exp $
+#
+# Executes a Tea script read from a file or from stdin. Run with
+# the --help option for more details.
+#
+#
+# Revisions:
+#
+# 2006/06/01 Corrected syntax error (missing "'" that was only aparent
+# under bash 3.1. (jfn)
+#
+# 2005/01/18 Solved issues with detecting Cygwin. (jfn)
+#
+# 2003/05/23 Added the "--version" option. (jfn)
+#
+# 2003/02/12 The current directory is no longer added to the classpath
+# of the JVM running the Tea interpreter. (jfn)
+#
+# 2003/02/10 Adapted to use the new configuration files. (jfn)
+#
+# 2002/03/04 Minor changes to work under the Solaris 8 Bourne shell. (jfn)
+#
+# 2001/05/12 Created. (jfn)
+#
+###########################################################################
+
+
+
+
+
+##########################################################################
+#
+# Follow symlinks so this script may be called from a symlink
+# somewhere.
+#
+##########################################################################
+
+SCRIPT=$0
+
+while [ -h $SCRIPT ]
+do
+    dirname=`dirname $SCRIPT`
+    link=`ls -ld $SCRIPT | awk '{print $11}'`
+    if [ `expr "$link" : '\(.\).*'` = "/" ]
+    then
+	SCRIPT=$link
+    else
+	SCRIPT=$dirname/$link
+    fi
+done
+
+SCRIPT_DIR=`dirname $SCRIPT`
+SCRIPT_NAME=`basename $SCRIPT`
+
+teaBaseDir=`cd ${SCRIPT_DIR}/..; pwd`
+pathSep=":"
+
+
+
+
+
+##########################################################################
+#
+# Reads the installation configuration parameters.
+#
+##########################################################################
+
+#
+# Makes utility functions available.
+#
+. ${teaBaseDir}/bin/tea-utils
+
+case `teaOsType` in
+    *CYGWIN* )
+	pathSep=";"
+	teaBaseDir=`cygpath --windows "$teaBaseDir" | sed 's/\\\/\\//g'`
+    ;;
+esac
+
+teaReadInstallConfig $teaBaseDir
+
+teaLibrary=
+teaClasspath=
+teaJre=
+teaJreOptions=
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+displayHeader() {
+
+    cat <<EOF
+Tea $TEA_VERSION
+Copyright (c) 2001, 2002, 2003, 2004, 2005 PDM&FC, All Rights Reserved.
+
+EOF
+}
+
+
+
+
+
+###########################################################################
+#
+# Displays the help message.
+#
+###########################################################################
+
+displayHelp() {
+
+    displayHeader
+
+    cat <<EOF
+Runs a Tea script either from a file or from standard input. The
+command line arguments are as follows:
+
+tsh [option ...] script-file [arg ...]
+tsh [option ...]
+
+Available options:
+--library=DIRLIST
+	Colon separated list of directory pathnames or URLs. These are
+	the locations where the Tea 'import' function will look for
+	files. In the case of an URL all the colons must be replaced
+	by the '|' character. This option is not mandatory.
+--classpath=DIRLIST
+	Colon separated list of directories or JAR files pathnames. These
+	will be added to the CLASSPATH of the JVM running the Tea script.
+	This option is needed when using external Java libraries (e.g. for
+	a JDBC driver). This option is not mandatory.
+--jre=PATH
+	Path to your Java runtime environment executable. It must accept
+	the "-classpath" and "-D" options. This option is not mandatory.
+	When not specified it will default to the value specified at
+        instalation time.
+--jre-options=STRING
+	Set of options passed as argument to the JRE. This option is
+	not mandatory. It defaults to an empty string, that is, the JRE
+	is invoked with no aditional options.
+--version
+	Print version information and exits.
+--help
+	Prints this help text and exits.
+		  
+EOF
+}
+
+
+
+
+
+###########################################################################
+#
+# Parse the command line arguments.
+#
+###########################################################################
+
+for option in "$@"
+do
+    case $option in
+	--library=* )
+	    teaLibrary=`expr "$option" : '--library=\(.*\)'`
+	    ;;
+	--classpath=* )
+	    teaClasspath=`expr "$option" : '--classpath=\(.*\)'`
+	    ;;
+	--jre=* )
+	    teaJre=`expr "$option" : '--jre=\(.*\)'`
+	    ;;
+	--jre-options=* )
+	    teaJreOptions=`expr "$option" : '--jre-options=\(.*\)'`
+	    ;;
+	--version )
+	    displayHeader
+	    exit 0
+	    ;;
+	--help )
+	    displayHelp
+	    exit 0
+	    ;;
+	--*=* )
+	    theOption=`expr $option : '\(--.*\)=.*'`
+	    echo "$theOption : unrecognized option. Use --help to see options."
+	    exit 1
+	    ;;
+	* )
+	    # End of options.
+	    break
+	;;
+    esac
+    shift
+done
+
+if [ -z "$teaJre" ]
+    then
+    teaJre="$TEA_JRE"
+fi
+
+if [ -z "$teaJreOptions" ]
+    then
+    teaJreOptions="$TEA_JRE_OPTIONS"
+fi
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+teaLibrary="${teaLibrary}${pathSep}${TEA_CORE_LIBRARY}"
+if [ -z "$teaClasspath" ]
+    then
+    teaClasspath="${TEA_CORE_CLASSPATH}"
+else
+    teaClasspath="${teaClasspath}${pathSep}${TEA_CORE_CLASSPATH}"
+fi
+
+exec "$teaJre" \
+    $teaJreOptions \
+    -classpath "$teaClasspath" \
+    -DTEA_LIBRARY="$teaLibrary" \
+    com.pdmfc.tea.apps.STeaShell \
+    "$@"
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
