@@ -1,3 +1,17 @@
+2008/04/01
+
+Resumo:
+
+1. TSK-PDMFC-TEA-0040 Migração da árvore de desenvolvimento para
+   Subversion - Concluida implementação. Tarefa fechada.
+
+2. TSK-PDMFC-TEA-0041 Remoção da dependência em "gnu.regexp" -
+   Concluida implementação. Tarefa fechada.
+
+
+
+
+
 2006/07/11
 
 Resumo:

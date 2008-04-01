@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -10,6 +10,10 @@
  *
  *
  * Revisions:
+ *
+ * 2008/04/01 Refactored to use classes from the "java.utils.regex"
+ * package. No longer uses the "gnu.regexp" library.
+ * (TSK-PDMFC-TEA-0041) (jfn)
  *
  * 2002/08/02
  * Moved to the "com.pdmfc.tea.modules" package. (jfn)
@@ -38,11 +42,10 @@ package com.pdmfc.tea.modules;
 
 import java.io.File;
 import java.io.FilenameFilter;
-
-import gnu.regexp.RE;
-import gnu.regexp.REException;
-import gnu.regexp.REMatch;
-import gnu.regexp.REMatchEnumeration;
+import java.util.regex.Matcher;
+import java.util.regex.MatchResult;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.modules.SModule;
@@ -292,11 +295,12 @@ public class SModuleRegexp
 	int numArgs = args.length;
 
 	if ( numArgs < 3 ) {
-	    throw new SNumArgException(args[0], "dir-name regexp [regexp ...]");
+	    throw new SNumArgException(args[0],"dir-name regexp [regexp ...]");
 	}
 
-	final RE[] patterns = new RE[numArgs-2];
-	File       aDir     = new File(STypes.getString(args, 1));
+	String          dirName   = STypes.getString(args, 1);
+	File            directory = new File(dirName);
+	final Pattern[] patterns  = new Pattern[numArgs-2];
 
 	for ( int i=numArgs; (i--)>2; ) {
 	    patterns[i-2] = getPattern(args,i);
@@ -305,14 +309,15 @@ public class SModuleRegexp
 	FilenameFilter filter = new FilenameFilter() {
 		public boolean accept(File dir, String name) {
 		    for ( int i=patterns.length; (i--)>0; ) {
-			if ( patterns[i].isMatch(name)  ) {
+			Matcher matcher = patterns[i].matcher(name);
+			if ( matcher.matches()  ) {
 			    return true;
 			}
 		    }
 		    return false;
 		}
 	    };
-	String[] fileNames = aDir.list(filter);
+	String[] fileNames = directory.list(filter);
 	SObjPair head      = SObjPair.emptyList();
 
 	if ( fileNames != null ) {
@@ -377,13 +382,11 @@ public class SModuleRegexp
 	    throw new SNumArgException(args[0], "regex substitution input");
 	}
 
-	RE      pattern  = getPattern(args,1);
+	Pattern pattern  = getPattern(args,1);
 	String  subst    = STypes.getString(args,2);
 	String  input    = STypes.getString(args,3);
-	String  result;
-	
-	// Perform the substitutions
-	result = pattern.substituteAll(input, subst);
+	Matcher matcher  = pattern.matcher(input);
+	String  result   = matcher.replaceAll(subst);
 
 	return result;
     }
@@ -439,10 +442,12 @@ public class SModuleRegexp
 	    throw new SNumArgException(args[0], "regex input");
 	}
 
-	RE      pattern  = getPattern(args,1);
+	Pattern pattern  = getPattern(args,1);
 	String  input    = STypes.getString(args,2);
+	Matcher matcher  = pattern.matcher(input);
+	Boolean result   = matcher.matches() ? Boolean.TRUE : Boolean.FALSE;
 
-	return pattern.isMatch(input) ? Boolean.TRUE : Boolean.FALSE;
+	return result;
     }
 
 
@@ -496,14 +501,16 @@ public class SModuleRegexp
 	    throw new SNumArgException(args[0], "regex string");
 	}
 
-	RE                 pattern  = getPattern(args,1);
+	Pattern            pattern  = getPattern(args,1);
 	String             aString  = STypes.getString(args,2);
-	REMatchEnumeration matchSet = pattern.getMatchEnumeration(aString);
+	Matcher            matcher  = pattern.matcher(aString);
 	SObjPair           head     = null;
 	SObjPair           tail     = null;
 
-	while ( matchSet.hasMoreMatches() ) {
-	    SObjPair node = new SObjPair(buildMatch(matchSet.nextMatch()),null);
+	while ( matcher.find() ) {
+	    MatchResult match = matcher.toMatchResult();
+	    SObjPair    elem  = buildMatch(match);
+	    SObjPair    node  = new SObjPair(elem,null);
 
 	    if ( head == null ) {
 		head = node;
@@ -528,7 +535,7 @@ public class SModuleRegexp
 /**************************************************************************
  *
  * Builds a list with match information. First element is the matched
- * portion. Following elements are the portions mathcing the
+ * portion. Following elements are the portions matching the
  * parenthesized sets in the pattern.
  *
  * @param result
@@ -539,13 +546,13 @@ public class SModuleRegexp
  *
  **************************************************************************/
 
-   private static SObjPair buildMatch(REMatch result) {
+   private static SObjPair buildMatch(MatchResult result) {
 
-      SObjPair head  = new SObjPair(result.toString(),null);
+      SObjPair head  = new SObjPair(result.group(),null);
       SObjPair tail  = head;
 
-      for ( int i=1; result.getSubStartIndex(i)>=0; i++ ) {
-	 String   subExpr = result.toString(i);
+      for ( int i=1, count=result.groupCount(); i<=count; ++i ) {
+	 String   subExpr = result.group(i);
 	 SObjPair node    = new SObjPair(subExpr,null);
 
 	 if ( head == null ) {
@@ -619,16 +626,16 @@ public class SModuleRegexp
 	    return SObjPair.emptyList();
 	}
 
-	RE                 pattern  = getPattern(args,2);
-	int                index    = 0;
-	REMatchEnumeration matchSet = pattern.getMatchEnumeration(str);
-	SObjPair           head     = null;
-	SObjPair           tail     = null;
+	Pattern            pattern = getPattern(args,2);
+	int                index   = 0;
+	Matcher            matcher = pattern.matcher(str);
+	SObjPair           head    = null;
+	SObjPair           tail    = null;
 
-	while ( matchSet.hasMoreMatches() ) {
-	    REMatch  match = matchSet.nextMatch();
-	    String   part  = str.substring(index, match.getStartIndex());
-	    SObjPair node  = new SObjPair(part,null);
+	while ( matcher.find() ) {
+	    MatchResult  match = matcher.toMatchResult();
+	    String       part  = str.substring(index, match.start());
+	    SObjPair     node  = new SObjPair(part,null);
 	    
 	    if ( head == null ) {
 		head = node;
@@ -636,7 +643,7 @@ public class SModuleRegexp
 		tail._cdr = node;
 	    }
 	    tail = node;
-	    index = match.getEndIndex();
+	    index = match.end();
 	}
 
 	String   part  = str.substring(index);
@@ -660,9 +667,9 @@ public class SModuleRegexp
 /**************************************************************************
  *
  * Tries to convert argument <TT>index</TT> into a
- * <TT>gnu.regexp.RE</TT>. If that argument is neither a
+ * <TT>java.util.regex.Pattern</TT>. If that argument is neither a
  * <TT>String</TT> representing a valid regular expression nor a
- * <TT>gnu.regexp.RE</TT>, an exception is thrown.
+ * <TT>java.util.regex.Patter</TT>, an exception is thrown.
  *
  * @param args Array of <TT>Object</TT>, supposed to be the arguments
  * received by a call to the command.
@@ -670,35 +677,35 @@ public class SModuleRegexp
  * @param index The index of the argument to convert.
  *
  * @exception com.pdmfc.tea.STeaException Thrown if argument
- * <TT>index</TT> could not be converted to a <TT>SObjPattern</TT>.
+ * <TT>index</TT> could not be converted to a
+ * <TT>java.util.regex.Pattern</TT>.
  *
  **************************************************************************/
 
-    private static RE getPattern(Object[] args,
-				 int      index)
+    private static Pattern getPattern(Object[] args,
+				      int      index)
 	throws STeaException {
 
 	Object theArg = args[index];
 
-	if ( theArg instanceof RE ) {
-	    return (RE)theArg;
+	if ( theArg instanceof Pattern ) {
+	    return (Pattern)theArg;
 	}
 
 	if ( theArg instanceof String ) {
-	    String strPattern = (String)theArg;
+	    String patternStr = (String)theArg;
 	    try {
-		return new RE(strPattern);
-	    } catch (REException e){
-		throw new SRuntimeException(args[0],
-					    "malformed pattern (" + 
-					    e.getMessage() + ")");
+		return Pattern.compile(patternStr);
+	    } catch (PatternSyntaxException e){
+		String   msg     = "malformed pattern ({0})";
+		Object[] fmtArgs = { e.getMessage() };
+		throw new SRuntimeException(args[0], msg, fmtArgs);
 	    }
 	}
 
-	throw new STypeException(args[0],
-				 "argument " + index +
-				 " should be a regular expression, not a " +
-				 STypes.getTypeName(theArg));
+	String   msg     = "argument {0} should be a regex, not a {1}";
+	Object[] fmtArgs = { String.valueOf(index),STypes.getTypeName(theArg)};
+	throw new STypeException(args[0], msg, fmtArgs);
     }
 
 

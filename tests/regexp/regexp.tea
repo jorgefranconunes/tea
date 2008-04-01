@@ -25,10 +25,10 @@ $stdout writeln [str-format "Found %d matche(s)." [length $matches]]
 
 int i 0
 foreach aMatch $matches {
-    $stdout writeln [str-format "Match %d: '%s'" [++ $i] [nth $aMatch 0]]
+    $stdout writeln [str-format "Match %d: '%s'" [++ i] [nth $aMatch 0]]
     int j 0
     foreach subMatch [cdr $aMatch] {
-	$stdout writeln [str-format "\tSubmatch %d: '%s'" [++ $j] $subMatch]
+	$stdout writeln [str-format "\tSubmatch %d: '%s'" [++ j] $subMatch]
     }
     $stdout writeln ""
 }

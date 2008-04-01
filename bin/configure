@@ -1,7 +1,7 @@
 #!/bin/sh
 ###########################################################################
 #
-# Copyright (c) 2001, 2002, 2003, 2004, 2005 PDM&FC, All Rights Reserved.
+# Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
 #
 ###########################################################################
 
@@ -14,6 +14,9 @@
 #
 #
 # Revisions:
+#
+# 2008/04/01 Removed references to the "gnu-regexp-1.0.8.jar" file.
+# (TSK-PDMFC-TEA-0041) (jfn)
 #
 # 2005/02/16 Removed the "--jars-to-include" option. All JARs required
 # for compiling and running Tea are already included in the
@@ -263,7 +266,7 @@ TEA_MAKEFILE_CLASSPATH=$TEA_CLASSPATH
 
 # The names of the following two jars should probably come from a
 # configuration file.
-extensionJars="gnu-regexp-1.0.8.jar xerces-1.4.4.jar"
+extensionJars="xerces-1.4.4.jar"
 
 for path in $extensionJars ; do
     jarPath=${teaBaseDir}/lib/$path
