@@ -3,6 +3,15 @@ Release Notes for Tea 3
 
 
 
+2008/04/01 Removed dependency on the Xerces 1.4.4 library. Support for
+XML parsing is now implemented on top of the SAX library native to the
+JRE.
+
+
+2008/04/01 Removed dependency on the "gnu.regexp" library. Support for
+regular expressions is now implemented on top of the "java.util.regex"
+package.
+
 
 2007/03/04 SModuleReflect now transforms Java Object Arrays to Tea
 Lists. (TSK-PDMFC-TEA-0038) (pcorreia)

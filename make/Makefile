@@ -57,7 +57,7 @@
 # The files and directories that make up a Tea release. 
 #
 TEA_RELEASE_FILES =	\
-	00README	\
+	00README.txt	\
 	apps	\
 	config/tea-core.conf	\
 	config/tea-install.conf.template	\

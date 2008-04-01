@@ -8,6 +8,9 @@ Resumo:
 2. TSK-PDMFC-TEA-0041 Remoção da dependência em "gnu.regexp" -
    Concluida implementação. Tarefa fechada.
 
+3. TSK-PDMFC-TEA-0042 Remoção da dependência em "Xerces" - Concluida
+   implementação. Tarefa fechada.
+
 
 
 

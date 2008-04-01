@@ -1,12 +1,12 @@
 ###########################################################################
 #
-# Copyright (c) 2001, 2002, 2003 PDM&FC, All Rights Reserved.
+# Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
 #
 ###########################################################################
 
 ###########################################################################
 #
-# $Id: doc-html.tea,v 1.7 2006/10/11 13:35:58 jpsl Exp $
+# $Id$
 #
 #
 # Utility to produce Tea documentation from comments embeded in
@@ -14,6 +14,9 @@
 #	
 #
 # Revisions:
+#
+# 2008/04/01 The "--native-parser" option is no longer mandatory.
+# (TSK-PDMFC-TEA-0042) (jfn)
 #
 # 2006/08/02 Added the Since tag. (jpsl).
 #
@@ -83,7 +86,7 @@ define show-header () {
     
     echo
     echo "TeaDoc " $TEA_VERSION
-    echo "Copyright (c) 2001, 2002, 2003, 2004 PDM&FC, All Rights Reserved."
+    echo "Copyright (c) 2001-2008 PDM&FC, All Rights Reserved."
     echo
     echo "Tool for Generating Tea Documentation from Source Files"
     echo
@@ -243,10 +246,6 @@ foreach cliArg $argv {
 
 if { empty? $pathList } {
     echo "*** Missing --path-list option. Use --help for details."
-    exit 0
-}
-if { null? $nativeParser } {
-    echo "*** Missing --native-parser option. Use --help for details."
     exit 0
 }
     

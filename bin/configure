@@ -266,7 +266,7 @@ TEA_MAKEFILE_CLASSPATH=$TEA_CLASSPATH
 
 # The names of the following two jars should probably come from a
 # configuration file.
-extensionJars="xerces-1.4.4.jar"
+extensionJars=""
 
 for path in $extensionJars ; do
     jarPath=${teaBaseDir}/lib/$path
