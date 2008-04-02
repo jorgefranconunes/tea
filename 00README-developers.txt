@@ -149,5 +149,5 @@ directory to your PATH environment variable.
 Bug reports:
 
 Send your bug reports and requests for new features to
-tea.team@pdmfc.com
+tea.dev@pdmfc.com
 
