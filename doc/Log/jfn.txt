@@ -4,6 +4,8 @@ Resumo:
 
 1. Minor code cleanups, as sugested by ejc warning messages.
 
+2. TSK-PDMFC-ITEA-0016 Suporte para XML-RPC - Started implementation.
+
 
 
 
@@ -23,6 +25,8 @@ De acordo com instruções em
 
 
 -warn:-serial - Disable "missing serialVersionUID" warning.
+
+-warn:-unchecked - Disable "unchecked type operation" warning.
 
 
 
