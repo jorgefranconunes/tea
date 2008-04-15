@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001, 2002, 2003, 2004 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -34,12 +34,10 @@ import java.util.StringTokenizer;
 import com.pdmfc.tea.SConfigInfo;
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.compiler.SCode;
-import com.pdmfc.tea.compiler.SCompileException;
 import com.pdmfc.tea.compiler.SCompiler;
 import com.pdmfc.tea.runtime.SExitException;
 import com.pdmfc.tea.runtime.SFlowControlException;
 import com.pdmfc.tea.runtime.STeaRuntime;
-import com.pdmfc.tea.runtime.SObjNull;
 import com.pdmfc.tea.runtime.SObjPair;
 import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SRuntimeException;
@@ -242,10 +240,9 @@ public class STeaShell
 	throws IOException,
 	       STeaException {
 
-	int         retVal     = 0;
-	String      errMsg     = null;
-	SCode       code       = compileScript();
-	STeaRuntime context    = new STeaRuntime();
+	int         retVal  = 0;
+	SCode       code    = compileScript();
+	STeaRuntime context = new STeaRuntime();
 
 	try {
 	    if ( _scriptFile != null ) {
@@ -325,7 +322,6 @@ public class STeaShell
 			    int         count) {
 
       SObjPair head = SObjPair.emptyList();
-      SObjPair elem = null;
 
       for ( int i=start+count-1; i>=start; i-- ) {
 	  head = new SObjPair(args[i], head);

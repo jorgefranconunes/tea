@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -966,94 +966,6 @@ public class SCompiler
 	}
 
 	return result.toString();
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * Fetches the next four characters and parses them as an hexadecimal
- * value. The hexadecimal representation can be in either upper or
- * lower case.
- *
- * @return The unicode character whose value corresponds to the
- * hexadecimal value that was fetched.
- *
- * @exception SCompileException Throw if there were not four more
- * characters to read or if any of the four charaters is not an
- * hexadecimal digit.
- *
- **************************************************************************/
-
-    private char getUnicode()
-	throws IOException,
-	       SCompileException {
-
-	int d3 = skip();
-	int d2 = skip();
-	int d1 = skip();
-	int d0 = skip();
-
-	if ( (d3==-1) || (d2==-1) || (d1==-1) || (d0==-1) ) {
-	    throw new SCompileException("end of script while reading unicode constant");
-	}
-
-	d3 = Character.digit((char)d3, 16);
-	d2 = Character.digit((char)d2, 16);
-	d1 = Character.digit((char)d1, 16);
-	d0 = Character.digit((char)d0, 16);
-
-	if ( (d3==-1) || (d2==-1) || (d1==-1) || (d0==-1) ) {
-	    throw new SCompileException("invalid unicode constant on line "
-					+ currentLine());
-	}
-
-	return (char)((d3<<12) | (d2<<8) | (d1<<4) | d0);
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * Fetches the next two characters and parses them as an octal
- * value using <code>c</code> has the first digit.
- * lower case.
- *
- * @return The unicode character whose value corresponds to the octal
- *value that was fetched.
- *
- * @exception SCompileException Throw if there were not two more
- * characters to read or if any of the three charaters is not an octal
- * digit.
- *
- **************************************************************************/
-
-    private char getOctal(char c)
-	throws IOException,
-	       SCompileException {
-
-	int d2 = c;
-	int d1 = skip();
-	int d0 = skip();
-
-	if ( (d2==-1) || (d1==-1) || (d0==-1) ) {
-	    throw new SCompileException("end of script while reading octal constant");
-	}
-
-	d2 = Character.digit((char)d2, 8);
-	d1 = Character.digit((char)d1, 8);
-	d0 = Character.digit((char)d0, 8);
-
-	if ( (d2==-1) || (d1==-1) || (d0==-1) ) {
-	    throw new SCompileException("invalid octal constant on line "
-					 + currentLine());
-	}
-
-	return (char)((d2<<6) | (d1<<3) | d0);
     }
 
 

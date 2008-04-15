@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2002-2008 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -11,19 +11,13 @@
  *
  * Revisions:
  *
- * 2002/01/10
- * Created. (jfn)
+ * 2002/01/10 Created. (jfn)
  *
  **************************************************************************/
 
 package com.pdmfc.tea.modules;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
 import com.pdmfc.tea.STeaException;
-import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.STeaRuntime;
 
 

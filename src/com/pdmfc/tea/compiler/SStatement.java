@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -11,31 +11,23 @@
  *
  * Revisions:
  *
- * 2002/03/28
- * No longer stores the file name from where the SStatement was
- * compiled. That is now stored by the SCode holding this
+ * 2002/03/28 No longer stores the file name from where the SStatement
+ * was compiled. That is now stored by the SCode holding this
  * SStatement. (jfn)
  *
- * 2001/06/14
- * No longer uses an SObjArrayFactory. (jfn)
+ * 2001/06/14 No longer uses an SObjArrayFactory. (jfn)
  *
- * 2001/05/12
- * Created. (jfn)
+ * 2001/05/12 Created. (jfn)
  *
  **************************************************************************/
 
 package com.pdmfc.tea.compiler;
 
-import java.io.PrintStream;
-
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.compiler.SWord;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SRuntimeException;
-import com.pdmfc.tea.runtime.STypeException;
-import com.pdmfc.tea.runtime.STypes;
 
 
 

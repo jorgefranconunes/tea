@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001, 2002, 2003, 2004 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -21,8 +21,6 @@
  **************************************************************************/
 
 package com.pdmfc.tea.runtime;
-
-import java.util.Hashtable;
 
 import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SObjVar;

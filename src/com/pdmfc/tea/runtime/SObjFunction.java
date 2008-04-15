@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -11,20 +11,14 @@
  *
  * Revisions:
  *
- * 2001/05/12
- * Created.
+ * 2001/05/12 Created.
  *
  **************************************************************************/
 
 package com.pdmfc.tea.runtime;
 
 import com.pdmfc.tea.STeaException;
-import com.pdmfc.tea.runtime.SObjBlock;
-import com.pdmfc.tea.runtime.SObjPair;
-import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SNoSuchVarException;
-import com.pdmfc.tea.runtime.STypeException;
 
 
 

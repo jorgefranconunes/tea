@@ -1,8 +1,61 @@
+2008/04/15
+
+Resumo:
+
+1. Minor code cleanups, as sugested by ejc warning messages.
+
+
+
+
+
+Compilações com "ejc" dentro do Emacs.
+
+De acordo com instruções em
+"http://www.emacsblog.org/2007/02/13/emacs-jdee-ant-and-the-eclipse-java-compiler/":
+
+(setq compilation-error-regexp-alist
+  (cons '("----------\n[0-9]+. \\(ERROR\\|WARNING\\) in \\(.*\\)\n (at line \\([0-9]+\\))\n\\(\\(.*\n\\)+?\\).*^+\n\\(.*\n\\)"
+         2 3)
+         compilation-error-regexp-alist))
+
+
+
+
+
+-warn:-serial - Disable "missing serialVersionUID" warning.
+
+
+
+
+Public key authentication:
+
+On client, generate the public key.
+
+client$ ssh-keygen -t rsa
+
+For each server, copy the public key to the server:
+
+client$ scp ~/.ssh/id_rsa.pub someone@someservet:./
+
+and add it to the list of aujthorized keys:
+
+server$ cd
+server$ mkdir -p .ssh
+server$ chmod go-rwx .ssh
+server$ cat id_rsa.pub >> .ssh/authorized_keys
+server$ chmod go-rwx .ssh/authorized_keys
+server$ rm id_rsa.pub
+
+
+
+
+
 2008/04/03
 
 Resumo:
 
-1. 
+1. TSK-PDMFC-TEA-0044 STeaShell enhancements for improved Java Web
+   Start experience - Análise funcional.
 
 
 

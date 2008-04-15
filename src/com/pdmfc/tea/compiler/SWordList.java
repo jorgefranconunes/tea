@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -11,18 +11,15 @@
  *
  * Revisions:
  *
- * 2002/08/03
- * The constructor now receives a java.util.List as argument instead
- * of a SList. (jfn)
+ * 2002/08/03 The constructor now receives a java.util.List as
+ * argument instead of a SList. (jfn)
  *
- * 2001/05/12
- * Created. (jfn)
+ * 2001/05/12 Created. (jfn)
  *
  **************************************************************************/
 
 package com.pdmfc.tea.compiler;
 
-import java.io.PrintStream;
 import java.util.Iterator;
 import java.util.List;
 

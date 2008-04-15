@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001, 2002, 2003, 2004, 2005 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -37,7 +37,6 @@
 
 package com.pdmfc.tea.runtime;
 
-import java.io.File;
 import java.io.InputStream;
 import java.io.IOException;
 import java.net.URL;
