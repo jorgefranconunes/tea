@@ -1,19 +1,22 @@
-#!/bin/sh
+#!/bin/bash
 ###########################################################################
 #
-# Copyright (c) 2001, 2002, 2003, 2004, 2005 PDM&FC, All Rights Reserved.
+# Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
 #
 ###########################################################################
 
 ###########################################################################
 #
-# $Id: tsh,v 1.23 2006/07/03 15:15:28 jfn Exp $
+# $Id$
 #
 # Executes a Tea script read from a file or from stdin. Run with
 # the --help option for more details.
 #
 #
 # Revisions:
+#
+# 2008/04/18 Slight refactoring to acomodate the new arguments expected
+# by the com.pdmfc.tea.apps.STeaShell program. (TSK-PDMFC-TEA-0044) (jfn)
 #
 # 2006/06/01 Corrected syntax error (missing "'" that was only aparent
 # under bash 3.1. (jfn)
@@ -46,22 +49,20 @@
 
 SCRIPT=$0
 
-while [ -h $SCRIPT ]
-do
-    dirname=`dirname $SCRIPT`
-    link=`ls -ld $SCRIPT | awk '{print $11}'`
-    if [ `expr "$link" : '\(.\).*'` = "/" ]
-    then
+while [ -h $SCRIPT ] ; do
+    dirname=$(dirname $SCRIPT)
+    link=$(ls -ld $SCRIPT | awk '{print $11}')
+    if [ $(expr "$link" : '\(.\).*') = "/" ] ; then
 	SCRIPT=$link
     else
 	SCRIPT=$dirname/$link
     fi
 done
 
-SCRIPT_DIR=`dirname $SCRIPT`
-SCRIPT_NAME=`basename $SCRIPT`
+SCRIPT_DIR=$(dirname $SCRIPT)
+SCRIPT_NAME=$(basename $SCRIPT)
 
-teaBaseDir=`cd ${SCRIPT_DIR}/..; pwd`
+teaBaseDir=$(cd ${SCRIPT_DIR}/..; pwd)
 pathSep=":"
 
 
@@ -77,21 +78,22 @@ pathSep=":"
 #
 # Makes utility functions available.
 #
-. ${teaBaseDir}/bin/tea-utils
+source ${teaBaseDir}/bin/tea-utils
 
-case `teaOsType` in
+case $(teaOsType) in
     *CYGWIN* )
 	pathSep=";"
-	teaBaseDir=`cygpath --windows "$teaBaseDir" | sed 's/\\\/\\//g'`
+	teaBaseDir=$(cygpath --windows "$teaBaseDir" | sed 's/\\\/\\//g')
     ;;
 esac
 
 teaReadInstallConfig $teaBaseDir
 
-teaLibrary=
-teaClasspath=
-teaJre=
-teaJreOptions=
+_teaLibrary=
+_teaClasspath=
+_teaJre="$TEA_JRE"
+_teaJreOptions="$TEA_JRE_OPTIONS"
+_teaScriptPath="-"
 
 
 
@@ -107,7 +109,7 @@ displayHeader() {
 
     cat <<EOF
 Tea $TEA_VERSION
-Copyright (c) 2001, 2002, 2003, 2004, 2005 PDM&FC, All Rights Reserved.
+Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
 
 EOF
 }
@@ -171,20 +173,19 @@ EOF
 #
 ###########################################################################
 
-for option in "$@"
-do
+for option in "$@" ; do
     case $option in
 	--library=* )
-	    teaLibrary=`expr "$option" : '--library=\(.*\)'`
+	    _teaLibrary=$(expr "$option" : '--library=\(.*\)')
 	    ;;
 	--classpath=* )
-	    teaClasspath=`expr "$option" : '--classpath=\(.*\)'`
+	    _teaClasspath=$(expr "$option" : '--classpath=\(.*\)')
 	    ;;
 	--jre=* )
-	    teaJre=`expr "$option" : '--jre=\(.*\)'`
+	    _teaJre=$(expr "$option" : '--jre=\(.*\)')
 	    ;;
 	--jre-options=* )
-	    teaJreOptions=`expr "$option" : '--jre-options=\(.*\)'`
+	    _teaJreOptions=$(expr "$option" : '--jre-options=\(.*\)')
 	    ;;
 	--version )
 	    displayHeader
@@ -195,7 +196,7 @@ do
 	    exit 0
 	    ;;
 	--*=* )
-	    theOption=`expr $option : '\(--.*\)=.*'`
+	    theOption=$(expr "$option" : '\(--.*\)=.*')
 	    echo "$theOption : unrecognized option. Use --help to see options."
 	    exit 1
 	    ;;
@@ -207,14 +208,25 @@ do
     shift
 done
 
-if [ -z "$teaJre" ]
-    then
-    teaJre="$TEA_JRE"
+# The first argument after the options is the path of the Tea script to
+# be run.
+_teaScriptPath=$1
+
+# And all remaining arguments will be passed as command line arguments
+# to the Tea script.
+shift
+
+
+if [ -z "$_teaLibrary" ] ; then
+    _teaLibrary="${TEA_CORE_LIBRARY}"
+else
+    _teaLibrary="${_teaLibrary}${pathSep}${TEA_CORE_LIBRARY}"
 fi
 
-if [ -z "$teaJreOptions" ]
-    then
-    teaJreOptions="$TEA_JRE_OPTIONS"
+if [ -z "$_teaClasspath" ] ; then
+    _teaClasspath="${TEA_CORE_CLASSPATH}"
+else
+    _teaClasspath="${_teaClasspath}${pathSep}${TEA_CORE_CLASSPATH}"
 fi
 
 
@@ -227,19 +239,13 @@ fi
 #
 ###########################################################################
 
-teaLibrary="${teaLibrary}${pathSep}${TEA_CORE_LIBRARY}"
-if [ -z "$teaClasspath" ]
-    then
-    teaClasspath="${TEA_CORE_CLASSPATH}"
-else
-    teaClasspath="${teaClasspath}${pathSep}${TEA_CORE_CLASSPATH}"
-fi
-
-exec "$teaJre" \
-    $teaJreOptions \
-    -classpath "$teaClasspath" \
-    -DTEA_LIBRARY="$teaLibrary" \
-    com.pdmfc.tea.apps.STeaShell \
+exec "$_teaJre" 			\
+    $_teaJreOptions			\
+    -classpath "$_teaClasspath"		\
+    com.pdmfc.tea.apps.STeaShell	\
+    --library="$_teaLibrary"		\
+    --script="$_teaScriptPath"		\
+    --					\
     "$@"
 
 

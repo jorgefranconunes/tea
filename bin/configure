@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 ###########################################################################
 #
 # Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
@@ -7,7 +7,7 @@
 
 #########################################################################
 #
-# $Id: configure,v 1.28 2005/10/31 15:33:34 jfn Exp $
+# $Id$
 #
 #
 # Configures the development tree.
@@ -64,7 +64,7 @@ isUnix=1
 #
 # Makes utility functions available.
 #
-. ${teaBaseDir}/bin/tea-utils
+source ${teaBaseDir}/bin/tea-utils
 
 case `teaOsType` in
     *CYGWIN* )
@@ -219,7 +219,7 @@ for option in "$@"
 	  exit 0
 	  ;;
       --*=* )
-	  option=`expr $option : '\(--.*\)=.*'`
+	  option=$(expr "$option" : '\(--.*\)=.*')
 	  teaError "$option : unrecognized option. Use --help for details."
 	  ;;
       * )

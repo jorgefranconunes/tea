@@ -1,15 +1,18 @@
 /**************************************************************************
  *
- * Copyright (c) 2001, 2002, 2003, 2004, 2005 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 /**************************************************************************
  *
- * $Id: SFunctionImport.java,v 1.22 2007/06/04 09:39:16 jfn Exp $
+ * $Id: SFunctionImport.java,v 1.24 2007/07/21 10:50:37 jfn Exp $
  *
  *
  * Revisions:
+ *
+ * 2008/04/18 Now uses an SInputSource to read from a file or
+ * URL. (TSK-PDMFC-TEA-0044) (jfn)
  *
  * 2006/05/02 Changes with hashtables so that it correctly identifies
  * the same file by full pathname even if diferent file paths
@@ -39,7 +42,6 @@ package com.pdmfc.tea.modules.lang;
 import java.io.File;
 import java.io.InputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -53,10 +55,11 @@ import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjNull;
 import com.pdmfc.tea.runtime.SObjPair;
-import com.pdmfc.tea.runtime.STeaRuntime;
 import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypes;
+import com.pdmfc.tea.util.SInputSource;
+import com.pdmfc.tea.util.SInputSourceFactory;
 
 
 
@@ -149,7 +152,7 @@ class SFunctionImport
     // The parent context for the context where the code in the
     // imported files will be executed. Each imported file is executed
     // in a separate context.
-    private STeaRuntime _globalContext = null;
+    private SContext _rootContext = null;
 
     // Keys are import paths (String). Values are ImportItem
     // instances.
@@ -172,9 +175,9 @@ class SFunctionImport
  *
  **************************************************************************/
 
-    public SFunctionImport(STeaRuntime globalContext) {
+    public SFunctionImport(SContext rootContext) {
 
-        _globalContext = globalContext;
+        _rootContext = rootContext;
     }
 
 
@@ -378,12 +381,14 @@ class SFunctionImport
             throws STeaException {
 
             Object      result = null;
-            String      path   = _isFile ? ("file:"+_fullPath) : _fullPath;
+            String      path   = _fullPath;
             InputStream input  = null;
 	    
-	    
             try {
-                input = (new URL(path)).openStream();
+                SInputSource inputSource =
+                    SInputSourceFactory.createInputSource(path);
+
+                input = inputSource.openStream();
             } catch (IOException e) {
                 // The path does not exist or is not accessible.
             }
@@ -391,7 +396,7 @@ class SFunctionImport
             // If the imput has been opened, try to compile and
             // execute the file.
             if ( input != null ) {
-                // record the import timestamp right now to prevent
+                // Record the import timestamp right now to prevent
                 // eventual infinite recursion (if this file is
                 // imported again while executing).
                 _lastImportTime = 
@@ -399,7 +404,7 @@ class SFunctionImport
 		    _file.lastModified() :
 		    System.currentTimeMillis();
 
-                SContext execContext = _globalContext.newChild();
+                SContext execContext = _rootContext.newChild();
                 SCode    code        = null;
 
                 try {

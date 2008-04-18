@@ -1,3 +1,24 @@
+2008/04/18
+
+Resumo:
+
+1. 
+
+
+
+
+
+TSK-PDMFC-TEA-0044 STeaShell enhancements for improved Java Web Start
+experience.
+
+Objectivo: Implementar as novas opções de linha de comando para
+permitir especificar a TEA_LIBRARY como argumento da linha de
+comando.
+
+
+
+
+
 2008/04/15
 
 Resumo:
@@ -41,7 +62,7 @@ For each server, copy the public key to the server:
 
 client$ scp ~/.ssh/id_rsa.pub someone@someservet:./
 
-and add it to the list of aujthorized keys:
+and add it to the list of authorized keys:
 
 server$ cd
 server$ mkdir -p .ssh
@@ -74,7 +95,7 @@ numa aplicação Java Web Start.
 
 As seguintes funcionalidades terão de ser introduzidas:
 
-1. Possibilidade de especificar como arguments de linha de comando a
+1. Possibilidade de especificar como argumento de linha de comando a
 lista de directorias/URLs usadas como TEA_LIBRARY.
 
 Actualmente o STeaShell obtem a lista do TEA_LIBRARY a partir da

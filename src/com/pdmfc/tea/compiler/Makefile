@@ -1,12 +1,12 @@
 ###########################################################################
 #
-# Copyright (c) 2005 PDM&FC, All Rights Reserved.
+# Copyright (c) 2005-2008 PDM&FC, All Rights Reserved.
 #
 ###########################################################################
 
 ###########################################################################
 #
-# $Id: Makefile,v 1.1 2005/02/15 17:42:45 jfn Exp $
+# $Id$
 #
 # Makefile for the "com.pdmfc.tea.compiler" package.
 #
@@ -31,6 +31,7 @@ SOURCES= \
 	SCompileException.java \
 	SCompiler.java \
 	SStatement.java \
+	SStatementFactory.java	\
 	SWord.java \
 	SWordBlock.java \
 	SWordCmdSubst.java \

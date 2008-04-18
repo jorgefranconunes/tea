@@ -6,10 +6,13 @@
 
 /**************************************************************************
  *
- * $Id: STeaShell.java,v 1.12 2005/11/04 05:50:04 jfn Exp $
+ * $Id$
  *
  *
  * Revisions:
+ *
+ * 2007/04/18 Refactored to receive the Tea library path list as a
+ * command line argument. (jfn)
  *
  * 2004/04/02 Slight API refactoring to make it possible for this
  * class to be used from inside Java code. (jfn)
@@ -23,24 +26,26 @@
 
 package com.pdmfc.tea.apps;
 
-import java.io.File;
 import java.io.InputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import com.pdmfc.tea.SConfigInfo;
 import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.apps.STeaShellArgs;
 import com.pdmfc.tea.compiler.SCode;
+import com.pdmfc.tea.compiler.SCompileException;
 import com.pdmfc.tea.compiler.SCompiler;
 import com.pdmfc.tea.runtime.SExitException;
 import com.pdmfc.tea.runtime.SFlowControlException;
 import com.pdmfc.tea.runtime.STeaRuntime;
+import com.pdmfc.tea.runtime.SObjNull;
 import com.pdmfc.tea.runtime.SObjPair;
 import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.util.SInputSourceFactory;
 
 
 
@@ -48,7 +53,7 @@ import com.pdmfc.tea.runtime.SRuntimeException;
 
 /**************************************************************************
  *
- * Implements a Tea shell. 
+ * A Tea shell that runs a Tea program with command line arguments.
  *
  **************************************************************************/
 
@@ -73,23 +78,12 @@ public class STeaShell
     private static final String PROP_LIB_VAR =
 	SConfigInfo.getProperty("com.pdmfc.tea.libraryVarName");
 
-    private static final String PROP_USE_RESOURCES =
-	SConfigInfo.getProperty("com.pdmfc.tea.useJavaResources");
-
-    private static final int MODE_PATH     = 0;
-    private static final int MODE_RESOURCE = 1;
 
 
 
 
-
-    private URL _scriptUrl  = null;
-
-    // The value passed to the setScriptFile(String) method. Passed to
-    // the Tea context as the value of the "argv0" variable.
-    private String _scriptFile = null;
-
-    private List _importDirList = new ArrayList();
+    private String _scriptLocation = null;
+    private List   _importDirList  = new ArrayList();
 
 
 
@@ -114,59 +108,17 @@ public class STeaShell
  * executed. The Tea script will be executed when the <code>{@link
  * #execute(String[])}</code> method is called.
  *
- * @param path A file path name.
+ * <p>The path of the Tea script is available to Tea code as a string
+ * in the <code>argv0</code> variable.</p>
  *
- * @exception IOException Thrown if the given <code>path</code> is not
- * valid.
- *
- **************************************************************************/
-
-    public void setScriptFile(String path) {
-
-	_scriptFile = path;
-	_scriptUrl  = null;
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * Specifies the URL where the script to be executed is to be read
- * from. The URL contents will only be read when the <code>{@link
- * #execute(String[])}</code> method is called.
- *
- * @param url The URL to read the Tea script from.
+ * @param location An URL or or a file system path name. If null then
+ * the script will be read from stdin.
  *
  **************************************************************************/
 
-    public void setScriptUrl(URL url) {
+    public void setScriptLocation(String location) {
 
-	_scriptFile = null;
-	_scriptUrl  = url;
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * Specifies a Java resource whose contents are the Tea script to
- * execute. The resource is read only when the <code>{@link
- * #execute(String[])}</code> method is called.
- *
- * @param resourceName The Java resource containing the Tea script to
- * be executed.
- *
- **************************************************************************/
-
-    public void setScriptResource(String resourceName) {
-
-	URL scriptUrl = STeaShell.class.getResource(resourceName);
-
-	setScriptUrl(scriptUrl);
+	_scriptLocation = location;
     }
 
 
@@ -179,37 +131,13 @@ public class STeaShell
  * <code>import</code> function in the Tea program. The given path is
  * added to the list without any modifications.
  *
- * @param path The path being added to the path list.
+ * @param location The path being added to the path list.
  *
  **************************************************************************/
 
-    public void addImportDirPath(String path) {
+    public void addImportDirLocation(String location) {
 
-	_importDirList.add(path);
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * Addes a component to the end of the list of paths used by the
- * <code>import</code> function in the Tea program. The given path is
- * assumed to be a Java resource name. The component added to the path
- * list is the URL representing that Java resource.
- *
- * @param resourceName The name of a Java resource that will be added
- * to the list of import directories.
- *
- **************************************************************************/
-
-    public void addImportDirResource(String resourceName) {
-
-	URL    importDirUrl = STeaShell.class.getResource(resourceName);
-	String dirComponent = importDirUrl.toString();
-
-	_importDirList.add(dirComponent);
+	_importDirList.add(location);
     }
 
 
@@ -240,16 +168,17 @@ public class STeaShell
 	throws IOException,
 	       STeaException {
 
-	int         retVal  = 0;
-	SCode       code    = compileScript();
-	STeaRuntime context = new STeaRuntime();
+	int         retVal     = 0;
+	String      errMsg     = null;
+	SCode       code       = compileScript();
+	STeaRuntime context    = new STeaRuntime();
 
 	try {
-	    if ( _scriptFile != null ) {
-		context.newVar(ARGV0_VAR, _scriptFile);
+	    if ( _scriptLocation != null ) {
+		context.newVar(ARGV0_VAR, _scriptLocation);
 	    }
 	    setCliArgs(context, args, 0, args.length);
-	    context.setImportDirs(_importDirList);
+	    context.setImportDirList(_importDirList);
 	    context.start();
 	    context.execute(code);
 	} catch (SExitException e2) {
@@ -281,14 +210,16 @@ public class STeaShell
 
 	SCompiler   compiler = new SCompiler();
 	SCode       code     = null;
-
-	if ( _scriptFile != null ) {
-	    code = compiler.compile(_scriptFile);
-	} else {
-	    InputStream script = 
-		(_scriptUrl==null) ? System.in : _scriptUrl.openStream();
-	    code = compiler.compile(script);
-	}
+	String      location = _scriptLocation;
+        InputStream input    = 
+            (_scriptLocation==null) ?
+            System.in :
+            SInputSourceFactory.createInputSource(location).openStream();
+        try {
+            code = compiler.compile(input);
+        } finally {
+            try { input.close(); } catch (IOException e) {}
+        }
 
 	return code;
     }
@@ -319,16 +250,18 @@ public class STeaShell
     private void setCliArgs(STeaRuntime runtime,
 			    String[]    args,
 			    int         start,
-			    int         count) {
+			    int         count)
+        throws STeaException {
 
-      SObjPair head = SObjPair.emptyList();
+        SObjPair head = SObjPair.emptyList();
+        SObjPair elem = null;
 
-      for ( int i=start+count-1; i>=start; i-- ) {
-	  head = new SObjPair(args[i], head);
-      }
+        for ( int i=start+count-1; i>=start; i-- ) {
+            head = new SObjPair(args[i], head);
+        }
 
-      runtime.newVar(ARGV_VAR_NAME, head);
-   }
+        runtime.newVar(ARGV_VAR_NAME, head);
+    }
 
 
 
@@ -339,120 +272,77 @@ public class STeaShell
  * Runs a Tea script contained in a file or read from the Java process
  * standard input.
  *
- * <p>The first command line argument is taken to be the pathname of a
- * Tea script and it will be executed. All the remaining arguments are
- * passed as command line arguments to the Tea script. If no command
- * line arguments are given then it reads a Tea script from standard
- * input.</p>
+ * <p>The following command line options are supported:</p>
+ *
+ * <ul>
+ *
+ * <li><code>--library=<i>DIR_LIST</i></code> - List of directories to
+ * be searched by the <code>import</code> function.</li>
+ *
+ * <li><code>--script=<i>PATH</i></code> - The Tea script to be
+ * executed. If not specified or if "<code>-</code>" then the script
+ * is read from the process standard input stream.</li>
+ *
+ * <li><code>--</code> - Signals that there are no more options. All
+ * remaining arguments will be passed as command line arguments to the
+ * Tea script.</li>
+ *
+ * </ul>
  *
  **************************************************************************/
 
     public static void main(String[] args) {
 
-	int       mode       = setupMode();
-	STeaShell shell      = new STeaShell();
-	String    script     = (args.length>0) ? args[0] : null;
-	int       argCount   = (args.length<=1) ? 0 : (args.length-1);
-	String[]  scriptArgs = new String[argCount];
-	String    errMsg     = null;
-	int       retVal     = 0;
+	int           retVal    = 0;
+	boolean       isOk      = true;
+	String        errorMsg  = null;
+	STeaShell     shell     = new STeaShell();
+	STeaShellArgs shellArgs = new STeaShellArgs();
 
-	if ( script != null ) {
-	    System.arraycopy(args, 1, scriptArgs, 0, argCount);
-	    setupScript(mode, script, shell);
-	}
-	setupImportDirList(mode, shell);
-
-	try {
-	    retVal = shell.execute(scriptArgs);
-	} catch (IOException e) {
-	    errMsg = "Failed to read script - " + e.getMessage();
-	}  catch (SRuntimeException e1) {
-	    errMsg = e1.getFullMessage();
-	} catch (STeaException e) {
-	    errMsg = e.getMessage();
+	if ( isOk ) {
+	    try {
+		shellArgs.parse(args);
+	    } catch (STeaException e) {
+		isOk     = false;
+		errorMsg = e.getMessage();
+	    }
 	}
 
-	if ( errMsg != null ) {
-	    System.err.println("\nProblems: " + errMsg);
+	if ( isOk ) {
+	    shell.setScriptLocation(shellArgs.getScriptPath());
+	    
+	    for ( Iterator i=shellArgs.getLibraryList().iterator();
+		  i.hasNext();){
+		String libPath = (String)i.next();
+		shell.addImportDirLocation(libPath);
+	    }
+	}
+	
+	if ( isOk ) {
+	    String[] scriptArgs = shellArgs.getScriptCliArgs();
+
+	    try {
+		retVal = shell.execute(scriptArgs);
+	    } catch (IOException e) {
+		isOk     = false;
+		errorMsg = "Failed to read script - " + e.getMessage();
+	    }  catch (SRuntimeException e1) {
+		isOk     = false;
+		errorMsg = e1.getFullMessage();
+	    } catch (STeaException e) {
+		isOk     = false;
+		errorMsg = e.getMessage();
+	    }
+	}
+
+	if ( !isOk ) {
+	    if ( retVal == 0 ) {
+		retVal = -1;
+	    }
+	    System.err.println("\nProblems: " + errorMsg);
 	}
 
 	System.exit(retVal);
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    private static int setupMode() {
-
-	int mode = MODE_PATH;
-
-	if ( System.getProperty(PROP_USE_RESOURCES) != null ) {
-	    mode = MODE_RESOURCE;
-	}
-
-	return mode;
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    private static void setupScript(int       mode,
-				    String    script,
-				    STeaShell shell) {
-
-	if ( mode == MODE_PATH ) {
-	    shell.setScriptFile(script);
-	} else {
-	    shell.setScriptResource(script);
-	}
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    private static void setupImportDirList(int       mode,
-					   STeaShell shell) {
-
-	String importDirs = System.getProperty(PROP_LIB_VAR);
-	String pathSep    = 
-	    (mode==MODE_PATH) ? File.pathSeparator : " ";
-
-	if ( importDirs != null ) {
-	    for ( StringTokenizer i=new StringTokenizer(importDirs,pathSep);
-		  i.hasMoreTokens(); ) {
-		String path = i.nextToken();
-		
-		path = path.replace('|', ':');
-
-		if ( mode == MODE_PATH ) {
-		    shell.addImportDirPath(path);
-		} else {
-		    shell.addImportDirResource(path);
-		}
-	    }
-	}
     }
 
 
