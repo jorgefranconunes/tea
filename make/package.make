@@ -64,7 +64,7 @@ $(packageTargetDir)/%.class : $(packageSourceDir)/%.java
 #
 # And for all other files that are not Java source files.
 #
-$(packageTargetDir)/% : $(packageSourceDir)/%
+$(packageTargetDir)/% : %
 	$(CP) $< $@
 
 #

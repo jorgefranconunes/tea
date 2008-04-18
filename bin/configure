@@ -78,8 +78,6 @@ teaCoreConfigFile=${teaBaseDir}/config/tea-core.conf
 teaCoreConfigTemplate=${teaCoreConfigFile}.template
 teaDevelopConfigFile=${teaBaseDir}/config/tea-develop.conf
 teaDevelopConfigTemplate=${teaDevelopConfigFile}.template
-teaRuntimeConfigFile=${teaBaseDir}/src/com/pdmfc/tea/TeaConfig.properties
-teaRuntimeConfigTemplate=${teaBaseDir}/config/TeaConfig.properties.template
 teaMakefile=${teaBaseDir}/Makefile
 teaMakefileTemplate=${teaBaseDir}/config/Makefile.template
 setupApp=${teaBaseDir}/bin/setup
@@ -330,14 +328,6 @@ teaParseTemplate $teaCoreConfigTemplate > $teaCoreConfigFile
 echo "Creating development tree configuration file \"`basename $teaDevelopConfigFile`\"..."
 
 teaParseTemplate $teaDevelopConfigTemplate > $teaDevelopConfigFile
-
-
-#
-# Updates the version information on the Tea source files.
-#
-echo "Updating version information in source files..."
-
-teaParseTemplate $teaRuntimeConfigTemplate > $teaRuntimeConfigFile
 
 
 #

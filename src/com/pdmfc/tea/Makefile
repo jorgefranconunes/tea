@@ -32,6 +32,10 @@ SOURCES= \
 	TeaConfig.properties
 
 
+TeaConfig.properties : TeaConfig.properties.template
+	$(BASE_DIR)/bin/process-template $< > $@
+
+
 include $(BASE_DIR)/make/package.make
 
 
