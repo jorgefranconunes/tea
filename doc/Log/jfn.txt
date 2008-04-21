@@ -1,3 +1,14 @@
+2008/04/21
+
+Resumo:
+
+1. Corrected problem with building the
+   "src/com/pdmfc/TeaConfig.properties" file.
+
+
+
+
+
 2008/04/18
 
 Resumo:
