@@ -298,6 +298,8 @@ clean :
 		$(TEA_BASE_DIR)/lib/tea-*.jar \
 		$(TEADOC_DIR) \
 		$(JAVADOC_DIR)
+	$(DELETE) \
+		src/com/pdmfc/tea/TeaConfig.properties
 
 
 # Builds the Tea documentation
