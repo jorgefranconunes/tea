@@ -1,18 +1,17 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 /**************************************************************************
  *
- * $Id: SFileInput.java,v 1.2 2002/08/02 17:47:24 jfn Exp $
+ * $Id$
  *
  *
  * Revisions:
  *
- * 2001/05/12
- * Created. (jfn)
+ * 2001/05/12 Created. (jfn)
  *
  **************************************************************************/
 
@@ -20,7 +19,6 @@ package com.pdmfc.tea.modules.io;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.modules.io.SInput;

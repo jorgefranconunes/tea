@@ -36,12 +36,10 @@ import com.pdmfc.tea.SConfigInfo;
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.apps.STeaShellArgs;
 import com.pdmfc.tea.compiler.SCode;
-import com.pdmfc.tea.compiler.SCompileException;
 import com.pdmfc.tea.compiler.SCompiler;
 import com.pdmfc.tea.runtime.SExitException;
 import com.pdmfc.tea.runtime.SFlowControlException;
 import com.pdmfc.tea.runtime.STeaRuntime;
-import com.pdmfc.tea.runtime.SObjNull;
 import com.pdmfc.tea.runtime.SObjPair;
 import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SRuntimeException;
@@ -168,10 +166,9 @@ public class STeaShell
 	throws IOException,
 	       STeaException {
 
-	int         retVal     = 0;
-	String      errMsg     = null;
-	SCode       code       = compileScript();
-	STeaRuntime context    = new STeaRuntime();
+	int         retVal  = 0;
+	SCode       code    = compileScript();
+	STeaRuntime context = new STeaRuntime();
 
 	try {
 	    if ( _scriptLocation != null ) {
@@ -254,7 +251,6 @@ public class STeaShell
         throws STeaException {
 
         SObjPair head = SObjPair.emptyList();
-        SObjPair elem = null;
 
         for ( int i=start+count-1; i>=start; i-- ) {
             head = new SObjPair(args[i], head);

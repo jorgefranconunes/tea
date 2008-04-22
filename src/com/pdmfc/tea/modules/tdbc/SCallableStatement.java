@@ -1,12 +1,12 @@
 /**************************************************************************
  *
- * Copyright (c) 2001, 2002, 2003 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 /**************************************************************************
  *
- * $Id: SCallableStatement.java,v 1.11 2005/11/04 05:50:04 jfn Exp $
+ * $Id$
  *
  *
  * Revisions:
@@ -43,7 +43,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.pdmfc.tea.STeaException;
-import com.pdmfc.tea.modules.tdbc.SResultSet;
 import com.pdmfc.tea.modules.tdbc.SPreparedStatement;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;

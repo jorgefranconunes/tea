@@ -1,25 +1,22 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 /**************************************************************************
  *
- * $Id: SModuleIO.java,v 1.10 2002/08/02 17:47:24 jfn Exp $
+ * $Id$
  *
  *
  * Revisions:
  *
- * 2002/01/20
- * Calls to the "addJavaFunction()" method were replaced by inner
- * classes for performance. (jfn)
+ * 2002/01/20 Calls to the "addJavaFunction()" method were replaced by
+ * inner classes for performance. (jfn)
  *
- * 2002/01/10
- * This classe now derives from SModuleCore. (jfn)
+ * 2002/01/10 This classe now derives from SModuleCore. (jfn)
  *
- * 2001/05/12
- * Created. (jfn)
+ * 2001/05/12 Created. (jfn)
  *
  **************************************************************************/
 
@@ -760,9 +757,8 @@ public class SModuleIO
 				       Object[]     args)
 	throws STeaException {
 
-	int          numArgs       = args.length;
-	StringBuffer result        = new StringBuffer();
-	int          numArgsMinus1 = args.length - 1;
+	int          numArgs = args.length;
+	StringBuffer result  = new StringBuffer();
 
 	try {
 	    if ( numArgs > 1 ) {

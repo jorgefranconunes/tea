@@ -6,7 +6,7 @@
 
 /**************************************************************************
  *
- * $Id: STosObj.java,v 1.7 2002/11/02 16:05:02 jfn Exp $
+ * $Id$
  *
  *
  * Revisions:
@@ -24,7 +24,6 @@ import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjNull;
 import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.STypes;
-import com.pdmfc.tea.util.SList;
 import com.pdmfc.tea.util.SListNode;
 
 

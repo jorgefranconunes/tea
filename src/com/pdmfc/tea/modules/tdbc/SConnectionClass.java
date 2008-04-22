@@ -1,18 +1,17 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 /**************************************************************************
  *
- * $Id: SConnectionClass.java,v 1.8 2003/05/21 16:56:47 jfn Exp $
+ * $Id$
  *
  *
  * Revisions:
  *
- * 2001/05/12
- * Created. (jfn)
+ * 2001/05/12 Created. (jfn)
  *
  **************************************************************************/
 
@@ -20,7 +19,6 @@ package com.pdmfc.tea.modules.tdbc;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import com.pdmfc.tea.STeaException;
@@ -76,8 +74,6 @@ class SConnectionClass
 
 
 
-
-    private static final String CLASS_NAME = "TConnection";
 
     private List _connections = new ArrayList();
 

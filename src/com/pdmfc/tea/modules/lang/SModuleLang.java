@@ -1,12 +1,12 @@
 /**************************************************************************
  *
- * Copyright (c) 2001, 2002, 2003, 2004 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 /**************************************************************************
  *
- * $Id: SModuleLang.java,v 1.37 2006/12/04 14:55:09 jpsl Exp $
+ * $Id$
  *
  *
  * Revisions:
@@ -48,7 +48,6 @@
 
 package com.pdmfc.tea.modules.lang;
 
-import java.io.File;
 import java.io.InputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -57,7 +56,6 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Properties;
-import java.util.StringTokenizer;
 
 import com.pdmfc.tea.SConfigInfo;
 import com.pdmfc.tea.STeaException;
@@ -2487,7 +2485,6 @@ public class SModuleLang
 
 	Object       formalParam  = args[1];
 	SObjBlock    body         = STypes.getBlock(args, 2);
-	SObjFunction result       = null;
 
 	if ( formalParam instanceof SObjPair ) {
 	    return newFixedArgsFunction(args[0], (SObjPair)formalParam, body);

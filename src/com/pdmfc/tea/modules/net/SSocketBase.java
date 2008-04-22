@@ -1,21 +1,19 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 /**************************************************************************
  *
- * $Id: SSocketBase.java,v 1.3 2002/11/02 16:05:02 jfn Exp $
+ * $Id$
  *
  *
  * Revisions:
  *
- * 2002/10/19
- * Renamed from SSocketBase para SSocketBase. (jfn)
+ * 2002/10/19 Renamed from SSocketBase para SSocketBase. (jfn)
  *
- * 2001/05/12
- * Created. (jfn)
+ * 2001/05/12 Created. (jfn)
  *
  **************************************************************************/
 
@@ -29,14 +27,11 @@ import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.modules.io.SIOException;
 import com.pdmfc.tea.modules.io.SInput;
 import com.pdmfc.tea.modules.io.SOutput;
-import com.pdmfc.tea.modules.net.SPlainSocketFactory;
 import com.pdmfc.tea.modules.net.SSocketFactory;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
-import com.pdmfc.tea.modules.tos.STosUtil;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypes;

@@ -1,12 +1,12 @@
 /**************************************************************************
  *
- * Copyright (c) 2001, 2002, 2003 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 /**************************************************************************
  *
- * $Id: SModuleString.java,v 1.8 2006/07/12 13:43:50 jpsl Exp $
+ * $Id$
  *
  *
  * Revisions:
@@ -1516,27 +1516,6 @@ public class SModuleString
 	}
 
 	return buf.toString();
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    private static String joinGetString(Object arg0,
-					Object obj)
-	throws STypeException {
-
-	try {
-	    return (String)obj;
-	} catch (ClassCastException e) {
-	    throw new STypeException(arg0, "a list element is not a string");
-	}
     }
 
 

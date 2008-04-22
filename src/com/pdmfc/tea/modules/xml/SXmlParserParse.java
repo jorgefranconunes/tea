@@ -49,7 +49,6 @@ import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypeException;
 import com.pdmfc.tea.runtime.STypes;
-import com.pdmfc.tea.modules.tos.STosUtil;
 import com.pdmfc.tea.modules.util.SHashtable;
 
 
@@ -217,7 +216,6 @@ class SXmlParserParse
 
 	 if ( input instanceof String ) {
 	     String xmlFile = (String)input;
-	     String url     = createUrl(xmlFile);
 	     inputSource = new InputSource(xmlFile);
 	 } else if ( input instanceof STosObj ) {
 	     SInput tosInput = null;

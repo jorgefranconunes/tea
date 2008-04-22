@@ -1,12 +1,12 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 /**************************************************************************
  *
- * $Id: SOutput.java,v 1.7 2003/07/10 18:06:54 jfn Exp $
+ * $Id$
  *
  *
  * Revisions:
@@ -27,7 +27,6 @@ import java.io.BufferedWriter;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.io.IOException;
 
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.modules.io.SIOException;

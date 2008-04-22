@@ -1,18 +1,17 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 /**************************************************************************
  *
- * $Id: SHashtable.java,v 1.7 2005/11/04 05:50:04 jfn Exp $
+ * $Id$
  *
  *
  * Revisions:
  *
- * 2001/05/12
- * Created. (jfn)
+ * 2001/05/12 Created. (jfn)
  *
  **************************************************************************/
 
@@ -32,7 +31,6 @@ import com.pdmfc.tea.runtime.SObjNull;
 import com.pdmfc.tea.runtime.SObjPair;
 import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SNumArgException;
-import com.pdmfc.tea.runtime.SRuntimeException;
 
 
 

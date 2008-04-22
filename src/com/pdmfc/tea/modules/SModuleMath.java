@@ -1,12 +1,12 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2005 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 /**************************************************************************
  *
- * $Id: SModuleMath.java,v 1.7 2005/02/28 10:28:14 jfn Exp $
+ * $Id$
  *
  *
  * Revisions:
@@ -887,7 +887,7 @@ public class SModuleMath
 	    op1         = op2;
 	    op1IsInt    = op2IsInt;
 	    op1IntVal   = op2IntVal;
-	    op1FloatVal = op1FloatVal;
+	    op1FloatVal = op2FloatVal;
 	}
 
 	return Boolean.TRUE;

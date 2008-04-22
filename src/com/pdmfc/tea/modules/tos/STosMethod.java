@@ -1,24 +1,21 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 /**************************************************************************
  *
- * $Id: STosMethod.java,v 1.5 2005/11/04 05:50:04 jfn Exp $
+ * $Id$
  *
  *
  * Revisions:
  *
- * 2001/05/12
- * Created. (jfn)
+ * 2001/05/12 Created. (jfn)
  *
  **************************************************************************/
 
 package com.pdmfc.tea.modules.tos;
-
-import java.util.Enumeration;
 
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.runtime.SContext;
@@ -29,9 +26,7 @@ import com.pdmfc.tea.runtime.SObjBlock;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjNull;
 import com.pdmfc.tea.runtime.SObjSymbol;
-import com.pdmfc.tea.runtime.SObjVar;
 import com.pdmfc.tea.runtime.SReturnException;
-import com.pdmfc.tea.util.SList;
 import com.pdmfc.tea.util.SListNode;
 
 

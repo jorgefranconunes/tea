@@ -6,7 +6,7 @@
 
 /**************************************************************************
  *
- * $Id: STeaRuntime.java,v 1.18 2005/03/09 15:10:36 jfn Exp $
+ * $Id$
  *
  *
  * Revisions:
@@ -39,7 +39,6 @@ package com.pdmfc.tea.runtime;
 
 import java.io.InputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -56,7 +55,6 @@ import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjPair;
 import com.pdmfc.tea.runtime.SObjSymbol;
-import com.pdmfc.tea.runtime.SUtils;
 import com.pdmfc.tea.util.SInputSource;
 import com.pdmfc.tea.util.SInputSourceFactory;
 

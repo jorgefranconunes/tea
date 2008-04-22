@@ -24,10 +24,7 @@
 package com.pdmfc.tea.compiler;
 
 import com.pdmfc.tea.STeaException;
-import com.pdmfc.tea.compiler.SWord;
 import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.SRuntimeException;
 
 
 

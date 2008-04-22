@@ -1,25 +1,22 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 /**************************************************************************
  *
- * $Id: SList.java,v 1.7 2004/10/01 15:32:10 jfn Exp $
+ * $Id$
  *
  *
  * Revisions:
  *
- * 2002/02/19
- * Readded the "elements()" method for compatibility with Java code
- * written for Tea 3.0.0. The method is deprecated. (jfn)
+ * 2002/02/19 Readded the "elements()" method for compatibility with
+ * Java code written for Tea 3.0.0. The method is deprecated. (jfn)
  *
- * 2002/01/10
- * The elements() method was replaced by iterator(). (jfn)
+ * 2002/01/10 The elements() method was replaced by iterator(). (jfn)
  *
- * 2001/05/12
- * Created. (jfn)
+ * 2001/05/12 Created. (jfn)
  *
  **************************************************************************/
 
@@ -28,8 +25,6 @@ package com.pdmfc.tea.util;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-
-import com.pdmfc.tea.util.SListNode;
 
 
 
