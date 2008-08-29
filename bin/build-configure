@@ -1,0 +1,118 @@
+#!/bin/bash
+###########################################################################
+#
+# Copyright (c) 2008 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+###########################################################################
+#
+# $Id$
+#
+#
+# Configures the development tree for performing builds.
+#
+#
+# Revisions:
+#
+# 2008/08/29 Created. (jfn)
+#
+###########################################################################
+
+_scriptDir=$(dirname $0)
+_scriptName=$(basename $0)
+
+_teaBaseDir=$(cd $_scriptDir/..; pwd)
+
+#
+# Makes utility functions available.
+#
+source ${_teaBaseDir}/bin/tea-utils
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+readBuildConfig () {
+
+    local buildConf=${_teaBaseDir}/build.conf
+
+    if [ ! -f $buildConf ] ; then
+	teaError "Build config file \"$buildConf\" is missing."
+    fi
+
+    # Set default values for some parameters.
+    BUILD_PATH_SEPARATOR=$(teaPathSeparator)
+
+    source $buildConf
+
+    local requiredParams="
+        BUILD_JAVAC
+        BUILD_JAR
+        BUILD_JAVADOC
+        BUILD_PATH_SEPARATOR
+"
+
+    for paramName in $requiredParams ; do
+	local paramValue=${!paramName}
+
+	if [ -z "$paramValue" ] ; then
+	    teaError "Parameter \"$paramName\" not defined on \"$buildConf\""
+	fi
+    done
+
+    # And assign values to aditional config parameters.
+
+    source ${_teaBaseDir}/config/tea-core.conf
+
+    BUILD_VERSION=$TEA_VERSION
+    BUILD_BASE_DIR=$_teaBaseDir
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+createMakefileConfig () {
+
+    local templateFile=${_teaBaseDir}/config/Makefile.conf.template
+    local resultFile=${_teaBaseDir}/Makefile.conf
+
+    teaParseTemplate $templateFile > $resultFile
+}
+
+
+
+
+
+###########################################################################
+#
+# The main script.
+#
+###########################################################################
+
+readBuildConfig
+createMakefileConfig
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+

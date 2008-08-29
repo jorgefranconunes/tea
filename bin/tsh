@@ -63,7 +63,6 @@ SCRIPT_DIR=$(dirname $SCRIPT)
 SCRIPT_NAME=$(basename $SCRIPT)
 
 teaBaseDir=$(cd ${SCRIPT_DIR}/..; pwd)
-pathSep=":"
 
 
 
@@ -82,7 +81,6 @@ source ${teaBaseDir}/bin/tea-utils
 
 case $(teaOsType) in
     *CYGWIN* )
-	pathSep=";"
 	teaBaseDir=$(cygpath --windows "$teaBaseDir" | sed 's/\\\/\\//g')
     ;;
 esac
@@ -94,6 +92,7 @@ _teaClasspath=
 _teaJre="$TEA_JRE"
 _teaJreOptions="$TEA_JRE_OPTIONS"
 _teaScriptPath="-"
+_pathSep=$(teaPathSeparator)
 
 
 
@@ -220,13 +219,13 @@ shift
 if [ -z "$_teaLibrary" ] ; then
     _teaLibrary="${TEA_CORE_LIBRARY}"
 else
-    _teaLibrary="${_teaLibrary}${pathSep}${TEA_CORE_LIBRARY}"
+    _teaLibrary="${_teaLibrary}${_pathSep}${TEA_CORE_LIBRARY}"
 fi
 
 if [ -z "$_teaClasspath" ] ; then
     _teaClasspath="${TEA_CORE_CLASSPATH}"
 else
-    _teaClasspath="${_teaClasspath}${pathSep}${TEA_CORE_CLASSPATH}"
+    _teaClasspath="${_teaClasspath}${_pathSep}${TEA_CORE_CLASSPATH}"
 fi
 
 

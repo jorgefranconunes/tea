@@ -16,18 +16,7 @@ development team.
 Pre-Requisites
 ==============
 
-1. JDK 1.2
-
-2. jdeps 1.0.1 or better. This tool is used to generate the apropriate
-   Makefile dependencies.
-
-3. The gnu.regexp 1.0.8 library or better. Both 1.0.8 and 1.1.4
-   versions are know to work. You can download it from
-   "http://www.cacas.org/~wes/java/".
-
-4. Library with an implementation of the SAX API. The Xerces-1.4.4
-   library is known to work. You can download it from
-   "http://xml.apache.org/xerces-j/".
+1. Compiler for Java 1.5 or later.
 
 
 
@@ -38,75 +27,43 @@ Preparing the Development Environment
 
 These instructions apply to unix environments. If you really want to
 develop under windows you should have CygWin
-(http://sources.redhat.com/cygwin/) installed on your system.
+(http://www.cygwin.com/) installed on your system.
 
 
-1. Unpack the source tree.
+1. Fetch the source tree.
 
 
-2. Run the "configure" script found on the "bin" directory at the root
-   of the distribution tree. You will need to pass it the apropriate
-   options. See bellow for details. Running "configure" will create
-   a"Makefile" at the root, needed for compiling the sources, and a
-   "config/tsh.config" needed to run the "tsh" utility.
+2. Create the "build.conf" file.
 
-The "configure" tool accepts the following options:
+This file must be manually created in the top of the development
+tree. It will contain information on the Java compiler to be used
+during the build. It is a file with Bourne shell syntax and it must
+define the following variables:
 
---java-home=PATH
+BUILD_JAVAC - The command that invokes the Java compiler and is used
+to compile Java source files during build. It must accept the "-d" and
+"-classpath" options just like Sun's JDK javac compiler.
 
-    Specifies the base dir of your Java instalation. The PATH is
-    supposed to refer to a directory containing a "bin" directory with
-    the following programs: java, javac, jar, javadoc. If this option
-    is not specified then it will default to "/usr".
+BUILD_JAR - The command to use for creating JAR files. It is expected
+to accept the same command line options as Sun's JDK jar utility.
 
---jre=COMMAND
-	
-    Specifies the comand that will execute a Java program. It must
-    recognize the "-D" and "-classpath" options. If this option is not
-    specified then its value is taken to be "$PATH/bin/java" where
-    PATH was specified through the "--java-home" option.
+BUILD_JAVADOC - The command to use for creating javadoc documentation
+from Java source files. It is expected to accept the same command line
+options as Sun's JDK javadoc utility.
 
---javac=COMMAND
+This file can be changed at any time. The build procedure will always
+use the values currently in this config file.
 
-    Specifies the command that invokes the Java compiler. It must
-    recognize the "-d" and "-classpath" options. If this option is not
-    specified then its value is taken to be "$PATH/bin/javac" where
-    PATH was specified through the "--java-home" option.
 
---jar=COMMAND
+3. Prepare the development tree to behave like an installation tree.
 
-    Specifies the comand that invokes the "jar" utility. If this
-    option is not specified then its value is taken to be
-    "$PATH/bin/jar" where PATH was specified through the "--java-home"
-    option.
+Run the "bin/setup" utility in order to prepare the development tree
+to behave like an installation tree. The only required command line
+option is "--java-home". Run it with "--help" for more details.
 
---javadoc=COMMAND
+Note that only after a successfull build will the development tree
+actually behave like an install tree.
 
-    Specifies the command that invokes the "javadoc" utility. If this
-    option is not specified then its value is taken to be
-    "$PATH/bin/javadoc" where PATH was specified through the
-    "--java-home" option.
-
---classpath=PATH_LIST
-
-    Specifies the ClassPath needed to compile the Tea runtime sources
-    and run the Tea interpeter. To compile you will need that
-    PATH_LIST references a library containing the "org.xml.sax"
-    package. If your Java environment needs any aditional libraries
-    you should specify them here.
-
---include-jars=JARLIST
-
-    Colon separated list of pathnames refering to JAR files. The
-    contents of these JAR files will be included in the final Tea
-    JAR. At least the JAR for the gnu.regexp library must be
-    referenced.
-
-You can run the "configure" multiple times. After the first time, if
-you do not specify one of the options it will use the value specified
-the previous time it was run. This is useful when you just want to
-change compiler options or just add another component to the
-classpath.
 
 
 
@@ -114,11 +71,12 @@ classpath.
 Building
 ========
 
-To compile just run "make" at the distribution root. This will use the
-"Makefile" created in the previous step. This "Makefile" recognizes
-the following targets:
+To compile just run "make" at the distribution root. The "Makefile"
+recognizes the following targets:
 
-all - This is the default target. It will create the Tea interpreter.
+all - This is the default target. It will create the Tea
+interpreter. After a successfull build the development tree also
+behaves like an installation tree.
 
 javadoc - Builds the javadoc documentation for the runtime
 internals. The HTML files will be created under the "doc/javadoc"
@@ -130,17 +88,10 @@ files will be created under the "doc/teadoc" directory.
 jar - Builds the target class files and creates the single JAR needed
 to run a Tea interpreter.
 
-depend - Figures out the Makefile dependencyes and produces the
-Makefile rules used to compile the Java sources. Do a "make depend"
-whenever a source file is added, renamed or removed from the source
-tree.
-
 clean - Removes all files created as the result of a build. The
 configuration information is not affected.
 
-After a successfull compilation you are ready to run the "tsh"
-utility. It is located under the "bin" directory. You can add this
-directory to your PATH environment variable.
+release - Creates a release package.
 
 
 

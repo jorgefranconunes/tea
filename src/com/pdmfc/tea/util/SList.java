@@ -35,10 +35,6 @@ import java.util.NoSuchElementException;
  * Implements an ordered list of objects. The list can be traversed
  * from its beggining to its end.
  *
- * @deprecated It is better to use one of the Java classes
- * implementing the <code>java.util.List</code> interface. If speed is
- * an issue then create a list implementation private to your package.
- *
  **************************************************************************/
 
 public class SList

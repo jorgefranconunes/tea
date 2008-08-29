@@ -1,6 +1,6 @@
 ###########################################################################
 #
-# Copyright (c) 2005-2008 PDM&FC, All Rights Reserved.
+# Copyright (c) 2008 PDM&FC, All Rights Reserved.
 #
 ###########################################################################
 
@@ -9,16 +9,12 @@
 # $Id$
 #
 #
-# Makefile for the "com.pdmfc.tea" package.
-#
-# The following variables are expected to be defined:
-#
-# BASE_DIR - The project root directory.
+# The main Makefile for the Tea project.
 #
 #
 # Revisions:
 #
-# 2005/02/15 Created. (jfn)
+# 2008/08/28 Created. (jfn)
 #
 ###########################################################################
 
@@ -26,17 +22,22 @@
 
 
 
-SOURCES= \
-	SConfigInfo.java \
-	STeaException.java \
-	TeaConfig.properties
+include Makefile.conf
+include make/Makefile
 
 
-TeaConfig.properties : $(BASE_DIR)/config/tea-core.conf TeaConfig.properties.template
-	$(BASE_DIR)/bin/process-template TeaConfig.properties.template > $@
 
 
-include $(BASE_DIR)/make/package.make
+
+Makefile.conf : build.conf config/tea-core.conf
+	./bin/build-configure
+
+build.conf :
+	@echo "***"
+	@echo "***File \"build.conf\" is missing."
+	@echo "*** See 00README-developers.txt for aditional details."
+	@echo "***"
+	@exit 1
 
 
 

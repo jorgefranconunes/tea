@@ -1,13 +1,13 @@
 #!/bin/sh
 ###########################################################################
 #
-# Copyright (c) 2001, 2002, 2003, 2004 PDM&FC, All Rights Reserved.
+# Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
 #
 ###########################################################################
 
 #########################################################################
 #
-# $Id: tea-utils,v 1.4 2005/02/11 17:15:32 jfn Exp $
+# $Id$
 #
 #
 # Utility functions. This script is not meant to be executed by
@@ -16,6 +16,8 @@
 #
 #
 # Revisions:
+#
+# 2008/08/29 Added the function "teaPathSeparator".
 #
 # 2004/09/29 The "teaParseTemplate" function now handles comments in
 # the template files. (jfn)
@@ -233,6 +235,29 @@ teaDate () {
 teaOsType () {
 
     uname -s
+}
+
+
+
+
+
+###########################################################################
+#
+# Retrieves the path separator character. It depends on the platform.
+#
+###########################################################################
+
+teaPathSeparator () {
+
+    case $(teaOsType) in
+	*CYGWIN* )
+	    echo ";"
+	    return
+	    ;;
+	* )
+	    echo ":"
+	    return
+    esac
 }
 
 

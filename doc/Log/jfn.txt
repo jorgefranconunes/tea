@@ -1,3 +1,74 @@
+2008/08/29
+
+Resumo:
+
+1. (03h) Simplified build environment - Concluded
+   implementation. Changes performed on "trunk".
+
+
+
+
+
+2008/08/28
+
+Resumo:
+
+1. Created the "branches" top directory in the Subversion
+   repository. This directory is intended to contain branches.
+
+2. (03h) Simplified build environment - Started refactoring. Changes
+   performed on "trunk".
+
+
+
+
+
+svn mkdir -m 'Created repository directory for branches.' \
+	svn+ssh://www.pdmfc.com/opt/develop/svnroot/tea/branches
+
+svn cp -r 1 \
+	svn+ssh://www.pdmfc.com/opt/develop/svnroot/tea/trunk \
+	svn+ssh://www.pdmfc.com/opt/develop/svnroot/tea/branches/3.2.x
+
+
+
+
+
+Pretende-se simplificar a forma de configuração do ambiente de
+desenvolvimento (build).
+
+In order to perform a build the following parameters must be known in
+the Makefile:
+
+TEA_BASE_DIR
+TEA_VERSION
+TEA_JAVAC
+TEA_JAR
+TEA_JAVADOC
+
+
+Prior to performing a build a file "Makefile.conf" must be manually
+created at the root of the development tree. This file is expected to
+be in the GNU Make format and must define the following makefile
+variables:
+
+TEA_JAVAC
+TEA_JAR
+TEA_JAVADOC
+
+
+O Makefile principal precisa para além disso de conhecer as seguintes
+variáveis:
+
+TEA_BASE_DIR
+TEA_VERSION
+
+Donde virão estes valores?...
+
+
+
+
+
 2008/04/22
 
 Resumo:
@@ -23,7 +94,8 @@ Resumo:
 
 Resumo:
 
-1. TSK-PDMFC-TEA-0044 - Concluded implementation. Must still create
+1. TSK-PDMFC-TEA-0044 STeaShell enhancements for improved Java Web
+   Start experience - Concluded implementation. Must still create
    documentation.
 
 

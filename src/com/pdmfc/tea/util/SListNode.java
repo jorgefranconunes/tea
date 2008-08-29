@@ -31,10 +31,6 @@ package com.pdmfc.tea.util;
  * from <TT>SList</TT> may want to access the node directly for performance
  * reasons.
  *
- * @deprecated It is better to use one of the Java classes
- * implementing the <code>java.util.List</code> interface. If speed is
- * an issue then create a list implementation private to your package.
- *
  **************************************************************************/
 
 public class SListNode extends Object {
