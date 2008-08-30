@@ -1,3 +1,41 @@
+2008/08/30 (jfn) Simplified the configuration of the build
+environment.
+
+See "00README-developers.txt" for details on the new simplified
+procedure for seting up the development environment.
+
+
+
+
+
+
+
+2008/08/28 (jfn) Created branch 3.2.x on the Subversion repository.
+
+The 3.2.x branch is intended for maintenance only. No new features
+should be added in this branch. Only bug fixes.
+
+svn mkdir -m 'Created repository directory for branches.' \
+	svn+ssh://www.pdmfc.com/opt/develop/svnroot/tea/branches
+
+svn cp -m 'Created branch 3.2.x with development tree as of 2007/06/04.' \
+        -r 1 \
+	svn+ssh://www.pdmfc.com/opt/develop/svnroot/tea/trunk \
+	svn+ssh://www.pdmfc.com/opt/develop/svnroot/tea/branches/3.2.x
+
+
+To create a local copy of the 3.2.x branch:
+
+cd ~/wherever
+cvn svn+ssh://www.pdmfc.com/opt/develop/svnroot/tee/branches/3.2.x tea
+
+The above commands will create inside "~/wherever" a directory named
+"tea" with the latest contents of the 3.2.x branch.
+
+
+
+
+
 2001/04/05
 
 In a Tea program run by the "tsh" utility a global variable named

@@ -1,12 +1,13 @@
 ###########################################################################
 #
-# Copyright (c) 2005 PDM&FC, All Rights Reserved.
+# Copyright (c) 2005-2008 PDM&FC, All Rights Reserved.
 #
 ###########################################################################
 
 ###########################################################################
 #
-# $Id: package.make,v 1.1 2005/02/15 17:42:45 jfn Exp $
+# $Id$
+#
 #
 # Makefile for a Java package. This file is always included from a
 # makefile in the package source directory.
@@ -63,7 +64,7 @@ $(packageTargetDir)/%.class : $(packageSourceDir)/%.java
 #
 # And for all other files that are not Java source files.
 #
-$(packageTargetDir)/% : $(packageSourceDir)/%
+$(packageTargetDir)/% : %
 	$(CP) $< $@
 
 #

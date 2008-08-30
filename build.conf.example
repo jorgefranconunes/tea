@@ -1,0 +1,40 @@
+#
+# Example build.conf
+#
+# The build.conf contains configuration parameters used by the
+# makefile used in the build procdeure. It is expected to be written
+# in Bourne shell syntax.
+#
+# The following parameters must be defined. See bellow for descriptions
+# and example values.
+#    BUILD_JAVAC
+#    BUILD_JAR
+#    BUILD_JAVADOC
+#
+
+
+#
+# The command for compiling a Java source file. It must accept the
+# options "-classpath" and "-d" just as Sun's javac compiler.
+#
+
+#BUILD_JAVAC="javac -1.5 -warn:-serial -warn:-unchecked -bootclasspath /usr/java/jdk1.5.0_09/jre/lib/rt.jar:/usr/java/jdk1.5.0_09/jre/lib/jsse.jar"
+
+#BUILD_JAVAC="jikes +E -bootclasspath /usr/java/jdk1.5.0_09/jre/lib/rt.jar:/usr/java/jdk1.5.0_09/jre/lib/jsse.jar"
+
+BUILD_JAVAC="/usr/java/jdk1.5.0_09/bin/javac -Xlint -Xlint:-unchecked -Xlint:-serial"
+
+
+#
+# The command for creating a JAR file. It is expected to accept the same
+# command line options as Sun's JDK jar utility.
+#
+BUILD_JAR=jar
+
+#
+# The command for building javadoc documentation from source file. It is
+# expected to accept the same command line options as Sun's JDK javadoc
+# utility.
+#
+BUILD_JAVADOC=/usr/java/jdk1.5.0_09/bin/javadoc
+

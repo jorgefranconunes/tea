@@ -1,12 +1,13 @@
 ###########################################################################
 #
-# Copyright (c) 2001-2007 PDM&FC, All Rights Reserved.
+# Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
 #
 ###########################################################################
 
 ###########################################################################
 #
-# $Id: Makefile,v 1.61 2007/01/01 22:07:12 jpsl Exp $
+# $Id$
+#
 #
 # The main Makefile for the Tea project. This makefile is actually
 # included by another, smaller, makefile in the development root directory
@@ -15,22 +16,20 @@
 # The following variables are expected to be set with something
 # reasonable:
 #
-# IS_UNIX - 
+# BUILD_BASE_DIR - 
 #
-# TEA_BASE_DIR - 
+# BUILD_VERSION - 
 #
-# TEA_VERSION - 
+# BUILD_JAVAC - 
 #
-# TEA_JAVAC - 
+# BUILD_JAR - 
 #
-# TEA_JAR - 
-#
-# TEA_JAVADOC - 
-#
-# TEA_MAKEFILE_CLASSPATH - 
+# BUILD_JAVADOC - 
 #
 #
 # Revisions:
+#
+# 2008/08/29 Slight refactoring to use new paramatere names. (jfn)
 #
 # 2005/02/15 Refactored in order not to need the "jdeps" tool. (jfn)
 #
@@ -57,7 +56,7 @@
 # The files and directories that make up a Tea release. 
 #
 TEA_RELEASE_FILES =	\
-	00README	\
+	00README.txt	\
 	apps	\
 	config/tea-core.conf	\
 	config/tea-install.conf.template	\
@@ -132,19 +131,20 @@ JAVADOC_PACKAGES = \
 #
 ###########################################################################
 
-ifdef IS_UNIX
-SEP = :
-else
-SEP = ;
-endif
-
+SEP = $(BUILD_PATH_SEPARATOR)
 EMPTY =
 SPACE = $(EMPTY) $(EMPTY)
 
-SOURCE_BASE_DIR   = $(TEA_BASE_DIR)/src
-CLASSES_BASE_DIR  = $(TEA_BASE_DIR)/lib/classes
+SOURCE_BASE_DIR   = $(BUILD_BASE_DIR)/src
+CLASSES_BASE_DIR  = $(BUILD_BASE_DIR)/lib/classes
 CLASSPATH         = $(CLASSES_BASE_DIR)$(SEP)$(TEA_MAKEFILE_CLASSPATH)
 SOURCEPATH        = $(SOURCE_BASE_DIR)
+
+#
+# Aditional JARs used during compilation.
+#
+TEA_MAKEFILE_CLASSPATH := $(BUILD_BASE_DIR)/lib/gnu-regexp-1.0.8.jar
+TEA_MAKEFILE_CLASSPATH := $(TEA_MAKEFILE_CLASSPATH)$(SEP)$(BUILD_BASE_DIR)/lib/xerces-1.4.4.jar
 
 
 
@@ -157,11 +157,11 @@ SOURCEPATH        = $(SOURCE_BASE_DIR)
 #
 ###########################################################################
 
-JAR_MANIFEST = $(TEA_BASE_DIR)/config/JarManifest
-JAR_NAME     = tea-$(TEA_VERSION).jar
-JAR_PATH     = $(TEA_BASE_DIR)/lib/$(JAR_NAME)
-JAR_FILES    = -C $(CLASSES_BASE_DIR) com -C $(CLASSES_BASE_DIR) lib/tea-$(TEA_VERSION)
-JAR          = $(TEA_JAR)
+JAR_MANIFEST = $(BUILD_BASE_DIR)/config/JarManifest
+JAR_NAME     = tea-$(BUILD_VERSION).jar
+JAR_PATH     = $(BUILD_BASE_DIR)/lib/$(JAR_NAME)
+JAR_FILES    = -C $(CLASSES_BASE_DIR) com -C $(CLASSES_BASE_DIR) lib/tea-$(BUILD_VERSION)
+JAR          = $(BUILD_JAR)
 
 
 
@@ -176,15 +176,15 @@ JAR          = $(TEA_JAR)
 #
 ###########################################################################
 
-TEADOC           = $(TEA_BASE_DIR)/bin/teadoc
-TEADOC_DIR       = $(TEA_BASE_DIR)/doc/teadoc
+TEADOC           = $(BUILD_BASE_DIR)/bin/teadoc
+TEADOC_DIR       = $(BUILD_BASE_DIR)/doc/teadoc
 TEADOC_DIRS      = src
-TEADOC_DOC_TITLE = "Tea $(TEA_VERSION) Reference Documentation"
+TEADOC_DOC_TITLE = "Tea $(BUILD_VERSION) Reference Documentation"
 TEADOC_WIN_TITLE = $(TEADOC_DOC_TITLE)
-TEADOC_HEADER    = "Tea $(TEA_VERSION) Reference Documentation<br>&copy 2007 <a href=\"http://www.pdmfc.com\">PDM&amp;FC</a>"
+TEADOC_HEADER    = "Tea $(BUILD_VERSION) Reference Documentation<br>&copy 2008 <a href=\"http://www.pdmfc.com\">PDM&amp;FC</a>"
 TEADOC_FOOTER    = $(TEADOC_HEADER)
-TEADOC_BOTTOM    = "<font size=\"-1\"><a href=\"mailto:info@pdmfc.com\">Report a bug or request new features</a></font><br><font size=\"-1\">&copy; 2007</font> <a href=\"http://www.pdmfc.com\"><img align=\"absmiddle\" border=\"0\" src=\"LogoSmallPdmfc.png\"></a>"
-TEADOC_TMP       = $(patsubst %,$(TEA_BASE_DIR)/%,$(TEADOC_DIRS))
+TEADOC_BOTTOM    = "<font size=\"-1\"><a href=\"mailto:info@pdmfc.com\">Report a bug or request new features</a></font><br><font size=\"-1\">&copy; 2008</font> <a href=\"http://www.pdmfc.com\"><img align=\"absmiddle\" border=\"0\" src=\"LogoSmallPdmfc.png\"></a>"
+TEADOC_TMP       = $(patsubst %,$(BUILD_BASE_DIR)/%,$(TEADOC_DIRS))
 TEADOC_DIRLIST   = $(subst $(SPACE),$(SEP),$(TEADOC_TMP))
 
 
@@ -198,11 +198,11 @@ TEADOC_DIRLIST   = $(subst $(SPACE),$(SEP),$(TEADOC_TMP))
 #
 ###########################################################################
 
-JAVADOC_DIR         = $(TEA_BASE_DIR)/doc/javadoc
-JAVADOC_WINDOWTITLE = "Tea $(TEA_VERSION) Java Runtime API"
+JAVADOC_DIR         = $(BUILD_BASE_DIR)/doc/javadoc
+JAVADOC_WINDOWTITLE = "Tea $(BUILD_VERSION) Java Runtime API"
 JAVADOC_DOCTITLE    = $(JAVADOC_WINDOWTITLE)
-JAVADOC_HEADER      = "<b>Tea Java Runtime API</b><br><b>Version $(TEA_VERSION)</b>"
-JAVADOC_BOTTOM      = "<font size=\"-1\">&copy; 2007 <a href=\"http://www.pdmfc.com\" target=\"_top\">PDM&amp;FC</a>, All Rights Reserved.</font>"
+JAVADOC_HEADER      = "<b>Tea Java Runtime API</b><br><b>Version $(BUILD_VERSION)</b>"
+JAVADOC_BOTTOM      = "<font size=\"-1\">&copy; 2008 <a href=\"http://www.pdmfc.com\" target=\"_top\">PDM&amp;FC</a>, All Rights Reserved.</font>"
 JAVADOC_OPTIONS     = \
 	-quiet	\
 	-d $(JAVADOC_DIR) \
@@ -216,7 +216,7 @@ JAVADOC_OPTIONS     = \
 	-doctitle $(JAVADOC_DOCTITLE) \
 	-header $(JAVADOC_HEADER) \
 	-bottom $(JAVADOC_BOTTOM)
-JAVADOC             = $(TEA_JAVADOC) $(JAVADOC_OPTIONS)
+JAVADOC             = $(BUILD_JAVADOC) $(JAVADOC_OPTIONS)
 
 
 
@@ -229,7 +229,7 @@ JAVADOC             = $(TEA_JAVADOC) $(JAVADOC_OPTIONS)
 ###########################################################################
 
 JAVAC  = \
-	$(TEA_JAVAC) \
+	$(BUILD_JAVAC) \
 	-classpath "$(CLASSPATH)$(SEP)$(SOURCEPATH)" \
 	-d "$(CLASSES_BASE_DIR)"
 CP     = cp
@@ -248,7 +248,7 @@ TOUCH  = touch
 #
 ###########################################################################
 
-BASE_DIR = $(TEA_BASE_DIR)
+BASE_DIR = $(BUILD_BASE_DIR)
 
 export BASE_DIR
 export IS_UNIX
@@ -276,7 +276,7 @@ default : all
 all : jar
 
 $(TEA_PACKAGES) : $(CLASSES_BASE_DIR)
-	$(MAKE) -C $(TEA_BASE_DIR)/src/$@ PACKAGE_DIR=$@ build
+	$(MAKE) -C $(BUILD_BASE_DIR)/src/$@ PACKAGE_DIR=$@ build
 
 $(CLASSES_BASE_DIR) :
 	$(MKDIR) $@
@@ -286,18 +286,19 @@ $(CLASSES_BASE_DIR) :
 jar : $(JAR_PATH)
 
 $(JAR_PATH) : $(TEA_PACKAGES) $(JAR_MANIFEST)
-	$(MKDIR) $(CLASSES_BASE_DIR)/lib/tea-$(TEA_VERSION)
-	(cd $(CLASSES_BASE_DIR)/lib/tea; tar cf - .) | (cd $(CLASSES_BASE_DIR)/lib/tea-$(TEA_VERSION); tar xf -)
+	$(MKDIR) $(CLASSES_BASE_DIR)/lib/tea-$(BUILD_VERSION)
+	(cd $(CLASSES_BASE_DIR)/lib/tea; tar cf - .) | (cd $(CLASSES_BASE_DIR)/lib/tea-$(BUILD_VERSION); tar xf -)
 	$(JAR) cmf $(JAR_MANIFEST) $(JAR_PATH) $(JAR_FILES)
 
 
 # Removes all Java class files and JARs.
 clean :
-	$(DELETE) \
-		$(CLASSES_BASE_DIR) \
-		$(TEA_BASE_DIR)/lib/tea-*.jar \
-		$(TEADOC_DIR) \
-		$(JAVADOC_DIR)
+	$(DELETE) $(CLASSES_BASE_DIR)
+	$(DELETE) $(BUILD_BASE_DIR)/lib/tea-*.jar
+	$(DELETE) $(TEADOC_DIR)
+	$(DELETE) $(JAVADOC_DIR)
+	$(DELETE) src/com/pdmfc/tea/TeaConfig.properties
+	$(DELETE) Makefile.conf
 
 
 # Builds the Tea documentation
@@ -322,11 +323,11 @@ teadoc : jar
 		--window-title=$(TEADOC_WIN_TITLE) \
 		--path-list=$(TEADOC_DIRLIST) \
 		--output-dir=$(TEADOC_DIR)
-	$(CP) $(TEA_BASE_DIR)/doc/images/LogoSmallPdmfc.png $(TEADOC_DIR)
+	$(CP) $(BUILD_BASE_DIR)/doc/images/LogoSmallPdmfc.png $(TEADOC_DIR)
 	$(ECHO) Done with TeaDoc.
 
 #
 #
 #
 release : all doc
-	$(TEA_BASE_DIR)/bin/make-release $(TEA_RELEASE_FILES)
+	$(BUILD_BASE_DIR)/bin/make-release $(TEA_RELEASE_FILES)

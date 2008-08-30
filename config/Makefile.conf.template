@@ -1,0 +1,58 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 
+%% Copyright (c) 2008 PDM&FC, All Rights Reserved.
+%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 
+%% $Id$
+%% 
+%% 
+%% Template for generating the configuration Makefile for the Tea
+%% build environment.
+%% 
+%% The following variables are expected to be defined:
+%%
+%% BUILD_BASE_DIR - 
+%%
+%% BUILD_VERSION - 
+%%
+%% BUILD_JAVAC - 
+%%
+%% BUILD_JAR - 
+%%
+%% BUILD_JAVADOC - 
+%%
+%% BUILD_PATH_SEPARATOR -
+%% 
+%% 
+%% Revisions:
+%% 
+%% 2008/08/29 Created. (jfn)
+%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+###########################################################################
+#
+# Copyright (c) 2008 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+###########################################################################
+#
+# Tea build environment configuration Makefile
+#
+# Automatically created by $(teaWhoAmI) on $(teaHostname) - $(teaDate)
+#
+# NOTE: This file is automatically regenerated every time the
+# "build-configure" tool is used.
+#
+###########################################################################
+
+BUILD_BASE_DIR       = $BUILD_BASE_DIR
+BUILD_VERSION        = $BUILD_VERSION
+BUILD_JAVAC          = $BUILD_JAVAC
+BUILD_JAR            = $BUILD_JAR
+BUILD_JAVADOC        = $BUILD_JAVADOC
+BUILD_PATH_SEPARATOR = $BUILD_PATH_SEPARATOR
+

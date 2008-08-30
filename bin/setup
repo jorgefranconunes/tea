@@ -1,18 +1,21 @@
-#!/bin/sh
+#!/bin/bash
 ###########################################################################
 #
-# Copyright (c) 2001, 2002, 2003, 2004, 2005 PDM&FC, All Rights Reserved.
+# Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
 #
 ###########################################################################
 
 ###########################################################################
 #
-# $Id: setup,v 1.16 2005/02/16 13:43:37 jfn Exp $
+# $Id$
+#
 #
 # Sets up a Tea software installation tree.
 #
 #
 # Revisions:
+#
+# 2008/08/29 Refactored such that is now structured. (jfn)
 #
 # 2005/01/18 Solved issues with detecting Cygwin. (jfn)
 #
@@ -28,11 +31,10 @@
 #
 ###########################################################################
 
-SCRIPT_DIR=`dirname $0`
-SCRIPT_NAME=`basename $0`
+_scriptDir=$(dirname $0)
+_scriptName=$(basename $0)
 
-teaBaseDir=`cd $SCRIPT_DIR/..; pwd`
-pathSep=":"
+_teaBaseDir=$(cd $_scriptDir/..; pwd)
 
 
 
@@ -47,24 +49,24 @@ pathSep=":"
 #
 # Makes utility functions available.
 #
-. ${teaBaseDir}/bin/tea-utils
+source ${_teaBaseDir}/bin/tea-utils
 
-case `teaOsType` in
+case $(teaOsType) in
     *CYGWIN* )
-	pathSep=";"
-	teaBaseDir=`cygpath --windows "$teaBaseDir" | sed 's/\\\/\\//g'`
+	_teaBaseDir=$(cygpath --windows "$_teaBaseDir" | sed 's/\\\/\\//g')
     ;;
 esac
 
-teaReadCoreConfig $teaBaseDir
+teaReadCoreConfig $_teaBaseDir
 
-TEA_JRE=
-TEA_CORE_CLASSPATH=
-TEA_CORE_LIBRARY=
-verbose=1
-teaInstallConfigFile=${teaBaseDir}/config/tea-install.conf
-teaInstallConfigTemplate=${teaInstallConfigFile}.template
-otherClasspath=
+_teaJre=
+_teaCoreClasspath=
+_teaCoreLibrary="."
+_verbose=1
+_otherClasspath=
+_pathSep=$(teaPathSeparator)
+
+_teaCoreJars=$TEA_CORE_JARS
 
 
 
@@ -81,7 +83,7 @@ displayHeader () {
     cat <<EOF
 
 Setup Tool for the Tea $TEA_VERSION Instalation
-Copyright (c) 2001, 2002, 2003, 2004, 2005 PDM&FC, All Rights Reserved.
+Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
 
 EOF
 }
@@ -101,7 +103,7 @@ displayHelp () {
     displayHeader
 
     cat <<EOF
-Configures your Tea instalation at $teaBaseDir
+Configures your Tea instalation at $_teaBaseDir
 
 Available options:
 --java-home=PATH
@@ -110,8 +112,8 @@ Available options:
 	This option is not mandatory if the --jre option has been
 	specified.
 --jre=PATH
-	Path to your Java runtime environment executable. It must accept
-	the "-classpath" and "-D" options. This option is not mandatory
+	Path to your Java runtime environment executable. It must
+	accept the "-classpath" option. This option is not mandatory
 	if the --java-home option has been specified.
 --classpath=DIRLIST
 	Colon separated directory and JAR list. These are added to the
@@ -131,54 +133,57 @@ EOF
 #
 ###########################################################################
 
-for option in "$@"
-  do
-  case $option in
-      --java-home=* )
-	  javaHome=`expr "$option" : '--java-home=\(.*\)'`
-	  TEA_JRE=${javaHome}/bin/java
-	  ;;
-      --jre=* )
-	  TEA_JRE=`expr "$option" : '--jre=\(.*\)'`
-	  ;;
-      --classpath=* )
-	  otherClasspath=`expr "$option" : '--classpath=\(.*\)'`
-	  ;;
-      --quiet )
-	  verbose=0
-	  ;;
-      --help )
-	  displayHelp
-	  exit 0
-	  ;;
-      --*=* )
-	  option=`expr $option : '\(--.*\)=.*'`
-	  teaError "$option : unrecognized option. Use --help to see options."
-	  ;;
-      * )
-	  teaError "$option : unrecognized option. Use --help to see options."
-	  exit 1
-	  ;;
-  esac
-done
+parseCliOptions () {
 
-if [ -z "$TEA_JRE" ]
-    then
-    teaError "Missing --jre or --java-home option. Use --help for details."
-fi
+    for option in "$@" ; do
+	case $option in
+	    --java-home=* )
+		local javaHome=$(expr "$option" : '--java-home=\(.*\)')
+		_teaJre=${javaHome}/bin/java
+		;;
+	    --jre=* )
+		_teaJre=$(expr "$option" : '--jre=\(.*\)')
+		;;
+	    --classpath=* )
+		_otherClasspath=$(expr "$option" : '--classpath=\(.*\)')
+		;;
+	    --quiet )
+		_verbose=0
+		;;
+	    --help )
+		displayHelp
+		exit 0
+		;;
+	    --*=* )
+		option=$(expr $option : '\(--.*\)=.*')
+		teaError "$option : unrecognized option. Use --help to see options."
+		;;
+	    * )
+		teaError "$option : unrecognized option. Use --help to see options."
+		exit 1
+		;;
+	esac
+    done
 
-TEA_CORE_LIBRARY="."
+    if [ -z "$_teaJre" ] ; then
+	teaError "Missing --jre or --java-home option. Use --help for details."
+    fi
 
-#
-# Builds the full core classpath.
-#
-TEA_CORE_CLASSPATH="$otherClasspath"
+    #
+    # Builds the full core classpath.
+    #
+    _teaCoreClasspath="$_otherClasspath"
 
-for jarBasename in $TEA_CORE_JARS
-  do
-  jarFile=${teaBaseDir}/lib/$jarBasename
-  TEA_CORE_CLASSPATH="$TEA_CORE_CLASSPATH${pathSep}$jarFile"
-done
+    for jarBasename in $_teaCoreJars ; do
+	local jarFile=${_teaBaseDir}/lib/$jarBasename
+
+	if [ -z "$_teaCoreClasspath" ] ; then
+	    _teaCoreClasspath=$jarFile
+	else
+	    _teaCoreClasspath="$_teaCoreClasspath${_pathSep}$jarFile"
+	fi
+    done
+}
 
 
 
@@ -190,30 +195,30 @@ done
 #
 ###########################################################################
 
-if [ $verbose -eq 1 ]
-then
-    displayHeader
+displayParameters () {
 
-    cat <<EOF
+    if [ $_verbose -eq 1 ] ; then
+	displayHeader
+
+	cat <<EOF
 Tea runtime environment configured with the following options:
 
 Java runtime
-	$TEA_JRE
+	$_teaJre
 EOF
 
-    echo "Java libraries"
-    for path in `echo $TEA_CORE_CLASSPATH | sed "s/$pathSep/ /g"`
-    do
-	echo "	$path"
-    done
+	echo "Java libraries"
+	for path in $(echo $_teaCoreClasspath | sed "s/$_pathSep/ /g") ; do
+	    echo "	$path"
+	done
 
-    echo "Tea libraries"
-    for path in `echo $TEA_CORE_LIBRARY | sed "s/$pathSep/ /g"`
-    do
-	echo "	$path"
-    done
-    echo
-fi
+	echo "Tea libraries"
+	for path in $(echo $_teaCoreLibrary | sed "s/$_pathSep/ /g") ; do
+	    echo "	$path"
+	done
+	echo
+    fi
+}
 
 
 
@@ -225,7 +230,31 @@ fi
 #
 ###########################################################################
 
-teaParseTemplate $teaInstallConfigTemplate > $teaInstallConfigFile
+createInstallConfig () {
+
+    local installConfigFile=${_teaBaseDir}/config/tea-install.conf
+    local installConfigTemplate=${installConfigFile}.template
+
+    TEA_JRE=$_teaJre
+    TEA_CORE_LIBRARY=$_teaCoreLibrary
+    TEA_CORE_CLASSPATH=$_teaCoreClasspath
+
+    teaParseTemplate $installConfigTemplate > $installConfigFile
+}
+
+
+
+
+
+#########################################################################
+#
+# The main script.
+#
+#########################################################################
+
+parseCliOptions "$@"
+displayParameters
+createInstallConfig
 
 
 

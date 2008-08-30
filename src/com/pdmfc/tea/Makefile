@@ -30,6 +30,11 @@ SOURCES= \
 	STeaException.java \
 	TeaConfig.properties
 
+
+TeaConfig.properties : $(BASE_DIR)/config/tea-core.conf TeaConfig.properties.template
+	$(BASE_DIR)/bin/process-template TeaConfig.properties.template > $@
+
+
 include $(BASE_DIR)/make/package.make
 
 
