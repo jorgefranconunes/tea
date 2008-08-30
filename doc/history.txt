@@ -24,6 +24,8 @@ svn cp -m 'Created branch 3.2.x with development tree as of 2007/06/04.' \
 	svn+ssh://www.pdmfc.com/opt/develop/svnroot/tea/branches/3.2.x
 
 
+The 3.2.x branch was created in revision 17.
+
 To create a local copy of the 3.2.x branch:
 
 cd ~/wherever
