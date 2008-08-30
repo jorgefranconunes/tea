@@ -35,10 +35,11 @@ develop under windows you should have CygWin
 
 2. Create the "build.conf" file.
 
-This file must be manually created in the top of the development
-tree. It will contain information on the Java compiler to be used
-during the build. It is a file with Bourne shell syntax and it must
-define the following variables:
+The "build.conf" file must be manually created in the top of the
+development tree. It will contain information on the Java compiler to
+be used during the build. It is a file with Bourne shell syntax and it
+must define the variables described bellow. There is a
+"build.conf.example" file with example values for these variables.
 
 BUILD_JAVAC - The command that invokes the Java compiler and is used
 to compile Java source files during build. It must accept the "-d" and
