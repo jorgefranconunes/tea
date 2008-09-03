@@ -385,11 +385,11 @@ public class SCompiler
  *
  **************************************************************************/
 
-   private List getList(int line)
+   private List<SWord> getList(int line)
          throws IOException,
 	        SCompileException {
 
-      List list = new ArrayList();
+      List<SWord> list = new ArrayList<SWord>();
 
       skipToWordInList();
       while ( !atEndOfList() ) {

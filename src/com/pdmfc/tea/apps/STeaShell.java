@@ -80,8 +80,8 @@ public class STeaShell
 
 
 
-    private String _scriptLocation = null;
-    private List   _importDirList  = new ArrayList();
+    private String       _scriptLocation = null;
+    private List<String> _importDirList  = new ArrayList<String>();
 
 
 
@@ -175,7 +175,7 @@ public class STeaShell
 		context.newVar(ARGV0_VAR, _scriptLocation);
 	    }
 	    setCliArgs(context, args, 0, args.length);
-	    context.setImportDirList(_importDirList);
+	    context.setImportLocations(_importDirList);
 	    context.start();
 	    context.execute(code);
 	} catch (SExitException e2) {

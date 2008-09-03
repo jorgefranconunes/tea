@@ -82,15 +82,17 @@ source ${teaBaseDir}/bin/tea-utils
 case $(teaOsType) in
     *CYGWIN* )
 	teaBaseDir=$(cygpath --windows "$teaBaseDir" | sed 's/\\\/\\//g')
-    ;;
+	;;
 esac
 
 teaReadInstallConfig $teaBaseDir
 
+_teaCoreLibrary=${TEA_CORE_LIBRARY}
 _teaLibrary=
+_teaCoreClasspath=${TEA_CORE_CLASSPATH}
 _teaClasspath=
-_teaJre="$TEA_JRE"
-_teaJreOptions="$TEA_JRE_OPTIONS"
+_teaJre=${TEA_JRE}
+_teaJreOptions=${TEA_JRE_OPTIONS}
 _teaScriptPath="-"
 _pathSep=$(teaPathSeparator)
 
@@ -217,15 +219,15 @@ shift
 
 
 if [ -z "$_teaLibrary" ] ; then
-    _teaLibrary="${TEA_CORE_LIBRARY}"
+    _teaLibrary=${_teaCoreLibrary}
 else
-    _teaLibrary="${_teaLibrary}${_pathSep}${TEA_CORE_LIBRARY}"
+    _teaLibrary="${_teaLibrary}${_pathSep}${_teaCoreLibrary}"
 fi
 
 if [ -z "$_teaClasspath" ] ; then
-    _teaClasspath="${TEA_CORE_CLASSPATH}"
+    _teaClasspath=${_teaCoreClasspath}
 else
-    _teaClasspath="${_teaClasspath}${_pathSep}${TEA_CORE_CLASSPATH}"
+    _teaClasspath="${_teaClasspath}${_pathSep}${_teaCoreClasspath}"
 fi
 
 

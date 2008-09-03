@@ -141,28 +141,6 @@ public class SObjPair
 
 /**************************************************************************
  *
- * Builds an <code>java.util.Enumeration</code> that will orderly
- * iterator over the elements in the list whose head is this
- * <code>SObjPair</code> object.
- *
- * @return A newly created <code>java.util.Enumeration</code> object
- * that will iterate over the list elements.
- *
- * @deprecated Use {@link #iterator}.
- *
- **************************************************************************/
-
-    public Enumeration elements() {
-
-	return new SPairEnumeration(this);
-    }
-
-
-
-
-
-/**************************************************************************
- *
  * Builds an <code>java.util.Iterator</code> that will orderly
  * iterator over the elements in the list whose head is this
  * <code>SObjPair</code> object.

@@ -175,29 +175,6 @@ public class SList
 
 /**************************************************************************
  *
- * Builds an <TT>Enumeration</TT> to iterate over the list elements. The
- * <TT>Enumeration</TT> will retrieve the elements by their order in the
- * list.
- *
- * @return An <TT>Enumeration</TT> object that may be used to iterate
- * over the list elements.
- *
- * @deprecated Use the <code>{@link #iterator()}</code> method
- * instead.
- *
- **************************************************************************/
-
-   public Enumeration elements() {
-
-      return new SListEnumeration(_head);
-   }
-
-
-
-
-
-/**************************************************************************
- *
  * 
  *
  **************************************************************************/

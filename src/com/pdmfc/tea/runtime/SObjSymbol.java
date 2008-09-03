@@ -1,24 +1,26 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 /**************************************************************************
  *
- * $Id: SObjSymbol.java,v 1.3 2002/01/10 19:37:02 jfn Exp $
+ * $Id$
  *
  *
  * Revisions:
  *
- * 2001/05/12
- * Created. (jfn)
+ * 2008/09/02 Replaced Hashtable with Map. (jfn)
+ *
+ * 2001/05/12 Created. (jfn)
  *
  **************************************************************************/
 
 package com.pdmfc.tea.runtime;
 
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 
 
 
@@ -38,17 +40,18 @@ public class SObjSymbol
 
 
 
-   /** The name of this symbol */
-   private String _name;
+    // The name of this symbol
+   private String _name = null;
 
-      /** The hashcode of this symbol. It was calculated from its name. */
-   private int    _hashCode;
+    //The hashcode of this symbol. It was calculated from its name.
+    private int _hashCode = -1;
 
-   /** The set of all existing symbols. */
-   private static Hashtable _nameSet = new Hashtable();
+    // The set of all existing symbols.
+    private static Map<String,SObjSymbol> _nameSet =
+	new HashMap<String,SObjSymbol>();
 
-   /** The number of declared symbols. Used to generate hash codes. */
-   private static int _symbolCount = 0;
+    // The number of declared symbols. Used to generate hash codes.
+    private static int _symbolCount = 0;
 
 
 
@@ -149,7 +152,7 @@ public class SObjSymbol
 
    public static SObjSymbol getSymbol(String name) {
 
-      return (SObjSymbol)_nameSet.get(name);
+      return _nameSet.get(name);
    }
 
 
@@ -171,7 +174,7 @@ public class SObjSymbol
 
    public static synchronized SObjSymbol addSymbol(String name) {
 
-      SObjSymbol symbol = (SObjSymbol)_nameSet.get(name);
+      SObjSymbol symbol = _nameSet.get(name);
 
       if ( symbol == null ) {
 	 symbol = new SObjSymbol(name, _symbolCount++);

@@ -49,7 +49,7 @@ public class SRuntimeException
 
 
 
-    private List _msgList = new ArrayList();
+    private List<String> _msgList = new ArrayList<String>();
 
 
 

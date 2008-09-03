@@ -53,11 +53,11 @@ class STeaShellArgs
 
 
 
-    private boolean  _isParsingOptions  = true;
-    private String   _scriptPath        = null;
-    private List     _libraryList       = new ArrayList();
-    private List     _scriptCliArgsList = new ArrayList();
-    private String[] _scriptCliArgs     = null;
+    private boolean      _isParsingOptions  = true;
+    private String       _scriptPath        = null;
+    private List<String> _libraryList       = new ArrayList<String>();
+    private List<String> _scriptCliArgsList = new ArrayList<String>();
+    private String[]     _scriptCliArgs     = null;
 
 
 
@@ -98,7 +98,7 @@ class STeaShellArgs
 	    parseArg(cliArgs[i]);
 	}
 
-	_scriptCliArgs = (String[])_scriptCliArgsList.toArray(new String[0]);
+	_scriptCliArgs = _scriptCliArgsList.toArray(new String[0]);
     }
 
 
@@ -208,9 +208,9 @@ class STeaShellArgs
  *
  **************************************************************************/
 
-    public List getLibraryList() {
+    public List<String> getLibraryList() {
 
-	List result = new ArrayList(_libraryList);
+	List<String> result = new ArrayList<String>(_libraryList);
 
 	return result;
     }
