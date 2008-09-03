@@ -8,8 +8,6 @@ procedure for seting up the development environment.
 
 
 
-
-
 2008/08/28 (jfn) Created branch 3.2.x on the Subversion repository.
 
 The 3.2.x branch is intended for maintenance only. No new features
