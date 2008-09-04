@@ -32,13 +32,15 @@ develop under windows you should have CygWin
 
 1. Fetch the source tree.
 
+svn co svn+ssh://www.pdmfc.com/opt/develop/svnroot/tea/trunk tea
+
 
 2. Create the "build.conf" file.
 
-The "build.conf" file must be manually created in the top of the
+The "build.conf" file must be manually created in the root of the
 development tree. It will contain information on the Java compiler to
 be used during the build. It is a file with Bourne shell syntax and it
-must define the variables described bellow. There is a
+must define the variables enumerated bellow. There is a
 "build.conf.example" file with example values for these variables.
 
 BUILD_JAVAC - The command that invokes the Java compiler and is used
@@ -52,8 +54,8 @@ BUILD_JAVADOC - The command to use for creating javadoc documentation
 from Java source files. It is expected to accept the same command line
 options as Sun's JDK javadoc utility.
 
-This file can be changed at any time. The build procedure will always
-use the values currently in this config file.
+This "build.conf" file can be changed at any time. The build procedure
+will always use the values currently defined in this config file.
 
 
 3. Prepare the development tree to behave like an installation tree.
