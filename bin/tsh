@@ -15,9 +15,6 @@
 #
 # Revisions:
 #
-# 2008/04/18 Slight refactoring to acomodate the new arguments expected
-# by the com.pdmfc.tea.apps.STeaShell program. (TSK-PDMFC-TEA-0044) (jfn)
-#
 # 2006/06/01 Corrected syntax error (missing "'" that was only aparent
 # under bash 3.1. (jfn)
 #
@@ -47,22 +44,22 @@
 #
 ##########################################################################
 
-SCRIPT=$0
+_script=$0
 
-while [ -h $SCRIPT ] ; do
-    dirname=$(dirname $SCRIPT)
-    link=$(ls -ld $SCRIPT | awk '{print $11}')
+while [ -h $_script ] ; do
+    dirname=$(dirname $_script)
+    link=$(ls -ld $_script | awk '{print $11}')
     if [ $(expr "$link" : '\(.\).*') = "/" ] ; then
-	SCRIPT=$link
+	_script=$link
     else
-	SCRIPT=$dirname/$link
+	_script=$dirname/$link
     fi
 done
 
-SCRIPT_DIR=$(dirname $SCRIPT)
-SCRIPT_NAME=$(basename $SCRIPT)
+_scriptDir=$(dirname $_script)
+_scriptName=$(basename $_script)
 
-teaBaseDir=$(cd ${SCRIPT_DIR}/..; pwd)
+_teaBaseDir=$(cd ${_scriptDir}/..; pwd)
 
 
 
@@ -77,21 +74,21 @@ teaBaseDir=$(cd ${SCRIPT_DIR}/..; pwd)
 #
 # Makes utility functions available.
 #
-source ${teaBaseDir}/bin/tea-utils
+source ${_teaBaseDir}/bin/tea-utils
 
 case $(teaOsType) in
     *CYGWIN* )
-	teaBaseDir=$(cygpath --windows "$teaBaseDir" | sed 's/\\\/\\//g')
+	_teaBaseDir=$(cygpath --windows "$_teaBaseDir" | sed 's/\\\/\\//g')
     ;;
 esac
 
-teaReadInstallConfig $teaBaseDir
+teaReadInstallConfig $_teaBaseDir
 
 _teaLibrary=
 _teaClasspath=
 _teaJre="$TEA_JRE"
 _teaJreOptions="$TEA_JRE_OPTIONS"
-_teaScriptPath="-"
+_teaScriptPath=
 _pathSep=$(teaPathSeparator)
 
 
@@ -243,7 +240,7 @@ exec "$_teaJre"				\
     -classpath "$_teaClasspath"		\
     -DTEA_LIBRARY="$_teaLibrary"	\
     com.pdmfc.tea.apps.STeaShell	\
-    "$_teaScriptPath"			\
+    $_teaScriptPath			\
     "$@"
 
 
