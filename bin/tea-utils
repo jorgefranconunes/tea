@@ -249,7 +249,7 @@ teaOsType () {
 
 teaPathSeparator () {
 
-    case $(teaOsType) in
+    case "$teaOsType" in
 	*CYGWIN* )
 	    echo ";"
 	    return
