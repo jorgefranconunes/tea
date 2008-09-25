@@ -2813,6 +2813,7 @@ public class SModuleLang
 
 	SObjFunction proc       = STypes.getFunction(context, args, 1);
 	Iterator     iterator   = STypes.getPair(args, 2).iterator();
+        int          iterCount  = -1;
 	int          numArgs    = 0;
 	Object[]     funcArgs   = null;
 	SObjPair     emptyList  = SObjPair.emptyList();
@@ -2821,7 +2822,17 @@ public class SModuleLang
 	SObjPair     node       = null;
 
 	if ( iterator.hasNext() ) {
-	    SObjPair argList = (SObjPair)iterator.next();
+            iterCount++;
+            Object o = iterator.next();
+            SObjPair argList = null;
+            try {
+                argList = (SObjPair)o;
+            } catch (ClassCastException e) {
+                throw new STypeException(args[0],
+					 "arg 2, element " + iterCount +
+					 " must be a list, not a " +
+					 STypes.getTypeName(o));
+            }
 	    numArgs = argList.length() + 1;
 	    funcArgs = new Object[numArgs];
 	    funcArgs[0] = proc;
@@ -2832,7 +2843,17 @@ public class SModuleLang
 	}
 
 	while ( iterator.hasNext() ) {
-	    SObjPair argList = (SObjPair)iterator.next();
+            iterCount++;
+            Object o = iterator.next();
+            SObjPair argList = null;
+            try {
+                argList = (SObjPair)o;
+            } catch (ClassCastException e) {
+                throw new STypeException(args[0],
+					 "arg 2, element " + iterCount +
+					 " must be a list, not a " +
+					 STypes.getTypeName(o));
+            }
 	    fillArgs(funcArgs, argList);
 	    Object   funcResult = proc.exec(proc, context, funcArgs);
 	    node = new SObjPair(funcResult ,emptyList);

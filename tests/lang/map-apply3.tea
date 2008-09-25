@@ -1,0 +1,7 @@
+# Test bug TSK-PDMFC-TEA-0047 in map-apply
+
+define aList ( ( aKey1 "aValue1" ) ( aKey2 "aValue2" ) ) 
+map-apply define $aList
+
+echo $aKey1 "," $aKey2
+

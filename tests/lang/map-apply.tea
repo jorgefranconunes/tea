@@ -1,0 +1,7 @@
+# Test bug TSK-PDMFC-TEA-0047 in map-apply
+# If the bug still exists, then there is a java.lang.ClassCastException
+# thrown instead of a Tea runtime exception.
+
+define aList ( aKey )  # should be define aList ( ( aKey "aValue" ) )
+map-apply define $aList
+
