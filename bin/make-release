@@ -55,7 +55,6 @@ esac
 . ${teaBaseDir}/bin/tea-utils
 
 teaReadCoreConfig $teaBaseDir
-. ${teaBaseDir}/config/tea-develop.conf
 
 teaPackageName=tea-${TEA_VERSION}
 teaPackageFile=${teaBaseDir}/${teaPackageName}.tar.gz

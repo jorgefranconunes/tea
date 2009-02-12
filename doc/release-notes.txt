@@ -1,7 +1,7 @@
 Release Notes for Tea 3
 
 
-
+2009/02/12 *** Released the 3.2.3 at SVN version 29.
 
 
 2007/03/04 SModuleReflect now transforms Java Object Arrays to Tea
