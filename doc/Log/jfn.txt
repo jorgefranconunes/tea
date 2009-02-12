@@ -1,3 +1,26 @@
+2009/02/12
+
+Resumo:
+
+1. created "releases" top directory in the Subversion erpository. This
+   directory is intended to contain releases.
+
+
+
+
+
+svn mkdir -m 'Created repository directory for branches.' \
+	svn+ssh://www.pdmfc.com/opt/develop/svnroot/tea/releases
+
+svn cp -m 'Tea 3.2.3 release.' \
+        -r 29 \
+	svn+ssh://www.pdmfc.com/opt/develop/svnroot/tea/branches/3.2.x \
+	svn+ssh://www.pdmfc.com/opt/develop/svnroot/tea/releases/3.2.3
+
+
+
+
+
 2006/07/11
 
 Resumo:
