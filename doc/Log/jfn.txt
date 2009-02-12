@@ -9,7 +9,7 @@ Resumo:
 
 
 
-svn mkdir -m 'Created repository directory for branches.' \
+svn mkdir -m 'Created repository directory for releases.' \
 	svn+ssh://www.pdmfc.com/opt/develop/svnroot/tea/releases
 
 svn cp -m 'Tea 3.2.3 release.' \
