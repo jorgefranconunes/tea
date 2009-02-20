@@ -99,6 +99,29 @@ release - Creates a release package.
 
 
 
+Making a New Release (for admins)
+====================
+
+1 - Check that the version number is coherent in all files
+    (config/tea-core.conf, and bin/tsh.bat)
+
+2 - Execute the Makefile target to build the release archive
+    make release
+    (tea-3.2.Z.tar.gz release file should be available in the current dir).
+
+3 - Test out the release, by tring out the installation of the archive
+    according to the Tea site's instructions.
+
+4 - Update the relase on SVN
+    svn cp -m 'Tea 3.2.Z release.' \
+         -r NNN \
+        svn+ssh://www.pdmfc.com/opt/develop/svnroot/tea/branches/3.2.x \
+        svn+ssh://www.pdmfc.com/opt/develop/svnroot/tea/releases/3.2.Z
+
+5 - If it is a public release, update the Tea site.
+
+
+
 
 Bug reports:
 
