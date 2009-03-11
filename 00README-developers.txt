@@ -19,7 +19,7 @@ be added in this branch. Only bug fixes.
 Pre-Requisites
 ==============
 
-1. Compiler for Java 1.4 or later.
+1. Compiler for Java 1.5 or later.
 
 
 
@@ -38,7 +38,7 @@ develop under windows you should have CygWin
 
 2. Create the "build.conf" file.
 
-The "build.conf" file must be manually created in the top of the
+The "build.conf" file must be manually created at the top of the
 development tree. It will contain information on the Java compiler to
 be used during the build. It is a file with Bourne shell syntax and it
 must define the variables described bellow. There is a
@@ -74,7 +74,7 @@ actually behave like an install tree.
 Building
 ========
 
-To compile just run "make" at the distribution root. The "Makefile"
+To compile just run "make" at the working copy root. The "Makefile"
 recognizes the following targets:
 
 all - This is the default target. It will create the Tea
@@ -102,23 +102,39 @@ release - Creates a release package.
 Making a New Release (for admins)
 ====================
 
-1 - Check that the version number is coherent in all files
-    (config/tea-core.conf, and bin/tsh.bat)
+1. Check the release version number.
 
-2 - Execute the Makefile target to build the release archive
+Ensure that the version number is coherent in all files
+("config/tea-core.conf" and "bin/tsh.bat").
+
+
+2. Build the release bundle.
+
+Execute the Makefile target to build the release archive:
+
     make release
-    (tea-3.2.Z.tar.gz release file should be available in the current dir).
 
-3 - Test out the release, by tring out the installation of the archive
-    according to the Tea site's instructions.
+The release bundle is named "tea-3.2.Z.tar.gz" and should be available
+in working copy root.
 
-4 - Update the relase on SVN
+
+3. Perform testing on the release.
+
+Test out the release, by tring out the installation of the archive
+according to the Tea site's instructions.
+
+
+4. Update the relase on the Subversion repository
+
     svn cp -m 'Tea 3.2.Z release.' \
          -r NNN \
         svn+ssh://www.pdmfc.com/opt/develop/svnroot/tea/branches/3.2.x \
         svn+ssh://www.pdmfc.com/opt/develop/svnroot/tea/releases/3.2.Z
 
-5 - If it is a public release, update the Tea site.
+
+5. Update the Tea site.
+
+If it is a public release, update the Tea site.
 
 
 
@@ -126,5 +142,5 @@ Making a New Release (for admins)
 Bug reports:
 
 Send your bug reports and requests for new features to
-tea.team@pdmfc.com
+tea.dev@pdmfc.com
 
