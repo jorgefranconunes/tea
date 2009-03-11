@@ -3,6 +3,10 @@ Release Notes for Tea 3
 
 
 
+2009/03/11 New list processing functions: "list-cat", "list-invert",
+"list-sort".
+
+
 2009/03/11 Improved "com.pdmfc.tea.apps.STeaShell" CLI arguments.
 
 This change makes it possible to use "STeaShell" as a Tea program
