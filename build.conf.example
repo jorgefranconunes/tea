@@ -1,8 +1,26 @@
 #
+# Example build.conf
+#
+# The build.conf contains configuration parameters used by the
+# makefile used in the build procdeure. It is expected to be written
+# in Bourne shell syntax.
+#
+# The following parameters must be defined. These parameters are expected
+# by the tools used during compilation and build. See bellow for
+# descriptions and example values.
+#    BUILD_JAVAC
+#    BUILD_JAR
+#    BUILD_JAVADOC
+#
+
+__javaHome=/usr/java/jdk1.5.0_10
+
+
+#
 # The command for compiling a Java source file. It must accept the
 # options "-classpath" and "-d" just as Sun's javac compiler.
 #
-BUILD_JAVAC="/usr/java/jdk1.5.0_09/bin/javac -Xlint -Xlint:-unchecked -Xlint:-serial"
+BUILD_JAVAC="${__javaHome}/bin/javac -Xlint -Xlint:-unchecked -Xlint:-serial"
 
 
 #
@@ -16,5 +34,5 @@ BUILD_JAR=jar
 # expected to accept the same command line options as Sun's JDK javadoc
 # utility.
 #
-BUILD_JAVADOC=/usr/java/jdk1.5.0_09/bin/javadoc
+BUILD_JAVADOC="${__javaHome}/bin/javadoc"
 

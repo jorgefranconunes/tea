@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2009 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -10,6 +10,8 @@
  *
  *
  * Revisions:
+ *
+ * 2009/03/11 Improved documentation. (jfn)
  *
  * 2007/04/18 Refactored to receive the Tea library path list as a
  * command line argument. (jfn)
@@ -109,7 +111,7 @@ public class STeaShell
  * <p>The path of the Tea script is available to Tea code as a string
  * in the <code>argv0</code> variable.</p>
  *
- * @param location An URL or or a file system path name. If null then
+ * @param location An URL or a file system path name. If null then
  * the script will be read from stdin.
  *
  **************************************************************************/
@@ -129,7 +131,8 @@ public class STeaShell
  * <code>import</code> function in the Tea program. The given path is
  * added to the list without any modifications.
  *
- * @param location The path being added to the path list.
+ * @param location The path being added to the path list. It may be an
+ * URL or a file system path name.
  *
  **************************************************************************/
 
@@ -273,7 +276,20 @@ public class STeaShell
  * <ul>
  *
  * <li><code>--library=<i>DIR_LIST</i></code> - List of directories to
- * be searched by the <code>import</code> function.</li>
+ * be searched by the <code>import</code> function. Elements are
+ * separated with a the path separator character (":" in unix, ";" in
+ * windows). Each element can be a file system path or an URL. In the
+ * case of an URL the character "|" must be used instead of ":", to
+ * differentiate it from the unix path separator character. This
+ * option may be specified multiple times with the effect of
+ * concatening the path elements in the given order.</li>
+ *
+ * <li><code>--library-item=<i>PATH</i></code> - Adds an item to the
+ * end of the list of directories to be searched by the
+ * <code>import</code> function. The path may be either a file system
+ * path or an URL. This option may be specified multiple
+ * times. Contrary to the "--library" option, a URL may contain the
+ * ":" character.</li>
  *
  * <li><code>--script=<i>PATH</i></code> - The Tea script to be
  * executed. If not specified or if "<code>-</code>" then the script
@@ -306,10 +322,8 @@ public class STeaShell
 
 	if ( isOk ) {
 	    shell.setScriptLocation(shellArgs.getScriptPath());
-	    
-	    for ( Iterator i=shellArgs.getLibraryList().iterator();
-		  i.hasNext();){
-		String libPath = (String)i.next();
+
+            for ( String libPath : shellArgs.getLibraryList() ) {
 		shell.addImportDirLocation(libPath);
 	    }
 	}

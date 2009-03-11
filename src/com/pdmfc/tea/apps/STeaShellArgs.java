@@ -1,15 +1,17 @@
 /**************************************************************************
  *
- * Copyright (c) 2007-2008 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2007-2009 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 /**************************************************************************
  *
- * $Id: STeaShellArgs.java,v 1.1 2007/08/11 15:29:20 jfn Exp $
+ * $Id$
  *
  *
  * Revisions:
+ *
+ * 2009/03/11 Added the "--library-item" option. (jfn)
  *
  * 2008/04/18 Refactored use command lne options. This was done in
  * order to receive the Tea library path list as a command line
@@ -34,7 +36,7 @@ import com.pdmfc.tea.STeaException;
 
 /**************************************************************************
  *
- * Parses the command line arguments given to the Tea shell invocation.
+ * Parses the command line arguments given to a Tea shell invocation.
  *
  **************************************************************************/
 
@@ -45,9 +47,10 @@ class STeaShellArgs
 
 
 
-    private String OPTION_LIBRARY = "--library";
-    private String OPTION_SCRIPT  = "--script";
-    private String OPTION_END     = "--";
+    private String OPTION_LIBRARY  = "--library";
+    private String OPTION_LIB_ITEM = "--library-item";
+    private String OPTION_SCRIPT   = "--script";
+    private String OPTION_END      = "--";
 
 
 
@@ -140,6 +143,8 @@ class STeaShellArgs
 
 	if ( OPTION_LIBRARY.equals(optionName) ) {
 	    optionSetLibrary(optionValue);
+        } else if ( OPTION_LIB_ITEM.equals(optionName) ) {
+            optionAddLibItem(optionValue);
 	} else if ( OPTION_SCRIPT.equals(optionName) ) {
 	    optionSetScriptPath(optionValue);
 	} else if ( OPTION_END.equals(optionName) ) {
@@ -176,6 +181,23 @@ class STeaShellArgs
                 _libraryList.add(path);
 	    }
 	}
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    private void optionAddLibItem(String path) {
+
+        path = path.replace('|', ':');
+
+        _libraryList.add(path);
     }
 
 
