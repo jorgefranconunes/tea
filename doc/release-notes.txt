@@ -7,10 +7,26 @@ Release Notes for Tea 3
 "list-sort".
 
 
+2009/03/11 Support for new URL protocol "resource".
+
+There is now support for URLs in the format "resource:/path". These
+URLs refer to items accessed as Java resources. The path refers to a
+Java resource.
+
+All Tea functions that expect a URL can handle this new protocol. In
+addition the Tea library paths passed to "tsh" and
+"com.pdmfc.tea.apps.STeaShell" (used by the "import" function) can
+also support use this new protocol.
+
+This feature makes it possible to use Tea code embeded in JAR
+files. This is usefull in Java Web Start and Java Plugin
+applications.
+
+
 2009/03/11 Improved "com.pdmfc.tea.apps.STeaShell" CLI arguments.
 
 This change makes it possible to use "STeaShell" as a Tea program
-launcher in a Java WebStart environment.
+launcher in a Java Web Start and Java Plugin environments.
 
 The following command line options are supported:
 

@@ -1,3 +1,64 @@
+2009/03/11
+
+Resumo:
+
+1. New CLI option "--library-item" supported by
+   "com.pdmfc.tea.apps.STeaShell"
+
+2. New list processing functions: "list-cat", "list-invert",
+   "list-sort".
+
+
+
+
+
+Notificações por commit no repositório Subversion
+
+Pretende-se que por cada commit no repositório Subversion da árvore de
+desenvolvimento do Tea seja automaticamente enviado um email para
+"tea.dev@pdmfc.com". Nesse email deverá estar indicado o comentário de
+commit e a lista dos ficheiros afectados.
+
+Na directoria do repositório (/opt/develop/svnroot/tea) criar o
+ficheiro executável "hooks/post-commit". Este executável é invocado
+imediatamente após um commit com sucesso. É invocado com dois
+argumentos:
+
+1. Path da directoria do repositório.
+
+2. Número da revisão do commit.
+
+
+Para obter a informação que deverá constar no email a enviar:
+
+a) Utilizador que efectuou o commit:
+
+svnlook author -r $REV $REPOS
+
+
+b) Data em que o commit teve lugar:
+
+svnlook date -r $REV $REPOS
+
+
+c) Comentário do commit:
+
+svnlook log -r $REV $REPOS
+
+
+d) Listagem dos ficheiros afectados no commit:
+
+svnlook changed  -r $REV --copy-info $REPOS
+
+
+e) Listagem das alterações introduzidas nos ficheiros afectados:
+
+svnlook diff -r $REV $REPOS
+
+
+
+
+
 2008/08/29
 
 Resumo:
