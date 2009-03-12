@@ -100,6 +100,37 @@ release - Creates a release package.
 
 
 
+Seting Up Email Notifications After each Subversion Commit
+==========================================================
+
+This is obviously usefull for the development team, but not required.
+
+The following config changes are to be performed in the host where the
+Subversion repository is located.
+
+1. Copy "bin/svn-commit-email" to "/usr/local/bin".
+
+
+2. Create the file "/opt/develop/svnroot/tea/hooks/post-commit" with
+   the following contents. Make sure it is executable (chmod +x).
+
+#!/bin/bash
+
+export PATH=/bin:/usr/bin
+
+_repository=$1
+_revision=$2
+
+/usr/local/bin/svn-commit-email \
+    --revision=$_revision \
+    --repository=$_repository \
+    --email=tea.dev@pdmfc.com \
+    --from-address=tea.dev@pdmfc.com
+
+
+
+
+
 Bug reports:
 
 Send your bug reports and requests for new features to

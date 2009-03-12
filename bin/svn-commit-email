@@ -31,6 +31,9 @@ _repository=""
 _toAddress=""
 _fromAddress=""
 _projectId=""
+_isDebug="no"
+
+_sendmailBin=/usr/lib/sendmail
 
 
 
@@ -75,6 +78,7 @@ Available options:
 --email=ADDRESS
 --from-address=ADDRESS
 --project=STRING
+--debug
 EOF
 }
 
@@ -103,6 +107,9 @@ parseCliOptions () {
 		;;
 	    --from-address=* )
 		_fromAddress=$(expr "$option" : '--from-address=\(.*\)')
+		;;
+	    --debug )
+		_isDebug="yes"
 		;;
 	    --help )
 		displayHelp
@@ -163,7 +170,7 @@ sendEmail () {
 
     cat > $emailMsg <<EOF
 To: $_toAddress
-Subject: $_projectId - Subversion commit
+Subject: $_projectId - Subversion commit by $user
 
 Subversion Commit
 
@@ -185,7 +192,11 @@ $changes
 
 EOF
 
-    cat $emailMsg
+    if [ "$_isDebug" = "no" ] ; then
+	$_sendmailBin -r $_fromAddress $_toAddress < $emailMsg
+    else
+	cat $emailMsg
+    fi
 
     rm -f $emailMsg
 }

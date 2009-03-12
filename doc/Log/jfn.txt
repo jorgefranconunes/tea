@@ -56,6 +56,31 @@ e) Listagem das alterações introduzidas nos ficheiros afectados:
 svnlook diff -r $REV $REPOS
 
 
+Seting up email notification after each commit
+
+The following config changes are to be performed in the host where the
+Subversion repository is located.
+
+1. Copy "bin/svn-commit-email" to "/usr/local/bin".
+
+
+2. Create the file "/opt/develop/svnroot/tea/hooks/post-commit" with
+   the following contents:
+
+#!/bin/bash
+
+export PATH=/bin:/usr/bin
+
+_repository=$1
+_revision=$2
+
+/usr/local/bin/svn-commit-email \
+    --revision=$_revision \
+    --repository=$repository \
+    --email=tea.dev@pdmfc.com \
+    --from-address=tea.dev@pdmfc.com    
+
+
 
 
 
@@ -189,7 +214,7 @@ Resumo:
 
 
 
-Compilações com "ejc" dentro do Emacs.
+Compilações com "ecj" dentro do Emacs.
 
 De acordo com instruções em
 "http://www.emacsblog.org/2007/02/13/emacs-jdee-ant-and-the-eclipse-java-compiler/":
