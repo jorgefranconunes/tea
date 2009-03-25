@@ -476,6 +476,19 @@ public class SModuleRegexp
 //* The first element is the matched portion. The following elements are
 //* the portions matching the parenthesized sets in the regular expression
 //* pattern.
+//* <Enumeration>
+//* <EnumLabel>Example (positive match)</EnumLabel>
+//* <EnumDescription>
+//* <Code>regexp "label([0-9]): (.*)" "label5: test message"</Code>
+//* evaluates to a list within one list that can be expressed (in Tea) as:
+//* <Code>( ( "label5: test message" "5" "test message" ) )</Code>
+//* </EnumDescription>
+//* <EnumLabel>Example (negative match)</EnumLabel>
+//* <EnumDescription>
+//* <Code>regexp "label([0-9]): (.*)" "label: test message"</Code>
+//* evaluates to an empty list.
+//* </EnumDescription>
+//* </Enumeration>
 //* </Description>
 //* 
 //* </TeaFunction>
