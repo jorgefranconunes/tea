@@ -6,7 +6,7 @@
 
 /**************************************************************************
  *
- * $Id: SModuleReflect.java,v 1.8 2007/03/06 19:39:35 pcorreia Exp $
+ * $Id: SModuleReflect.java,v 1.4 2008/04/21 11:23:48 pcorreia Exp $
  *
  *
  * Revisions:
@@ -46,20 +46,21 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.math.BigInteger;
-import java.sql.Connection;
-import java.sql.Statement;
-import java.sql.PreparedStatement;
+import java.lang.reflect.Modifier;
 import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
+import java.util.TreeSet;
 
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.modules.SModule;
@@ -131,18 +132,18 @@ public class SModuleReflect
 	_primitiveTypes.put(Void.TYPE.getName(),      Void.TYPE);
     }
 
-    private static Map _primitiveWrappers = new HashMap();
+    private static Map<Class,Class> _primitiveToClass = new HashMap<Class,Class>();
 
     static {
-	_primitiveWrappers.put(Boolean.class,   Boolean.TYPE);
-	_primitiveWrappers.put(Character.class, Character.TYPE);
-	_primitiveWrappers.put(Byte.class,      Byte.TYPE);
-	_primitiveWrappers.put(Short.class,     Short.TYPE);
-	_primitiveWrappers.put(Integer.class,   Integer.TYPE);
-	_primitiveWrappers.put(Long.class,      Long.TYPE);
-	_primitiveWrappers.put(Float.class,     Float.TYPE);
-	_primitiveWrappers.put(Double.class,    Double.TYPE);
-	_primitiveWrappers.put(Void.class,      Void.TYPE);
+	_primitiveToClass.put(Boolean.TYPE,   Boolean.class);
+	_primitiveToClass.put(Character.TYPE, Character.class);
+	_primitiveToClass.put(Byte.TYPE,      Byte.class);
+	_primitiveToClass.put(Short.TYPE,     Short.class);
+	_primitiveToClass.put(Integer.TYPE,   Integer.class);
+	_primitiveToClass.put(Long.TYPE,      Long.class);
+	_primitiveToClass.put(Float.TYPE,     Float.class);
+	_primitiveToClass.put(Double.TYPE,    Double.class);
+	_primitiveToClass.put(Void.TYPE,      Void.class);
     }
 
 
@@ -635,6 +636,7 @@ public class SModuleReflect
 	try {
 	    result = mtd.invoke(javaObj, javaArgs);
 	} catch (IllegalAccessException e) {
+	    e.printStackTrace();
  	    throw new SRuntimeException("cannot access method '" +
   					mtd.getName() + "'");
 	} catch (NullPointerException e) {
@@ -684,7 +686,7 @@ public class SModuleReflect
  *
  **************************************************************************/
 
-    private static Object functionNewInstance(SObjFunction func,
+   private static Object functionNewInstance(SObjFunction func,
 					      SContext     context,
 					      Object[]     args)
 	throws STeaException {
@@ -839,8 +841,8 @@ public class SModuleReflect
 
 	// convert value types to java
 	for(int i=3; i<args.length; i++) {
-	    paramTypes[i-3] = tea2Java(args[i]).getClass();
-	    mtdArgs[i-3] = args[i];
+	    mtdArgs[i-3] = tea2Java(args[i]);
+	    paramTypes[i-3] = mtdArgs[i-3].getClass();
 	}
 
 	Method mtd = null;
@@ -866,6 +868,367 @@ public class SModuleReflect
 
 /***************************************************************************
  *
+ * Each element will store a possible method with it's score in the TreeSet,
+ * the order is normal, having the greatest score as the last object in 
+ * the Set.
+ *
+ ***************************************************************************/
+
+    static class MethodScore implements Comparable {
+
+	public Method _method = null;
+	public int    _score  = 0;
+
+	public MethodScore(Method aMethod, int aScore) {
+	    _method = aMethod;
+	    _score = aScore;
+	}
+
+	public int compareTo (Object anObject) {
+	    MethodScore aMethodScore = (MethodScore) anObject;
+	    return _score - aMethodScore._score;
+	}
+    }
+
+
+
+
+
+/***************************************************************************
+ *
+ * Used to store the keys for the Class distance cache
+ *
+ ***************************************************************************/
+
+    static class ClassPair {
+
+	public Class _given = null;
+	public Class _known = null;
+	private int _hash = 0;
+
+	public ClassPair(Class aGiven, Class aKnown) {
+	    _given = aGiven;
+	    _known = aKnown;
+	    _hash = (_given.getName()+_known.getName()).hashCode();
+	}
+
+	public int hashCode () {
+	    return _hash;
+	}
+	
+	public boolean equals (Object anObj) {
+	    ClassPair aPair = (ClassPair)anObj;
+	    
+	    return _given.equals(aPair._given) && _known.equals(aPair._known);
+	}
+    }
+    
+    
+
+
+
+/***************************************************************************
+ *
+ *
+ *
+ ***************************************************************************/
+
+    private static boolean paramArrayMatches(Class[] givenParamTypes,
+					     Class[] knownParamTypes) {
+	boolean paramsMatch = true;
+	int numParams = givenParamTypes.length;
+	for(int i=0; i<numParams && paramsMatch; i++) {
+	    paramsMatch = (knownParamTypes[i].isAssignableFrom(givenParamTypes[i]));
+	    // if the parameter is primitive, check with correct class
+	    if (!paramsMatch && knownParamTypes[i].isPrimitive()) {
+		paramsMatch = (_primitiveToClass.get(knownParamTypes[i]).isAssignableFrom(givenParamTypes[i]));
+	    }
+	}
+	
+	return paramsMatch;
+    }
+    
+
+
+
+
+/***************************************************************************
+ *
+ * Calculates the distance between two array of Classes, where the distance
+ * is the sum of distances between each element.
+ *
+ ***************************************************************************/
+
+    private static int paramArrayDistance(Class[] givenParamTypes,
+					  Class[] knownParamTypes) {
+
+	int score = 0;
+	int distance = 0;
+	for(int i=0; i<givenParamTypes.length;i++) {
+	    // TBD - maybe the calculation of distance is not the best
+	    distance = paramClassDistance(givenParamTypes[i],
+					  knownParamTypes[i]);
+	    if ( distance >= 0) {
+		score += distance;
+	    }
+	}
+	
+	return score;
+    }
+
+
+
+
+
+/***************************************************************************
+ *
+ * Calculates the distance between Classes, which is the number of
+ * classes/interfaces between them.
+ * Also keep a cache of the calculated distances.
+ * The calculation algorithm is defined as:
+ *  - distance between two equal classes is zero.
+ *  - distance between a class and one given super class is 1 plus the 
+ *    distance of it's direct super class to the given super class
+ *  - distance between a class and one give interface is lowest of 1 plus the 
+ *    distance of each of its interfaces to the given interface.
+ * This method relies on the fact that it's always called after the check
+ * knownParamType.isAssignableFrom(givenParamType) returns true.
+ *
+ ***************************************************************************/
+
+    private static Map<ClassPair,Integer> _classDistances = 
+	new Hashtable<ClassPair,Integer>();
+	
+    private static int paramClassDistance(Class givenParamType,
+					  Class knownParamType) {
+	
+	ClassPair aPair = new ClassPair(givenParamType,knownParamType);
+	int distance = 0;
+	if (_classDistances.containsKey(aPair)) {
+	    distance=_classDistances.get(aPair).intValue();
+	} else {
+	    // If classes are diferent, then calculate the distance
+	    if (! givenParamType.equals(knownParamType)) {
+		TreeSet<Integer> distanceSet = new TreeSet<Integer>();
+		// check super class of givenParamType that is 
+		// assignable to knownParamType for the lowest distance
+		Class aSuper = givenParamType.getSuperclass();
+		if(null != aSuper && knownParamType.isAssignableFrom(aSuper)) {
+		    // TBD - maybe the calculation of distance is not the best
+		    int aDist=paramClassDistance(aSuper,knownParamType);
+		    if (aDist>=0) {
+			distanceSet.add(new Integer(1+aDist));
+		    }
+		}
+		// Check every interfaces of givenParamType that are
+		// assignable to knownParamType for the lowest distance
+		for(Class anInterf : givenParamType.getInterfaces()) {
+		    if (knownParamType.isAssignableFrom(anInterf)) {
+			// TBD - maybe the calculation of distance is not the best
+			int aDist=paramClassDistance(anInterf,knownParamType);
+			if (aDist>=0) {
+			    distanceSet.add(new Integer(1+aDist));
+			}
+		    }
+		}
+		// there might not be any method!!!
+		if (distanceSet.isEmpty()) {
+		    distance=-1;
+		} else {
+		    distance = distanceSet.first().intValue();
+		}
+	    }
+	    // store the distance if it exists
+	    if (distance>=0) {
+		_classDistances.put(aPair,new Integer(distance));
+	    }
+	}
+	return distance;
+    }
+    
+
+
+
+
+/***************************************************************************
+ *
+ * Populates a Set with valid methods and select the one closer
+ *
+ ***************************************************************************/
+
+    private static Method findMethod(Class   cl, 
+				     String  methodName, 
+				     Class[] paramTypes) 
+	throws NoSuchMethodException {
+
+	// TBD - Cache <cl, methodName, paramTypes> -> method ?
+
+	TreeSet<MethodScore> possibleMethods = new TreeSet<MethodScore>();
+
+	findMethod(cl, methodName, paramTypes, possibleMethods, 0);
+
+	Method result = null;
+	if (possibleMethods.size() == 0) {
+	    throw new NoSuchMethodException("Can't find method "+methodName);
+	} else {
+	    result = possibleMethods.first()._method;
+	}
+	
+	return result;
+    }
+
+
+
+
+
+/***************************************************************************
+ *
+ * Populates the Set possibleMethods with valid methods of public classes
+ * or interfaces.
+ *
+ ***************************************************************************/
+
+    private static void findMethod(Class   cl, 
+				   String  methodName, 
+				   Class[] paramTypes,
+				   TreeSet possibleMethods,
+				   int     initialDistance) 
+	throws NoSuchMethodException {
+
+	if (Modifier.isPublic(cl.getModifiers())) {
+	    // class is public, so we'll use the class directly
+	    findMethodInClass(cl, methodName, paramTypes, 
+			      possibleMethods, initialDistance);
+	} else {
+	    // class is not public, try the interfaces and then the super class
+	    for(Class anInterf : cl.getInterfaces()) {
+		// TBD - maybe the calculation of distance is not the best
+		findMethod(anInterf, methodName, paramTypes,
+			   possibleMethods, 1+initialDistance);
+	    }
+	    Class aSuper = cl.getSuperclass();
+	    if (null != aSuper) {
+		// TBD - maybe the calculation of distance is not the best
+		findMethod(aSuper, methodName, paramTypes,
+			   possibleMethods, 1+initialDistance);
+	    }
+	}
+    }
+
+
+
+
+
+/***************************************************************************
+ *
+ * Populates a Set (possibleMethods) with all the valid methods with 
+ * the given name and paramTypes.
+ * This will only be executed in public classes (or interfaces).
+ *
+ ***************************************************************************/
+
+   private static void findMethodInClass(Class   cl, 
+					  String  methodName, 
+					  Class[] paramTypes,
+					  TreeSet possibleMethods,
+					  int     initialDistance) 
+	throws NoSuchMethodException {
+
+	Method[] meths = cl.getMethods();
+	int numParams = paramTypes.length;
+	for(Method method : meths) {
+	    // check if method has the same name
+	    if (method.getName().equals(methodName)) {
+		// check if method has the same number of params
+		Class[] methParamTypes = method.getParameterTypes();
+		if (methParamTypes.length == numParams) {
+		    if (paramArrayMatches(paramTypes, methParamTypes)) {
+			// TBD - maybe the calculation of distance is not the best
+			int score = initialDistance+
+			    paramArrayDistance(paramTypes,
+					       methParamTypes);
+			possibleMethods.add(new MethodScore(method,score));
+		    }
+		}
+	    }
+	}
+    }
+
+
+
+
+
+/***************************************************************************
+ *
+ * Each element will store a possible method with it's score in the TreeSet,
+ * the order is normal, having the greatest score as the last object in 
+ * the Set.
+ *
+ ***************************************************************************/
+
+    static class ConstructorScore implements Comparable {
+
+	public Constructor _constructor = null;
+	public int         _score       = 0;
+
+	public ConstructorScore(Constructor aConstructor, int aScore) {
+	    _constructor = aConstructor;
+	    _score       = aScore;
+	}
+
+	public int compareTo (Object anObject) {
+	    ConstructorScore aConstructorScore = (ConstructorScore) anObject;
+	    return _score - aConstructorScore._score;
+	}
+    }
+
+
+
+
+
+/***************************************************************************
+ *
+ *
+ *
+ ***************************************************************************/
+    
+    private static Constructor findConstructor(Class   cl, 
+					       Class[] paramTypes) 
+	throws NoSuchMethodException {
+
+	Constructor[] consts = cl.getConstructors();
+	TreeSet<ConstructorScore> possibleConstructors = 
+	    new TreeSet<ConstructorScore>();
+	int numParams = paramTypes.length;
+	for(Constructor constructor : consts) {
+	    // check if method has the same number of params
+	    Class[] constParamTypes = constructor.getParameterTypes();
+	    if (constParamTypes.length == numParams) {
+		if (paramArrayMatches(paramTypes, constParamTypes)) {
+		    int score = paramArrayDistance(paramTypes,
+						   constParamTypes);
+		    possibleConstructors.add(new ConstructorScore(constructor,
+								  score));
+		}
+	    }
+	}
+	
+	Constructor result = null;
+	if (possibleConstructors.size() == 0) {
+	    result = cl.getConstructor(paramTypes);
+	} else {
+	    result = possibleConstructors.first()._constructor;
+	}
+	
+	return result;
+    }
+
+
+
+
+
+/***************************************************************************
+ *
  *
  *
  ***************************************************************************/
@@ -880,58 +1243,13 @@ public class SModuleReflect
 	NoSuchMethodException lastException = null;
 
 	if (useVariants) {
-	    Iterator it = new ClassArrayVariantsIterator(paramTypes);
-	    while (mtd == null && it.hasNext()) {
-		try {
-		    mtd=cl.getMethod(methodName, (Class[])it.next());
-		} catch (NoSuchMethodException e) {
-		    lastException = e;
-		}
-	    }
+	    mtd=findMethod(cl, methodName, paramTypes);
 	} else {
 	    mtd=cl.getMethod(methodName, paramTypes);
 	}
 
 	if (null!=mtd) {
 	    return mtd;
-	}
-
-	if (null!=lastException) {
-	    throw lastException;
-	}
-
-	return null;
-    }
-
-
-
-
-
-/***************************************************************************
- *
- *
- *
- ***************************************************************************/
-
-    private static Constructor findConstructor(Class   cl, 
-					       Class[] paramTypes) 
-	throws NoSuchMethodException {
-	
-	Iterator it = new ClassArrayVariantsIterator(paramTypes);
-	
-	Constructor           ctr           = null;
-	NoSuchMethodException lastException = null;
-	
-	while (ctr == null && it.hasNext()) {
-	    try {
-		ctr=cl.getConstructor((Class[])it.next());
-	    } catch (NoSuchMethodException e) {
-		lastException = e;
-	    }
-	}
-
-	if (null!=ctr) {
-	    return ctr;
 	}
 
 	if (null!=lastException) {
@@ -1334,97 +1652,6 @@ public class SModuleReflect
 	}
     }
 
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    static class ClassArrayVariantsIterator 
-	implements Iterator {
-
-	private Class[]    _params   = null;
-	private Class[]    _current  = null;
-	private BigInteger _values   = null;
-	private int        _maxValue = 0;
-
-	public ClassArrayVariantsIterator (Class[] params) {
-
-	    if (params.length > 0) {
-		_values = new BigInteger(new byte[params.length]);
-	    } else {
-		_values = null;
-	    }
-	    _maxValue   = (int)Math.pow(2,params.length);
-	    _params     = params;
-	    _current    = getCurrentVariant();
-	}
-
-
-	public boolean hasNext() {
-	    
-	    return _current != null;
-	}
-
-
-	public Object next() {
-
-	    Class[] result = _current;
-
-	    if (_values == null) {
-		_current = null;
-		return result;
-	    }
-	    if (_values.intValue() < _maxValue) {
-		_values = _values.add(BigInteger.ONE);
-		while (_values.intValue() < _maxValue && 
-		       null == (_current = getCurrentVariant())) {
-		    _values = _values.add(BigInteger.ONE);
-		}
-	    } else {
-		_current = null;
-		return null;
-	    }
-
-	    return result;
-	}
-
-
-	public void remove() {
-	}
-
-
-	private Class[] getCurrentVariant() {
-
-	    Class[] params = new Class[_params.length];
-
-	    if (_values == null) {
-		return params;
-	    }
-	    if (_values.intValue() == 0) {
-		return _params;
-	    }
-	    
-	    for(int i=0; i<_params.length; i++) {
-		if (_values.testBit(i)) {
-		    Class wrapper = (Class)_primitiveWrappers.get(_params[i]);
-		    if (null == wrapper) {
-			return null;
-		    }
-		    params[i] = wrapper;
-		} else {
-		    params[i] = _params[i];
-		}
-	    }
-
-	    return params;
-	}
-    }
 
 
 
