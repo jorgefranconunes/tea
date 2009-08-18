@@ -13,16 +13,14 @@
 #
 
 
+_myJavaHome=/usr/java/jdk1.5.0_09
+
+
 #
 # The command for compiling a Java source file. It must accept the
 # options "-classpath" and "-d" just as Sun's javac compiler.
 #
-
-#BUILD_JAVAC="javac -1.5 -warn:-serial -warn:-unchecked -bootclasspath /usr/java/jdk1.5.0_09/jre/lib/rt.jar:/usr/java/jdk1.5.0_09/jre/lib/jsse.jar"
-
-#BUILD_JAVAC="jikes +E -bootclasspath /usr/java/jdk1.5.0_09/jre/lib/rt.jar:/usr/java/jdk1.5.0_09/jre/lib/jsse.jar"
-
-BUILD_JAVAC="/usr/java/jdk1.5.0_09/bin/javac -Xlint -Xlint:-unchecked -Xlint:-serial"
+BUILD_JAVAC="${_myJavaHome}/bin/javac -Xlint -Xlint:-unchecked -Xlint:-serial"
 
 
 #
@@ -36,5 +34,5 @@ BUILD_JAR=jar
 # expected to accept the same command line options as Sun's JDK javadoc
 # utility.
 #
-BUILD_JAVADOC=/usr/java/jdk1.5.0_09/bin/javadoc
+BUILD_JAVADOC=${_myJavaHome}/bin/javadoc
 
