@@ -191,11 +191,12 @@ public class SList
  * instead.
  *
  **************************************************************************/
+    
+    @Deprecated
+    public Enumeration elements() {
 
-   public Enumeration elements() {
-
-      return new SListEnumeration(_head);
-   }
+	return new SListEnumeration(_head);
+    }
 
 
 
