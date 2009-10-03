@@ -152,6 +152,7 @@ public class SObjPair
  *
  **************************************************************************/
 
+    @Deprecated
     public Enumeration elements() {
 
 	return new SPairEnumeration(this);

@@ -179,6 +179,7 @@ public class STeaRuntime
  *
  **************************************************************************/
 
+    @Deprecated
     public void setImportDirs(String    dirList,
 			      SCompiler compiler)
 	throws STeaException {
