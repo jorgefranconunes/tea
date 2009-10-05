@@ -1,12 +1,12 @@
 /**************************************************************************
  *
- * Copyright (c) 2001, 2002, 2003, 2004, 2005 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2009 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 /**************************************************************************
  *
- * $Id: STeaRuntime.java,v 1.18 2005/03/09 15:10:36 jfn Exp $
+ * $Id$
  *
  *
  * Revisions:
@@ -37,10 +37,8 @@
 
 package com.pdmfc.tea.runtime;
 
-import java.io.File;
 import java.io.InputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -57,7 +55,8 @@ import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjPair;
 import com.pdmfc.tea.runtime.SObjSymbol;
-import com.pdmfc.tea.runtime.SUtils;
+import com.pdmfc.tea.util.SInputSource;
+import com.pdmfc.tea.util.SInputSourceFactory;
 
 
 
@@ -105,21 +104,38 @@ public class STeaRuntime
     private static final String CORE_IMPORT_DIR =
 	SConfigInfo.getProperty(PROP_CORE_IMPORT_DIR);
 
+
+
+
+    private enum State {
+	INITED, STARTED, RUNNING, ENDED
+    };
+
+
+
+
+    
+    private List<String> _importLocations    = new ArrayList<String>();
+    private List<String> _allImportLocations = null;
+
     // List of modules registered by calls to one of the
     // <code>addModule(...)</code> methods.
-    private ArrayList _modules = new ArrayList();
+    private ArrayList<SModule> _modules = new ArrayList<SModule>();
 
-    // The modules registered by calls to the <code>{@link
-    // #addModule(String)}</code> method. The values are
-    // <code>SModule</code> instances and are indexed by the
-    // respective Java class name. This is used to assure a module is
+    // The modules registered by calls to the addModule(String)}
+    // method. The values are SModule instances and are indexed by the
+    // respective Java class name. This is used to ensure a module is
     // not added twice.
-    private Map _modulesByName = new HashMap();
+    private Map<String,SModule> _modulesByName =
+	new HashMap<String,SModule>();
 
     // Counts packages preventing this Tea interpreter from stoping.
     private int _holdCounter = 0;
 
-    private boolean _needsToRunInitScripts = true;
+    private boolean _isFirstStart = true;
+    private boolean _isFirstExec  = true;
+
+    private State _state = State.INITED;
 
 
 
@@ -147,57 +163,15 @@ public class STeaRuntime
 
 /**************************************************************************
  *
- * Sets the list of directories from where the <code>import</code> Tea
- * function will try to read files.
- *
- * <p>A Tea global variable named <code>TEA_LIBRARY</code> will be
- * created. This variable will contain a list of strings. Each string
- * element is the pathname of one of the directories represented by
- * <code>dirList</code>.</p>
- *
- * <p>For each directory, a Tea script named <code>init.tea</code>
- * will be executed, if it exits.</p>
- *
- * <p>This method must not be invoked between calls to
- * <code>start()</code> and <code>stop</code>. Internally
- * <code>start()</code> is is called just before executing the
- * <code>init.tea</code> scripts and <code>stop()</code> is called
- * just afterwards.</p>
- *
- * @param dirList List of directories. Each directory is separated by
- * a path separator character.
- *
- * @param compiler Tea compiler that will be used to compile the
- * <code>init.tea</code> scripts.
- *
- * @exception com.pdmfc.tea.SException Thrown if there were any
- * problems executing one of the <code>init.tea</code> scripts.
- *
- * @deprecated A call to this method should be replaced by a call to
- * the <code>{@link #setImportDirs(String)}</code> method and using
- * the <code>{@link #execute(SCode)}</code> method.
+ * @deprecated Use method <code>{@link
+ * #setImportLocations(List<String>}</code> instead.
  *
  **************************************************************************/
 
     @Deprecated
-    public void setImportDirs(String    dirList,
-			      SCompiler compiler)
-	throws STeaException {
+    public void setImportDirs(List<String> dirList) {
 
-	STeaException error = null;
-
-	setImportDirs(dirList);
-	start();
-	try {
-	    runInitScripts();
-	} catch (STeaException e) {
-	    error = e;
-	}
-	stop();
-
-	if ( error != null ) {
-	    throw error;
-	}
+	setImportLocations(dirList);
     }
 
 
@@ -205,35 +179,55 @@ public class STeaRuntime
 
 
 /**************************************************************************
- *
- * Utility method for initializing the <code>TEA_LIBRARY</code>
- * variable. This variable will be initialized with a list of
- * strings. These strings are obtained from <code>dirListStr</code> by
- * spliting it using the plataform path separator character as
- * separator between elements.
- *
- * <p>The elements in the list that is stored in the
- * <code>TEA_LIBRARY</code> variable represent directory pathnames or
- * URLs. These directories and URLs will be used to look for files
- * when the Tea <code>import</code> function is called. If a character
- * in a URL is the same as the path separator character
- * (e.g. "<code>:</code>" in unix) then it should be replaced by a
- * "<code>|</code>" character.</p>
- *
- * <p>This method is supposed to be called prior to invoking <code>{@link
- * #execute(SCode)}</code>.</p>
  *
  * @param dirListStr A string representing a list of directory
  * pathnames and URLs. The elements are separated by the platform path
  * separator characeter.
  *
+ * @deprecated Use method <code>{@link
+ * #setImportLocations(List<String>}</code> instead.
+ *
  **************************************************************************/
 
+    @Deprecated
     public void setImportDirs(String dirListStr) {
 
-	SObjPair dirList = SUtils.buildPathList(dirListStr);
+	SObjPair     pairList = SUtils.buildPathList(dirListStr);
+	List<String> dirList  = new ArrayList<String>();
 
-	setImportDirs(dirList);
+	for ( Iterator i=pairList.iterator(); i.hasNext(); ) {
+	    SObjPair pair = (SObjPair)i.next();
+	    String   dir  = (String)pair._car;
+
+	    dirList.add(dir);
+	}
+
+	setImportLocations(dirList);
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * Specifies the list of locations for importing source files from
+ * within the Tea script. The locations can be either file system path
+ * names or URLs.
+ *
+ * <p>This method is intended to be called prior to the first call to
+ * <code>{@link #execute(SCode)}</code>. After that it will have no
+ * effect.</p>
+ *
+ * @param dirList List of strings representing file system path names
+ * or URLs.
+ *
+ **************************************************************************/
+
+    public void setImportLocations(List<String> dirList) {
+
+        _importLocations.clear();
+        _importLocations.addAll(dirList);
     }
 
 
@@ -246,11 +240,9 @@ public class STeaRuntime
  *
  **************************************************************************/
 
-    public void setImportDirs(List dirList) {
+    public void prependImportLocation(String location) {
 
-	SObjPair teaDirList = SUtils.buildPathList(dirList);
-
-	setImportDirs(teaDirList);
+	_importLocations.add(0, location);
     }
 
 
@@ -263,30 +255,9 @@ public class STeaRuntime
  *
  **************************************************************************/
 
-    private void setImportDirs(SObjPair dirList) {
+    public void prependImportLocations(List<String> locations) {
 
-	URL      corePathUrl = STeaRuntime.class.getResource(CORE_IMPORT_DIR);
-	String   corePath    =
-	    (corePathUrl==null) ? null : corePathUrl.toString();
-
-	if ( corePath != null ) {
-	    SObjPair lastElement =
-		new SObjPair(corePath, SObjPair.emptyList());
-
-	    if ( dirList._car == null ) {
-		// dirList is an empty list. It will now contain a
-		// single element.
-		dirList = lastElement;
-	    } else {
-		SObjPair root = dirList;
-		while ( ((SObjPair)root._cdr)._car != null ) {
-		    root = (SObjPair)root._cdr;
-		}
-		root._cdr = lastElement;
-	    }
-	}
-
-	newVar(LIB_VAR, dirList);
+	_importLocations.addAll(0, locations);
     }
 
 
@@ -299,23 +270,9 @@ public class STeaRuntime
  *
  **************************************************************************/
 
-    private void runInitScripts()
-	throws STeaException {
+    public void appendImportLocation(String location) {
 
-	if ( !isDefined(LIB_VAR) ) {
-	    return;
-	}
-
-	Object dirListObj = getVar(LIB_VAR);
-
-	if ( ! (dirListObj instanceof SObjPair) ) {
-	    return;
-	}
-
-	SObjPair  dirList  = (SObjPair) dirListObj;
-	SCompiler compiler = new SCompiler();
-
-	runInitScripts(dirList, compiler);
+	_importLocations.add(location);
     }
 
 
@@ -324,53 +281,13 @@ public class STeaRuntime
 
 /**************************************************************************
  *
- * For each directory in <code>dirList</code>, if there is a Tea
- * script named <code>init.tea</code> in that directory then executes
- * it.
- *
- * @param dirList A Tea list that is suposed to contain only strings
- * representing directory path names.
- *
- * @param compiler The Tea compiler that will be used to compile the
- * Tea scripts just before they get executed.
- *
- * @exception STeaException Thrown by any problem inside the script.
+ * 
  *
  **************************************************************************/
 
-    private void runInitScripts(SObjPair  dirList,
-				SCompiler compiler)
-	throws STeaException {
+    public void appendImportLocations(List<String> locations) {
 
-	_needsToRunInitScripts = false;
-
-	for ( Iterator i=dirList.iterator(); i.hasNext(); ) {
-	    String      urlPrefix = null;
-	    String      fullUrl   = null;
-	    InputStream input     = null;
-	    
-	    try {
-		urlPrefix = (String)i.next();
-	    } catch ( ClassCastException e1) {
-		continue;
-	    }
-	    if ( urlPrefix.startsWith("/") || urlPrefix.startsWith(".") ) {
-		fullUrl = "file:" + urlPrefix + "/" + INIT_FILE;
-	    } else {
-		fullUrl = urlPrefix + "/" + INIT_FILE;
-	    }
-	    try {
-		input = (new URL(fullUrl)).openStream();
-	    } catch (IOException e2) {
-		continue;
-	    }
-	    try {
-		compiler.compile(input, fullUrl).exec(this);
-	    } catch (STeaException e3) {
-		try { input.close(); } catch (IOException e4) {}
-		throw e3;
-	    }
-	}
+	_importLocations.addAll(locations);
     }
 
 
@@ -432,33 +349,20 @@ public class STeaRuntime
     public void addModule(String className)
 	throws STeaException {
 
-	// If was previouslly added, do nothing.
 	if ( _modulesByName.containsKey(className) ) {
+	    // The module was already previouslly added, do nothing.
 	    return;
 	}
 
-	SModule  pkg     = null;
-	String   msg     = null;
-	Object[] fmtArgs = null;
+	SModule pkg = null;
 
 	try {
 	    pkg = (SModule)Class.forName(className).newInstance();
-	} catch (ClassNotFoundException e) {
-	    msg    = "could not load class \"{0}\" while loading module";
-	    fmtArgs = new Object[] { className };
-	} catch (InstantiationException e) {
-	    msg     = "could not instantiate \"{0}\" while loading module";
-	    fmtArgs = new Object[] { className };
-	} catch (IllegalAccessException e) {
-	    msg     = "class \"{0}\" is not accessible, while loading module";
-	    fmtArgs = new Object[] { className };
 	} catch (Throwable e) {
-	    msg     = "failed to load class \"{0}\" - {1} - {2}";
-	    fmtArgs =
-		new Object[] {className,e.getClass().getName(),e.getMessage()};
-	}
-
-	if ( msg != null ) {
+	    String   msg     = "failed to load class \"{0}\" - {1} - {2}";
+	    Object[] fmtArgs = {
+		className,e.getClass().getName(),e.getMessage()
+	    };
 	    throw new STeaException(msg, fmtArgs);
 	}
 
@@ -479,9 +383,11 @@ public class STeaRuntime
 
     public void start() {
 
-	for ( Iterator i=_modules.iterator(); i.hasNext(); ) {
-	    SModule module = (SModule)i.next();
-	    module.start();
+	if ( _state != State.INITED ) {
+	    String msg = "Action not allowed on state " + _state;
+	    throw new IllegalStateException(msg);
+	} else {
+	    _state = State.STARTED;
 	}
     }
 
@@ -506,7 +412,15 @@ public class STeaRuntime
  *
  **************************************************************************/
 
-    public synchronized void stop() {
+    public void stop() {
+
+	if ( _state != State.STARTED ) {
+	    String msg = "Action not allowed on state " + _state;
+	    throw new IllegalStateException(msg);
+	} else {
+	    _state       = State.INITED;
+	    _isFirstExec = true;
+	}
 
 	while ( _holdCounter > 0 ) {
 	    try {
@@ -515,10 +429,224 @@ public class STeaRuntime
 	    }
 	}
 
-	for ( ListIterator i=_modules.listIterator(_modules.size());
+	for ( ListIterator<SModule> i=_modules.listIterator(_modules.size());
 	      i.hasPrevious(); ) {
-	    SModule module = (SModule)i.previous();
+	    SModule module = i.previous();
 	    module.stop();
+	}
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * Signals that this context is no longer to be used. All the packages
+ * that had been loaded so far are signaled. Then they are discarded.
+ *
+ **************************************************************************/
+
+   public void end() {
+
+	if ( _state != State.INITED ) {
+	    String msg = "Action not allowed on state " + _state;
+	    throw new IllegalStateException(msg);
+	} else {
+	    _state = State.ENDED;
+	}
+
+      for ( ListIterator<SModule> i=_modules.listIterator(_modules.size());
+	    i.hasNext(); ) {
+	  SModule module = i.previous();
+	  module.end();
+      }
+      clearAll();
+      _modules.clear();
+      _modulesByName.clear();
+   }
+
+
+
+
+
+/**************************************************************************
+ *
+ * Executes the given Tea program.
+ *
+ * @param code The Tea program to execute.
+ *
+ * @return The result of executing the Tea code. This will be the
+ * value returned by the last function invocation in the program.
+ *
+ * @exception STeaException Thrown if there were any errors while
+ * executing the Tea program. It may also be thrown the first time
+ * this method is called if there were errors executing the
+ * <code>init.tea</code> scripts in the import directories.
+ *
+ **************************************************************************/
+
+    public Object execute(SCode code)
+	throws STeaException {
+
+	if ( _state != State.STARTED ) {
+	    String msg = "Action not allowed on state " + _state;
+	    throw new IllegalStateException(msg);
+	} else {
+	    _state = State.RUNNING;
+	}
+
+	if ( _isFirstExec ) {
+	    _isFirstExec = false;
+	    doStart();
+	}
+
+	Object result = null;
+
+	try {
+	    result = code.exec(this);
+	} finally {
+	    _state = State.STARTED;
+	}
+
+	return result;
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    private void doStart()
+	throws STeaException {
+
+	boolean wasFirstStart = _isFirstStart;
+
+	_isFirstStart = false;
+
+	if ( wasFirstStart ) {
+	    setupLibVar(_importLocations);
+	}
+
+	for ( SModule module : _modules ) {
+	    module.start();
+	}
+
+	if ( wasFirstStart ) {
+	    runInitScripts();
+	}
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    private void setupLibVar(List<String> locations) {
+
+	_allImportLocations = new ArrayList<String>();
+
+	_allImportLocations.addAll(locations);
+	_allImportLocations.add(CORE_IMPORT_DIR);
+
+        SObjPair teaLocations  = buildTeaList(_allImportLocations);
+
+	newVar(LIB_VAR, teaLocations);
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * Creates a Tea list of strings from the given list.
+ *
+ * @param pathList A list where each element is a string representing
+ * a path or URL.
+ *
+ * @return The head of a Tea list.
+ *
+ **************************************************************************/
+
+    private static SObjPair buildTeaList(List<String> pathList) {
+
+	SObjPair empty = SObjPair.emptyList();
+	SObjPair head  = empty;
+	SObjPair elem  = null;
+
+	if ( pathList == null ) {
+	    return empty;
+	}
+
+	for ( String path : pathList ) {
+	    SObjPair node = null;
+
+	    if ( path.length() == 0 ) {
+		continue;
+	    }
+	    node = new SObjPair(path, empty);
+ 
+	    if ( elem == null ) {
+		head = node;
+	    } else {
+		elem._cdr = node;
+	    }
+	    elem = node;
+	}
+
+	return head;
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * For each directory in <code>_importLocations</code>, if there is a
+ * Tea script named <code>init.tea</code> in that directory then
+ * executes it.
+ *
+ **************************************************************************/
+
+    private void runInitScripts()
+	throws STeaException {
+
+        List<String> dirList  = _allImportLocations;
+        SCompiler    compiler = new SCompiler();
+
+	for ( String dirPath : dirList ) {
+            String      path  = INIT_FILE;
+            InputStream input = null;
+
+            try {
+                SInputSource inputSource =
+                    SInputSourceFactory.createInputSource(dirPath, path);
+
+                input = inputSource.openStream();
+            } catch (IOException e) {
+                // The given path does not exist or is not
+                // readable. Never mind.
+            }
+
+            if ( input != null ) {
+                try {
+                    compiler.compile(input, path).exec(this);
+                } finally {
+                    try { input.close(); } catch (IOException e) {}
+                }
+            }
 	}
     }
 
@@ -558,68 +686,6 @@ public class STeaRuntime
 	    _holdCounter--;
 	    notify();
 	}
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * Signals that this context is no longer to be used. All the packages
- * that had been loaded so far are signaled. Then they are discarded.
- *
- **************************************************************************/
-
-   public void end() {
-
-      for ( ListIterator i=_modules.listIterator(_modules.size());
-	    i.hasNext(); ) {
-	  SModule module = (SModule)i.previous();
-	  module.end();
-      }
-      clearAll();
-      _modules.clear();
-      _modulesByName.clear();
-   }
-
-
-
-
-
-/**************************************************************************
- *
- * Executes the given Tea program.
- *
- * The Tea variable <code>TEA_LIBRARY</code> is supposed to have been
- * created and contain a list of strings. This variable is tipically
- * set by a call to the <code>{@link #setImportDirs(String)}</code>
- * method.
- *
- * @param code The Tea program to execute.
- *
- * @return The result of executing the Tea code. This will be the
- * value returned by the last function invocation in the program.
- *
- * @exception STeaException Thrown if there were any errors while
- * executing the Tea program. It may also be thrown the first time
- * this method is called if there were errors executing the
- * <code>init.tea</code> scripts in the import directories.
- *
- **************************************************************************/
-
-    public Object execute(SCode code)
-	throws STeaException {
-
-	Object result = null;
-
-	if ( _needsToRunInitScripts ) {
-	    runInitScripts();
-	}
-
-	result = code.exec(this);
-
-	return result;
     }
 
 

@@ -1,0 +1,55 @@
+TSK-PDMFC-TEA-0044 Support for new URL protocol "resource"
+
+
+
+
+
+Description
+
+The new URL protocol "resource" will be used to access Java
+resources. URLs with the format "resource:/path" will refer to items
+accessed as Java resources. The "path" component in the URL represents
+a Java resource.
+
+It will be possible to use these new URLs wherever a URL is expected
+in the Tea APIs.
+
+
+
+
+
+Analysis
+
+Simple test:
+
+Cd to the root of the development tree.
+
+
+The following will result in the error 'Problems: could not import
+file "import-stub.tea"'
+
+./bin/tsh --library=resource|/tests/lang ./tests/lang/import.tea
+
+
+The following will work as expected.
+
+./bin/tsh --classpath=./ --library=resource|/tests/lang ./tests/lang/import.tea
+
+
+
+
+
+Implementation
+
+New/modified files:
+
+src/com/pdmfc/tea/util/SInputSource.java
+src/com/pdmfc/tea/util/SInputSourceFactory.java
+
+
+
+
+History
+
+2009/10/03 - jfn - Started backporting from the main trunk to the
+3.2.x branch.

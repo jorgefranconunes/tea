@@ -1,18 +1,20 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2009 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 /**************************************************************************
  *
- * $Id: SUrlInput.java,v 1.3 2002/08/02 17:47:24 jfn Exp $
+ * $Id$
  *
  *
  * Revisions:
  *
- * 2001/09/16
- * Created. (jfn)
+ * 2007/07/21 Now uses an SInputSource to read from a file or
+ * URL. (TSK-PDMFC-TEA-0044) (jfn)
+ *
+ * 2001/09/16 Created. (jfn)
  *
  **************************************************************************/
 
@@ -20,7 +22,6 @@ package com.pdmfc.tea.modules.io;
 
 import java.io.InputStream;
 import java.io.IOException;
-import java.net.URL;
 
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.modules.io.SInput;
@@ -33,6 +34,8 @@ import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypes;
+import com.pdmfc.tea.util.SInputSource;
+import com.pdmfc.tea.util.SInputSourceFactory;
 
 
 
@@ -133,16 +136,15 @@ public class SUrlInput
 	String      url   = STypes.getString(args,2);
 	InputStream input = null;
 
-	if ( url.startsWith("/") || url.startsWith(".") ) {
-	    url = "file:" + url;
-	}
-
 	try {
-	    input = (new URL(url)).openStream();
+            SInputSource inputSource =
+                SInputSourceFactory.createInputSource(url);
+
+            input = inputSource.openStream();
 	} catch (IOException e) {
-	    throw new SRuntimeException("url '" + url +
-					"' could not be opened for reading - "
-					+ e.getMessage());
+            String   msg     = "URL \"{0}\" could not be opened for reading";
+            Object[] fmtArgs = { url, e.getMessage() };
+	    throw new SRuntimeException(msg, fmtArgs);
 	}
 
 	open(input);

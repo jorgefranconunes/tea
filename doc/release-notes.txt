@@ -1,4 +1,24 @@
-Release Notes for Tea 3
+Release Notes for Tea 3.2
+
+
+
+
+
+2009/10/05 Support for new URL protocol "resource" (TSK-PDMFC-TEA-0044)
+
+There is now support for URLs in the format "resource:/path". These
+URLs refer to items accessed as Java resources. The path refers to a
+Java resource.
+
+All Tea functions that expect a URL can handle this new protocol. In
+addition the Tea library paths passed to "tsh" and
+"com.pdmfc.tea.apps.STeaShell" (used by the "import" function) can
+also use this new protocol.
+
+This feature makes it simple and easy to use Tea code embeded in JAR
+files. This is particulrarly usefull for applications deployled
+through Java Web Start and Java Plugin.
+
 
 2009/04/08 *** Released the 3.2.4 at SVN version 51.
 

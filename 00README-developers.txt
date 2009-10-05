@@ -115,7 +115,7 @@ Execute the Makefile target to build the release archive:
     make release
 
 The release bundle is named "tea-3.2.Z.tar.gz" and should be available
-in working copy root.
+at the working copy root.
 
 
 3. Perform testing on the release.
