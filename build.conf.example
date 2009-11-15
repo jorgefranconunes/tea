@@ -27,7 +27,7 @@ BUILD_JAVAC="${_myJavaHome}/bin/javac -Xlint -Xlint:-unchecked -Xlint:-serial"
 # The command for creating a JAR file. It is expected to accept the same
 # command line options as Sun's JDK jar utility.
 #
-BUILD_JAR=jar
+BUILD_JAR=${_myJavaHome}/bin/jar
 
 #
 # The command for building javadoc documentation from source file. It is
