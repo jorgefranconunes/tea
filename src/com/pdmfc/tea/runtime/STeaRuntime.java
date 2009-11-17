@@ -197,7 +197,7 @@ public class STeaRuntime
 	List<String> dirList  = new ArrayList<String>();
 
 	for ( Iterator i=pairList.iterator(); i.hasNext(); ) {
-	    String   dir  = (String)i.next();
+	    String dir = (String)i.next();
 
 	    dirList.add(dir);
 	}

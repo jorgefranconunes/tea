@@ -1,12 +1,12 @@
 /**************************************************************************
  *
- * Copyright (c) 2001, 2002, 2003, 2004 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2009 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 /**************************************************************************
  *
- * $Id: STeaShell.java,v 1.12 2005/11/04 05:50:04 jfn Exp $
+ * $Id$
  *
  *
  * Revisions:
@@ -52,8 +52,11 @@ import com.pdmfc.tea.runtime.SRuntimeException;
  *
  * Implements a Tea shell. 
  *
+ * @Deprecated Use <code>{@link STeaLauncher}</code> instead.
+ *
  **************************************************************************/
 
+@Deprecated
 public class STeaShell
     extends Object {
 
