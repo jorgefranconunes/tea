@@ -790,7 +790,7 @@ public class SModuleReflect
  	    throw new SRuntimeException("method '" +
   					mtd.getName() + "' is not static");
 	} catch (InvocationTargetException e) {
- 	    throw new SRuntimeException(e);
+ 	    throw new SRuntimeException(e.getCause());
  	}
 
 	// convert values back to tea 
