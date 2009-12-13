@@ -1,0 +1,6 @@
+define imgDirJObj [java-new-instance java.io.File "aDir"]
+# Create a temp file for the image that will be deleted afterwards
+define imgTmpFileJObj [java-exec-method java.io.File createTempFile \
+            [[new TDate] format "'itssc_'yyyyMMddHHmmss'.'S'_'"]  \
+            ".png" $imgDirJObj]
+
