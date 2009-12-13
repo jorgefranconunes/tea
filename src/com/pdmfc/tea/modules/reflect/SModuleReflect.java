@@ -878,7 +878,7 @@ public class SModuleReflect
 	} catch (InstantiationException e) {
 	    throw new SRuntimeException(e);
 	} catch (InvocationTargetException e) {
-	    throw new SRuntimeException(e);
+	    throw new SRuntimeException(e.getCause());
 	} catch (IllegalArgumentException e) {
 	    throw new SRuntimeException(args[0],
 					"problems calling constructor for '" + 
