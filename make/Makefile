@@ -1,6 +1,6 @@
 ###########################################################################
 #
-# Copyright (c) 2001-2009 PDM&FC, All Rights Reserved.
+# Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
 #
 ###########################################################################
 
@@ -19,6 +19,8 @@
 # BUILD_BASE_DIR - 
 #
 # BUILD_VERSION - 
+#
+# BUILD_JAVA_HOME - 
 #
 # BUILD_JAVAC - 
 #
@@ -315,6 +317,7 @@ javadoc :
 # Builds the Tea documentation extracted from the source files.
 teadoc : jar
 	$(MKDIR) $(TEADOC_DIR)
+	if [ ! -f ./config/tea-install.conf ] ; then ./bin/setup --java-home=$(BUILD_JAVA_HOME) ; fi
 	$(TEADOC) \
 		--header=$(TEADOC_HEADER) \
 		--footer=$(TEADOC_FOOTER) \

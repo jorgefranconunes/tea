@@ -44,6 +44,10 @@ be used during the build. It is a file with Bourne shell syntax and it
 must define the variables described bellow. There is a
 "build.conf.example" file with example values for these variables.
 
+BUILD_JAVA_HOME - The java home of the JRE to be used for seting up
+the development environment as a Tea installation. This is required in
+order to run the "teadoc" tool.
+
 BUILD_JAVAC - The command that invokes the Java compiler and is used
 to compile Java source files during build. It must accept the "-d" and
 "-classpath" options just like Sun's JDK javac compiler.

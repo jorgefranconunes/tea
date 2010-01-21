@@ -1,6 +1,6 @@
 ###########################################################################
 #
-# Copyright (c) 2008 PDM&FC, All Rights Reserved.
+# Copyright (c) 2008-2010 PDM&FC, All Rights Reserved.
 #
 ###########################################################################
 
@@ -29,7 +29,7 @@ include make/Makefile
 
 
 
-Makefile.conf : build.conf config/tea-core.conf
+Makefile.conf : build.conf config/tea-core.conf config/Makefile.conf.template
 	./bin/build-configure
 
 build.conf :

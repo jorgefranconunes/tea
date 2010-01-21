@@ -1,6 +1,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 
-%% Copyright (c) 2008 PDM&FC, All Rights Reserved.
+%% Copyright (c) 2008-2010 PDM&FC, All Rights Reserved.
 %% 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -18,6 +18,8 @@
 %%
 %% BUILD_VERSION - 
 %%
+%% BUILD_JAVA_HOME - 
+%%
 %% BUILD_JAVAC - 
 %%
 %% BUILD_JAR - 
@@ -34,7 +36,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ###########################################################################
 #
-# Copyright (c) 2008 PDM&FC, All Rights Reserved.
+# Copyright (c) 2008-2010 PDM&FC, All Rights Reserved.
 #
 ###########################################################################
 
@@ -51,6 +53,7 @@
 
 BUILD_BASE_DIR       = $BUILD_BASE_DIR
 BUILD_VERSION        = $BUILD_VERSION
+BUILD_JAVA_HOME      = $BUILD_JAVA_HOME
 BUILD_JAVAC          = $BUILD_JAVAC
 BUILD_JAR            = $BUILD_JAR
 BUILD_JAVADOC        = $BUILD_JAVADOC
