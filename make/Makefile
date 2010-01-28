@@ -31,7 +31,7 @@
 #
 # Revisions:
 #
-# 2008/08/29 Slight refactoring to use new paramatere names. (jfn)
+# 2008/08/29 Slight refactoring to use new paramater names. (jfn)
 #
 # 2005/02/15 Refactored in order not to need the "jdeps" tool. (jfn)
 #
