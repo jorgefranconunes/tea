@@ -1,22 +1,22 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 /**************************************************************************
  *
- * $Id: SRuntimeException.java,v 1.5 2002/08/03 17:53:30 jfn Exp $
+ * $Id$
  *
  *
  * Revisions:
  *
- * 2002/08/03
- * The list of messages is now a java.util.List, instead of an
- * SList. (jfn)
+ * 2010/01/28 Minor code refactorings to properly use generics. (jfn)
  *
- * 2001/05/12
- * Created. (jfn)
+ * 2002/08/03 The list of messages is now a java.util.List, instead of
+ * an SList. (jfn)
+ *
+ * 2001/05/12 Created. (jfn)
  *
  **************************************************************************/
 
@@ -24,7 +24,6 @@ package com.pdmfc.tea.runtime;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import com.pdmfc.tea.STeaException;
@@ -49,7 +48,7 @@ public class SRuntimeException
 
 
 
-    private List _msgList = new ArrayList();
+    private List<String> _msgList = new ArrayList<String>();
 
 
 
@@ -199,10 +198,11 @@ public class SRuntimeException
 
    public String getFullMessage() {
 
-      StringBuffer message = new StringBuffer();
+      StringBuilder message = new StringBuilder();
 
-      for ( Iterator i=_msgList.iterator(); i.hasNext(); ) {
-	 message.append((String)i.next() + "\n");
+      for ( String line : _msgList ) {
+          message.append(line);
+          message.append("\n");
       }
 
       return message.toString();

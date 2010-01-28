@@ -395,7 +395,7 @@ class SFunctionImport
                 // The path does not exist or is not accessible.
             }
 
-            // If the imput has been opened, try to compile and
+            // If the input has been opened, try to compile and
             // execute the file.
             if ( input != null ) {
                 // Record the import timestamp right now to prevent

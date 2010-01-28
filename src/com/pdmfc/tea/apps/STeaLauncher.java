@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2009 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -11,7 +11,7 @@
  *
  * Revisions:
  *
- * 2009/1013 Backported to the 3.2.x branch. (TSK-PDMFC-TEA-0044) (jfn)
+ * 2009/10/13 Backported to the 3.2.x branch. (TSK-PDMFC-TEA-0044) (jfn)
  *
  * 2009/03/11 Improved documentation. (jfn)
  *

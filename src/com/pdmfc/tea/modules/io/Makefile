@@ -1,12 +1,12 @@
 ###########################################################################
 #
-# Copyright (c) 2005 PDM&FC, All Rights Reserved.
+# Copyright (c) 2005-2010 PDM&FC, All Rights Reserved.
 #
 ###########################################################################
 
 ###########################################################################
 #
-# $Id: Makefile,v 1.1 2005/02/15 17:42:45 jfn Exp $
+# $Id$
 #
 # Makefile for the "com.pdmfc.tea.modules.io" package.
 #
@@ -25,7 +25,9 @@
 
 
 
-SOURCES = \
+PACKAGE_DIR := com/pdmfc/tea/modules/io
+
+SOURCES := \
 	SFileInput.java \
 	SFileOutput.java \
 	SIOException.java \

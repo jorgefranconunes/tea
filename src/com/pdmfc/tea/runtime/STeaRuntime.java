@@ -361,7 +361,7 @@ public class STeaRuntime
 	} catch (Throwable e) {
 	    String   msg     = "failed to load class \"{0}\" - {1} - {2}";
 	    Object[] fmtArgs = {
-		className,e.getClass().getName(),e.getMessage()
+		className,e.getClass().getName(), e.getMessage()
 	    };
 	    throw new STeaException(msg, fmtArgs);
 	}
@@ -496,14 +496,14 @@ public class STeaRuntime
 	    _state = State.RUNNING;
 	}
 
-	if ( _isFirstExec ) {
-	    _isFirstExec = false;
-	    doStart();
-	}
-
 	Object result = null;
 
 	try {
+            if ( _isFirstExec ) {
+                _isFirstExec = false;
+                doStart();
+            }
+
 	    result = code.exec(this);
 	} finally {
 	    _state = State.STARTED;

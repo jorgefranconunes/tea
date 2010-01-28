@@ -1,14 +1,16 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 /**************************************************************************
  *
- * $Id: SCompiler.java,v 1.18 2003/07/10 18:06:54 jfn Exp $
+ * $Id$
  *
  * Revisions:
+ *
+ * 2010/01/28 Minor refactorings to properly use generics. (jfn)
  *
  * 2003/07/10 Added support for long integral literals
  * (e.g. 123L). (jfn)
@@ -66,6 +68,9 @@ import com.pdmfc.tea.compiler.SWordVarSubst;
 
 public class SCompiler
     extends Object {
+
+
+
 
 
    private SStream _in       = null;
@@ -385,11 +390,11 @@ public class SCompiler
  *
  **************************************************************************/
 
-   private List getList(int line)
+   private List<SWord> getList(int line)
          throws IOException,
 	        SCompileException {
 
-      List list = new ArrayList();
+      List<SWord> list = new ArrayList<SWord>();
 
       skipToWordInList();
       while ( !atEndOfList() ) {

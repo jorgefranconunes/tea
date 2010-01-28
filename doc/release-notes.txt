@@ -16,7 +16,7 @@ addition the Tea library paths passed to "tsh" and
 also use this new protocol.
 
 This feature makes it simple and easy to use Tea code embeded in JAR
-files. This is particulrarly usefull for applications deployled
+files. This is particulrarly usefull for applications deployed
 through Java Web Start and Java Plugin.
 
 

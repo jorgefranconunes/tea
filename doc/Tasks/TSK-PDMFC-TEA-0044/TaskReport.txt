@@ -17,7 +17,7 @@ numa aplicacao Java Web Start.
 
 Analysis
 
-As seguintes funcionalidades terãoo de ser introduzidas:
+As seguintes funcionalidades terão de ser introduzidas:
 
 1. Possibilidade de especificar como arguments de linha de comando a
 lista de directorias/URLs usadas como TEA_LIBRARY.

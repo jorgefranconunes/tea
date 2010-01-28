@@ -147,8 +147,8 @@ public class SFileOutput
 	}
 
 	String           fileName  = STypes.getString(args,2);
-	boolean          append    = (numArgs==3) ?
-	    false : STypes.getBoolean(args,3).booleanValue();
+	boolean          append    =
+            (numArgs==3) ? false : STypes.getBoolean(args,3).booleanValue();
 	FileOutputStream outStream = null;
 
 	try {

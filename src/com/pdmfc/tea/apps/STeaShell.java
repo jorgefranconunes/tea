@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2009 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -10,6 +10,11 @@
  *
  *
  * Revisions:
+ *
+ * 2010/01/28 Minor refactorings to properly use generics. (jfn)
+ *
+ * 2009/10/13 This class is now deprecated. It will be removed in a
+ * future release. (jfn)
  *
  * 2004/04/02 Slight API refactoring to make it possible for this
  * class to be used from inside Java code. (jfn)
@@ -94,7 +99,7 @@ public class STeaShell
     // the Tea context as the value of the "argv0" variable.
     private String _scriptFile = null;
 
-    private List _importDirList = new ArrayList();
+    private List<String> _importDirList = new ArrayList<String>();
 
 
 

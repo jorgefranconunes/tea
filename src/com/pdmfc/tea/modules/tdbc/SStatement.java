@@ -1,15 +1,17 @@
 /**************************************************************************
  *
- * Copyright (c) 2001, 2002, 2003 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 /**************************************************************************
  *
- * $Id: SStatement.java,v 1.15 2006/10/11 14:19:41 jpsl Exp $
+ * $Id$
  *
  *
  * Revisions:
+ *
+ * 2010/01/28 Minor refactorings to properly use generics. (jfn)
  *
  * 2006/08/02 Added TeaDoc Since to get/setFetchSize. (jpsl)
  *
@@ -89,13 +91,12 @@ public class SStatement
     private static final String     CLASS_NAME   = "TStatement";
     private static final SObjSymbol CLASS_NAME_S = SObjSymbol.addSymbol(CLASS_NAME);
 
-    private   Statement _statement   = null;
-    protected List      _resultSets  = new ArrayList();
+    private   Statement        _statement   = null;
+    protected List<SResultSet> _resultSets  = new ArrayList<SResultSet>();
 
-    /**
-     * Listeners for the "closedEvent".
-     */
-    private List _listeners  = new ArrayList();
+    // Listeners for the "closedEvent".
+    private List<SClosedEventListener> _listeners  =
+        new ArrayList<SClosedEventListener>();
 
 
 
@@ -807,8 +808,7 @@ public class SStatement
     private void fireClosedEvent() {
 
 	for ( int i=_listeners.size(); (i--)>0; ) {
-	    SClosedEventListener lstnr =
-		(SClosedEventListener)_listeners.get(i);
+	    SClosedEventListener lstnr = _listeners.get(i);
 
 	    lstnr.closedEvent(this);
 	}
@@ -825,6 +825,13 @@ public class SStatement
  **************************************************************************/
 
     public void closedEvent(Object closedObject) {
+
+        if ( !(closedObject instanceof SResultSet) ) {
+            String msg =
+                "Expected a " + SResultSet.class +
+                " and got a " + closedObject.getClass();
+            throw new IllegalArgumentException(msg);
+        }
 
 	_resultSets.remove(closedObject);
     }

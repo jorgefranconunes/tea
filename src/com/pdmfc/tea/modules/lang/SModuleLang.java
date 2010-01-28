@@ -1,15 +1,17 @@
 /**************************************************************************
  *
- * Copyright (c) 2001, 2002, 2003, 2004 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 /**************************************************************************
  *
- * $Id: SModuleLang.java,v 1.37 2006/12/04 14:55:09 jpsl Exp $
+ * $Id$
  *
  *
  * Revisions:
+ *
+ * 2010/01/28 Minor refactorings to properly use generics. (jfn)
  *
  * 2005/10/25 Added the implementation of the function
  * "tea-set-system-property". (jfn)
@@ -53,8 +55,9 @@ import java.io.InputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Properties;
 import java.util.StringTokenizer;
@@ -141,7 +144,8 @@ public class SModuleLang
 
     // These are used by the implementation of the Tea "load-function"
     // function.
-    private Hashtable _funcs = new Hashtable();
+    private Map<String,SObjFunction> _funcs =
+        new HashMap<String,SObjFunction>();
 
     // THashtable containing the Java system properties.
     private SHashtable _systemProps = null;
@@ -1358,11 +1362,16 @@ public class SModuleLang
 	Iterator     it         = paramList.iterator();
 
 	for ( int i=0; it.hasNext(); i++) {
+            Object paramName = it.next();
+
 	    try {
-		parameters[i] = (SObjSymbol)it.next();
+		parameters[i] = (SObjSymbol)paramName;
 	    } catch (ClassCastException e1) {
-		throw new STypeException(arg0,
-					 "formal parameters must be symbols");
+                String msg = "formal parameter {0} must be a symbol, not a {1}";
+                Object[] fmtArgs = {
+                    String.valueOf(i), STypes.getTypeName(paramName)
+                };
+		throw new STypeException(arg0, msg, fmtArgs);
 	    }
 	}
 
@@ -1889,7 +1898,7 @@ public class SModuleLang
  *
  **************************************************************************/
 
-    private static Object typeCheck(Class        type,
+    private static Object typeCheck(Class<?>     type,
 				    SObjFunction func,
 				    SContext     context,
 				    Object[]     args)
@@ -2602,7 +2611,7 @@ public class SModuleLang
 
 	String       className = STypes.getString(args,1);
 	Class        javaClass = null;
-	SObjFunction teaFunc   = (SObjFunction)_funcs.get(className);
+	SObjFunction teaFunc   = _funcs.get(className);
 	String       msg       = null;
 
 	if ( teaFunc == null ) {

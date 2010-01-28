@@ -1,3 +1,32 @@
+2010/01/28
+
+Resumo:
+
+1. 
+
+
+
+
+
+Improved support for text encodings
+
+Pretende-se que sejam suportados de forma natural os text encodings da
+plataforma Java.
+
+
+Compilador.
+
+com.pdmfc.tea.compiler.SCompiler
+
+
+Leitura de ficheiros.
+
+Escrita de ficheiros.
+
+
+
+
+
 2009/02/12
 
 Resumo:
