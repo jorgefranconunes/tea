@@ -19,7 +19,7 @@ be added in this branch. Only bug fixes.
 Pre-Requisites
 ==============
 
-1. Compiler for Java 1.5 or later.
+1. Compiler for Java 1.6 or later.
 
 
 

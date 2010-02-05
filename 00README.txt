@@ -104,10 +104,9 @@ Installing and Configuring Tea on a Microsoft Windows Environment
 
 To run the Tea interpreter under Windows you will need to have a Java
 virtual machine installed on your system. You can download one for the
-Windows environment (95, 98, 2000, NT4) from
-"http://java.sun.com/j2se/1.3/download-windows.html". After installing
-it (if you had not one already installed) follow the instructions
-bellow in order to install the Tea runtime environment.
+Windows environment (95, 98, 2000, NT4) from "http://java.sun.com/j2se/".
+After installing it (if you had not one already installed) follow the
+instructions bellow in order to install the Tea runtime environment.
 
 
 1. Download the latest Tea version from
