@@ -4,6 +4,52 @@ Release Notes for Tea 3.2
 
 
 
+2010/02/07 Removed dependency on the Xerces 1.4.4 library.
+
+Support for XML parsing is now implemented on top of the SAX library
+native to the JRE.
+
+
+2009/10/13 Improved handling of CLI arguments.
+
+There is a new class "com.pdmfc.tea.apps.STeaShell" used to launch a
+Tea program read from a file. This class provided enhanced command
+line options, as compared with the now deprected
+"com.pdmfc.tea.apps.STeaShell" class.
+
+This change makes it possible to use "STeaLauncher" as a Tea program
+launcher in a Java Web Start and Java Plugin environments.
+
+The following command line options are supported:
+
+--library=DIR_LIST
+	List of directories to be searched by the "import"
+        function. Elements are separated with a the path separator
+        character (":" in unix, ";" in windows). Each element can be a
+        file system path or an URL. In the case of an URL the
+        character "|" must be used instead of ":", to differentiate it
+        from the unix path separator character. This option may be
+        specified multiple times with the effect of concatening the
+        path elements in the given order.
+
+--library-item=PATH
+	Adds an item to the end of the list of directories to be
+        searched by the "import" function. The path may be either a
+        file system path or an URL. This option may be specified
+        multiple times. Contrary to the "--library" option, a URL may
+        contain the ":" character.
+
+--script=PATH
+	The Tea script to be executed. If not specified or if it
+        equals "-" then the script is read from the process standard
+        input stream.
+
+--
+	Signals that there are no more options. All remaining
+        arguments will be passed as command line arguments to the Tea
+        script.
+
+
 2009/10/05 Support for new URL protocol "resource" (TSK-PDMFC-TEA-0044)
 
 There is now support for URLs in the format "resource:/path". These
@@ -16,8 +62,8 @@ addition the Tea library paths passed to "tsh" and
 also use this new protocol.
 
 This feature makes it simple and easy to use Tea code embeded in JAR
-files. This is particulrarly usefull for applications deployed
-through Java Web Start and Java Plugin.
+files. This is particularly usefull for applications deployed through
+Java Web Start and Java Plugin.
 
 
 2009/04/08 *** Released the 3.2.4 at SVN version 51.

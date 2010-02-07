@@ -1,3 +1,26 @@
+2010/02/07
+
+Resumo:
+
+1. 
+
+
+
+
+
+Remoção de dependência de Xerces
+
+Backporting das alterações feitas no trunk para o branch 3.x.2
+
+src/com/pdmfc/tea/modules/xml/SXmlParser.java
+src/com/pdmfc/tea/modules/xml/SXmlParserParse.java
+apps/teadoc/lib/tea/doc-html.tea
+apps/teadoc/lib/tea/DocProducer.tea
+
+
+
+
+
 2010/01/28
 
 Resumo:

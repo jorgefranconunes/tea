@@ -70,9 +70,12 @@ class DocProducer (
 
 method DocProducer constructor ( nativeParser ) {
 
-    set! _docSet   [new DocSet]
-    $_docSet setNativeParser $nativeParser
     set! _mustStop $false
+    set! _docSet   [new DocSet]
+
+    if { not-null? $nativeParser } {
+        $_docSet setNativeParser $nativeParser
+    }
 }
 
 

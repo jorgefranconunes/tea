@@ -1,3 +1,3 @@
 Manifest-Version: 1.0
-Main-Class: com.pdmfc.tea.apps.STeaShell
-Class-Path: gnu-regexp-1.0.8.jar xerces-1.4.4.jar
+Main-Class: com.pdmfc.tea.apps.STeaLauncher
+Class-Path: gnu-regexp-1.0.8.jar
