@@ -2,7 +2,8 @@
 
 Resumo:
 
-1. 
+1. Removed dependency on the Xerces 1.4.4 library. Changed were
+backported from the trunk.
 
 
 
