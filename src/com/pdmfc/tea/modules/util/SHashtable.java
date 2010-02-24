@@ -140,7 +140,7 @@ public class SHashtable
  *
  **************************************************************************/
 
-    public Map getInternalMap() {
+    public Map<Object,Object> getInternalMap() {
 
 	return _hashtable;
     }

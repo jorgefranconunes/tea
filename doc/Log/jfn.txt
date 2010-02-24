@@ -26,7 +26,8 @@ apps/teadoc/lib/tea/DocProducer.tea
 
 Resumo:
 
-1. 
+1. Minor refactoring of the build environment to better follow current
+conventons (i.e. like the I*Tea build environment).
 
 
 

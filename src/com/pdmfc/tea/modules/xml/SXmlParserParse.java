@@ -398,8 +398,8 @@ class SXmlParserParse
 				Attributes attribs)
 	throws SAXException {
 
-	SHashtable attribsTable = null;
-	Map        tbl          = null;
+	SHashtable         attribsTable = null;
+	Map<Object,Object> tbl          = null;
 
 	try {
 	    attribsTable = SHashtable.newInstance(_context);

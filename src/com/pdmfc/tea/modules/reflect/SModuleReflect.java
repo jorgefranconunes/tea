@@ -258,7 +258,8 @@ public class SModuleReflect
 
 
 
-    private static Map _primitiveTypes = new HashMap();
+    private static Map<String,Class> _primitiveTypes =
+        new HashMap<String,Class>();
 
     static {
 	_primitiveTypes.put(Boolean.TYPE.getName(),   Boolean.TYPE);

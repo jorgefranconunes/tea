@@ -69,8 +69,6 @@ import com.pdmfc.tea.compiler.SCompiler;
 import com.pdmfc.tea.modules.SModule;
 import com.pdmfc.tea.modules.SModuleMath;
 import com.pdmfc.tea.modules.io.SInput;
-import com.pdmfc.tea.modules.lang.SLockManager;
-import com.pdmfc.tea.modules.lang.SShared;
 import com.pdmfc.tea.modules.util.SHashtable;
 import com.pdmfc.tea.runtime.SBreakException;
 import com.pdmfc.tea.runtime.SContext;
@@ -130,13 +128,14 @@ public class SModuleLang
     // Used by the implementation of the Tea "system" function.
     private static final int BUFFER_SIZE = 4096;
 
-    private static SContext     _sharedContext = null;
-    private static SLockManager _lockManager   = null;
-
-    private STeaRuntime _globalContext = null;
-
     private static final String PROP_TEA_VERSION = "com.pdmfc.tea.version";
     private static final String TEA_VERSION_VAR  = "TEA_VERSION";
+
+
+
+
+
+    private STeaRuntime _globalContext = null;
 
     // These are used by the implementation of the Tea "source"
     // function.
@@ -606,38 +605,7 @@ public class SModuleLang
 				}
 			    });
 
-	context.addFunction("tea-lock-acquire",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionAcquire(func, context,args);
-				}
-			    });
-
-	context.addFunction("tea-lock-release",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionRelease(func, context,args);
-				}
-			    });
-
 	context.addFunction("import", new SFunctionImport(_globalContext));
-
-	SContext shared = getSharedContext();
-
-	context.addFunction("tea-shared-define",
-			    SShared.functionDefine(shared));
-	context.addFunction("tea-shared-defined?",
-			    SShared.functionIsDefined(shared));
-	context.addFunction("tea-shared-set!",
-			    SShared.functionSet(shared));
-	context.addFunction("tea-shared-get",
-			    SShared.functionGet(shared));
 
 	context.addFunction("tea-get-system-property",
 			    new SObjFunction() {
@@ -683,50 +651,9 @@ public class SModuleLang
  **************************************************************************/
 
       public void stop() {
-
-	 getLockManager().releaseAllLocks(this);
+          
+          // Nothing to do.
       }
-
-
-
-
-
-/**************************************************************************
- *
- * Fetches the context used to store the variables shared among all
- * the interpreters in the JVM. The context is created the first time
- * this method is called.
- *
- **************************************************************************/
-
-    private static synchronized SContext getSharedContext() {
-
-	if ( _sharedContext == null ) {
-	    _sharedContext = new SContext() {
-		};
-	}
-	return _sharedContext;
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * Creates the lock manager used among all interpreters in the
- * JVM. The lock manager is created the first time this method is
- * called.
- *
- **************************************************************************/
-
-    private static synchronized SLockManager getLockManager() {
-
-	if ( _lockManager == null ) {
-	    _lockManager = new SLockManager();
-	}
-	return _lockManager;
-    }
 
 
 
@@ -3469,133 +3396,6 @@ public class SModuleLang
 
       return result;
    }
-
-
-
-
-
-//* 
-//* <TeaFunction name="tea-lock-acquire"
-//* 		arguments="lockName"
-//*             module="tea.lang">
-//*
-//* <Overview>
-//* Acquires a lock to enter an exclusive code section.
-//* </Overview>
-//*
-//* <Parameter name="lockName">
-//* Symbol identifying the lock being acquired.
-//* </Parameter>
-//*
-//* <Description>
-//* After returning from this function any other calls to
-//* <Func name="tea-lock-aquire"/> for the same <Arg name="lockName"/>
-//* will block until the lock is released by calling
-//* <Func name="tea-lock-release"/>. The locks are global to the
-//* JVM meaning that they are meant to grant exclusive
-//* access to resources that may be used by all running threads.
-//* <P>
-//* Note that a deadlock will occur if you make two successive calls to
-//* <Func name="tea-lock-acquire"/> for the same lock in the same
-//* thread without calling <Func name="tea-lock-release"/> in between.
-//* </P>
-//* <P>
-//* The functions <Func name="tea-lock-acquire"/>,
-//* <Func name="tea-lock-release"/> are only useful within code
-//* that may be executing by more than one interpreter, where each
-//* interpreter is running on a separate thread.
-//* </P>
-//* </Description>
-//* 
-//* </TeaFunction>
-//* 
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    private Object functionAcquire(SObjFunction obj,
-				  SContext     context,
-				  Object[]     args)
-	throws STeaException {
-
-	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], MSG_NUM_ARGS);
-	}
-
-	SObjSymbol   lockName    = STypes.getSymbol(args, 1);
-	SLockManager lockManager = getLockManager();
-
-	try {
-	    lockManager.acquireLock(lockName, this);
-	} catch (InterruptedException e) {
-	    throw new SRuntimeException(MSG_INTERRUPTED);
-	}
-
-	return SObjNull.NULL;
-    }
-
-
-
-
-
-//* 
-//* <TeaFunction name="tea-lock-release"
-//* 		arguments="lockName"
-//*             module="tea.lang">
-//*
-//* <Overview>
-//* Releases a previously acquired lock.
-//* </Overview>
-//*
-//* <Parameter name="lockName">
-//* Symbol identifing the lock being released.
-//* </Parameter>
-//*
-//* <Description>
-//* Releases a lock previously acquired by calling
-//* <Func name="tea-lock-acquire"/>. One of the threads
-//* that were blocked on <Arg name="lockName"/> will resume
-//* execution.
-//* <P>
-//* It is illegal to release a lock that was not previously acquired
-//* by the current thread. A runtime error will occur if this happens.
-//* </P>
-//* <P>
-//* The functions <Func name="tea-lock-release"/>,
-//* <Func name="tea-lock-acquire"/> are only useful within code
-//* that may be executing by more than one interpreter, where each
-//* interpreter is running on a separate thread.
-//* </P>
-//* </Description>
-//* 
-//* </TeaFunction>
-//* 
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    private Object functionRelease(SObjFunction obj,
-				   SContext     context,
-				   Object[]     args)
-	throws STeaException {
-
-	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], MSG_NUM_ARGS);
-	}
-
-	SObjSymbol   lockName    = STypes.getSymbol(args, 1);
-	SLockManager lockManager = getLockManager();
-
-	lockManager.releaseLock(lockName);
-
-	return SObjNull.NULL;
-    }
 
 
 

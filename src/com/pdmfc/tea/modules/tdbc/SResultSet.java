@@ -1,12 +1,12 @@
 /**************************************************************************
  *
- * Copyright (c) 2001, 2002, 2003 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 /**************************************************************************
  *
- * $Id: SResultSet.java,v 1.11 2006/10/11 14:19:41 jpsl Exp $
+ * $Id$
  *
  *
  * Revisions:
@@ -22,10 +22,12 @@ package com.pdmfc.tea.modules.tdbc;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Date;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.modules.tdbc.SClosedEventListener;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.tos.STosUtil;
@@ -98,7 +100,8 @@ public class SResultSet
     private boolean           _hasRows    = false;
 
     // Listeners for the "closedEvent".
-    private Vector _listeners  = new Vector();
+    private List<SClosedEventListener> _listeners  =
+        new ArrayList<SClosedEventListener>();
 
 
 
@@ -215,7 +218,7 @@ public class SResultSet
 
     public void addClosedListener(SClosedEventListener listener) {
 
-	_listeners.addElement(listener);
+	_listeners.add(listener);
     }
 
 
@@ -1051,7 +1054,7 @@ public class SResultSet
 	_resultSet.close();
 	_resultSet = null;
 	fireClosedEvent();
-	_listeners.removeAllElements();
+	_listeners.clear();
     }
 
 
@@ -1068,7 +1071,7 @@ public class SResultSet
     private void fireClosedEvent() {
 
 	for ( int i=_listeners.size(); (i--)>0; ) {
-	    SClosedEventListener lstnr = (SClosedEventListener)_listeners.elementAt(i);
+	    SClosedEventListener lstnr = _listeners.get(i);
 	    lstnr.closedEvent(this);
 	}
     }

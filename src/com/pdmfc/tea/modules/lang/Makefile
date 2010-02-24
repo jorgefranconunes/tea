@@ -29,9 +29,7 @@ PACKAGE_DIR := com/pdmfc/tea/modules/lang
 
 SOURCES := \
 	SFunctionImport.java \
-	SLockManager.java \
 	SModuleLang.java \
-	SShared.java \
 
 include $(BASE_DIR)/make/package.make
 
