@@ -30,7 +30,6 @@
 
 package com.pdmfc.tea.apps;
 
-import java.io.InputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -44,10 +43,7 @@ import com.pdmfc.tea.compiler.SCompiler;
 import com.pdmfc.tea.runtime.SExitException;
 import com.pdmfc.tea.runtime.SFlowControlException;
 import com.pdmfc.tea.runtime.STeaRuntime;
-import com.pdmfc.tea.runtime.SObjPair;
-import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SRuntimeException;
-import com.pdmfc.tea.util.SInputSourceFactory;
 
 
 
@@ -65,26 +61,9 @@ public class STeaLauncher
 
 
 
-    private static final String PROP_ARGV0_VAR =
-	SConfigInfo.getProperty("com.pdmfc.tea.argv0VarName");
-
-    private static final SObjSymbol ARGV0_VAR =
-	SObjSymbol.addSymbol(PROP_ARGV0_VAR);
-
-    private static final String PROP_ARGV_VAR =
-	SConfigInfo.getProperty("com.pdmfc.tea.argvVarName");
-
-    private static final SObjSymbol ARGV_VAR_NAME =
-	SObjSymbol.addSymbol(PROP_ARGV_VAR);
-
-    private static final String PROP_LIB_VAR =
-	SConfigInfo.getProperty("com.pdmfc.tea.libraryVarName");
-
-
-
-
 
     private String       _scriptLocation = null;
+    private String       _encoding       = null;
     private List<String> _importDirList  = new ArrayList<String>();
 
 
@@ -121,6 +100,21 @@ public class STeaLauncher
     public void setScriptLocation(String location) {
 
 	_scriptLocation = location;
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    public void setEncoding(String encoding) {
+
+        _encoding = encoding;
     }
 
 
@@ -175,13 +169,12 @@ public class STeaLauncher
 	SCode       code    = compileScript();
 	STeaRuntime context = new STeaRuntime();
 
+        context.setArgv0(_scriptLocation);
+        context.setArgv(args);
+        context.setImportLocations(_importDirList);
+        context.start();
+
 	try {
-	    if ( _scriptLocation != null ) {
-		context.newVar(ARGV0_VAR, _scriptLocation);
-	    }
-	    setCliArgs(context, args, 0, args.length);
-	    context.setImportLocations(_importDirList);
-	    context.start();
 	    context.execute(code);
 	} catch (SExitException e2) {
 	    retVal = e2._value.intValue();
@@ -210,58 +203,16 @@ public class STeaLauncher
 	throws IOException,
 	       STeaException {
 
-	SCompiler   compiler = new SCompiler();
-	SCode       code     = null;
-	String      location = _scriptLocation;
-        InputStream input    = 
-            (_scriptLocation==null) ?
-            System.in :
-            SInputSourceFactory.createInputSource(location).openStream();
-        try {
-            code = compiler.compile(input);
-        } finally {
-            try { input.close(); } catch (IOException e) {}
+	SCompiler compiler = new SCompiler();
+	SCode     code     = null;
+
+        if ( _scriptLocation == null ) {
+            code = compiler.compile(System.in, _encoding, null);
+        } else {
+            code = compiler.compile(_scriptLocation,_encoding,_scriptLocation);
         }
 
 	return code;
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * Specifies the command line arguments that are passed to the Tea
- * interpreter. This just entails creating the <code>argv</code> Tea
- * global variable. This Tea variable will contain a list of strings
- * corresponding to the command line arguments.
- *
- * @param runtime The runtime where the variable will be created.
- *
- * @param args Contains the command line arguments.
- *
- * @param start The index in <code>args</code> of the first string to
- * be used as command line argument.
- *
- * @param count The number of elements int <code>args</code> that will
- * be used as command line arguments.
- *
- **************************************************************************/
-
-    private void setCliArgs(STeaRuntime runtime,
-			    String[]    args,
-			    int         start,
-			    int         count)
-        throws STeaException {
-
-        SObjPair head = SObjPair.emptyList();
-
-        for ( int i=start+count-1; i>=start; i-- ) {
-            head = new SObjPair(args[i], head);
-        }
-
-        runtime.newVar(ARGV_VAR_NAME, head);
     }
 
 
@@ -324,6 +275,7 @@ public class STeaLauncher
 
 	if ( isOk ) {
 	    shell.setScriptLocation(shellArgs.getScriptPath());
+            shell.setEncoding(shellArgs.getEncoding());
 
             for ( String libPath : shellArgs.getLibraryList() ) {
 		shell.addImportDirLocation(libPath);

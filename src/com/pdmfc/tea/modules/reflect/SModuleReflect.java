@@ -1,12 +1,12 @@
 /**************************************************************************
  *
- * Copyright (c) 2005 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2005-2010 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 /**************************************************************************
  *
- * $Id: SModuleReflect.java,v 1.4 2008/04/21 11:23:48 pcorreia Exp $
+ * $Id$
  *
  *
  * Revisions:
@@ -80,7 +80,6 @@ import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjNull;
 import com.pdmfc.tea.runtime.SObjPair;
 import com.pdmfc.tea.runtime.SObjSymbol;
-import com.pdmfc.tea.runtime.STeaRuntime;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypes;
 import com.pdmfc.tea.runtime.STypeException;
@@ -252,7 +251,8 @@ import com.pdmfc.tea.runtime.STypeException;
  **************************************************************************/
 
 public class SModuleReflect
-    extends SModule {
+    extends Object
+    implements SModule {
 
 
 
@@ -310,84 +310,69 @@ public class SModuleReflect
  *
  **************************************************************************/
 
-    public void init(STeaRuntime context)
+    public void init(SContext context)
 	throws STeaException {
 
-	super.init(context);
+	context.newVar("java-get-value",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionGetValue(func,
+                                                       context,
+                                                       args);
+                           }
+                       });
 
-	context.addFunction("java-get-value",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionGetValue(func,
-							    context,
-							    args);
-				}
-			    });
+	context.newVar("java-set-value",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionSetValue(func,
+                                                       context,
+                                                       args);
+                           }
+                       });
 
-	context.addFunction("java-set-value",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionSetValue(func,
-							    context,
-							    args);
-				}
-			    });
+	context.newVar("java-get-method",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionGetMethod(func,
+                                                        context,
+                                                        args);
+                           }
+                       });
 
-	context.addFunction("java-get-method",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionGetMethod(func,
-							     context,
-							     args);
-				}
-			    });
+	context.newVar("java-exec-method",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionExecMethod(func,
+                                                         context,
+                                                         args);
+                           }
+                       });
 
-	context.addFunction("java-exec-method",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionExecMethod(func,
-							      context,
-							      args);
-				}
-			    });
-
-	context.addFunction("java-new-instance",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionNewInstance(func,
-							       context,
-							       args);
-				}
-			    });
+	context.newVar("java-new-instance",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionNewInstance(func,
+                                                          context,
+                                                          args);
+                           }
+                       });
    }
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    public void stop() {
-    }
 
 
 
@@ -401,7 +386,37 @@ public class SModuleReflect
 
     public void end() {
 
-	stop();
+        // Nothing to do.
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    public void start() {
+
+        // Nothing to do.
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    public void stop() {
+
+        // Nothing to do.
     }
 
 
@@ -1726,7 +1741,7 @@ public class SModuleReflect
 	throws ClassNotFoundException {
 
 	// Check primitive types
-	Class result = (Class)_primitiveTypes.get(className);
+	Class result = _primitiveTypes.get(className);
 	
 	if (null==result) {
 	    result = Class.forName(className);

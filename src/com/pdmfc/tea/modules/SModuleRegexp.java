@@ -1,15 +1,19 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 /**************************************************************************
  *
- * $Id: SModuleRegexp.java,v 1.1 2002/08/02 17:47:24 jfn Exp $
+ * $Id$
  *
  *
  * Revisions:
+ *
+ * 2008/04/01 Refactored to use classes from the "java.utils.regex"
+ * package. No longer uses the "gnu.regexp" library.
+ * (TSK-PDMFC-TEA-0041) (jfn)
  *
  * 2002/08/02
  * Moved to the "com.pdmfc.tea.modules" package. (jfn)
@@ -38,19 +42,17 @@ package com.pdmfc.tea.modules;
 
 import java.io.File;
 import java.io.FilenameFilter;
-
-import gnu.regexp.RE;
-import gnu.regexp.REException;
-import gnu.regexp.REMatch;
-import gnu.regexp.REMatchEnumeration;
+import java.util.regex.Matcher;
+import java.util.regex.MatchResult;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.modules.SModule;
 import com.pdmfc.tea.runtime.SContext;
+import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjPair;
-import com.pdmfc.tea.runtime.STeaRuntime;
-import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypeException;
 import com.pdmfc.tea.runtime.STypes;
@@ -84,7 +86,8 @@ import com.pdmfc.tea.runtime.STypes;
  **************************************************************************/
 
 public class SModuleRegexp
-    extends SModule {
+    extends Object
+    implements SModule {
 
 
 
@@ -109,75 +112,118 @@ public class SModuleRegexp
  *
  **************************************************************************/
 
-   public void init(STeaRuntime context)
+   public void init(SContext context)
        throws STeaException {
 
-       super.init(context);
+       context.newVar("regexp-pattern",
+                      new SObjFunction() {
+                          public Object exec(SObjFunction func,
+                                             SContext     context,
+                                             Object[]     args)
+                              throws STeaException {
+                              return functionPattern(func, context, args);
+                          }
+                      });
 
-	context.addFunction("regexp-pattern",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionPattern(func, context, args);
-				    }
-				});
+       context.newVar("glob",
+                      new SObjFunction() {
+                          public Object exec(SObjFunction func,
+                                             SContext     context,
+                                             Object[]     args)
+                              throws STeaException {
+                              return functionGlob(func, context, args);
+                          }
+                      });
 
-	context.addFunction("glob",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionGlob(func, context, args);
-				    }
-				});
+       context.newVar("regsub",
+                      new SObjFunction() {
+                          public Object exec(SObjFunction func,
+                                             SContext     context,
+                                             Object[]     args)
+                              throws STeaException {
+                              return functionRegsub(func, context, args);
+                          }
+                      });
 
-	context.addFunction("regsub",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionRegsub(func, context, args);
-				    }
-				});
+       SObjFunction matches = new SObjFunction() {
+               public Object exec(SObjFunction func,
+                                  SContext     context,
+                                  Object[]     args)
+                   throws STeaException {
+                   return functionMatches(func, context, args);
+               }
+           };
 
-	SObjFunction matches = new SObjFunction() {
-		public Object exec(SObjFunction func,
-				   SContext     context,
-				   Object[]     args)
-		    throws STeaException {
-		    return functionMatches(func, context, args);
-		}
-	    };
-
-	context.addFunction("matches?", matches);
+       context.newVar("matches?", matches);
 	
-	// For backwards compatibility with Tea 1.x.
-	context.addFunction("matches", matches);
+       // For backwards compatibility with Tea 1.x.
+       context.newVar("matches", matches);
 
-	context.addFunction("regexp",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionRegexp(func, context, args);
-				    }
-				});
+       context.newVar("regexp",
+                      new SObjFunction() {
+                          public Object exec(SObjFunction func,
+                                             SContext     context,
+                                             Object[]     args)
+                              throws STeaException {
+                              return functionRegexp(func, context, args);
+                          }
+                      });
 
-	context.addFunction("str-split",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionSplit(func, context, args);
-				    }
-				});
+       context.newVar("str-split",
+                      new SObjFunction() {
+                          public Object exec(SObjFunction func,
+                                             SContext     context,
+                                             Object[]     args)
+                              throws STeaException {
+                              return functionSplit(func, context, args);
+                          }
+                      });
    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    public void end() {
+
+        // Nothing to do.
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    public void start() {
+
+        // Nothing to do.
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    public void stop() {
+
+        // Nothing to do.
+    }
 
 
 
@@ -292,11 +338,12 @@ public class SModuleRegexp
 	int numArgs = args.length;
 
 	if ( numArgs < 3 ) {
-	    throw new SNumArgException(args[0], "dir-name regexp [regexp ...]");
+	    throw new SNumArgException(args[0],"dir-name regexp [regexp ...]");
 	}
 
-	final RE[] patterns = new RE[numArgs-2];
-	File       aDir     = new File(STypes.getString(args, 1));
+	String          dirName   = STypes.getString(args, 1);
+	File            directory = new File(dirName);
+	final Pattern[] patterns  = new Pattern[numArgs-2];
 
 	for ( int i=numArgs; (i--)>2; ) {
 	    patterns[i-2] = getPattern(args,i);
@@ -305,14 +352,15 @@ public class SModuleRegexp
 	FilenameFilter filter = new FilenameFilter() {
 		public boolean accept(File dir, String name) {
 		    for ( int i=patterns.length; (i--)>0; ) {
-			if ( patterns[i].isMatch(name)  ) {
+			Matcher matcher = patterns[i].matcher(name);
+			if ( matcher.matches()  ) {
 			    return true;
 			}
 		    }
 		    return false;
 		}
 	    };
-	String[] fileNames = aDir.list(filter);
+	String[] fileNames = directory.list(filter);
 	SObjPair head      = SObjPair.emptyList();
 
 	if ( fileNames != null ) {
@@ -377,13 +425,11 @@ public class SModuleRegexp
 	    throw new SNumArgException(args[0], "regex substitution input");
 	}
 
-	RE      pattern  = getPattern(args,1);
+	Pattern pattern  = getPattern(args,1);
 	String  subst    = STypes.getString(args,2);
 	String  input    = STypes.getString(args,3);
-	String  result;
-	
-	// Perform the substitutions
-	result = pattern.substituteAll(input, subst);
+	Matcher matcher  = pattern.matcher(input);
+	String  result   = matcher.replaceAll(subst);
 
 	return result;
     }
@@ -439,10 +485,12 @@ public class SModuleRegexp
 	    throw new SNumArgException(args[0], "regex input");
 	}
 
-	RE      pattern  = getPattern(args,1);
+	Pattern pattern  = getPattern(args,1);
 	String  input    = STypes.getString(args,2);
+	Matcher matcher  = pattern.matcher(input);
+	Boolean result   = matcher.matches() ? Boolean.TRUE : Boolean.FALSE;
 
-	return pattern.isMatch(input) ? Boolean.TRUE : Boolean.FALSE;
+	return result;
     }
 
 
@@ -476,19 +524,17 @@ public class SModuleRegexp
 //* The first element is the matched portion. The following elements are
 //* the portions matching the parenthesized sets in the regular expression
 //* pattern.
-//* <Enumeration>
-//* <EnumLabel>Example (positive match)</EnumLabel>
-//* <EnumDescription>
-//* <Code>regexp "label([0-9]): (.*)" "label5: test message"</Code>
+//* <ul>
+//* <li><b>Example (positive match)</b><br/>
+//* <pre>regexp "label([0-9]): (.*)" "label5: test message"</pre>
 //* evaluates to a list within one list that can be expressed (in Tea) as:
-//* <Code>( ( "label5: test message" "5" "test message" ) )</Code>
-//* </EnumDescription>
-//* <EnumLabel>Example (negative match)</EnumLabel>
-//* <EnumDescription>
-//* <Code>regexp "label([0-9]): (.*)" "label: test message"</Code>
+//* <pre>( ( "label5: test message" "5" "test message" ) )</pre>
+//* </li>
+//* <li><b>Example (negative match)</b><br/>
+//* <pre>regexp "label([0-9]): (.*)" "label: test message"</pre>
 //* evaluates to an empty list.
-//* </EnumDescription>
-//* </Enumeration>
+//* </li>
+//* </ul>
 //* </Description>
 //* 
 //* </TeaFunction>
@@ -509,14 +555,16 @@ public class SModuleRegexp
 	    throw new SNumArgException(args[0], "regex string");
 	}
 
-	RE                 pattern  = getPattern(args,1);
-	String             aString  = STypes.getString(args,2);
-	REMatchEnumeration matchSet = pattern.getMatchEnumeration(aString);
-	SObjPair           head     = null;
-	SObjPair           tail     = null;
+	Pattern  pattern  = getPattern(args,1);
+	String   aString  = STypes.getString(args,2);
+	Matcher  matcher  = pattern.matcher(aString);
+	SObjPair head     = null;
+	SObjPair tail     = null;
 
-	while ( matchSet.hasMoreMatches() ) {
-	    SObjPair node = new SObjPair(buildMatch(matchSet.nextMatch()),null);
+	while ( matcher.find() ) {
+	    MatchResult match = matcher.toMatchResult();
+	    SObjPair    elem  = buildMatch(match);
+	    SObjPair    node  = new SObjPair(elem,null);
 
 	    if ( head == null ) {
 		head = node;
@@ -541,7 +589,7 @@ public class SModuleRegexp
 /**************************************************************************
  *
  * Builds a list with match information. First element is the matched
- * portion. Following elements are the portions mathcing the
+ * portion. Following elements are the portions matching the
  * parenthesized sets in the pattern.
  *
  * @param result
@@ -552,13 +600,13 @@ public class SModuleRegexp
  *
  **************************************************************************/
 
-   private static SObjPair buildMatch(REMatch result) {
+   private static SObjPair buildMatch(MatchResult result) {
 
-      SObjPair head  = new SObjPair(result.toString(),null);
+      SObjPair head  = new SObjPair(result.group(),null);
       SObjPair tail  = head;
 
-      for ( int i=1; result.getSubStartIndex(i)>=0; i++ ) {
-	 String   subExpr = result.toString(i);
+      for ( int i=1, count=result.groupCount(); i<=count; ++i ) {
+	 String   subExpr = result.group(i);
 	 SObjPair node    = new SObjPair(subExpr,null);
 
 	 if ( head == null ) {
@@ -632,16 +680,16 @@ public class SModuleRegexp
 	    return SObjPair.emptyList();
 	}
 
-	RE                 pattern  = getPattern(args,2);
-	int                index    = 0;
-	REMatchEnumeration matchSet = pattern.getMatchEnumeration(str);
-	SObjPair           head     = null;
-	SObjPair           tail     = null;
+	Pattern            pattern = getPattern(args,2);
+	int                index   = 0;
+	Matcher            matcher = pattern.matcher(str);
+	SObjPair           head    = null;
+	SObjPair           tail    = null;
 
-	while ( matchSet.hasMoreMatches() ) {
-	    REMatch  match = matchSet.nextMatch();
-	    String   part  = str.substring(index, match.getStartIndex());
-	    SObjPair node  = new SObjPair(part,null);
+	while ( matcher.find() ) {
+	    MatchResult  match = matcher.toMatchResult();
+	    String       part  = str.substring(index, match.start());
+	    SObjPair     node  = new SObjPair(part,null);
 	    
 	    if ( head == null ) {
 		head = node;
@@ -649,7 +697,7 @@ public class SModuleRegexp
 		tail._cdr = node;
 	    }
 	    tail = node;
-	    index = match.getEndIndex();
+	    index = match.end();
 	}
 
 	String   part  = str.substring(index);
@@ -673,9 +721,9 @@ public class SModuleRegexp
 /**************************************************************************
  *
  * Tries to convert argument <TT>index</TT> into a
- * <TT>gnu.regexp.RE</TT>. If that argument is neither a
+ * <TT>java.util.regex.Pattern</TT>. If that argument is neither a
  * <TT>String</TT> representing a valid regular expression nor a
- * <TT>gnu.regexp.RE</TT>, an exception is thrown.
+ * <TT>java.util.regex.Patter</TT>, an exception is thrown.
  *
  * @param args Array of <TT>Object</TT>, supposed to be the arguments
  * received by a call to the command.
@@ -683,35 +731,35 @@ public class SModuleRegexp
  * @param index The index of the argument to convert.
  *
  * @exception com.pdmfc.tea.STeaException Thrown if argument
- * <TT>index</TT> could not be converted to a <TT>SObjPattern</TT>.
+ * <TT>index</TT> could not be converted to a
+ * <TT>java.util.regex.Pattern</TT>.
  *
  **************************************************************************/
 
-    private static RE getPattern(Object[] args,
-				 int      index)
+    private static Pattern getPattern(Object[] args,
+				      int      index)
 	throws STeaException {
 
 	Object theArg = args[index];
 
-	if ( theArg instanceof RE ) {
-	    return (RE)theArg;
+	if ( theArg instanceof Pattern ) {
+	    return (Pattern)theArg;
 	}
 
 	if ( theArg instanceof String ) {
-	    String strPattern = (String)theArg;
+	    String patternStr = (String)theArg;
 	    try {
-		return new RE(strPattern);
-	    } catch (REException e){
-		throw new SRuntimeException(args[0],
-					    "malformed pattern (" + 
-					    e.getMessage() + ")");
+		return Pattern.compile(patternStr);
+	    } catch (PatternSyntaxException e){
+		String   msg     = "malformed pattern ({0})";
+		Object[] fmtArgs = { e.getMessage() };
+		throw new SRuntimeException(args[0], msg, fmtArgs);
 	    }
 	}
 
-	throw new STypeException(args[0],
-				 "argument " + index +
-				 " should be a regular expression, not a " +
-				 STypes.getTypeName(theArg));
+	String   msg     = "argument {0} should be a regex, not a {1}";
+	Object[] fmtArgs = { String.valueOf(index),STypes.getTypeName(theArg)};
+	throw new STypeException(args[0], msg, fmtArgs);
     }
 
 

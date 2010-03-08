@@ -87,7 +87,7 @@ class SWordBlock
 		}
 		public Object exec()
 		    throws STeaException {
-		    return code.exec(new SContext(context));
+		    return code.exec(context.newChild());
 		}
 	    };
 

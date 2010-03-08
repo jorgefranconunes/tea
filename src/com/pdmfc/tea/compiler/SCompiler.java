@@ -27,18 +27,23 @@
 
 package com.pdmfc.tea.compiler;
 
-import java.io.ByteArrayInputStream;
-import java.io.BufferedInputStream;
+import java.io.StringReader;
+import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.IOException;
+import java.io.Reader;
+import java.nio.charset.Charset;
+import java.nio.charset.UnsupportedCharsetException;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.pdmfc.tea.compiler.SArithExpression;
 import com.pdmfc.tea.compiler.SCode;
 import com.pdmfc.tea.compiler.SCompileException;
+import com.pdmfc.tea.compiler.SCompilerStream;
 import com.pdmfc.tea.compiler.SStatement;
 import com.pdmfc.tea.compiler.SWordBlock;
 import com.pdmfc.tea.compiler.SWordCmdSubst;
@@ -50,6 +55,7 @@ import com.pdmfc.tea.compiler.SWordList;
 import com.pdmfc.tea.compiler.SWordLong;
 import com.pdmfc.tea.compiler.SWordSymbol;
 import com.pdmfc.tea.compiler.SWordVarSubst;
+import com.pdmfc.tea.util.SInputSourceFactory;
 
 
 
@@ -73,8 +79,8 @@ public class SCompiler
 
 
 
-   private SStream _in       = null;
-   private String  _fileName = null;
+    private SCompilerStream _in       = null;
+    private String          _fileName = null;
 
 
 
@@ -86,6 +92,9 @@ public class SCompiler
  * builds an <TT>SCode</TT> object representing the compiled code.
  *
  * @param fileName The name of the file containing the Tea script.
+ *
+ * @param charset The text encoding of the file to be read. If null
+ * the JVM default encoding is assumed.
  *
  * @return A <TT>SCode</TT> object containing the bytecode that can be
  * executed later.
@@ -101,45 +110,43 @@ public class SCompiler
  *
  **************************************************************************/
 
-   public SCode compile(String fileName)
-	 throws SCompileException {
+    public SCode compile(String location,
+                         String encoding,
+                         String fileName)
+        throws IOException,
+               SCompileException {
 
-      SCode             code  = null;
-      FileInputStream   fIn   = null;
-      SCompileException error = null;
+        Charset charset = findCharset(encoding);
+        Reader  reader  = SInputSourceFactory.openReader(location, charset);
+        SCode   code    = compile(reader, fileName);
 
-      _fileName = fileName;
+        return code;
+    }
 
-      try {
-	 fIn  = new FileInputStream(fileName);
-         _in  = new SStream(fIn);
-         code = getBlockWhole();
-      } catch (FileNotFoundException e1) {
-	 String msg = e1.getMessage();
-	 error = new SCompileException("could not open file '" +
-				       fileName + "'" +
-				       ((e1!=null) ? (" ("+msg+")") : ""));
-      } catch (IOException e2) {
-	 String msg = e2.getMessage();
-	 error = new SCompileException("problems reading from file '" +
-				       fileName + "'" +
-				       ((e2!=null) ? (" ("+msg+")") : ""));
-      } catch (SCompileException e3) {
-	 error = e3;
-      }
-      if ( fIn != null ) {
-	 try {
-	    fIn.close();
-	 } catch (IOException e3) {
-	 }
-      }
-      _in = null;
-      if ( error != null ) {
-	 throw error;
-      }
 
-      return code;
-   }
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    public SCode compile(String baseLocation,
+                         String location,
+                         String encoding,
+                         String fileName)
+        throws IOException,
+               SCompileException {
+
+        Charset charset = findCharset(encoding);
+        Reader  reader  =
+            SInputSourceFactory.openReader(baseLocation, location, charset);
+        SCode   code    = compile(reader, fileName);
+
+        return code;
+    }
 
 
 
@@ -149,8 +156,12 @@ public class SCompiler
  *
  * Compiles the Tea script read from the an <code>InputStream</code>.
  *
- * @param input Reference to an <code>InputStream</code> where a
- * script will be read from.
+ * @param reader The <code>Reader</code> where the script will be read
+ * from.
+ *
+ * @param fileName The name to be associated with the compiled
+ * code. Compile or runtime error messages will use this name when
+ * identifying the source file where the error occurred.
  *
  * @return A <code>{@link SCode}</code> object containing the bytecode
  * that can be executed later.
@@ -161,25 +172,19 @@ public class SCompiler
  *
  **************************************************************************/
 
-   public SCode compile(InputStream input,
-			String      fileName)
-	 throws SCompileException {
+    public SCode compile(InputStream input,
+                         String      encoding,
+                         String      fileName)
+        throws IOException,
+               SCompileException {
 
-      SCode code = null;
+        Charset charset     = findCharset(encoding);
+        Reader  inputReader = new InputStreamReader(input, charset);
+        Reader  reader      = new BufferedReader(inputReader);
+        SCode   code        = compile(reader, fileName);
 
-      _fileName = fileName;
-
-      try {
-         _in  = new SStream(input);
-         code = getBlockWhole();
-      } catch (IOException e1) {
-	 String msg = e1.getMessage();
-	 throw new SCompileException("problems reading from input"
-				     + " (" + msg + ")");
-      }
-
-      return code;
-   }
+        return code;
+    }
 
 
 
@@ -187,32 +192,7 @@ public class SCompiler
 
 /**************************************************************************
  *
- * Compiles the Tea script read from the an <TT>InputStream</TT>.
- *
- * @param input Reference to an <TT>InputStream</TT> where a script
- * will be read from.
- *
- * @return A <TT>SCode</TT> object containing the bytecode that can be
- * executed later.
- *
- * @exception com.pdmfc.tea.compiler.SCompileException Thrown if a
- * syntax error was found during compilation.
- *
- **************************************************************************/
-
-   public SCode compile(InputStream input)
-	 throws SCompileException {
-
-       return compile(input, null);
-   }
-
-
-
-
-
-/**************************************************************************
- *
- * Compiles the Tea script stored in the <TT>script</TT> byte array.
+ * Compiles the Tea script stored in a string.
  *
  * @param script A Tea script.
  *
@@ -224,26 +204,15 @@ public class SCompiler
  *
  **************************************************************************/
 
-   public SCode compile(byte[] script,
-			int    offset,
-			int    length)
-	 throws SCompileException {
+    public SCode compile(String script)
+        throws IOException,
+               SCompileException {
 
-      SCode code = null;
+        Reader reader = new StringReader(script);
+        SCode  code   = compile(reader, null);
 
-      _fileName = null;
-
-      try {
-         _in  = new SStream(script, offset, length);
-	 code = getBlockWhole();
-      } catch (IOException e1) {
-	 String msg = e1.getMessage();
-	 throw new SCompileException("problems reading from input"
-				     + " (" + msg + ")");
-      }
-
-      return code;
- }
+        return code;
+    }
 
 
 
@@ -251,23 +220,80 @@ public class SCompiler
 
 /**************************************************************************
  *
- * Compiles the Tea script stored in the <TT>script</TT> byte array.
+ * Compiles the Tea script read from the an <code>InputStream</code>.
  *
- * @param script A Tea script.
+ * @param reader The <code>Reader</code> where the script will be read
+ * from.
  *
- * @return A <TT>SCode</TT> object containing the bytecode that can be
- * executed later.
+ * @param fileName The name to be associated with the compiled
+ * code. Compile or runtime error messages will use this name when
+ * identifying the source file where the error occurred.
+ *
+ * @return A <code>{@link SCode}</code> object containing the bytecode
+ * that can be executed later.
  *
  * @exception com.pdmfc.tea.compiler.SCompileException Thrown if a
- * syntax error was found during compilation.
+ * syntax error was found during compilation or there were problems
+ * reading from the <code>InputStream</code>.
  *
  **************************************************************************/
 
-   public SCode compile(byte[] script)
-	 throws SCompileException {
+    private SCode compile(Reader reader,
+                          String fileName)
+        throws IOException,
+               SCompileException {
 
-      return compile(script, 0, script.length);
- }
+        SCode code = null;
+
+        _fileName = fileName;
+
+        try {
+            _in = new SCompilerStream(reader);
+        } catch (IOException e) {
+            try { reader.close(); } catch (IOException e2) {}
+            throw e;
+        }
+
+        try {
+            code = getBlockWhole();
+        } finally {
+            _in.close();
+            _in       = null;
+            _fileName = null;
+        }
+
+        return code;
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    private Charset findCharset(String charsetName)
+        throws SCompileException {
+
+        Charset charset = null;
+
+        if ( charsetName == null ) {
+            charset = Charset.defaultCharset();
+        } else {
+            try {
+                charset = Charset.forName(charsetName);
+            } catch (UnsupportedCharsetException e) {
+                String   msg     = "Unsupported charset \"{0}\"";
+                Object[] fmtArgs = { charsetName };
+                throw new SCompileException(msg, fmtArgs);
+            }
+        }
+
+        return charset;
+    }
 
 
 
@@ -1352,158 +1378,6 @@ public class SCompiler
 
       return (_fileName==null) ? "" : (" on file '" + _fileName + "'");
    }
-
-
-}
-
-
-
-
-
-/**************************************************************************
- *
- * This class operates on a stream of bytes that may come from several
- * sources. It provides very simple methods to iterate over the bytes
- * from the script.
- *
- **************************************************************************/
-
-class SStream
-    extends Object {
-
-
-
-
-
-    private InputStream _in          = null;
-    private int         _currentChar = 0;
-    private int         _line        = 1;
-
-
-
-
-
-/**************************************************************************
- *
- * Initializes the stream from a <TT>InputStream</TT>.
- *
- * @param stream The <TT>InputStream</TT> where the bytes will be
- * coming from.
- *
- * @exception IOException Thrown if there were problems reading from
- * the file.
- *
- **************************************************************************/
-
-    public SStream(InputStream stream)
-	throws IOException {
-
-	_in          = new BufferedInputStream(stream);
-	_currentChar = _in.read();
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * Initializes the stream from the contents of an array of bytes.
- *
- * @param array The array of bytes where the bytes will be coming
- * from.
- *
- * @exception IOException Thrown if there were problems reading from
- * the stream.
- *
- **************************************************************************/
-
-    public SStream(byte[] array,
-		   int    offset,
-		   int    length)
-	throws IOException {
-
-	_in          = new ByteArrayInputStream(array, offset, length);
-	_currentChar = _in.read();
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * @return The current char in the stream.
- *
- **************************************************************************/
-
-    public char peek()
-	throws IOException {
-
-	if ( _currentChar == -1 ) {
-	    throw new IOException("read beyond end of stream");
-	}
-	return (char)_currentChar;
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * Advances one byte in the stream. It returns the new current byte.
- *
- * @return The new current byte in the stream, or -1 if the end of the
- * stream was reached.
- *
- **************************************************************************/
-
-    public char skip()
-	throws IOException {
-
-	int previousChar = _currentChar;
-
-	if ( previousChar == -1 ) {
-	    throw new IOException("read beyond end of stream");
-	}
-	if ( (char)previousChar == '\n' ) {
-	    _line++;
-	}
-	_currentChar = _in.read();
-
-	return (char)previousChar;
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    public boolean atEnd() {
-
-	return _currentChar == -1;
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    public int currentLine() {
-
-	return _line;
-    }
 
 
 }

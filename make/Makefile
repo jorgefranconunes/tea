@@ -101,6 +101,7 @@ TEA_PACKAGES = \
 	lib/tea/io	\
 	lib/tea/net	\
 	lib/tea/tdbc	\
+	lib/tea/tea/util	\
 	lib/tea/util	\
 	lib/tea/xml	\
 

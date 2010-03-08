@@ -1,30 +1,26 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 /**************************************************************************
  *
- * $Id: SModule.java,v 1.5 2002/07/16 18:50:40 jfn Exp $
+ * $Id$
  *
  *
  * Revisions:
  *
- * 2002/01/10
- * Created. (jfn)
+ * 2010/03/03 This class is now an interface. (jfn)
+ *
+ * 2002/01/10 Created. (jfn)
  *
  **************************************************************************/
 
 package com.pdmfc.tea.modules;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
 import com.pdmfc.tea.STeaException;
-import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.STeaRuntime;
+import com.pdmfc.tea.runtime.SContext;
 
 
 
@@ -37,8 +33,7 @@ import com.pdmfc.tea.runtime.STeaRuntime;
  *
  **************************************************************************/
 
-public class SModule
-    extends Object {
+public interface SModule {
 
 
 
@@ -46,32 +41,14 @@ public class SModule
 
 /**************************************************************************
  *
- * 
+ * Populates the <code>context</code> with commands and variables.
+ *
+ * @param context The root context to be populated.
  *
  **************************************************************************/
 
-    public SModule() {
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * Populates the <code>context</code> with commands and variables. If
- * this method is redefined in a derived class then the implementation
- * in the derived class is always expected to call this
- * implementation.
- *
- * @param context Reference to the <TT>STeaRuntime</TT> object to be
- * populated.
- *
- **************************************************************************/
-
-   public void init(STeaRuntime context)
-       throws STeaException {
-   }
+   public void init(SContext context)
+       throws STeaException;
 
 
 
@@ -82,13 +59,11 @@ public class SModule
  * Signals that the package will no longer be used. That means that
  * the commands that may have been created inside the
  * <TT>SContext</TT> passed to the <TT>init()</TT> method will not be
- * used again. Resources allocated to the commands may be freed. This
- * implementation does nothing.
+ * used again. Resources allocated to the commands may be freed.
  *
  **************************************************************************/
 
-    public void end() {
-    }
+    public void end();
 
 
 
@@ -96,13 +71,11 @@ public class SModule
 
 /**************************************************************************
  *
- * Signals that the package will be used shortly after. This
- * implementaion does nothing.
+ * Signals that the package will be used shortly after.
  *
  **************************************************************************/
 
-    public void start() {
-    }
+    public void start();
 
 
 
@@ -111,13 +84,11 @@ public class SModule
 /**************************************************************************
  *
  * Signals that the package will not be used until a call to the
- * <TT>start()</TT> method is made again. This implementation does
- * nothing.
+ * <TT>start()</TT> method is made again.
  *
  **************************************************************************/
 
-    public void stop() {
-    }
+    public void stop();
 
 
 }

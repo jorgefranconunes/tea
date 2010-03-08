@@ -1,18 +1,17 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 /**************************************************************************
  *
- * $Id: SModuleXml.java,v 1.3 2002/08/02 17:47:24 jfn Exp $
+ * $Id$
  *
  *
  * Revisions:
  *
- * 2002/03/16
- * Created. (jfn)
+ * 2002/03/16 Created. (jfn)
  *
  **************************************************************************/
 
@@ -23,7 +22,6 @@ import com.pdmfc.tea.modules.SModule;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.STeaRuntime;
 import com.pdmfc.tea.runtime.STypeException;
 import com.pdmfc.tea.runtime.STypes;
 
@@ -52,7 +50,8 @@ import com.pdmfc.tea.runtime.STypes;
  **************************************************************************/
 
 public class SModuleXml
-    extends SModule {
+    extends Object
+    implements SModule {
 
 
 
@@ -77,22 +76,65 @@ public class SModuleXml
  *
  **************************************************************************/
 
-    public void init(STeaRuntime context)
+    public void init(SContext context)
 	throws STeaException {
 
-	super.init(context);
+	context.newVar("xml-encode",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionXmlEncode(func,
+                                                        context,
+                                                        args);
+                           }
+                       });
+    }
 
-	context.addFunction("xml-encode",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionXmlEncode(func,
-								 context,
-								 args);
-				    }
-				});
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    public void end() {
+
+        // Nothing to do.
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    public void start() {
+
+        // Nothing to do.
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    public void stop() {
+
+        // Nothing to do.
     }
 
 

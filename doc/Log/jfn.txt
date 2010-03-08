@@ -1,8 +1,19 @@
+2010/03/01
+
+Resumo:
+
+1. (02h) tea - Removed dependencoes on the Gnu.Regexp library.Changes were
+backported from the trunk.
+
+
+
+
+
 2010/02/07
 
 Resumo:
 
-1. Removed dependency on the Xerces 1.4.4 library. Changed were
+1. tea - Removed dependency on the Xerces 1.4.4 library. Changes were
 backported from the trunk.
 
 

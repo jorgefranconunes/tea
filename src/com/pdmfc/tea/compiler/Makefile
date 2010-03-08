@@ -32,6 +32,7 @@ SOURCES := \
 	SCode.java \
 	SCompileException.java \
 	SCompiler.java \
+	SCompilerStream.java	\
 	SStatement.java \
 	SWord.java \
 	SWordBlock.java \

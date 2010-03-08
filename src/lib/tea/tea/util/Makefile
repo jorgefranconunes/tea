@@ -1,6 +1,6 @@
 ###########################################################################
 #
-# Copyright (c) 2005-2010 PDM&FC, All Rights Reserved.
+# Copyright (c) 2010 PDM&FC, All Rights Reserved.
 #
 ###########################################################################
 
@@ -8,7 +8,7 @@
 #
 # $Id$
 #
-# Makefile for the "com.pdmfc.tea.apps" package.
+# Makefile for the "lib.tea.tea.util" package.
 #
 # The following variables are expected to be defined:
 #
@@ -17,7 +17,7 @@
 #
 # Revisions:
 #
-# 2005/02/15 Created. (jfn)
+# 2010/03/01 Created. (jfn)
 #
 ###########################################################################
 
@@ -25,12 +25,10 @@
 
 
 
-PACKAGE_DIR := com/pdmfc/tea/apps
+PACKAGE_DIR := lib/tea/tea/util
 
 SOURCES := \
-	STeaLauncher.java	\
-	STeaLauncherArgs.java	\
-
+	lists.tea \
 
 include $(BASE_DIR)/make/package.make
 

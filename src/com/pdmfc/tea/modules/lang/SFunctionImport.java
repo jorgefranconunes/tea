@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2009 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -40,7 +40,6 @@
 package com.pdmfc.tea.modules.lang;
 
 import java.io.File;
-import java.io.InputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -58,8 +57,6 @@ import com.pdmfc.tea.runtime.SObjPair;
 import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypes;
-import com.pdmfc.tea.util.SInputSource;
-import com.pdmfc.tea.util.SInputSourceFactory;
 
 
 
@@ -382,22 +379,18 @@ class SFunctionImport
         public Object tryToPerformImport()
             throws STeaException {
 
-            Object      result = null;
-            String      path   = _fullPath;
-            InputStream input  = null;
+            Object result = null;
+            String path   = _fullPath;
+            SCode  code   = null;
 	    
             try {
-                SInputSource inputSource =
-                    SInputSourceFactory.createInputSource(path);
-
-                input = inputSource.openStream();
+                code = _compiler.compile(path, null, _importPath);
             } catch (IOException e) {
                 // The path does not exist or is not accessible.
             }
 
-            // If the input has been opened, try to compile and
-            // execute the file.
-            if ( input != null ) {
+            // If the input has been opened, try to execute the file.
+            if ( code != null ) {
                 // Record the import timestamp right now to prevent
                 // eventual infinite recursion (if this file is
                 // imported again while executing).
@@ -407,14 +400,6 @@ class SFunctionImport
 		    System.currentTimeMillis();
 
                 SContext execContext = _rootContext.newChild();
-                SCode    code        = null;
-
-                try {
-                    code = _compiler.compile(input, _importPath);
-                } finally {
-                    // Try very hard to close the input.
-                    try { input.close(); } catch (IOException e) {}
-                }
 		
                 result = code.exec(execContext);
             }

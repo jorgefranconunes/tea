@@ -4,6 +4,19 @@ Release Notes for Tea 3.2
 
 
 
+2010/02/02 Improved support for text encodings
+
+Added the option "--encoding" to the "tsh" utility. The public Java
+API has been extended to allow specification of the text encoding when
+running Tea scripts.
+
+
+2010/03/01 Removed dependencoes on the Gnu.Regexp library.
+
+Support for regular expressions is now implemented on top of the
+standard java.util.regex package.
+
+
 2010/02/07 Removed dependency on the Xerces 1.4.4 library.
 
 Support for XML parsing is now implemented on top of the SAX library
