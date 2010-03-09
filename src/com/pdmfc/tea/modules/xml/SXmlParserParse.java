@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -11,7 +11,7 @@
  *
  * Revisions:
  *
- * 2008/04/01 Refactored to use "org.xml.sax.XMLReader" instead of
+ * 2010/02/07 Refactored to use "org.xml.sax.XMLReader" instead of
  * "org.xml.sax.Parser". (TSK-PDMFC-TEA-0042) (jfn)
  *
  * 2002/07/30 Corrected a typo in the name of the
@@ -222,15 +222,15 @@ class SXmlParserParse
 	     try {
 		 tosInput = (SInput)((STosObj)input).part(0);
 	     } catch (ClassCastException e) {
-		 throw new STypeException(args[0],
-					  "expected String or TInput, not a "
-					  + STypes.getTypeName(input));
+                 String   msg     = "expected String or TInput, not a {0}";
+                 Object[] fmtArgs = { STypes.getTypeName(input) };
+		 throw new STypeException(args[0], msg, fmtArgs);
 	     }
 	     inputSource = new InputSource(tosInput.getInputStream());
 	 } else {
-	     throw new STypeException(args[0],
-				      "expected String or TInput, not a "
-				      + STypes.getTypeName(input));
+             String   msg     = "expected String or TInput, not a {0}";
+             Object[] fmtArgs = { STypes.getTypeName(input) };
+	     throw new STypeException(args[0], msg, fmtArgs);
 	 }
 
 	 if ( _handler == null ) {
@@ -398,8 +398,8 @@ class SXmlParserParse
 				Attributes attribs)
 	throws SAXException {
 
-	SHashtable attribsTable = null;
-	Map        tbl          = null;
+	SHashtable         attribsTable = null;
+	Map<Object,Object> tbl          = null;
 
 	try {
 	    attribsTable = SHashtable.newInstance(_context);

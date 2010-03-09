@@ -1,30 +1,38 @@
 /**************************************************************************
  *
- * Copyright (c) 2002-2008 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2002 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 /**************************************************************************
  *
- * $Id$
+ * $Id: SPlainSocketBase.java,v 1.3 2002/11/02 16:05:02 jfn Exp $
  *
  *
  * Revisions:
  *
- * 2002/10/19 Created. (jfn)
+ * 2002/10/19
+ * Created. (jfn)
  *
  **************************************************************************/
 
 package com.pdmfc.tea.modules.net;
 
+import java.io.IOException;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.modules.net.SPlainSocketFactory;
+import com.pdmfc.tea.modules.net.SSocketFactory;
 import com.pdmfc.tea.modules.tos.STosClass;
+import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.tos.STosUtil;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.STypes;
 
 
 

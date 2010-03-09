@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -39,7 +39,6 @@ import com.pdmfc.tea.runtime.SObjBlock;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SObjVar;
-import com.pdmfc.tea.runtime.STeaRuntime;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypeException;
@@ -70,7 +69,8 @@ import com.pdmfc.tea.runtime.STypes;
  **************************************************************************/
 
 public class SModuleMath
-    extends SModule {
+    extends Object
+    implements SModule {
 
 
 
@@ -104,7 +104,7 @@ public class SModuleMath
     private static final int DIV = 4;
 
     private static final SComparator _gt = new SGt();
-    private static final SComparator _lt = new  SLt();
+    private static final SComparator _lt = new SLt();
 
     // Used by the implementation of the Tea "rand-int" function.
     private Random _generator = new Random();
@@ -133,420 +133,463 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    public void init(STeaRuntime context)
+    public void init(SContext context)
 	throws STeaException {
 
-	super.init(context);
+	context.newVar("==",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionEq(func, context, args);
+                           }
+                       });
+	
+	context.newVar("!=",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionNe(func, context, args);
+                           }
+                       });
+	
+	context.newVar(">",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionGt(func, context, args);
+                           }
+                       });
+	
+	context.newVar(">=",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionGe(func, context, args);
+                           }
+                       });
+	
+	context.newVar("<",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionLt(func, context, args);
+                           }
+                       });
+	
+	context.newVar("<=",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionLe(func, context, args);
+                           }
+                       });
+	
+	context.newVar("+",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionAdd(func, context, args);
+                           }
+                       });
+	
+	context.newVar("-",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionSub(func, context, args);
+                           }
+                       });
+	
+	context.newVar("*",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionMul(func, context, args);
+                           }
+                       });
+	
+	context.newVar("/",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionDiv(func, context, args);
+                           }
+                       });
+	
+	context.newVar("%",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionMod(func, context, args);
+                           }
+                       });
+	
+	context.newVar("and",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionAnd(func, context, args);
+                           }
+                       });
+	
+	context.newVar("or",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionOr(func, context, args);
+                           }
+                       });
+	
+	context.newVar("not",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionNot(func, context, args);
+                           }
+                       });
+	
+	context.newVar("abs",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionAbs(func, context, args);
+                           }
+                       });
+	
+	context.newVar("round",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionRound(func, context, args);
+                           }
+                       });
+	
+	context.newVar("floor",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionFloor(func, context, args);
+                           }
+                       });
+	
+	context.newVar("ceil",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionCeil(func, context, args);
+                           }
+                       });
+	
+	context.newVar("sqrt",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionSqrt(func, context, args);
+                           }
+                       });
+	
+	context.newVar("min",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionMin(func, context, args);
+                           }
+                       });
+	
+	context.newVar("max",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionMax(func, context, args);
+                           }
+                       });
+	
+	context.newVar("rand-int",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionRandInt(func, context, args);
+                           }
+                       });
+	
+	context.newVar("int",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionInt(func, context, args);
+                           }
+                       });
+	
+	context.newVar("=",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionSetValue(func, context, args);
+                           }
+                       });
+	
+	context.newVar("+=",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionIncBy(func, context, args);
+                           }
+                       });
+	
+	context.newVar("-=",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionDecBy(func, context, args);
+                           }
+                       });
+	
+	context.newVar("*=",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionMulBy(func, context, args);
+                           }
+                       });
+	
+	context.newVar("/=",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionDivBy(func, context, args);
+                           }
+                       });
+	
+	context.newVar("++",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionInc(func, context, args);
+                           }
+                       });
+	
+	context.newVar("--",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionDec(func, context, args);
+                           }
+                       });
+	
+	context.newVar("~",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionBinNeg(func, context, args);
+                           }
+                       });
+	
+	context.newVar("&",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionBinAnd(func, context, args);
+                           }
+                       });
+	
+	context.newVar("|",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionBinOr(func, context, args);
+                           }
+                       });
+	
+	context.newVar("^",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionBinXor(func, context, args);
+                           }
+                       });
+	
+	context.newVar("<<",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionBinSl(func, context, args);
+                           }
+                       });
+	
+	context.newVar(">>",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionBinSr(func, context, args);
+                           }
+                       });
+	
+	context.newVar("&=",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionBinAndBy(func,context,args);
+                           }
+                       });
 
-	context.addFunction("==",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionEq(func, context, args);
-				}
-			    });
-	
-	context.addFunction("!=",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionNe(func, context, args);
-				}
-			    });
-	
-	context.addFunction(">",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionGt(func, context, args);
-				}
-			    });
-	
-	context.addFunction(">=",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionGe(func, context, args);
-				}
-			    });
-	
-	context.addFunction("<",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionLt(func, context, args);
-				}
-			    });
-	
-	context.addFunction("<=",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionLe(func, context, args);
-				}
-			    });
-	
-	context.addFunction("+",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionAdd(func, context, args);
-				}
-			    });
-	
-	context.addFunction("-",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionSub(func, context, args);
-				}
-			    });
-	
-	context.addFunction("*",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionMul(func, context, args);
-				}
-			    });
-	
-	context.addFunction("/",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionDiv(func, context, args);
-				}
-			    });
-	
-	context.addFunction("%",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionMod(func, context, args);
-				}
-			    });
-	
-	context.addFunction("and",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionAnd(func, context, args);
-				}
-			    });
-	
-	context.addFunction("or",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionOr(func, context, args);
-				}
-			    });
-	
-	context.addFunction("not",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionNot(func, context, args);
-				}
-			    });
-	
-	context.addFunction("abs",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionAbs(func, context, args);
-				}
-			    });
-	
-	context.addFunction("round",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionRound(func, context, args);
-				}
-			    });
-	
-	context.addFunction("floor",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionFloor(func, context, args);
-				}
-			    });
-	
-	context.addFunction("ceil",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionCeil(func, context, args);
-				}
-			    });
-	
-	context.addFunction("sqrt",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionSqrt(func, context, args);
-				}
-			    });
-	
-	context.addFunction("min",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionMin(func, context, args);
-				}
-			    });
-	
-	context.addFunction("max",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionMax(func, context, args);
-				}
-			    });
-	
-	context.addFunction("rand-int",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionRandInt(func, context, args);
-				}
-			    });
-	
-	context.addFunction("int",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionInt(func, context, args);
-				}
-			    });
-	
-	context.addFunction("=",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionSetValue(func, context, args);
-				}
-			    });
-	
-	context.addFunction("+=",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionIncBy(func, context, args);
-				}
-			    });
-	
-	context.addFunction("-=",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionDecBy(func, context, args);
-				}
-			    });
-	
-	context.addFunction("*=",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionMulBy(func, context, args);
-				}
-			    });
-	
-	context.addFunction("/=",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionDivBy(func, context, args);
-				}
-			    });
-	
-	context.addFunction("++",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionInc(func, context, args);
-				}
-			    });
-	
-	context.addFunction("--",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionDec(func, context, args);
-				}
-			    });
-	
-	context.addFunction("~",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionBinNeg(func, context, args);
-				}
-			    });
-	
-	context.addFunction("&",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionBinAnd(func, context, args);
-				}
-			    });
-	
-	context.addFunction("|",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionBinOr(func, context, args);
-				}
-			    });
-	
-	context.addFunction("^",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionBinXor(func, context, args);
-				}
-			    });
-	
-	context.addFunction("<<",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionBinSl(func, context, args);
-				}
-			    });
-	
-	context.addFunction(">>",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionBinSr(func, context, args);
-				}
-			    });
-	
-	context.addFunction("&=",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionBinAndBy(func,context,args);
-				}
-			    });
+	context.newVar("|=",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionBinOrBy(func,context,args);
+                           }
+                       });
 
-	context.addFunction("|=",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionBinOrBy(func,context,args);
-				}
-			    });
+	context.newVar("^=",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionBinXorBy(func,context,args);
+                           }
+                       });
 
-	context.addFunction("^=",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionBinXorBy(func,context,args);
-				}
-			    });
+	context.newVar("<<=",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionBinSlBy(func,context,args);
+                           }
+                       });
 
-	context.addFunction("<<=",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionBinSlBy(func,context,args);
-				}
-			    });
+	context.newVar(">>=",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionBinSrBy(func,context,args);
+                           }
+                       });
+    }
 
-	context.addFunction(">>=",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionBinSrBy(func,context,args);
-				}
-			    });
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    public void end() {
+
+        // Nothing to do.
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    public void start() {
+
+        // Nothing to do.
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    public void stop() {
+
+        // Nothing to do.
     }
 
 
@@ -887,7 +930,7 @@ public class SModuleMath
 	    op1         = op2;
 	    op1IsInt    = op2IsInt;
 	    op1IntVal   = op2IntVal;
-	    op1FloatVal = op2FloatVal;
+	    op1FloatVal = op1FloatVal;
 	}
 
 	return Boolean.TRUE;

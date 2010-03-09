@@ -1,7 +1,7 @@
 #!/bin/bash
 ###########################################################################
 #
-# Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
+# Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
 #
 ###########################################################################
 
@@ -42,9 +42,9 @@ SCRIPT=$0
 
 while [ -h $SCRIPT ]
 do
-    dirname=`dirname $SCRIPT`
-    link=`ls -ld $SCRIPT | awk '{print $11}'`
-    if [ `expr "$link" : '\(.\).*'` = "/" ]
+    dirname=$(dirname $SCRIPT)
+    link=$(ls -ld $SCRIPT | awk '{print $11}')
+    if [ $(expr "$link" : '\(.\).*') = "/" ]
     then
 	SCRIPT=$link
     else
@@ -52,10 +52,10 @@ do
     fi
 done
 
-SCRIPT_DIR=`dirname $SCRIPT`
-SCRIPT_NAME=`basename $SCRIPT`
+SCRIPT_DIR=$(dirname $SCRIPT)
+SCRIPT_NAME=$(basename $SCRIPT)
 
-teaBaseDir=`cd ${SCRIPT_DIR}/..; pwd`
+teaBaseDir=$(cd ${SCRIPT_DIR}/..; pwd)
 pathSep=":"
 
 
@@ -71,23 +71,16 @@ pathSep=":"
 #
 # Makes utility functions available.
 #
-. ${teaBaseDir}/bin/tea-utils
+source ${teaBaseDir}/bin/tea-utils
 
-case `teaOsType` in
+case $(teaOsType) in
     *CYGWIN* )
 	pathSep=";"
-	teaBaseDir=`cygpath --windows "$teaBaseDir" | sed 's/\\\/\\//g'`
+	teaBaseDir=$(cygpath --windows "$teaBaseDir" | sed 's/\\\/\\//g')
     ;;
 esac
 
 teaReadInstallConfig $teaBaseDir
-
-saxParserOption=
-
-if [ ! -z "$TEA_SAX_PARSER_CLASS" ]
-then
-    saxParserOption="--native-parser=$TEA_SAX_PARSER_CLASS"
-fi
 
 
 
@@ -104,7 +97,10 @@ teadocBaseDir=${teaBaseDir}/apps/teadoc
 teaScript=${teadocBaseDir}/lib/tea/doc-html.tea
 teaLibrary=${teadocBaseDir}/lib/tea
 
-exec ${teaBaseDir}/bin/tsh --library="${teaLibrary}" $teaScript $saxParserOption "$@"
+exec ${teaBaseDir}/bin/tsh \
+    --library="${teaLibrary}" \
+    $teaScript \
+    "$@"
 
 
 

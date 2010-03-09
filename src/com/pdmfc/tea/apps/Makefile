@@ -1,6 +1,6 @@
 ###########################################################################
 #
-# Copyright (c) 2005-2008 PDM&FC, All Rights Reserved.
+# Copyright (c) 2005-2010 PDM&FC, All Rights Reserved.
 #
 ###########################################################################
 
@@ -25,9 +25,12 @@
 
 
 
-SOURCES= \
-	STeaShell.java	\
-	STeaShellArgs.java
+PACKAGE_DIR := com/pdmfc/tea/apps
+
+SOURCES := \
+	STeaLauncher.java	\
+	STeaLauncherArgs.java	\
+
 
 include $(BASE_DIR)/make/package.make
 

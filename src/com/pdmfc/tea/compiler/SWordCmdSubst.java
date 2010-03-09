@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -11,11 +11,14 @@
  *
  * Revisions:
  *
- * 2001/05/12 Created. (jfn)
+ * 2001/05/12
+ * Created. (jfn)
  *
  **************************************************************************/
 
 package com.pdmfc.tea.compiler;
+
+import java.io.PrintStream;
 
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.compiler.SWord;

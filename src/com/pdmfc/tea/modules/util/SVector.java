@@ -1,12 +1,12 @@
 /**************************************************************************
  *
- * Copyright (c) 2001, 2002, 2003, 2004 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 /**************************************************************************
  *
- * $Id: SVector.java,v 1.6 2004/11/03 17:37:56 jfn Exp $
+ * $Id$
  *
  *
  * Revisions:
@@ -26,7 +26,6 @@
 package com.pdmfc.tea.modules.util;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import com.pdmfc.tea.STeaException;
@@ -83,7 +82,7 @@ public class SVector
     private static final SObjSymbol CLASS_NAME_S =
 	SObjSymbol.addSymbol(CLASS_NAME);
 
-    private List         _vector   = null;
+    private List<Object> _vector   = null;
     private SContext     _context  = null;
     private SObjFunction _compFunc = null;
 
@@ -106,7 +105,7 @@ public class SVector
 
 	super(myClass);
 
-	_vector = new ArrayList();
+	_vector = new ArrayList<Object>();
     }
 
 
@@ -126,8 +125,8 @@ public class SVector
  *
  **************************************************************************/
 
-    private SVector(STosClass myClass,
-		    List      contents)
+    private SVector(STosClass    myClass,
+		    List<Object> contents)
 	throws STeaException {
 
 	super(myClass);
@@ -151,7 +150,7 @@ public class SVector
  *
  **************************************************************************/
 
-    public List getInternalList() {
+    public List<Object> getInternalList() {
 
 	return _vector;
     }
@@ -687,8 +686,7 @@ public class SVector
 	SObjPair    head   = empty;
 	SObjPair    node   = null;
 
-	for ( Iterator i=_vector.iterator(); i.hasNext(); ) {
-	    Object   value   = i.next();
+        for ( Object value : _vector ) {
 	    SObjPair newNode = new SObjPair(value, empty);
 
 	    if ( node == null ) {
@@ -880,9 +878,9 @@ public class SVector
  *
  **************************************************************************/
 
-    private void qs(List v,
-		    int  left,
-		    int  right)
+    private void qs(List<Object> v,
+		    int          left,
+		    int          right)
 	throws STeaException {
 
 	int    i = left;
@@ -1018,8 +1016,8 @@ public class SVector
  *
  **************************************************************************/
 
-    public static SVector newInstance(SContext context,
-				      List     contents)
+    public static SVector newInstance(SContext     context,
+				      List<Object> contents)
 	throws STeaException {
 
 	STosClass theClass = STosUtil.getClass(context, CLASS_NAME_S);

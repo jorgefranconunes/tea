@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -50,10 +50,9 @@ import java.util.regex.PatternSyntaxException;
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.modules.SModule;
 import com.pdmfc.tea.runtime.SContext;
+import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjPair;
-import com.pdmfc.tea.runtime.STeaRuntime;
-import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypeException;
 import com.pdmfc.tea.runtime.STypes;
@@ -87,7 +86,8 @@ import com.pdmfc.tea.runtime.STypes;
  **************************************************************************/
 
 public class SModuleRegexp
-    extends SModule {
+    extends Object
+    implements SModule {
 
 
 
@@ -112,75 +112,118 @@ public class SModuleRegexp
  *
  **************************************************************************/
 
-   public void init(STeaRuntime context)
+   public void init(SContext context)
        throws STeaException {
 
-       super.init(context);
+       context.newVar("regexp-pattern",
+                      new SObjFunction() {
+                          public Object exec(SObjFunction func,
+                                             SContext     context,
+                                             Object[]     args)
+                              throws STeaException {
+                              return functionPattern(func, context, args);
+                          }
+                      });
 
-	context.addFunction("regexp-pattern",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionPattern(func, context, args);
-				    }
-				});
+       context.newVar("glob",
+                      new SObjFunction() {
+                          public Object exec(SObjFunction func,
+                                             SContext     context,
+                                             Object[]     args)
+                              throws STeaException {
+                              return functionGlob(func, context, args);
+                          }
+                      });
 
-	context.addFunction("glob",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionGlob(func, context, args);
-				    }
-				});
+       context.newVar("regsub",
+                      new SObjFunction() {
+                          public Object exec(SObjFunction func,
+                                             SContext     context,
+                                             Object[]     args)
+                              throws STeaException {
+                              return functionRegsub(func, context, args);
+                          }
+                      });
 
-	context.addFunction("regsub",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionRegsub(func, context, args);
-				    }
-				});
+       SObjFunction matches = new SObjFunction() {
+               public Object exec(SObjFunction func,
+                                  SContext     context,
+                                  Object[]     args)
+                   throws STeaException {
+                   return functionMatches(func, context, args);
+               }
+           };
 
-	SObjFunction matches = new SObjFunction() {
-		public Object exec(SObjFunction func,
-				   SContext     context,
-				   Object[]     args)
-		    throws STeaException {
-		    return functionMatches(func, context, args);
-		}
-	    };
-
-	context.addFunction("matches?", matches);
+       context.newVar("matches?", matches);
 	
-	// For backwards compatibility with Tea 1.x.
-	context.addFunction("matches", matches);
+       // For backwards compatibility with Tea 1.x.
+       context.newVar("matches", matches);
 
-	context.addFunction("regexp",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionRegexp(func, context, args);
-				    }
-				});
+       context.newVar("regexp",
+                      new SObjFunction() {
+                          public Object exec(SObjFunction func,
+                                             SContext     context,
+                                             Object[]     args)
+                              throws STeaException {
+                              return functionRegexp(func, context, args);
+                          }
+                      });
 
-	context.addFunction("str-split",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionSplit(func, context, args);
-				    }
-				});
+       context.newVar("str-split",
+                      new SObjFunction() {
+                          public Object exec(SObjFunction func,
+                                             SContext     context,
+                                             Object[]     args)
+                              throws STeaException {
+                              return functionSplit(func, context, args);
+                          }
+                      });
    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    public void end() {
+
+        // Nothing to do.
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    public void start() {
+
+        // Nothing to do.
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    public void stop() {
+
+        // Nothing to do.
+    }
 
 
 
@@ -481,6 +524,17 @@ public class SModuleRegexp
 //* The first element is the matched portion. The following elements are
 //* the portions matching the parenthesized sets in the regular expression
 //* pattern.
+//* <ul>
+//* <li><b>Example (positive match)</b><br/>
+//* <pre>regexp "label([0-9]): (.*)" "label5: test message"</pre>
+//* evaluates to a list within one list that can be expressed (in Tea) as:
+//* <pre>( ( "label5: test message" "5" "test message" ) )</pre>
+//* </li>
+//* <li><b>Example (negative match)</b><br/>
+//* <pre>regexp "label([0-9]): (.*)" "label: test message"</pre>
+//* evaluates to an empty list.
+//* </li>
+//* </ul>
 //* </Description>
 //* 
 //* </TeaFunction>
@@ -501,11 +555,11 @@ public class SModuleRegexp
 	    throw new SNumArgException(args[0], "regex string");
 	}
 
-	Pattern            pattern  = getPattern(args,1);
-	String             aString  = STypes.getString(args,2);
-	Matcher            matcher  = pattern.matcher(aString);
-	SObjPair           head     = null;
-	SObjPair           tail     = null;
+	Pattern  pattern  = getPattern(args,1);
+	String   aString  = STypes.getString(args,2);
+	Matcher  matcher  = pattern.matcher(aString);
+	SObjPair head     = null;
+	SObjPair tail     = null;
 
 	while ( matcher.find() ) {
 	    MatchResult match = matcher.toMatchResult();

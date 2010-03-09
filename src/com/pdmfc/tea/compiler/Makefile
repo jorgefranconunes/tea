@@ -1,6 +1,6 @@
 ###########################################################################
 #
-# Copyright (c) 2005-2008 PDM&FC, All Rights Reserved.
+# Copyright (c) 2005-2010 PDM&FC, All Rights Reserved.
 #
 ###########################################################################
 
@@ -25,13 +25,15 @@
 
 
 
-SOURCES= \
+PACKAGE_DIR := com/pdmfc/tea/compiler
+
+SOURCES := \
 	SArithExpression.java \
 	SCode.java \
 	SCompileException.java \
 	SCompiler.java \
+	SCompilerStream.java	\
 	SStatement.java \
-	SStatementFactory.java	\
 	SWord.java \
 	SWordBlock.java \
 	SWordCmdSubst.java \

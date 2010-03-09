@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -11,6 +11,8 @@
  *
  * Revisions:
  *
+ * 2010/01/28 Minor refactorings to properly use generics. (jfn)
+ *
  * 2002/08/03 The constructor now receives a java.util.List as
  * argument instead of a SList. (jfn)
  *
@@ -20,6 +22,7 @@
 
 package com.pdmfc.tea.compiler;
 
+import java.io.PrintStream;
 import java.util.Iterator;
 import java.util.List;
 
@@ -48,7 +51,7 @@ class SWordList
 
 
 
-    private List _list = null;
+    private List<SWord> _list = null;
 
 
 
@@ -60,7 +63,7 @@ class SWordList
  *
  **************************************************************************/
 
-    SWordList(List list) {
+    SWordList(List<SWord> list) {
 
 	_list = list;
     }
@@ -82,8 +85,8 @@ class SWordList
 	SObjPair head  = empty;
 	SObjPair elem  = null;
 
-	for ( Iterator i=_list.iterator(); i.hasNext(); ) {
-	    Object   car  = ((SWord)i.next()).get(context);
+        for ( SWord word : _list ) {
+	    Object   car  = word.get(context);
 	    SObjPair node = new SObjPair(car, empty);
 	    
 	    if ( elem == null ) {

@@ -1,12 +1,12 @@
 ###########################################################################
 #
-# Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
+# Copyright (c) 2001, 2002, 2003, 2004 PDM&FC, All Rights Reserved.
 #
 ###########################################################################
 
 ###########################################################################
 #
-# $Id$
+# $Id: index.tea,v 1.13 2006/01/19 19:02:05 jfn Exp $
 #
 #
 # Tea autoload index file.
@@ -48,13 +48,13 @@ tea-autoload TEA_NOCLASS_CALLBACK "util/tea-autoload.tea"
 #
 # TOS module.
 #
-tea-autoload-module class          "com.pdmfc.tea.modules.tos.SModuleTos"
-tea-autoload-module new            "com.pdmfc.tea.modules.tos.SModuleTos"
-tea-autoload-module method         "com.pdmfc.tea.modules.tos.SModuleTos"
-tea-autoload-module load-class     "com.pdmfc.tea.modules.tos.SModuleTos"
-tea-autoload-module class-base-of  "com.pdmfc.tea.modules.tos.SModuleTos"
-tea-autoload-module class-of       "com.pdmfc.tea.modules.tos.SModuleTos"
-tea-autoload-module class-is-a     "com.pdmfc.tea.modules.tos.SModuleTos"
+tea-autoload-module class "com.pdmfc.tea.modules.tos.SModuleTos"
+tea-autoload-module new "com.pdmfc.tea.modules.tos.SModuleTos"
+tea-autoload-module method "com.pdmfc.tea.modules.tos.SModuleTos"
+tea-autoload-module load-class "com.pdmfc.tea.modules.tos.SModuleTos"
+tea-autoload-module class-base-of "com.pdmfc.tea.modules.tos.SModuleTos"
+tea-autoload-module class-of "com.pdmfc.tea.modules.tos.SModuleTos"
+tea-autoload-module class-is-a "com.pdmfc.tea.modules.tos.SModuleTos"
 tea-autoload-module class-get-name "com.pdmfc.tea.modules.tos.SModuleTos"
  
 
@@ -134,9 +134,9 @@ tea-autoload-native-class TFileInput  "com.pdmfc.tea.modules.io.SFileInput"
 tea-autoload-native-class TFileOutput "com.pdmfc.tea.modules.io.SFileOutput"
 tea-autoload-native-class TUrlInput   "com.pdmfc.tea.modules.io.SUrlInput"
 
-tea-autoload-module glob           "com.pdmfc.tea.modules.SModuleRegexp"
+tea-autoload-module glob "com.pdmfc.tea.modules.SModuleRegexp"
 tea-autoload file-unlink-recursive "io/io.tea"
-tea-autoload file-make-path        "io/io.tea"
+tea-autoload file-make-path "io/io.tea"
 
 
 
@@ -172,7 +172,6 @@ tea-autoload xml-get-next-element        "xml/utils.tea"
 
 tea-autoload-module html-encode "com.pdmfc.tea.modules.SModuleHtml"
 tea-autoload-module url-encode  "com.pdmfc.tea.modules.SModuleHtml"
-
 tea-autoload url-build "html/url.tea"
 
 
@@ -184,11 +183,11 @@ tea-autoload url-build "html/url.tea"
 #
 
 tea-autoload-module regexp-pattern "com.pdmfc.tea.modules.SModuleRegexp"
-tea-autoload-module regsub         "com.pdmfc.tea.modules.SModuleRegexp"
-tea-autoload-module matches?       "com.pdmfc.tea.modules.SModuleRegexp"
-tea-autoload-module matches        "com.pdmfc.tea.modules.SModuleRegexp"
-tea-autoload-module regexp         "com.pdmfc.tea.modules.SModuleRegexp"
-tea-autoload-module str-split      "com.pdmfc.tea.modules.SModuleRegexp"
+tea-autoload-module regsub "com.pdmfc.tea.modules.SModuleRegexp"
+tea-autoload-module matches? "com.pdmfc.tea.modules.SModuleRegexp"
+tea-autoload-module matches "com.pdmfc.tea.modules.SModuleRegexp"
+tea-autoload-module regexp "com.pdmfc.tea.modules.SModuleRegexp"
+tea-autoload-module str-split "com.pdmfc.tea.modules.SModuleRegexp"
 
 
 
@@ -225,7 +224,7 @@ tea-autoload TServerSocket "net/TServerSocket.tea"
 
 
 #
-# Reflection module.
+# Reflect module.
 #
 
 tea-autoload-module java-get-value    "com.pdmfc.tea.modules.reflect.SModuleReflect"

@@ -1,7 +1,7 @@
 #!/bin/bash
 ###########################################################################
 #
-# Copyright (c) 2001-2009 PDM&FC, All Rights Reserved.
+# Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
 #
 ###########################################################################
 
@@ -83,7 +83,7 @@ displayHeader () {
     cat <<EOF
 
 Setup Tool for the Tea $TEA_VERSION Instalation
-Copyright (c) 2001-2009 PDM&FC, All Rights Reserved.
+Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
 
 EOF
 }

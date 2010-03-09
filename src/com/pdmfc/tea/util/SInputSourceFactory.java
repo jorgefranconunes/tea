@@ -1,12 +1,12 @@
 /**************************************************************************
  *
- * Copyright (c) 2007 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2007-2010 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 /**************************************************************************
  *
- * $Id: SInputSourceFactory.java,v 1.3 2007/07/21 10:50:37 jfn Exp $
+ * $Id$
  *
  *
  * Revisions:
@@ -17,10 +17,14 @@
 
 package com.pdmfc.tea.util;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.IOException;
+import java.io.Reader;
+import java.nio.charset.Charset;
 import java.net.URL;
 
 import com.pdmfc.tea.util.SInputSource;
@@ -135,6 +139,59 @@ public class SInputSourceFactory
         // URL because the "protocol" would be only a characeter wide.
 
         return protocol;
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    public static Reader openReader(String  source,
+                                    Charset charset)
+        throws IOException {
+
+        if ( charset == null ) {
+            charset = Charset.defaultCharset();
+        }
+
+        SInputSource inputSource = createInputSource(source);
+        InputStream  input       = inputSource.openStream();
+        Reader       reader      = new InputStreamReader(input, charset);
+        Reader       bufReader   = new BufferedReader(reader);
+
+        return bufReader;
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    public static Reader openReader(String  sourceBase,
+                                    String  source,
+                                    Charset charset)
+        throws IOException {
+
+        if ( charset == null ) {
+            charset = Charset.defaultCharset();
+        }
+
+        SInputSource inputSource = createInputSource(sourceBase, source);
+        InputStream  input       = inputSource.openStream();
+        Reader       reader      = new InputStreamReader(input, charset);
+        Reader       bufReader   = new BufferedReader(reader);
+
+        return bufReader;
     }
 
 

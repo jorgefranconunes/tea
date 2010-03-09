@@ -1,6 +1,6 @@
 ###########################################################################
 #
-# Copyright (c) 2009 PDM&FC, All Rights Reserved.
+# Copyright (c) 2010 PDM&FC, All Rights Reserved.
 #
 ###########################################################################
 
@@ -8,7 +8,7 @@
 #
 # $Id$
 #
-# Makefile for the "lib.tea.tea.lists" package.
+# Makefile for the "lib.tea.tea.util" package.
 #
 # The following variables are expected to be defined:
 #
@@ -17,7 +17,7 @@
 #
 # Revisions:
 #
-# 2009/03/11 Created. (jfn)
+# 2010/03/01 Created. (jfn)
 #
 ###########################################################################
 
@@ -25,7 +25,9 @@
 
 
 
-SOURCES = \
+PACKAGE_DIR := lib/tea/tea/util
+
+SOURCES := \
 	lists.tea \
 
 include $(BASE_DIR)/make/package.make

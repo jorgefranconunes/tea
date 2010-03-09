@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -11,7 +11,7 @@
  *
  * Revisions:
  *
- * 2008/04/01 Refactored to use "org.xml.sax.XMLReader" instead of
+ * 2010/02/07 Refactored to use "org.xml.sax.XMLReader" instead of
  * "org.xml.sax.Parser". (TSK-PDMFC-TEA-0042) (jfn)
  *
  * 2001/05/12

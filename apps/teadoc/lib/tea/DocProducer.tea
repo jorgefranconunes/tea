@@ -1,6 +1,6 @@
 ###########################################################################
 #
-# Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
+# Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
 #
 ###########################################################################
 
@@ -11,8 +11,8 @@
 #
 # Revisions:
 #
-# 2008/04/01 Slight refactoring in the constructor to allow the case
-# of a null argument. (TSK-PDMFC-TEA-0042) (jfn)
+# 2010/01/27 Added ".svn" to the set of directory names that get skiped
+# when looking for source files to process. (jfn)
 #
 # 2004/08/13 The "DocProducer processFile" now only processes the XML
 # file if it was actually created by "DocExtractor::processFile".
@@ -39,7 +39,7 @@ define _knownFileTypes [regexp-pattern ".*((\\.tea)|(\\.java))$"]
 #
 # Regexp for names of directories that will be skiped.
 #
-define _namesToSkip [regexp-pattern "CVS"]
+define _namesToSkip [regexp-pattern "(CVS)|(\.svn)"]
 
 
 
@@ -64,7 +64,7 @@ class DocProducer (
 
 ###########################################################################
 #
-# If the "nativeParser" argument is null then a default parser is used.
+# 
 #
 ###########################################################################
 

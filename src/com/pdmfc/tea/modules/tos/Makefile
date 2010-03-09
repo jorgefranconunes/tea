@@ -1,12 +1,12 @@
 ###########################################################################
 #
-# Copyright (c) 2005 PDM&FC, All Rights Reserved.
+# Copyright (c) 2005-2010 PDM&FC, All Rights Reserved.
 #
 ###########################################################################
 
 ###########################################################################
 #
-# $Id: Makefile,v 1.1 2005/02/15 17:42:45 jfn Exp $
+# $Id$
 #
 # Makefile for the "com.pdmfc.tea.modules.tos" package.
 #
@@ -24,6 +24,8 @@
 
 
 
+
+PACKAGE_DIR := com/pdmfc/tea/modules/tos
 
 SOURCES = \
 	SEmptyMethod.java \

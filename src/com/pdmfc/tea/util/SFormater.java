@@ -272,10 +272,10 @@ public abstract class SFormater
 	    _flags |= ZF;
 	    _width = 0;
 	 } else {
-	    _width = (int)(c-'0');
+	    _width = c - '0';
 	 }
 	 while ( !atEnd() && Character.isDigit(c=nextChar()) ) {
-	    _width = _width*10 + (int)(c-'0');
+	    _width = _width*10 + (c-'0');
 	 }
 	 if ( c == '.' ) {
 	    processSigFigs();
@@ -308,7 +308,7 @@ public abstract class SFormater
       _sigFigs = 0;
 
       while ( !atEnd() && Character.isDigit(c=nextChar()) ) {
- 	 _sigFigs = _sigFigs*10 + (int)(c-'0');
+ 	 _sigFigs = _sigFigs*10 + (c-'0');
       }
 
       processTypeField(c);

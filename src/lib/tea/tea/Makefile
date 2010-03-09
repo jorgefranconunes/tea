@@ -1,6 +1,6 @@
 ###########################################################################
 #
-# Copyright (c) 2009 PDM&FC, All Rights Reserved.
+# Copyright (c) 2010 PDM&FC, All Rights Reserved.
 #
 ###########################################################################
 
@@ -17,7 +17,7 @@
 #
 # Revisions:
 #
-# 2009/03/11 Created. (jfn)
+# 2010/03/01 Created. (jfn)
 #
 ###########################################################################
 
@@ -25,7 +25,9 @@
 
 
 
-SOURCES = \
+PACKAGE_DIR := lib/tea/tea
+
+SOURCES := \
 
 include $(BASE_DIR)/make/package.make
 

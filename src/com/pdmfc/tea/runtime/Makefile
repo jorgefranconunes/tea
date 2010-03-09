@@ -1,13 +1,12 @@
 ###########################################################################
 #
-# Copyright (c) 2005-2008 PDM&FC, All Rights Reserved.
+# Copyright (c) 2005-2010 PDM&FC, All Rights Reserved.
 #
 ###########################################################################
 
 ###########################################################################
 #
 # $Id$
-#
 #
 # Makefile for the "com.pdmfc.tea.runtime" package.
 #
@@ -26,31 +25,35 @@
 
 
 
-SOURCES = \
-	SBreakException.java \
-	SContext.java \
-	SContinueException.java \
-	SEmptyListException.java \
-	SExitException.java \
-	SFlowControlException.java \
-	SLambdaFunction.java \
-	SLambdaFunctionVarArg.java \
-	SMalformedListException.java \
-	SNoSuchFunctionException.java \
-	SNoSuchVarException.java \
-	SNumArgException.java \
-	SObjBlock.java \
-	SObjByteArray.java \
-	SObjFunction.java \
-	SObjNull.java \
-	SObjPair.java \
-	SObjSymbol.java \
-	SObjVar.java \
-	SReturnException.java \
-	SRuntimeException.java \
-	STeaRuntime.java \
-	STypeException.java \
-	STypes.java \
+PACKAGE_DIR := com/pdmfc/tea/runtime
+
+SOURCES := \
+	SBreakException.java	\
+	SContext.java	\
+	SContinueException.java	\
+	SEmptyListException.java	\
+	SExitException.java	\
+	SFlowControlException.java	\
+	SLambdaFunction.java	\
+	SLambdaFunctionVarArg.java	\
+	SMalformedListException.java	\
+	SModuleUtils.java	\
+	SNoSuchFunctionException.java	\
+	SNoSuchVarException.java	\
+	SNumArgException.java	\
+	SObjBlock.java	\
+	SObjByteArray.java	\
+	SObjFunction.java	\
+	SObjNull.java	\
+	SObjPair.java	\
+	SObjSymbol.java	\
+	SObjVar.java	\
+	SReturnException.java	\
+	SRuntimeException.java	\
+	STeaRuntime.java	\
+	STypeException.java	\
+	STypes.java	\
+	SUtils.java	\
 
 include $(BASE_DIR)/make/package.make
 

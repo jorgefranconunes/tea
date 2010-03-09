@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -34,7 +34,6 @@ import com.pdmfc.tea.modules.SModule;
 import com.pdmfc.tea.modules.io.SInput;
 import com.pdmfc.tea.modules.tos.SJavaClass;
 import com.pdmfc.tea.modules.tos.STosClass;
-import com.pdmfc.tea.runtime.STeaRuntime;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjNull;
@@ -84,7 +83,8 @@ import com.pdmfc.tea.runtime.SUtils;
  **************************************************************************/
 
 public class SModuleIO
-    extends SModule {
+    extends Object
+    implements SModule {
 
 
 
@@ -122,10 +122,8 @@ public class SModuleIO
  *
  **************************************************************************/
 
-    public void init(STeaRuntime context)
+    public void init(SContext context)
 	throws STeaException {
-
-	super.init(context);
 
 	STosClass inClass  = new SJavaClass("com.pdmfc.tea.modules.io.SInput");
 	STosClass outClass = new SJavaClass("com.pdmfc.tea.modules.io.SOutput");
@@ -146,135 +144,165 @@ public class SModuleIO
 	context.newVar("stdout", _stdout);
 	context.newVar("stderr", _stderr);
 
-	context.addFunction("file-basename",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionBasename(func, context, args);
-				    }
-				});
+	context.newVar("file-basename",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionBasename(func, context, args);
+                           }
+                       });
 
-	context.addFunction("file-copy",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionCopy(func, context, args);
-				    }
-				});
+	context.newVar("file-copy",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionCopy(func, context, args);
+                           }
+                       });
 
-	context.addFunction("file-dirname",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionDirname(func, context, args);
-				    }
-				});
+	context.newVar("file-dirname",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionDirname(func, context, args);
+                           }
+                       });
 
-	context.addFunction("file-extension",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionExtension(func, context, args);
-				    }
-				});
+	context.newVar("file-extension",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionExtension(func, context, args);
+                           }
+                       });
 
-	context.addFunction("file-exists?",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionFileExists(func, context, args);
-				    }
-				});
+	context.newVar("file-exists?",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionFileExists(func, context, args);
+                           }
+                       });
 
-	context.addFunction("file-is-dir?",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionIsDir(func, context, args);
-				    }
-				});
+	context.newVar("file-is-dir?",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionIsDir(func, context, args);
+                           }
+                       });
 
-	context.addFunction("file-is-regular?",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionIsRegular(func, context, args);
-				    }
-				});
+	context.newVar("file-is-regular?",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionIsRegular(func, context, args);
+                           }
+                       });
 
-	context.addFunction("file-join",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionJoin(func, context, args);
-				    }
-				});
+	context.newVar("file-join",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionJoin(func, context, args);
+                           }
+                       });
 
-	context.addFunction("file-mkdir",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionMkdir(func, context, args);
-				    }
-				});
+	context.newVar("file-mkdir",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionMkdir(func, context, args);
+                           }
+                       });
 
-	context.addFunction("file-rename",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionRename(func, context, args);
-				    }
-				});
+	context.newVar("file-rename",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionRename(func, context, args);
+                           }
+                       });
 
-	context.addFunction("file-size",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionSize(func, context, args);
-				    }
-				});
+	context.newVar("file-size",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionSize(func, context, args);
+                           }
+                       });
 
-	context.addFunction("file-split-path-list",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionSplitPathList(func, context, args);
-				    }
-				});
+	context.newVar("file-split-path-list",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionSplitPathList(func, context, args);
+                           }
+                       });
 
-	context.addFunction("file-unlink",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionUnlink(func, context, args);
-				    }
-				});
+	context.newVar("file-unlink",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionUnlink(func, context, args);
+                           }
+                       });
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    public void end() {
+
+        // Nothing to do.
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    public void start() {
+
+        // Nothing to do.
     }
 
 
@@ -757,8 +785,9 @@ public class SModuleIO
 				       Object[]     args)
 	throws STeaException {
 
-	int          numArgs = args.length;
-	StringBuffer result  = new StringBuffer();
+	int          numArgs       = args.length;
+	StringBuffer result        = new StringBuffer();
+	int          numArgsMinus1 = args.length - 1;
 
 	try {
 	    if ( numArgs > 1 ) {

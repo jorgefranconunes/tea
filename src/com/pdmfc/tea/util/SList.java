@@ -1,22 +1,25 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 /**************************************************************************
  *
- * $Id$
+ * $Id: SList.java,v 1.7 2004/10/01 15:32:10 jfn Exp $
  *
  *
  * Revisions:
  *
- * 2002/02/19 Readded the "elements()" method for compatibility with
- * Java code written for Tea 3.0.0. The method is deprecated. (jfn)
+ * 2002/02/19
+ * Readded the "elements()" method for compatibility with Java code
+ * written for Tea 3.0.0. The method is deprecated. (jfn)
  *
- * 2002/01/10 The elements() method was replaced by iterator(). (jfn)
+ * 2002/01/10
+ * The elements() method was replaced by iterator(). (jfn)
  *
- * 2001/05/12 Created. (jfn)
+ * 2001/05/12
+ * Created. (jfn)
  *
  **************************************************************************/
 
@@ -25,6 +28,8 @@ package com.pdmfc.tea.util;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+
+import com.pdmfc.tea.util.SListNode;
 
 
 
@@ -168,6 +173,30 @@ public class SList
 
       return new SListIterator(_head);
    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * Builds an <TT>Enumeration</TT> to iterate over the list elements. The
+ * <TT>Enumeration</TT> will retrieve the elements by their order in the
+ * list.
+ *
+ * @return An <TT>Enumeration</TT> object that may be used to iterate
+ * over the list elements.
+ *
+ * @deprecated Use the <code>{@link #iterator()}</code> method
+ * instead.
+ *
+ **************************************************************************/
+    
+    @Deprecated
+    public Enumeration elements() {
+
+	return new SListEnumeration(_head);
+    }
 
 
 

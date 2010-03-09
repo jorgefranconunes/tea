@@ -1,17 +1,18 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001, 2002 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 /**************************************************************************
  *
- * $Id$
+ * $Id: SLambdaFunction.java,v 1.5 2005/03/09 12:19:00 jpsl Exp $
  *
  *
  * Revisions:
  *
- * 2001/05/12 Created. (jfn)
+ * 2001/05/12
+ * Created. (jfn)
  *
  **************************************************************************/
 
@@ -27,6 +28,7 @@ import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SBreakException;
 import com.pdmfc.tea.runtime.SContinueException;
 import com.pdmfc.tea.runtime.SReturnException;
+import com.pdmfc.tea.runtime.STypeException;
 
 
 

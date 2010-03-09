@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001, 2002, 2003, 2004 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -11,8 +11,7 @@
  *
  * Revisions:
  *
- * 2004/09/02 Added the constructor
- * "STypeException(String,Object[])". (jfn)
+ * 2004/09/02 Added the constructor "STypeException(String,Object[])". (jfn)
  *
  * 2001/05/12 Created. (jfn)
  *
@@ -20,6 +19,7 @@
 
 package com.pdmfc.tea.runtime;
 
+import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SRuntimeException;
 
 

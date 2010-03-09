@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -36,7 +36,6 @@ import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjNull;
 import com.pdmfc.tea.runtime.SObjPair;
 import com.pdmfc.tea.runtime.SObjSymbol;
-import com.pdmfc.tea.runtime.STeaRuntime;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypeException;
@@ -72,16 +71,15 @@ import com.pdmfc.tea.util.SList;
  **************************************************************************/
 
 public class SModuleTos
-    extends SModule {
+    extends Object
+    implements SModule {
 
 
 
 
 
-    /**
-     * Stores the TOS class objects indexed by the respectiva Java
-     * class name. Used by the "functionLoadClass(...)" method.
-     */
+    // Stores the TOS class objects indexed by the respectiva Java
+    // class name. Used by the "functionLoadClass(...)" method.
     private Hashtable _tosClasses = new Hashtable();
 
     private SContext _globalContext = null;
@@ -109,118 +107,161 @@ public class SModuleTos
  *
  **************************************************************************/
 
-    public void init(STeaRuntime context)
+    public void init(SContext context)
 	throws STeaException {
-
-	super.init(context);
 
 	_globalContext = context;
 
-	context.addFunction("class",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionClass(func, context, args);
-				    }
-				});
+	context.newVar("class",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionClass(func, context, args);
+                           }
+                       });
 
-	context.addFunction("new-class",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionNewClass(func, context, args);
-				    }
-				});
+	context.newVar("new-class",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionNewClass(func, context, args);
+                           }
+                       });
 
-	context.addFunction("new",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionNew(func, context, args);
-				    }
-				});
+	context.newVar("new",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionNew(func, context, args);
+                           }
+                       });
 
-	context.addFunction("method",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionMethod(func, context, args);
-				    }
-				});
+	context.newVar("method",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionMethod(func, context, args);
+                           }
+                       });
 
-	context.addFunction("load-class",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionLoadClass(func, context, args);
-				    }
-				});
+	context.newVar("load-class",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionLoadClass(func, context, args);
+                           }
+                       });
 
-	context.addFunction("class-base-of",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionBaseOf(func, context, args);
-				    }
-				});
+	context.newVar("class-base-of",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionBaseOf(func, context, args);
+                           }
+                       });
 
-	context.addFunction("class-of",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionClassOf(func, context, args);
-				    }
-				});
+	context.newVar("class-of",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionClassOf(func, context, args);
+                           }
+                       });
 
-	context.addFunction("class-is-a",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionIsA(func,
-							   context,
-							   args);
-				    }
-				});
+	context.newVar("class-is-a",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionIsA(func,
+                                                  context,
+                                                  args);
+                           }
+                       });
 
-	context.addFunction("class-get-name",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionGetName(func,
-							       context,
-							       args);
-				    }
-				});
+	context.newVar("class-get-name",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionGetName(func,
+                                                      context,
+                                                      args);
+                           }
+                       });
 
-	context.addFunction("tos-obj?",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionIsTosObj(func,
-								context,
-								args);
-				    }
-				});
+	context.newVar("tos-obj?",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionIsTosObj(func,
+                                                       context,
+                                                       args);
+                           }
+                       });
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    public void end() {
+
+        // Nothing to do.
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    public void start() {
+
+        // Nothing to do.
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    public void stop() {
+
+        // Nothing to do.
     }
 
 

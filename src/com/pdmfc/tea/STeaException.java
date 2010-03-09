@@ -1,20 +1,18 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 /**************************************************************************
  * 
- * $Id$
+ * $Id: STeaException.java,v 1.3 2005/11/04 05:50:04 jfn Exp $
  *
  *
  * Revisions:
  *
- * 2008/09/02 Added the methods getMessageFormat(),
- * getMessageArguments(). (jfn)
- *
- * 2001/05/12 Created. (jfn)
+ * 2001/05/12
+ * Created. (jfn)
  *
  **************************************************************************/
 
@@ -110,42 +108,6 @@ public class STeaException
 
 	_msgFmt  = msgFmt;
 	_fmtArgs = fmtArgs;
-    }
-
-
-
-
-
-/***************************************************************************
- *
- * Fetches the formating string passed to one of the constructors.
- *
- * @return The formating string passed to one of the constructors.
- *
- ***************************************************************************/
-
-    public String getMessageFormat() {
-
-        return _msgFmt;
-    }
-
-
-
-
-
-/***************************************************************************
- *
- * Fetches the array of formating arguments that were passed to the
- * constructor.
- *
- * @return The array of message arguments that were passed to the
- * constructor.
- *
- ***************************************************************************/
-
-    public Object[] getMessageArguments() {
-
-        return _fmtArgs;
     }
 
 

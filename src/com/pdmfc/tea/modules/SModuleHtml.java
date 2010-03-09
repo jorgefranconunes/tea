@@ -1,32 +1,27 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 /**************************************************************************
  *
- * $Id: SModuleHtml.java,v 1.2 2005/02/15 17:41:09 jfn Exp $
+ * $Id$
  *
  *
  * Revisions:
  *
- * 2002/08/02
- * Moved to the "com.pdmfc.tea.modules" package. (jfn)
+ * 2002/08/02 Moved to the "com.pdmfc.tea.modules" package. (jfn)
  *
- * 2002/03/06
- * Added the "|" character to the set of characters that the
- * "urlEncode(String)" method will encode. (jfn)
+ * 2002/03/06 Added the "|" character to the set of characters that
+ * the "urlEncode(String)" method will encode. (jfn)
  *
- * 2002/01/20
- * Calls to the "addJavaFunction()" method were replaced by inner
- * classes for performance. (jfn)
+ * 2002/01/20 Calls to the "addJavaFunction()" method were replaced by
+ * inner classes for performance. (jfn)
  *
- * 2002/01/10
- * This classe now derives from SModuleCore. (jfn)
+ * 2002/01/10 This classe now derives from SModuleCore. (jfn)
  *
- * 2001/08/18
- * Created. (jfn)
+ * 2001/08/18 Created. (jfn)
  *
  **************************************************************************/
 
@@ -37,7 +32,6 @@ import com.pdmfc.tea.modules.SModule;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.STeaRuntime;
 import com.pdmfc.tea.runtime.STypeException;
 import com.pdmfc.tea.runtime.STypes;
 
@@ -66,7 +60,8 @@ import com.pdmfc.tea.runtime.STypes;
  **************************************************************************/
 
 public class SModuleHtml 
-    extends SModule {
+    extends Object
+    implements SModule {
 
 
 
@@ -91,30 +86,73 @@ public class SModuleHtml
  *
  **************************************************************************/
 
-    public void init(STeaRuntime context)
+    public void init(SContext context)
 	throws STeaException {
 
-	super.init(context);
+	context.newVar("html-encode",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionHtmlEncode(func, context, args);
+                           }
+                       });
 
-	context.addFunction("html-encode",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionHtmlEncode(func, context, args);
-				    }
-				});
+	context.newVar("url-encode",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionUrlEncode(func, context, args);
+                           }
+                       });
+    }
 
-	context.addFunction("url-encode",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionUrlEncode(func, context, args);
-				    }
-				});
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    public void end() {
+
+        // Nothing to do.
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    public void start() {
+
+        // Nothing to do.
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    public void stop() {
+
+        // Nothing to do.
     }
 
 

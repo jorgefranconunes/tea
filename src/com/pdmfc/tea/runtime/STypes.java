@@ -54,6 +54,7 @@ public class STypes
     private static final String TYPE_FUNC     = "Function";
     private static final String TYPE_INT      = "Integer";
     private static final String TYPE_NULL     = "Null";
+    private static final String TYPE_NUMBER   = "Number";
     private static final String TYPE_PAIR     = "Pair";
     private static final String TYPE_STRING   = "String";
     private static final String TYPE_SYMBOL   = "Symbol";

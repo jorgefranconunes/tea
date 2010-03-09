@@ -1,17 +1,18 @@
 /**************************************************************************
  *
- * Copyright (c) 2002-2008 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2002 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 /**************************************************************************
  *
- * $Id$
+ * $Id: STosTeaClass.java,v 1.2 2002/09/17 16:35:28 jfn Exp $
  *
  *
  * Revisions:
  *
- * 2002/06/24 Created. (jfn)
+ * 2002/06/24
+ * Created. (jfn)
  *
  **************************************************************************/
 
@@ -21,6 +22,7 @@ import java.util.Iterator;
 
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.runtime.SContext;
+import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SNoSuchVarException;
 import com.pdmfc.tea.tos.SNoSuchMethodException;

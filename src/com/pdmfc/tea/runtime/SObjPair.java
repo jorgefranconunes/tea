@@ -1,21 +1,20 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 /**************************************************************************
  *
- * $Id
+ * $Id$
  *
  *
  * Revisions:
  *
- * 2002/01/10
- * The elements() method was replaced with the iterator() method. (jfn)
+ * 2002/01/10 The elements() method was replaced with the iterator()
+ * method. (jfn)
  *
- * 2001/05/12
- * Created. (jfn)
+ * 2001/05/12 Created. (jfn)
  *
  **************************************************************************/
 
@@ -108,6 +107,34 @@ public class SObjPair
 
 /**************************************************************************
  *
+ * 
+ *
+ **************************************************************************/
+
+    public SObjPair nextPair()
+        throws SRuntimeException {
+
+        if ( _cdr == null ) {
+            String msg = "No such element";
+            throw new SRuntimeException(msg);
+        }
+
+        if ( !(_cdr instanceof SObjPair) ) {
+            String msg = "Improperly formed list";
+            throw new SRuntimeException(msg);
+        }
+
+        SObjPair result = (SObjPair)_cdr;
+
+        return result;
+    }
+
+
+
+
+
+/**************************************************************************
+ *
  * Determines the size of the list starting with this node.
  *
  * @return The number of nodes in the list, starting with this node.
@@ -133,6 +160,29 @@ public class SObjPair
 	}
 	
 	return numNodes;
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * Builds an <code>java.util.Enumeration</code> that will orderly
+ * iterator over the elements in the list whose head is this
+ * <code>SObjPair</code> object.
+ *
+ * @return A newly created <code>java.util.Enumeration</code> object
+ * that will iterate over the list elements.
+ *
+ * @deprecated Use {@link #iterator}.
+ *
+ **************************************************************************/
+
+    @Deprecated
+    public Enumeration elements() {
+
+	return new SPairEnumeration(this);
     }
 
 

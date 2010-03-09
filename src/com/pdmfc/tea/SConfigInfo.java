@@ -46,13 +46,13 @@ public class SConfigInfo
     static {
 	InputStream in = SConfigInfo.class.getResourceAsStream(RES_NAME);
 
-	if ( in != null ) {
-	    try {
-		_props.load(in);
-	    } catch (IOException e) {
-		// Too bad we just don't care...
-	    }
-	}
+        if ( in != null ) {
+            try {
+                _props.load(in);
+            } catch (IOException e) {
+                // Too bad we just don't care...
+            }
+        }
     }
 
 

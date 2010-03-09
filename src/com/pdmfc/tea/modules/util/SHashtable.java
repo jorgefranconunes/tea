@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -10,6 +10,8 @@
  *
  *
  * Revisions:
+ *
+ * 2010/01/28 Minor refactorings to properly use generics. (jfn)
  *
  * 2001/05/12 Created. (jfn)
  *
@@ -31,6 +33,7 @@ import com.pdmfc.tea.runtime.SObjNull;
 import com.pdmfc.tea.runtime.SObjPair;
 import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SNumArgException;
+import com.pdmfc.tea.runtime.SRuntimeException;
 
 
 
@@ -71,7 +74,7 @@ public class SHashtable
     private static final SObjSymbol CLASS_NAME_S =
 	SObjSymbol.addSymbol(CLASS_NAME);
 
-    private Map _hashtable = null;
+    private Map<Object,Object> _hashtable = null;
 
 
 
@@ -92,7 +95,7 @@ public class SHashtable
 
 	super(myClass);
 
-	_hashtable = new HashMap();
+	_hashtable = new HashMap<Object,Object>();
     }
 
 
@@ -112,8 +115,8 @@ public class SHashtable
  *
  **************************************************************************/
 
-    private SHashtable(STosClass myClass,
-		       Map       contents)
+    private SHashtable(STosClass          myClass,
+		       Map<Object,Object> contents)
 	throws STeaException {
 
 	super(myClass);
@@ -137,7 +140,7 @@ public class SHashtable
  *
  **************************************************************************/
 
-    public Map getInternalMap() {
+    public Map<Object,Object> getInternalMap() {
 
 	return _hashtable;
     }
@@ -658,8 +661,8 @@ public class SHashtable
  *
  **************************************************************************/
 
-    public static SHashtable newInstance(SContext context,
-					 Map      contents)
+    public static SHashtable newInstance(SContext           context,
+					 Map<Object,Object> contents)
 	throws STeaException {
 
 	STosClass  theClass = STosUtil.getClass(context, CLASS_NAME_S);

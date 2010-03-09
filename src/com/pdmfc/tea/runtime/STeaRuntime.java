@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -37,7 +37,6 @@
 
 package com.pdmfc.tea.runtime;
 
-import java.io.InputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,11 +51,10 @@ import com.pdmfc.tea.compiler.SCode;
 import com.pdmfc.tea.compiler.SCompiler;
 import com.pdmfc.tea.modules.SModule;
 import com.pdmfc.tea.runtime.SContext;
+import com.pdmfc.tea.runtime.SModuleUtils;
 import com.pdmfc.tea.runtime.SObjFunction;
+import com.pdmfc.tea.runtime.SObjNull;
 import com.pdmfc.tea.runtime.SObjPair;
-import com.pdmfc.tea.runtime.SObjSymbol;
-import com.pdmfc.tea.util.SInputSource;
-import com.pdmfc.tea.util.SInputSourceFactory;
 
 
 
@@ -66,43 +64,48 @@ import com.pdmfc.tea.util.SInputSourceFactory;
  *
  * Represents a Tea interpreter.
  *
- * <p>Usage of this class is preferable to the direct manipulation of
- * <code>SContext</code> objects when running a Tea program.</p>
- *
  **************************************************************************/
 
 public class STeaRuntime
-    extends SContext {
+    extends Object {
 
 
 
-
-
-    private static final String PROP_LIB_VAR   =
-	"com.pdmfc.tea.libraryVarName";
-
-    private static final String PROP_INIT_FILE =
-	"com.pdmfc.tea.initFile";
-
-    private static final String PROP_CORE_IMPORT_DIR =
-	"com.pdmfc.tea.coreImportDir";
 
 
     // The name of the Tea global variable with the list of directory
     // names where the <code>import</code> function looks for Tea
     // source files.
-    private static final SObjSymbol LIB_VAR   =
-	SObjSymbol.addSymbol(SConfigInfo.getProperty(PROP_LIB_VAR));
+    private static final String VAR_LIBRARY   =
+	SConfigInfo.getProperty("com.pdmfc.tea.libraryVarName");
+
+    // The name of the Tea global variable that will contain the 0th
+    // argument.
+    private static final String VAR_ARGV0 =
+        SConfigInfo.getProperty("com.pdmfc.tea.argv0VarName");
+
+    // The name of the Tea global variable that will contain the list
+    // of command line arguments.
+    private static final String VAR_ARGV =
+	SConfigInfo.getProperty("com.pdmfc.tea.argvVarName");
 
     // Name of the file to read from each directory in the TEA_LIBRARY
     // list.
     private static final String INIT_FILE = 
-	SConfigInfo.getProperty(PROP_INIT_FILE);
+	SConfigInfo.getProperty("com.pdmfc.tea.initFile");
 
-    // The path of Java resource to use as import directory. This path
-    // will be added to the end of list of import directories.
+    // The path of a Java resource to use as import directory. This
+    // path will be added to the end of list of import directories.
     private static final String CORE_IMPORT_DIR =
-	SConfigInfo.getProperty(PROP_CORE_IMPORT_DIR);
+	SConfigInfo.getProperty("com.pdmfc.tea.coreImportDir");
+
+    private static final String[] CORE_MODULES = {
+        "com.pdmfc.tea.modules.io.SModuleIO",
+	"com.pdmfc.tea.modules.lang.SModuleLang",
+	"com.pdmfc.tea.modules.SModuleList",
+	"com.pdmfc.tea.modules.SModuleMath",
+	"com.pdmfc.tea.modules.SModuleString"
+    };
 
 
 
@@ -114,27 +117,23 @@ public class STeaRuntime
 
 
 
-    
+
     private List<String> _importLocations    = new ArrayList<String>();
     private List<String> _allImportLocations = null;
 
-    // List of modules registered by calls to one of the
-    // <code>addModule(...)</code> methods.
-    private ArrayList<SModule> _modules = new ArrayList<SModule>();
+    private String   _argv0 = null;
+    private String[] _argv  = new String[0];
 
-    // The modules registered by calls to the addModule(String)}
-    // method. The values are SModule instances and are indexed by the
-    // respective Java class name. This is used to ensure a module is
-    // not added twice.
-    private Map<String,SModule> _modulesByName =
-	new HashMap<String,SModule>();
-
-    // Counts packages preventing this Tea interpreter from stoping.
-    private int _holdCounter = 0;
+    // List of module class names or SModule instances. These were
+    // registered by calls to addModule(...) before the first start.
+    private List<Object> _modules = new ArrayList<Object>();
 
     private boolean _isFirstStart = true;
+    private boolean _isFirstExec  = true;
 
     private State _state = State.INITED;
+
+    private SContext _toplevelContext = new SContext();
 
 
 
@@ -146,14 +145,11 @@ public class STeaRuntime
  *
  **************************************************************************/
 
-    public STeaRuntime()
-	throws STeaException {
+    public STeaRuntime() {
 
-	addModule("com.pdmfc.tea.modules.io.SModuleIO");
-	addModule("com.pdmfc.tea.modules.lang.SModuleLang");
-	addModule("com.pdmfc.tea.modules.SModuleList");
-	addModule("com.pdmfc.tea.modules.SModuleMath");
-	addModule("com.pdmfc.tea.modules.SModuleString");
+        for ( String moduleClassName : CORE_MODULES ) {
+            _modules.add(moduleClassName);
+        }
     }
 
 
@@ -175,8 +171,7 @@ public class STeaRuntime
  *
  **************************************************************************/
 
-    public void setImportLocations(List<String> dirList)
-        throws STeaException {
+    public void setImportLocations(List<String> dirList) {
 
         _importLocations.clear();
         _importLocations.addAll(dirList);
@@ -252,10 +247,9 @@ public class STeaRuntime
  *
  **************************************************************************/
 
-    public final void addFunction(String       functionName,
-				  SObjFunction function) {
+    public void setArgv0(String argv0) {
 
-	newVar(functionName, function);
+        _argv0 = argv0;
     }
 
 
@@ -264,19 +258,13 @@ public class STeaRuntime
 
 /**************************************************************************
  *
- * Initializes the package in this context. Tipically this will add
- * new commands to the context.
- *
- * @param pkg Reference to the <code>SModule</code> object to be
- * initialized.
+ * 
  *
  **************************************************************************/
 
-    public void addModule(SModule pkg)
-	throws STeaException {
+    public void setArgv(String[] argv) {
 
-	_modules.add(pkg);
-	pkg.init(this);
+        _argv = argv;
     }
 
 
@@ -285,41 +273,22 @@ public class STeaRuntime
 
 /**************************************************************************
  *
- * Initializes a package in this context. An object of the java class
- * named <code>className</code> is instantiated. That class must be
- * derived from the <code>SModule</code> class. The newly created
- * <code>SModule</code> object is initialized inside this context.
- *
- * @param className The name of the java class, derived from
- * <code>SModule</code>, of the object to be inSantiated.
- *
- * @exception STeaException Thrown if there were any problems loading
- * the class or inSantiating the object.
+ * 
  *
  **************************************************************************/
 
     public void addModule(String className)
-	throws STeaException {
+        throws STeaException {
 
-	if ( _modulesByName.containsKey(className) ) {
-	    // The module was already previouslly added, do nothing.
-	    return;
-	}
+        checkState(State.INITED, State.STARTED, State.RUNNING);
 
-	SModule pkg = null;
-
-	try {
-	    pkg = (SModule)Class.forName(className).newInstance();
-	} catch (Throwable e) {
-	    String   msg     = "failed to load class \"{0}\" - {1} - {2}";
-	    Object[] fmtArgs = {
-		className,e.getClass().getName(),e.getMessage()
-	    };
-	    throw new STeaException(msg, fmtArgs);
-	}
-
-	addModule(pkg);
-	_modulesByName.put(className, pkg);
+        if ( _isFirstStart ) {
+            _modules.add(className);
+        } else if ( _state == State.RUNNING ) {
+            SModuleUtils.addAndStartModule(_toplevelContext, className);
+        } else {
+            SModuleUtils.addModule(_toplevelContext, className);
+        }
     }
 
 
@@ -328,36 +297,203 @@ public class STeaRuntime
 
 /**************************************************************************
  *
- * Signals that this context will be used shortly after. All the
- * packages loaded so far are signaled.
+ * 
  *
  **************************************************************************/
 
-    public void start()
+    public void addModule(SModule module)
+        throws STeaException {
+
+        checkState(State.INITED, State.STARTED, State.RUNNING);
+
+        if ( _isFirstStart ) {
+            _modules.add(module);
+        } else if ( _state == State.RUNNING ) {
+            SModuleUtils.addAndStartModule(_toplevelContext, module);
+        } else {
+            SModuleUtils.addModule(_toplevelContext, module);
+        }
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    public SContext getToplevelContext() {
+
+        return _toplevelContext;
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * Signals that this context will be used shortly after.
+ *
+ **************************************************************************/
+
+    public void start() {
+
+        checkState(State.INITED);
+
+        _state = State.STARTED;
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * Signals that this context will not be used until a call to the
+ * <code>start()</code> method is made again. All the packages loaded
+ * so far are signaled with a call to their <code>stop()</code>
+ * method.
+ *
+ * <p>Before calling the packages' <code>stop()</code> method the
+ * current thread waits until all necessary calls to
+ * <code>releaseStop()</code> are performed. The calls to
+ * <code>releaseStop()</code> must be as many as the ones to
+ * <code>holdStop</code>. Note that as the current thread sleeps, the
+ * calls to <code>releaseStop()</code> must be made from another
+ * thread.</p>
+ *
+ **************************************************************************/
+
+    public void stop() {
+
+        checkState(State.STARTED);
+
+        _state       = State.INITED;
+        _isFirstExec = true;
+
+        try {
+            SModuleUtils.stopModules(_toplevelContext);
+        } catch (STeaException e) {
+            // How should we report this to the caller?...
+        }
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * Signals that this context is no longer to be used. All the packages
+ * that had been loaded so far are signaled. Then they are discarded.
+ *
+ **************************************************************************/
+
+   public void end() {
+
+       checkState(State.INITED);
+
+       _state = State.ENDED;
+
+        try {
+            SModuleUtils.endModules(_toplevelContext);
+        } catch (STeaException e) {
+            // How should we report this to the caller?...
+        }
+   }
+
+
+
+
+
+/**************************************************************************
+ *
+ * Executes the given Tea program.
+ *
+ * @param code The Tea program to execute.
+ *
+ * @return The result of executing the Tea code. This will be the
+ * value returned by the last function invocation in the program.
+ *
+ * @exception STeaException Thrown if there were any errors while
+ * executing the Tea program. It may also be thrown the first time
+ * this method is called if there were errors executing the
+ * <code>init.tea</code> scripts in the import directories.
+ *
+ **************************************************************************/
+
+    public Object execute(SCode code)
 	throws STeaException {
 
-	if ( _state != State.INITED ) {
-	    String msg = "Action now allowed on state " + _state;
-	    throw new IllegalStateException(msg);
-	} else {
+        checkState(State.STARTED);
+
+        _state = State.RUNNING;
+
+        Object result = null;
+
+	try {
+            if ( _isFirstExec ) {
+                _isFirstExec = false;
+                doStart();
+            }
+
+	    result = code.exec(_toplevelContext);
+	} finally {
 	    _state = State.STARTED;
 	}
+
+	return result;
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    private void doStart()
+	throws STeaException {
 
 	boolean wasFirstStart = _isFirstStart;
 
 	_isFirstStart = false;
 
 	if ( wasFirstStart ) {
-	    setupLibVar(_importLocations);
+	    doFirstStartInitializations();
 	}
 
-	for ( SModule module : _modules ) {
-	    module.start();
-	}
+        SModuleUtils.startModules(_toplevelContext);
 
 	if ( wasFirstStart ) {
 	    runInitScripts();
 	}
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    private void doFirstStartInitializations()
+        throws STeaException {
+
+        setupLibVar(_importLocations);
+        setupArgv0Var(_argv0);
+        setupArgvVar(_argv);
+        setupModules(_modules);
     }
 
 
@@ -379,7 +515,7 @@ public class STeaRuntime
 
         SObjPair teaLocations  = buildTeaList(_allImportLocations);
 
-	newVar(LIB_VAR, teaLocations);
+	_toplevelContext.newVar(VAR_LIBRARY, teaLocations);
     }
 
 
@@ -432,42 +568,15 @@ public class STeaRuntime
 
 /**************************************************************************
  *
- * Signals that this context will not be used until a call to the
- * <code>start()</code> method is made again. All the packages loaded
- * so far are signaled with a call to their <code>stop()</code>
- * method.
- *
- * <p>Before calling the packages' <code>stop()</code> method the
- * current thread waits until all necessary calls to
- * <code>releaseStop()</code> are performed. The calls to
- * <code>releaseStop()</code> must be as many as the ones to
- * <code>holdStop</code>. Note that as the current thread sleeps, the
- * calls to <code>releaseStop()</code> must be made from another
- * thread.</p>
+ * 
  *
  **************************************************************************/
 
-    public synchronized void stop() {
+    private void setupArgv0Var(String argv0) {
 
-	if ( _state != State.STARTED ) {
-	    String msg = "Action not allowed on state " + _state;
-	    throw new IllegalStateException(msg);
-	} else {
-	    _state = State.INITED;
-	}
+        Object argv0Value = (argv0!=null) ? argv0 : SObjNull.NULL;
 
-	while ( _holdCounter > 0 ) {
-	    try {
-		wait();
-	    } catch (InterruptedException e) {
-	    }
-	}
-
-	for ( ListIterator<SModule> i=_modules.listIterator(_modules.size());
-	      i.hasPrevious(); ) {
-	    SModule module = i.previous();
-	    module.stop();
-	}
+	_toplevelContext.newVar(VAR_ARGV0, argv0Value);
     }
 
 
@@ -476,18 +585,19 @@ public class STeaRuntime
 
 /**************************************************************************
  *
- * Signals this interpreter that it must wait for a call to the
- * <code>releaseStop()</code> method before calling
- * <code>stop()</code> for all packages in the <code>stop()</code>
- * method. Note that for each call to this method there must be a
- * corresponding call to <code>releaseStop()</code> before the
- * <code>stop()</code> method exits.
+ * 
  *
  **************************************************************************/
 
-    public synchronized void holdStop() {
+    private void setupArgvVar(String[] argv) {
 
-	_holdCounter++;
+        SObjPair head = SObjPair.emptyList();
+
+        for (int i=argv.length-1; i>=0; --i ) {
+            head = new SObjPair(argv[i], head);
+        }
+
+        _toplevelContext.newVar(VAR_ARGV, head);
     }
 
 
@@ -496,87 +606,25 @@ public class STeaRuntime
 
 /**************************************************************************
  *
- * The complement to <code>holdStop()</code>.
+ * 
  *
  **************************************************************************/
 
-    public synchronized void releaseStop() {
+    private void setupModules(List<Object> modules)
+        throws STeaException {
 
-	if ( _holdCounter > 0 ) {
-	    _holdCounter--;
-	    notify();
-	}
-    }
+        for ( Object moduleOrClassName : modules ) {
+            if ( moduleOrClassName instanceof String ) {
+                String moduleClassName = (String)moduleOrClassName;
 
+                SModuleUtils.addModule(_toplevelContext, moduleClassName);
+            } else {
+                SModule module = (SModule)moduleOrClassName;
 
+                SModuleUtils.addModule(_toplevelContext, module);
+            }
 
-
-
-/**************************************************************************
- *
- * Signals that this context is no longer to be used. All the packages
- * that had been loaded so far are signaled. Then they are discarded.
- *
- **************************************************************************/
-
-   public void end() {
-
-	if ( _state != State.INITED ) {
-	    String msg = "Action not allowed on state " + _state;
-	    throw new IllegalStateException(msg);
-	} else {
-	    _state = State.ENDED;
-	}
-
-      for ( ListIterator<SModule> i=_modules.listIterator(_modules.size());
-	    i.hasNext(); ) {
-	  SModule module = i.previous();
-	  module.end();
-      }
-      clearAll();
-      _modules.clear();
-      _modulesByName.clear();
-   }
-
-
-
-
-
-/**************************************************************************
- *
- * Executes the given Tea program.
- *
- * @param code The Tea program to execute.
- *
- * @return The result of executing the Tea code. This will be the
- * value returned by the last function invocation in the program.
- *
- * @exception STeaException Thrown if there were any errors while
- * executing the Tea program. It may also be thrown the first time
- * this method is called if there were errors executing the
- * <code>init.tea</code> scripts in the import directories.
- *
- **************************************************************************/
-
-    public Object execute(SCode code)
-	throws STeaException {
-
-	if ( _state != State.STARTED ) {
-	    String msg = "Action not allowed on state " + _state;
-	    throw new IllegalStateException(msg);
-	} else {
-	    _state = State.RUNNING;
-	}
-
-	Object result = null;
-
-	try {
-	    result = code.exec(this);
-	} finally {
-	    _state = State.STARTED;
-	}
-
-	return result;
+        }
     }
 
 
@@ -598,27 +646,45 @@ public class STeaRuntime
         SCompiler    compiler = new SCompiler();
 
 	for ( String dirPath : dirList ) {
-            String      path  = INIT_FILE;
-            InputStream input = null;
-
+            String path = INIT_FILE;
+            SCode  code = null;
+            
             try {
-                SInputSource inputSource =
-                    SInputSourceFactory.createInputSource(dirPath, path);
-
-                input = inputSource.openStream();
+                code = compiler.compile(dirPath, path, null, path);
+                code.exec(_toplevelContext);
             } catch (IOException e) {
                 // The given path does not exist or is not
-                // readable. Never mind.
-            }
-
-            if ( input != null ) {
-                try {
-                    compiler.compile(input, path).exec(this);
-                } finally {
-                    try { input.close(); } catch (IOException e) {}
-                }
+                // readable. Go ahead and just ignore it.
             }
 	}
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    private void checkState(State... states) {
+
+        boolean currentStateIsValid = false;
+        State   currentState        = _state;
+
+        for ( State state : states ) {
+            if ( state == currentState ) {
+                currentStateIsValid = true;
+                break;
+            }
+        }
+
+        if ( !currentStateIsValid ) {
+            String msg = "Action not allowed on state " + currentState;
+            throw new IllegalArgumentException(msg);
+        }
     }
 
 

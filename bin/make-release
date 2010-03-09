@@ -1,22 +1,19 @@
 #!/bin/sh
 ###########################################################################
 #
-# Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
+# Copyright (c) 2001-2005 PDM&FC, All Rights Reserved.
 #
 ###########################################################################
 
 #########################################################################
 #
-# $Id$
+# $Id: make-release,v 1.10 2005/02/15 17:38:10 jfn Exp $
 #
 #
 # Creates the package for release.
 #
 #
 # Revisions:
-#
-# 2008/04/01 Minor change to make it work as expected ina Subversion
-# working area. The build procedure really needs to be revised... (jfn)
 #
 # 2003/02/10 The release bundle is now obtained from the contents
 # of the current development tree instead of retrieving it from
@@ -87,7 +84,7 @@ done
 echo "Creating release tree..."
 rm -rf $tmpReleaseDir
 mkdir $tmpReleaseDir
-(cd $teaBaseDir; tar cf - --exclude .svn "$@") | (cd $tmpReleaseDir; tar xf -)
+(cd $teaBaseDir; tar cf - "$@") | (cd $tmpReleaseDir; tar xf -)
 
 #
 # Remove unwanted files. This is because the list of files to include

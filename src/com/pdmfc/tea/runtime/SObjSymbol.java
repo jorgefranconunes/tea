@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -11,7 +11,7 @@
  *
  * Revisions:
  *
- * 2008/09/02 Replaced Hashtable with Map. (jfn)
+ * 2010/01/28 Minor refactoring to use generics. (jfn)
  *
  * 2001/05/12 Created. (jfn)
  *
@@ -41,16 +41,16 @@ public class SObjSymbol
 
 
     // The name of this symbol
-   private String _name = null;
+    private String _name;
 
-    //The hashcode of this symbol. It was calculated from its name.
-    private int _hashCode = -1;
+    // The hashcode of this symbol. It was calculated from its name.
+    private int    _hashCode;
 
     // The set of all existing symbols.
     private static Map<String,SObjSymbol> _nameSet =
-	new HashMap<String,SObjSymbol>();
+        new HashMap<String,SObjSymbol>();
 
-    // The number of declared symbols. Used to generate hash codes.
+    // The number of declared symbols. Used to generate hash codes. */
     private static int _symbolCount = 0;
 
 
@@ -67,12 +67,12 @@ public class SObjSymbol
  *
  **************************************************************************/
 
-   private SObjSymbol(String name,
-		      int    hash) {
+    private SObjSymbol(String name,
+                       int    hash) {
 
-      _name     = name;
-      _hashCode = hash;
-   }
+        _name     = name;
+        _hashCode = hash;
+    }
 
 
 
@@ -90,10 +90,10 @@ public class SObjSymbol
  *
  **************************************************************************/
 
-   public int hashCode() {
+    public int hashCode() {
 
-      return _hashCode;
-   }
+        return _hashCode;
+    }
 
 
 
@@ -107,10 +107,10 @@ public class SObjSymbol
  *
  **************************************************************************/
 
-   public String getName() {
+    public String getName() {
 
-      return _name;
-   }
+        return _name;
+    }
 
 
 
@@ -150,10 +150,10 @@ public class SObjSymbol
  *
  **************************************************************************/
 
-   public static SObjSymbol getSymbol(String name) {
+    public static synchronized SObjSymbol getSymbol(String name) {
 
-      return _nameSet.get(name);
-   }
+        return _nameSet.get(name);
+    }
 
 
 
@@ -164,25 +164,24 @@ public class SObjSymbol
  * Adds a new symbol to the symbol table and returns the associated object.
  * There is only one object for each symbol.
  *
- * @param name
- *    String with the name of the symbol to be added to the symbol table.
+ * @param name String with the name of the symbol to be added to the
+ * symbol table.
  *
- * @return
- *    Reference to the object representing the symbol.
+ * @return Reference to the object representing the symbol.
  *
  **************************************************************************/
 
-   public static synchronized SObjSymbol addSymbol(String name) {
+    public static synchronized SObjSymbol addSymbol(String name) {
 
-      SObjSymbol symbol = _nameSet.get(name);
+        SObjSymbol symbol = _nameSet.get(name);
 
-      if ( symbol == null ) {
-	 symbol = new SObjSymbol(name, _symbolCount++);
-	 _nameSet.put(name, symbol);
-      }
+        if ( symbol == null ) {
+            symbol = new SObjSymbol(name, _symbolCount++);
+            _nameSet.put(name, symbol);
+        }
 
-      return symbol;
-   }
+        return symbol;
+    }
 
 
 }

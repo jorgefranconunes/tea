@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -10,6 +10,8 @@
  *
  *
  * Revisions:
+ *
+ * 2010/01/28 Minor refactorings to properly use generics. (jfn)
  *
  * 2003/10/22 Corrected bug with the "registerDate" method. It was
  * storing java.lang.Timestamp into the variable instead of the
@@ -43,6 +45,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.modules.tdbc.SResultSet;
 import com.pdmfc.tea.modules.tdbc.SPreparedStatement;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
@@ -95,8 +98,8 @@ public class SCallableStatement
     private static final SObjSymbol CLASS_NAME_S =
 	SObjSymbol.addSymbol(CLASS_NAME);
 
-    private CallableStatement _callStat = null;
-    private List              _outList  = new ArrayList();
+    private CallableStatement   _callStat = null;
+    private List<SOutParameter> _outList  = new ArrayList<SOutParameter>();
 
 
 
@@ -632,8 +635,7 @@ public class SCallableStatement
 	throws STeaException {
 
  	try {
-	    for ( Iterator i=_outList.iterator(); i.hasNext(); ) {
-		SOutParameter outParam = (SOutParameter)i.next();
+            for ( SOutParameter outParam : _outList ) {
 		outParam.retrieve(_callStat);
 	    }
  	} catch (SQLException e) {

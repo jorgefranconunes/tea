@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2003-2008 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2003 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -16,6 +16,8 @@
  **************************************************************************/
 
 package com.pdmfc.tea.compiler;
+
+import java.io.PrintStream;
 
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.compiler.SWord;

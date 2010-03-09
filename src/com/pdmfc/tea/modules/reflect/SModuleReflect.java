@@ -1,12 +1,12 @@
 /**************************************************************************
  *
- * Copyright (c) 2005 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2005-2010 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 /**************************************************************************
  *
- * $Id: SModuleReflect.java,v 1.4 2008/04/21 11:23:48 pcorreia Exp $
+ * $Id$
  *
  *
  * Revisions:
@@ -80,7 +80,6 @@ import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjNull;
 import com.pdmfc.tea.runtime.SObjPair;
 import com.pdmfc.tea.runtime.SObjSymbol;
-import com.pdmfc.tea.runtime.STeaRuntime;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypes;
 import com.pdmfc.tea.runtime.STypeException;
@@ -98,6 +97,146 @@ import com.pdmfc.tea.runtime.STypeException;
 //*
 //* <Description>
 //* Tea reflection over Java objects.
+//* <P>The functions in this module attempt to ease the use of 
+//* a Java code base without having to write Java wrapper classes
+//* (wich can be loaded into the Tea runtime using the
+//* <FuncRef name="load"/> or <FuncRef name="load-function"/> functions).
+//* </P>
+//* <P>
+//* The functions provided allow for instatiation with
+//* constructor invocation, static method invocation, member
+//* field get/set access, and instance method invocation.
+//* </P>
+//* <P>
+//* Method invocation provides limited support for method overloading.
+//* Method invocation search (as described in the Java Language Specification
+//* , Third Edition , section 15.12) is simplified by searching all methods
+//* with the same name and number of arguments, 1 - in the class of the
+//* object being invoked, then 2 - on the interfaces,
+//* and 3 - on the superclass.
+//* For the set of method that matches the name and number of arguments,
+//* the type of the arguments matches if the Java method argument
+//* is assignable (using java.lang.Class.isAssignable()) from the
+//* Tea value, or by unboxing to a Java primitive type.
+//* (No support is provided for narrowing convertions.)
+//* </P>
+//* <P>
+//* No support is provided for invocation of methods with variable
+//* argument lists.
+//* </P>
+//* <P>
+//* Method arguments,
+//* return values, and field get/set values are converted from Tea to Java
+//* ana Java to Tea using a few simple rules.
+//* </P>
+//*
+//* <Enumeration>
+//*
+//* <EnumLabel>Tea $null</EnumLabel>
+//* <EnumDescription>
+//* $null is converted to java's null.
+//* </EnumDescription>
+//*
+//* <EnumLabel>Tea numbers (java.lang.Integer, java.lang.Long,
+//* and java.lang.Double) </EnumLabel>
+//* <EnumDescription>
+//* No convertion is needed.  Unboxing convertion is performed on method invocation arguments when needed. Examples of Tea value literal/expressions and corresponding Java type:
+//*    <Enumeration>
+//*    <EnumLabel>1</EnumLabel>
+//*    <EnumDescription>
+//*    java.lang.Integer
+//*    </EnumDescription>
+//*    <EnumLabel>1L</EnumLabel>
+//*    <EnumDescription>
+//*    java.lang.Long
+//*    </EnumDescription>
+//*    <EnumLabel>1.0</EnumLabel>
+//*    <EnumDescription>
+//*    java.lang.Double
+//*    </EnumDescription>
+//*    </Enumeration>
+//* No support for narrowing convertions (yet).
+//* </EnumDescription>
+//*
+//* <EnumLabel>Tea strings(java.lang.String)</EnumLabel>
+//* <EnumDescription>
+//* Are assignable to java.lang.String.  Examples of Tea value literal/expressions and corresponding Java type:
+//*    <Enumeration>
+//*    <EnumLabel>"1"</EnumLabel>
+//*    <EnumDescription>
+//*    java.lang.String
+//*    </EnumDescription>
+//*    </Enumeration>
+//* </EnumDescription>
+//*
+//* <EnumLabel>Tea symbols (com.pdmfc.tea.runtime.SObjSymbol)</EnumLabel>
+//* <EnumDescription>
+//* Are converted to java.lang.String.  Examples of Tea value literal/expressions and corresponding Java type:
+//*    <Enumeration>
+//*    <EnumLabel>myFunction</EnumLabel>
+//*    <EnumDescription>
+//*    java.lang.String
+//*    </EnumDescription>
+//*    </Enumeration>
+//* </EnumDescription>
+//*
+//* <EnumLabel>Tea booleans (java.lang.Boolean)</EnumLabel>
+//* <EnumDescription>
+//* Are assignable to java.lang.Boolean. Unboxing convertion is performed on method invocation arguments when needed. Examples of Tea value literal/expressions and corresponding Java type:
+//*    <Enumeration>
+//*    <EnumLabel>$true</EnumLabel>
+//*    <EnumDescription>
+//*    java.lang.Boolean
+//*    </EnumDescription>
+//*    <EnumLabel>$false</EnumLabel>
+//*    <EnumDescription>
+//*    java.lang.Boolean
+//*    </EnumDescription>
+//*    </Enumeration>
+//* </EnumDescription>
+//*
+//* <EnumLabel>Tea lists (com.pdmfc.tea.runtime.SObjPair)</EnumLabel>
+//* <EnumDescription>
+//* Are converted to java.util.ArrayList. Each element in the list is recursively converted according to these rules. Examples of Tea value literal/expressions and corresponding Java type:
+//*    <Enumeration>
+//*    <EnumLabel>( 1 2 "hello" $true 5.0 )</EnumLabel>
+//*    <EnumDescription>
+//*    <code>java.util.ArrayList&lt;java.lang.Object&gt;</code>
+//*    </EnumDescription>
+//*    </Enumeration>
+//* </EnumDescription>
+//*
+//* <EnumLabel>TDate (com.pdmfc.tea.runtime.STosObj)</EnumLabel>
+//* <EnumDescription>
+//* Are assignable to java.util.Date.
+//* </EnumDescription>
+//*
+//* <EnumLabel>THashtable (com.pdmfc.tea.runtime.STosObj)</EnumLabel>
+//* <EnumDescription>
+//* Are converted to java.util.HashMap. Each element in the hashtable is recursively converted according to these rules.
+//* </EnumDescription>
+//*
+//* <EnumLabel>TVector (com.pdmfc.tea.runtime.STosObj)</EnumLabel>
+//* <EnumDescription>
+//* Are assignable to java.util.ArrayList. Each element in the vector IS NOT recursively converted according to these rules.
+//* </EnumDescription>
+//*
+//* <EnumLabel>TConnection, TStatement, TResultSet (com.pdmfc.tea.runtime.STosObj)</EnumLabel>
+//* <EnumDescription>
+//* Are assignable to java.sql.Connection, java.sql.Statement, java.sql.ResultSet.
+//* </EnumDescription>
+//*
+//* </Enumeration>
+//*
+//* <P>
+//* The support for exception handling is limited.
+//* All Java Exceptions are converted to Tea runtime errors (as if they
+//* were raised using the <FuncRef name="error"/> function) regardless
+//* of their original Java Exception class. The only
+//* way to catch them is to use the <FuncRef name="catch"/> function,
+//* which catches all Tea runtime errors (but does not distinguishes
+//* between originating Java Exception classes).
+//* </P>
 //* </Description>
 //*
 //* <Since version="3.2.1"/>
@@ -112,13 +251,15 @@ import com.pdmfc.tea.runtime.STypeException;
  **************************************************************************/
 
 public class SModuleReflect
-    extends SModule {
+    extends Object
+    implements SModule {
 
 
 
 
 
-    private static Map _primitiveTypes = new HashMap();
+    private static Map<String,Class> _primitiveTypes =
+        new HashMap<String,Class>();
 
     static {
 	_primitiveTypes.put(Boolean.TYPE.getName(),   Boolean.TYPE);
@@ -169,84 +310,69 @@ public class SModuleReflect
  *
  **************************************************************************/
 
-    public void init(STeaRuntime context)
+    public void init(SContext context)
 	throws STeaException {
 
-	super.init(context);
+	context.newVar("java-get-value",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionGetValue(func,
+                                                       context,
+                                                       args);
+                           }
+                       });
 
-	context.addFunction("java-get-value",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionGetValue(func,
-							    context,
-							    args);
-				}
-			    });
+	context.newVar("java-set-value",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionSetValue(func,
+                                                       context,
+                                                       args);
+                           }
+                       });
 
-	context.addFunction("java-set-value",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionSetValue(func,
-							    context,
-							    args);
-				}
-			    });
+	context.newVar("java-get-method",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionGetMethod(func,
+                                                        context,
+                                                        args);
+                           }
+                       });
 
-	context.addFunction("java-get-method",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionGetMethod(func,
-							     context,
-							     args);
-				}
-			    });
+	context.newVar("java-exec-method",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionExecMethod(func,
+                                                         context,
+                                                         args);
+                           }
+                       });
 
-	context.addFunction("java-exec-method",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionExecMethod(func,
-							      context,
-							      args);
-				}
-			    });
-
-	context.addFunction("java-new-instance",
-			    new SObjFunction() {
-				public Object exec(SObjFunction func,
-						   SContext     context,
-						   Object[]     args)
-				    throws STeaException {
-				    return functionNewInstance(func,
-							       context,
-							       args);
-				}
-			    });
+	context.newVar("java-new-instance",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionNewInstance(func,
+                                                          context,
+                                                          args);
+                           }
+                       });
    }
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    public void stop() {
-    }
 
 
 
@@ -260,7 +386,37 @@ public class SModuleReflect
 
     public void end() {
 
-	stop();
+        // Nothing to do.
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    public void start() {
+
+        // Nothing to do.
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    public void stop() {
+
+        // Nothing to do.
     }
 
 
@@ -277,8 +433,9 @@ public class SModuleReflect
 //* </Overview>
 //*
 //* <Parameter name="[javaClassName|wrapperObject]">
-//* String or Symbol identifying a Java class, or a wrapperObject, created 
-//* with the <code>java-new-instance</code> function.
+//* A String or Symbol identifying a Java class (for access to a
+//* static field member), or a wrapperObject created 
+//* with the <FuncRef name="java-new-instance"/> function.
 //* </Parameter>
 //*
 //* <Parameter name="memberName">
@@ -286,7 +443,7 @@ public class SModuleReflect
 //* </Parameter>
 //*
 //* <Description>
-//* Returns the value of the given member.
+//* Returns the value of the given field member.
 //* </Description>
 //* 
 //* <Since version="3.2.1"/>
@@ -390,12 +547,13 @@ public class SModuleReflect
 //* </Overview>
 //*
 //* <Parameter name="[javaClassName|wrapperObject]">
-//* String or Symbol identifying a Java class, or a wrapperObject, created 
-//* with the <code>java-new-instance</code> function.
+//* A String or Symbol identifying a Java class (for accessing static
+//* field members), or a wrapperObject, created 
+//* with the <FuncRef name="java-new-instance"/> function.
 //* </Parameter>
 //*
 //* <Parameter name="memberName">
-//* String or Symbol identifying a member in the Java class or object.
+//* String or Symbol identifying a field member in the Java class or object.
 //* </Parameter>
 //*
 //* <Parameter name="value">
@@ -508,7 +666,8 @@ public class SModuleReflect
 //*              module="tea.java">
 //*
 //* <Overview>
-//* Returns the value stored in the static member on the given class.
+//* Returns an anonymous function that can be used to wrap Tea calls
+//* to the specified static method.
 //* </Overview>
 //*
 //* <Parameter name="javaClassName">
@@ -521,11 +680,15 @@ public class SModuleReflect
 //*
 //* <Parameter name="argTypeN">
 //* String or Symbol identifying the type of the Nth parameter of the 
-//* method (fqcn or primitive type name).
+//* method (fqcn or primitive type name). Example values are: "int",
+//* "long", etc...
 //* </Parameter>
 //*
 //* <Description>
-//* Returns a wrapper around the method.
+//* Returns a wrapper around the method. The argTypeN type names 
+//* help to locate the required method, when default convertion rules
+//* are now enough to locate the method using
+//* <FuncRef name="java-exec-method"/>.
 //* </Description>
 //* 
 //* <Since version="3.2.1"/>
@@ -643,7 +806,7 @@ public class SModuleReflect
  	    throw new SRuntimeException("method '" +
   					mtd.getName() + "' is not static");
 	} catch (InvocationTargetException e) {
- 	    throw new SRuntimeException(e);
+ 	    throw new SRuntimeException(e.getCause());
  	}
 
 	// convert values back to tea 
@@ -731,7 +894,7 @@ public class SModuleReflect
 	} catch (InstantiationException e) {
 	    throw new SRuntimeException(e);
 	} catch (InvocationTargetException e) {
-	    throw new SRuntimeException(e);
+	    throw new SRuntimeException(e.getCause());
 	} catch (IllegalArgumentException e) {
 	    throw new SRuntimeException(args[0],
 					"problems calling constructor for '" + 
@@ -811,9 +974,17 @@ public class SModuleReflect
 //* </Parameter>
 //*
 //* <Description>
-//* Executes the static method.
+//* Executes the static method with the supplied arguments.
+//* <P>Support for method overloading is limited, as Tea-to-Java argument
+//* convertion algorithm only covers a few promotions.
+//* For better overloaded method identification, see also <FuncRef
+//* name="java-get-method"/>.</P>
 //* </Description>
 //* 
+//* <Returns>
+//* The value that the method call returned, converted to Tea.
+//* </Returns>
+//*
 //* <Since version="3.2.1"/>
 //* 
 //* </TeaFunction>
@@ -1330,6 +1501,9 @@ public class SModuleReflect
 	if ( obj instanceof Integer ) {
 	    return obj;
 	}
+	if ( obj instanceof Long ) {
+	    return obj;
+	}
 	if ( obj instanceof String ) {
 	    return obj;
 	}
@@ -1455,6 +1629,9 @@ public class SModuleReflect
 	if ( obj instanceof Integer ) {
 	    return obj;
 	}
+	if ( obj instanceof Long ) {
+	    return obj;
+	}
 	if ( obj instanceof Double ) {
 	    return obj;
 	}
@@ -1564,7 +1741,7 @@ public class SModuleReflect
 	throws ClassNotFoundException {
 
 	// Check primitive types
-	Class result = (Class)_primitiveTypes.get(className);
+	Class result = _primitiveTypes.get(className);
 	
 	if (null==result) {
 	    result = Class.forName(className);

@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -45,12 +45,11 @@ import com.pdmfc.tea.modules.SModuleMath;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.util.SDate;
 import com.pdmfc.tea.runtime.SContext;
+import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjNull;
 import com.pdmfc.tea.runtime.SObjPair;
-import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SRuntimeException;
-import com.pdmfc.tea.runtime.STeaRuntime;
 import com.pdmfc.tea.runtime.STypeException;
 import com.pdmfc.tea.runtime.STypes;
 import com.pdmfc.tea.util.SFormater;
@@ -79,12 +78,13 @@ import com.pdmfc.tea.util.SFormater;
 
 /**************************************************************************
  *
- * String manipulation related package.
+ * String manipulation set of functions.
  *
  **************************************************************************/
 
 public class SModuleString
-    extends SModule {
+    extends Object
+    implements SModule {
 
 
 
@@ -117,10 +117,8 @@ public class SModuleString
  *
  **************************************************************************/
 
-   public void init(STeaRuntime context)
+   public void init(SContext context)
        throws STeaException {
-
-       super.init(context);
 
        SObjFunction fmt = new SObjFunction() {
 	       public Object exec(SObjFunction func,
@@ -130,286 +128,331 @@ public class SModuleString
 		   return functionPrintf(func, context, args);
 	       }
 	   };
-
-	context.addFunction("str-printf", fmt);
+       
+       context.newVar("str-printf", fmt);
 
        // For downward compatibility with previous releases.
-       context.addFunction("str-format", fmt);
+       context.newVar("str-format", fmt);
 
-       context.addFunction("str-fmt",
-			   new SObjFunction() {
-				   public Object exec(SObjFunction func,
-						      SContext     context,
-						      Object[]     args)
-				       throws STeaException {
-				       return functionFmt(func, context, args);
-				   }
-			       });
+       context.newVar("str-fmt",
+                      new SObjFunction() {
+                          public Object exec(SObjFunction func,
+                                             SContext     context,
+                                             Object[]     args)
+                              throws STeaException {
+                              return functionFmt(func, context, args);
+                          }
+                      });
 
-	SObjFunction comp = new SObjFunction() {
-		public Object exec(SObjFunction func,
-				   SContext     context,
-				   Object[]     args)
-		    throws STeaException {
-		    return functionCompare(func, context, args);
-		}
-	    };
+       SObjFunction comp = new SObjFunction() {
+               public Object exec(SObjFunction func,
+                                  SContext     context,
+                                  Object[]     args)
+                   throws STeaException {
+                   return functionCompare(func, context, args);
+               }
+           };
 
-	context.addFunction("str-cmp", comp);
+       context.newVar("str-cmp", comp);
 
-	// For downward compatibility with Tea 1.x.
-	context.addFunction("str-comp", comp);
+       // For downward compatibility with Tea 1.x.
+       context.newVar("str-comp", comp);
 
-	context.addFunction("str>",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionGt(func, context, args);
-				    }
-				});
+       context.newVar("str>",
+                      new SObjFunction() {
+                          public Object exec(SObjFunction func,
+                                             SContext     context,
+                                             Object[]     args)
+                              throws STeaException {
+                              return functionGt(func, context, args);
+                          }
+                      });
 
-	context.addFunction("str>=",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionGe(func, context, args);
-				    }
-				});
+       context.newVar("str>=",
+                      new SObjFunction() {
+                          public Object exec(SObjFunction func,
+                                             SContext     context,
+                                             Object[]     args)
+                              throws STeaException {
+                              return functionGe(func, context, args);
+                          }
+                      });
 
-	SObjFunction eq = new SObjFunction() {
-		public Object exec(SObjFunction func,
-				   SContext     context,
-				   Object[]     args)
-		    throws STeaException {
-		    return functionEq(func, context, args);
-		}
-	    };
+       SObjFunction eq = new SObjFunction() {
+               public Object exec(SObjFunction func,
+                                  SContext     context,
+                                  Object[]     args)
+                   throws STeaException {
+                   return functionEq(func, context, args);
+               }
+           };
 
-	context.addFunction("str==", eq);
+       context.newVar("str==", eq);
 
-	// For downward compatibility with Tea 1.x.
-	context.addFunction("str-eq", eq);
-	context.addFunction("str-eq?", eq);
+       // For downward compatibility with Tea 1.x.
+       context.newVar("str-eq", eq);
+       context.newVar("str-eq?", eq);
 
-	SObjFunction neq = new SObjFunction() {
-		public Object exec(SObjFunction func,
-				   SContext     context,
-				   Object[]     args)
-		    throws STeaException {
-		    return functionNe(func, context, args);
-		}
-	    };
+       SObjFunction neq = new SObjFunction() {
+               public Object exec(SObjFunction func,
+                                  SContext     context,
+                                  Object[]     args)
+                   throws STeaException {
+                   return functionNe(func, context, args);
+               }
+           };
 
-	context.addFunction("str!=", neq);
+       context.newVar("str!=", neq);
 
-	// For downward compatibility with Tea 1.x.
-	context.addFunction("str-not-eq?", neq);
-	context.addFunction("str-neq", neq);
+       // For downward compatibility with Tea 1.x.
+       context.newVar("str-not-eq?", neq);
+       context.newVar("str-neq", neq);
 
-	context.addFunction("str<",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionLt(func, context, args);
-				    }
-				});
+       context.newVar("str<",
+                      new SObjFunction() {
+                          public Object exec(SObjFunction func,
+                                             SContext     context,
+                                             Object[]     args)
+                              throws STeaException {
+                              return functionLt(func, context, args);
+                          }
+                      });
 
-	context.addFunction("str<=",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionLe(func, context, args);
-				    }
-				});
+       context.newVar("str<=",
+                      new SObjFunction() {
+                          public Object exec(SObjFunction func,
+                                             SContext     context,
+                                             Object[]     args)
+                              throws STeaException {
+                              return functionLe(func, context, args);
+                          }
+                      });
 
-	context.addFunction("str-cat",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionCat(func, context, args);
-				    }
-				});
+       context.newVar("str-cat",
+                      new SObjFunction() {
+                          public Object exec(SObjFunction func,
+                                             SContext     context,
+                                             Object[]     args)
+                              throws STeaException {
+                              return functionCat(func, context, args);
+                          }
+                      });
 
-	context.addFunction("str-ends-with?",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionEndsWith(func, context, args);
-				    }
-				});
+       context.newVar("str-ends-with?",
+                      new SObjFunction() {
+                          public Object exec(SObjFunction func,
+                                             SContext     context,
+                                             Object[]     args)
+                              throws STeaException {
+                              return functionEndsWith(func, context, args);
+                          }
+                      });
 
-	context.addFunction("str-starts-with?",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionStartsWith(func, context, args);
-				    }
-				});
+       context.newVar("str-starts-with?",
+                      new SObjFunction() {
+                          public Object exec(SObjFunction func,
+                                             SContext     context,
+                                             Object[]     args)
+                              throws STeaException {
+                              return functionStartsWith(func, context, args);
+                          }
+                      });
 
-	context.addFunction("str-index-of",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionIndexOf(func, context, args);
-				    }
-				});
+       context.newVar("str-index-of",
+                      new SObjFunction() {
+                          public Object exec(SObjFunction func,
+                                             SContext     context,
+                                             Object[]     args)
+                              throws STeaException {
+                              return functionIndexOf(func, context, args);
+                          }
+                      });
 
-	context.addFunction("str-lower",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionLower(func, context, args);
-				    }
-				});
+       context.newVar("str-lower",
+                      new SObjFunction() {
+                          public Object exec(SObjFunction func,
+                                             SContext     context,
+                                             Object[]     args)
+                              throws STeaException {
+                              return functionLower(func, context, args);
+                          }
+                      });
 
-	context.addFunction("str-upper",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionUpper(func, context, args);
-				    }
-				});
+       context.newVar("str-upper",
+                      new SObjFunction() {
+                          public Object exec(SObjFunction func,
+                                             SContext     context,
+                                             Object[]     args)
+                              throws STeaException {
+                              return functionUpper(func, context, args);
+                          }
+                      });
 
-	context.addFunction("str-len",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionLen(func, context, args);
-				    }
-				});
+       context.newVar("str-len",
+                      new SObjFunction() {
+                          public Object exec(SObjFunction func,
+                                             SContext     context,
+                                             Object[]     args)
+                              throws STeaException {
+                              return functionLen(func, context, args);
+                          }
+                      });
 
-	context.addFunction("str-substring",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionSubString(func, context, args);
-				    }
-				});
+       context.newVar("str-substring",
+                      new SObjFunction() {
+                          public Object exec(SObjFunction func,
+                                             SContext     context,
+                                             Object[]     args)
+                              throws STeaException {
+                              return functionSubString(func, context, args);
+                          }
+                      });
 
-	context.addFunction("str-trim",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionTrim(func, context, args);
-				    }
-				});
+       context.newVar("str-trim",
+                      new SObjFunction() {
+                          public Object exec(SObjFunction func,
+                                             SContext     context,
+                                             Object[]     args)
+                              throws STeaException {
+                              return functionTrim(func, context, args);
+                          }
+                      });
 
-	context.addFunction("str-join",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionJoin(func, context, args);
-				    }
-				});
+       context.newVar("str-join",
+                      new SObjFunction() {
+                          public Object exec(SObjFunction func,
+                                             SContext     context,
+                                             Object[]     args)
+                              throws STeaException {
+                              return functionJoin(func, context, args);
+                          }
+                      });
 
-	context.addFunction("str-empty?",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionEmpty(func, context, args);
-				    }
-				});
+       context.newVar("str-empty?",
+                      new SObjFunction() {
+                          public Object exec(SObjFunction func,
+                                             SContext     context,
+                                             Object[]     args)
+                              throws STeaException {
+                              return functionEmpty(func, context, args);
+                          }
+                      });
 
-	context.addFunction("str-not-empty?",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionNotEmpty(func, context, args);
-				    }
-				});
+       context.newVar("str-not-empty?",
+                      new SObjFunction() {
+                          public Object exec(SObjFunction func,
+                                             SContext     context,
+                                             Object[]     args)
+                              throws STeaException {
+                              return functionNotEmpty(func, context, args);
+                          }
+                      });
 
-	context.addFunction("symbol->string",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionSymbolToString(func, context, args);
-				    }
-				});
+       context.newVar("symbol->string",
+                      new SObjFunction() {
+                          public Object exec(SObjFunction func,
+                                             SContext     context,
+                                             Object[]     args)
+                              throws STeaException {
+                              return functionSymbolToString(func, context, args);
+                          }
+                      });
 
-	context.addFunction("string->int",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionStringToInt(func, context, args);
-				    }
-				});
+       context.newVar("string->int",
+                      new SObjFunction() {
+                          public Object exec(SObjFunction func,
+                                             SContext     context,
+                                             Object[]     args)
+                              throws STeaException {
+                              return functionStringToInt(func, context, args);
+                          }
+                      });
 
-	context.addFunction("string->float",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionStringToFloat(func, context, args);
-				    }
-				});
+       context.newVar("string->float",
+                      new SObjFunction() {
+                          public Object exec(SObjFunction func,
+                                             SContext     context,
+                                             Object[]     args)
+                              throws STeaException {
+                              return functionStringToFloat(func, context, args);
+                          }
+                      });
 
-	context.addFunction("int->string",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionIntToString(func, context, args);
-				    }
-				});
+       context.newVar("int->string",
+                      new SObjFunction() {
+                          public Object exec(SObjFunction func,
+                                             SContext     context,
+                                             Object[]     args)
+                              throws STeaException {
+                              return functionIntToString(func, context, args);
+                          }
+                      });
 
-	context.addFunction("float->string",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionFloatToString(func, context, args);
-				    }
-				});
+       context.newVar("float->string",
+                      new SObjFunction() {
+                          public Object exec(SObjFunction func,
+                                             SContext     context,
+                                             Object[]     args)
+                              throws STeaException {
+                              return functionFloatToString(func, context, args);
+                          }
+                      });
 
-	context.addFunction("str-unescape",
-			    new SObjFunction() {
-				    public Object exec(SObjFunction func,
-						       SContext     context,
-						       Object[]     args)
-					throws STeaException {
-					return functionUnescape(func, context, args);
-				    }
-				});
+       context.newVar("str-unescape",
+                      new SObjFunction() {
+                          public Object exec(SObjFunction func,
+                                             SContext     context,
+                                             Object[]     args)
+                              throws STeaException {
+                              return functionUnescape(func, context, args);
+                          }
+                      });
    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    public void end() {
+
+        // Nothing to do.
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    public void start() {
+
+        // Nothing to do.
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    public void stop() {
+
+        // Nothing to do.
+    }
 
 
 
@@ -1516,6 +1559,27 @@ public class SModuleString
 	}
 
 	return buf.toString();
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    private static String joinGetString(Object arg0,
+					Object obj)
+	throws STypeException {
+
+	try {
+	    return (String)obj;
+	} catch (ClassCastException e) {
+	    throw new STypeException(arg0, "a list element is not a string");
+	}
     }
 
 

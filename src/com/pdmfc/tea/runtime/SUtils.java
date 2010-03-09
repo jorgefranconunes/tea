@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2002-2008 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2002, 2003, 2004 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -119,9 +119,10 @@ public class SUtils
 
     public static SObjPair buildPathList(List pathList) {
 
-	SObjPair empty = SObjPair.emptyList();
-	SObjPair head  = empty;
-	SObjPair elem  = null;
+	SObjPair empty    = SObjPair.emptyList();
+	SObjPair head     = empty;
+	SObjPair elem     = null;
+	String   pathSep  = File.pathSeparator;
 
 	if ( pathList == null ) {
 	    return empty;

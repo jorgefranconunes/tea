@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2002-2008 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2002 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -11,13 +11,15 @@
  *
  * Revisions:
  *
- * 2002/09/11 Created. (jfn)
+ * 2002/09/11
+ * Created. (jfn)
  *
  **************************************************************************/
 
 package com.pdmfc.tea.compiler;
 
 import java.io.PrintStream;
+import java.text.MessageFormat;
 
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.compiler.SArithExpression;

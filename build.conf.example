@@ -5,34 +5,40 @@
 # makefile used in the build procdeure. It is expected to be written
 # in Bourne shell syntax.
 #
-# The following parameters must be defined. These parameters are expected
-# by the tools used during compilation and build. See bellow for
-# descriptions and example values.
+# The following parameters must be defined. See bellow for descriptions
+# and example values.
+#
+#    BUILD_JAVA_HOME
 #    BUILD_JAVAC
 #    BUILD_JAR
 #    BUILD_JAVADOC
 #
 
-__javaHome=/usr/java/jdk1.5.0_10
+
+#
+# Used for seting up the development environment as a Tea installation
+# in order to run the "teadoc" tool.
+#
+BUILD_JAVA_HOME=/usr/java/default
 
 
 #
 # The command for compiling a Java source file. It must accept the
 # options "-classpath" and "-d" just as Sun's javac compiler.
 #
-BUILD_JAVAC="${__javaHome}/bin/javac -Xlint -Xlint:-unchecked -Xlint:-serial"
+BUILD_JAVAC="${BUILD_JAVA_HOME}/bin/javac -Xlint -Xlint:-unchecked -Xlint:-serial"
 
 
 #
 # The command for creating a JAR file. It is expected to accept the same
 # command line options as Sun's JDK jar utility.
 #
-BUILD_JAR=jar
+BUILD_JAR=${BUILD_JAVA_HOME}/bin/jar
 
 #
 # The command for building javadoc documentation from source file. It is
 # expected to accept the same command line options as Sun's JDK javadoc
 # utility.
 #
-BUILD_JAVADOC="${__javaHome}/bin/javadoc"
+BUILD_JAVADOC=${BUILD_JAVA_HOME}/bin/javadoc
 

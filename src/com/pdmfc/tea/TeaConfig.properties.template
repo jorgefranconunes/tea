@@ -1,6 +1,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 
-%% Copyright (c) 2003-2008 PDM&FC, All Rights Reserved.
+%% Copyright (c) 2003-2010 PDM&FC, All Rights Reserved.
 %% 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -28,7 +28,7 @@
 
 ###########################################################################
 #
-# Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
+# Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
 #
 ###########################################################################
 
@@ -73,6 +73,14 @@ com.pdmfc.tea.argv0VarName=argv0
 # will not be defined.
 #
 com.pdmfc.tea.argvVarName=argv
+
+
+#
+# Name of the system property that when defined signals to the Tea
+# shell it should consider as Java resources the script name and
+# the components in the import dir list.
+#
+com.pdmfc.tea.useJavaResources=TEA_USE_JAVA_RESOURCES
 
 
 #

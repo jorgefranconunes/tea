@@ -1,17 +1,18 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 /**************************************************************************
  *
- * $Id$
+ * $Id: STosObj.java,v 1.7 2002/11/02 16:05:02 jfn Exp $
  *
  *
  * Revisions:
  *
- * 2001/05/12 Created. (jfn)
+ * 2001/05/12
+ * Created. (jfn)
  *
  **************************************************************************/
 
@@ -24,6 +25,7 @@ import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjNull;
 import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.STypes;
+import com.pdmfc.tea.util.SList;
 import com.pdmfc.tea.util.SListNode;
 
 
@@ -233,7 +235,7 @@ public class STosObj
 
    public STosObj part(int level) {
 
-      return (STosObj)_parts[level];
+      return _parts[level];
    }
 
 

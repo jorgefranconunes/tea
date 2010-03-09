@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -18,8 +18,8 @@
 package com.pdmfc.tea.modules.tdbc;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.modules.tdbc.SClosedEventListener;
@@ -75,7 +75,9 @@ class SConnectionClass
 
 
 
-    private List _connections = new ArrayList();
+    private static final String CLASS_NAME = "TConnection";
+
+    private Set<SConnection> _connections = new HashSet<SConnection>();
 
 
 
@@ -136,7 +138,7 @@ class SConnectionClass
 	_connections.add(connection);
 	connection.addClosedListener(new SClosedEventListener() {
 		public void closedEvent(Object closedObject) {
-		    myClosedEvent(closedObject);
+		    myClosedEvent((SConnection)closedObject);
 		}
 	    });
 	
@@ -155,11 +157,9 @@ class SConnectionClass
 
     public void closeAll() {
 
-	Object[] conns = _connections.toArray();
+        Set<SConnection> myConnections = new HashSet<SConnection>(_connections);
 
-	for ( int i=0, count=conns.length;i <count; i++ ) {
-	    SConnection conn = (SConnection)conns[i];
-
+        for ( SConnection conn : myConnections ) {
 	    try {
 		conn.close();
 	    } catch (SQLException e) {
@@ -198,7 +198,7 @@ class SConnectionClass
  *
  **************************************************************************/
 
-    private void myClosedEvent(Object closedObject) {
+    private void myClosedEvent(SConnection closedObject) {
 
 	_connections.remove(closedObject);
     }

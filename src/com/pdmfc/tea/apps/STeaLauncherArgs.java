@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2007-2009 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2007-2010 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -11,9 +11,13 @@
  *
  * Revisions:
  *
+ * 2010/03/02 Added method "getEncoding()". (jfn)
+ *
+ * 2009/10/13 Backported to the 3.2.x branch. (TSK-PDMFC-TEA-0044) (jfn)
+ *
  * 2009/03/11 Added the "--library-item" option. (jfn)
  *
- * 2008/04/18 Refactored use command lne options. This was done in
+ * 2008/04/18 Refactored use command line options. This was done in
  * order to receive the Tea library path list as a command line
  * argument. (TSK-PDMFC-TEA-0044) (jfn)
  *
@@ -40,7 +44,7 @@ import com.pdmfc.tea.STeaException;
  *
  **************************************************************************/
 
-class STeaShellArgs
+class STeaLauncherArgs
     extends Object {
 
 
@@ -50,6 +54,7 @@ class STeaShellArgs
     private String OPTION_LIBRARY  = "--library";
     private String OPTION_LIB_ITEM = "--library-item";
     private String OPTION_SCRIPT   = "--script";
+    private String OPTION_ENCODING = "--encoding";
     private String OPTION_END      = "--";
 
 
@@ -58,6 +63,7 @@ class STeaShellArgs
 
     private boolean      _isParsingOptions  = true;
     private String       _scriptPath        = null;
+    private String       _encoding          = null;
     private List<String> _libraryList       = new ArrayList<String>();
     private List<String> _scriptCliArgsList = new ArrayList<String>();
     private String[]     _scriptCliArgs     = null;
@@ -72,7 +78,7 @@ class STeaShellArgs
  *
  **************************************************************************/
 
-    public STeaShellArgs() {
+    public STeaLauncherArgs() {
     }
 
 
@@ -147,6 +153,8 @@ class STeaShellArgs
             optionAddLibItem(optionValue);
 	} else if ( OPTION_SCRIPT.equals(optionName) ) {
 	    optionSetScriptPath(optionValue);
+	} else if ( OPTION_ENCODING.equals(optionName) ) {
+	    optionSetEncoding(optionValue);
 	} else if ( OPTION_END.equals(optionName) ) {
 	    _isParsingOptions = false;
 	} else {
@@ -226,6 +234,25 @@ class STeaShellArgs
 
 /**************************************************************************
  *
+ * 
+ *
+ **************************************************************************/
+
+    private void optionSetEncoding(String encoding) {
+
+	if ( (encoding!=null) && encoding.equals("") ) {
+            encoding = null;
+	}
+
+	_encoding = encoding;
+    }
+
+
+
+
+
+/**************************************************************************
+ *
  * Retrieves the list of paths to be used for importing files.
  *
  **************************************************************************/
@@ -255,6 +282,23 @@ class STeaShellArgs
     public String getScriptPath() {
 
 	return _scriptPath;
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * Returns the value of the "<code>--encoding</code>" option.
+ *
+ * @return 
+ *
+ **************************************************************************/
+
+    public String getEncoding() {
+
+	return _encoding;
     }
 
 

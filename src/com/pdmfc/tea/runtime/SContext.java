@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001, 2002, 2003, 2004 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -57,7 +57,6 @@ public class SContext
     private static final float HASH_LOAD_FACTOR = 0.75f;
 
     private static final int INITIAL_CAPACITY = 21;
-   
 
 
 
@@ -65,12 +64,12 @@ public class SContext
 
 /**************************************************************************
  *
- * Initializes a top level context.
+ * Initializes a top-level context.
  *
  **************************************************************************/
 
-    protected SContext() {
-	
+    public SContext() {
+
 	_parent = null;
     }
 
@@ -91,30 +90,9 @@ public class SContext
  *
  **************************************************************************/
 
-    public SContext(SContext parent) {
+    protected SContext(SContext parent) {
 
 	_parent = parent;
-    }
-   
-
-
-
-
-
-/**************************************************************************
- *
- * Initializes a top level context with a particular initial capacity.
- *
- * @param initialCapacity The internal hashtable initial capacity.
- *
- **************************************************************************/
-
-    protected SContext(int initialCapacity) {
-
-	this();
-
-	_varTable           = new SVarSet[initialCapacity];
-	_hashThreshold      = (int)(initialCapacity * HASH_LOAD_FACTOR);
     }
 
 
@@ -214,30 +192,6 @@ public class SContext
 
 /**************************************************************************
  *
- * Creates a new variable inside this context. The variable will be
- * associated with a symbol named <TT>name</TT> and it will have has contents
- * the object referenced by <TT>value</TT>.
- *
- * @param name
- *    The name of the symbol to be associated to the variable being created.
- *
- * @param value
- *    Reference to the object to be stored inside the variable.
- *
- **************************************************************************/
-
-    public final SObjVar newVar(String name,
-				Object value) {
-
-	return newVar(SObjSymbol.addSymbol(name), value);
-    }
-
-
-
-
-
-/**************************************************************************
- *
  * Checks if a given variable is defined in this context. The variable
  * is also searched in all parent contexts.
  *
@@ -279,6 +233,30 @@ public class SContext
 	    return false;
 	}
    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * Creates a new variable inside this context. The variable will be
+ * associated with a symbol named <TT>name</TT> and it will have has contents
+ * the object referenced by <TT>value</TT>.
+ *
+ * @param name
+ *    The name of the symbol to be associated to the variable being created.
+ *
+ * @param value
+ *    Reference to the object to be stored inside the variable.
+ *
+ **************************************************************************/
+
+    public final SObjVar newVar(String name,
+				Object value) {
+
+	return newVar(SObjSymbol.addSymbol(name), value);
+    }
 
 
 
@@ -530,9 +508,6 @@ public class SContext
    }
 
 
-}
-
-
 
 
 
@@ -542,33 +517,19 @@ public class SContext
  *
  **************************************************************************/
 
-class SVarSet
-    extends Object
-    implements SObjVar {
+    private static class SVarSet
+        extends Object
+        implements SObjVar {
 
-    // The hash value of the symbol object this variable is
-    // associated with.
-    int     _symbolHash;
+        // The hash value of the symbol object this variable is
+        // associated with.
+        private int     _symbolHash;
 
-    // The contents of the variable.
-    Object  _value;
-
-    // The next entry in this set.
-    SVarSet _next;
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    public void set(Object newValue) {
-
-	_value = newValue;
-    }
+        // The contents of the variable.
+        private Object  _value;
+        
+        // The next entry in this set.
+        private SVarSet _next;
 
 
 
@@ -579,11 +540,28 @@ class SVarSet
  *
  **************************************************************************/
 
-    public Object get() {
+        public void set(Object newValue) {
 
-	return _value;
+            _value = newValue;
+        }
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+        public Object get() {
+
+            return _value;
+        }
+
+
     }
-
+    
 
 }
 

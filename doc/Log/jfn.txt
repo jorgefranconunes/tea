@@ -1,379 +1,86 @@
-2009/03/11
+2010/03/01
 
 Resumo:
 
-1. New CLI option "--library-item" supported by
-   "com.pdmfc.tea.apps.STeaShell"
-
-2. New list processing functions: "list-cat", "list-invert",
-   "list-sort".
+1. (02h) tea - Removed dependencoes on the Gnu.Regexp library.Changes were
+backported from the trunk.
 
 
 
 
 
-Notificações por commit no repositório Subversion
-
-Pretende-se que por cada commit no repositório Subversion da árvore de
-desenvolvimento do Tea seja automaticamente enviado um email para
-"tea.dev@pdmfc.com". Nesse email deverá estar indicado o comentário de
-commit e a lista dos ficheiros afectados.
-
-Na directoria do repositório (/opt/develop/svnroot/tea) criar o
-ficheiro executável "hooks/post-commit". Este executável é invocado
-imediatamente após um commit com sucesso. É invocado com dois
-argumentos:
-
-1. Path da directoria do repositório.
-
-2. Número da revisão do commit.
-
-
-Para obter a informação que deverá constar no email a enviar:
-
-a) Utilizador que efectuou o commit:
-
-svnlook author -r $REV $REPOS
-
-
-b) Data em que o commit teve lugar:
-
-svnlook date -r $REV $REPOS
-
-
-c) Comentário do commit:
-
-svnlook log -r $REV $REPOS
-
-
-d) Listagem dos ficheiros afectados no commit:
-
-svnlook changed  -r $REV --copy-info $REPOS
-
-
-e) Listagem das alterações introduzidas nos ficheiros afectados:
-
-svnlook diff -r $REV $REPOS
-
-
-Seting up email notification after each commit
-
-The following config changes are to be performed in the host where the
-Subversion repository is located.
-
-1. Copy "bin/svn-commit-email" to "/usr/local/bin".
-
-
-2. Create the file "/opt/develop/svnroot/tea/hooks/post-commit" with
-   the following contents:
-
-#!/bin/bash
-
-export PATH=/bin:/usr/bin
-
-_repository=$1
-_revision=$2
-
-/usr/local/bin/svn-commit-email \
-    --revision=$_revision \
-    --repository=$repository \
-    --email=tea.dev@pdmfc.com \
-    --from-address=tea.dev@pdmfc.com    
-
-
-
-
-
-2008/08/29
+2010/02/07
 
 Resumo:
 
-1. (03h) Simplified build environment - Concluded
-   implementation. Changes performed on "trunk".
-
-2. Created branch 3.2.x
+1. tea - Removed dependency on the Xerces 1.4.4 library. Changes were
+backported from the trunk.
 
 
 
 
 
-2008/08/28
+Remoção de dependência de Xerces
 
-Resumo:
+Backporting das alterações feitas no trunk para o branch 3.x.2
 
-1. Created the "branches" top directory in the Subversion
-   repository. This directory is intended to contain branches.
-
-2. (03h) Simplified build environment - Started refactoring. Changes
-   performed on "trunk".
-
-
-
-
-
-svn mkdir -m 'Created repository directory for branches.' \
-	svn+ssh://www.pdmfc.com/opt/develop/svnroot/tea/branches
-
-svn cp -m 'Created branch 3.2.x with development tree as of 2007/06/04.' \
-        -r 1 \
-	svn+ssh://www.pdmfc.com/opt/develop/svnroot/tea/trunk \
-	svn+ssh://www.pdmfc.com/opt/develop/svnroot/tea/branches/3.2.x
+src/com/pdmfc/tea/modules/xml/SXmlParser.java
+src/com/pdmfc/tea/modules/xml/SXmlParserParse.java
+apps/teadoc/lib/tea/doc-html.tea
+apps/teadoc/lib/tea/DocProducer.tea
 
 
 
 
 
-Pretende-se simplificar a forma de configuração do ambiente de
-desenvolvimento (build).
-
-In order to perform a build the following parameters must be known in
-the Makefile:
-
-TEA_BASE_DIR
-TEA_VERSION
-TEA_JAVAC
-TEA_JAR
-TEA_JAVADOC
-
-
-Prior to performing a build a file "Makefile.conf" must be manually
-created at the root of the development tree. This file is expected to
-be in the GNU Make format and must define the following makefile
-variables:
-
-TEA_JAVAC
-TEA_JAR
-TEA_JAVADOC
-
-
-O Makefile principal precisa para além disso de conhecer as seguintes
-variáveis:
-
-TEA_BASE_DIR
-TEA_VERSION
-
-Donde virão estes valores?...
-
-
-
-
-
-2008/04/22
+2010/01/28
 
 Resumo:
 
-1. Minor code cleanups, as suggested by the ecj compiler.
+1. Minor refactoring of the build environment to better follow current
+conventons (i.e. like the I*Tea build environment).
 
 
 
 
 
-2008/04/21
+Improved support for text encodings
 
-Resumo:
-
-1. Corrected problem with building the
-   "src/com/pdmfc/TeaConfig.properties" file.
+Pretende-se que sejam suportados de forma natural os text encodings da
+plataforma Java.
 
 
+Compilador.
+
+com.pdmfc.tea.compiler.SCompiler
 
 
+Leitura de ficheiros.
 
-2008/04/18
-
-Resumo:
-
-1. TSK-PDMFC-TEA-0044 STeaShell enhancements for improved Java Web
-   Start experience - Concluded implementation. Must still create
-   documentation.
+Escrita de ficheiros.
 
 
 
 
 
-TSK-PDMFC-TEA-0044 STeaShell enhancements for improved Java Web Start
-experience.
-
-Objectivo: Implementar as novas opções de linha de comando para
-permitir especificar a TEA_LIBRARY como argumento da linha de
-comando.
-
-
-
-
-
-2008/04/15
+2009/02/12
 
 Resumo:
 
-1. Minor code cleanups, as sugested by ejc warning messages.
+1. created "releases" top directory in the Subversion erpository. This
+   directory is intended to contain releases.
 
-2. TSK-PDMFC-ITEA-0016 Suporte para XML-RPC - Started implementation.
 
 
 
 
+svn mkdir -m 'Created repository directory for releases.' \
+	svn+ssh://www.pdmfc.com/opt/develop/svnroot/tea/releases
 
-Compilações com "ecj" dentro do Emacs.
-
-De acordo com instruções em
-"http://www.emacsblog.org/2007/02/13/emacs-jdee-ant-and-the-eclipse-java-compiler/":
-
-(setq compilation-error-regexp-alist
-  (cons '("----------\n[0-9]+. \\(ERROR\\|WARNING\\) in \\(.*\\)\n (at line \\([0-9]+\\))\n\\(\\(.*\n\\)+?\\).*^+\n\\(.*\n\\)"
-         2 3)
-         compilation-error-regexp-alist))
-
-
-
-
-
--warn:-serial - Disable "missing serialVersionUID" warning.
-
--warn:-unchecked - Disable "unchecked type operation" warning.
-
-
-
-
-Public key authentication:
-
-On client, generate the public key.
-
-client$ ssh-keygen -t rsa
-
-For each server, copy the public key to the server:
-
-client$ scp ~/.ssh/id_rsa.pub someone@someservet:./
-
-and add it to the list of authorized keys:
-
-server$ cd
-server$ mkdir -p .ssh
-server$ chmod go-rwx .ssh
-server$ cat id_rsa.pub >> .ssh/authorized_keys
-server$ chmod go-rwx .ssh/authorized_keys
-server$ rm id_rsa.pub
-
-
-
-
-
-2008/04/03
-
-Resumo:
-
-1. TSK-PDMFC-TEA-0044 STeaShell enhancements for improved Java Web
-   Start experience - Análise funcional.
-
-
-
-
-
-TSK-PDMFC-TEA-0044 STeaShell enhancements for improved Java Web Start
-experience.
-
-Pretende-se reformular a classe "com.pdmfc.tea.apps.STeaShell" por
-forma a que seja possível usá-la directamente como programa principal
-numa aplicação Java Web Start.
-
-As seguintes funcionalidades terão de ser introduzidas:
-
-1. Possibilidade de especificar como argumento de linha de comando a
-lista de directorias/URLs usadas como TEA_LIBRARY.
-
-Actualmente o STeaShell obtem a lista do TEA_LIBRARY a partir da
-system property "TEA_LIBRARY". Em programas Java Web Start existem
-fortes limitações sobre as system properties que podem ser
-definidas. A eliminação da passagem de informação para o interior do
-programa Java através de system properties é pois uma boa coisa.
-
-
-2. Possibilidade de especificar como um elemento da lista TEA_LIBRARY
-um resource Java.
-
-A solução proposta para satisfazer este requisito consiste em suportar
-um protocolo adicional para URLs: "resource". Uma URL com o formato
-"resource:/whatever/path" corresponderá a um resource Java com o path
-"/whatever/path".
-
-
-3. Possibilidade de especificar o script Tea a ser executado como
-sendo um resource Java.
-
-Também aqui a solução será usar uma URL para especificar o script a
-ser executado. Quando a URL tem o formato "resource:/whatever/path"
-então é assumido que se trata de um resource Java.
-
-
-Os elementos da lista TEA_LIBRARY são strings representando URLs ou
-file system paths (note-se que com URLs de protocolo "file" se podem
-também especificar file system paths). Considera-se que se trata de
-uma URL quando a string corresponde com "\w{2,}:.*" (i.e. duas ou mais
-word characters seguidos de ":" e mais whatever).
-
-Exemplos:
-
-/somedir/somefile - File system path (absolute path).
-
-thisdir/somefile - File system path (relative path).
-
-http://server.com/something - URL.
-
-resource:/whatever/path - URL.
-
-c:/Windows/whatever - File system path. But would only work on the
-windows platform.
-
-
-O programa principal de STeaShell passará a receber os seguintes
-opções de linha de comando:
-
---library=PATH-LIST
-
-Specifies the list of paths to be used by the "import" function to
-look for the file to be executed, if required. Each path can be either
-a file system path or an URL. Each element in the list is separated by
-one or more white spaces. This option may be specified more than
-once. Later occurrences of this option have the effect of
-concatenating the aditional paths to the end of the first path list.
-
-TBD - What if I need to specify a path with spaces in it? If it is a
-URL a space is encoded as "%20" (is this true for all protocols?). But
-what if it is a file system path?
-
-
---script=PATH
-
-Specifies the path of the Tea script to be executed. This path can be
-either a file system path or a URL.
-
-
--- 
-
-Signals end of command line options. All remaining arguments
-will be passed as command line arguments to the Tea script.
-
-
---help
-
-Prints this help text and exits.
-
-
-
-
-
-2008/04/01
-
-Resumo:
-
-1. TSK-PDMFC-TEA-0040 Migração da árvore de desenvolvimento para
-   Subversion - Concluida implementação. Tarefa fechada.
-
-2. TSK-PDMFC-TEA-0041 Remoção da dependência em "gnu.regexp" -
-   Concluida implementação. Tarefa fechada.
-
-3. TSK-PDMFC-TEA-0042 Remoção da dependência em "Xerces" - Concluida
-   implementação. Tarefa fechada.
+svn cp -m 'Tea 3.2.3 release.' \
+        -r 29 \
+	svn+ssh://www.pdmfc.com/opt/develop/svnroot/tea/branches/3.2.x \
+	svn+ssh://www.pdmfc.com/opt/develop/svnroot/tea/releases/3.2.3
 
 
 

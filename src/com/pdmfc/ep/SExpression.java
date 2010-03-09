@@ -1,18 +1,19 @@
 /**************************************************************************
  *
- * Copyright (c) 2002 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2002-2010 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 /**************************************************************************
  *
- * $Id: SExpression.java,v 1.3 2002/09/11 19:05:43 jfn Exp $
+ * $Id$
  *
  *
  * Revisions:
  *
- * 2002/09/08
- * Created. (jfn)
+ * 2010/01/28 Minor refactorings to properly use generics. (jfn)
+ *
+ * 2002/09/08 Created. (jfn)
  *
  **************************************************************************/
 
@@ -88,8 +89,8 @@ public class SExpression
      */
     private int _pointer = 0;
 
-    List     _varNameList = new ArrayList();
-    String[] _varNames    = null;
+    List<String> _varNameList = new ArrayList<String>();
+    String[]     _varNames    = null;
 
 
 
@@ -134,7 +135,7 @@ public class SExpression
 
 	_varNames    = new String[_varNameList.size()];
 	for ( int i=_varNames.length; (i--)>0; ) {
-	    _varNames[i] = (String)_varNameList.get(i);
+	    _varNames[i] = _varNameList.get(i);
 	}
 	_varNameList = null;
     }
@@ -432,6 +433,7 @@ public class SExpression
 
 	String token  = getToken();
 	SNode  result = null;
+	SNode  expr   = null;
 
 	if ( token.equals("(") ) {
 	    fetchToken();
