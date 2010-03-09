@@ -4,7 +4,7 @@ Release Notes for Tea 3.2
 
 
 
-2010/02/02 Improved support for text encodings
+2010/03/02 Improved support for text encodings
 
 Added the option "--encoding" to the "tsh" utility. The public Java
 API has been extended to allow specification of the text encoding when
