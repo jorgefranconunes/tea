@@ -1,25 +1,27 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 /**************************************************************************
  *
- * $Id$
+ * $Id: SConnectionClass.java,v 1.8 2003/05/21 16:56:47 jfn Exp $
  *
  *
  * Revisions:
  *
- * 2001/05/12 Created. (jfn)
+ * 2001/05/12
+ * Created. (jfn)
  *
  **************************************************************************/
 
 package com.pdmfc.tea.modules.tdbc;
 
 import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.modules.tdbc.SClosedEventListener;
@@ -77,7 +79,7 @@ class SConnectionClass
 
     private static final String CLASS_NAME = "TConnection";
 
-    private Set<SConnection> _connections = new HashSet<SConnection>();
+    private List _connections = new ArrayList();
 
 
 
@@ -138,7 +140,7 @@ class SConnectionClass
 	_connections.add(connection);
 	connection.addClosedListener(new SClosedEventListener() {
 		public void closedEvent(Object closedObject) {
-		    myClosedEvent((SConnection)closedObject);
+		    myClosedEvent(closedObject);
 		}
 	    });
 	
@@ -157,9 +159,11 @@ class SConnectionClass
 
     public void closeAll() {
 
-        Set<SConnection> myConnections = new HashSet<SConnection>(_connections);
+	Object[] conns = _connections.toArray();
 
-        for ( SConnection conn : myConnections ) {
+	for ( int i=0, count=conns.length;i <count; i++ ) {
+	    SConnection conn = (SConnection)conns[i];
+
 	    try {
 		conn.close();
 	    } catch (SQLException e) {
@@ -198,7 +202,7 @@ class SConnectionClass
  *
  **************************************************************************/
 
-    private void myClosedEvent(SConnection closedObject) {
+    private void myClosedEvent(Object closedObject) {
 
 	_connections.remove(closedObject);
     }

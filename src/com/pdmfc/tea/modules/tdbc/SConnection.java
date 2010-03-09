@@ -1,12 +1,12 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001, 2002, 2003 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 /**************************************************************************
  *
- * $Id$
+ * $Id: SConnection.java,v 1.11 2005/02/11 17:18:12 jfn Exp $
  *
  *
  * Revisions:
@@ -31,8 +31,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.modules.tdbc.SClosedEventListener;
@@ -79,11 +80,10 @@ public class SConnection
     private boolean _ownsConnection = false;
 
     // The SStatement objects opened by this SConnection.
-    private Set<SStatement> _statements = new HashSet<SStatement>();
+    private List _statements = new ArrayList();
 
     // The SClosedEventListener registered with this SConnection.
-    private Set<SClosedEventListener> _listeners  =
-        new HashSet<SClosedEventListener>();
+    private List _listeners  = new ArrayList();
     
 
 
@@ -431,12 +431,7 @@ public class SConnection
 	}
 	tosStat = SStatement.newInstance(context);
 	tosStat.setStatement(stat);
-	tosStat.addClosedListener(new SClosedEventListener() {
-                public void closedEvent(Object closedObject) {
-                    myClosedEvent((SStatement)closedObject);
-                }
-            });
-
+	tosStat.addClosedListener(createClosedListener());
 	_statements.add(tosStat);
 	
 	return tosStat;
@@ -539,12 +534,7 @@ public class SConnection
 	    (SPreparedStatement)SPreparedStatement.newInstance(context);
 
 	stat.setPreparedStatement(prepStat);
-	stat.addClosedListener(new SClosedEventListener() {
-                public void closedEvent(Object closedObject) {
-                    myClosedEvent((SPreparedStatement)closedObject);
-                }
-            });
-
+	stat.addClosedListener(createClosedListener());
 	_statements.add(stat);
 
 	return stat;
@@ -640,12 +630,7 @@ public class SConnection
 	}
 	stat = (SCallableStatement)SCallableStatement.newInstance(context);
 	stat.setCallableStatement(clbStat);
-	stat.addClosedListener(new SClosedEventListener() {
-                public void closedEvent(Object closedObject) {
-                    myClosedEvent((SCallableStatement)closedObject);
-                }
-            });
-
+	stat.addClosedListener(createClosedListener());
 	_statements.add(stat);
 	
 	return stat;
@@ -943,13 +928,11 @@ public class SConnection
 	    return;
 	}
 
-        // We make a copy of the statements list because as we close
-        // them we get notified of the close event and myCloseEvent
-        // will be called to remove the statement from the _statements
-        // set.
-        Set<SStatement> myStatements = new HashSet<SStatement>(_statements);
+	Object[] stats = _statements.toArray();
+	int      count = stats.length;
 
-        for ( SStatement stat : myStatements ) {
+	for ( int i=0;i<count; i++ ) {
+	    SStatement stat =(SStatement)stats[i];
 	    try {
 		stat.close();
 	    } catch (SQLException e) {
@@ -986,8 +969,10 @@ public class SConnection
 
     private void fireClosedEvent() {
 
-        for ( SClosedEventListener listener : _listeners ) {
-	    listener.closedEvent(this);
+	for ( Iterator i=_listeners.iterator(); i.hasNext(); ) {
+	    SClosedEventListener lstnr = (SClosedEventListener)i.next();
+
+	    lstnr.closedEvent(this);
 	}
     }
 
@@ -1001,7 +986,7 @@ public class SConnection
  *
  **************************************************************************/
 
-    private void myClosedEvent(SStatement closedObject) {
+    private void myClosedEvent(Object closedObject) {
 
 	_statements.remove(closedObject);
     }
@@ -1026,6 +1011,27 @@ public class SConnection
 	if ( _connection == null ) {
 	    throw new SRuntimeException("connection is closed");
 	}
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    private SClosedEventListener createClosedListener() {
+
+	SClosedEventListener result = new SClosedEventListener() {
+		public void closedEvent(Object closedObject) {
+		    myClosedEvent(closedObject);
+		}
+	    };
+
+	return result;
     }
 
 

@@ -1,17 +1,15 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001, 2002, 2003, 2004 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 /**************************************************************************
  *
- * $Id$
+ * $Id: SModuleLang.java,v 1.37 2006/12/04 14:55:09 jpsl Exp $
  *
  *
  * Revisions:
- *
- * 2010/01/28 Minor refactorings to properly use generics. (jfn)
  *
  * 2005/10/25 Added the implementation of the function
  * "tea-set-system-property". (jfn)
@@ -50,17 +48,13 @@
 
 package com.pdmfc.tea.modules.lang;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.Reader;
 import java.io.StringWriter;
-import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Properties;
 import java.util.StringTokenizer;
@@ -72,6 +66,8 @@ import com.pdmfc.tea.compiler.SCompiler;
 import com.pdmfc.tea.modules.SModule;
 import com.pdmfc.tea.modules.SModuleMath;
 import com.pdmfc.tea.modules.io.SInput;
+import com.pdmfc.tea.modules.lang.SLockManager;
+import com.pdmfc.tea.modules.lang.SShared;
 import com.pdmfc.tea.modules.util.SHashtable;
 import com.pdmfc.tea.runtime.SBreakException;
 import com.pdmfc.tea.runtime.SContext;
@@ -79,7 +75,6 @@ import com.pdmfc.tea.runtime.SContinueException;
 import com.pdmfc.tea.runtime.SExitException;
 import com.pdmfc.tea.runtime.SLambdaFunction;
 import com.pdmfc.tea.runtime.SLambdaFunctionVarArg;
-import com.pdmfc.tea.runtime.SModuleUtils;
 import com.pdmfc.tea.runtime.SNoSuchVarException;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SObjBlock;
@@ -88,6 +83,7 @@ import com.pdmfc.tea.runtime.SObjNull;
 import com.pdmfc.tea.runtime.SObjPair;
 import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SObjVar;
+import com.pdmfc.tea.runtime.STeaRuntime;
 import com.pdmfc.tea.runtime.SReturnException;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypeException;
@@ -123,8 +119,7 @@ import com.pdmfc.tea.runtime.STypes;
  **************************************************************************/
 
 public class SModuleLang
-    extends Object
-    implements SModule {
+    extends SModule {
 
 
 
@@ -132,14 +127,13 @@ public class SModuleLang
     // Used by the implementation of the Tea "system" function.
     private static final int BUFFER_SIZE = 4096;
 
+    private static SContext     _sharedContext = null;
+    private static SLockManager _lockManager   = null;
+
+    private STeaRuntime _globalContext = null;
+
     private static final String PROP_TEA_VERSION = "com.pdmfc.tea.version";
     private static final String TEA_VERSION_VAR  = "TEA_VERSION";
-
-
-
-
-
-    private SContext _globalContext = null;
 
     // These are used by the implementation of the Tea "source"
     // function.
@@ -147,8 +141,7 @@ public class SModuleLang
 
     // These are used by the implementation of the Tea "load-function"
     // function.
-    private Map<String,SObjFunction> _funcs =
-        new HashMap<String,SObjFunction>();
+    private Hashtable _funcs = new Hashtable();
 
     // THashtable containing the Java system properties.
     private SHashtable _systemProps = null;
@@ -202,8 +195,10 @@ public class SModuleLang
  *
  **************************************************************************/
 
-    public void init(SContext context)
+    public void init(STeaRuntime context)
 	throws STeaException {
+
+	super.init(context);
 
 	_globalContext = context;
 
@@ -213,315 +208,315 @@ public class SModuleLang
 	context.newVar(TEA_VERSION_VAR,
 		       SConfigInfo.getProperty(PROP_TEA_VERSION));
 
-	context.newVar("echo",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionEcho(func, context, args);
-                           }
-                       });
+	context.addFunction("echo",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionEcho(func, context, args);
+				}
+			    });
 
-	context.newVar("define",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionDefine(func, context, args);
-                           }
-                       });
+	context.addFunction("define",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionDefine(func, context, args);
+				}
+			    });
 
-	context.newVar("global",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionGlobal(func, context, args);
-                           }
-                       });
+	context.addFunction("global",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionGlobal(func, context, args);
+				}
+			    });
 
-	context.newVar("set!",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionSet(func, context, args);
-                           }
-                       });
+	context.addFunction("set!",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionSet(func, context, args);
+				}
+			    });
 
-	context.newVar("get",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionGet(func, context, args);
-                           }
-                       });
+	context.addFunction("get",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionGet(func, context, args);
+				}
+			    });
 	
-	context.newVar("break",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionBreak(func, context, args);
-                           }
-                       });
+	context.addFunction("break",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionBreak(func, context, args);
+				}
+			    });
 
-	context.newVar("continue",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionContinue(func, context, args);
-                           }
-                       });
+	context.addFunction("continue",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionContinue(func, context, args);
+				}
+			    });
 
-	context.newVar("return",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionReturn(func, context, args);
-                           }
-                       });
+	context.addFunction("return",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionReturn(func, context, args);
+				}
+			    });
 
-	context.newVar("error",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionError(func, context, args);
-                           }
-                       });
+	context.addFunction("error",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionError(func, context, args);
+				}
+			    });
 
-	context.newVar("is",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionIs(func, context, args);
-                           }
-                       });
+	context.addFunction("is",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionIs(func, context, args);
+				}
+			    });
 
-	context.newVar("exit",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionExit(func, context, args);
-                           }
-                       });
+	context.addFunction("exit",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionExit(func, context, args);
+				}
+			    });
 
-	context.newVar("if",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionIf(func, context, args);
-                           }
-                       });
+	context.addFunction("if",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionIf(func, context, args);
+				}
+			    });
 
-	context.newVar("cond",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionCond(func, context, args);
-                           }
-                       });
+	context.addFunction("cond",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionCond(func, context, args);
+				}
+			    });
 
-	context.newVar("while",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionWhile(func, context, args);
-                           }
-                       });
+	context.addFunction("while",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionWhile(func, context, args);
+				}
+			    });
 
-	context.newVar("foreach",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionForeach(func, context, args);
-                           }
-                       });
+	context.addFunction("foreach",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionForeach(func, context, args);
+				}
+			    });
 
-	context.newVar("exec",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionExec(func, context, args);
-                           }
-                       });
+	context.addFunction("exec",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionExec(func, context, args);
+				}
+			    });
 
-	context.newVar("lambda",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionLambda(func, context, args);
-                           }
-                       });
+	context.addFunction("lambda",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionLambda(func, context, args);
+				}
+			    });
 
-	context.newVar("load",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionLoad(func, context, args);
-                           }
-                       });
+	context.addFunction("load",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionLoad(func, context, args);
+				}
+			    });
 
-	context.newVar("load-function",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionLoadFunction(func, context, args);
-                           }
-                       });
+	context.addFunction("load-function",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionLoadFunction(func, context, args);
+				}
+			    });
 	
-	context.newVar("system",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionSystem(func, context, args);
-                           }
-                       });
+	context.addFunction("system",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionSystem(func, context, args);
+				}
+			    });
 
-	context.newVar("source",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionSource(func, context, args);
-                           }
-                       });
+	context.addFunction("source",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionSource(func, context, args);
+				}
+			    });
 
-	context.newVar("apply",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionApply(func, context, args);
-                           }
-                       });
+	context.addFunction("apply",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionApply(func, context, args);
+				}
+			    });
 
-	context.newVar("map",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionMap(func, context, args);
-                           }
-                       });
+	context.addFunction("map",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionMap(func, context, args);
+				}
+			    });
 	
-	context.newVar("map-apply",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionMapApply(func, context, args);
-                           }
-                       });
+	context.addFunction("map-apply",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionMapApply(func, context, args);
+				}
+			    });
 
-	context.newVar("null?",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionIsNull(func, context, args);
-                           }
-                       });
+	context.addFunction("null?",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionIsNull(func, context, args);
+				}
+			    });
 
-	context.newVar("not-null?",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionIsNotNull(func, context, args);
-                           }
-                       });
+	context.addFunction("not-null?",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionIsNotNull(func, context, args);
+				}
+			    });
 
-	context.newVar("bool?",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionIsBoolean(func, context, args);
-                           }
-                       });
+	context.addFunction("bool?",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionIsBoolean(func, context, args);
+				}
+				});
 
-	context.newVar("block?",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionIsBlock(func, context, args);
-                           }
-                       });
+	context.addFunction("block?",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionIsBlock(func, context, args);
+				}
+			    });
 
-	context.newVar("float?",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionIsFloat(func, context, args);
-                           }
-                       });
+	context.addFunction("float?",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionIsFloat(func, context, args);
+				}
+			    });
 
-	context.newVar("int?",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionIsInt(func, context, args);
-                           }
-                       });
+	context.addFunction("int?",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionIsInt(func, context, args);
+				}
+			    });
 
-	context.newVar("pair?",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionIsPair(func, context, args);
-                           }
-                       });
+	context.addFunction("pair?",
+			    new SObjFunction() {
+				    public Object exec(SObjFunction func,
+						       SContext     context,
+						       Object[]     args)
+					throws STeaException {
+					return functionIsPair(func, context, args);
+				    }
+				});
 
 	SObjFunction isFunc = new SObjFunction() {
 		public Object exec(SObjFunction func,
@@ -532,143 +527,144 @@ public class SModuleLang
 		}
 	    };
 
-	context.newVar("function?", isFunc);
+	context.addFunction("function?", isFunc);
 
 	// For backwards compatibility with Tea 1.x.
-	context.newVar("proc?", isFunc);
+	context.addFunction("proc?", isFunc);
 
-	context.newVar("symbol?",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionIsSymbol(func, context, args);
-                           }
-                       });
+	context.addFunction("symbol?",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionIsSymbol(func, context, args);
+				}
+			    });
 
-	context.newVar("string?",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionIsString(func, context, args);
-                           }
-                       });
+	context.addFunction("string?",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionIsString(func, context, args);
+				}
+			    });
 
-	context.newVar("same?",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionIsSame(func, context, args);
-                           }
-                       });
+	context.addFunction("same?",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionIsSame(func, context, args);
+				}
+			    });
 
-	context.newVar("not-same?",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionIsNotSame(func,context,args);
-                           }
-                       });
+	context.addFunction("not-same?",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionIsNotSame(func,context,args);
+				}
+			    });
 
-	context.newVar("time",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionTime(func, context, args);
-                           }
-                       });
+	context.addFunction("time",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionTime(func, context, args);
+				}
+			    });
 
-	context.newVar("catch",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionCatch(func, context, args);
-                           }
-                       });
+	context.addFunction("catch",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionCatch(func, context, args);
+				}
+			    });
 
-	context.newVar("sleep",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionSleep(func, context, args);
-                           }
-                       });
+	context.addFunction("sleep",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionSleep(func, context, args);
+				}
+			    });
 
-	context.newVar("import", new SFunctionImport(_globalContext));
+	context.addFunction("tea-lock-acquire",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionAcquire(func, context,args);
+				}
+			    });
 
-	context.newVar("tea-get-system-property",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionGetProp(func, context,args);
-                           }
-                       });
+	context.addFunction("tea-lock-release",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionRelease(func, context,args);
+				}
+			    });
 
-	context.newVar("tea-set-system-property",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionSetProp(func, context,args);
-                           }
-                       });
+	context.addFunction("import", new SFunctionImport(_globalContext));
 
-	context.newVar("tea-get-system-properties",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionGetProps(func,context,args);
-                           }
-                       });
+	SContext shared = getSharedContext();
+
+	context.addFunction("tea-shared-define",
+			    SShared.functionDefine(shared));
+	context.addFunction("tea-shared-defined?",
+			    SShared.functionIsDefined(shared));
+	context.addFunction("tea-shared-set!",
+			    SShared.functionSet(shared));
+	context.addFunction("tea-shared-get",
+			    SShared.functionGet(shared));
+
+	context.addFunction("tea-get-system-property",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionGetProp(func, context,args);
+				}
+			    });
+
+	context.addFunction("tea-set-system-property",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionSetProp(func, context,args);
+				}
+			    });
+
+	context.addFunction("tea-get-system-properties",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionGetProps(func,context,args);
+				}
+			    });
    }
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    public void end() {
-
-        // Nothing to do.
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    public void start() {
-
-        // Nothing to do.
-    }
 
 
 
@@ -683,9 +679,50 @@ public class SModuleLang
  **************************************************************************/
 
       public void stop() {
-          
-          // Nothing to do.
+
+	 getLockManager().releaseAllLocks(this);
       }
+
+
+
+
+
+/**************************************************************************
+ *
+ * Fetches the context used to store the variables shared among all
+ * the interpreters in the JVM. The context is created the first time
+ * this method is called.
+ *
+ **************************************************************************/
+
+    private static synchronized SContext getSharedContext() {
+
+	if ( _sharedContext == null ) {
+	    _sharedContext = new SContext() {
+		};
+	}
+	return _sharedContext;
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * Creates the lock manager used among all interpreters in the
+ * JVM. The lock manager is created the first time this method is
+ * called.
+ *
+ **************************************************************************/
+
+    private static synchronized SLockManager getLockManager() {
+
+	if ( _lockManager == null ) {
+	    _lockManager = new SLockManager();
+	}
+	return _lockManager;
+    }
 
 
 
@@ -1251,9 +1288,9 @@ public class SModuleLang
 	case 3 :
 	    result = args[2];
 	    break;
-        case 4 :
-            result = newFunction(args);
-            break;
+	 case 4 :
+	     result = newFunction(args);
+	     break;
 	}
 
 	_globalContext.newVar(symbol, result);
@@ -1321,16 +1358,11 @@ public class SModuleLang
 	Iterator     it         = paramList.iterator();
 
 	for ( int i=0; it.hasNext(); i++) {
-            Object paramName = it.next();
-
 	    try {
-		parameters[i] = (SObjSymbol)paramName;
+		parameters[i] = (SObjSymbol)it.next();
 	    } catch (ClassCastException e1) {
-                String msg = "formal parameter {0} must be a symbol, not a {1}";
-                Object[] fmtArgs = {
-                    String.valueOf(i), STypes.getTypeName(paramName)
-                };
-		throw new STypeException(arg0, msg, fmtArgs);
+		throw new STypeException(arg0,
+					 "formal parameters must be symbols");
 	    }
 	}
 
@@ -1857,7 +1889,7 @@ public class SModuleLang
  *
  **************************************************************************/
 
-    private static Object typeCheck(Class<?>     type,
+    private static Object typeCheck(Class        type,
 				    SObjFunction func,
 				    SContext     context,
 				    Object[]     args)
@@ -2512,11 +2544,9 @@ public class SModuleLang
 	if ( args.length != 2 ) {
 	    throw new SNumArgException(args[0], "java-package-name");
 	}
-
-        String moduleClassName = STypes.getString(args, 1);
 	
 	try {
-            SModuleUtils.addAndStartModule(_globalContext, moduleClassName);
+	    _globalContext.addModule(STypes.getString(args,1));
 	} catch (STeaException e) {
 	    throw new SRuntimeException(args[0], e.getMessage());
 	}
@@ -2572,7 +2602,7 @@ public class SModuleLang
 
 	String       className = STypes.getString(args,1);
 	Class        javaClass = null;
-	SObjFunction teaFunc   = _funcs.get(className);
+	SObjFunction teaFunc   = (SObjFunction)_funcs.get(className);
 	String       msg       = null;
 
 	if ( teaFunc == null ) {
@@ -3099,29 +3129,13 @@ public class SModuleLang
 
 	if ( arg instanceof String ) {
 	    String fileName = (String)arg;
-            
-            try {
-                program  = _compiler.compile(fileName, null, fileName);
-            } catch (IOException e) {
-                String   msg     = "Failed to read \"{0}\" - {1}";
-                Object[] fmtArgs = { fileName, e.getMessage() };
-                throw new SRuntimeException(msg, fmtArgs);
-            }
+	    program  = _compiler.compile(fileName);
 	} else if ( arg instanceof SInput ) {
-	    InputStream    input     = ((SInput)arg).getInputStream();
+	    InputStream input = ((SInput)arg).getInputStream();
 	    if ( input == null ) {
 		throw new SRuntimeException("input stream is closed");
 	    }
-
-            try {
-                program = _compiler.compile(input, null, null);
-            } catch (IOException e) {
-                String   msg     = "Failed to read input stream - {0}";
-                Object[] fmtArgs = { e.getMessage() };
-                throw new SRuntimeException(msg, fmtArgs);
-            } finally {
-                try { ((SInput)arg).close(); } catch (IOException e) {}
-            }
+	    program = _compiler.compile(input);
 	} else {
 	    throw new STypeException("argument 1 is supposed to be a string or an input stream, not a " + STypes.getTypeName(arg));
 	}
@@ -3446,6 +3460,133 @@ public class SModuleLang
 
       return result;
    }
+
+
+
+
+
+//* 
+//* <TeaFunction name="tea-lock-acquire"
+//* 		arguments="lockName"
+//*             module="tea.lang">
+//*
+//* <Overview>
+//* Acquires a lock to enter an exclusive code section.
+//* </Overview>
+//*
+//* <Parameter name="lockName">
+//* Symbol identifying the lock being acquired.
+//* </Parameter>
+//*
+//* <Description>
+//* After returning from this function any other calls to
+//* <Func name="tea-lock-aquire"/> for the same <Arg name="lockName"/>
+//* will block until the lock is released by calling
+//* <Func name="tea-lock-release"/>. The locks are global to the
+//* JVM meaning that they are meant to grant exclusive
+//* access to resources that may be used by all running threads.
+//* <P>
+//* Note that a deadlock will occur if you make two successive calls to
+//* <Func name="tea-lock-acquire"/> for the same lock in the same
+//* thread without calling <Func name="tea-lock-release"/> in between.
+//* </P>
+//* <P>
+//* The functions <Func name="tea-lock-acquire"/>,
+//* <Func name="tea-lock-release"/> are only useful within code
+//* that may be executing by more than one interpreter, where each
+//* interpreter is running on a separate thread.
+//* </P>
+//* </Description>
+//* 
+//* </TeaFunction>
+//* 
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    private Object functionAcquire(SObjFunction obj,
+				  SContext     context,
+				  Object[]     args)
+	throws STeaException {
+
+	if ( args.length != 2 ) {
+	    throw new SNumArgException(args[0], MSG_NUM_ARGS);
+	}
+
+	SObjSymbol   lockName    = STypes.getSymbol(args, 1);
+	SLockManager lockManager = getLockManager();
+
+	try {
+	    lockManager.acquireLock(lockName, this);
+	} catch (InterruptedException e) {
+	    throw new SRuntimeException(MSG_INTERRUPTED);
+	}
+
+	return SObjNull.NULL;
+    }
+
+
+
+
+
+//* 
+//* <TeaFunction name="tea-lock-release"
+//* 		arguments="lockName"
+//*             module="tea.lang">
+//*
+//* <Overview>
+//* Releases a previously acquired lock.
+//* </Overview>
+//*
+//* <Parameter name="lockName">
+//* Symbol identifing the lock being released.
+//* </Parameter>
+//*
+//* <Description>
+//* Releases a lock previously acquired by calling
+//* <Func name="tea-lock-acquire"/>. One of the threads
+//* that were blocked on <Arg name="lockName"/> will resume
+//* execution.
+//* <P>
+//* It is illegal to release a lock that was not previously acquired
+//* by the current thread. A runtime error will occur if this happens.
+//* </P>
+//* <P>
+//* The functions <Func name="tea-lock-release"/>,
+//* <Func name="tea-lock-acquire"/> are only useful within code
+//* that may be executing by more than one interpreter, where each
+//* interpreter is running on a separate thread.
+//* </P>
+//* </Description>
+//* 
+//* </TeaFunction>
+//* 
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    private Object functionRelease(SObjFunction obj,
+				   SContext     context,
+				   Object[]     args)
+	throws STeaException {
+
+	if ( args.length != 2 ) {
+	    throw new SNumArgException(args[0], MSG_NUM_ARGS);
+	}
+
+	SObjSymbol   lockName    = STypes.getSymbol(args, 1);
+	SLockManager lockManager = getLockManager();
+
+	lockManager.releaseLock(lockName);
+
+	return SObjNull.NULL;
+    }
 
 
 

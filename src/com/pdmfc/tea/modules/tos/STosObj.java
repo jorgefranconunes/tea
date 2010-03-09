@@ -235,7 +235,7 @@ public class STosObj
 
    public STosObj part(int level) {
 
-      return _parts[level];
+      return (STosObj)_parts[level];
    }
 
 

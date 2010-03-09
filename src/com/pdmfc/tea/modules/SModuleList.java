@@ -1,25 +1,29 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 /**************************************************************************
  *
- * $Id$
+ * $Id: SModuleList.java,v 1.2 2002/11/02 16:05:02 jfn Exp $
  *
  *
  * Revisions:
  *
- * 2002/08/02 Moved to package "com.pdmfc.tea.modules". (jfn)
+ * 2002/08/02
+ * Moved to package "com.pdmfc.tea.modules". (jfn)
  *
- * 2002/01/20 Calls to the "addJavaFunction()" method were replaced by
- * inner classes for performance. (jfn)
+ * 2002/01/20
+ * Calls to the "addJavaFunction()" method were replaced by inner
+ * classes for performance. (jfn)
  *
- * 2002/01/10 This classe now derives from SModuleCore. (jfn) Now uses
- * SObjPair.iterator(). (jfn)
+ * 2002/01/10
+ * This classe now derives from SModuleCore. (jfn)
+ * Now uses SObjPair.iterator(). (jfn)
  *
- * 2001/05/12 Created. (jfn)
+ * 2001/05/12
+ * Created. (jfn)
  *
  **************************************************************************/
 
@@ -35,6 +39,7 @@ import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjPair;
 import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.STeaRuntime;
 import com.pdmfc.tea.runtime.STypes;
 
 
@@ -66,8 +71,7 @@ import com.pdmfc.tea.runtime.STypes;
  **************************************************************************/
 
 public class SModuleList
-    extends Object
-    implements SModule {
+    extends SModule {
 
 
 
@@ -95,173 +99,130 @@ public class SModuleList
  *
  **************************************************************************/
 
-    public void init(SContext context)
+    public void init(STeaRuntime context)
 	throws STeaException {
 
-	context.newVar("cons",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionCons(func, context, args);
-                           }
-                       });
+	super.init(context);
 
-	context.newVar("car",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionCar(func, context, args);
-                           }
-                       });
+	context.addFunction("cons",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionCons(func, context, args);
+				}
+			    });
+
+	context.addFunction("car",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionCar(func, context, args);
+				}
+			    });
 	
-	context.newVar("cdr",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionCdr(func, context, args);
-                           }
-                       });
+	context.addFunction("cdr",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionCdr(func, context, args);
+				}
+			    });
 
-	context.newVar("empty?",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionEmpty(func, context, args);
-                           }
-                       });
+	context.addFunction("empty?",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionEmpty(func, context, args);
+				}
+			    });
 	
-	context.newVar("not-empty?",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionNotEmpty(func, context, args);
-                           }
-                       });
+	context.addFunction("not-empty?",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionNotEmpty(func, context, args);
+				}
+			    });
 	
-	context.newVar("set-car!",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionSetCar(func, context, args);
-                           }
-                       });
+	context.addFunction("set-car!",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionSetCar(func, context, args);
+				}
+			    });
 	
-	context.newVar("set-cdr!",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionSetCdr(func, context, args);
-                           }
-                       });
+	context.addFunction("set-cdr!",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionSetCdr(func, context, args);
+				}
+			    });
 	
-	context.newVar("list",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionList(func, context, args);
-                           }
-                       });
+	context.addFunction("list",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionList(func, context, args);
+				}
+			    });
 	
-	context.newVar("nth",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionNth(func, context, args);
-                           }
-                       });
+	context.addFunction("nth",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionNth(func, context, args);
+				}
+			    });
 	
-	context.newVar("prepend",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionPrepend(func, context, args);
-                           }
-                       });
+	context.addFunction("prepend",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionPrepend(func, context, args);
+				}
+			    });
 	
-	context.newVar("append",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionAppend(func, context, args);
-                           }
-                       });
+	context.addFunction("append",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionAppend(func, context, args);
+				}
+			    });
 	
-	context.newVar("length",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionLength(func, context, args);
-                           }
-                       });
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    public void end() {
-
-        // Nothing to do.
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    public void start() {
-
-        // Nothing to do.
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    public void stop() {
-
-        // Nothing to do.
+	context.addFunction("length",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionLength(func, context, args);
+				}
+			    });
     }
     
 

@@ -19,7 +19,7 @@ be added in this branch. Only bug fixes.
 Pre-Requisites
 ==============
 
-1. Compiler for Java 1.6 or later.
+1. Compiler for Java 1.5 or later.
 
 
 
@@ -43,10 +43,6 @@ development tree. It will contain information on the Java compiler to
 be used during the build. It is a file with Bourne shell syntax and it
 must define the variables described bellow. There is a
 "build.conf.example" file with example values for these variables.
-
-BUILD_JAVA_HOME - The java home of the JRE to be used for seting up
-the development environment as a Tea installation. This is required in
-order to run the "teadoc" tool.
 
 BUILD_JAVAC - The command that invokes the Java compiler and is used
 to compile Java source files during build. It must accept the "-d" and
@@ -119,7 +115,7 @@ Execute the Makefile target to build the release archive:
     make release
 
 The release bundle is named "tea-3.2.Z.tar.gz" and should be available
-at the working copy root.
+in working copy root.
 
 
 3. Perform testing on the release.

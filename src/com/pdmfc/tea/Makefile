@@ -1,18 +1,18 @@
 ###########################################################################
 #
-# Copyright (c) 2005-2010 PDM&FC, All Rights Reserved.
+# Copyright (c) 2005 PDM&FC, All Rights Reserved.
 #
 ###########################################################################
 
 ###########################################################################
 #
-# $Id$
+# $Id: Makefile,v 1.1 2005/02/15 17:42:45 jfn Exp $
 #
 # Makefile for the "com.pdmfc.tea" package.
 #
 # The following variables are expected to be defined:
 #
-# BUILD_BASE_DIR - The project root directory.
+# BASE_DIR - The project root directory.
 #
 #
 # Revisions:
@@ -25,19 +25,17 @@
 
 
 
-PACKAGE_DIR := com/pdmfc/tea
-
-SOURCES := \
+SOURCES= \
 	SConfigInfo.java \
 	STeaException.java \
 	TeaConfig.properties
 
 
-$(SOURCE_BASE_DIR)/$(PACKAGE_DIR)/TeaConfig.properties : $(BUILD_BASE_DIR)/config/tea-core.conf $(SOURCE_BASE_DIR)/$(PACKAGE_DIR)/TeaConfig.properties.template
-	$(BUILD_BASE_DIR)/bin/process-template $(SOURCE_BASE_DIR)/com/pdmfc/tea/TeaConfig.properties.template > $@
+TeaConfig.properties : $(BASE_DIR)/config/tea-core.conf TeaConfig.properties.template
+	$(BASE_DIR)/bin/process-template TeaConfig.properties.template > $@
 
 
-include $(BUILD_BASE_DIR)/make/package.make
+include $(BASE_DIR)/make/package.make
 
 
 

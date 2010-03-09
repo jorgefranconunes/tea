@@ -1,12 +1,12 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001, 2002, 2003 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 /**************************************************************************
  *
- * $Id$
+ * $Id: SModuleTdbc.java,v 1.13 2004/04/02 19:39:06 jfn Exp $
  *
  *
  * Revisions:
@@ -34,6 +34,7 @@ import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjNull;
+import com.pdmfc.tea.runtime.STeaRuntime;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypes;
 
@@ -62,8 +63,7 @@ import com.pdmfc.tea.runtime.STypes;
  **************************************************************************/
 
 public class SModuleTdbc
-    extends Object
-    implements SModule {
+    extends SModule {
 
 
 
@@ -94,8 +94,10 @@ public class SModuleTdbc
  *
  **************************************************************************/
 
-    public void init(SContext context)
+    public void init(STeaRuntime context)
 	throws STeaException {
+
+	super.init(context);
 
 	STosClass rSetClass =
 	    new SJavaClass("com.pdmfc.tea.modules.tdbc.SResultSet");
@@ -114,84 +116,54 @@ public class SModuleTdbc
 	context.newVar(callStatC.getName(), callStatC);
 	context.newVar(_connClass.getName(), _connClass);
 
-	context.newVar("tdbc-register-driver",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionRegisterDriver(func,
-                                                             context,
-                                                             args);
-                           }
-                       });
+	context.addFunction("tdbc-register-driver",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionRegisterDriver(func,
+								  context,
+								  args);
+				}
+			    });
 
-	context.newVar("sql-encode",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionSqlEncode(func,
-                                                        context,
-                                                        args);
-                           }
-                       });
+	context.addFunction("sql-encode",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionSqlEncode(func,
+							     context,
+							     args);
+				}
+			    });
 
-	context.newVar("tdbc-get-open-connections-count",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionGetOpenConnCount(func,
-                                                               context,
-                                                               args);
-                           }
-                       });
+	context.addFunction("tdbc-get-open-connections-count",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionGetOpenConnCount(func,
+								    context,
+								    args);
+				}
+			    });
 
-	context.newVar("tdbc-close-all-connections",
-                       new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
-                               throws STeaException {
-                               return functionCloseAllConn(func,
-                                                           context,
-                                                           args);
-                           }
-                       });
+	context.addFunction("tdbc-close-all-connections",
+			    new SObjFunction() {
+				public Object exec(SObjFunction func,
+						   SContext     context,
+						   Object[]     args)
+				    throws STeaException {
+				    return functionCloseAllConn(func,
+								context,
+								args);
+				}
+			    });
    }
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    public void end() {
-
-	stop();
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    public void start() {
-
-        // Nothing to do.
-    }
 
 
 
@@ -208,6 +180,21 @@ public class SModuleTdbc
 	if ( _connClass != null ) {
 	    _connClass.closeAll();
 	}
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    public void end() {
+
+	stop();
     }
 
 

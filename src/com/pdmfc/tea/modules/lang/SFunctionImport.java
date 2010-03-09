@@ -1,18 +1,15 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001, 2002, 2003, 2004, 2005 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 /**************************************************************************
  *
- * $Id$
+ * $Id: SFunctionImport.java,v 1.22 2007/06/04 09:39:16 jfn Exp $
  *
  *
  * Revisions:
- *
- * 2008/04/18 Now uses an SInputSource to read from a file or
- * URL. (TSK-PDMFC-TEA-0044) (jfn)
  *
  * 2006/05/02 Changes with hashtables so that it correctly identifies
  * the same file by full pathname even if diferent file paths
@@ -40,7 +37,9 @@
 package com.pdmfc.tea.modules.lang;
 
 import java.io.File;
+import java.io.InputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -54,6 +53,7 @@ import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjNull;
 import com.pdmfc.tea.runtime.SObjPair;
+import com.pdmfc.tea.runtime.STeaRuntime;
 import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypes;
@@ -149,17 +149,15 @@ class SFunctionImport
     // The parent context for the context where the code in the
     // imported files will be executed. Each imported file is executed
     // in a separate context.
-    private SContext _rootContext = null;
+    private STeaRuntime _globalContext = null;
 
     // Keys are import paths (String). Values are ImportItem
     // instances.
-    private HashMap<String,ImportItem> _itemsByPath =
-	new HashMap<String,ImportItem>();
+    private HashMap _itemsByPath = new HashMap();
 
     // Keys are import items full paths (String). Values are
     // ImportItem instances.
-    private HashMap<String,ImportItem> _itemsByFullPath =
-	new HashMap<String,ImportItem>();
+    private HashMap _itemsByFullPath = new HashMap();
 
     // Used to compile the code in the imported files.
     private SCompiler _compiler = new SCompiler();
@@ -174,9 +172,9 @@ class SFunctionImport
  *
  **************************************************************************/
 
-    public SFunctionImport(SContext rootContext) {
+    public SFunctionImport(STeaRuntime globalContext) {
 
-        _rootContext = rootContext;
+        _globalContext = globalContext;
     }
 
 
@@ -205,7 +203,7 @@ class SFunctionImport
 
         String     fileName = STypes.getString(args, 1);
         Object     result   = SObjNull.NULL;
-        ImportItem item     = _itemsByPath.get(fileName);
+        ImportItem item     = (ImportItem)_itemsByPath.get(fileName);
 
         if ( item != null ) {
             result = item.performImport();
@@ -266,7 +264,7 @@ class SFunctionImport
 
             ImportItem item     = new ImportItem(baseDir, fileName);
             String     fullPath = item.getFullPath();
-            ImportItem prevItem = _itemsByFullPath.get(fullPath);
+            ImportItem prevItem = (ImportItem)_itemsByFullPath.get(fullPath);
 
             if ( prevItem != null ) {
                 // This same file has already been imported through
@@ -379,19 +377,21 @@ class SFunctionImport
         public Object tryToPerformImport()
             throws STeaException {
 
-            Object result = null;
-            String path   = _fullPath;
-            SCode  code   = null;
+            Object      result = null;
+            String      path   = _isFile ? ("file:"+_fullPath) : _fullPath;
+            InputStream input  = null;
+	    
 	    
             try {
-                code = _compiler.compile(path, null, _importPath);
+                input = (new URL(path)).openStream();
             } catch (IOException e) {
                 // The path does not exist or is not accessible.
             }
 
-            // If the input has been opened, try to execute the file.
-            if ( code != null ) {
-                // Record the import timestamp right now to prevent
+            // If the imput has been opened, try to compile and
+            // execute the file.
+            if ( input != null ) {
+                // record the import timestamp right now to prevent
                 // eventual infinite recursion (if this file is
                 // imported again while executing).
                 _lastImportTime = 
@@ -399,7 +399,15 @@ class SFunctionImport
 		    _file.lastModified() :
 		    System.currentTimeMillis();
 
-                SContext execContext = _rootContext.newChild();
+                SContext execContext = _globalContext.newChild();
+                SCode    code        = null;
+
+                try {
+                    code = _compiler.compile(input, _importPath);
+                } finally {
+                    // Try very hard to close the input.
+                    try { input.close(); } catch (IOException e) {}
+                }
 		
                 result = code.exec(execContext);
             }

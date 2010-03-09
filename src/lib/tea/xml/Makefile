@@ -1,6 +1,6 @@
 ###########################################################################
 #
-# Copyright (c) 2005-2010 PDM&FC, All Rights Reserved.
+# Copyright (c) 2005 PDM&FC, All Rights Reserved.
 #
 ###########################################################################
 
@@ -25,9 +25,7 @@
 
 
 
-PACKAGE_DIR := lib/tea/xml
-
-SOURCES := \
+SOURCES = \
 	TDocument.tea \
 	TDomParser.tea \
 	TElement.tea \

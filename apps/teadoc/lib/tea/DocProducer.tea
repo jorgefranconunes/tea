@@ -1,18 +1,15 @@
 ###########################################################################
 #
-# Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
+# Copyright (c) 2001, 2002, 2003, 2004 PDM&FC, All Rights Reserved.
 #
 ###########################################################################
 
 ##########################################################################
 #
-# $Id$
+# $Id: DocProducer.tea,v 1.8 2005/12/07 16:49:28 jfn Exp $
 #
 #
 # Revisions:
-#
-# 2010/01/27 Added ".svn" to the set of directory names that get skiped
-# when looking for source files to process. (jfn)
 #
 # 2004/08/13 The "DocProducer processFile" now only processes the XML
 # file if it was actually created by "DocExtractor::processFile".
@@ -39,7 +36,7 @@ define _knownFileTypes [regexp-pattern ".*((\\.tea)|(\\.java))$"]
 #
 # Regexp for names of directories that will be skiped.
 #
-define _namesToSkip [regexp-pattern "(CVS)|(\.svn)"]
+define _namesToSkip [regexp-pattern "CVS"]
 
 
 
@@ -70,12 +67,9 @@ class DocProducer (
 
 method DocProducer constructor ( nativeParser ) {
 
-    set! _mustStop $false
     set! _docSet   [new DocSet]
-
-    if { not-null? $nativeParser } {
-        $_docSet setNativeParser $nativeParser
-    }
+    $_docSet setNativeParser $nativeParser
+    set! _mustStop $false
 }
 
 

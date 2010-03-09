@@ -33,16 +33,6 @@ source ${_teaBaseDir}/bin/tea-utils
 
 
 
-#
-# List of JARs in the "lib" directory used during compilation.
-#
-_additionalBuildJars="
-"
-
-
-
-
-
 ###########################################################################
 #
 # 
@@ -77,28 +67,12 @@ readBuildConfig () {
 	fi
     done
 
-    # Fill the list of JARs to use during compilation.
-
-    local sep=$(teaPathSeparator)
-    local makefileClasspath=
-
-    for jar in $_additionalBuildJars ; do
-        local jarPath=${_teaBaseDir}/lib/${jar}
-
-        if [ -z "$makefileClasspath" ] ; then
-            makefileClasspath=$jarPath
-        else
-            makefileClasspath=${makefileClasspath}${sep}${path}
-        fi
-    done
-
     # And assign values to aditional config parameters.
 
     source ${_teaBaseDir}/config/tea-core.conf
 
-    BUILD_BASE_DIR=$_teaBaseDir
     BUILD_VERSION=$TEA_VERSION
-    BUILD_MAKEFILE_CLASSPATH=$makefileClasspath
+    BUILD_BASE_DIR=$_teaBaseDir
 }
 
 

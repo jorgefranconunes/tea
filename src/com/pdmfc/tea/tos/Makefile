@@ -1,12 +1,12 @@
 ###########################################################################
 #
-# Copyright (c) 2005-2010 PDM&FC, All Rights Reserved.
+# Copyright (c) 2005 PDM&FC, All Rights Reserved.
 #
 ###########################################################################
 
 ###########################################################################
 #
-# $Id$
+# $Id: Makefile,v 1.1 2005/02/15 17:42:46 jfn Exp $
 #
 # Makefile for the "com.pdmfc.tea.tos" package.
 #
@@ -25,9 +25,7 @@
 
 
 
-PACKAGE_DIR := com/pdmfc/tea/tos
-
-SOURCES := \
+SOURCES = \
 	SNoSuchMethodException.java \
 	STosClass.java \
 	STosJavaClass.java \

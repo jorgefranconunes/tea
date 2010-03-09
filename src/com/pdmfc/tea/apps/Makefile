@@ -1,12 +1,12 @@
 ###########################################################################
 #
-# Copyright (c) 2005-2010 PDM&FC, All Rights Reserved.
+# Copyright (c) 2005 PDM&FC, All Rights Reserved.
 #
 ###########################################################################
 
 ###########################################################################
 #
-# $Id$
+# $Id: Makefile,v 1.1 2005/02/15 17:42:45 jfn Exp $
 #
 # Makefile for the "com.pdmfc.tea.apps" package.
 #
@@ -25,12 +25,8 @@
 
 
 
-PACKAGE_DIR := com/pdmfc/tea/apps
-
-SOURCES := \
-	STeaLauncher.java	\
-	STeaLauncherArgs.java	\
-
+SOURCES= \
+	STeaShell.java
 
 include $(BASE_DIR)/make/package.make
 

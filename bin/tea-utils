@@ -169,10 +169,10 @@ teaParseTemplate () {
     tpt_tmpScript=/tmp/tea-parse-template.$$
 
     echo "cat <<EOF" > $tpt_tmpScript
-    sed '/^%%/d' "$1" >> $tpt_tmpScript || exit 1
+    sed '/^%%/d' "$1" >> $tpt_tmpScript
     echo "EOF" >> $tpt_tmpScript
 
-    source $tpt_tmpScript
+    . $tpt_tmpScript
 
     rm -f $tpt_tmpScript
 }

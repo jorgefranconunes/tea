@@ -1,12 +1,12 @@
 ###########################################################################
 #
-# Copyright (c) 2005-2010 PDM&FC, All Rights Reserved.
+# Copyright (c) 2005 PDM&FC, All Rights Reserved.
 #
 ###########################################################################
 
 ###########################################################################
 #
-# $Id$
+# $Id: Makefile,v 1.1 2005/12/05 20:37:53 pcorreia Exp $
 #
 # Makefile for the "com.pdmfc.tea.modules.reflect" package.
 #
@@ -17,7 +17,10 @@
 #
 # Revisions:
 #
-# 2005/12/05 Support for reflection over Java. (pcorreia)
+# $Log: Makefile,v $
+# Revision 1.1  2005/12/05 20:37:53  pcorreia
+# Support for reflection over Java
+#
 #
 ###########################################################################
 
@@ -25,9 +28,7 @@
 
 
 
-PACKAGE_DIR := com/pdmfc/tea/modules/reflect
-
-SOURCES := \
+SOURCES = \
 	SModuleReflect.java \
 
 include $(BASE_DIR)/make/package.make

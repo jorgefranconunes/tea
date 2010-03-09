@@ -1,18 +1,14 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 /**************************************************************************
  *
- * $Id$
- *
+ * $Id: SXmlParser.java,v 1.6 2002/08/02 17:47:25 jfn Exp $
  *
  * Revisions:
- *
- * 2010/02/07 Refactored to use "org.xml.sax.XMLReader" instead of
- * "org.xml.sax.Parser". (TSK-PDMFC-TEA-0042) (jfn)
  *
  * 2001/05/12
  * Created. (jfn)
@@ -21,9 +17,8 @@
 
 package com.pdmfc.tea.modules.xml;
 
-import org.xml.sax.SAXException;
-import org.xml.sax.XMLReader;
-import org.xml.sax.helpers.XMLReaderFactory;
+import org.xml.sax.Parser;
+import org.xml.sax.helpers.ParserFactory;
 
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.runtime.SRuntimeException;
@@ -71,11 +66,15 @@ public class SXmlParser
     private static final String     CLASS_NAME   = "TXmlParser";
     private static final SObjSymbol CLASS_NAME_S = SObjSymbol.addSymbol(CLASS_NAME);
 
-    // The XML parser.
-    private XMLReader _parser = null;
+    /**
+     * The XML parser.
+     */
+    Parser _parser = null;
     
-    // The TOS object that will be used to handle the parsing events.
-    private STosObj _handler = null;
+    /**
+     * The TOS object that will be used to handle the parsing events.
+     */
+    STosObj _handler = null;
 
 
 
@@ -112,15 +111,23 @@ public class SXmlParser
 	throws SRuntimeException {
 
 	try {
-	    if ( parserClassName != null ) {
-		_parser = XMLReaderFactory.createXMLReader(parserClassName);
-	    } else {
-		_parser = XMLReaderFactory.createXMLReader();
-	    }
-	} catch (SAXException e) {
-	    String   msg     = "Failed to create XML parser - {0} - {1}";
-	    Object[] fmtArgs = { e.getClass().getName(), e.getMessage() };
-	    throw new SRuntimeException(msg, fmtArgs);
+	    _parser = ParserFactory.makeParser(parserClassName);
+	} catch (ClassNotFoundException e1) {
+	    throw new SRuntimeException("class '"
+					+ parserClassName
+					+ "' was not found.");
+	} catch (IllegalAccessException e2) {
+	    throw new SRuntimeException("class '"
+					+ parserClassName
+					+ "' is not accessible.");
+	} catch (InstantiationException e3) {
+	    throw new SRuntimeException("problems while instantiating class '"
+					+ parserClassName
+					+ "'");
+	} catch (ClassCastException e4) {
+	    throw new SRuntimeException("class '"
+					+ parserClassName
+					+ "' does not implement interface org.sml.sax.Parser");
 	}
     }
 
@@ -140,7 +147,7 @@ public class SXmlParser
 //*
 //* <Parameter name="javaClassName">
 //* Name of a Java class that must implement the
-//* <Func name="org.xml.sax.XMLReader"/> interface.
+//* <Func name="org.xml.sax.Parser"/> interface.
 //* </Parameter>
 //* 
 //* <Description>
@@ -171,26 +178,6 @@ public class SXmlParser
 	}
 
 	return obj;
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    public XMLReader getParser()
-	throws SRuntimeException {
-
-	if ( _parser == null ) {
-	    setNativeParser(null);
-	}
-
-	return _parser;
     }
 
 

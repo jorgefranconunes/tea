@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -11,12 +11,12 @@
  *
  * Revisions:
  *
- * 2010/01/28 Minor refactorings to properly use generics. (jfn)
+ * 2002/08/03
+ * The constructor now receives a java.util.List as argument instead
+ * of a SList. (jfn)
  *
- * 2002/08/03 The constructor now receives a java.util.List as
- * argument instead of a SList. (jfn)
- *
- * 2001/05/12 Created. (jfn)
+ * 2001/05/12
+ * Created. (jfn)
  *
  **************************************************************************/
 
@@ -51,7 +51,7 @@ class SWordList
 
 
 
-    private List<SWord> _list = null;
+    private List _list = null;
 
 
 
@@ -63,7 +63,7 @@ class SWordList
  *
  **************************************************************************/
 
-    SWordList(List<SWord> list) {
+    SWordList(List list) {
 
 	_list = list;
     }
@@ -85,8 +85,8 @@ class SWordList
 	SObjPair head  = empty;
 	SObjPair elem  = null;
 
-        for ( SWord word : _list ) {
-	    Object   car  = word.get(context);
+	for ( Iterator i=_list.iterator(); i.hasNext(); ) {
+	    Object   car  = ((SWord)i.next()).get(context);
 	    SObjPair node = new SObjPair(car, empty);
 	    
 	    if ( elem == null ) {
