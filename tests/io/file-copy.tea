@@ -1,0 +1,24 @@
+# Test the copy of a temporary file into another, using file-copy
+# Both files are removed at the end.
+# The sleep can be used to test bug TSK-PDMFC-TEA-0053.
+
+# uses java reflectio to generate a temporary file
+define aTempJavaFile1 [java-exec-method java.io.File createTempFile "tea-file-copy-1" ".tmp"]
+define aTempFileName1 [$aTempJavaFile1 getAbsolutePath]
+# put some content into the file
+define aTempFileHandler1 [new TFileOutput $aTempFileName1]
+$aTempFileHandler1 writeln "Hello file-copy"
+$aTempFileHandler1 close
+define aTempJavaFile2 [java-exec-method java.io.File createTempFile "tea-file-copy-2" ".tmp"]
+define aTempFileName2 [$aTempJavaFile2 getAbsolutePath]
+#define aTempFileName2 "/dev/nocando"
+if [not [file-copy $aTempFileName1 $aTempFileName2]] {
+    $stderr writeln "file-copy " $aTempFileName1 " " $aTempFileName2 " failed!"
+    exit 1
+}
+#sleep 60000 # TSK-PDMFC-TEA-0053 test for un-closed descriptors
+   # $ ps -ef | grep "java.*file-copy"
+   # $ lsof -p PIDabove
+   # check that both FDs are still open before TSK-PDMFC-TEA-0053
+file-unlink $aTempFileName1
+file-unlink $aTempFileName2

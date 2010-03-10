@@ -434,22 +434,22 @@ public class SModuleIO
 	throws IOException {
 
 	byte[]           buffer = new byte[BUFFER_SIZE];
-	FileInputStream  in     = new FileInputStream(src);
-	FileOutputStream out    = new FileOutputStream(dst);
+	FileInputStream  in     = null;
+	FileOutputStream out    = null;
 	int              count;
 
 	try {
+	    in  = new FileInputStream(src);
+	    out = new FileOutputStream(dst);
 	    while ( (count=in.read(buffer)) != -1 ) {
 		out.write(buffer, 0, count);
 	    }
 	} catch (IOException e) {
-	    try {
-		in.close();
-		out.close();
-	    } catch (Exception e2) {
-	    }
 	    throw e;
-	}
+	} finally {
+	    if (in != null) try { in.close(); } catch (Exception e2) {}
+	    if (out != null) try { out.close(); } catch (Exception e2) {}
+        }
     }
 
 
