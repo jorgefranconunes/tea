@@ -79,16 +79,6 @@ public class STeaRuntime
     private static final String VAR_LIBRARY   =
 	SConfigInfo.getProperty("com.pdmfc.tea.libraryVarName");
 
-    // The name of the Tea global variable that will contain the 0th
-    // argument.
-    private static final String VAR_ARGV0 =
-        SConfigInfo.getProperty("com.pdmfc.tea.argv0VarName");
-
-    // The name of the Tea global variable that will contain the list
-    // of command line arguments.
-    private static final String VAR_ARGV =
-	SConfigInfo.getProperty("com.pdmfc.tea.argvVarName");
-
     // Name of the file to read from each directory in the TEA_LIBRARY
     // list.
     private static final String INIT_FILE = 
@@ -491,8 +481,7 @@ public class STeaRuntime
         throws STeaException {
 
         setupLibVar(_importLocations);
-        setupArgv0Var(_argv0);
-        setupArgvVar(_argv);
+        SArgvUtils.setArgv(_toplevelContext, _argv0, _argv);
         setupModules(_modules);
     }
 
@@ -560,44 +549,6 @@ public class STeaRuntime
 	}
 
 	return head;
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    private void setupArgv0Var(String argv0) {
-
-        Object argv0Value = (argv0!=null) ? argv0 : SObjNull.NULL;
-
-	_toplevelContext.newVar(VAR_ARGV0, argv0Value);
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    private void setupArgvVar(String[] argv) {
-
-        SObjPair head = SObjPair.emptyList();
-
-        for (int i=argv.length-1; i>=0; --i ) {
-            head = new SObjPair(argv[i], head);
-        }
-
-        _toplevelContext.newVar(VAR_ARGV, head);
     }
 
 

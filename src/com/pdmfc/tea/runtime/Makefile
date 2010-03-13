@@ -28,6 +28,7 @@
 PACKAGE_DIR := com/pdmfc/tea/runtime
 
 SOURCES := \
+	SArgvUtils.java	\
 	SBreakException.java	\
 	SContext.java	\
 	SContinueException.java	\

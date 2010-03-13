@@ -32,7 +32,8 @@ import com.pdmfc.tea.runtime.SRuntimeException;
 
 /**************************************************************************
  *
- * Utility functions for managing the Tea modules in an interpreter.
+ * Utility functions for managing the Tea modules in a Tea
+ * interpreter.
  *
  **************************************************************************/
 
