@@ -33,6 +33,7 @@ SOURCES := \
 	SInputSourceFactory.java	\
 	SList.java \
 	SListNode.java \
+	SListUtils.java	\
 
 include $(BASE_DIR)/make/package.make
 

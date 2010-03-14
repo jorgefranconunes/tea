@@ -478,33 +478,64 @@ public class SContext
     public final SObjVar getVarObject(SObjSymbol name) 
 	throws SNoSuchVarException {
 
-	if ( _varTable == null ) {
-	    if ( _parent != null ) {
-		return _parent.getVarObject(name);
-	    } else {
-		throw new SNoSuchVarException(name);
-	    }
-	}
-      
-	// Search for a variable with that name.
-	SVarSet[] table = _varTable;
-	int       hash  = name.hashCode();
-	int       index = (hash & 0x7FFFFFFF) % table.length;
-	
-	for ( SVarSet entry=table[index]; entry!=null; entry=entry._next ) {
-	    if ( entry._symbolHash == hash ) {
-		// We found it!
-		return entry;
-	    }
-	}
+        SObjVar result = getVarObjectIfPossible(name);
 
-	// There is no variable with that name in this context.
-	// So search in the parent context.
-	if ( _parent != null ) {
-	    return _parent.getVarObject(name);
-	} else {
+        if ( result == null ) {
 	    throw new SNoSuchVarException(name);
 	}
+
+        return result;
+   }
+
+
+
+
+
+/**************************************************************************
+ *
+ * Fetches the container of a variable. If such a variable does not exist in this context
+ * then it is searched in its parent.
+ *
+ * @param name Symbol associated with the variable whose contents are
+ * to be retrieved.
+ *
+ * @return The variable container associated with symbol <TT>name</TT>
+ * or null if no Tea variable with that name is defined.
+ *
+ **************************************************************************/
+
+    public final SObjVar getVarObjectIfPossible(SObjSymbol name)  {
+
+        SObjVar result = null;
+
+	if ( _varTable == null ) {
+	    if ( _parent != null ) {
+		result = _parent.getVarObjectIfPossible(name);
+	    }
+	} else {
+            // Search for a variable with that name.
+            SVarSet[] table = _varTable;
+            int       hash  = name.hashCode();
+            int       index = (hash & 0x7FFFFFFF) % table.length;
+            
+            for ( SVarSet entry=table[index]; entry!=null; entry=entry._next ){
+                if ( entry._symbolHash == hash ) {
+                    // We found it!
+                    result = entry;
+                    break;
+                }
+            }
+
+            if ( result == null ) {
+                // There is no variable with that name in this
+                // context.  So search in the parent context.
+                if ( _parent != null ) {
+                    result = _parent.getVarObjectIfPossible(name);
+                }
+            }
+        }
+
+        return result;
    }
 
 

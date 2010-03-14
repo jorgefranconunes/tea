@@ -50,7 +50,9 @@ import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.compiler.SCode;
 import com.pdmfc.tea.compiler.SCompiler;
 import com.pdmfc.tea.modules.SModule;
+import com.pdmfc.tea.runtime.SArgvUtils;
 import com.pdmfc.tea.runtime.SContext;
+import com.pdmfc.tea.runtime.SLibVarUtils;
 import com.pdmfc.tea.runtime.SModuleUtils;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjNull;
@@ -72,12 +74,6 @@ public class STeaRuntime
 
 
 
-
-    // The name of the Tea global variable with the list of directory
-    // names where the <code>import</code> function looks for Tea
-    // source files.
-    private static final String VAR_LIBRARY   =
-	SConfigInfo.getProperty("com.pdmfc.tea.libraryVarName");
 
     // Name of the file to read from each directory in the TEA_LIBRARY
     // list.
@@ -480,8 +476,8 @@ public class STeaRuntime
     private void doFirstStartInitializations()
         throws STeaException {
 
-        setupLibVar(_importLocations);
         SArgvUtils.setArgv(_toplevelContext, _argv0, _argv);
+        setupLibVar(_importLocations);
         setupModules(_modules);
     }
 
@@ -502,53 +498,7 @@ public class STeaRuntime
 	_allImportLocations.addAll(locations);
 	_allImportLocations.add(CORE_IMPORT_DIR);
 
-        SObjPair teaLocations  = buildTeaList(_allImportLocations);
-
-	_toplevelContext.newVar(VAR_LIBRARY, teaLocations);
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * Creates a Tea list of strings from the given list.
- *
- * @param pathList A list where each element is a string representing
- * a path or URL.
- *
- * @return The head of a Tea list.
- *
- **************************************************************************/
-
-    private static SObjPair buildTeaList(List<String> pathList) {
-
-	SObjPair empty = SObjPair.emptyList();
-	SObjPair head  = empty;
-	SObjPair elem  = null;
-
-	if ( pathList == null ) {
-	    return empty;
-	}
-
-	for ( String path : pathList ) {
-	    SObjPair node = null;
-
-	    if ( path.length() == 0 ) {
-		continue;
-	    }
-	    node = new SObjPair(path, empty);
- 
-	    if ( elem == null ) {
-		head = node;
-	    } else {
-		elem._cdr = node;
-	    }
-	    elem = node;
-	}
-
-	return head;
+        SLibVarUtils.setupLibVar(_toplevelContext, _allImportLocations);
     }
 
 

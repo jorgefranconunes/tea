@@ -37,6 +37,7 @@ SOURCES := \
 	SFlowControlException.java	\
 	SLambdaFunction.java	\
 	SLambdaFunctionVarArg.java	\
+	SLibVarUtils.java	\
 	SMalformedListException.java	\
 	SModuleUtils.java	\
 	SNoSuchFunctionException.java	\
