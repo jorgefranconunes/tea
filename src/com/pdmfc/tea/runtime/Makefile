@@ -33,6 +33,7 @@ SOURCES := \
 	SContext.java	\
 	SContinueException.java	\
 	SEmptyListException.java	\
+	SEncodingUtils.java	\
 	SExitException.java	\
 	SFlowControlException.java	\
 	SLambdaFunction.java	\

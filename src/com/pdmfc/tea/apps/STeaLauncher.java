@@ -171,6 +171,7 @@ public class STeaLauncher
 
         context.setArgv0(_scriptLocation);
         context.setArgv(args);
+        context.setSourceEncoding(_encoding);
         context.setImportLocations(_importDirList);
         context.start();
 

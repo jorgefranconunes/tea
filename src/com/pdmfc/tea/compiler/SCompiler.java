@@ -99,8 +99,7 @@ public class SCompiler
  * @return A <TT>SCode</TT> object containing the bytecode that can be
  * executed later.
  *
- * @exception com.pdmfc.tea.compiler.SCompileException Thrown in the
- * following cases:
+ * @exception SCompileException Thrown in the following cases:
  *
  *        <UL>
  *	  <LI>The file could not be opened for reading.

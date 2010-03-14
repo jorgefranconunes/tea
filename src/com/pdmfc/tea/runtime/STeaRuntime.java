@@ -52,6 +52,7 @@ import com.pdmfc.tea.compiler.SCompiler;
 import com.pdmfc.tea.modules.SModule;
 import com.pdmfc.tea.runtime.SArgvUtils;
 import com.pdmfc.tea.runtime.SContext;
+import com.pdmfc.tea.runtime.SEncodingUtils;
 import com.pdmfc.tea.runtime.SLibVarUtils;
 import com.pdmfc.tea.runtime.SModuleUtils;
 import com.pdmfc.tea.runtime.SObjFunction;
@@ -107,8 +108,9 @@ public class STeaRuntime
     private List<String> _importLocations    = new ArrayList<String>();
     private List<String> _allImportLocations = null;
 
-    private String   _argv0 = null;
-    private String[] _argv  = new String[0];
+    private String   _argv0          = null;
+    private String[] _argv           = new String[0];
+    private String   _sourceEncoding = null;
 
     // List of module class names or SModule instances. These were
     // registered by calls to addModule(...) before the first start.
@@ -251,6 +253,24 @@ public class STeaRuntime
     public void setArgv(String[] argv) {
 
         _argv = argv;
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * Specifies the encoding of Tea source files.
+ *
+ * @param sourceEncoding If null the platform default encoding is
+ * assumed.
+ *
+ **************************************************************************/
+
+    public void setSourceEncoding(String sourceEncoding) {
+
+        _sourceEncoding = sourceEncoding;
     }
 
 
@@ -478,6 +498,7 @@ public class STeaRuntime
 
         SArgvUtils.setArgv(_toplevelContext, _argv0, _argv);
         setupLibVar(_importLocations);
+        SEncodingUtils.setSourceEncoding(_toplevelContext, _sourceEncoding);
         setupModules(_modules);
     }
 
@@ -551,7 +572,7 @@ public class STeaRuntime
             SCode  code = null;
             
             try {
-                code = compiler.compile(dirPath, path, null, path);
+                code = compiler.compile(dirPath, path, _sourceEncoding, path);
                 code.exec(_toplevelContext);
             } catch (IOException e) {
                 // The given path does not exist or is not

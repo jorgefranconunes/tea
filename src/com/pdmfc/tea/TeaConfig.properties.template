@@ -45,7 +45,7 @@
 #
 # The Tea version.
 #
-com.pdmfc.tea.version=$TEA_VERSION
+com.pdmfc.tea.version = $TEA_VERSION
 
 
 #
@@ -62,7 +62,7 @@ com.pdmfc.tea.libraryVarName=TEA_LIBRARY
 # program being run by the "tsh" utility. If the script was read from
 # stdout then this variable will not be defined.
 #
-com.pdmfc.tea.argv0VarName=argv0
+com.pdmfc.tea.argv0VarName = argv0
 
 
 #
@@ -72,29 +72,27 @@ com.pdmfc.tea.argv0VarName=argv0
 # utility. If the script was read from stdout then this variable
 # will not be defined.
 #
-com.pdmfc.tea.argvVarName=argv
+com.pdmfc.tea.argvVarName = argv
 
 
 #
-# Name of the system property that when defined signals to the Tea
-# shell it should consider as Java resources the script name and
-# the components in the import dir list.
 #
-com.pdmfc.tea.useJavaResources=TEA_USE_JAVA_RESOURCES
+#
+com.pdmfc.tea.sourceEncodingVarName = TEA_ENCODING_SOURCE
 
 
 #
 # Name of the file read from each directory in the TEA_LIBRARY
 # directory list.
 #
-com.pdmfc.tea.initFile=init.tea
+com.pdmfc.tea.initFile = init.tea
 
 
 #
 # Name of the Java resource to be used as the last element in the
 # TEA_LIBRARY directory and URL list.
 #
-com.pdmfc.tea.coreImportDir=resource:/lib/tea-$TEA_VERSION
+com.pdmfc.tea.coreImportDir = resource:/lib/tea-$TEA_VERSION
 
 
 

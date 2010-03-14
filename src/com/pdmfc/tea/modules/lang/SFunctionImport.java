@@ -49,6 +49,7 @@ import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.compiler.SCode;
 import com.pdmfc.tea.compiler.SCompiler;
 import com.pdmfc.tea.runtime.SContext;
+import com.pdmfc.tea.runtime.SEncodingUtils;
 import com.pdmfc.tea.runtime.SNoSuchVarException;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SObjFunction;
@@ -379,12 +380,14 @@ class SFunctionImport
         public Object tryToPerformImport()
             throws STeaException {
 
-            Object result = null;
-            String path   = _fullPath;
-            SCode  code   = null;
+            Object result         = null;
+            String path           = _fullPath;
+            String sourceEncoding =
+                SEncodingUtils.getSourceEncoding(_rootContext);
+            SCode  code           = null;
 	    
             try {
-                code = _compiler.compile(path, null, _importPath);
+                code = _compiler.compile(path, sourceEncoding, _importPath);
             } catch (IOException e) {
                 // The path does not exist or is not accessible.
             }

@@ -103,8 +103,8 @@ public class STeaException
  *
  **************************************************************************/
 
-    public STeaException(String   msgFmt,
-			 Object[] fmtArgs) {
+    public STeaException(String    msgFmt,
+			 Object... fmtArgs) {
 
 	_msgFmt  = msgFmt;
 	_fmtArgs = fmtArgs;

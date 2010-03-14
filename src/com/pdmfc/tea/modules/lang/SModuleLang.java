@@ -76,6 +76,7 @@ import com.pdmfc.tea.modules.util.SHashtable;
 import com.pdmfc.tea.runtime.SBreakException;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SContinueException;
+import com.pdmfc.tea.runtime.SEncodingUtils;
 import com.pdmfc.tea.runtime.SExitException;
 import com.pdmfc.tea.runtime.SLambdaFunction;
 import com.pdmfc.tea.runtime.SLambdaFunctionVarArg;
@@ -3094,14 +3095,15 @@ public class SModuleLang
 	    throw new SNumArgException(args[0], "file");
 	}
 	
-	Object arg     = args[1];
-	SCode  program = null;
+	Object arg      = args[1];
+        String encoding = SEncodingUtils.getSourceEncoding(context);
+	SCode  program  = null;
 
 	if ( arg instanceof String ) {
 	    String fileName = (String)arg;
             
             try {
-                program  = _compiler.compile(fileName, null, fileName);
+                program  = _compiler.compile(fileName, encoding, fileName);
             } catch (IOException e) {
                 String   msg     = "Failed to read \"{0}\" - {1}";
                 Object[] fmtArgs = { fileName, e.getMessage() };
@@ -3114,7 +3116,7 @@ public class SModuleLang
 	    }
 
             try {
-                program = _compiler.compile(input, null, null);
+                program = _compiler.compile(input, encoding, null);
             } catch (IOException e) {
                 String   msg     = "Failed to read input stream - {0}";
                 Object[] fmtArgs = { e.getMessage() };
