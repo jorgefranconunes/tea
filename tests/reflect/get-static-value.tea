@@ -12,8 +12,15 @@
 
 define echoValue (anIndent aValue) {
     cond {pair? $aValue} {
+        echo $anIndent "LIST"
         foreach item $aValue {
             echoValue [str-cat "  " $anIndent] $item
+        }
+    } {and {tos-obj? $aValue} {class-is-a [class-of $aValue] THashtable}} {
+        echo $anIndent "THashtable"
+        foreach aKey [$aValue getKeys] {
+            echoValue [str-cat "  " $anIndent " key: "]   $aKey
+            echoValue [str-cat "  " $anIndent "      "] [$aValue get $aKey]
         }
     } {
         echo $anIndent $aValue
@@ -22,7 +29,14 @@ define echoValue (anIndent aValue) {
 
 
 
+if {< [length $argv] 2} {
+    $stderr writeln "Arguments: classOrInstance memberName"
+    $stderr writeln 
+    $stderr writeln "Example: ReflectTest _CTE_LIST"
+    exit 1
+}
 
 define value [java-get-value [nth $argv 0] [nth $argv 1]]
 
 echoValue "" $value
+

@@ -461,6 +461,9 @@ public class SModuleReflect
 	    throw new SRuntimeException(args[0],
 					"cannot access member '" + 
 					memberName + "'");
+	} catch (IllegalArgumentException e) {
+	    throw new SRuntimeException(args[0],
+					e.getMessage());
 	} catch (NullPointerException e) {
 	    throw new SRuntimeException(args[0],
 					"member '" + 
@@ -487,6 +490,7 @@ public class SModuleReflect
 					Object value)
 	throws NoSuchFieldException,
 	       IllegalAccessException,
+               IllegalArgumentException,
 	       NullPointerException {
 	
 	Object result  = null;
@@ -703,11 +707,11 @@ public class SModuleReflect
 
 	for(int i=2; i<args.length; i++) {
 	    params[i-2]     = tea2Java(args[i]);
-	    paramTypes[i-2] = params[i-2].getClass();
+	    paramTypes[i-2] = params[i-2]==null ? null : params[i-2].getClass();
 	    if (i>2) {
 		paramsTxt.append(",");
 	    }
-	    paramsTxt.append(paramTypes[i-2].getName());
+	    paramsTxt.append(params[i-2]==null ? "null" : paramTypes[i-2].getName());
 	}
 	try {
 	    Class        cl      = Class.forName(className);
@@ -769,7 +773,8 @@ public class SModuleReflect
 
 	// convert value types to java and create methodArgs array
 	for(int i=2; i<args.length; i++) {
-	    paramTypes[i-2] = tea2Java(args[i]).getClass();
+            Object o = tea2Java(args[i]);
+	    paramTypes[i-2] = o==null ? null : o.getClass();
 	    mtdArgs[i-2] = args[i];
 	}
 
@@ -842,7 +847,7 @@ public class SModuleReflect
 	// convert value types to java
 	for(int i=3; i<args.length; i++) {
 	    mtdArgs[i-3] = tea2Java(args[i]);
-	    paramTypes[i-3] = mtdArgs[i-3].getClass();
+	    paramTypes[i-3] = mtdArgs[i-3]==null ? null : mtdArgs[i-3].getClass();
 	}
 
 	Method mtd = null;
@@ -909,7 +914,8 @@ public class SModuleReflect
 	public ClassPair(Class aGiven, Class aKnown) {
 	    _given = aGiven;
 	    _known = aKnown;
-	    _hash = (_given.getName()+_known.getName()).hashCode();
+            String aGivenName = _given == null ? "null" : _given.getName();
+	    _hash = (aGivenName+_known.getName()).hashCode();
 	}
 
 	public int hashCode () {
@@ -918,8 +924,14 @@ public class SModuleReflect
 	
 	public boolean equals (Object anObj) {
 	    ClassPair aPair = (ClassPair)anObj;
-	    
-	    return _given.equals(aPair._given) && _known.equals(aPair._known);
+	    if (_given == null ) {
+                if (aPair._given == null) {
+                    return _known.equals(aPair._known);
+                } else
+                    return false;
+	    } else {
+                return _given.equals(aPair._given) && _known.equals(aPair._known);
+            }
 	}
     }
     
@@ -938,9 +950,9 @@ public class SModuleReflect
 	boolean paramsMatch = true;
 	int numParams = givenParamTypes.length;
 	for(int i=0; i<numParams && paramsMatch; i++) {
-	    paramsMatch = (knownParamTypes[i].isAssignableFrom(givenParamTypes[i]));
+	    paramsMatch = givenParamTypes[i]==null ? (!(knownParamTypes[i].isPrimitive())) : (knownParamTypes[i].isAssignableFrom(givenParamTypes[i]));
 	    // if the parameter is primitive, check with correct class
-	    if (!paramsMatch && knownParamTypes[i].isPrimitive()) {
+	    if (!paramsMatch && knownParamTypes[i].isPrimitive() && givenParamTypes[i]!=null) {
 		paramsMatch = (_primitiveToClass.get(knownParamTypes[i]).isAssignableFrom(givenParamTypes[i]));
 	    }
 	}
@@ -1007,8 +1019,16 @@ public class SModuleReflect
 	if (_classDistances.containsKey(aPair)) {
 	    distance=_classDistances.get(aPair).intValue();
 	} else {
-	    // If classes are diferent, then calculate the distance
-	    if (! givenParamType.equals(knownParamType)) {
+	    if (givenParamType == null) {
+                if (knownParamType.isPrimitive()) {
+                    // null does not match any primitive type
+	            distance = -1;
+                } else {
+                    // null matches any non-primitive argument with a zero distance
+	            distance = 0;
+                }
+            } else if (!givenParamType.equals(knownParamType)) {
+                // If classes are diferent, then calculate the distance
 		TreeSet<Integer> distanceSet = new TreeSet<Integer>();
 		// check super class of givenParamType that is 
 		// assignable to knownParamType for the lowest distance
@@ -1328,6 +1348,9 @@ public class SModuleReflect
 	    return obj;
 	}
 	if ( obj instanceof Integer ) {
+	    return obj;
+	}
+	if ( obj instanceof Long ) {
 	    return obj;
 	}
 	if ( obj instanceof String ) {

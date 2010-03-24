@@ -65,7 +65,8 @@ public class ReflectTest {
 	subHash.put("A String", _CTE_STRING);
     }
 
-    private int _b = 0;
+    private int    _b = 0;
+    private String _s = null;
 
 
 
@@ -107,6 +108,61 @@ public class ReflectTest {
 
    public ReflectTest(double b) {
        _b = (int)(b+0.5);
+   }
+
+
+
+
+
+
+
+
+/**************************************************************************
+ *
+ *
+ *
+ **************************************************************************/
+
+   public ReflectTest(String s) {
+       _s = s;
+   }
+
+
+
+
+
+/**************************************************************************
+ *
+ *
+ *
+ **************************************************************************/
+
+   public String adder(String s) {
+
+       if (_s != null) {
+           return _s + "+" + s;
+       } else {
+           return _b + "+" + s;
+       }
+   }
+
+
+
+
+
+/**************************************************************************
+ *
+ *
+ *
+ **************************************************************************/
+
+   public String adder(String s2, String s3) {
+
+       if (_s != null) {
+           return _s + "+" + s2 + "+" + s3;
+       } else {
+           return _b + "+" + s2 + "+" + s3;
+       }
    }
 
 
@@ -225,7 +281,6 @@ public class ReflectTest {
  **************************************************************************/
 
    public static long adder(long a, long b) {
-
        return a+b+3;
    }
 
@@ -306,6 +361,18 @@ public class ReflectTest {
 	   }
 	   System.out.println("  Returns:\n    "+mtds[i].getReturnType().getName());
        }
+
+ 
+       System.out.println("Calling getArray(String,null)");
+       String[] a = getArray("s1",null);
+       int i=0;
+       for(Object o : a) {
+           System.out.println("  ["+(i++)+"]="+o);
+       }
+
+       ReflectTest t = new ReflectTest(null);
+       System.out.println("RefelectTest(null).adder(null,\"s2\")= "+t.adder(null,"s2"));
+     
    }
 
 
