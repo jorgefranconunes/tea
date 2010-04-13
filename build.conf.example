@@ -26,7 +26,7 @@ BUILD_JAVA_HOME=/usr/java/default
 # The command for compiling a Java source file. It must accept the
 # options "-classpath" and "-d" just as Sun's javac compiler.
 #
-BUILD_JAVAC="${BUILD_JAVA_HOME}/bin/javac -Xlint -Xlint:-unchecked -Xlint:-serial"
+BUILD_JAVAC="${BUILD_JAVA_HOME}/bin/javac -Xlint -Xlint:-serial"
 
 
 #

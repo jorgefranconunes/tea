@@ -93,7 +93,6 @@ TEA_PACKAGES = \
 	com/pdmfc/tea/modules/net	\
 	com/pdmfc/tea/modules/reflect	\
 	com/pdmfc/tea/runtime	\
-	com/pdmfc/tea/tos	\
 	com/pdmfc/tea/util	\
 	lib/tea	\
 	lib/tea/deprecated	\
@@ -124,7 +123,6 @@ JAVADOC_PACKAGES = \
 	com.pdmfc.tea.modules.reflect	\
 	com.pdmfc.tea.runtime	\
 	com.pdmfc.tea.util	\
-	com.pdmfc.tea.tos	\
 
 
 

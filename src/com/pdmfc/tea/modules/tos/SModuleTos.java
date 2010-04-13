@@ -78,7 +78,7 @@ public class SModuleTos
 
 
 
-    // Stores the TOS class objects indexed by the respectiva Java
+    // Stores the TOS class objects indexed by the respective Java
     // class name. Used by the "functionLoadClass(...)" method.
     private Hashtable _tosClasses = new Hashtable();
 
@@ -300,11 +300,11 @@ public class SModuleTos
 //* <P>The <Func name="class"/> function could be implemented using the
 //* <FuncRef name="new-class"/> function like this:</P>
 //*
-//* <Code>
+//* <pre>
 //* global class args {
 //*     global [car $args] [apply new-class [cdr $args]]
 //* }
-//* </Code>
+//* </pre>
 //* </Description>
 //* 
 //* </TeaFunction>
