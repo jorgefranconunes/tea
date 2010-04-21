@@ -67,8 +67,8 @@ import com.pdmfc.tea.util.SInputSourceFactory;
  * later. The bytecode is stored inside a <code>{@link SCode}</code>
  * object.
  *
- * <p>Objects of this class should not be used from inside of more
- * then one thread at a time.</p>
+ * <p>Objects of this class are intended to be used from within a
+ * single thread.</p>
  *
  **************************************************************************/
 
@@ -100,12 +100,11 @@ public class SCompiler
  * executed later.
  *
  * @exception SCompileException Thrown in the following cases:
- *
- *        <UL>
- *	  <LI>The file could not be opened for reading.
- *	  <LI>There were problems while reading the file.
- *	  <LI>The Tea script had syntax errors.
- *	  </UL>
+ *        <ul>
+ *	  <li>The file could not be opened for reading.</li>
+ *	  <li>There were problems while reading the file.</li>
+ *	  <li>The Tea script had syntax errors.</li>
+ *	  </ul>
  *
  **************************************************************************/
 
@@ -285,9 +284,8 @@ public class SCompiler
             try {
                 charset = Charset.forName(charsetName);
             } catch (UnsupportedCharsetException e) {
-                String   msg     = "Unsupported charset \"{0}\"";
-                Object[] fmtArgs = { charsetName };
-                throw new SCompileException(msg, fmtArgs);
+                String msg = "Unsupported charset \"{0}\"";
+                compileError(msg, charsetName);
             }
         }
 
@@ -304,16 +302,15 @@ public class SCompiler
  *
  **************************************************************************/
 
-   private SCode getBlockWhole()
-         throws IOException,
-	        SCompileException {
+    private SCode getBlockWhole()
+        throws IOException,
+               SCompileException {
 
-      SCode code = getBlock();
+        SCode code = getBlock();
 
-      if ( !atEnd() ) {
-         throw new SCompileException("unexpected '" + peek() +
-				     "' at line " + currentLine() +
-				     onFileMsg());
+        if ( !atEnd() ) {
+            String msg = "unexpected ''{0}'' at line {1}{2}";
+            compileError(msg, peek(), currentLine(), onFileMsg());
       }
 
       return code;
@@ -337,17 +334,12 @@ public class SCompiler
 	SCode code = getBlock();
 
 	if ( atEnd() ) {
-	    throw new SCompileException("no '" + c +
-					"' found before end of script " +
-					"for block starting at line " + line +
-					onFileMsg());
+            String msg = "no ''{0}'' found before end of script for block starting at line {1}{2}";
+            compileError(msg, c, line, onFileMsg());
 	}
-      if ( peek() != c ) {
-         throw new SCompileException("found '" + peek() +
-				     "' at line " + currentLine() +
-				     " while expecting a '" + c + "' "  +
-				     "for block starting at line " + line +
-				     onFileMsg());
+        if ( peek() != c ) {
+            String msg = "found ''{0}'' at line {1} while expecting a ''{2}'' for block starting at line {3}{4}";
+            compileError(msg, peek(), currentLine(), c, line, onFileMsg());
       }
       skip();
 
@@ -364,20 +356,20 @@ public class SCompiler
  *
  **************************************************************************/
 
-   private SCode getBlock()
-         throws IOException,
-	        SCompileException {
+    private SCode getBlock()
+        throws IOException,
+               SCompileException {
 
-      SCode code = new SCode(_fileName);
+        SCode code = new SCode(_fileName);
 
-      skipToStatement();
-      while ( !atEndOfBlock() ) {
-         code.addStatement(getStatement());
-         skipToStatement();
-      }
+        skipToStatement();
+        while ( !atEndOfBlock() ) {
+            code.addStatement(getStatement());
+            skipToStatement();
+        }
 
-      return code;
-   }
+        return code;
+    }
 
 
 
@@ -389,21 +381,21 @@ public class SCompiler
  *
  **************************************************************************/
 
-   private SStatement getStatement()
-         throws IOException,
-	        SCompileException {
+    private SStatement getStatement()
+        throws IOException,
+               SCompileException {
 
-      SStatementFactory statFact  = new SStatementFactory(currentLine());
-      SStatement        statement = null;
+        SStatementFactory statFact  = new SStatementFactory(currentLine());
+        SStatement        statement = null;
 
-      while ( !atEndOfStatement() ) {
-         statFact.addWord(getWord());
-         skipToWord();
-      }
-      statement = statFact.createStatement();
+        while ( !atEndOfStatement() ) {
+            statFact.addWord(getWord());
+            skipToWord();
+        }
+        statement = statFact.createStatement();
 
-      return statement;
-   }
+        return statement;
+    }
 
 
 
@@ -415,34 +407,30 @@ public class SCompiler
  *
  **************************************************************************/
 
-   private List<SWord> getList(int line)
-         throws IOException,
-	        SCompileException {
+    private List<SWord> getList(int line)
+        throws IOException,
+               SCompileException {
 
-      List<SWord> list = new ArrayList<SWord>();
+        List<SWord> list = new ArrayList<SWord>();
 
-      skipToWordInList();
-      while ( !atEndOfList() ) {
-         list.add(getWord());
-         skipToWordInList();
-      }
+        skipToWordInList();
+        while ( !atEndOfList() ) {
+            list.add(getWord());
+            skipToWordInList();
+        }
 
-      if ( atEnd() ) {
-         throw new SCompileException("no ')' found before end of script " +
-				     "for list starting at line " + line +
-				     onFileMsg());
-      }
-      if ( peek() != ')' ) {
-         throw new SCompileException("found '" + peek() +
-				     "' at line " + currentLine() +
-				     " while expecting a ')' "  +
-				     "for list starting at line " + line +
-				     onFileMsg());
-      }
-      skip();
+        if ( atEnd() ) {
+            String msg = "no '')'' found before end of script for list starting at line {0}{1}";
+            compileError(msg, line, onFileMsg());
+        }
+        if ( peek() != ')' ) {
+            String msg = "found ''{0}'' at line {1} while expecting a '')'' for list starting at line {2}{3}";
+            compileError(msg, peek(), currentLine(), line, onFileMsg());
+        }
+        skip();
 
-      return list;
-   }
+        return list;
+    }
 
 
 
@@ -454,48 +442,60 @@ public class SCompiler
  *
  **************************************************************************/
 
-   private SWord getWord()
-         throws IOException,
-	        SCompileException {
+    private SWord getWord()
+        throws IOException,
+               SCompileException {
 
-      int  l = currentLine();
-      char c = peek();
+        SWord result = null;
+        int  l       = currentLine();
+        char c       = peek();
 
-      switch ( c ) {
-      case '[' :
-	  skip();
-	  return new SWordCmdSubst(getBlockInner(']', l));
-      case '{' :
-	  skip();
-	  if ( peek() == '`' ) {
-	      skip();
-	      return new SWordExpressionBlock(getExpressionBlock(l));
-	  } else {
-	      return new SWordBlock(getBlockInner('}', l));
-	  }
-      case '$' :
-	  skip();
-	  return new SWordVarSubst(getSymbolName());
-      case '"' :
-	  skip();
-	  return new SWordString(getString(l));
-      case '`' :
-	  skip();
-	  return new SWordExpression(getExpression(l));
-      case '(' :
-	  skip();
-	  return new SWordList(getList(l));
-      case '+' :
-	  return objIntOrFloat();
-      case '-' :
-	  return objIntOrFloat();
-      }
-      if ( Character.isDigit(c) ) {
-	 return objIntOrFloat();
-      }
+        switch ( c ) {
+        case '[' :
+            skip();
+            result = new SWordCmdSubst(getBlockInner(']', l));
+            break;
+        case '{' :
+            skip();
+            if ( peek() == '`' ) {
+                skip();
+                result = new SWordExpressionBlock(getExpressionBlock(l));
+            } else {
+                result = new SWordBlock(getBlockInner('}', l));
+            }
+            break;
+        case '$' :
+            skip();
+            result = new SWordVarSubst(getSymbolName());
+            break;
+        case '"' :
+            skip();
+            result = new SWordString(getString(l));
+            break;
+        case '`' :
+            skip();
+            result = new SWordExpression(getExpression(l));
+            break;
+        case '(' :
+            skip();
+            result = new SWordList(getList(l));
+            break;
+        case '+' :
+            result = objIntOrFloat();
+            break;
+        case '-' :
+            result = objIntOrFloat();
+            break;
+        default :
+            if ( Character.isDigit(c) ) {
+                result = objIntOrFloat();
+            } else {
+                result = new SWordSymbol(getSymbolName());
+            }
+        }
 
-      return new SWordSymbol(getSymbolName());
-   }
+        return result;
+    }
 
 
 
@@ -573,14 +573,16 @@ public class SCompiler
     private int parseDec(String str)
 	throws SCompileException {
 
+        int result = 0;
+
 	try {
-	    return Integer.parseInt(str);
+	    result = Integer.parseInt(str);
 	} catch (NumberFormatException e) {
-	    throw new SCompileException("invalid integer constant (" +
-					str + ")" + " at line " +
-					currentLine() +
-					onFileMsg());
+            String msg = "invalid integer constant ({0}) at line {1}{2}";
+            compileError(msg, str, currentLine(), onFileMsg());
 	}
+
+        return result;
     }
 
 
@@ -596,14 +598,16 @@ public class SCompiler
     private long parseLong(String str)
 	throws SCompileException {
 
+        long result = 0L;
+
 	try {
-	    return Long.parseLong(str.substring(0,str.length()-1));
+	    result = Long.parseLong(str.substring(0,str.length()-1));
 	} catch (NumberFormatException e) {
-	    String   fmt     = "invalid long constant ({0}) at line {1}{2}";
-	    Object[] fmtArgs =
-		{ str, new Integer(currentLine()), onFileMsg() };
-	    throw new SCompileException(fmt, fmtArgs);
+	    String msg = "invalid long constant ({0}) at line {1}{2}";
+	    compileError(msg, str, currentLine(), onFileMsg());
 	}
+
+        return result;
     }
 
 
@@ -619,18 +623,20 @@ public class SCompiler
     private int parseOct(String str)
 	throws SCompileException {
 
+        int result = 0;
+
 	try {
 	    if ( str.length() == 1 ) {
-		return 0;
+		result = 0;
 	    } else {
-		return Integer.parseInt(str.substring(1), 8);
+		result = Integer.parseInt(str.substring(1), 8);
 	    }
 	} catch (NumberFormatException e) {
-	    throw new SCompileException("invalid octal constant (" +
-					str + ")" + " at line " +
-					currentLine() +
-					onFileMsg());
+            String msg = "invalid octal constant ({0}) at line {1}{2}";
+            compileError(msg, str, currentLine(), onFileMsg());
 	}
+
+        return result;
     }
 
 
@@ -646,14 +652,16 @@ public class SCompiler
     private int parseHex(String str)
 	throws SCompileException {
 
+        int result = 0;
+
 	try {
-	    return Integer.parseInt(str.substring(2), 16);
+	    result = Integer.parseInt(str.substring(2), 16);
 	} catch (NumberFormatException e) {
-	    throw new SCompileException("invalid hexadecimal constant (" +
-					str + ")" + " at line " +
-					currentLine() +
-					onFileMsg());
+            String msg = "invalid hexadecimal constant ({0}) at line {1}{2}";
+            compileError(msg, str, currentLine(), onFileMsg());
 	}
+
+        return result;
     }
 
 
@@ -669,14 +677,16 @@ public class SCompiler
     private double parseFloat(String str)
 	throws SCompileException {
 
+        double result = 0.0;
+
 	try {
-	    return Double.parseDouble(str);
+	    result = Double.parseDouble(str);
 	} catch (NumberFormatException e) {
-	    throw new SCompileException("invalid float constant (" +
-					str + ")" + " at line " +
-					currentLine() +
-					onFileMsg());
+            String msg = "invalid float constant ({0}) at line {1}{2}";
+            compileError(msg, str, currentLine(), onFileMsg());
 	}
+
+        return result;
     }
 
 
@@ -772,9 +782,8 @@ public class SCompiler
 	}
 
 	if ( !endWasFound ) {
-	    throw new SCompileException("no '\"' found before end of script " +
-					 "for string starting at line " +
-					 line + onFileMsg());
+            String msg = "no ''\"'' found before end of script for string starting at line {0}{1}";
+            compileError(msg, line, onFileMsg());
 	}
 
 	return unescape(name.toString());
@@ -797,9 +806,8 @@ public class SCompiler
 	SArithExpression result = getExpression(line);
 
 	if ( peek() != '}' ) {
-	    throw new SCompileException("unexpected '" + peek() +
-					"' at line " + currentLine() +
-					onFileMsg());
+            String msg = "unexpected ''{0}'' at line {1}{2}";
+            compileError(msg, peek(), currentLine(), onFileMsg());
 	}
 	skip();
 
@@ -848,9 +856,8 @@ public class SCompiler
 	}
 
 	if ( !endWasFound ) {
-	    throw new SCompileException("no '`' found before end of script " +
-					 "for expression starting at line " +
-					 line + onFileMsg());
+            String msg = "no ''`'' found before end of script for expression starting at line {0}{1}";
+            compileError(msg, line, onFileMsg());
 	}
 
 	result.initialize(buffer.toString());
@@ -1027,7 +1034,8 @@ public class SCompiler
 	int d0 = skip();
 
 	if ( (d3==-1) || (d2==-1) || (d1==-1) || (d0==-1) ) {
-	    throw new SCompileException("end of script while reading unicode constant");
+            String msg = "end of script while reading unicode constant{0}";
+            compileError(msg, onFileMsg());
 	}
 
 	d3 = Character.digit((char)d3, 16);
@@ -1036,8 +1044,8 @@ public class SCompiler
 	d0 = Character.digit((char)d0, 16);
 
 	if ( (d3==-1) || (d2==-1) || (d1==-1) || (d0==-1) ) {
-	    throw new SCompileException("invalid unicode constant on line "
-					+ currentLine());
+            String msg = "invalid unicode constant on line {0}{1}";
+            compileError(msg, currentLine(), onFileMsg());
 	}
 
 	return (char)((d3<<12) | (d2<<8) | (d1<<4) | d0);
@@ -1071,7 +1079,8 @@ public class SCompiler
 	int d0 = skip();
 
 	if ( (d2==-1) || (d1==-1) || (d0==-1) ) {
-	    throw new SCompileException("end of script while reading octal constant");
+            String msg = "end of script while reading octal constant{0}";
+	    compileError(msg, onFileMsg());
 	}
 
 	d2 = Character.digit((char)d2, 8);
@@ -1079,8 +1088,8 @@ public class SCompiler
 	d0 = Character.digit((char)d0, 8);
 
 	if ( (d2==-1) || (d1==-1) || (d0==-1) ) {
-	    throw new SCompileException("invalid octal constant on line "
-					 + currentLine());
+            String msg = "invalid octal constant on line {0}{1}";
+            compileError(msg, currentLine(), onFileMsg());
 	}
 
 	return (char)((d2<<6) | (d1<<3) | d0);
@@ -1377,6 +1386,23 @@ public class SCompiler
 
       return (_fileName==null) ? "" : (" on file '" + _fileName + "'");
    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    private void compileError(String    msg,
+                              Object... fmtArgs)
+        throws SCompileException {
+
+        throw new SCompileException(msg, fmtArgs);
+    }
 
 
 }

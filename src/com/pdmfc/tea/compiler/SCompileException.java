@@ -43,19 +43,6 @@ public class SCompileException
  *
  **************************************************************************/
 
-   public SCompileException() {
-   }
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
     SCompileException(String msg) {
 
 	super(msg);
@@ -71,8 +58,8 @@ public class SCompileException
  *
  **************************************************************************/
 
-    SCompileException(String   msgFmt,
-		      Object[] fmtArgs) {
+    SCompileException(String    msgFmt,
+		      Object... fmtArgs) {
 
 	super(msgFmt, fmtArgs);
     }
