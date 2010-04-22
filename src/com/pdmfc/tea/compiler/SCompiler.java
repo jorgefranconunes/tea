@@ -93,7 +93,7 @@ public class SCompiler
  *
  * @param fileName The name of the file containing the Tea script.
  *
- * @param charset The text encoding of the file to be read. If null
+ * @param encoding The text encoding of the file to be read. If null
  * the JVM default encoding is assumed.
  *
  * @return A <TT>SCode</TT> object containing the bytecode that can be
@@ -154,8 +154,10 @@ public class SCompiler
  *
  * Compiles the Tea script read from the an <code>InputStream</code>.
  *
- * @param reader The <code>Reader</code> where the script will be read
- * from.
+ * @param input The input stream where the script will be read from.
+ *
+ * @param encoding The text encoding of the input stream to be
+ * read. If null the JVM default encoding is assumed.
  *
  * @param fileName The name to be associated with the compiled
  * code. Compile or runtime error messages will use this name when

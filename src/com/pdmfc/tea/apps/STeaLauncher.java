@@ -155,9 +155,7 @@ public class STeaLauncher
  * the Tea script.
  *
  * @exception STeaException Thrown if there were any problems
- * compiling or executing the script. This exception can actually be
- * an instance of <code>{@link SCompileException}</code> or
- * <code>{@link SRuntimeException}</code>.
+ * compiling or executing the script.
  *
  **************************************************************************/
 

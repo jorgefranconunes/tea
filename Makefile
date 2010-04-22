@@ -23,7 +23,7 @@
 
 
 include Makefile.conf
-include make/Makefile
+include make/build.make
 
 
 

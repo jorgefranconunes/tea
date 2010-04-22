@@ -52,8 +52,8 @@
 #
 #
 #
-packageSourceDir := $(SOURCE_BASE_DIR)/$(PACKAGE_DIR)
-packageTargetDir := $(CLASSES_BASE_DIR)/$(PACKAGE_DIR)
+packageSourceDir := $(JAVA_SOURCE_DIR)/$(PACKAGE_DIR)
+packageTargetDir := $(JAVA_TARGET_DIR)/$(PACKAGE_DIR)
 javaSourceFiles  := $(filter %.java, $(SOURCES))
 otherSourceFiles := $(filter-out $(javaSourceFiles), $(SOURCES))
 javaClassFiles   := $(javaSourceFiles:%.java=$(packageTargetDir)/%.class)
@@ -73,7 +73,7 @@ ALL_DEPS_FILES    := $(ALL_DEPS_FILES) $(depsFiles)
 # Implicit rule for compiling Java source files in a particular package.
 #
 $(packageTargetDir)/%.class : $(packageSourceDir)/%.java
-	$(JAVAC) $<
+	$(JAVA_JAVAC) $<
 
 #
 # Implicit rule for generating the dependency files in a particular package.
@@ -85,8 +85,8 @@ $(packageTargetDir)/%.u : $(packageSourceDir)/%.java
 # And for all other files that are not Java source files.
 #
 $(packageTargetDir)/% : $(packageSourceDir)/%
-	$(MKDIR) $(dir $@)
-	$(CP) $< $@
+	mkdir -p $(dir $@)
+	cp $< $@
 
 
 

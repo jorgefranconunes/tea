@@ -33,8 +33,8 @@ SOURCES := \
 	TeaConfig.properties
 
 
-$(SOURCE_BASE_DIR)/$(PACKAGE_DIR)/TeaConfig.properties : $(BUILD_BASE_DIR)/config/tea-core.conf $(SOURCE_BASE_DIR)/$(PACKAGE_DIR)/TeaConfig.properties.template
-	$(BUILD_BASE_DIR)/bin/process-template $(SOURCE_BASE_DIR)/com/pdmfc/tea/TeaConfig.properties.template > $@
+$(JAVA_SOURCE_DIR)/$(PACKAGE_DIR)/TeaConfig.properties : $(BUILD_BASE_DIR)/config/tea-core.conf $(JAVA_SOURCE_DIR)/$(PACKAGE_DIR)/TeaConfig.properties.template
+	$(BUILD_BASE_DIR)/bin/process-template $(JAVA_SOURCE_DIR)/com/pdmfc/tea/TeaConfig.properties.template > $@
 
 
 include $(BUILD_BASE_DIR)/make/package.make
