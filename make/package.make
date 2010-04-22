@@ -29,19 +29,7 @@
 #
 # CLASSES_BASE_DIR - 
 #
-# JAVAC - 
-#
-# CP - 
-#
-# MKDIR - 
-#
-#
-# Revisions:
-#
-# 2010/01/28 Minor adaptations to follow current build conventions
-# on makefiles. (jfn)
-#
-# 2005/02/15 Created. (jfn)
+# JAVA_JAVAC - 
 #
 ###########################################################################
 
