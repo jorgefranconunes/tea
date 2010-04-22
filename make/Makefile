@@ -233,7 +233,6 @@ TOUCH  = touch
 BASE_DIR = $(BUILD_BASE_DIR)
 
 export BASE_DIR
-export IS_UNIX
 export SOURCE_BASE_DIR
 export CLASSES_BASE_DIR
 export JAVAC
