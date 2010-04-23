@@ -40,18 +40,16 @@
 #
 #
 #
-packageSourceDir := $(JAVA_SOURCE_DIR)/$(PACKAGE_DIR)
-packageTargetDir := $(JAVA_TARGET_DIR)/$(PACKAGE_DIR)
+packageSourceDir := $(SOURCE_DIR)/$(PACKAGE_DIR)
+packageTargetDir := $(TARGET_DIR)/$(PACKAGE_DIR)
 javaSourceFiles  := $(filter %.java, $(SOURCES))
 otherSourceFiles := $(filter-out $(javaSourceFiles), $(SOURCES))
 javaClassFiles   := $(javaSourceFiles:%.java=$(packageTargetDir)/%.class)
-depsFiles        := $(javaSourceFiles:%.java=$(packageTargetDir)/%.u)
 otherTargetFiles := $(otherSourceFiles:%=$(packageTargetDir)/%)
 
 ALL_SOURCES       := $(ALL_SOURCES) $(SOURCES:%=$(packageSourceDir)/%)
 ALL_CLASS_FILES   := $(ALL_CLASS_FILES) $(javaClassFiles)
 ALL_OTHER_TARGETS := $(ALL_OTHER_TARGETS) $(otherTargetFiles)
-ALL_DEPS_FILES    := $(ALL_DEPS_FILES) $(depsFiles)
 
 
 
@@ -62,12 +60,6 @@ ALL_DEPS_FILES    := $(ALL_DEPS_FILES) $(depsFiles)
 #
 $(packageTargetDir)/%.class : $(packageSourceDir)/%.java
 	$(JAVA_JAVAC) $<
-
-#
-# Implicit rule for generating the dependency files in a particular package.
-#
-$(packageTargetDir)/%.u : $(packageSourceDir)/%.java
-	$(MAKEDEPS) --source=$(<:$(SOURCE_BASE_DIR)/%=%)
 
 #
 # And for all other files that are not Java source files.

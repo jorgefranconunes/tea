@@ -1,0 +1,77 @@
+<project name="Tea" default="all">
+
+  <description>
+    Tea build environment.
+  </description>
+
+
+
+
+  <!-- Global properties used througout the build. -->
+
+  <property file="Makefile.conf" />
+
+  <property name="java.source.dir" location="src/main/java" />
+  <property name="java.target.dir" location="target/classes" />
+
+  <property name="tea.source.dir" location="src/main/tea" />
+  <property name="tea.target.dir" location="target/classes/lib/tea-${BUILD_VERSION}" />
+
+
+
+
+
+  <target name="all" depends="jar.build">
+  </target>
+
+  <target name="clean" depends="jar.clean">
+  </target>
+
+
+
+
+
+  <target name="jar.build" depends="java.build, tea.build">
+  </target>
+
+  <target name="jar.clean" depends="java.clean, tea.clean">
+  </target>
+
+
+
+
+
+  <target name="java.build">
+    <mkdir dir="${java.target.dir}" />
+    <javac srcdir="${java.source.dir}" destdir="${java.target.dir}">
+      <compilerarg value="-Xlint" />
+      <compilerarg value="-Xlint:-serial" />
+    </javac>
+  </target>
+
+  <target name="java.clean">
+    <delete dir="${java.target.dir}" />
+  </target>
+
+
+
+
+
+  <target name="tea.build">
+    <mkdir dir="${tea.target.dir}" />
+    <copy todir="${tea.target.dir}">
+      <fileset dir="${tea.source.dir}">
+        <include name="**/*.tea" />
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="tea.clean">
+    <delete dir="${tea.target.dir}" />
+  </target>
+
+
+
+
+
+</project>

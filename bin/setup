@@ -83,7 +83,7 @@ displayHeader () {
     cat <<EOF
 
 Setup Tool for the Tea $TEA_VERSION Instalation
-Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
+Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
 
 EOF
 }
@@ -175,7 +175,7 @@ parseCliOptions () {
     _teaCoreClasspath="$_otherClasspath"
 
     for jarBasename in $_teaCoreJars ; do
-	local jarFile=${_teaBaseDir}/lib/$jarBasename
+	local jarFile=${_teaBaseDir}/lib/jars/$jarBasename
 
 	if [ -z "$_teaCoreClasspath" ] ; then
 	    _teaCoreClasspath=$jarFile

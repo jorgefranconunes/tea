@@ -37,14 +37,14 @@
 
 ###########################################################################
 #
-# Some tools used inside the rules.
+# 
 #
 ###########################################################################
 
 #
 # The list of packages to build and put into the JAR.
 #
-JAVA_SOURCE_DIR_LIST = \
+JAVA_SOURCE_DIR_LIST := \
 	com/pdmfc/ep	\
 	com/pdmfc/tea	\
 	com/pdmfc/tea/apps	\
@@ -61,10 +61,22 @@ JAVA_SOURCE_DIR_LIST = \
 	com/pdmfc/tea/runtime	\
 	com/pdmfc/tea/util	\
 
-JAVA_SOURCE_DIR = $(BUILD_BASE_DIR)/src
-JAVA_TARGET_DIR = $(BUILD_BASE_DIR)/lib/classes
+JAVA_SOURCE_DIR    := $(BUILD_BASE_DIR)/src/main/java
+JAVA_TARGET_DIR    := $(BUILD_BASE_DIR)/target/classes
+JAVA_ALL_MAKEFILES := $(JAVA_SOURCE_DIR_LIST:%=$(JAVA_SOURCE_DIR)/%/Makefile)
 
-JAVA_JAVAC  = \
+SOURCE_DIR := $(JAVA_SOURCE_DIR)
+TARGET_DIR := $(JAVA_TARGET_DIR)
+
+ifdef BUILD_BASE_DIR
+include $(JAVA_ALL_MAKEFILES)
+endif
+
+JAVA_ALL_TARGETS      := $(ALL_CLASS_FILES) $(ALL_OTHER_TARGETS)
+JAVA_ALL_SOURCES      := $(ALL_SOURCES)
+JAVA_ALL_JAVA_SOURCES := $(filter %.java, $(JAVA_ALL_SOURCES))
+
+JAVA_JAVAC  := \
 	$(BUILD_JAVAC) \
 	-classpath "$(BUILD_MAKEFILE_CLASSPATH)$(SEP)$(JAVA_SOURCE_DIR)" \
 	-d "$(JAVA_TARGET_DIR)"
@@ -80,17 +92,6 @@ JAVA_JAVAC  = \
 ###########################################################################
 
 .PHONY : java-clean
-
-
-JAVA_ALL_MAKEFILES := $(JAVA_SOURCE_DIR_LIST:%=$(JAVA_SOURCE_DIR)/%/Makefile)
-
-ifdef BUILD_BASE_DIR
-include $(JAVA_ALL_MAKEFILES)
-endif
-
-JAVA_ALL_TARGETS := $(ALL_CLASS_FILES) $(ALL_OTHER_TARGETS)
-JAVA_ALL_SOURCES := $(ALL_SOURCES)
-JAVA_ALL_JAVA_SOURCES := $(filter %.java, $(JAVA_ALL_SOURCES))
 
 #
 # Compiles all the code.

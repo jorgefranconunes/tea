@@ -37,47 +37,36 @@
 
 ###########################################################################
 #
-# The most commonly changed configuration parameters.
+# 
 #
 ###########################################################################
 
 #
 # The list of packages to build and put into the JAR.
 #
-TEA_SOURCE_DIR_LIST = \
-	lib/tea	\
-	lib/tea/deprecated	\
-	lib/tea/html	\
-	lib/tea/io	\
-	lib/tea/net	\
-	lib/tea/tdbc	\
-	lib/tea/tea/util	\
-	lib/tea/util	\
-	lib/tea/xml	\
+TEA_SOURCE_DIR_LIST := \
+	.	\
+	./deprecated	\
+	./html	\
+	./io	\
+	./net	\
+	./tdbc	\
+	./tea/util	\
+	./util	\
+	./xml	\
 
+TEA_SOURCE_DIR    := $(BUILD_BASE_DIR)/src/main/tea
+TEA_TARGET_DIR    := $(BUILD_BASE_DIR)/target/classes/lib/tea-$(BUILD_VERSION)
+TEA_ALL_MAKEFILES := $(TEA_SOURCE_DIR_LIST:%=$(TEA_SOURCE_DIR)/%/Makefile)
 
-
-
-
-###########################################################################
-#
-# 
-#
-###########################################################################
-
-SEP = $(BUILD_PATH_SEPARATOR)
-EMPTY =
-SPACE = $(EMPTY) $(EMPTY)
-
-TEA_SOURCE_DIR    = $(BUILD_BASE_DIR)/src
-TEA_TARGET_DIR    = $(BUILD_BASE_DIR)/lib/classes
-TEA_ALL_MAKEFILES = $(TEA_SOURCE_DIR_LIST:%=$(TEA_SOURCE_DIR)/%/Makefile)
+SOURCE_DIR := $(TEA_SOURCE_DIR)
+TARGET_DIR := $(TEA_TARGET_DIR)
 
 ifdef BUILD_BASE_DIR
 include $(TEA_ALL_MAKEFILES)
 endif
 
-TEA_TARGETS = $(filter %.tea, $(ALL_OTHER_TARGETS))
+TEA_TARGETS := $(filter %.tea, $(ALL_OTHER_TARGETS))
 
 
 

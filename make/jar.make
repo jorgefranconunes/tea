@@ -42,12 +42,13 @@
 #
 ###########################################################################
 
-JAR_CLASSES_DIR = $(BUILD_BASE_DIR)/lib/classes
-JAR_MANIFEST    = $(BUILD_BASE_DIR)/config/JarManifest
-JAR_NAME        = tea-$(BUILD_VERSION).jar
-JAR_PATH        = $(BUILD_BASE_DIR)/lib/$(JAR_NAME)
-JAR_FILES       = -C $(JAR_CLASSES_DIR) com -C $(JAR_CLASSES_DIR) lib/tea-$(BUILD_VERSION)
-JAR_JAR         = $(BUILD_JAR)
+JAR_CLASSES_DIR := $(BUILD_BASE_DIR)/target/classes
+JAR_MANIFEST    := $(BUILD_BASE_DIR)/config/JarManifest
+JAR_DIR         := $(BUILD_BASE_DIR)/lib/jars
+JAR_NAME        := tea-$(BUILD_VERSION).jar
+JAR_TARGET      := $(JAR_DIR)/$(JAR_NAME)
+JAR_FILES       := -C $(JAR_CLASSES_DIR) .
+JAR_JAR         := $(BUILD_JAR)
 
 
 
@@ -63,22 +64,22 @@ JAR_JAR         = $(BUILD_JAR)
 
 
 # Builds the jar with the whole Tea package.
-.jar-all : $(JAR_PATH)
+.jar-all : $(JAR_TARGET)
 	touch .jar-all
 
-.jar-all-once : .java-all-once $(JAR_PATH)
+.jar-all-once : .java-all-once $(JAR_TARGET)
 	touch .jar-all
 	touch .jar-all-once
 
-$(JAR_PATH) : .java-all .tea-all $(JAR_MANIFEST)
-	mkdir -p $(JAR_CLASSES_DIR)/lib/tea-$(BUILD_VERSION)
-	(cd $(JAR_CLASSES_DIR)/lib/tea; tar cf - .) | (cd $(JAR_CLASSES_DIR)/lib/tea-$(BUILD_VERSION); tar xf -)
-	cd $(JAR_CLASSES_DIR) ; \
-	$(JAR_JAR) cmf $(JAR_MANIFEST) $(JAR_PATH) ./com ./lib/tea-$(BUILD_VERSION)
+$(JAR_TARGET) : .java-all .tea-all $(JAR_MANIFEST) $(JAR_DIR)
+	$(JAR_JAR) cmf $(JAR_MANIFEST) $(JAR_TARGET) $(JAR_FILES)
+
+$(JAR_DIR) :
+	mkdir -p $(JAR_DIR)
 
 
 # Removes all Java class files and JARs.
 jar-clean :
 	rm -rf .jar-all .jar-all-once
-	rm -rf $(BUILD_BASE_DIR)/lib/tea-*.jar
+	rm -rf $(JAR_DIR)/tea-*.jar
 
