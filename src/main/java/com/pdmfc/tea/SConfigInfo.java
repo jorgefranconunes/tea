@@ -1,17 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id: SConfigInfo.java,v 1.6 2007/06/04 09:39:16 jfn Exp $
- *
- *
- * Revisions:
- *
- * 2001/05/12 Created. (jfn)
+ * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -50,8 +39,11 @@ public class SConfigInfo
             try {
                 _props.load(in);
             } catch (IOException e) {
-                // Too bad we just don't care...
+                throw new RuntimeException(e);
             }
+        } else {
+            String msg = "Missing resource \"" + RES_NAME + "\"";
+            throw new RuntimeException(msg);
         }
     }
 

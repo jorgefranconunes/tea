@@ -23,6 +23,8 @@
 #
 include Makefile.conf
 
+ANT_TOOL = $(BUILD_BASE_DIR)/bin/build-ant
+
 
 
 
@@ -62,33 +64,34 @@ build.conf :
 #Compiles all the code.
 # 
 all :
-	JAVA_HOME=$(BUILD_JAVA_HOME) $(BUILD_ANT) $@
+	@$(ANT_TOOL) $@
 
 
 #
 #
 #
 test :
-	JAVA_HOME=$(BUILD_JAVA_HOME) $(BUILD_ANT) $@
+	@$(ANT_TOOL) $@
 
 
 #
 # Builds the Tea and Java documentation
 #
 doc :
-	JAVA_HOME=$(BUILD_JAVA_HOME) $(BUILD_ANT) $@
+	@$(ANT_TOOL) $@
 
 teadoc :
+	@$(ANT_TOOL) $@
 
 javadoc :
+	@$(ANT_TOOL) $@
 
 
 #
 # Removes all Java class files and JARs.
 #
 clean :
-	JAVA_HOME=$(BUILD_JAVA_HOME) $(BUILD_ANT) $@
-	rm -rf src/com/pdmfc/tea/TeaConfig.properties
+	@$(ANT_TOOL) $@
 	rm -rf Makefile.conf
 
 #

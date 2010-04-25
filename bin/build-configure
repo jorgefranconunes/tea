@@ -31,6 +31,9 @@ source ${_teaBaseDir}/bin/tea-utils
 CONF_ANT_BUNDLE=${_teaBaseDir}/third-party/apache-ant-1.8.0-bin.tar.bz2
 CONF_ANT_TOOL=${_teaBaseDir}/devtools/apache-ant-1.8.0/bin/ant
 
+CONF_ANTC_BUNDLE=${_teaBaseDir}/third-party/ant-contrib-1.0b3-bin.zip
+CONF_ANTC_JAR=ant-contrib/ant-contrib-1.0b3.jar
+
 CONF_JUNIT_BUNDLE=${_teaBaseDir}/third-party/junit4.8.2.zip
 CONF_JUNIT_JAR=junit4.8.2/junit-4.8.2.jar
 
@@ -141,6 +144,10 @@ function antSetup () {
 
         BUILD_ANT=$CONF_ANT_TOOL
     fi
+
+    local antcJarDir=${_teaBaseDir}/lib/jars
+
+    unzip -q -o -j $CONF_ANTC_BUNDLE $CONF_ANTC_JAR -d $antcJarDir
 }
 
 

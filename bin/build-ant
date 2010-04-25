@@ -1,0 +1,47 @@
+#!/bin/bash
+###########################################################################
+#
+# Copyright (c) 2010 PDM&FC, All Rights Reserved.
+#
+#
+# Invokes the Ant tool with the apropriate JVM and classpath.
+#
+#########################################################################
+
+_scriptDir=$(dirname $0)
+_scriptName=$(basename $0)
+_teaBaseDir=$(cd $_scriptDir/..; pwd)
+
+#
+# Make utility functions available
+#
+source ${_teaBaseDir}/bin/tea-utils
+
+
+
+
+
+#########################################################################
+#
+# Script main body
+#
+#########################################################################
+
+source ${_teaBaseDir}/Makefile.conf
+
+JAVA_HOME=${BUILD_JAVA_HOME} \
+ANT_HOME=${_teaBaseDir}/apache-ant-1.8.0 \
+    ${BUILD_ANT} \
+    -lib ${_teaBaseDir}/lib/jars/ant-contrib-1.0b3.jar \
+    "$@"
+
+
+
+
+
+#########################################################################
+#
+# 
+#
+#########################################################################
+

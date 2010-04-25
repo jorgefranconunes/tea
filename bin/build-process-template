@@ -1,0 +1,122 @@
+#!/bin/bash
+###########################################################################
+#
+# Copyright (c) 2010 PDM&FC, All Rights Reserved.
+#
+#
+# Performs the processing of a template file, using the parameters
+# defined in the "config/tea-develop.conf" config file.
+#
+# This utility is intended to be used only in the development
+# environment.
+#
+#########################################################################
+
+_scriptDir=$(dirname $0)
+_scriptName=$(basename $0)
+_teaBaseDir=$(cd $_scriptDir/..; pwd)
+
+#
+# Make utility functions available
+#
+source ${_teaBaseDir}/bin/tea-utils
+
+
+
+
+
+#
+#
+#
+_inputTemplate=
+_outputFile=
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+parseCliOptions () {
+
+    for option in "$@" ; do
+	case $option in
+	    --input=* )
+		_inputTemplate=$(expr "$option" : '--input=\(.*\)')
+		;;
+	    --output=* )
+		_outputFile=$(expr "$option" : '--output=\(.*\)')
+		;;
+	    --help )
+		displayHelp
+		exit 0
+		;;
+	    * )
+		teaError "$option : unrecognized option. Use --help for details."
+		exit 1
+		;;
+	esac
+    done
+
+    if [ -z "$_inputTemplate" ] ; then
+	teaError "Missing --input option. Use --help for details."
+    fi
+    if [ -z "$_outputFile" ] ; then
+	teaError "Missing --output option. Use --help for details."
+    fi
+}
+
+
+
+
+
+###########################################################################
+#
+# Displays an help message describing the configuration options.
+#
+###########################################################################
+
+displayHelp () {
+
+    displayHeader
+
+    cat <<EOF
+
+Available options:
+
+--input=PATH
+--output=PATH
+
+EOF
+}
+
+
+
+
+
+#########################################################################
+#
+# Script main body
+#
+#########################################################################
+
+parseCliOptions "$@"
+
+source ${_teaBaseDir}/config/tea-core.conf
+
+teaParseTemplate $_inputTemplate > $_outputFile
+
+
+
+
+
+#########################################################################
+#
+# 
+#
+#########################################################################
+

@@ -4,6 +4,8 @@
     Tea build environment.
   </description>
 
+  <taskdef resource="net/sf/antcontrib/antcontrib.properties" />
+
 
 
 
@@ -21,7 +23,14 @@
 
   <target name="test" depends="jar.build, java-test.build" />
 
-  <target name="clean" depends="jar.clean, java-test.clean" />
+  <target name="doc" depends="javadoc.build, teadoc.build" />
+  <target name="doc.clean" depends="javadoc.clean, teadoc.clean" />
+
+  <target name="javadoc" depends="javadoc.build" />
+
+  <target name="teadoc" depends="teadoc.build" />
+
+  <target name="clean" depends="jar.clean, java-test.clean, doc.clean" />
 
 
 
@@ -34,7 +43,7 @@
   <property name="jar.file" value="${jar.dir}/${jar.name}" />
   <property name="jar.basedir" location="target/classes" />
 
-  <target name="jar.build" depends="java.build, tea.build">
+  <target name="jar.build" depends="java.build, resources.build, tea.build">
     <jar
        destfile="${jar.file}"
        basedir="${jar.basedir}"
@@ -42,7 +51,7 @@
        />
   </target>
 
-  <target name="jar.clean" depends="java.clean, tea.clean">
+  <target name="jar.clean" depends="java.clean, resources.clean, tea.clean">
     <delete file="${jar.file}" />
   </target>
 
@@ -56,15 +65,39 @@
   <property name="java.target.dir" location="target/classes" />
 
   <target name="java.build">
-    <mkdir dir="${java.target.dir}" />
-    <javac srcdir="${java.source.dir}" destdir="${java.target.dir}">
-      <compilerarg value="-Xlint" />
-      <compilerarg value="-Xlint:-serial" />
-    </javac>
+    <java-compile srcdir="${java.source.dir}" destdir="${java.target.dir}" />
   </target>
 
   <target name="java.clean">
     <delete dir="${java.target.dir}" />
+  </target>
+
+
+
+
+
+  <!-- -->
+
+  <property name="resources.source.dir" location="src/main/resources" />
+  <property name="resources.target.dir" location="target/classes/" />
+
+  <target name="resources.build">
+    <mkdir dir="${resources.target.dir}" />
+
+    <copy todir="${resources.target.dir}">
+      <fileset dir="${resources.source.dir}">
+        <!-- No resource files to copy as-is. -->
+      </fileset>
+    </copy>
+
+    <copy-from-template 
+       file="${java.source.dir}/com/pdmfc/tea/TeaConfig.properties.template"
+       tofile="${resources.target.dir}/com/pdmfc/tea/TeaConfig.properties" />
+
+  </target>
+
+  <target name="resources.clean">
+    <delete dir="${resources.target.dir}" />
   </target>
 
 
@@ -99,19 +132,141 @@
   <property name="java-test.target.dir" location="target/test-classes" />
 
   <target name="java-test.build">
-    <mkdir dir="${java-test.target.dir}" />
-    <javac srcdir="${java-test.source.dir}" destdir="${java-test.target.dir}">
-      <compilerarg value="-Xlint" />
-      <compilerarg value="-Xlint:-serial" />
-      <classpath>
+    <java-compile
+       srcdir="${java-test.source.dir}"
+       destdir="${java-test.target.dir}">
+      <javac-classpath>
         <pathelement location="lib/jars/junit-4.8.2.jar" />
-      </classpath>
-    </javac>
+      </javac-classpath>
+    </java-compile>
   </target>
 
   <target name="java-test.clean">
     <delete dir="${java-test.target.dir}" />
   </target>
+
+
+
+
+
+  <!-- Javadoc related targets. -->
+
+  <property name="javadoc.source.dir" value="${java.source.dir}" />
+  <property name="javadoc.target.dir" location="doc/javadoc" />
+
+  <property
+     name="javadoc.doctitle"
+     value="Tea ${BUILD_VERSION} Java Runtime API" />
+  <property
+     name="javadoc.windowtitle"
+     value="${javadoc.doctitle}" />
+
+  <target name="javadoc.build">
+    <mkdir dir="${javadoc.target.dir}" />
+    <copy file="doc/images/LogoSmallPdmfc.png" todir="${javadoc.target.dir}" />
+    
+    <javadoc
+       sourcepath="${javadoc.source.dir}"
+       destdir="${javadoc.target.dir}"
+       useexternalfile="yes"
+       nodeprecatedlist="yes"
+       author="true"
+       splitindex="true"
+       version="true"
+       use="true"
+       doctitle="${javadoc.doctitle}"
+       windowtitle="${javadoc.windowtitle}">
+      <header><![CDATA[
+<b>Tea Java Runtime API</b><br /><b>Version ${BUILD_VERSION}</b>
+      ]]></header>
+      <bottom><![CDATA[
+<font size="-1">&copy; 2010 <a href="http://www.pdmfc.com" target="_blank">PDM&amp;FC</a>, All Rights Reserved.</font>
+      ]]></bottom>
+    </javadoc>
+
+  </target>
+
+  <target name="javadoc.clean" >
+    <delete dir="${javadoc.target.dir}" />
+  </target>
+
+
+
+
+
+  <!-- Teadoc related targets. -->
+
+  <property name="teadoc.source.dir" location="src/main" />
+  <property name="teadoc.target.dir" location="doc/teadoc" />
+
+  <target name="teadoc.build" depends="jar.build">
+    <mkdir dir="${teadoc.target.dir}" />
+  </target>
+
+  <target name="teadoc.clean" >
+    <delete dir="${teadoc.target.dir}" />
+  </target>
+
+
+
+
+
+  <!-- A task for compiling Java sources. -->
+
+  <macrodef name="java-compile">
+    <attribute name="srcdir" />
+    <attribute name="destdir" />
+    <element name="javac-classpath" optional="yes" />
+    <sequential>
+      <mkdir dir="@{destdir}" />
+      <javac
+         srcdir="@{srcdir}"
+         destdir="@{destdir}"
+         debug="yes"
+         includeantruntime="no">
+        <compilerarg value="-Xlint" />
+        <compilerarg value="-Xlint:-serial" />
+        <classpath>
+          <javac-classpath />
+        </classpath>
+      </javac>
+    </sequential>
+  </macrodef>
+
+
+
+
+
+  <!-- -->
+
+  <property
+     name="copy-from-template.tool"
+     location="bin/build-process-template" />
+
+  <macrodef name="copy-from-template">
+    <attribute name="file" />
+    <attribute name="tofile" />
+    <sequential>
+      <outofdate>
+        <sourcefiles>
+          <pathelement path="@{file}" />
+        </sourcefiles>
+        <targetfiles>
+          <pathelement path="@{tofile}" />
+        </targetfiles>
+        <sequential>
+          <echo>Processing template:
+    From : @{file}
+    To   : @{tofile}</echo>
+          <exec executable="${copy-from-template.tool}" failonerror="yes">
+            <arg value="--input=@{file}" />
+            <arg value="--output=@{tofile}" />
+          </exec>
+        </sequential>
+      </outofdate>
+
+    </sequential>
+  </macrodef>
 
 
 
