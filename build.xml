@@ -11,35 +11,49 @@
 
   <property file="Makefile.conf" />
 
-  <property name="java.source.dir" location="src/main/java" />
-  <property name="java.target.dir" location="target/classes" />
-
-  <property name="tea.source.dir" location="src/main/tea" />
-  <property name="tea.target.dir" location="target/classes/lib/tea-${BUILD_VERSION}" />
 
 
 
 
+  <!-- -->
 
-  <target name="all" depends="jar.build">
-  </target>
+  <target name="all" depends="jar.build" />
 
-  <target name="clean" depends="jar.clean">
-  </target>
+  <target name="test" depends="jar.build, java-test.build" />
 
-
+  <target name="clean" depends="jar.clean, java-test.clean" />
 
 
+
+
+
+  <!-- -->
+
+  <property name="jar.name" value="tea-${BUILD_VERSION}.jar" />
+  <property name="jar.dir" location="lib/jars" />
+  <property name="jar.file" value="${jar.dir}/${jar.name}" />
+  <property name="jar.basedir" location="target/classes" />
 
   <target name="jar.build" depends="java.build, tea.build">
+    <jar
+       destfile="${jar.file}"
+       basedir="${jar.basedir}"
+       manifest="config/JarManifest"
+       />
   </target>
 
   <target name="jar.clean" depends="java.clean, tea.clean">
+    <delete file="${jar.file}" />
   </target>
 
 
 
 
+
+  <!-- -->
+
+  <property name="java.source.dir" location="src/main/java" />
+  <property name="java.target.dir" location="target/classes" />
 
   <target name="java.build">
     <mkdir dir="${java.target.dir}" />
@@ -57,6 +71,11 @@
 
 
 
+  <!-- -->
+
+  <property name="tea.source.dir" location="src/main/tea" />
+  <property name="tea.target.dir" location="target/classes/lib/tea-${BUILD_VERSION}" />
+
   <target name="tea.build">
     <mkdir dir="${tea.target.dir}" />
     <copy todir="${tea.target.dir}">
@@ -68,6 +87,30 @@
 
   <target name="tea.clean">
     <delete dir="${tea.target.dir}" />
+  </target>
+
+
+
+
+
+  <!-- -->
+
+  <property name="java-test.source.dir" location="src/test/java" />
+  <property name="java-test.target.dir" location="target/test-classes" />
+
+  <target name="java-test.build">
+    <mkdir dir="${java-test.target.dir}" />
+    <javac srcdir="${java-test.source.dir}" destdir="${java-test.target.dir}">
+      <compilerarg value="-Xlint" />
+      <compilerarg value="-Xlint:-serial" />
+      <classpath>
+        <pathelement location="lib/jars/junit-4.8.2.jar" />
+      </classpath>
+    </javac>
+  </target>
+
+  <target name="java-test.clean">
+    <delete dir="${java-test.target.dir}" />
   </target>
 
 
