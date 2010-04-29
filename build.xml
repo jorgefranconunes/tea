@@ -84,14 +84,8 @@
   <target name="resources.build">
     <mkdir dir="${resources.target.dir}" />
 
-    <copy todir="${resources.target.dir}">
-      <fileset dir="${resources.source.dir}">
-        <!-- No resource files to copy as-is. -->
-      </fileset>
-    </copy>
-
     <copy-from-template 
-       file="${java.source.dir}/com/pdmfc/tea/TeaConfig.properties.template"
+       file="${resources.source.dir}/com/pdmfc/tea/TeaConfig.properties.template"
        tofile="${resources.target.dir}/com/pdmfc/tea/TeaConfig.properties" />
 
   </target>
@@ -201,6 +195,7 @@
 
   <target name="teadoc.build" depends="jar.build">
     <mkdir dir="${teadoc.target.dir}" />
+
   </target>
 
   <target name="teadoc.clean" >
