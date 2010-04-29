@@ -29,11 +29,11 @@ Preparing the Development Environment
 =====================================
 
 These instructions apply to unix environments. If you really want to
-develop under windows you should have CygWin
-(http://www.cygwin.com/) installed on your system.
+develop under windows you should have CygWin (http://www.cygwin.com/)
+installed on your system.
 
 
-1. Fetch the source tree.
+1. Fetch the source tree from the Subversion repository.
 
 
 2. Create the "build.conf" file.
@@ -44,20 +44,9 @@ be used during the build. It is a file with Bourne shell syntax and it
 must define the variables described bellow. There is a
 "build.conf.example" file with example values for these variables.
 
-BUILD_JAVA_HOME - The java home of the JRE to be used for seting up
-the development environment as a Tea installation. This is required in
-order to run the "teadoc" tool.
-
-BUILD_JAVAC - The command that invokes the Java compiler and is used
-to compile Java source files during build. It must accept the "-d" and
-"-classpath" options just like Sun's JDK javac compiler.
-
-BUILD_JAR - The command to use for creating JAR files. It is expected
-to accept the same command line options as Sun's JDK jar utility.
-
-BUILD_JAVADOC - The command to use for creating javadoc documentation
-from Java source files. It is expected to accept the same command line
-options as Sun's JDK javadoc utility.
+BUILD_JAVA_HOME - The java home of the JDK to be used for compiling
+and for seting up
+the development environment as a Tea installation.
 
 This file can be changed at any time. The build procedure will always
 use the values currently in this config file.

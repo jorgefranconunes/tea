@@ -32,7 +32,6 @@ source ${_teaBaseDir}/Makefile.conf
 JAVA_HOME=${BUILD_JAVA_HOME} \
 ANT_HOME=${_teaBaseDir}/apache-ant-1.8.0 \
     ${BUILD_ANT} \
-    -lib ${_teaBaseDir}/lib/jars/ant-contrib-1.0b3.jar \
     "$@"
 
 

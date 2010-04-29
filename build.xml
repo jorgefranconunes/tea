@@ -1,15 +1,25 @@
+<!--
+
+Copyright (c) 2010 PDM&FC, All Rights Reserved.
+
+
+Main Ant build file for the Tea development tree.
+
+-->
+
 <project name="Tea" default="all">
 
   <description>
     Tea build environment.
   </description>
 
-  <taskdef resource="net/sf/antcontrib/antcontrib.properties" />
-
 
 
 
   <!-- Global properties used througout the build. -->
+
+  <property name="antc.jar" location="lib/jars/ant-contrib-1.0b3.jar" />
+  <property name="junit.jar" location="lib/jars/junit-4.8.2.jar" />
 
   <property file="Makefile.conf" />
 
@@ -17,11 +27,20 @@
 
 
 
-  <!-- -->
+  <!-- Defines the "outofdate" task. -->
+  <taskdef
+     resource="net/sf/antcontrib/antcontrib.properties"
+     classpath="${antc.jar}" />
+
+
+
+
+
+  <!-- Public targets. -->
 
   <target name="all" depends="jar.build" />
 
-  <target name="test" depends="jar.build, java-test.build" />
+  <target name="test" depends="test.build" />
 
   <target name="doc" depends="javadoc.build, teadoc.build" />
   <target name="doc.clean" depends="javadoc.clean, teadoc.clean" />
@@ -130,13 +149,35 @@
        srcdir="${java-test.source.dir}"
        destdir="${java-test.target.dir}">
       <javac-classpath>
-        <pathelement location="lib/jars/junit-4.8.2.jar" />
+        <pathelement path="${junit.jar}" />
       </javac-classpath>
     </java-compile>
   </target>
 
   <target name="java-test.clean">
     <delete dir="${java-test.target.dir}" />
+  </target>
+
+
+
+
+
+  <!-- -->
+  
+  <target name="test.build" depends="jar.build, java-test.build">
+    <junit haltonerror="yes" haltonfailure="yes" showoutput="yes">
+      <classpath>
+        <pathelement location="${java-test.target.dir}" />
+        <pathelement path="${jar.file}" />
+        <pathelement location="lib/jars/junit-4.8.2.jar" />
+      </classpath>
+      <formatter type="plain" usefile="no" />
+      <batchtest>
+        <fileset dir="${java-test.source.dir}">
+          <include name="**/Test*.java" />
+        </fileset>
+      </batchtest>
+    </junit>
   </target>
 
 
@@ -193,12 +234,32 @@
   <property name="teadoc.source.dir" location="src/main" />
   <property name="teadoc.target.dir" location="doc/teadoc" />
 
-  <target name="teadoc.build" depends="jar.build">
+  <property name="teadoc.tool" location="bin/teadoc" />
+  <property name="teadoc.header" value="Tea ${BUILD_VERSION} Reference Documentation&lt;br&gt;&amp;copy; 2010 &lt;a href=&quot;http://www.pdmfc.com&quot;&gt;PDM&amp;amp;FC&lt;/a&gt;" />
+  <property name="teadoc.footer" value="${teadoc.header}" />
+  <property name="teadoc.bottom" value="&lt;font size=&quot;-1&quot;&gt;&lt;a href=&quot;mailto:info@pdmfc.com&quot;&gt;Report a bug or request new features&lt;/a&gt;&lt;/font&gt;&lt;br /&gt;&lt;font size=&quot;-1&quot;&gt;&amp;copy; 2010&lt;/font&gt; &lt;a href=&quot;http://www.pdmfc.com&quot;&gt;&lt;img align=&quot;absmiddle&quot; border=&quot;0&quot; src=&quot;LogoSmallPdmfc.png&quot;&gt;&lt;/a&gt;" />
+  <property name="teadoc.doctitle" value="Tea ${BUILD_VERSION} Reference Documentation" />
+  <property name="teadoc.windowtitle" value="${teadoc.doctitle}" />
+  <property name="teadoc.pathlist" value="${teadoc.source.dir}" />
+  <property name="teadoc.outputdir" value="${teadoc.target.dir}" />
+
+  <target name="teadoc.build" depends="jar.build, teainstall.build">
     <mkdir dir="${teadoc.target.dir}" />
+    <copy file="doc/images/LogoSmallPdmfc.png" todir="${teadoc.target.dir}" />
+
+    <exec executable="${teadoc.tool}" failonerror="yes">
+      <arg value="--header=${teadoc.header}" />
+      <arg value="--footer=${teadoc.footer}" />
+      <arg value="--bottom=${teadoc.bottom}" />
+      <arg value="--doc-title=${teadoc.doctitle}" />
+      <arg value="--window-title=${teadoc.windowtitle}" />
+      <arg value="--path-list=${teadoc.pathlist}" />
+      <arg value="--output-dir=${teadoc.outputdir}" />
+    </exec>
 
   </target>
 
-  <target name="teadoc.clean" >
+  <target name="teadoc.clean" depends="teainstall.clean" >
     <delete dir="${teadoc.target.dir}" />
   </target>
 
@@ -206,7 +267,38 @@
 
 
 
-  <!-- A task for compiling Java sources. -->
+  <!-- -->
+
+  <property name="teainstall.conffile" location="config/tea-install.conf" />
+  <property name="teainstall.setuptool" location="bin/setup" />
+
+  <target name="teainstall.build">
+    <create-target to="${teainstall.conffile}">
+      <exec executable="${teainstall.setuptool}">
+        <arg value="--java-home=${BUILD_JAVA_HOME}" />
+      </exec>
+    </create-target>
+  </target>
+
+  <target name="teainstall.clean">
+    <delete file="${teainstall.conffile}" />
+  </target>
+
+
+
+
+
+<!-- 
+
+Utility tasks bellow.
+
+-->
+
+
+
+
+
+  <!-- Compiles Java sources. -->
 
   <macrodef name="java-compile">
     <attribute name="srcdir" />
@@ -232,7 +324,7 @@
 
 
 
-  <!-- -->
+  <!-- Generates a target file from a template. -->
 
   <property
      name="copy-from-template.tool"
@@ -242,24 +334,61 @@
     <attribute name="file" />
     <attribute name="tofile" />
     <sequential>
-      <outofdate>
-        <sourcefiles>
-          <pathelement path="@{file}" />
-        </sourcefiles>
-        <targetfiles>
-          <pathelement path="@{tofile}" />
-        </targetfiles>
-        <sequential>
-          <echo>Processing template:
+      <update-target from="@{file}" to="@{tofile}">
+        <echo>Processing template:
     From : @{file}
     To   : @{tofile}</echo>
-          <exec executable="${copy-from-template.tool}" failonerror="yes">
-            <arg value="--input=@{file}" />
-            <arg value="--output=@{tofile}" />
-          </exec>
+        <exec executable="${copy-from-template.tool}" failonerror="yes">
+          <arg value="--input=@{file}" />
+          <arg value="--output=@{tofile}" />
+        </exec>
+      </update-target>
+    </sequential>
+  </macrodef>
+
+
+
+
+
+  <!-- Updates a target file from a source file, if target is out of
+  date, using a given sequence of tasks. -->
+
+  <macrodef name="update-target">
+    <attribute name="from" />
+    <attribute name="to" />
+    <element name="do" implicit="yes" />
+    <sequential>
+      <outofdate>
+        <sourcefiles>
+          <pathelement path="@{from}" />
+        </sourcefiles>
+        <targetfiles>
+          <pathelement path="@{to}" />
+        </targetfiles>
+        <sequential>
+          <do />
         </sequential>
       </outofdate>
+    </sequential>
+  </macrodef>
 
+
+
+
+
+  <!-- Creates a target file, if target does not exist, using a given
+  sequence of tasks. -->
+
+  <macrodef name="create-target">
+    <attribute name="to" />
+    <element name="do" implicit="yes" />
+    <sequential>
+      <if>
+        <not><available file="@{to}" /></not>
+      <then>
+        <do />
+      </then>
+      </if>
     </sequential>
   </macrodef>
 
