@@ -45,21 +45,11 @@ must define the variables described bellow. There is a
 "build.conf.example" file with example values for these variables.
 
 BUILD_JAVA_HOME - The java home of the JDK to be used for compiling
-and for seting up
-the development environment as a Tea installation.
+and for seting up the development environment as a Tea installation.
 
 This file can be changed at any time. The build procedure will always
 use the values currently in this config file.
 
-
-3. Prepare the development tree to behave like an installation tree.
-
-Run the "bin/setup" utility in order to prepare the development tree
-to behave like an installation tree. The only required command line
-option is "--java-home". Run it with "--help" for more details.
-
-Note that only after a successfull build will the development tree
-actually behave like an install tree.
 
 
 
@@ -83,6 +73,8 @@ files will be created under the "doc/teadoc" directory.
 
 jar - Builds the target class files and creates the single JAR needed
 to run a Tea interpreter.
+
+test - Runs all unit tests.
 
 clean - Removes all files created as the result of a build. The
 configuration information is not affected.
