@@ -1,0 +1,17 @@
+###########################################################################
+#
+# Copyright (c) 2005 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+
+#
+# Testing the java-exec-method function on arrays (strings).
+#
+
+define values [java-exec-method "ReflectTest" getArray $null $null]
+
+foreach value $values {
+    echo [if {null? $value} "$null" $value]
+}
+

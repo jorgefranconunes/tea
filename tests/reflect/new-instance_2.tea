@@ -1,0 +1,17 @@
+###########################################################################
+#
+# Copyright (c) 2010 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+
+
+#
+# Testing the java-new-instance function.
+#
+
+define obj [java-new-instance "ReflectTest" "s1"]
+
+define value [$obj adder "s2"]
+
+echo $value
