@@ -93,6 +93,7 @@ mkdir $tmpReleaseDir
 #
 find $tmpReleaseDir -name \*~ -exec rm -f {} \;
 rm -rf `find $tmpReleaseDir -type d -name CVS -print`
+rm -rf `find $tmpReleaseDir -type d -name .svn -print`
 
 
 #
