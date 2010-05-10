@@ -64,6 +64,7 @@ TEA_RELEASE_FILES =	\
 	bin/teadoc	\
 	bin/tea-utils	\
 	bin/tsh	\
+	bin/tsh.bat	\
 	doc/javadoc	\
 	doc/release-notes.txt	\
 	doc/teadoc	\
