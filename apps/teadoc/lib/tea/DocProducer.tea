@@ -11,6 +11,8 @@
 #
 # Revisions:
 #
+# 2010/05/10 Directories named ".svn"  are now skipped. (jpsl)
+#
 # 2004/08/13 The "DocProducer processFile" now only processes the XML
 # file if it was actually created by "DocExtractor::processFile".
 # Performance has been thus increased. (jfn)
@@ -36,7 +38,7 @@ define _knownFileTypes [regexp-pattern ".*((\\.tea)|(\\.java))$"]
 #
 # Regexp for names of directories that will be skiped.
 #
-define _namesToSkip [regexp-pattern "CVS"]
+define _namesToSkip [regexp-pattern "CVS|.svn"]
 
 
 
