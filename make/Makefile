@@ -1,6 +1,6 @@
 ###########################################################################
 #
-# Copyright (c) 2001-2009 PDM&FC, All Rights Reserved.
+# Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
 #
 ###########################################################################
 
@@ -182,9 +182,9 @@ TEADOC_DIR       = $(BUILD_BASE_DIR)/doc/teadoc
 TEADOC_DIRS      = src
 TEADOC_DOC_TITLE = "Tea $(BUILD_VERSION) Reference Documentation"
 TEADOC_WIN_TITLE = $(TEADOC_DOC_TITLE)
-TEADOC_HEADER    = "Tea $(BUILD_VERSION) Reference Documentation<br>&copy 2009 <a href=\"http://www.pdmfc.com\">PDM&amp;FC</a>"
+TEADOC_HEADER    = "Tea $(BUILD_VERSION) Reference Documentation<br>&copy 2010 <a href=\"http://www.pdmfc.com\">PDM&amp;FC</a>"
 TEADOC_FOOTER    = $(TEADOC_HEADER)
-TEADOC_BOTTOM    = "<font size=\"-1\"><a href=\"mailto:info@pdmfc.com\">Report a bug or request new features</a></font><br><font size=\"-1\">&copy; 2009</font> <a href=\"http://www.pdmfc.com\"><img align=\"absmiddle\" border=\"0\" src=\"LogoSmallPdmfc.png\"></a>"
+TEADOC_BOTTOM    = "<font size=\"-1\"><a href=\"mailto:info@pdmfc.com\">Report a bug or request new features</a></font><br><font size=\"-1\">&copy; 2010</font> <a href=\"http://www.pdmfc.com\"><img align=\"absmiddle\" border=\"0\" src=\"LogoSmallPdmfc.png\"></a>"
 TEADOC_TMP       = $(patsubst %,$(BUILD_BASE_DIR)/%,$(TEADOC_DIRS))
 TEADOC_DIRLIST   = $(subst $(SPACE),$(SEP),$(TEADOC_TMP))
 
@@ -203,7 +203,7 @@ JAVADOC_DIR         = $(BUILD_BASE_DIR)/doc/javadoc
 JAVADOC_WINDOWTITLE = "Tea $(BUILD_VERSION) Java Runtime API"
 JAVADOC_DOCTITLE    = $(JAVADOC_WINDOWTITLE)
 JAVADOC_HEADER      = "<b>Tea Java Runtime API</b><br><b>Version $(BUILD_VERSION)</b>"
-JAVADOC_BOTTOM      = "<font size=\"-1\">&copy; 2009 <a href=\"http://www.pdmfc.com\" target=\"_top\">PDM&amp;FC</a>, All Rights Reserved.</font>"
+JAVADOC_BOTTOM      = "<font size=\"-1\">&copy; 2010 <a href=\"http://www.pdmfc.com\" target=\"_top\">PDM&amp;FC</a>, All Rights Reserved.</font>"
 JAVADOC_OPTIONS     = \
 	-quiet	\
 	-d $(JAVADOC_DIR) \
