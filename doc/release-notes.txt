@@ -1,5 +1,10 @@
 Release Notes for Tea 3
 
+2010/05/11 *** Released the 3.2.5 at SVN version 110.
+
+2010/05/10 SModuleReflect now handles tea-to-java $null arguments better.
+bin/make-release and teadoc skip .svn directories.
+
 2009/04/08 *** Released the 3.2.4 at SVN version 51.
 
 
