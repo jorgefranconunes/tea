@@ -20,7 +20,7 @@ REM
 REM TEA_BASE_DIR is the directory where the Tea instalation resides.
 REM
 
-SET TEA_BASE_DIR=c:\tea-3.2.4
+SET TEA_BASE_DIR=c:\tea-3.2.5
 
 
 REM
@@ -29,7 +29,7 @@ REM the Tea runtime. It must at least contain the "gnu.regexp" library
 REM and the "lib\classes" directory of the Tea instalation.
 REM
 
-SET TEA_CLASSPATH=%TEA_BASE_DIR%\lib\tea-3.2.4.jar
+SET TEA_CLASSPATH=%TEA_BASE_DIR%\lib\tea-3.2.5.jar
 
 
 REM
@@ -39,7 +39,7 @@ REM reading a file. It must at least contain the "lib/tea" directory
 REM contained in the Tea runtime JAR file.
 REM
 
-SET TEA_LIBRARY=jar:file:%TEA_BASE_DIR%/lib/tea-3.2.4.jar!/lib/tea
+SET TEA_LIBRARY=jar:file:%TEA_BASE_DIR%/lib/tea-3.2.5.jar!/lib/tea
 SET TEA_LIBRARY=%TEA_LIBRARY%;.
 
 
