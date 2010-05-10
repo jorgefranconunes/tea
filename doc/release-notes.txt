@@ -5,6 +5,9 @@ Release Notes for Tea 3
 2010/05/10 SModuleReflect now handles tea-to-java $null arguments better.
 bin/make-release and teadoc skip .svn directories.
 
+2010/03/10 SModuleIO.java file-copy does not leave open file descriptors
+anymore (at SVN r81).
+
 2009/04/08 *** Released the 3.2.4 at SVN version 51.
 
 
