@@ -12,8 +12,8 @@ package com.pdmfc.tea.compiler;
 
 /**************************************************************************
  *
- * Provides utility functions that encapsulate some Tea language
- * parsing abilities.
+ * Provides utility functions that encapsulate some parsing abilities
+ * of the Tea language.
  *
  **************************************************************************/
 
@@ -48,7 +48,7 @@ public class STeaParserUtils
  *
  **************************************************************************/
 
-    public static String unescapeString(String s) {
+    public static String parseStringLiteral(String s) {
 
 	StringBuffer result    = new StringBuffer();
 	int          size      = s.length();

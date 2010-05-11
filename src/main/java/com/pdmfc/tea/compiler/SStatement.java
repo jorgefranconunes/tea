@@ -1,26 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id: SStatement.java,v 1.7 2002/09/17 16:35:27 jfn Exp $
- *
- *
- * Revisions:
- *
- * 2002/03/28
- * No longer stores the file name from where the SStatement was
- * compiled. That is now stored by the SCode holding this
- * SStatement. (jfn)
- *
- * 2001/06/14
- * No longer uses an SObjArrayFactory. (jfn)
- *
- * 2001/05/12
- * Created. (jfn)
+ * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -57,7 +37,7 @@ abstract class SStatement
 
 
     // The line number this statement belongs to.
-    protected int    _lineNumber;
+    private int _lineNumber;
 
 
 
@@ -140,9 +120,6 @@ abstract class SStatement
 	throws STeaException;
 
 
-}
-
-
 
 
 
@@ -152,19 +129,19 @@ abstract class SStatement
  *
  **************************************************************************/
 
-class SStatementFactory
-    extends Object {
+    public static class Factory
+        extends Object {
 
 
 
 
 
-    private SStatementNode _wordsHead = null;
-    private SStatementNode _wordsTail = null;
-    private int            _wordCount = 0;
+        private SStatement.Node _wordsHead = null;
+        private SStatement.Node _wordsTail = null;
+        private int             _wordCount = 0;
 
-    // The line number this statement belongs to.
-    private int    _lineNumber;
+        // The line number this statement belongs to.
+        private int    _lineNumber;
 
 
 
@@ -178,10 +155,10 @@ class SStatementFactory
  *
  **************************************************************************/
 
-    public SStatementFactory(int line) {
+        public Factory(int line) {
 
-	_lineNumber = line;
-    }
+            _lineNumber = line;
+        }
 
 
 
@@ -196,18 +173,18 @@ class SStatementFactory
  *
  **************************************************************************/
 
-    public void addWord(SWord aWord) {
+        public void addWord(SWord aWord) {
 
-	SStatementNode newWord = new SStatementNode(aWord);
+            SStatement.Node newWord = new SStatement.Node(aWord);
 
-	if ( _wordsHead == null ) {
-	    _wordsHead = newWord;
-	} else {
-	    _wordsTail._next = newWord;
-	}
-	_wordsTail = newWord;
-	_wordCount++;
-    }
+            if ( _wordsHead == null ) {
+                _wordsHead = newWord;
+            } else {
+                _wordsTail._next = newWord;
+            }
+            _wordsTail = newWord;
+            _wordCount++;
+        }
 
 
 
@@ -219,38 +196,38 @@ class SStatementFactory
  *
  **************************************************************************/
 
-    public SStatement createStatement() {
+        public SStatement createStatement() {
 
-	SStatement result = null;
+            SStatement result = null;
 
-	switch ( _wordCount ) {
-	case 0 :
-	    throw new RuntimeException("Empty Tea statement!");
-	case 1 :
-	    result = new SStatement1(_lineNumber, _wordsHead);
-	    break;
-	case 2 :
-	    result = new SStatement2(_lineNumber, _wordsHead);
-	    break;
-	case 3 :
-	    result = new SStatement3(_lineNumber, _wordsHead);
-	    break;
-	case 4 :
-	    result = new SStatement4(_lineNumber, _wordsHead);
-	    break;
-	case 5 :
-	    result = new SStatement5(_lineNumber, _wordsHead);
-	    break;
-	default :
-	    result = new SGenericStatement(_lineNumber, _wordsHead,_wordCount);
-	    break;
-	}
+            switch ( _wordCount ) {
+            case 0 :
+                throw new IllegalStateException("Empty Tea statement!");
+            case 1 :
+                result = new SStatement.Order1(_lineNumber, _wordsHead);
+                break;
+            case 2 :
+                result = new SStatement.Order2(_lineNumber, _wordsHead);
+                break;
+            case 3 :
+                result = new SStatement.Order3(_lineNumber, _wordsHead);
+                break;
+            case 4 :
+                result = new SStatement.Order4(_lineNumber, _wordsHead);
+                break;
+            case 5 :
+                result = new SStatement.Order5(_lineNumber, _wordsHead);
+                break;
+            default :
+                result = new SStatement.Generic(_lineNumber, _wordsHead,_wordCount);
+                break;
+            }
 
-	return result;
+            return result;
+        }
+
+
     }
-
-
-}
 
 
 
@@ -264,19 +241,19 @@ class SStatementFactory
  *
  **************************************************************************/
 
-class SGenericStatement
-    extends SStatement {
+    private static class Generic
+        extends SStatement {
 
 
 
 
 
-    private SStatementNode _wordsHead = null;
-    private int            _wordCount = 0;
-    private SWord          _firstWord = null;
+        private SStatement.Node _wordsHead = null;
+        private int            _wordCount = 0;
+        private SWord          _firstWord = null;
 
-    private static final String ERR_WORD =
-	"	while evaluating argument {0} on line {1}";
+        private static final String ERR_WORD =
+            "	while evaluating argument {0} on line {1}";
 
 
 
@@ -290,16 +267,16 @@ class SGenericStatement
  *
  **************************************************************************/
 
-    public SGenericStatement(int            lineNumber,
-			     SStatementNode head,
-			     int            wordCount) {
+        public Generic(int            lineNumber,
+                       SStatement.Node head,
+                       int            wordCount) {
 
-	super(lineNumber);
+            super(lineNumber);
 
-	_wordsHead = head;
-	_wordCount = wordCount;
-	_firstWord = head._element;
-    }
+            _wordsHead = head;
+            _wordCount = wordCount;
+            _firstWord = head._element;
+        }
 
 
 
@@ -346,37 +323,38 @@ class SGenericStatement
  *
  **************************************************************************/
 
-    public final Object exec(SContext context)
-	throws STeaException {
+        public final Object exec(SContext context)
+            throws STeaException {
 
-	int            numArgs  = _wordCount;
-	SStatementNode node     = _wordsHead._next;
-	Object[]       args     = new Object[numArgs];
-	SObjFunction   function = _firstWord.toFunction(context);
+            int            numArgs  = _wordCount;
+            SStatement.Node node     = _wordsHead._next;
+            Object[]       args     = new Object[numArgs];
+            SObjFunction   function = _firstWord.toFunction(context);
 
-	args[0] = function;
+            args[0] = function;
 
-	// First we evaluate the arguments:
-	for ( int i=1; i<numArgs; i++ ) {
-	    try {
-		args[i] = node._element.get(context);
-		node = node._next;
-	    } catch (SRuntimeException e) {
-		Object[] fmtArgs = { new Integer(i), new Integer(_lineNumber)};
-		e.addMessage(ERR_WORD, fmtArgs);
-		throw e;
-	    }
-	}
+            // First we evaluate the arguments:
+            for ( int i=1; i<numArgs; i++ ) {
+                try {
+                    args[i] = node._element.get(context);
+                    node = node._next;
+                } catch (SRuntimeException e) {
+                    Object[] fmtArgs =
+                        { String.valueOf(i), String.valueOf(getLineNumber())};
+                    e.addMessage(ERR_WORD, fmtArgs);
+                    throw e;
+                }
+            }
 
-	// And finally we execute the Tea function, passing it the
-	// arguments:
-	Object result = function.exec(function, context, args);
+            // And finally we execute the Tea function, passing it the
+            // arguments:
+            Object result = function.exec(function, context, args);
 
-	return result;
+            return result;
+        }
+
+
     }
-
-
-}
 
 
 
@@ -388,32 +366,15 @@ class SGenericStatement
  *
  **************************************************************************/
 
-class SStatementNode
-    extends Object {
+    private static class Node
+        extends Object {
 
 
 
 
 
-    public SWord          _element = null;
-    public SStatementNode _next    = null;
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    public SStatementNode(SWord word) {
-
-	_element = word;
-    }
-
-}
+        public SWord _element = null;
+        public Node  _next    = null;
 
 
 
@@ -425,33 +386,11 @@ class SStatementNode
  *
  **************************************************************************/
 
-class SStatement1
-    extends SStatement {
+        public Node(SWord word) {
 
+            _element = word;
+        }
 
-
-
-
-    private SWord _word0 = null;
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    public SStatement1(int            lineNumber,
-		       SStatementNode head) {
-
-	super(lineNumber);
-
-	SStatementNode node = head;
-
-	_word0 = node._element;
     }
 
 
@@ -464,18 +403,14 @@ class SStatement1
  *
  **************************************************************************/
 
-    public Object exec(SContext context)
-	throws STeaException {
+    private static class Order1
+        extends SStatement {
 
-	SObjFunction function = _word0.toFunction(context);
-	Object[]     args     = {
-	    function,
-	};
-	Object       result   = function.exec(function, context, args);
 
-	return result;
-    }
-}
+
+
+
+        private SWord _word0 = null;
 
 
 
@@ -487,37 +422,15 @@ class SStatement1
  *
  **************************************************************************/
 
-class SStatement2
-    extends SStatement {
+        public Order1(int            lineNumber,
+                      SStatement.Node head) {
 
+            super(lineNumber);
 
+            SStatement.Node node = head;
 
-
-
-    private SWord _word0 = null;
-    private SWord _word1 = null;
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    public SStatement2(int            lineNumber,
-		       SStatementNode head) {
-
-	super(lineNumber);
-
-	SStatementNode node = head;
-
-	_word0 = node._element;
-	node   = node._next;
-	_word1 = node._element;
-    }
+            _word0 = node._element;
+        }
 
 
 
@@ -529,65 +442,19 @@ class SStatement2
  *
  **************************************************************************/
 
-    public Object exec(SContext context)
-	throws STeaException {
+        public Object exec(SContext context)
+            throws STeaException {
 
-	SObjFunction function = _word0.toFunction(context);
-	Object[]     args     = {
-	    function,
-	    _word1.get(context)
-	};
-	Object       result   = function.exec(function, context, args);
+            SObjFunction function = _word0.toFunction(context);
+            Object[]     args     = {
+                function,
+            };
+            Object       result   = function.exec(function, context, args);
 
-	return result;
-    }
-
-
-}
+            return result;
+        }
 
 
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-class SStatement3
-    extends SStatement {
-
-
-
-
-
-    private SWord _word0 = null;
-    private SWord _word1 = null;
-    private SWord _word2 = null;
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    public SStatement3(int            lineNumber,
-		       SStatementNode head) {
-
-	super(lineNumber);
-
-	SStatementNode node = head;
-
-	_word0 = node._element;
-	node   = node._next;
-	_word1 = node._element;
-	node   = node._next;
-	_word2 = node._element;
     }
 
 
@@ -600,19 +467,60 @@ class SStatement3
  *
  **************************************************************************/
 
-    public Object exec(SContext context)
-	throws STeaException {
+    private static class Order2
+        extends SStatement {
 
-	SObjFunction function = _word0.toFunction(context);
-	Object[]     args     = {
-	    function,
-	    _word1.get(context),
-	    _word2.get(context)
-	};
-	Object       result   = function.exec(function, context, args);
 
-	return result;
-    }
+
+
+
+        private SWord _word0 = null;
+        private SWord _word1 = null;
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+        public Order2(int            lineNumber,
+                      SStatement.Node head) {
+
+            super(lineNumber);
+
+            SStatement.Node node = head;
+
+            _word0 = node._element;
+            node   = node._next;
+            _word1 = node._element;
+        }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+        public Object exec(SContext context)
+            throws STeaException {
+
+            SObjFunction function = _word0.toFunction(context);
+            Object[]     args     = {
+                function,
+                _word1.get(context)
+            };
+            Object       result   = function.exec(function, context, args);
+
+            return result;
+        }
 
 
 }
@@ -627,17 +535,16 @@ class SStatement3
  *
  **************************************************************************/
 
-class SStatement4
-    extends SStatement {
+    private static class Order3
+        extends SStatement {
 
 
 
 
 
-    private SWord _word0 = null;
-    private SWord _word1 = null;
-    private SWord _word2 = null;
-    private SWord _word3 = null;
+        private SWord _word0 = null;
+        private SWord _word1 = null;
+        private SWord _word2 = null;
 
 
 
@@ -649,20 +556,18 @@ class SStatement4
  *
  **************************************************************************/
 
-    public SStatement4(int            lineNumber,
-		       SStatementNode head) {
+    public Order3(int            lineNumber,
+                  SStatement.Node head) {
 
 	super(lineNumber);
 
-	SStatementNode node = head;
+	SStatement.Node node = head;
 
 	_word0 = node._element;
 	node   = node._next;
 	_word1 = node._element;
 	node   = node._next;
 	_word2 = node._element;
-	node   = node._next;
-	_word3 = node._element;
     }
 
 
@@ -675,101 +580,180 @@ class SStatement4
  *
  **************************************************************************/
 
-    public Object exec(SContext context)
-	throws STeaException {
+        public Object exec(SContext context)
+            throws STeaException {
 
-	SObjFunction function = _word0.toFunction(context);
-	Object[]     args     = {
-	    function,
-	    _word1.get(context),
-	    _word2.get(context),
-	    _word3.get(context)
-	};
-	Object       result   = function.exec(function, context, args);
+            SObjFunction function = _word0.toFunction(context);
+            Object[]     args     = {
+                function,
+                _word1.get(context),
+                _word2.get(context)
+            };
+            Object       result   = function.exec(function, context, args);
 
-	return result;
+            return result;
+        }
+
+
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    private static class Order4
+        extends SStatement {
+
+
+
+
+
+        private SWord _word0 = null;
+        private SWord _word1 = null;
+        private SWord _word2 = null;
+        private SWord _word3 = null;
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+        public Order4(int            lineNumber,
+                      SStatement.Node head) {
+
+            super(lineNumber);
+
+            SStatement.Node node = head;
+
+            _word0 = node._element;
+            node   = node._next;
+            _word1 = node._element;
+            node   = node._next;
+            _word2 = node._element;
+            node   = node._next;
+            _word3 = node._element;
+        }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+        public Object exec(SContext context)
+            throws STeaException {
+
+            SObjFunction function = _word0.toFunction(context);
+            Object[]     args     = {
+                function,
+                _word1.get(context),
+                _word2.get(context),
+                _word3.get(context)
+            };
+            Object       result   = function.exec(function, context, args);
+
+            return result;
+        }
+
+
+    }
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    private static class Order5
+        extends SStatement {
+
+
+
+
+
+        private SWord _word0 = null;
+        private SWord _word1 = null;
+        private SWord _word2 = null;
+        private SWord _word3 = null;
+        private SWord _word4 = null;
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+        public Order5(int            lineNumber,
+                      SStatement.Node head) {
+
+            super(lineNumber);
+
+            SStatement.Node node = head;
+
+            _word0 = node._element;
+            node   = node._next;
+            _word1 = node._element;
+            node   = node._next;
+            _word2 = node._element;
+            node   = node._next;
+            _word3 = node._element;
+            node   = node._next;
+            _word4 = node._element;
+        }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+        public Object exec(SContext context)
+            throws STeaException {
+
+            SObjFunction function = _word0.toFunction(context);
+            Object[]     args     = {
+                function,
+                _word1.get(context),
+                _word2.get(context),
+                _word3.get(context),
+                _word4.get(context)
+            };
+            Object       result   = function.exec(function, context, args);
+
+            return result;
+        }
+
+
     }
 
 
 }
 
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-class SStatement5
-    extends SStatement {
-
-
-
-
-
-    private SWord _word0 = null;
-    private SWord _word1 = null;
-    private SWord _word2 = null;
-    private SWord _word3 = null;
-    private SWord _word4 = null;
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    public SStatement5(int            lineNumber,
-		       SStatementNode head) {
-
-	super(lineNumber);
-
-	SStatementNode node = head;
-
-	_word0 = node._element;
-	node   = node._next;
-	_word1 = node._element;
-	node   = node._next;
-	_word2 = node._element;
-	node   = node._next;
-	_word3 = node._element;
-	node   = node._next;
-	_word4 = node._element;
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    public Object exec(SContext context)
-	throws STeaException {
-
-	SObjFunction function = _word0.toFunction(context);
-	Object[]     args     = {
-	    function,
-	    _word1.get(context),
-	    _word2.get(context),
-	    _word3.get(context),
-	    _word4.get(context)
-	};
-	Object       result   = function.exec(function, context, args);
-
-	return result;
-    }
-
-
-}
 
 
 

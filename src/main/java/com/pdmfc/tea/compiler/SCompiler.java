@@ -311,9 +311,9 @@ public class SCompiler
 
         SCode code = getBlock();
 
-        if ( !atEnd() ) {
+        if ( !isAtEnd() ) {
             String msg = "unexpected ''{0}'' at line {1}{2}";
-            compileError(msg, peek(), currentLine(), onFileMsg());
+            compileError(msg, peek(), getCurrentLine(), onFileMsg());
       }
 
       return code;
@@ -336,13 +336,13 @@ public class SCompiler
 
 	SCode code = getBlock();
 
-	if ( atEnd() ) {
+	if ( isAtEnd() ) {
             String msg = "no ''{0}'' found before end of script for block starting at line {1}{2}";
             compileError(msg, c, line, onFileMsg());
 	}
         if ( peek() != c ) {
             String msg = "found ''{0}'' at line {1} while expecting a ''{2}'' for block starting at line {3}{4}";
-            compileError(msg, peek(), currentLine(), c, line, onFileMsg());
+            compileError(msg, peek(), getCurrentLine(), c, line, onFileMsg());
       }
       skip();
 
@@ -388,8 +388,8 @@ public class SCompiler
         throws IOException,
                SCompileException {
 
-        SStatementFactory statFact  = new SStatementFactory(currentLine());
-        SStatement        statement = null;
+        SStatement.Factory statFact  = new SStatement.Factory(getCurrentLine());
+        SStatement         statement = null;
 
         while ( !atEndOfStatement() ) {
             statFact.addWord(getWord());
@@ -422,13 +422,13 @@ public class SCompiler
             skipToWordInList();
         }
 
-        if ( atEnd() ) {
+        if ( isAtEnd() ) {
             String msg = "no '')'' found before end of script for list starting at line {0}{1}";
             compileError(msg, line, onFileMsg());
         }
         if ( peek() != ')' ) {
             String msg = "found ''{0}'' at line {1} while expecting a '')'' for list starting at line {2}{3}";
-            compileError(msg, peek(), currentLine(), line, onFileMsg());
+            compileError(msg, peek(), getCurrentLine(), line, onFileMsg());
         }
         skip();
 
@@ -450,7 +450,7 @@ public class SCompiler
                SCompileException {
 
         SWord result = null;
-        int  l       = currentLine();
+        int  l       = getCurrentLine();
         char c       = peek();
 
         switch ( c ) {
@@ -582,7 +582,7 @@ public class SCompiler
 	    result = Integer.parseInt(str);
 	} catch (NumberFormatException e) {
             String msg = "invalid integer constant ({0}) at line {1}{2}";
-            compileError(msg, str, currentLine(), onFileMsg());
+            compileError(msg, str, getCurrentLine(), onFileMsg());
 	}
 
         return result;
@@ -607,7 +607,7 @@ public class SCompiler
 	    result = Long.parseLong(str.substring(0,str.length()-1));
 	} catch (NumberFormatException e) {
 	    String msg = "invalid long constant ({0}) at line {1}{2}";
-	    compileError(msg, str, currentLine(), onFileMsg());
+	    compileError(msg, str, getCurrentLine(), onFileMsg());
 	}
 
         return result;
@@ -636,7 +636,7 @@ public class SCompiler
 	    }
 	} catch (NumberFormatException e) {
             String msg = "invalid octal constant ({0}) at line {1}{2}";
-            compileError(msg, str, currentLine(), onFileMsg());
+            compileError(msg, str, getCurrentLine(), onFileMsg());
 	}
 
         return result;
@@ -661,7 +661,7 @@ public class SCompiler
 	    result = Integer.parseInt(str.substring(2), 16);
 	} catch (NumberFormatException e) {
             String msg = "invalid hexadecimal constant ({0}) at line {1}{2}";
-            compileError(msg, str, currentLine(), onFileMsg());
+            compileError(msg, str, getCurrentLine(), onFileMsg());
 	}
 
         return result;
@@ -686,7 +686,7 @@ public class SCompiler
 	    result = Double.parseDouble(str);
 	} catch (NumberFormatException e) {
             String msg = "invalid float constant ({0}) at line {1}{2}";
-            compileError(msg, str, currentLine(), onFileMsg());
+            compileError(msg, str, getCurrentLine(), onFileMsg());
 	}
 
         return result;
@@ -750,7 +750,11 @@ public class SCompiler
 
 /**************************************************************************
  *
- * 
+ * Fetches a string literal. The double-quote initiating the string
+ * has already been consumed.
+ *
+ * After this method returns the double-quote ending the string will
+ * also have been consumed.
  *
  **************************************************************************/
 
@@ -761,7 +765,7 @@ public class SCompiler
 	StringBuffer name        = new StringBuffer();
 	boolean      endWasFound = false;
 
-	while ( !atEnd() ) {
+	while ( !isAtEnd() ) {
 	    char c = skip();
 
 	    if ( c == '"' ) {
@@ -769,15 +773,12 @@ public class SCompiler
 		break;
 	    }
 	    if ( c == '\\' ) {
-		if ( atEnd() ) {
+		if ( isAtEnd() ) {
 		    name.append('\\');
 		} else {
-		    if ( (c=skip()) == '"' ) {
-			name.append('"');
-		    } else {
-			name.append('\\');
-			name.append(c);
-		    }
+                    name.append('\\');
+		    c = skip();
+                    name.append(c);
 		}
 	    } else {
 		name.append(c);
@@ -789,7 +790,7 @@ public class SCompiler
             compileError(msg, line, onFileMsg());
 	}
 
-        String result = STeaParserUtils.unescapeString(name.toString());
+        String result = STeaParserUtils.parseStringLiteral(name.toString());
 
         return result;
     }
@@ -812,7 +813,7 @@ public class SCompiler
 
 	if ( peek() != '}' ) {
             String msg = "unexpected ''{0}'' at line {1}{2}";
-            compileError(msg, peek(), currentLine(), onFileMsg());
+            compileError(msg, peek(), getCurrentLine(), onFileMsg());
 	}
 	skip();
 
@@ -837,7 +838,7 @@ public class SCompiler
 	StringBuffer     buffer      = new StringBuffer();
 	boolean          endWasFound = false;
 
-	while ( !atEnd() ) {
+	while ( !isAtEnd() ) {
 	    char c = skip();
 
 	    if ( c == '`' ) {
@@ -845,7 +846,7 @@ public class SCompiler
 		break;
 	    }
 	    if ( c == '\\' ) {
-		if ( atEnd() ) {
+		if ( isAtEnd() ) {
 		    buffer.append('\\');
 		} else {
 		    if ( (c=skip()) == '`' ) {
@@ -876,96 +877,6 @@ public class SCompiler
 
 /**************************************************************************
  *
- * Fetches the next four characters and parses them as an hexadecimal
- * value. The hexadecimal representation can be in either upper or
- * lower case.
- *
- * @return The unicode character whose value corresponds to the
- * hexadecimal value that was fetched.
- *
- * @exception SCompileException Throw if there were not four more
- * characters to read or if any of the four charaters is not an
- * hexadecimal digit.
- *
- **************************************************************************/
-
-    private char getUnicode()
-	throws IOException,
-	       SCompileException {
-
-	int d3 = skip();
-	int d2 = skip();
-	int d1 = skip();
-	int d0 = skip();
-
-	if ( (d3==-1) || (d2==-1) || (d1==-1) || (d0==-1) ) {
-            String msg = "end of script while reading unicode constant{0}";
-            compileError(msg, onFileMsg());
-	}
-
-	d3 = Character.digit((char)d3, 16);
-	d2 = Character.digit((char)d2, 16);
-	d1 = Character.digit((char)d1, 16);
-	d0 = Character.digit((char)d0, 16);
-
-	if ( (d3==-1) || (d2==-1) || (d1==-1) || (d0==-1) ) {
-            String msg = "invalid unicode constant on line {0}{1}";
-            compileError(msg, currentLine(), onFileMsg());
-	}
-
-	return (char)((d3<<12) | (d2<<8) | (d1<<4) | d0);
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * Fetches the next two characters and parses them as an octal
- * value using <code>c</code> has the first digit.
- * lower case.
- *
- * @return The unicode character whose value corresponds to the octal
- *value that was fetched.
- *
- * @exception SCompileException Throw if there were not two more
- * characters to read or if any of the three charaters is not an octal
- * digit.
- *
- **************************************************************************/
-
-    private char getOctal(char c)
-	throws IOException,
-	       SCompileException {
-
-	int d2 = c;
-	int d1 = skip();
-	int d0 = skip();
-
-	if ( (d2==-1) || (d1==-1) || (d0==-1) ) {
-            String msg = "end of script while reading octal constant{0}";
-	    compileError(msg, onFileMsg());
-	}
-
-	d2 = Character.digit((char)d2, 8);
-	d1 = Character.digit((char)d1, 8);
-	d0 = Character.digit((char)d0, 8);
-
-	if ( (d2==-1) || (d1==-1) || (d0==-1) ) {
-            String msg = "invalid octal constant on line {0}{1}";
-            compileError(msg, currentLine(), onFileMsg());
-	}
-
-	return (char)((d2<<6) | (d1<<3) | d0);
-    }
-
-
-
-
-
-/**************************************************************************
- *
  * 
  *
  **************************************************************************/
@@ -973,7 +884,7 @@ public class SCompiler
     private void skipToEOL()
 	throws IOException {
 
-	while ( !atEnd() ) {
+	while ( !isAtEnd() ) {
 	    if ( skip() == '\n' ) {
 		return;
 	    }
@@ -993,7 +904,7 @@ public class SCompiler
     private void skipToStatement()
 	throws IOException {
 
-	while ( !atEnd() ) {
+	while ( !isAtEnd() ) {
 	    char c = peek();
 
 	    switch ( c ) {
@@ -1027,7 +938,7 @@ public class SCompiler
     private void skipToWord()
 	throws IOException {
 
-	while ( !atEnd() ) {
+	while ( !isAtEnd() ) {
 	    char c = peek();
 
 	    switch ( c ) {
@@ -1072,9 +983,9 @@ public class SCompiler
  *
  **************************************************************************/
 
-    private boolean atEnd() {
+    private boolean isAtEnd() {
 
-	return _in.atEnd();
+	return _in.isAtEnd();
     }
 
 
@@ -1090,7 +1001,7 @@ public class SCompiler
     private boolean atEndOfBlock()
 	throws IOException {
 
-	if ( atEnd() ) {
+	if ( isAtEnd() ) {
 	    return true;
 	}
 
@@ -1112,7 +1023,7 @@ public class SCompiler
     private boolean atEndOfStatement()
 	throws IOException {
 
-	if ( atEnd() ) {
+	if ( isAtEnd() ) {
 	    return true;
 	}
 
@@ -1139,7 +1050,7 @@ public class SCompiler
    private boolean atEndOfList()
          throws IOException {
 
-      if ( atEnd() ) {
+      if ( isAtEnd() ) {
 	 return true;
       }
 
@@ -1161,7 +1072,7 @@ public class SCompiler
    private boolean atEndOfSymbol()
          throws IOException {
 
-      if ( atEnd() ) {
+      if ( isAtEnd() ) {
 	 return true;
       }
 
@@ -1217,9 +1128,9 @@ public class SCompiler
  *
  **************************************************************************/
 
-   private int currentLine() {
+   private int getCurrentLine() {
 
-      return _in.currentLine();
+      return _in.getCurrentLine();
    }
 
 

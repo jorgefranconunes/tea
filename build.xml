@@ -49,7 +49,7 @@ Main Ant build file for the Tea development tree.
 
   <target name="teadoc" depends="teadoc.build" />
 
-  <target name="clean" depends="jar.clean, java-test.clean, doc.clean" />
+  <target name="clean" depends="jar.clean, test.clean, doc.clean" />
 
 
 
@@ -140,6 +140,36 @@ Main Ant build file for the Tea development tree.
 
 
   <!-- -->
+  
+  <target
+     name="test.build"
+     depends="jar.build, java-test.build, resources-test.build">
+
+    <junit haltonerror="yes" haltonfailure="yes" showoutput="yes">
+      <classpath>
+        <pathelement location="${java-test.target.dir}" />
+        <pathelement path="${jar.file}" />
+        <pathelement location="lib/jars/junit-4.8.2.jar" />
+      </classpath>
+      <formatter type="plain" usefile="no" />
+      <batchtest>
+        <fileset dir="${java-test.source.dir}">
+          <include name="**/Test*.java" />
+        </fileset>
+      </batchtest>
+    </junit>
+
+  </target>
+
+  <target
+     name="test.clean"
+     depends="java-test.clean, resources-test.clean" />
+
+
+
+
+
+  <!-- -->
 
   <property name="java-test.source.dir" location="src/test/java" />
   <property name="java-test.target.dir" location="target/test-classes" />
@@ -149,6 +179,7 @@ Main Ant build file for the Tea development tree.
        srcdir="${java-test.source.dir}"
        destdir="${java-test.target.dir}">
       <javac-classpath>
+        <pathelement path="${jar.file}" />
         <pathelement path="${junit.jar}" />
       </javac-classpath>
     </java-compile>
@@ -163,21 +194,23 @@ Main Ant build file for the Tea development tree.
 
 
   <!-- -->
-  
-  <target name="test.build" depends="jar.build, java-test.build">
-    <junit haltonerror="yes" haltonfailure="yes" showoutput="yes">
-      <classpath>
-        <pathelement location="${java-test.target.dir}" />
-        <pathelement path="${jar.file}" />
-        <pathelement location="lib/jars/junit-4.8.2.jar" />
-      </classpath>
-      <formatter type="plain" usefile="no" />
-      <batchtest>
-        <fileset dir="${java-test.source.dir}">
-          <include name="**/Test*.java" />
-        </fileset>
-      </batchtest>
-    </junit>
+
+  <property name="resources-test.source.dir" location="src/test/resources" />
+  <property name="resources-test.target.dir" location="target/test-classes/" />
+
+  <target name="resources-test.build">
+    <mkdir dir="${resources-test.target.dir}" />
+
+    <copy todir="${resources-test.target.dir}">
+      <fileset dir="${resources-test.source.dir}">
+        <filename name="com/pdmfc/tea/compiler/StringLiteralTests.txt" />
+      </fileset>
+    </copy>
+
+  </target>
+
+  <target name="resources-test.clean">
+    <delete dir="${resources-test.target.dir}" />
   </target>
 
 

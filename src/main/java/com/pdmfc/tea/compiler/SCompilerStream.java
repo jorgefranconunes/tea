@@ -121,7 +121,7 @@ class SCompilerStream
 	throws IOException {
 
 	if ( _currentChar == -1 ) {
-	    throw new IOException("read beyond end of stream");
+	    throw new IllegalStateException("read beyond end of stream");
 	}
 	return (char)_currentChar;
     }
@@ -132,10 +132,10 @@ class SCompilerStream
 
 /**************************************************************************
  *
- * Advances one byte in the stream. It returns the new current byte.
+ * Advances one byte in the stream. It returns the previous current
+ * byte.
  *
- * @return The new current byte in the stream, or -1 if the end of the
- * stream was reached.
+ * @return The previous current byte in the stream.
  *
  **************************************************************************/
 
@@ -145,7 +145,7 @@ class SCompilerStream
 	int previousChar = _currentChar;
 
 	if ( previousChar == -1 ) {
-	    throw new IOException("read beyond end of stream");
+	    throw new IllegalStateException("read beyond end of stream");
 	}
 	if ( previousChar == '\n' ) {
 	    _line++;
@@ -165,7 +165,7 @@ class SCompilerStream
  *
  **************************************************************************/
 
-    public boolean atEnd() {
+    public boolean isAtEnd() {
 
 	return _currentChar == -1;
     }
@@ -180,7 +180,7 @@ class SCompilerStream
  *
  **************************************************************************/
 
-    public int currentLine() {
+    public int getCurrentLine() {
 
 	return _line;
     }

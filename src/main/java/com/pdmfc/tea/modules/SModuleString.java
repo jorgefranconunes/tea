@@ -2000,9 +2000,10 @@ public class SModuleString
 	    throw new SNumArgException(args[0], "string");
 	}
 
-	String str = STypes.getString(args,1);
+	String str    = STypes.getString(args,1);
+        String result = STeaParserUtils.parseStringLiteral(str);
 
-	return STeaParserUtils.unescapeString(str);
+        return result;
     }
 
 
