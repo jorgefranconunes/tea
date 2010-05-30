@@ -1,26 +1,12 @@
 #!/bin/sh
 ###########################################################################
 #
-# Copyright (c) 2001-2005 PDM&FC, All Rights Reserved.
-#
-###########################################################################
-
-#########################################################################
-#
-# $Id: make-release,v 1.10 2005/02/15 17:38:10 jfn Exp $
+# Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
 #
 #
 # Creates the package for release.
 #
-#
-# Revisions:
-#
-# 2003/02/10 The release bundle is now obtained from the contents
-# of the current development tree instead of retrieving it from
-# the CVS root. (jfn)
-#
-# 2001/09/24
-# Created. (jfn)
+# NOTE: This script is way to outdated. It will be rewritten soon.
 #
 #########################################################################
 
@@ -43,6 +29,27 @@ esac
 
 
 
+CONF_RELEASE_FILES="
+	00README.txt
+	apps
+	config/tea-core.conf
+	config/tea-install.conf.template
+	bin/setup
+	bin/teadoc	\
+	bin/tea-utils	\
+	bin/tsh
+	doc/javadoc	\
+	doc/release-notes.txt	\
+	doc/teadoc
+	doc/tea-mode.el
+	doc/Memos/Faq.txt
+	lib/jars/tea-*.jar
+"
+
+
+
+
+
 ###########################################################################
 #
 # 
@@ -52,7 +59,7 @@ esac
 #
 # Makes utility functions available.
 #
-. ${teaBaseDir}/bin/tea-utils
+source ${teaBaseDir}/bin/tea-utils
 
 teaReadCoreConfig $teaBaseDir
 
@@ -65,18 +72,6 @@ tmpReleaseDir=${tmpDir}/${teaPackageName}
 mkdir $tmpDir
 trap "rm -rf $tmpDir" EXIT
 
-#
-#
-#
-echo
-echo "Copying JARs to include in the release bundle..."
-
-mkdir -p ${tmpReleaseDir}/lib
-for jarFile in `echo $TEA_JARS_TO_INCLUDE | sed "s/$pathSep/ /g"`
-  do
-  cp $jarFile ${tmpReleaseDir}/lib
-done
-
 
 #
 #
@@ -84,7 +79,7 @@ done
 echo "Creating release tree..."
 rm -rf $tmpReleaseDir
 mkdir $tmpReleaseDir
-(cd $teaBaseDir; tar cf - "$@") | (cd $tmpReleaseDir; tar xf -)
+(cd $teaBaseDir; tar cf - $CONF_RELEASE_FILES) | (cd $tmpReleaseDir; tar xf -)
 
 #
 # Remove unwanted files. This is because the list of files to include
@@ -93,6 +88,7 @@ mkdir $tmpReleaseDir
 #
 find $tmpReleaseDir -name \*~ -exec rm -f {} \;
 rm -rf `find $tmpReleaseDir -type d -name CVS -print`
+rm -rf `find $tmpReleaseDir -type d -name .svn -print`
 
 
 #

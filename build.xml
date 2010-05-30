@@ -71,7 +71,9 @@ Main Ant build file for the Tea development tree.
   </target>
 
   <target name="jar.clean" depends="java.clean, resources.clean, tea.clean">
-    <delete file="${jar.file}" />
+    <delete>
+      <fileset dir="${jar.dir}" includes="tea-*.jar" />
+    </delete>
   </target>
 
 
