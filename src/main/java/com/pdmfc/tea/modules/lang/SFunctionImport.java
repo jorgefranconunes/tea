@@ -4,39 +4,6 @@
  *
  **************************************************************************/
 
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2008/04/18 Now uses an SInputSource to read from a file or
- * URL. (TSK-PDMFC-TEA-0044) (jfn)
- *
- * 2006/05/02 Changes with hashtables so that it correctly identifies
- * the same file by full pathname even if diferent file paths
- * are given in argument to the import command. (jpsl).
- *
- * 2005/02/14 Corrected bug that led to a stack overflow when doing
- * recursive imports.
- *
- * 2005/01/02 Refactored to check for modifications on the file being
- * imported since the last time that file was imported.
- *
- * 2003/02/24 Corrected a bug that prevented the files opened by the
- * "import" function from being explicitly closed. (jfn)
- *
- * 2002/02/06 Corrected bug that prevented the correct exception from
- * being generated when a file could not be "import"ed. (jfn)
- *
- * 2002/01/10 Now uses SObjPair.iterator() instead of
- * SObjPair.elements(). (jfn)
- *
- * 2001/09/03 Created. (jfn)
- *
- **************************************************************************/
-
 package com.pdmfc.tea.modules.lang;
 
 import java.io.File;

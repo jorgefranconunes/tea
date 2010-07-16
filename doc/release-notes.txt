@@ -1,7 +1,16 @@
-Release Notes for Tea 3.2
+Release Notes for Tea
 
 
 
+
+
+2010/07/16 Added new function "compile"
+
+Creates a code block object from Tea code read from a file or from an
+input stream. The code block context is a direct descendent of the
+global context. That means variables defined locally in the code
+(using the <FuncRef name="define"/> function) will only be known
+inside that code.
 
 
 2010/03/02 Improved support for text encodings

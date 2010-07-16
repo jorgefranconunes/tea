@@ -4,50 +4,6 @@
  *
  **************************************************************************/
 
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2010/01/28 Minor refactorings to properly use generics. (jfn)
- *
- * 2005/10/25 Added the implementation of the function
- * "tea-set-system-property". (jfn)
- *
- * 2004/10/01 Renamed variables named "enum" to make code compatible
- * with JDK 1.5. (jfn)
- *
- * 2004/04/28 The "map-apply" function now returns the list containing
- * the successive results of the function invocation. (jfn)
- *
- * 2003/07/10 The "echo" function now also supports Long
- * objects. (jfn)
- *
- * 2003/05/29 The call to the "system" function now only causes an
- * explicit garbage collection if the JRE running the Tea interpreter
- * is prior to the 1.3 version.
- *
- * 2003/05/29 Added the functions "tea-get-system-property",
- * "tea-get-system-properties". (jfn)
- *
- * 2002/02/20 Added the "proc?" function for downwards compatibility
- * with Tea 1.x.  It is excactly as the "function?" function. (jfn)
- *
- * 2002/01/20 Calls to the "addJavaFunction()" method were replaced by
- * inner classes for performance. (jfn)
- *
- * 2002/01/15 The "itea-lock-acquire", "itea-lock-release" are now
- * implemented by this class. (jfn)
- *
- * 2002/01/10 This classe now derives from SModuleBase. (jfn) Now uses
- * SObjPair.iterator() instead of SObjPair.elements(). (jfn)
- *
- * 2001/05/12 Created. (jfn)
- *
- **************************************************************************/
-
 package com.pdmfc.tea.modules.lang;
 
 import java.io.BufferedReader;
@@ -421,6 +377,16 @@ public class SModuleLang
                                               Object[]     args)
                                throws STeaException {
                                return functionSource(func, context, args);
+                           }
+                       });
+
+	context.newVar("compile",
+                       new SObjFunction() {
+                           public Object exec(SObjFunction func,
+                                              SContext     context,
+                                              Object[]     args)
+                               throws STeaException {
+                               return functionCompile(func, context, args);
                            }
                        });
 
@@ -3078,17 +3044,120 @@ public class SModuleLang
 
 /**************************************************************************
  *
- * This method is supposed to be called with <TT>args</TT> having at least
- * one element.
  *
- * @exception com.pdmfc.tea.STeaException
- *   Thrown if there is not two arguments for the command.
  *
  **************************************************************************/
 
     private Object functionSource(SObjFunction func,
 				  SContext     context,
 				  Object[]     args)
+	throws STeaException {
+
+        SCode    program    = compileFromSource(func, context, args);
+	SContext runContext = _globalContext.newChild();
+	Object   result     = program.exec(runContext);
+
+	return result;
+    }
+
+
+
+
+
+//* 
+//* <TeaFunction name="compile"
+//* 		arguments="fileName"
+//*             module="tea.lang">
+//* 
+//* <Prototype arguments="inputStream"/>
+//*
+//* <Overview>
+//* Creates a code block object from Tea code read from a file or from
+//* an input stream.
+//* </Overview>
+//*
+//* <Parameter name="fileName">
+//* String representing the path name of the file to execute. The path
+//* name can be either absolute or relative to the current working
+//* directory of the process.
+//* </Parameter>
+//*
+//* <Parameter name="inputStream">
+//* A <ClassRef name="TInput"/> from where the Tea code will be
+//* read.
+//* </Parameter>
+//* 
+//* <Returns>
+//* A code block object.
+//* </Returns>
+//*
+//* <Description>
+//* <p>
+//* The code block context is a direct descendent of the global
+//* context. That means variables defined locally in the code
+//* (using the <FuncRef name="define"/> function) will only be known
+//* inside that code.
+//* </p>
+//* <p>
+//* The <Func name="compile"/> function can also read Tea code
+//* from a <ClassRef name="TInput"/>. In this case the
+//* <Arg name="inputStream"/> is read until an end-of-file
+//* condition is reached. It is the caller responsability to close
+//* the <Arg name="inputStream"/>
+//* </p>
+//* <p>
+//* If the file or the input stream can not be read or if there are
+//* syntax errors in the code then a runtime error will occur.
+//* </p>
+//* </Description>
+//* 
+//* </TeaFunction>
+//* 
+
+/**************************************************************************
+ *
+ *
+ *
+ **************************************************************************/
+
+    private Object functionCompile(SObjFunction func,
+                                   SContext     context,
+                                   Object[]     args)
+	throws STeaException {
+
+        final SCode     program      = compileFromSource(func, context, args);
+	final SContext  blockContext = _globalContext;
+	SObjBlock       result       =
+            new SObjBlock() {
+                public SContext getContext() {
+                    return blockContext;
+                }
+                public Object exec(SContext context)
+		    throws STeaException {
+                    return program.exec(context);
+                }
+                public Object exec()
+		    throws STeaException {
+                    return program.exec(blockContext.newChild());
+                }
+            };
+
+	return result;
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ *
+ *
+ **************************************************************************/
+
+    private SCode compileFromSource(SObjFunction func,
+                                    SContext     context,
+                                    Object[]     args)
 	throws STeaException {
 
 	if ( args.length != 2 ) {
@@ -3125,13 +3194,12 @@ public class SModuleLang
                 try { ((SInput)arg).close(); } catch (IOException e) {}
             }
 	} else {
-	    throw new STypeException("argument 1 is supposed to be a string or an input stream, not a " + STypes.getTypeName(arg));
+            String msg = "argument 1 must be string or input stream, not {0}";
+            Object[] fmtArgs = { STypes.getTypeName(arg) };
+	    throw new STypeException(msg, fmtArgs);
 	}
 
-	SContext runContext = _globalContext.newChild();
-	Object   result     = program.exec(runContext);
-
-	return result;
+	return program;
     }
 
 
