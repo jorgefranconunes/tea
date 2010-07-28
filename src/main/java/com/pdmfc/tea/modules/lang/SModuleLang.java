@@ -3126,8 +3126,8 @@ public class SModuleLang
 	throws STeaException {
 
         final SCode     program      = compileFromSource(func, context, args);
-	final SContext  blockContext = _globalContext;
-	SObjBlock       result       =
+        final SContext  blockContext = _globalContext;
+        SObjBlock       result       =
             new SObjBlock() {
                 public SContext getContext() {
                     return blockContext;
