@@ -250,12 +250,8 @@ Main Ant build file for the Tea development tree.
        use="true"
        doctitle="${javadoc.doctitle}"
        windowtitle="${javadoc.windowtitle}">
-      <header><![CDATA[
-<b>Tea Java Runtime API</b><br /><b>Version ${BUILD_VERSION}</b>
-      ]]></header>
-      <bottom><![CDATA[
-<font size="-1">&copy; 2010 <a href="http://www.pdmfc.com" target="_blank">PDM&amp;FC</a>, All Rights Reserved.</font>
-      ]]></bottom>
+      <header><![CDATA[<b>Tea Java Runtime API</b><br /><b>Version ${BUILD_VERSION}</b>]]></header>
+      <bottom><![CDATA[<font size="-1">&copy; 2010 <a href="http://www.pdmfc.com" target="_blank">PDM&amp;FC</a>, All Rights Reserved.</font>]]></bottom>
     </javadoc>
 
   </target>
