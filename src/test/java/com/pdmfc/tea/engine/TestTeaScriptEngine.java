@@ -17,6 +17,7 @@
 
 package com.pdmfc.tea.engine;
 
+import com.pdmfc.tea.runtime.SObjFunction;
 import java.io.IOException;
 import java.io.InputStream;
 import javax.script.Invocable;
@@ -74,6 +75,18 @@ public class TestTeaScriptEngine {
     @Test
     public void checkEvalString() throws ScriptException {
         _e.eval("global v 1");
+    }
+
+    @Test
+    public void checkEvalStringImportTdbc() throws ScriptException {
+
+        SObjFunction r = (SObjFunction) _e.get("tdbc-connection");
+        assertNull(r);
+
+        _e.eval("import \"tdbc/tdbc.tea\"");
+
+        r = (SObjFunction) _e.get("tdbc-connection");
+        assertNotNull(r);
     }
 
     @Test
