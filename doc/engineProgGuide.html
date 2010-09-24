@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+<head>
+  <title>Tea Engine Programmer's Guide</title>
+  <meta content="Joao Luis - PDM&amp;FC" name="author">
+</head>
+<body>
+<h1>Tea Engine Programmer's Guide</h1>
+<ul>
+  <li><a href="#who">Who is the Tea Engine library for?</a> </li>
+  <li><a href="#examples">Examples</a>
+    <ul>
+      <li><a href="#helloworld">"Hello, World"</a> </li>
+      <li><a href="#evalfile">Evaluating a Script File</a> </li>
+      <li><a href="#scriptvars">Script Variables</a> </li>
+      <li><a href="#invoke">Invoking Script Functions and Methods</a> </li>
+    </ul>
+  </li>
+</ul>
+<a name="who"></a>
+<h2>Who is the Tea Engine library for?</h2>
+For people who want to integrate Tea code into existing Java frameworks
+using the standard JSR-223 Java<font
+ size="-1"><sup>TM</sup></font> Scripting API, without having to learn
+internal details of Tea Java interfaces.<br>
+Reading of <a
+ href="http://java.sun.com/javase/6/docs/technotes/guides/scripting/index.html">Java
+1.6 scripting features</a> and <a href="http://www.pdmfc.com/tea">Tea
+documentation</a> is highly recommended.<br>
+But for a quickstart, compiling (and running) the examples below with
+tea-4.x.y/lib/tea-4.x.y.jar on the classpath
+(on this order) should be enough.
+<p><a href="#top">top</a></p>
+<hr><a name="examples"></a>
+<h2>Examples</h2>
+The same examples provided in the Java Scripting Programmers guide are
+provided, adapted to Tea, for convinience.<br>
+<br>
+<a name="helloworld"></a>
+<h3>"Hello, World"</h3>
+<p>
+From the <code>ScriptEngineManager</code> instance, we request a
+Tea engine instance using
+<code>getEngineByName</code> method. On the script engine, the <code>eval</code>
+method is called to execute
+a given String as Tea code! For brevity, in this as well as in
+subsequent examples, we have not shown
+exception handling. There are checked and runtime exceptions thrown
+from <code>javax.script</code> API.
+Needless to say, you have to handle the exceptions appropriately.
+</p>
+<pre>import javax.script.*;<br>public class HelloWorld {<br><br>    public static void main(String[] args) throws Exception {<br>        // create a script engine manager<br>        ScriptEngineManager m = new ScriptEngineManager();<br>        // create engine<br>        ScriptEngine engine = m.getEngineByName("tea");<br>        // evaluate JavaScript code from string.<br>        engine.eval("echo \"Tea says Hello Java Standard World!\"");<br>        //((TeaScriptEngine)engine).end();<br>    }<br>}<br><br></pre>
+<a href="#top">top</a>
+<hr><a name="evalfile"></a>
+<h3>Evaluating a Script File</h3>
+<p>
+In this example, we call the <code>eval</code> method that accepts <code>java.io.Reader</code>
+for the input source.
+The script read by the given reader is executed. This way it is
+possible to execute scripts from files, URLs and
+resources by wrapping the relevant input stream objects as readers.
+</p>
+<pre>import javax.script.*;<br>public class EvalFile {<br>    public static void main(String[] args) throws Exception {<br>        // create a script engine manager<br>        <span
+ class="classref">ScriptEngineManager</span> m = new ScriptEngineManager();<br>        // create engine<br>        ScriptEngine engine = m.getEngineByName("tea");<br>        // evaluate Tea code from file with filename as 1st argument.<br>        engine.eval(new java.io.FileReader(args[0]));<br>    }<br>}<br></pre>
+Let us assume that we have the file named "sample.tea" with the
+following text:<br>
+<pre>echo "Hello"<br><br></pre>
+<p>We can run the above Java as
+</p>
+<pre>
+java EvalFile sample.tea
+</pre>
+<a href="#top">top</a>
+<hr><a name="scriptvars"></a>
+<h3>Script Variables</h3>
+<p>
+When you embed script engines and scripts with your Java application,
+you may want to
+expose your application objects as global variables to scripts. This
+example demonstrates
+how you can expose your application objects as global variables to a
+script. We create a <code>java.io.File</code> in the application and
+expose the same as a global variable with
+the name "file". The script can access the variable - for example, it
+can call public methods
+on it. Note that the syntax to access Java objects, methods and fields
+is dependent on the scripting language.&nbsp;<br>
+</p>
+<pre>public class ScriptVars { <br>    public static void main(String[] args) throws Exception {<br>        ScriptEngineManager manager = new ScriptEngineManager();<br>        ScriptEngine engine = manager.getEngineByName("Tea Engine");<br><br>        String s = new String("test string");<br>        // expose File object as variable to script<br>        engine.put("aString", s);<br><br>        // evaluate a script string. The script accesses "file" <br>        // variable and calls method on it<br>        engine.eval("echo $aString");<br>    }<br>}<br><br></pre>
+<a href="#top">top</a>
+<hr><a name="invoke"></a>
+<h3>Invoking Script Functions and Methods</h3>
+<p>
+Sometimes you may want to call a specific scripting function repeatedly
+- for example,
+your application menu functionality might be implemented by a script.
+In your menu's action
+event handler you may want to call a specific script function. The
+following
+example demonstrates invoking a specific script function from Java
+code.
+</p>
+<pre>
+import javax.script.*;
+
+public class InvokeScriptFunction {
+    public static void main(String[] args) throws Exception {
+        ScriptEngineManager manager = new ScriptEngineManager();<br>        ScriptEngine engine = manager.getEngineByName("Tea Engine");<br><br>        // evaluate a script string.<br>        engine.eval("global hello ( arg ) { echo \"hello \" $arg }");        // javax.script.Invocable is an optional interface.<br><br>        // Check whether your script engine implements or not!<br>        // Note that the Tea Engine implements Invocable interface.<br>        Invocable inv = (Invocable) engine;<br><br>        // invoke the global function named "hello"<br>        inv.invokeFunction("hello", "Scripting!!" );<br>    }<br>}<br><br>
+</pre>
+<p>Tea supports objects through the native TOS library, so
+you can invoke a script method on a script object.
+</p>
+<pre>
+import javax.script.*;
+
+public class InvokeScriptMethod {
+    public static void main(String[] args) throws Exception {
+        ScriptEngineManager manager = new ScriptEngineManager();
+        ScriptEngine engine = manager.getEngineByName("Tea Engine");<br><br>        // evaluate a script string. // TODO: load should not be needed<br>        engine.eval("load \"com.pdmfc.tea.modules.tos.SModuleTos\"; class Test ( ) ; method Test hello ( arg ) { echo \"hello \" $arg } ; global obj [new Test]");<br><br>        // javax.script.Invocable is an optional interface.<br>        // Check whether your script engine implements or not!<br>        // Note that the Tea Engine implements Invocable interface.<br>        Invocable inv = (Invocable) engine;<br><br>        // get script object on which we want to call the method<br>        Object obj = engine.get("obj");<br><br>        // invoke the method named "hello" on the script object "obj"<br>        inv.invokeMethod(obj, "hello", "Script Method !!" );<br>    }<br>}<br><br>
+</pre>
+<a href="#top">top</a>
+<hr><br>
+Copyright 2007-2010 PDM&amp;FC<br>
+</body>
+</html>

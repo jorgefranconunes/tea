@@ -1,0 +1,20 @@
+- 2006-12-24 jpsl
+  Better convertion of STeaRuntimeException to ScriptException.
+
+- 2006-12-24 jpsl
+  Understand better the purpose of ScriptContext, Bindings, and
+  how it relates to STeaRuntime and SContext.
+  Extend SContext so that it supports extra methods ?
+
+- 2006-12-24 jpsl
+  Implement Invocable.getInterface() methods.
+
+- 2006-12-24 jpsl
+  Tea needs to expose version information in runtime, so that TeaEngine
+  may read it and decide wich operations are supported.
+
+- 2006-12-24 jpsl
+  Tea needs to allow initialization of $stdin, $stdout and $stderr
+  from TeaEngine. How to do that is another issue (as ScriptContext
+  provides Readers and Writers, and Tea uses InputStream and OutputStream).
+

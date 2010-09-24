@@ -67,7 +67,9 @@ Main Ant build file for the Tea development tree.
        destfile="${jar.file}"
        basedir="${jar.basedir}"
        manifest="config/JarManifest"
-       />
+    >
+        <metainf dir="${resources.source.dir}/META-INF" />
+    </jar>
   </target>
 
   <target name="jar.clean" depends="java.clean, resources.clean, tea.clean">
@@ -157,6 +159,7 @@ Main Ant build file for the Tea development tree.
       <batchtest>
         <fileset dir="${java-test.source.dir}">
           <include name="**/Test*.java" />
+          <!-- exclude name="**/TestHelloWorld.java" / -->
         </fileset>
       </batchtest>
     </junit>
@@ -205,7 +208,8 @@ Main Ant build file for the Tea development tree.
 
     <copy todir="${resources-test.target.dir}">
       <fileset dir="${resources-test.source.dir}">
-        <filename name="com/pdmfc/tea/compiler/StringLiteralTests.txt" />
+        <!-- copy all test resource files, not just one -->
+        <!-- filename name="com/pdmfc/tea/compiler/StringLiteralTests.txt" / -->
       </fileset>
     </copy>
 
