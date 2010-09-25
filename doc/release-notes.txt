@@ -2,6 +2,8 @@ Release Notes for Tea
 
 
 
+2010/09/25 teaEngine-0.7.0 merged into trunk of tea-4.0.0beta2.
+Tea now has mainstream support for the javax.script standard API.
 
 
 2010/07/16 Added new function "compile"
