@@ -386,7 +386,9 @@ Utility tasks bellow.
 
 
   <!-- Updates a target file from a source file, if target is out of
-  date, using a given sequence of tasks. -->
+  date, using a given sequence of tasks. A target is out of date if:
+  a) It does not exist; b) It exists but its modification date is
+  older than the source modification date. -->
 
   <macrodef name="update-target">
     <attribute name="from" />

@@ -9,6 +9,10 @@
 #
 # This resource file must have UTF-8 encoding.
 #
+# For each pair of non-empty lines:
+#     - The first line is a Tea string literal.
+#     - The second line is the corresponding string after being parsed.
+#
 ##########################################################################
 
 
