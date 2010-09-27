@@ -33,10 +33,10 @@ import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SNoSuchVarException;
 
 /**
- * The javax.script.Bindings interface allows Java code to access
+ * This class allows Java code to access
  * (get, set, remove, list, etc...) variable bindings for Tea code.
- * In Tea, this is implemented in the base class
- * com.pdmfc.tea.runtime.SContext, com.pdmfc.tea.runtime.STeaRuntime.
+ * It is basically a wrapper for the top level global context (com.pdmfc.tea.runtime.SContext)
+ * implemented by the com.pdmfc.tea.runtime.STeaRuntime.
  * <p>Up to Tea 3.2.1, SContext is optimized for speed of execution, and does
  * not support unsetting (undefining) variables or listing 
  * variables. As such, methods related to these features throw the
@@ -116,8 +116,21 @@ public class TeaBindings implements Bindings {
     }
 
     /**
-     * Unsupported.
-     * @throws java.lang.UnsupportedOperationException
+     * The implementation of this method is limited to fteching values from global variables.
+     * This is a preliminary interpretation of the javax.script.Bindings specification, and
+     * may change in the future.
+     * <p>Example to fetch the value (a list) of the TEA_LIBRARY global variable:
+     * <code>SObjPair p = myBindings.get("TEA_LIBRARY");</code></p>
+     * <p>No auto-loading is performed. (Note also that the specification of the <code>javax.script.Bindings.get(...)</code> does not allow any
+     * exception to be thrown when calling this method).</p>
+     *
+     * @param key a String object containing the symbol name of the global variable to fetch.
+     *
+     * @return a reference to the Java object that represents the Tea value of the requested
+     * global variable. null if the variable name is not found in the top level global scope.
+     * Please read the
+     * Teadocs for the <code>tea.java</code> module for more information on the
+     * Tea/Java data type mappings.
      */
     public Object get(Object key) {
         try {
@@ -157,6 +170,23 @@ public class TeaBindings implements Bindings {
         throw new UnsupportedOperationException("TeaBinding.keySet() unsupported. Tea contexts do not support reflection!");
     }
 
+    /**
+     * Even before calling eaScriptEngine.eval(...) methods, you are allowed to set
+     * global variables into the global scope, and they will reach the Tea global variable
+     * scope on the first eval.
+     *
+     * @param key a String object containing the symbol name of the global variable to set.
+     *
+     * @param value a Java object reference to the Tea value to be set. Please read the
+     * Teadocs for the <code>tea.java</code> module for more information on the
+     * Tea/Java data type mappings.
+     *
+     * @return a reference to the Java object that represents the Tea value of the requested
+     * global variable. null if an error ocurred. (Note also that the specification of the
+     * <code>javax.script.Bindings.put(...)</code> does not allow any
+     * exception to be thrown when calling this method).
+     *
+     */
     public Object put(String key, Object value) {
         SObjSymbol keySym;
         try {
