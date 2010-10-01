@@ -75,7 +75,10 @@ import com.pdmfc.tea.modules.util.SDate;
 import com.pdmfc.tea.modules.util.SHashtable;
 import com.pdmfc.tea.modules.util.SVector;
 import com.pdmfc.tea.runtime.SContext;
+import com.pdmfc.tea.runtime.SLambdaFunction;
 import com.pdmfc.tea.runtime.SNumArgException;
+import com.pdmfc.tea.runtime.SObjBlock;
+import com.pdmfc.tea.runtime.SObjByteArray;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjNull;
 import com.pdmfc.tea.runtime.SObjPair;
@@ -1530,6 +1533,20 @@ public class SModuleReflect
 	if ( obj instanceof Boolean ) {
 	    return obj;
 	}
+        // TSK-PDMFC-TEA-0034 Tea engine - do not re-wrap a Tea runtime object
+        // It can happen, if by intermixed java/Tea programming, a Tea value
+        // object is inadvertly converted twice by java2Tea.
+        if (obj instanceof STosObj
+                || obj instanceof SLambdaFunction
+                || obj instanceof SObjBlock
+                || obj instanceof SObjByteArray
+                || obj instanceof SObjFunction
+                || obj instanceof SObjNull
+                || obj instanceof SObjPair
+                || obj instanceof SObjSymbol
+                || obj instanceof JavaWrapperObject) {
+            return obj;
+        }
 
 	// Wrap the object to a tea wrapped obj
 	return new JavaWrapperObject(new STosClass(), obj);
