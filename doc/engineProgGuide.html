@@ -119,6 +119,56 @@ public class InvokeScriptMethod {
         ScriptEngine engine = manager.getEngineByName("Tea Engine");<br><br>        // evaluate a script string. // TODO: load should not be needed<br>        engine.eval("load \"com.pdmfc.tea.modules.tos.SModuleTos\"; class Test ( ) ; method Test hello ( arg ) { echo \"hello \" $arg } ; global obj [new Test]");<br><br>        // javax.script.Invocable is an optional interface.<br>        // Check whether your script engine implements or not!<br>        // Note that the Tea Engine implements Invocable interface.<br>        Invocable inv = (Invocable) engine;<br><br>        // get script object on which we want to call the method<br>        Object obj = engine.get("obj");<br><br>        // invoke the method named "hello" on the script object "obj"<br>        inv.invokeMethod(obj, "hello", "Script Method !!" );<br>    }<br>}<br><br>
 </pre>
 <a href="#top">top</a>
+<hr><a name="multiscopes"></a>
+<h3>Multiple Scopes for Scripts</h3>
+<p>In the script variables example, we saw how to expose application objects as
+   script global variables. It is possible to expose multiple global "scopes"
+   for scripts. A single scope is an instance of <code>javax.script.Bindings</code>.
+   This interface is derived from <code>java.util.Map&lt;String, Object&gt;</code>. A scope is
+   a set of name-value pairs where a name is any non-empty, non-null String.
+   Multiple scopes are supported by <code>javax.script.ScriptContext</code> interface.
+   A script context supports one or more scopes with associated Bindings
+   for each scope.
+   By default, every script engine has a default script context.
+   The default script context has atleast one scope called "ENGINE_SCOPE".
+   Various scopes supported by a script context are available through <code>getScopes</code>
+   method.
+</p>
+<pre>
+import javax.script.*;
+
+public class MultiScopes {
+    public static void main(String[] args) throws Exception {
+        ScriptEngineManager manager = new ScriptEngineManager();
+        ScriptEngine engine = manager.getEngineByName("Tea");
+
+        engine.put("TEST_GLOBAL_1", "hello");
+        // print global variable TEST_GLOBAL_1
+        engine.eval("echo $TEST_GLOBAL_1");
+        // the above line prints "hello"
+
+        // Now, pass a different script context
+        ScriptContext newContext = new SimpleScriptContext();
+        Bindings engineScope = newContext.getBindings(ScriptContext.ENGINE_SCOPE);
+
+        // add new variable TEST_GLOBAL_1 to the new engineScope
+        engineScope.put("TEST_GLOBAL_1", "world");
+
+        // execute the same script - but this time pass a different script context
+        engine.eval("echo $TEST_GLOBAL_1", newContext);
+        // the above line prints "world"
+    }
+}
+</pre>
+<p>
+    It is recommended that you limit the copying of variables between scopes
+    and different ScriptContexts
+    to simple data values such as Strings or numerics.
+    At the present version, the TeaScriptEngine does not impose any limitation
+    on copying any other kinds of values, but if you attempt to copy functions,
+    unless you understand the underlying behaviour of the scope associated
+    with every function creation, you may experience unexpected behaviour.
+</p>
 <hr><br>
 Copyright 2007-2010 PDM&amp;FC<br>
 </body>

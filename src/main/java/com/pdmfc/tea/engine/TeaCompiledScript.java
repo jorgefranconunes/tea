@@ -20,7 +20,9 @@ package com.pdmfc.tea.engine;
 import javax.script.*;
 
 import com.pdmfc.tea.compiler.SCode;
+import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.STeaRuntime;
+import java.util.Iterator;
 
 public class TeaCompiledScript extends CompiledScript {
 
@@ -46,39 +48,36 @@ public class TeaCompiledScript extends CompiledScript {
      */
     public Object eval(ScriptContext scriptContext)
         throws ScriptException {
+        STeaRuntime teaRuntime    = _engine.getRuntime(scriptContext);
         try {
+            //System.out.println("teaCompiledScript.eval("+scriptContext+")");
             // TODO: init/get STeaRuntime from ScriptContext
-            TeaBindings b = (TeaBindings)scriptContext.getBindings(ScriptContext.ENGINE_SCOPE);
-            STeaRuntime context    = b.getMyRuntime();
+            //TeaBindings b = (TeaBindings)scriptContext.getBindings(ScriptContext.ENGINE_SCOPE);
+            //STeaRuntime context    = b.getMyRuntime();
             //STeaRuntime context    = TeaScriptEngine.getRuntime(scriptContext);
-            context.start();
+            //System.out.println("eval TeaRuntime="+teaRuntime);
+
+            teaRuntime.start();
 
             // put Bindings as global vars.
-            //Bindings b = scriptContext.getBindings(ScriptContext.ENGINE_SCOPE);
-            //if (b != null) {
-            //    for(Iterator i=b.keySet().iterator(); i.hasNext(); ) {
-            //        String key = (String)i.next();
-            //        SObjSymbol keySym = SObjSymbol.addSymbol(key);
-            //        context.newVar(keySym, b.get(key));
-            //    }
-            //}
+            _engine.context2TeaGlobals(teaRuntime, scriptContext);
 
+            // Run the code
             Object result = null;
-            result = context.execute(_code); // Tea 3.1.2 or higher.
+            result = teaRuntime.execute(_code); // Tea 3.1.2 or higher.
 
-            // retrived updated global vars to Bindings.
-            //if (b != null) {
-            //    for(Iterator i=b.keySet().iterator(); i.hasNext(); ) {
-            //        String key = (String)i.next();
-            //        SObjSymbol keySym = SObjSymbol.addSymbol(key);
-            //        b.put(key, context.getVar(keySym));
-            //    }
-            //}
-            context.stop();
-            // context.end(); -- not here. On servlet unloading ?
             return result;
         } catch (Exception e) {
+            System.out.println("eval exception "+e.getMessage());
+            for(StackTraceElement ste : e.getStackTrace()) {
+                System.out.println(ste.toString());
+            }
             throw new ScriptException(e);
+        } finally {
+            // retrived updated global vars to Bindings.
+            _engine.teaGlobals2Context(teaRuntime, scriptContext);
+            teaRuntime.stop();
+            // teaRuntime.end(); -- not here. On servlet unloading ?
         }
     }
 }

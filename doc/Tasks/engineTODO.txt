@@ -1,3 +1,11 @@
+- 2010-10-03 jpsl
+  Support for javax.script.argv. See TODO in
+  TeaScriptEngine.context2TeaGlobals()
+
+- 2010-09-26 jpsl
+  Better support of script source charset encoding options through
+  the TeaScriptEngine.
+
 - 2006-12-24 jpsl
   Better convertion of STeaRuntimeException to ScriptException.
 
@@ -10,11 +18,7 @@
   Implement Invocable.getInterface() methods.
 
 - 2006-12-24 jpsl
-  Tea needs to expose version information in runtime, so that TeaEngine
-  may read it and decide wich operations are supported.
-
-- 2006-12-24 jpsl
-  Tea needs to allow initialization of $stdin, $stdout and $stderr
-  from TeaEngine. How to do that is another issue (as ScriptContext
+  TeaScriptEngine needs to allow initialization of $stdin, $stdout and $stderr
+  How to do that is another issue (as ScriptContext
   provides Readers and Writers, and Tea uses InputStream and OutputStream).
-
+  See also TODO in TeaScriptEngine.context2TeaGlobals()

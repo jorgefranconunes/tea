@@ -99,7 +99,7 @@ public class TeaScriptEngineFactory implements ScriptEngineFactory {
         if (aKey.equals(ScriptEngine.LANGUAGE_VERSION))
             return getLanguageVersion();
         if (aKey.equals("THREADING"))
-            return "MULTITHREADED";
+            return null;
         
         return null;
     }
