@@ -67,9 +67,9 @@ public class TeaCompiledScript extends CompiledScript {
             return result;
         } catch (Exception e) {
             //System.out.println("eval exception "+e.getMessage());
-            for(StackTraceElement ste : e.getStackTrace()) {
-                System.out.println(ste.toString());
-            }
+            //for(StackTraceElement ste : e.getStackTrace()) {
+            //    System.out.println(ste.toString());
+            //}
             throw new ScriptException(e);
         } finally {
             // retrived updated global vars to Bindings.

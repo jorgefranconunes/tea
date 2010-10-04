@@ -15,6 +15,7 @@
  **************************************************************************/
 package com.pdmfc.tea.engine;
 
+import com.pdmfc.tea.SConfigInfo;
 import com.pdmfc.tea.runtime.SObjFunction;
 import java.io.IOException;
 import java.io.InputStream;
@@ -93,9 +94,11 @@ public class TeaScriptEngineTest {
 
     @Test
     public void checkEvalFile() throws ScriptException, IOException {
+    	_e.put("A_GLOBAL", null);
         java.io.InputStreamReader ir = new java.io.InputStreamReader(_is);
         _e.eval(ir);
         ir.close();
+        assertEquals(_e.get("A_GLOBAL"), 2);
     }
 
     @Test
@@ -108,7 +111,7 @@ public class TeaScriptEngineTest {
         _e.put("V1", "not the same as A test string!");
 
         // define a function that sets/defines a global variable.
-        _e.eval("global fhello ( arg ) { set! V1 $arg ; echo \"Invoked with \" $arg } ; echo \"fhello defined\"");
+        _e.eval("global fhello ( arg ) { set! V1 $arg }");
 
         // Check whether your script engine implements or not!
         // Note that the JavaScript engine implements Invocable interface.
@@ -131,7 +134,7 @@ public class TeaScriptEngineTest {
         _e.put("Vfresult", null); // put Vfresult in the ENGINE_SCOPE bindings
 
         // define a function that sets/defines a global variable.
-        _e.eval("class Test ( ) ; method Test hello ( arg ) { echo \"hello \" $arg ; set! Vfresult $arg } ; global obj [new Test]");        // javax.script.Invocable is an optional interface.
+        _e.eval("class Test ( ) ; method Test hello ( arg ) { set! Vfresult $arg } ; global obj [new Test]");        // javax.script.Invocable is an optional interface.
 
         // Check whether your script engine implements or not!
         // Note that the JavaScript engine implements Invocable interface.
@@ -190,19 +193,27 @@ public class TeaScriptEngineTest {
         // get factory
         ScriptEngineFactory f = _e.getFactory();
 
-        String propKeys[] = {
-            ScriptEngine.ENGINE,
-            ScriptEngine.ENGINE_VERSION,
-            ScriptEngine.NAME,
-            ScriptEngine.LANGUAGE,
-            ScriptEngine.LANGUAGE_VERSION,
-            "THREADING"
-        };
 
-        System.out.println("TeaScriptEngine properties:");
-        for (int i = 0; i < propKeys.length; i++) {
-            System.out.println(propKeys[i] + "=" + f.getParameter(propKeys[i]));
-        }
+        assertEquals(f.getParameter(ScriptEngine.ENGINE), "Tea Engine");
+        assertEquals(f.getParameter(ScriptEngine.ENGINE_VERSION), SConfigInfo.getProperty("com.pdmfc.tea.version"));
+        assertEquals(f.getParameter(ScriptEngine.NAME), "Tea Engine");
+        assertEquals(f.getParameter(ScriptEngine.LANGUAGE), "Tea");
+        assertEquals(f.getParameter(ScriptEngine.LANGUAGE_VERSION), SConfigInfo.getProperty("com.pdmfc.tea.version"));
+        assertNull(f.getParameter("THREADING"));
+        
+//        String propKeys[] = {
+//                ScriptEngine.ENGINE,
+//                ScriptEngine.ENGINE_VERSION,
+//                ScriptEngine.NAME,
+//                ScriptEngine.LANGUAGE,
+//                ScriptEngine.LANGUAGE_VERSION,
+//                "THREADING"
+//            };
+//        System.out.println("TeaScriptEngine properties:");
+        // show it
+        // for (int i = 0; i < propKeys.length; i++) {
+        //    System.out.println(propKeys[i] + "=" + f.getParameter(propKeys[i]));
+        //}
     }
 
     // The following tests are adapted from an IBM article:
