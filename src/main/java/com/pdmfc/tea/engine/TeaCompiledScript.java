@@ -20,9 +20,7 @@ package com.pdmfc.tea.engine;
 import javax.script.*;
 
 import com.pdmfc.tea.compiler.SCode;
-import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.STeaRuntime;
-import java.util.Iterator;
 
 public class TeaCompiledScript extends CompiledScript {
 
@@ -68,7 +66,7 @@ public class TeaCompiledScript extends CompiledScript {
 
             return result;
         } catch (Exception e) {
-            System.out.println("eval exception "+e.getMessage());
+            //System.out.println("eval exception "+e.getMessage());
             for(StackTraceElement ste : e.getStackTrace()) {
                 System.out.println(ste.toString());
             }

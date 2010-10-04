@@ -11,17 +11,14 @@
  *
  * Revisions:
  *
- * 2010/09/23 Created. (jpsl)
+ * 2006/12/24 Created. (jpsl)
  *
  **************************************************************************/
 
-
 package com.pdmfc.tea.engine;
 
-import java.io.ByteArrayOutputStream;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -33,11 +30,9 @@ import static org.junit.Assert.*;
  *
  * @author jpsl
  */
-public class TestHelloWorld {
+public class TeaScriptEngineFactoryTest {
 
-    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-
-    public TestHelloWorld() {
+    public TeaScriptEngineFactoryTest() {
     }
 
     @BeforeClass
@@ -50,30 +45,33 @@ public class TestHelloWorld {
 
     @Before
     public void setUp() {
-        //System.setOut(new PrintStream(outContent));
     }
 
     @After
     public void tearDown() {
-        //System.setOut(null);
     }
 
-    // TODO add test methods here.
-    // The methods must be annotated with annotation @Test. For example:
-    //
     @Test
-    public void hello() throws ScriptException {
-        
+    public void checkFactory() {
         // create a script engine manager
         ScriptEngineManager m = new ScriptEngineManager();
         assertTrue(m!=null);
 
-        // create engine
-        ScriptEngine engine = m.getEngineByName("tea");
-        assertTrue(engine!=null);
+        //System.out.println("Listing scripting engines supported:");
+        //List<ScriptEngineFactory> sefl=m.getEngineFactories();
+        //for(ScriptEngineFactory sef : sefl) {
+        //    System.out.println(sef.getEngineName());
+        //}
+
+        ScriptEngine e = m.getEngineByName("tea");
+        assertTrue(e!=null);
+
+        e = m.getEngineByName("Tea");
+        assertTrue(e!=null);
         
-        // evaluate Tea code from string.
-        engine.eval("echo \"Tea says Hello Java Standard World!\"");
+        e = m.getEngineByExtension("tea");
+        assertTrue(e!=null);
+
     }
 
 }

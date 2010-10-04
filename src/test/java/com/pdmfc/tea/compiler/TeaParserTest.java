@@ -27,7 +27,7 @@ import com.pdmfc.tea.compiler.STeaParserUtils;
  *
  **************************************************************************/
 
-public class TestTeaParser
+public class TeaParserTest
     extends Object {
 
 
@@ -53,7 +53,7 @@ public class TestTeaParser
                IOException {
 
         InputStream       input =
-            TestTeaParser.class.getResourceAsStream(RES_STRING_LITERAL_TESTS);
+            TeaParserTest.class.getResourceAsStream(RES_STRING_LITERAL_TESTS);
         InputStreamReader inputReader =
             new InputStreamReader(input, "UTF-8");
         BufferedReader    reader =

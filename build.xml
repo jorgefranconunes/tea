@@ -26,7 +26,6 @@ Main Ant build file for the Tea development tree.
 
 
 
-
   <!-- Defines the "outofdate" task. -->
   <taskdef
      resource="net/sf/antcontrib/antcontrib.properties"
@@ -158,8 +157,8 @@ Main Ant build file for the Tea development tree.
       <formatter type="plain" usefile="no" />
       <batchtest>
         <fileset dir="${java-test.source.dir}">
-          <include name="**/Test*.java" />
-          <!-- exclude name="**/TestHelloWorld.java" / -->
+          <include name="**/*Test.java" />
+          <!-- exclude name="**/HelloWorldTest.java" / -->
         </fileset>
       </batchtest>
     </junit>
@@ -373,10 +372,17 @@ Utility tasks bellow.
         <echo>Processing template:
     From : @{file}
     To   : @{tofile}</echo>
-        <exec executable="${copy-from-template.tool}" failonerror="yes">
-          <arg value="--input=@{file}" />
-          <arg value="--output=@{tofile}" />
-        </exec>
+      	<!-- jpsl - avoid the use of an external tool -->
+        <!-- exec executable="${copy-from-template.tool}" failonerror="yes" -->
+          <!-- arg value="-x-input=@{file}" / -->
+          <!-- arg value="-x-output=@{tofile}" / -->
+        <!-- /exec -->
+      	<copy file="@{file}"
+      	      tofile="@{tofile}">
+      	    <filterset begintoken="$${" endtoken="}">
+      	    	<filtersfile file="config/tea-core.conf" />
+      	    </filterset>
+      	</copy>
       </update-target>
     </sequential>
   </macrodef>

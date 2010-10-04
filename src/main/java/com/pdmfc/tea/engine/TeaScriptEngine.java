@@ -26,7 +26,6 @@ import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.STypes;
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.runtime.SContext;
-import java.util.Iterator;
 import java.util.Set;
 
 /**
@@ -143,7 +142,7 @@ public class TeaScriptEngine extends AbstractScriptEngine
      */
     public Object eval(String script, ScriptContext scriptContext)
             throws ScriptException {
-        System.out.println("eval \""+script+"\" , scriptContext="+scriptContext);
+        //System.out.println("eval \""+script+"\" , scriptContext="+scriptContext);
         CompiledScript code = this.compile(script);
         return code.eval(scriptContext);
     }
@@ -338,8 +337,7 @@ public class TeaScriptEngine extends AbstractScriptEngine
             Bindings b = sc.getBindings(ScriptContext.GLOBAL_SCOPE);
             if (b != null) {
                 //System.out.println("sc "+sc+" GLOBAL_SCOPE has "+b.keySet().size()+" entries");
-                for (Iterator i = b.keySet().iterator(); i.hasNext();) {
-                    String key = (String) i.next();
+                for (String key : b.keySet()) {
                     // SCR.4.3.4.1.1 Bindings, Bound Values and State - skip
                     // reserved names
                     if (key.startsWith("javax.script")
@@ -353,8 +351,7 @@ public class TeaScriptEngine extends AbstractScriptEngine
             }
             b = sc.getBindings(ScriptContext.ENGINE_SCOPE);
             if (b != null) {
-                for (Iterator i = b.keySet().iterator(); i.hasNext();) {
-                    String key = (String) i.next();
+                for (String key : b.keySet()) {
                     // SCR.4.3.4.1.1 Bindings, Bound Values and State - skip
                     // reserved names
                     if (key.startsWith("javax.script")
@@ -392,11 +389,10 @@ public class TeaScriptEngine extends AbstractScriptEngine
         try {
             SContext teaContext = teaRuntime.getToplevelContext();
             Bindings b = sc.getBindings(ScriptContext.ENGINE_SCOPE);
-            Set esKeys = null;
+            Set<String> esKeys = null;
             if (b != null) {
                 esKeys = b.keySet();
-                for (Iterator i = esKeys.iterator(); i.hasNext();) {
-                    String key = (String) i.next();
+                for (String key : esKeys) {
                     // SCR.4.3.4.1.1 Bindings, Bound Values and State - skip
                     // reserved names
                     if (key.startsWith("javax.script")
@@ -411,18 +407,17 @@ public class TeaScriptEngine extends AbstractScriptEngine
                     } catch (SNoSuchVarException ex) {
                         ;
                     }
-                    System.out.println("tea global to ENGINE_SCOPE " + key + "=" + b.get(key));
+                    //System.out.println("tea global to ENGINE_SCOPE " + key + "=" + b.get(key));
                 }
             }
             b = sc.getBindings(ScriptContext.GLOBAL_SCOPE);
             if (b != null) {
-                Set gsKeys = b.keySet();
+                Set<String> gsKeys = b.keySet();
                 // skip all keys that have been set on ENGINE_SCOPE
                 //if (esKeys != null) {
                 //    gsKeys.removeAll(esKeys);
                 //}
-                for (Iterator i = gsKeys.iterator(); i.hasNext();) {
-                    String key = (String) i.next();
+                for (String key : gsKeys) {
                     // SCR.4.3.4.1.1 Bindings, Bound Values and State - skip
                     // reserved names
                     if (key.startsWith("javax.script")
@@ -437,7 +432,7 @@ public class TeaScriptEngine extends AbstractScriptEngine
                     } catch (SNoSuchVarException ex) {
                         ;
                     }
-                    System.out.println("tea global to GLOBAL_SCOPE " + key + "=" + b.get(key));
+                    //System.out.println("tea global to GLOBAL_SCOPE " + key + "=" + b.get(key));
                 }
             }
         } catch (STeaException e) {

@@ -11,6 +11,9 @@
 %% 
 %% Revisions:
 %%
+%% 2010/10/04 Variables delimited within ${VARNAME} to allow for ant token
+%% replacement without breaking Bourne shell replacement (jpsl)
+%%
 %% 2004/09/29 Added template comments. (jfn)
 %%
 %% 2003/02/13 The "TeaConfig.properties" file is now generated from
@@ -28,7 +31,7 @@
 
 ###########################################################################
 #
-# Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
+# Copyright (c) 2001-2010 PDM&FC, All Rights Reserved. 
 #
 ###########################################################################
 
@@ -45,7 +48,7 @@
 #
 # The Tea version.
 #
-com.pdmfc.tea.version = $TEA_VERSION
+com.pdmfc.tea.version = ${TEA_VERSION}
 
 
 #
@@ -92,7 +95,7 @@ com.pdmfc.tea.initFile = init.tea
 # Name of the Java resource to be used as the last element in the
 # TEA_LIBRARY directory and URL list.
 #
-com.pdmfc.tea.coreImportDir = resource:/lib/tea-$TEA_VERSION
+com.pdmfc.tea.coreImportDir = resource:/lib/tea-${TEA_VERSION}
 
 
 

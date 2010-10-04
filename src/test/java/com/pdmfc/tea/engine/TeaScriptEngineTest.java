@@ -37,12 +37,12 @@ import static org.junit.Assert.*;
  *
  * @author jpsl
  */
-public class TestTeaScriptEngine {
+public class TeaScriptEngineTest {
 
     private ScriptEngine _e = null;
     private InputStream _is = null;
 
-    public TestTeaScriptEngine() {
+    public TeaScriptEngineTest() {
     }
 
     @BeforeClass
@@ -64,7 +64,7 @@ public class TestTeaScriptEngine {
         assertNotNull(m);
 
         // create a temporary file
-        _is = TestTeaScriptEngine.class.getResourceAsStream("TestTeaScriptEngineScript1.tea");
+        _is = TeaScriptEngineTest.class.getResourceAsStream("TeaScriptEngineTestScript1.tea");
         assertNotNull(_is);
     }
 
