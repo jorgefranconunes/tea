@@ -58,7 +58,6 @@ public class TeaScriptEngine extends AbstractScriptEngine
      */
     public static final String KEY_RUNTIME =
             "com.pdmfc.tea.engine.runtime";
-
     /**
      * A single com.pdmfc.tea.compiler.SCompiler is used to compile
      * Tea code into an internal representation
@@ -219,10 +218,7 @@ public class TeaScriptEngine extends AbstractScriptEngine
     public Object invokeFunction(String name, Object... args)
             throws ScriptException {
         //System.out.println("Invoke using sc=" + this.getContext());
-        STeaRuntime teaRuntime = this.getRuntime(this.getContext());
-        //System.out.println("invokeFunction TeaRuntime=" + teaRuntime);
-        teaRuntime.start();
-        this.context2TeaGlobals(teaRuntime, this.getContext());
+        STeaRuntime teaRuntime = this.context2TeaGlobals(this.getContext());
         SContext teaContext = teaRuntime.getToplevelContext();
         SObjSymbol nameSymbol = SObjSymbol.getSymbol(name);
         try {
@@ -238,17 +234,13 @@ public class TeaScriptEngine extends AbstractScriptEngine
             throw new ScriptException(e);
         } finally {
             // retrived updated global vars to Bindings.
-            this.teaGlobals2Context(teaRuntime, this.getContext());
-            teaRuntime.stop();
-            // teaRuntime.end(); -- not here. On servlet unloading ?
+            this.teaGlobals2Context(this.getContext());
         }
     }
 
     public Object invokeMethod(Object thisz, String name, Object... args)
             throws ScriptException {
-        STeaRuntime teaRuntime = this.getRuntime(this.getContext());
-        teaRuntime.start();
-        this.context2TeaGlobals(teaRuntime, this.getContext());
+        STeaRuntime teaRuntime = this.context2TeaGlobals(this.getContext());
         SContext teaContext = teaRuntime.getToplevelContext();
         SObjSymbol nameSymbol = SObjSymbol.getSymbol(name);
         try {
@@ -260,15 +252,12 @@ public class TeaScriptEngine extends AbstractScriptEngine
             }
             SObjFunction obj = STypes.getFunction(teaContext, newArgs, 0);
             Object result = com.pdmfc.tea.modules.reflect.SModuleReflect.tea2Java(obj.exec(obj, teaContext, newArgs));
-            this.teaGlobals2Context(teaRuntime, this.getContext());
             return result;
         } catch (STeaException e) {
             throw new ScriptException(e);
         } finally {
             // retrived updated global vars to Bindings.
-            this.teaGlobals2Context(teaRuntime, this.getContext());
-            teaRuntime.stop();
-            // teaRuntime.end(); -- not here. On servlet unloading ?
+            this.teaGlobals2Context(this.getContext());
         }
 
     }
@@ -330,10 +319,19 @@ public class TeaScriptEngine extends AbstractScriptEngine
         }
     }
 
-    public void context2TeaGlobals(STeaRuntime teaRuntime, ScriptContext sc)
+
+    /* This internal method out to be called before execution of Tea code
+     * completes inside this ScriptContext.
+     */
+    public STeaRuntime context2TeaGlobals(ScriptContext sc)
             throws ScriptException {
         try {
+            STeaRuntime teaRuntime = this.getRuntime(sc);
+            // prepare the context for execution of code.
+            teaRuntime.start();
+            
             SContext teaContext = teaRuntime.getToplevelContext();
+
             Bindings b = sc.getBindings(ScriptContext.GLOBAL_SCOPE);
             if (b != null) {
                 //System.out.println("sc "+sc+" GLOBAL_SCOPE has "+b.keySet().size()+" entries");
@@ -380,9 +378,9 @@ public class TeaScriptEngine extends AbstractScriptEngine
             // SCR.4.3.4.1.1 Bindings, Bound Values and State
             // Set argv, argv0, etc, from javax.script.argv, javax.script.filename, etc.
             // TODO - make the argv and argv0 cast errors give a more friendly error
-            Object oArgv[] = (Object [])sc.getAttribute("javax.script.argv");
+            Object oArgv[] = (Object[]) sc.getAttribute("javax.script.argv");
             if (oArgv != null) {
-                String [] argv = new String[oArgv.length];
+                String[] argv = new String[oArgv.length];
                 try {
                     System.arraycopy(oArgv, 0, argv, 0, argv.length);
                 } catch (ArrayStoreException e) {
@@ -390,18 +388,24 @@ public class TeaScriptEngine extends AbstractScriptEngine
                 }
                 teaRuntime.setArgv(argv);
             }
-            String argv0 = (String)sc.getAttribute("javax.script.filename");
+            String argv0 = (String) sc.getAttribute("javax.script.filename");
             if (argv0 != null) {
                 teaRuntime.setArgv0(argv0);
             }
+
+            return teaRuntime;
         } catch (STeaException e) {
             throw new ScriptException(e);
         }
     }
 
-    public void teaGlobals2Context(STeaRuntime teaRuntime, ScriptContext sc)
+    /* This internal method out to be called after the execution of Tea code
+     * completes inside this ScriptContext.
+     */
+    public void teaGlobals2Context(ScriptContext sc)
             throws ScriptException {
         try {
+            STeaRuntime teaRuntime = this.getRuntime(sc);
             SContext teaContext = teaRuntime.getToplevelContext();
             Bindings b = sc.getBindings(ScriptContext.ENGINE_SCOPE);
             Set<String> esKeys = null;
@@ -450,6 +454,10 @@ public class TeaScriptEngine extends AbstractScriptEngine
                     //System.out.println("tea global to GLOBAL_SCOPE " + key + "=" + b.get(key));
                 }
             }
+
+            // no more Tea code ought to be executed without calling start
+            teaRuntime.stop();
+            // teaRuntime.end(); -- not here. On servlet unloading ?
         } catch (STeaException e) {
             throw new ScriptException(e);
         }

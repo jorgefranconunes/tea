@@ -46,25 +46,23 @@ public class TeaCompiledScript extends CompiledScript {
      */
     public Object eval(ScriptContext scriptContext)
         throws ScriptException {
-        STeaRuntime teaRuntime    = _engine.getRuntime(scriptContext);
         try {
             //System.out.println("teaCompiledScript.eval("+scriptContext+")");
-            // TODO: init/get STeaRuntime from ScriptContext
+
+            STeaRuntime teaRuntime = _engine.context2TeaGlobals(scriptContext);
+
             //TeaBindings b = (TeaBindings)scriptContext.getBindings(ScriptContext.ENGINE_SCOPE);
             //STeaRuntime context    = b.getMyRuntime();
             //STeaRuntime context    = TeaScriptEngine.getRuntime(scriptContext);
             //System.out.println("eval TeaRuntime="+teaRuntime);
 
-            teaRuntime.start();
-
-            // put Bindings as global vars.
-            _engine.context2TeaGlobals(teaRuntime, scriptContext);
+            // put Bindings as global vars, and prepare the context for execution
+            
 
             // Run the code
-            Object result = null;
-            result = teaRuntime.execute(_code); // Tea 3.1.2 or higher.
+            Object result = teaRuntime.execute(_code); // Tea 3.1.2 or higher.
 
-            return result;
+            return com.pdmfc.tea.modules.reflect.SModuleReflect.tea2Java(result);
         } catch (Exception e) {
             //System.out.println("eval exception "+e.getMessage());
             //for(StackTraceElement ste : e.getStackTrace()) {
@@ -73,9 +71,7 @@ public class TeaCompiledScript extends CompiledScript {
             throw new ScriptException(e);
         } finally {
             // retrived updated global vars to Bindings.
-            _engine.teaGlobals2Context(teaRuntime, scriptContext);
-            teaRuntime.stop();
-            // teaRuntime.end(); -- not here. On servlet unloading ?
+            _engine.teaGlobals2Context(scriptContext);
         }
     }
 }
