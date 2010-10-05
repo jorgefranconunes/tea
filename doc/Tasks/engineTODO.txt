@@ -1,18 +1,10 @@
-- 2010-10-03 jpsl
-  Support for javax.script.argv. See TODO in
-  TeaScriptEngine.context2TeaGlobals()
-
 - 2010-09-26 jpsl
   Better support of script source charset encoding options through
   the TeaScriptEngine.
 
 - 2006-12-24 jpsl
-  Better convertion of STeaRuntimeException to ScriptException.
-
-- 2006-12-24 jpsl
-  Understand better the purpose of ScriptContext, Bindings, and
-  how it relates to STeaRuntime and SContext.
-  Extend SContext so that it supports extra methods ?
+  Better convertion of STeaRuntimeException to ScriptException. (Fillout script
+  source line information).
 
 - 2006-12-24 jpsl
   Implement Invocable.getInterface() methods.

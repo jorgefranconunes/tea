@@ -377,8 +377,17 @@ public class TeaScriptEngine extends AbstractScriptEngine
             // should be initialized from the appropriate reader/writers
             // in the ScriptContext.
 
-            // TODO: SCR.4.3.4.1.1 Bindings, Bound Values and State
-            // Set argv from javax.script.argv
+            // SCR.4.3.4.1.1 Bindings, Bound Values and State
+            // Set argv, argv0, etc, from javax.script.argv, javax.script.filename, etc.
+            // TODO - make the argv and argv0 cast errors give a more friendly error
+            String argv[] = (String [])sc.getAttribute("javax.script.argv");
+            if (argv != null) {
+                teaRuntime.setArgv(argv);
+            }
+            String argv0 = (String)sc.getAttribute("javax.script.filename");
+            if (argv0 != null) {
+                teaRuntime.setArgv0(argv0);
+            }
         } catch (STeaException e) {
             throw new ScriptException(e);
         }

@@ -188,8 +188,20 @@ public class TeaScriptEngineTest {
         // the above line prints "world"
     }
 
+
     @Test
-    public void printProperties() {
+    public void checkArgv() throws ScriptException {
+        String argv0 = "someFilename";
+        String [] argv = { "arg1", "arg2" };
+        _e.put("javax.script.argv", argv);
+        _e.put("javax.script.filename", argv0);
+        assertEquals(_e.eval("length $argv"), 2);
+        assertEquals(_e.eval("nth $argv 1"), "arg2");
+        assertEquals(_e.eval("is $argv0"), argv0);
+    }
+
+    @Test
+    public void testFactoryProperties() {
         // get factory
         ScriptEngineFactory f = _e.getFactory();
 
@@ -461,7 +473,7 @@ public class TeaScriptEngineTest {
      * script engines must set in their context containing the ScriptContext.
      * Spec 4.3.4.1.2
      */
-    // @Test
+    @Test
     public void testContextAvailable() throws ScriptException {
         ScriptEngineManager engineManager = new ScriptEngineManager();
         ScriptEngine teaEngine = engineManager.getEngineByName("Tea");
@@ -469,9 +481,9 @@ public class TeaScriptEngineTest {
         assertEquals(
                 "Standard 'context' var pre-set in script context",
                 ScriptContext.ENGINE_SCOPE,
-                teaEngine.eval("context.ENGINE_SCOPE;"));
+                teaEngine.eval("java-get-value $context ENGINE_SCOPE"));
 
-        teaEngine.eval("context.setAttribute('hi', 'there', context.ENGINE_SCOPE)");
+        teaEngine.eval("$context setAttribute \"hi\" \"there\" [java-get-value javax.script.ScriptContext ENGINE_SCOPE]");
         assertEquals(
                 "'context' didn't allow attribute to be set",
                 "there",
