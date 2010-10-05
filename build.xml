@@ -379,14 +379,14 @@ Utility tasks bellow.
         <!-- /exec -->
       	<copy file="@{file}"
       	      tofile="@{tofile}">
+             <filterchain>
+                 <striplinecomments>
+                     <comment value="%%" />
+                 </striplinecomments>
+             </filterchain>
       	    <filterset begintoken="$${" endtoken="}">
       	    	<filtersfile file="config/tea-core.conf" />
       	    </filterset>
-            <filterchain>  
-	            <striplinecomments>
-	                <comment value="%%" />
-                </striplinecomments>
-	        </filterchain>
       	</copy>
       </update-target>
     </sequential>
