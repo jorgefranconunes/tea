@@ -16,6 +16,7 @@
 package com.pdmfc.tea.engine;
 
 import com.pdmfc.tea.SConfigInfo;
+import com.pdmfc.tea.modules.util.SDate;
 import com.pdmfc.tea.runtime.SObjFunction;
 import java.io.IOException;
 import java.io.InputStream;
@@ -91,6 +92,19 @@ public class TeaScriptEngineTest {
         r = (SObjFunction) _e.get("tdbc-connection");
         assertNotNull(r);
     }
+
+
+    @Test
+    public void checkTosDate() throws ScriptException {
+        _e.put("A_RESULT", null);
+
+        _e.eval("set! A_RESULT [new TDate]");
+
+        Object o = _e.get("A_RESULT");
+
+        assertSame(o.getClass(), java.util.Date.class);
+    }
+
 
     @Test
     public void checkEvalFile() throws ScriptException, IOException {
