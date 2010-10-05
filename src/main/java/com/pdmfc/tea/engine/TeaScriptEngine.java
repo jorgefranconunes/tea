@@ -380,8 +380,14 @@ public class TeaScriptEngine extends AbstractScriptEngine
             // SCR.4.3.4.1.1 Bindings, Bound Values and State
             // Set argv, argv0, etc, from javax.script.argv, javax.script.filename, etc.
             // TODO - make the argv and argv0 cast errors give a more friendly error
-            String argv[] = (String [])sc.getAttribute("javax.script.argv");
-            if (argv != null) {
+            Object oArgv[] = (Object [])sc.getAttribute("javax.script.argv");
+            if (oArgv != null) {
+                String [] argv = new String[oArgv.length];
+                try {
+                    System.arraycopy(oArgv, 0, argv, 0, argv.length);
+                } catch (ArrayStoreException e) {
+                    throw new ScriptException("javax.script.argv must be an array of strings");
+                }
                 teaRuntime.setArgv(argv);
             }
             String argv0 = (String)sc.getAttribute("javax.script.filename");

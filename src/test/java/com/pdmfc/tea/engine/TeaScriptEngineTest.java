@@ -189,14 +189,27 @@ public class TeaScriptEngineTest {
     }
 
 
+    @Test(expected=ScriptException.class)
+    public void checkBadArgv() throws ScriptException {
+        // get a new engine, so we don't leave a bad argv in ScriptContext
+        ScriptEngine e = _e.getFactory().getScriptEngine();
+        Object [] badArgv = { "arg1", "arg2", 3 };
+        e.put("javax.script.argv", badArgv);
+        e.eval("echo [nth $argv 0]");
+    }
+
+
+
     @Test
-    public void checkArgv() throws ScriptException {
+    public void checkGoodArgv() throws ScriptException {
         String argv0 = "someFilename";
-        String [] argv = { "arg1", "arg2" };
+        Object [] argv = { "arg1", "arg2" };
+
         _e.put("javax.script.argv", argv);
         _e.put("javax.script.filename", argv0);
         assertEquals(_e.eval("length $argv"), 2);
-        assertEquals(_e.eval("nth $argv 1"), "arg2");
+        assertEquals(_e.eval("nth $argv 0"), argv[0]);
+        assertEquals(_e.eval("nth $argv 1"), argv[1]);
         assertEquals(_e.eval("is $argv0"), argv0);
     }
 
