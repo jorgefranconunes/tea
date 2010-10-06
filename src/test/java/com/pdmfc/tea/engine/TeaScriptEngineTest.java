@@ -95,14 +95,12 @@ public class TeaScriptEngineTest {
 
 
     @Test
-    public void checkTosDate() throws ScriptException {
+    public void checkTosDate() throws ScriptException, InterruptedException {
         _e.put("A_RESULT", null);
-
         _e.eval("set! A_RESULT [new TDate]");
-
         Object o = _e.get("A_RESULT");
-
         assertSame(o.getClass(), java.util.Date.class);
+        assertTrue((Boolean)_e.eval(">= [[new TDate] compare $A_RESULT] 0"));
     }
 
 
