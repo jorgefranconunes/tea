@@ -56,7 +56,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -86,6 +85,8 @@ import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypes;
 import com.pdmfc.tea.runtime.STypeException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 
 
@@ -261,8 +262,8 @@ public class SModuleReflect
 
 
 
-    private static Map<String,Class> _primitiveTypes =
-        new HashMap<String,Class>();
+    private static Map<String,Class<?>> _primitiveTypes =
+        new HashMap<String,Class<?>>();
 
     static {
 	_primitiveTypes.put(Boolean.TYPE.getName(),   Boolean.TYPE);
@@ -276,7 +277,8 @@ public class SModuleReflect
 	_primitiveTypes.put(Void.TYPE.getName(),      Void.TYPE);
     }
 
-    private static Map<Class,Class> _primitiveToClass = new HashMap<Class,Class>();
+
+    private static Map<Class,Class<?>> _primitiveToClass = new HashMap<Class,Class<?>>();
 
     static {
 	_primitiveToClass.put(Boolean.TYPE,   Boolean.class);
@@ -787,7 +789,7 @@ public class SModuleReflect
 	Class[] paramTypes = mtd.getParameterTypes();
 
 	if ( args.length != paramTypes.length ) {
-	    StringBuffer argsTxt = new StringBuffer();
+	    StringBuilder argsTxt = new StringBuilder();
 	    for (int i=0; i<paramTypes.length; i++) {
 		if (i>0) {
 		    argsTxt.append(" ");
@@ -806,9 +808,13 @@ public class SModuleReflect
 	try {
 	    result = mtd.invoke(javaObj, javaArgs);
 	} catch (IllegalAccessException e) {
-	    e.printStackTrace();
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            e.printStackTrace(pw);
+            pw.close();
  	    throw new SRuntimeException("cannot access method '" +
-  					mtd.getName() + "'");
+  					mtd.getName() + "' - stack trace: " +
+                                        sw.toString());
 	} catch (NullPointerException e) {
  	    throw new SRuntimeException("method '" +
   					mtd.getName() + "' is not static");
@@ -869,7 +875,7 @@ public class SModuleReflect
 	Object[]     params     = new Object[args.length - 2];
 	Class[]      paramTypes = new Class[args.length - 2];
 	Object       result     = null;
-	StringBuffer paramsTxt  = new StringBuffer();
+	StringBuilder paramsTxt  = new StringBuilder();
 
 	for(int i=2; i<args.length; i++) {
 	    params[i-2]     = tea2Java(args[i]);
@@ -1092,11 +1098,15 @@ public class SModuleReflect
 	    _hash = (aGivenName+_known.getName()).hashCode();
 	}
 
+        @Override
 	public int hashCode () {
 	    return _hash;
 	}
 	
+        @Override
 	public boolean equals (Object anObj) {
+            if (this.getClass() != anObj.getClass())
+                return false;
 	    ClassPair aPair = (ClassPair)anObj;
 	    if (_given == null ) {
                 if (aPair._given == null) {
@@ -1119,12 +1129,16 @@ public class SModuleReflect
  *
  ***************************************************************************/
 
-    private static boolean paramArrayMatches(Class[] givenParamTypes,
-					     Class[] knownParamTypes) {
+    private static boolean paramArrayMatches(Class<?>[] givenParamTypes,
+					     Class<?>[] knownParamTypes) {
 	boolean paramsMatch = true;
 	int numParams = givenParamTypes.length;
 	for(int i=0; i<numParams && paramsMatch; i++) {
-	    paramsMatch = givenParamTypes[i]==null ? (!(knownParamTypes[i].isPrimitive())) : (knownParamTypes[i].isAssignableFrom(givenParamTypes[i]));
+            if (givenParamTypes[i]==null) {
+                paramsMatch =  !(knownParamTypes[i].isPrimitive());
+            } else {
+                paramsMatch = knownParamTypes[i].isAssignableFrom(givenParamTypes[i]);
+            }
 	    // if the parameter is primitive, check with correct class
 	    if (!paramsMatch && knownParamTypes[i].isPrimitive() && givenParamTypes[i]!=null) {
 		paramsMatch = (_primitiveToClass.get(knownParamTypes[i]).isAssignableFrom(givenParamTypes[i]));
@@ -1183,10 +1197,10 @@ public class SModuleReflect
  ***************************************************************************/
 
     private static Map<ClassPair,Integer> _classDistances = 
-	new Hashtable<ClassPair,Integer>();
+	new HashMap<ClassPair,Integer>();
 	
-    private static int paramClassDistance(Class givenParamType,
-					  Class knownParamType) {
+    private static int paramClassDistance(Class<?> givenParamType,
+					  Class<?> knownParamType) {
 	
 	ClassPair aPair = new ClassPair(givenParamType,knownParamType);
 	int distance = 0;
@@ -1262,7 +1276,7 @@ public class SModuleReflect
 	findMethod(cl, methodName, paramTypes, possibleMethods, 0);
 
 	Method result = null;
-	if (possibleMethods.size() == 0) {
+	if (possibleMethods.isEmpty()) {
 	    throw new NoSuchMethodException("Can't find method "+methodName);
 	} else {
 	    result = possibleMethods.first()._method;
@@ -1282,11 +1296,11 @@ public class SModuleReflect
  *
  ***************************************************************************/
 
-    private static void findMethod(Class   cl, 
-				   String  methodName, 
-				   Class[] paramTypes,
-				   TreeSet possibleMethods,
-				   int     initialDistance) 
+    private static void findMethod(Class<?>             cl,
+				   String               methodName,
+				   Class<?>[]           paramTypes,
+				   TreeSet<MethodScore> possibleMethods,
+				   int                  initialDistance)
 	throws NoSuchMethodException {
 
 	if (Modifier.isPublic(cl.getModifiers())) {
@@ -1321,11 +1335,11 @@ public class SModuleReflect
  *
  ***************************************************************************/
 
-   private static void findMethodInClass(Class   cl, 
-					  String  methodName, 
-					  Class[] paramTypes,
-					  TreeSet possibleMethods,
-					  int     initialDistance) 
+   private static void findMethodInClass(Class<?>             cl,
+					 String               methodName,
+					 Class<?>[]           paramTypes,
+					 TreeSet<MethodScore> possibleMethods,
+					 int                  initialDistance)
 	throws NoSuchMethodException {
 
 	Method[] meths = cl.getMethods();
@@ -1386,8 +1400,8 @@ public class SModuleReflect
  *
  ***************************************************************************/
     
-    private static Constructor findConstructor(Class   cl, 
-					       Class[] paramTypes) 
+    private static Constructor findConstructor(Class<?>   cl,
+					       Class<?>[] paramTypes)
 	throws NoSuchMethodException {
 
 	Constructor[] consts = cl.getConstructors();
@@ -1408,7 +1422,7 @@ public class SModuleReflect
 	}
 	
 	Constructor result = null;
-	if (possibleConstructors.size() == 0) {
+	if (possibleConstructors.isEmpty()) {
 	    result = cl.getConstructor(paramTypes);
 	} else {
 	    result = possibleConstructors.first()._constructor;
@@ -1427,10 +1441,10 @@ public class SModuleReflect
  *
  ***************************************************************************/
 
-    private static Method findMethod(Class   cl, 
-				     String  methodName, 
-				     Class[] paramTypes,
-				     boolean useVariants) 
+    private static Method findMethod(Class<?> cl,
+				     String   methodName,
+				     Class[]  paramTypes,
+				     boolean  useVariants)
 	throws NoSuchMethodException {
 
 	Method                mtd           = null;
@@ -1567,7 +1581,7 @@ public class SModuleReflect
 	throws STeaException {
 
 	SHashtable teaObj = null;
-	Map        teaMap = null;
+	Map<Object,Object> teaMap = null;
 
 	try {
 	    teaObj = SHashtable.newInstance(context);
@@ -1725,7 +1739,7 @@ public class SModuleReflect
     private static List teaList2List(SObjPair head)
 	throws STeaException {
 	
-	List list = new ArrayList();
+	List<Object> list = new ArrayList<Object>();
 	
 	for ( Iterator i=head.iterator(); i.hasNext(); ) {
 	    Object teaValue  = i.next();
@@ -1750,8 +1764,8 @@ public class SModuleReflect
     private static Map teaMap2Map(SHashtable hashtable)
 	throws STeaException {
 	
-	Map teaMap = hashtable.getInternalMap();
-	Map map    = new HashMap();
+	Map                 teaMap = hashtable.getInternalMap();
+	Map<Object, Object> map    = new HashMap<Object, Object>();
 	
 	for ( Iterator i=teaMap.entrySet().iterator(); i.hasNext(); ) {
 	    Map.Entry entry   = (Map.Entry)i.next();
@@ -1836,6 +1850,7 @@ public class SModuleReflect
 	}
 
 
+        @Override
 	public Object exec(SObjFunction func,
 			   SContext     context,
 			   Object[]     args)
