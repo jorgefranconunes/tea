@@ -1,20 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2005 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id: SJavaClass.java,v 1.6 2005/10/31 15:32:55 jfn Exp $
- *
- *
- * Revisions:
- *
- * 2005/10/25 Changed such that methods in derived classes override
- * methods in base classes. (jfn)
- *
- * 2001/05/12 Created. (jfn)
+ * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -142,7 +128,7 @@ public class SJavaClass
  *
  **************************************************************************/
 
-    private static Constructor getJavaClassConstructor(Class javaClass)
+    private static Constructor getJavaClassConstructor(Class<?> javaClass)
 	throws SRuntimeException {
 
 	Constructor ctor = null;
@@ -257,7 +243,7 @@ public class SJavaClass
  *
  **************************************************************************/
 
-    private void setClassName(Class javaClass) {
+    private void setClassName(Class<?> javaClass) {
 
 	Method getNameMethod = null;
 	String tosClassName  = null;

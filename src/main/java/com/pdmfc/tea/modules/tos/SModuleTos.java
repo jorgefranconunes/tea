@@ -4,29 +4,11 @@
  *
  **************************************************************************/
 
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2004/12/13 Added the function "tos-obj?". (jfn)
- *
- * 2002/01/20 Calls to the "addJavaFunction()" method were replaced by
- * inner classes for performance. (jfn)
- *
- * 2002/01/10 This classe now derives from SModuleCore. (jfn) Now uses
- * SObjPair.iterator(). (jfn)
- *
- * 2001/05/12 Created. (jfn)
- *
- **************************************************************************/
-
 package com.pdmfc.tea.modules.tos;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.modules.SModule;
@@ -80,7 +62,8 @@ public class SModuleTos
 
     // Stores the TOS class objects indexed by the respective Java
     // class name. Used by the "functionLoadClass(...)" method.
-    private Hashtable _tosClasses = new Hashtable();
+    private Map<String,STosClass> _tosClasses =
+        new HashMap<String,STosClass>();
 
     private SContext _globalContext = null;
 
@@ -694,7 +677,7 @@ public class SModuleTos
 
 	String    className = STypes.getString(args,1);
 	Class     javaClass = null;
-	STosClass tosClass  = (STosClass)_tosClasses.get(className);
+	STosClass tosClass  = _tosClasses.get(className);
 	String    msg       = null;
 
 	if ( tosClass == null ) {

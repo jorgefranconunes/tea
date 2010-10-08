@@ -1,18 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001, 2002 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id: STosJavaClass.java,v 1.2 2002/09/17 16:35:27 jfn Exp $
- *
- *
- * Revisions:
- *
- * 2002/06/24
- * Created. (jfn)
+ * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -73,7 +61,8 @@ public class STosJavaClass
     private STosMethod  _constructor   = null;
 
     // Keys are SObjSymbol. Values are STosMethod.
-    private Map         _methods       = new HashMap();
+    private Map<SObjSymbol,STosMethod> _methods =
+        new HashMap<SObjSymbol,STosMethod>();
 
 
 
@@ -163,7 +152,7 @@ public class STosJavaClass
  *
  **************************************************************************/
 
-    private static Constructor getJavaClassConstructor(Class javaClass)
+    private static Constructor getJavaClassConstructor(Class<?> javaClass)
 	throws SRuntimeException {
 
 	Constructor ctor = null;
@@ -256,7 +245,7 @@ public class STosJavaClass
  *
  **************************************************************************/
 
-    private void setClassName(Class javaClass) {
+    private void setClassName(Class<?> javaClass) {
 
 	Method getNameMethod = null;
 
@@ -396,7 +385,7 @@ public class STosJavaClass
     public STosMethod getMethod(SObjSymbol methodName)
 	throws SNoSuchMethodException {
 
-	STosMethod method = (STosMethod)_methods.get(methodName);
+	STosMethod method = _methods.get(methodName);
 
 	if ( method == null ) {
 	    throw new SNoSuchMethodException(_tosClassName, methodName);

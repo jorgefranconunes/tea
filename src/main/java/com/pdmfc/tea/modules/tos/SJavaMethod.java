@@ -1,18 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id: SJavaMethod.java,v 1.4 2002/07/23 17:13:06 jfn Exp $
- *
- *
- * Revisions:
- *
- * 2001/05/12
- * Created. (jfn)
+ * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -67,8 +55,8 @@ public class SJavaMethod
  *
  **************************************************************************/
 
-    public SJavaMethod(Class  javaClass,
-		       String javaMethodName) {
+    public SJavaMethod(Class<?> javaClass,
+		       String   javaMethodName) {
 
 	try {
 	    _javaMethod = javaClass.getMethod(javaMethodName, PARAM_TYPES);
