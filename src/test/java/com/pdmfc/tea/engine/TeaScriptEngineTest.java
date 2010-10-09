@@ -16,7 +16,6 @@
 package com.pdmfc.tea.engine;
 
 import com.pdmfc.tea.SConfigInfo;
-import com.pdmfc.tea.modules.util.SDate;
 import com.pdmfc.tea.runtime.SObjFunction;
 import java.io.IOException;
 import java.io.InputStream;
@@ -63,7 +62,7 @@ public class TeaScriptEngineTest {
 
         // create engine
         _e = m.getEngineByName("tea");
-        assertNotNull(m);
+        assertNotNull(_e);
 
         // create a temporary file
         _is = TeaScriptEngineTest.class.getResourceAsStream("TeaScriptEngineTestScript1.tea");
@@ -93,24 +92,54 @@ public class TeaScriptEngineTest {
         assertNotNull(r);
     }
 
-
     @Test
     public void checkTosDate() throws ScriptException, InterruptedException {
         _e.put("A_RESULT", null);
         _e.eval("set! A_RESULT [new TDate]");
         Object o = _e.get("A_RESULT");
-        assertSame(o.getClass(), java.util.Date.class);
-        assertTrue((Boolean)_e.eval(">= [[new TDate] compare $A_RESULT] 0"));
+        assertSame(java.util.Date.class, o.getClass());
+        assertTrue((Boolean) _e.eval(">= [[new TDate] compare $A_RESULT] 0"));
+        //System.out.println("A_RESULT=" + _e.get("A_RESULT"));
+        //System.out.println(_e.eval("$A_RESULT format \"yyyy-MM-dd'T'HH:mm:ss.SSSZ\""));
     }
 
+    @Test
+    public void checkTosDateInit() throws ScriptException {
+        // check that java2Tea is operational before any Tea code execution
+        _e.put("A_RESULT", new java.util.Date());
+        Object o = _e.eval("$A_RESULT format \"yyyy-MM-dd'T'HH:mm:ss.SSSZ\"");
+        //System.out.println(o);
+        assertEquals(String.class, o.getClass());
+    }
+
+    //@Test
+    public void checkTosMistery() throws ScriptException {
+
+        java.util.Date d = new java.util.Date();
+        _e.put("A_RESULT", d);
+
+        System.out.println("A_RESULT=" + _e.eval("$A_RESULT format \"yyyy-MM-dd'T'HH:mm:ss.SSSZ\""));
+
+        // on Fedora 12 prints 1 ??? should print -1 or 0
+        System.out.println(_e.eval("$A_RESULT compare [new TDate]"));
+
+        java.util.Date d2 = new java.util.Date();
+
+        // uncomment the following 2 lines and the last 2 prints give expected results
+        //java.text.SimpleDateFormat df2 = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+        //System.out.println("d2="+df2.format(d2));
+
+        System.out.println(((java.util.Date) _e.get("A_RESULT")).compareTo(new java.util.Date()));
+        System.out.println(((java.util.Date) _e.get("A_RESULT")).compareTo(d2));
+    }
 
     @Test
     public void checkEvalFile() throws ScriptException, IOException {
-    	_e.put("A_GLOBAL", null);
+        _e.put("A_GLOBAL", null);
         java.io.InputStreamReader ir = new java.io.InputStreamReader(_is);
         _e.eval(ir);
         ir.close();
-        assertEquals(_e.get("A_GLOBAL"), 2);
+        assertEquals(2, _e.get("A_GLOBAL"));
     }
 
     @Test
@@ -136,7 +165,7 @@ public class TeaScriptEngineTest {
 
         String r = (String) _e.get("V1");
 
-        assertEquals(r, s);
+        assertEquals(s, r);
     }
 
     @Test
@@ -200,29 +229,27 @@ public class TeaScriptEngineTest {
         // the above line prints "world"
     }
 
-
-    @Test(expected=ScriptException.class)
+    @Test(expected = ScriptException.class)
     public void checkBadArgv() throws ScriptException {
         // get a new engine, so we don't leave a bad argv in ScriptContext
         ScriptEngine e = _e.getFactory().getScriptEngine();
-        Object [] badArgv = { "arg1", "arg2", 3 };
+        Object[] badArgv = {"arg1", "arg2", 3};
         e.put("javax.script.argv", badArgv);
         e.eval("echo [nth $argv 0]");
     }
 
-
-
     @Test
     public void checkGoodArgv() throws ScriptException {
         String argv0 = "someFilename";
-        Object [] argv = { "arg1", "arg2" };
+        Object[] argv = {"arg1", "arg2"};
 
         _e.put("javax.script.argv", argv);
         _e.put("javax.script.filename", argv0);
-        assertEquals(_e.eval("length $argv"), 2);
-        assertEquals(_e.eval("nth $argv 0"), argv[0]);
-        assertEquals(_e.eval("nth $argv 1"), argv[1]);
-        assertEquals(_e.eval("is $argv0"), argv0);
+        //System.out.print("len argv=" + _e.eval("length $argv"));
+        assertEquals(2, _e.eval("length $argv"));
+        assertEquals(argv[0], _e.eval("nth $argv 0"));
+        assertEquals(argv[1], _e.eval("nth $argv 1"));
+        assertEquals(argv0, _e.eval("is $argv0"));
     }
 
     @Test
@@ -231,13 +258,13 @@ public class TeaScriptEngineTest {
         ScriptEngineFactory f = _e.getFactory();
 
 
-        assertEquals(f.getParameter(ScriptEngine.ENGINE), "Tea Engine");
-        assertEquals(f.getParameter(ScriptEngine.ENGINE_VERSION), SConfigInfo.getProperty("com.pdmfc.tea.version"));
-        assertEquals(f.getParameter(ScriptEngine.NAME), "Tea Engine");
-        assertEquals(f.getParameter(ScriptEngine.LANGUAGE), "Tea");
-        assertEquals(f.getParameter(ScriptEngine.LANGUAGE_VERSION), SConfigInfo.getProperty("com.pdmfc.tea.version"));
+        assertEquals("Tea Engine", f.getParameter(ScriptEngine.ENGINE));
+        assertEquals(SConfigInfo.getProperty("com.pdmfc.tea.version"), f.getParameter(ScriptEngine.ENGINE_VERSION));
+        assertEquals("Tea Engine", f.getParameter(ScriptEngine.NAME));
+        assertEquals("Tea", f.getParameter(ScriptEngine.LANGUAGE));
+        assertEquals(SConfigInfo.getProperty("com.pdmfc.tea.version"), f.getParameter(ScriptEngine.LANGUAGE_VERSION));
         assertNull(f.getParameter("THREADING"));
-        
+
 //        String propKeys[] = {
 //                ScriptEngine.ENGINE,
 //                ScriptEngine.ENGINE_VERSION,

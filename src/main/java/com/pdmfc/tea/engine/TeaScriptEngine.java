@@ -15,8 +15,11 @@
  **************************************************************************/
 package com.pdmfc.tea.engine;
 
+import com.pdmfc.tea.compiler.SCompileException;
 import com.pdmfc.tea.runtime.SNoSuchVarException;
 import java.io.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.script.*;
 
 import com.pdmfc.tea.compiler.SCompiler;
@@ -25,6 +28,7 @@ import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.STypes;
 import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.compiler.SCode;
 import com.pdmfc.tea.runtime.SContext;
 import java.util.Set;
 
@@ -58,12 +62,20 @@ public class TeaScriptEngine extends AbstractScriptEngine
      */
     public static final String KEY_RUNTIME =
             "com.pdmfc.tea.engine.runtime";
+
     /**
      * A single com.pdmfc.tea.compiler.SCompiler is used to compile
      * Tea code into an internal representation
      * com.pdmfc.tea.runtime.SCode.
      */
     protected SCompiler _compiler;
+
+    /**
+     * A private empty compiled code. Used internally
+     * to force initialization of the STeaRuntime for the 1st time.
+     */
+    protected SCode _emptyCode;
+
     /**
      * Reference the factory that instantiated this object.
      */
@@ -78,6 +90,16 @@ public class TeaScriptEngine extends AbstractScriptEngine
      */
     public TeaScriptEngine() {
         //this(null);
+        try {
+            _compiler = new SCompiler();
+            _emptyCode = _compiler.compile("");
+        } catch (SCompileException ex) {
+            // This can never happen. But we can't go on if it does.
+            throw new java.lang.RuntimeException(ex);
+        } catch (IOException ex) {
+            // This can never happen. But we can't go on if it does.
+            throw new java.lang.RuntimeException(ex);
+        }
     }
 
     /**
@@ -91,6 +113,7 @@ public class TeaScriptEngine extends AbstractScriptEngine
      */
     public TeaScriptEngine(TeaScriptEngineFactory aFactory) {
         //super(new TeaBindings());
+        this();
         //System.out.println("TeaScriptEngine(TeaScriptEngineFactory aFactory)");
         _factory = aFactory;
         // TODO: more constructors with importPath setup ?
@@ -110,9 +133,6 @@ public class TeaScriptEngine extends AbstractScriptEngine
      * per engine.
      */
     public synchronized SCompiler getCompiler() {
-        if (_compiler == null) {
-            _compiler = new SCompiler();
-        }
         return _compiler;
     }
 
@@ -290,7 +310,7 @@ public class TeaScriptEngine extends AbstractScriptEngine
      * resources, no real harm is done by not calling this method.)
      */
     public void end() throws ScriptException {
-        this.getRuntime(this.getContext()).end();
+        this.getTeaRuntime(this.getContext()).end();
     }
 
     /**
@@ -301,17 +321,11 @@ public class TeaScriptEngine extends AbstractScriptEngine
      * @throws ScriptException as Tea initialization code might be
      * called to initialize the runtime.
      */
-    public STeaRuntime getRuntime(ScriptContext sc) throws ScriptException {
+    public STeaRuntime getTeaRuntime(ScriptContext sc) throws ScriptException {
         synchronized (sc) {
-            // SCR.4.3.4.1.2 Script Execution - mentions key "context"
-            // It says nothing about (dis)allowing the use of a keys named
-            // "context" in the GLOBAL_SCOPE. We just recognize it at
-            // ENGINE_SCOPE.
             STeaRuntime teaRuntime = (STeaRuntime) sc.getAttribute(KEY_RUNTIME, ScriptContext.ENGINE_SCOPE);
             if (teaRuntime == null) {
                 teaRuntime = new STeaRuntime();
-                // no need to initialize from context here. It is initialized
-                // in TeaCompiledScript.eval().
                 //System.out.println("Setting a new runtime on ENGINE_SCOPE of "+sc);
                 sc.setAttribute(KEY_RUNTIME, teaRuntime, ScriptContext.ENGINE_SCOPE);
             }
@@ -326,10 +340,44 @@ public class TeaScriptEngine extends AbstractScriptEngine
     public STeaRuntime context2TeaGlobals(ScriptContext sc)
             throws ScriptException {
         try {
-            STeaRuntime teaRuntime = this.getRuntime(sc);
+            STeaRuntime teaRuntime = this.getTeaRuntime(sc);
             // prepare the context for execution of code.
+
+            // TODO: SCR.4.3.1 ScriptContext - $stdin, $stdout and $stderr
+            // should be initialized from the appropriate reader/writers
+            // in the ScriptContext.
+
+            // SCR.4.3.4.1.1 Bindings, Bound Values and State
+            // Set argv, argv0, etc, from javax.script.argv, javax.script.filename, etc.
+            // TODO - make the argv and argv0 cast errors give a more friendly error
+            Object oArgv[] = (Object[]) sc.getAttribute("javax.script.argv");
+            if (oArgv != null) {
+                String[] argv = new String[oArgv.length];
+                try {
+                    System.arraycopy(oArgv, 0, argv, 0, argv.length);
+                } catch (ArrayStoreException e) {
+                    throw new ScriptException("javax.script.argv must be an array of strings");
+                }
+                teaRuntime.setArgv(argv);
+            }
+            String argv0 = (String) sc.getAttribute("javax.script.filename");
+            if (argv0 != null) {
+                teaRuntime.setArgv0(argv0);
+            }
+
+            // argv0 and argv must be set before.
             teaRuntime.start();
-            
+            // Run an empty code to force 1st time initialization
+            // before calling SModuleReflect.java2Tea.
+            // (There is no public interface for doing so in STeaRuntime.)
+            // Otherwise we will get errors for some convertions resulting
+            // in STosObj like SDate.
+            try {
+                teaRuntime.execute(_emptyCode);
+            } catch (STeaException ex) {
+                throw new ScriptException(ex);
+            }
+
             SContext teaContext = teaRuntime.getToplevelContext();
 
             Bindings b = sc.getBindings(ScriptContext.GLOBAL_SCOPE);
@@ -371,28 +419,6 @@ public class TeaScriptEngine extends AbstractScriptEngine
                     SObjSymbol.addSymbol("context"),
                     com.pdmfc.tea.modules.reflect.SModuleReflect.java2Tea(sc, teaContext));
 
-            // TODO: SCR.4.3.1 ScriptContext - $stdin, $stdout and $stderr
-            // should be initialized from the appropriate reader/writers
-            // in the ScriptContext.
-
-            // SCR.4.3.4.1.1 Bindings, Bound Values and State
-            // Set argv, argv0, etc, from javax.script.argv, javax.script.filename, etc.
-            // TODO - make the argv and argv0 cast errors give a more friendly error
-            Object oArgv[] = (Object[]) sc.getAttribute("javax.script.argv");
-            if (oArgv != null) {
-                String[] argv = new String[oArgv.length];
-                try {
-                    System.arraycopy(oArgv, 0, argv, 0, argv.length);
-                } catch (ArrayStoreException e) {
-                    throw new ScriptException("javax.script.argv must be an array of strings");
-                }
-                teaRuntime.setArgv(argv);
-            }
-            String argv0 = (String) sc.getAttribute("javax.script.filename");
-            if (argv0 != null) {
-                teaRuntime.setArgv0(argv0);
-            }
-
             return teaRuntime;
         } catch (STeaException e) {
             throw new ScriptException(e);
@@ -404,8 +430,9 @@ public class TeaScriptEngine extends AbstractScriptEngine
      */
     public void teaGlobals2Context(ScriptContext sc)
             throws ScriptException {
+
+        STeaRuntime teaRuntime = this.getTeaRuntime(sc);
         try {
-            STeaRuntime teaRuntime = this.getRuntime(sc);
             SContext teaContext = teaRuntime.getToplevelContext();
             Bindings b = sc.getBindings(ScriptContext.ENGINE_SCOPE);
             Set<String> esKeys = null;
@@ -455,11 +482,18 @@ public class TeaScriptEngine extends AbstractScriptEngine
                 }
             }
 
-            // no more Tea code ought to be executed without calling start
-            teaRuntime.stop();
-            // teaRuntime.end(); -- not here. On servlet unloading ?
         } catch (STeaException e) {
             throw new ScriptException(e);
+        } finally {
+            // no more Tea code ought to be executed without calling start
+            try {
+                teaRuntime.stop();
+            } catch (IllegalArgumentException ex) {
+                // If an error ocurred before initialization of STeaRuntime
+                // we ignore it, but we attempted to stop it anyway.
+                throw new ScriptException(ex);
+            }
+            // teaRuntime.end(); -- not here. On servlet unloading ?
         }
     }
 }
