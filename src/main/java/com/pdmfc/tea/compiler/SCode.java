@@ -1,22 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id: SCode.java,v 1.7 2004/04/02 19:39:06 jfn Exp $
- *
- *
- * Revisions:
- *
- * 2002/03/28
- * The SCode instances now store the file name from where they
- * were compiled. (jfn)
- *
- * 2001/05/12
- * Created. (jfn)
+ * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -49,10 +33,10 @@ public class SCode
 
 
 
-    SCodeNode _statsHead = null;
-    SCodeNode _statsTail = null;
-    int       _statCount = 0;
-    String    _fileName  = null;
+    private SCodeNode _statsHead = null;
+    private SCodeNode _statsTail = null;
+    private int       _statCount = 0;
+    private String    _fileName  = null;
 
     private static final String ERR_STAT =
 	"While evaluating statement on line {0}";

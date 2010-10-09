@@ -88,8 +88,7 @@ public class SInputSourceFactory
 
 /**************************************************************************
  *
- * Retrieves the input stream associated with the given input resource. The
- * input stream is opened th first time this method is called.
+ * Retrieves the input stream associated with the given input resource.
  *
  * @param sourceBase The base file system path or URL.
  *

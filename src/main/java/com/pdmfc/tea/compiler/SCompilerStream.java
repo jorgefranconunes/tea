@@ -4,17 +4,6 @@
  *
  **************************************************************************/
 
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2010/03/02 Created. (jfn)
- *
- **************************************************************************/
-
 package com.pdmfc.tea.compiler;
 
 import java.io.BufferedReader;
@@ -72,28 +61,6 @@ class SCompilerStream
 
 /**************************************************************************
  *
- * Initializes the stream from the contents of a string.
- *
- * @param str 
- *
- * @exception IOException Thrown if there were problems reading from
- * the stream.
- *
- **************************************************************************/
-
-    public SCompilerStream(String str)
-	throws IOException {
-
-	_in          = new StringReader(str);
-	_currentChar = _in.read();
-    }
-
-
-
-
-
-/**************************************************************************
- *
  * 
  *
  **************************************************************************/
@@ -112,6 +79,9 @@ class SCompilerStream
 
 
 /**************************************************************************
+ *
+ * Retrieves the current char in the stream. This will be the char
+ * returned by the next call to <code>{@link skip()}</code>.
  *
  * @return The current char in the stream.
  *
@@ -176,7 +146,8 @@ class SCompilerStream
 
 /**************************************************************************
  *
- * 
+ * Retrieves the number of the line where the current position is
+ * located. Line numbers start at one.
  *
  **************************************************************************/
 
