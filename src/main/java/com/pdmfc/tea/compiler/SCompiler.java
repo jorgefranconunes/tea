@@ -4,27 +4,6 @@
  *
  **************************************************************************/
 
-/**************************************************************************
- *
- * $Id$
- *
- * Revisions:
- *
- * 2010/01/28 Minor refactorings to properly use generics. (jfn)
- *
- * 2003/07/10 Added support for long integral literals
- * (e.g. 123L). (jfn)
- *
- * 2002/08/03 The getList() method now returns a java.util.List
- * instead of a com.pdmfc.tea.util.SList. (jfn).
- *
- * 2002/03/07 Added support for supports integer literals with
- * hexadecimal (e.g. 0xab) and octal (e.g. 076) representations. (jfn)
- *
- * 2001/05/12 Created. (jfn)
- *
- **************************************************************************/
-
 package com.pdmfc.tea.compiler;
 
 import java.io.StringReader;
@@ -64,8 +43,8 @@ import com.pdmfc.tea.util.SInputSourceFactory;
 
 /**************************************************************************
  *
- * Parses a Tea script and produces bytecode that can be executed
- * later. The bytecode is stored inside a <code>{@link SCode}</code>
+ * Parses a Tea script and produces code that can be executed
+ * later. Compiled code is represented as a <code>{@link SCode}</code>
  * object.
  *
  * <p>Objects of this class are intended to be used from within a
@@ -89,23 +68,28 @@ public class SCompiler
 
 /**************************************************************************
  *
- * Compiles the Tea script read from the file <TT>fileName</TT> and
- * builds an <TT>SCode</TT> object representing the compiled code.
+ * Compiles a Tea script read from a file or URL.
  *
- * @param fileName The name of the file containing the Tea script.
+ * @param location File system path or URL identifying the entity to
+ * be read and compiled.
  *
  * @param encoding The text encoding of the file to be read. If null
- * the JVM default encoding is assumed.
+ * the platform default encoding is assumed.
  *
- * @return A <TT>SCode</TT> object containing the bytecode that can be
+ * @param fileName Name to be associated with the compiled
+ * code. Compile or runtime error messages will use this name when
+ * identifying the source file where the error occurred. It is only
+ * used for informational messages. If null then no references to file
+ * names will appear on error messages.
+ *
+ * @return The object representing the compiled code that can be
  * executed later.
  *
- * @exception SCompileException Thrown in the following cases:
- *        <ul>
- *	  <li>The file could not be opened for reading.</li>
- *	  <li>There were problems while reading the file.</li>
- *	  <li>The Tea script had syntax errors.</li>
- *	  </ul>
+ * @exception IOException Thrown if the provided location could not be
+ * opened for reading or if there was any error during reading.
+ *
+ * @exception SCompileException Thrown the Tea script had syntax
+ * errors.
  *
  **************************************************************************/
 
@@ -128,7 +112,31 @@ public class SCompiler
 
 /**************************************************************************
  *
- * 
+ * Compiles a Tea script read from a file or URL.
+ *
+ * @param locationBase File system path or URL used as base for
+ * <code>location</code>.
+ *
+ * @param location A path relative to <code>baseLocation</code>
+ * identifying the entity to be read and compiled.
+ *
+ * @param encoding The text encoding of the file to be read. If null
+ * the platform default encoding is assumed.
+ *
+ * @param fileName Name to be associated with the compiled
+ * code. Compile or runtime error messages will use this name when
+ * identifying the source file where the error occurred. It is only
+ * used for informational messages. If null then no references to file
+ * names will appear on error messages.
+ *
+ * @return The object representing the compiled code that can be
+ * executed later.
+ *
+ * @exception IOException Thrown if the provided location could not be
+ * opened for reading or if there was any error during reading.
+ *
+ * @exception SCompileException Thrown the Tea script had syntax
+ * errors.
  *
  **************************************************************************/
 
@@ -142,7 +150,13 @@ public class SCompiler
         Charset charset = findCharset(encoding);
         Reader  reader  =
             SInputSourceFactory.openReader(baseLocation, location, charset);
-        SCode   code    = compile(reader, fileName);
+        SCode   code    = null;
+
+        try {
+            code = compile(reader, fileName);
+        } finally {
+            try { reader.close(); } catch (IOException e) {}
+        }
 
         return code;
     }
@@ -153,23 +167,27 @@ public class SCompiler
 
 /**************************************************************************
  *
- * Compiles the Tea script read from the an <code>InputStream</code>.
+ * Compiles the Tea script read from an <code>InputStream</code>.
  *
  * @param input The input stream where the script will be read from.
  *
- * @param encoding The text encoding of the input stream to be
- * read. If null the JVM default encoding is assumed.
+ * @param encoding The text encoding of the file to be read. If null
+ * the platform default encoding is assumed.
  *
- * @param fileName The name to be associated with the compiled
+ * @param fileName Name to be associated with the compiled
  * code. Compile or runtime error messages will use this name when
- * identifying the source file where the error occurred.
+ * identifying the source file where the error occurred. It is only
+ * used for informational messages. If null then no references to file
+ * names will appear on error messages.
  *
- * @return A <code>{@link SCode}</code> object containing the bytecode
- * that can be executed later.
+ * @return The object representing the compiled code that can be
+ * executed later.
  *
- * @exception com.pdmfc.tea.compiler.SCompileException Thrown if a
- * syntax error was found during compilation or there were problems
- * reading from the <code>InputStream</code>.
+ * @exception IOException Thrown if the provided location could not be
+ * opened for reading or if there was any error during reading.
+ *
+ * @exception SCompileException Thrown the Tea script had syntax
+ * errors.
  *
  **************************************************************************/
 
@@ -182,7 +200,13 @@ public class SCompiler
         Charset charset     = findCharset(encoding);
         Reader  inputReader = new InputStreamReader(input, charset);
         Reader  reader      = new BufferedReader(inputReader);
-        SCode   code        = compile(reader, fileName);
+        SCode   code        = null;
+
+        try {
+            code = compile(reader, fileName);
+        } finally {
+            try { reader.close(); } catch (IOException e) {}
+        }
 
         return code;
     }
@@ -197,11 +221,11 @@ public class SCompiler
  *
  * @param script A Tea script.
  *
- * @return A <TT>SCode</TT> object containing the bytecode that can be
+ * @return A <code>SCode</code> object containing the bytecode that can be
  * executed later.
  *
- * @exception com.pdmfc.tea.compiler.SCompileException Thrown if a
- * syntax error was found during compilation.
+ * @exception SCompileException Thrown if a syntax error was found
+ * during compilation.
  *
  **************************************************************************/
 
@@ -210,7 +234,13 @@ public class SCompiler
                SCompileException {
 
         Reader reader = new StringReader(script);
-        SCode  code   = compile(reader, null);
+        SCode  code   = null;
+
+        try {
+            code = compile(reader, null);
+        } finally {
+            try { reader.close(); } catch (IOException e) {}
+        }
 
         return code;
     }
@@ -233,7 +263,7 @@ public class SCompiler
  * @return A <code>{@link SCode}</code> object containing the bytecode
  * that can be executed later.
  *
- * @exception com.pdmfc.tea.compiler.SCompileException Thrown if a
+ * @exception SCompileException Thrown if a
  * syntax error was found during compilation or there were problems
  * reading from the <code>InputStream</code>.
  *
@@ -247,13 +277,7 @@ public class SCompiler
         SCode code = null;
 
         _fileName = fileName;
-
-        try {
-            _in = new SCompilerStream(reader);
-        } catch (IOException e) {
-            try { reader.close(); } catch (IOException e2) {}
-            throw e;
-        }
+        _in       = new SCompilerStream(reader);
 
         try {
             code = getBlockWhole();
@@ -515,10 +539,10 @@ public class SCompiler
          throws IOException,
 	        SCompileException {
 
-      boolean      justDigits   = true;
-      StringBuffer buffer       = new StringBuffer();
-      char         c            = skip();
-      int          sign         = 1;
+      boolean       justDigits   = true;
+      StringBuilder buffer       = new StringBuilder();
+      char          c            = skip();
+      int           sign         = 1;
 
       switch ( c ) {
 	 case '-' : sign = -1; break;
@@ -705,7 +729,7 @@ public class SCompiler
    private String getSymbolName()
          throws IOException {
 
-      StringBuffer name = new StringBuffer();
+      StringBuilder name = new StringBuilder();
 
       while ( !atEndOfSymbol() ) {
 	 char c = skip();
@@ -730,7 +754,7 @@ public class SCompiler
    private String getSymbolName(char c)
          throws IOException {
 
-      StringBuffer name = new StringBuffer();
+      StringBuilder name = new StringBuilder();
 
       name.append(c);
 
@@ -762,8 +786,8 @@ public class SCompiler
 	throws IOException,
 	       SCompileException {
 
-	StringBuffer name        = new StringBuffer();
-	boolean      endWasFound = false;
+	StringBuilder name        = new StringBuilder();
+	boolean       endWasFound = false;
 
 	while ( !isAtEnd() ) {
 	    char c = skip();
@@ -834,9 +858,9 @@ public class SCompiler
 	throws IOException,
 	       SCompileException {
 
-	SArithExpression result      = new SArithExpression();
-	StringBuffer     buffer      = new StringBuffer();
-	boolean          endWasFound = false;
+	SArithExpression  result      = new SArithExpression();
+	StringBuilder     buffer      = new StringBuilder();
+	boolean           endWasFound = false;
 
 	while ( !isAtEnd() ) {
 	    char c = skip();
