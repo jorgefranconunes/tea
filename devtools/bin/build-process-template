@@ -14,7 +14,7 @@
 
 _scriptDir=$(dirname $0)
 _scriptName=$(basename $0)
-_teaBaseDir=$(cd $_scriptDir/..; pwd)
+_teaBaseDir=$(cd $_scriptDir/../..; pwd)
 
 #
 # Make utility functions available

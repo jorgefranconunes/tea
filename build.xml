@@ -18,8 +18,8 @@ Main Ant build file for the Tea development tree.
 
   <!-- Global properties used througout the build. -->
 
-  <property name="antc.jar" location="lib/jars/ant-contrib-1.0b3.jar" />
-  <property name="junit.jar" location="lib/jars/junit-4.8.2.jar" />
+  <property name="antc.jar" location="devtools/lib/jars/ant-contrib-1.0b3.jar" />
+  <property name="junit.jar" location="devtools/lib/jars/junit-4.8.2.jar" />
 
   <property file="Makefile.conf" />
 
@@ -152,13 +152,12 @@ Main Ant build file for the Tea development tree.
       <classpath>
         <pathelement location="${java-test.target.dir}" />
         <pathelement path="${jar.file}" />
-        <pathelement location="lib/jars/junit-4.8.2.jar" />
+        <pathelement path="${junit.jar}" />
       </classpath>
       <formatter type="plain" usefile="no" />
       <batchtest>
         <fileset dir="${java-test.source.dir}">
           <include name="**/*Test.java" />
-          <!-- exclude name="**/HelloWorldTest.java" / -->
         </fileset>
       </batchtest>
     </junit>
@@ -362,7 +361,7 @@ Utility tasks bellow.
 
   <property
      name="copy-from-template.tool"
-     location="bin/build-process-template" />
+     location="devtools/bin/build-process-template" />
 
   <macrodef name="copy-from-template">
     <attribute name="file" />

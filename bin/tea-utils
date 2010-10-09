@@ -1,31 +1,12 @@
-#!/bin/sh
+#!/bin/bash
 ###########################################################################
 #
-# Copyright (c) 2001-2008 PDM&FC, All Rights Reserved.
-#
-###########################################################################
-
-#########################################################################
-#
-# $Id$
+# Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
 #
 #
 # Utility functions. This script is not meant to be executed by
 # itself. Instead it is tipically sourced from within other scripts
-# using the "." operator.
-#
-#
-# Revisions:
-#
-# 2008/08/29 Added the function "teaPathSeparator".
-#
-# 2004/09/29 The "teaParseTemplate" function now handles comments in
-# the template files. (jfn)
-#
-# 2004/09/29 Added the functions "teaWhoAmI", "teaHostname",
-# "teaDate". (jfn)
-#
-# 2003/02/10 Created. (jfn)
+# using the "source" operator.
 #
 #########################################################################
 
@@ -43,7 +24,7 @@
 #
 ###########################################################################
 
-teaError () {
+function teaError () {
 
     echo "***" $1 >&2
     exit 1
@@ -59,11 +40,11 @@ teaError () {
 #
 ###########################################################################
 
-teaCwd () {
+function teaCwd () {
 
     case "$OSTYPE" in
 	cygwin )
-	    cygpath --windows `pwd` | sed 's/\\\/\\//g'
+	    cygpath --windows $(pwd) | sed 's/\\\/\\//g'
 	    ;;
 	* )
 	    pwd
@@ -81,7 +62,7 @@ teaCwd () {
 #
 ###########################################################################
 
-teaNormalizePath () {
+function teaNormalizePath () {
 
     case "$OSTYPE" in
 	cygwin )
@@ -106,7 +87,7 @@ teaNormalizePath () {
 #
 ###########################################################################
 
-teaReadCoreConfig () {
+function teaReadCoreConfig () {
 
     # The path of the core configuration parameters file.
     trcc_configFile=$1/config/tea-core.conf
@@ -135,7 +116,7 @@ teaReadCoreConfig () {
 #
 ###########################################################################
 
-teaReadInstallConfig () {
+function teaReadInstallConfig () {
 
     teaReadCoreConfig $1
 
@@ -164,7 +145,7 @@ teaReadInstallConfig () {
 #
 ###########################################################################
 
-teaParseTemplate () {
+function teaParseTemplate () {
 
     tpt_tmpScript=/tmp/tea-parse-template.$$
 
@@ -187,9 +168,9 @@ teaParseTemplate () {
 #
 ###########################################################################
 
-teaWhoAmI () {
+function teaWhoAmI () {
 
-    expr "`id`" : "uid=[0-9]*(\([^)]*\).*"
+    expr "$(id)" : "uid=[0-9]*(\([^)]*\).*"
 }
 
 
@@ -202,7 +183,7 @@ teaWhoAmI () {
 #
 ###########################################################################
 
-teaHostname () {
+function teaHostname () {
 
     uname -n
 }
@@ -217,7 +198,7 @@ teaHostname () {
 #
 ###########################################################################
 
-teaDate () {
+function teaDate () {
 
     date "+%Y/%m/%d %H:%M:%S"
 }
@@ -232,7 +213,7 @@ teaDate () {
 #
 ###########################################################################
 
-teaOsType () {
+function teaOsType () {
 
     uname -s
 }
@@ -247,9 +228,9 @@ teaOsType () {
 #
 ###########################################################################
 
-teaPathSeparator () {
+function teaPathSeparator () {
 
-    case `teaOsType` in
+    case $(teaOsType) in
 	*CYGWIN* )
 	    echo ";"
 	    return

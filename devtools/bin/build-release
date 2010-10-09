@@ -13,7 +13,7 @@
 SCRIPT_DIR=`dirname $0`
 SCRIPT_NAME=`basename $0` 
 
-teaBaseDir=`cd $SCRIPT_DIR/..; pwd`
+teaBaseDir=`cd $SCRIPT_DIR/../..; pwd`
 pathSep=":"
 isUnix=1
 

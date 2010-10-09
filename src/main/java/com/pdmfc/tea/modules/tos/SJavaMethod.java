@@ -36,10 +36,10 @@ public class SJavaMethod
 
 
     private static final String LINE_SEPARATOR =
-	System.getProperty("line.separator");
+        System.getProperty("line.separator");
 
     private static final Class[] PARAM_TYPES = new Class[] {
-	SObjFunction.class, SContext.class, Object[].class
+        SObjFunction.class, SContext.class, Object[].class
     };
 
     private Method _javaMethod = null;
@@ -56,17 +56,17 @@ public class SJavaMethod
  **************************************************************************/
 
     public SJavaMethod(Class<?> javaClass,
-		       String   javaMethodName) {
+                       String   javaMethodName) {
 
-	try {
-	    _javaMethod = javaClass.getMethod(javaMethodName, PARAM_TYPES);
-	} catch (NoSuchMethodException e1) {
-	    _errorMsg = "Java class " + javaClass.getName() + 
-		" has no " + javaMethodName + " method";
-	} catch (SecurityException e2) {
-	    _errorMsg = "Java class " + javaClass.getName() + 
-		" has no accessible " + javaMethodName + " method";
-	}
+        try {
+            _javaMethod = javaClass.getMethod(javaMethodName, PARAM_TYPES);
+        } catch (NoSuchMethodException e1) {
+            _errorMsg = "Java class " + javaClass.getName() + 
+                " has no " + javaMethodName + " method";
+        } catch (SecurityException e2) {
+            _errorMsg = "Java class " + javaClass.getName() + 
+                " has no accessible " + javaMethodName + " method";
+        }
     }
 
 
@@ -81,7 +81,7 @@ public class SJavaMethod
 
     public SJavaMethod(Method javaMethod) {
 
-	_javaMethod = javaMethod;
+        _javaMethod = javaMethod;
     }
 
 
@@ -95,34 +95,34 @@ public class SJavaMethod
  **************************************************************************/
 
     public Object exec(SObjFunction obj,
-		       SContext     context,
-		       Object[]     args)
-	throws STeaException {
+                       SContext     context,
+                       Object[]     args)
+        throws STeaException {
 
-	if ( _javaMethod == null ) {
-	    throw new SRuntimeException(_errorMsg);
-	}
+        if ( _javaMethod == null ) {
+            throw new SRuntimeException(_errorMsg);
+        }
 
-	Object   target     = ((STosObj)obj).part(0);
-	Object[] targetArgs = new Object[] { obj, context, args };
+        Object   target     = ((STosObj)obj).part(0);
+        Object[] targetArgs = new Object[] { obj, context, args };
 
-	try {
-	    return _javaMethod.invoke(target, targetArgs);
-	} catch (IllegalAccessException e1) {
-	    internalError(e1);
-	} catch (IllegalArgumentException e2) {
-	    internalError(e2);
-	} catch (InvocationTargetException e3) {
-	    Throwable error = e3.getTargetException();
-	    if ( error instanceof STeaException ) {
-		throw (STeaException)error;
-	    } else {
-		internalError(error);
-	    }
-	}
+        try {
+            return _javaMethod.invoke(target, targetArgs);
+        } catch (IllegalAccessException e1) {
+            internalError(e1);
+        } catch (IllegalArgumentException e2) {
+            internalError(e2);
+        } catch (InvocationTargetException e3) {
+            Throwable error = e3.getTargetException();
+            if ( error instanceof STeaException ) {
+                throw (STeaException)error;
+            } else {
+                internalError(error);
+            }
+        }
 
-	// Never reached.
-	return null;
+        // Never reached.
+        return null;
     }
 
 
@@ -136,12 +136,12 @@ public class SJavaMethod
  **************************************************************************/
 
     private void internalError(Throwable error)
-	throws SRuntimeException {
+        throws SRuntimeException {
 
-	SRuntimeException rtError  =
-	    new SRuntimeException("internal error - {0} - {1}",
-				  new Object[] { error.getClass().getName(),
-						 error.getMessage() });
+        SRuntimeException rtError  =
+            new SRuntimeException("internal error - {0} - {1}",
+                                  new Object[] { error.getClass().getName(),
+                                                 error.getMessage() });
         StringWriter    buffer     = new StringWriter();
         PrintWriter     bufPrinter = new PrintWriter(buffer);
         StringTokenizer st         = null;
@@ -153,7 +153,7 @@ public class SJavaMethod
             rtError.addMessage(st.nextToken());
         }
 
-	throw rtError;
+        throw rtError;
     }
 
 
