@@ -30,7 +30,10 @@ import com.pdmfc.tea.runtime.STypes;
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.compiler.SCode;
 import com.pdmfc.tea.runtime.SContext;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 /**
  * Most of the functionality is implemented, except for
@@ -56,12 +59,47 @@ public class TeaScriptEngine extends AbstractScriptEngine
         implements Compilable, Invocable {
 
     /**
+     * <code>com.pdmfc.tea.engine.runtime</code><br />
      * Reserved binding name for the STeaRuntime.
      * Every ScriptContext has an associated STeaRuntime stored
      * with this key name in the bindings at ENGINE_SCOPE level.
+     * <p><b>Do not attempt to set it.</b> Its purpose is to preserve
+     * the full Tea runtime context associated with the ScriptContext,
+     * and eventually allow the java programmer to access
+     * the STeaRuntime object after the 1st script execution. </p>
      */
     public static final String KEY_RUNTIME =
-            "com.pdmfc.tea.engine.runtime";
+            "com.pdmfc.tea.engine.runtime";  
+    
+    /**
+     * <code>com.pdmfc.tea.engine.library</code><br />
+     * Reserved binding name for a list of import paths that will make up the
+     * the TEA_LIBRARY. The value has the same syntax as the
+     * <code>tsh --library</code> command line option: a String with a list
+     * of colon separated paths (or URLs).
+     * Set this attribute at ENGINE_SCOPE or GLOBAL_SCOPE to define the
+     * TEA_LIBRARY import path.
+     * <p>This is redundant with modifying the global <code>TEA_LIBRARY</code>
+     * Tea variable, which is a list import paths.</p>
+     */
+    public static final String KEY_LIBRARY =
+            "com.pdmfc.tea.engine.library";
+
+    /**
+     * <code>com.pdmfc.tea.engine.encoding</code><br />
+     * Reserved binding name for changing the encoding of imported Tea files.
+     * Has the same syntax as the
+     * <code>tsh --encoding</code> command line option: a string with the name
+     * of a java.nio.Charset.
+     * <p>
+     * Examples: UTF-8 or ISO-8859-1
+     * </p>
+     * <p>If used, it <b>must be set before the 1st execution</b> of any script
+     * in the associated ScriptContext. Any changes made to this attribute
+     * afterwards, have no effect.</p>
+     */
+    public static final String KEY_ENCODING =
+            "com.pdmfc.tea.engine.encoding";
 
     /**
      * A single com.pdmfc.tea.compiler.SCompiler is used to compile
@@ -363,6 +401,27 @@ public class TeaScriptEngine extends AbstractScriptEngine
             String argv0 = (String) sc.getAttribute("javax.script.filename");
             if (argv0 != null) {
                 teaRuntime.setArgv0(argv0);
+            }
+
+            // Set import library from com.pdmfc.tea.engine.library
+            // TODO: talk with jfn to open STeaLauncherArgs.optionSetLibary()
+            String libraryStr = (String) sc.getAttribute(KEY_LIBRARY);
+            if (libraryStr != null) {
+                String pathSep = File.pathSeparator;
+                StringTokenizer i = new StringTokenizer(libraryStr, pathSep);
+                List<String> libraryList = new ArrayList<String>();
+                while (i.hasMoreTokens()) {
+                    String path = i.nextToken();
+                    path = path.replace('|', ':');
+                    libraryList.add(path);
+                }
+                teaRuntime.setImportLocations(libraryList);
+            }
+
+            // Set source encoding com.pdmfc.tea.engine.encoding
+            String encoding = (String) sc.getAttribute(KEY_ENCODING);
+            if (encoding != null) {
+                teaRuntime.setSourceEncoding(encoding);
             }
 
             // argv0 and argv must be set before.

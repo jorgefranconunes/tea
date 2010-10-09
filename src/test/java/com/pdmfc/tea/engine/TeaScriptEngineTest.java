@@ -17,8 +17,10 @@ package com.pdmfc.tea.engine;
 
 import com.pdmfc.tea.SConfigInfo;
 import com.pdmfc.tea.runtime.SObjFunction;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import javax.script.Bindings;
 import javax.script.Invocable;
 import javax.script.ScriptContext;
@@ -41,7 +43,6 @@ import static org.junit.Assert.*;
 public class TeaScriptEngineTest {
 
     private ScriptEngine _e = null;
-    private InputStream _is = null;
 
     public TeaScriptEngineTest() {
     }
@@ -63,15 +64,10 @@ public class TeaScriptEngineTest {
         // create engine
         _e = m.getEngineByName("tea");
         assertNotNull(_e);
-
-        // create a temporary file
-        _is = TeaScriptEngineTest.class.getResourceAsStream("TeaScriptEngineTestScript1.tea");
-        assertNotNull(_is);
     }
 
     @After
     public void tearDown() throws IOException {
-        _is.close();
     }
 
     @Test
@@ -90,6 +86,69 @@ public class TeaScriptEngineTest {
 
         r = (SObjFunction) _e.get("tdbc-connection");
         assertNotNull(r);
+
+
+    }
+
+    @Test
+    public void checkEvalStringImportResource() throws ScriptException {
+
+        assertNull(_e.get("A_GLOBAL"));
+        _e.put("A_GLOBAL", null);
+        URL r = this.getClass().getResource("TeaScriptEngineTestCheckEvalFile.tea");
+        assertEquals("file", r.getProtocol());
+        File f = new File(r.getFile());
+        assertTrue(f.isFile());
+        assertTrue(f.canRead());
+        _e.put(TeaScriptEngine.KEY_LIBRARY, f.getParent());
+        _e.eval("import \"" + f.getName() + "\"");
+        assertEquals(2, _e.get("A_GLOBAL"));
+        assertEquals(f.getParent(), _e.get(TeaScriptEngine.KEY_LIBRARY));
+
+        // the default build-in paths should not be overwritten
+        _e.put("tdbc-connection", null);
+        SObjFunction of = (SObjFunction) _e.get("tdbc-connection");
+        assertNull(of);
+
+        _e.eval("import \"tdbc/tdbc.tea\"");
+
+        of = (SObjFunction) _e.get("tdbc-connection");
+        assertNotNull(of);
+    }
+
+    @Test
+    public void checkEncoding() throws ScriptException {
+
+        // This test only works if the resource import also works
+
+        assertNull(_e.get("A_GLOBAL"));
+        _e.put("A_GLOBAL", null);
+        URL r = this.getClass().getResource("TeaScriptEngineTestCheckEncoding88591.tea");
+        assertEquals("file", r.getProtocol());
+        File f = new File(r.getFile());
+        assertTrue(f.isFile());
+        assertTrue(f.canRead());
+        _e.put(TeaScriptEngine.KEY_LIBRARY, f.getParent());
+        _e.put(TeaScriptEngine.KEY_ENCODING, "ISO-8859-1");
+        _e.eval("import \"" + f.getName() + "\"");
+        String s = (String)_e.get("A_GLOBAL");
+        assertNotNull(s);
+        assertEquals(225, s.charAt(2)); // a acute
+
+        // change the context, to be able to set a new encoding
+        _e.setContext(new SimpleScriptContext());
+        _e.put("A_GLOBAL", null);
+        r = this.getClass().getResource("TeaScriptEngineTestCheckEncodingUtf8.tea");
+        assertEquals("file", r.getProtocol());
+        f = new File(r.getFile());
+        assertTrue(f.isFile());
+        assertTrue(f.canRead());
+        _e.put(TeaScriptEngine.KEY_LIBRARY, f.getParent());
+        _e.put(TeaScriptEngine.KEY_ENCODING, "UTF-8");
+        _e.eval("import \"" + f.getName() + "\"");
+        s = (String)_e.get("A_GLOBAL");
+        assertNotNull(s);
+        assertEquals(225, s.charAt(2)); // a acute
     }
 
     @Test
@@ -136,10 +195,17 @@ public class TeaScriptEngineTest {
     @Test
     public void checkEvalFile() throws ScriptException, IOException {
         _e.put("A_GLOBAL", null);
-        java.io.InputStreamReader ir = new java.io.InputStreamReader(_is);
+
+        //System.out.println(TeaScriptEngineTest.class.getResource("TeaScriptEngineTestCheckEvalFile.tea"));
+
+        // eval a resource file
+        InputStream is = TeaScriptEngineTest.class.getResourceAsStream("TeaScriptEngineTestCheckEvalFile.tea");
+        assertNotNull(is);
+        java.io.InputStreamReader ir = new java.io.InputStreamReader(is);
         _e.eval(ir);
-        ir.close();
         assertEquals(2, _e.get("A_GLOBAL"));
+        ir.close();
+        is.close();
     }
 
     @Test
