@@ -363,7 +363,7 @@ public class SModuleReflectTestTopClass {
 
        for(int i=0;i<mtds.length; i++) {
 	   System.out.println(mtds[i].getName()+":\n  Params:");
-	   Class[] params=mtds[i].getParameterTypes();
+	   Class<?>[] params=mtds[i].getParameterTypes();
 	   for(int j=0;j<params.length; j++) {
 	       System.out.println("    "+params[j].getName());
 	   }
