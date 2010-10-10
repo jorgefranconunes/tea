@@ -154,7 +154,6 @@ public class TeaScriptEngine extends AbstractScriptEngine
         this();
         //System.out.println("TeaScriptEngine(TeaScriptEngineFactory aFactory)");
         _factory = aFactory;
-        // TODO: more constructors with importPath setup ?
     }
 
     /**
@@ -174,24 +173,7 @@ public class TeaScriptEngine extends AbstractScriptEngine
         return _compiler;
     }
 
-    //protected synchronized ScriptContext getScriptContext(Bindings nn) {
-    //    ScriptContext sc = super.getScriptContext(nn);
-    //    STeaRuntime context =
-    //        (STeaRuntime)sc.getAttribute(KEY_RUNTIME,
-    //                                     ScriptContext.ENGINE_SCOPE);
-    //    if (context == null) {
-    //        try {
-    //            context = new STeaRuntime();
-    //            sc.setAttribute(KEY_RUNTIME, context, ScriptContext.ENGINE_SCOPE);            // context.start() ?
-    //            // setup import paths and readers/writers
-    //            // context.stop(); - put where ?
-    //            // context.end(); - put where ?
-    //        } catch (STeaException e) {
-    //            ; // TODO: ?
-    //        }
-    //    }
-    //    return sc;
-    //}
+
     /**
      * Converts the String to
      * <code>byte[]</code> for evaluation.
