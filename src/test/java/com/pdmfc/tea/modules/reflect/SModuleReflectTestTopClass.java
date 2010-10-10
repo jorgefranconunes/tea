@@ -6,6 +6,7 @@
 
 /**************************************************************************
  *
+ * $HeadURL$
  * $Id$
  *
  *
@@ -30,6 +31,8 @@
  *
  **************************************************************************/
 
+package com.pdmfc.tea.modules.reflect;
+
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,6 +49,8 @@ import java.util.Map;
  **************************************************************************/
 
 public class SModuleReflectTestTopClass {
+
+    // SModuleReflectTest depends on the values and data structures in this class
 
     public static String              _CTE_STRING  = "This is a String Constant";
     public static Float               _CTE_FLOAT   = new Float(3.14);
