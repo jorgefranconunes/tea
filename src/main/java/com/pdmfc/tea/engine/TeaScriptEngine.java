@@ -348,9 +348,19 @@ public class TeaScriptEngine extends AbstractScriptEngine
      * resources, no real harm is done by not calling this method.)
      */
     public void end() throws ScriptException {
-        this.getTeaRuntime(this.getContext()).end();
+        this.getTeaRuntime().end();
     }
 
+
+    /**
+     * Get the STeaRuntime for the current context.
+     * Convinience method that returns the same as
+     * <code>getTeaRuntime(getContext())</code>.
+     */
+    public STeaRuntime getTeaRuntime() throws ScriptException {
+        return this.getTeaRuntime(this.getContext());
+    }
+    
     /**
      * Get a STeaRuntime from the given engine context.
      * If non exists, create a new one.
