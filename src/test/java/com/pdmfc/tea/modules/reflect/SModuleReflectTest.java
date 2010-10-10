@@ -22,6 +22,9 @@ import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjNull;
 import com.pdmfc.tea.runtime.SObjPair;
 import com.pdmfc.tea.runtime.SObjSymbol;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import javax.script.ScriptEngineFactory;
 import javax.script.ScriptException;
 import org.junit.After;
@@ -112,7 +115,52 @@ public class SModuleReflectTest {
         Object teaObject = SModuleReflect.java2Tea(new java.util.Date(), context);
         assertSame(teaObject.getClass(), SDate.class);
 
-        // TODO: a lot more of objects to test
+        // JDBC->TDBC convertion
+        /* ok to uncomment when TSK-PDMFC-TEA-0058 derby.jar is concluded
+        String result;
+        Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+        Connection conn = java.sql.DriverManager.getConnection("jdbc:derby:memory:myDB;create=true");
+        Statement stat = conn.createStatement();
+        stat.execute("CREATE TABLE FIRSTTABLE (ID INT PRIMARY KEY, NAME VARCHAR(12))");
+        stat.execute("INSERT INTO FIRSTTABLE VALUES  (10,'TEN'),(20,'TWENTY'),(30,'THIRTY')");
+
+        // ResultSet
+        ResultSet rSet = stat.executeQuery("SELECT * FROM FIRSTTABLE ORDER BY ID");
+        _engine.put("aRSet", rSet);
+        result = (String) _engine.eval(_factory.getProgram(
+                "define aSum 0",
+                "define aStrList ()",
+                "while {$aRSet next} {",
+                "  set! aSum [+ $aSum [$aRSet getInt 1]]",
+                "  append [$aRSet getString 2] $aStrList",
+                "}",
+                "$aRSet close",
+                "str-cat [int->string $aSum] \"=\" [str-join $aStrList \"+\"]"));
+        assertEquals("60=TEN+TWENTY+THIRTY", result);
+        assertTrue(rSet.isClosed());
+
+        // Statement
+        _engine.put("aStat", stat);
+        result = (String) _engine.eval(_factory.getProgram(
+                "define aRSet [$aStat query \"SELECT COUNT(*) FROM FIRSTTABLE\"]",
+                "$aRSet next",
+                "define aCount [$aRSet getString 1]",
+                "$aRSet close",
+                "$aStat close",
+                "is $aCount"));
+        assertEquals("3", result);
+        assertTrue(stat.isClosed());
+
+        // Connection
+        assertTrue(conn.getAutoCommit());
+        _engine.put("aConn", conn);
+        _engine.eval("$aConn autocommit $false");
+        assertFalse(conn.getAutoCommit());
+
+        conn.close();
+        */
+
+        // TODO: a few more of objects to test
     }
 
     /**
@@ -302,11 +350,10 @@ public class SModuleReflectTest {
         oldStr = (String) _engine.eval("java-get-value $obj _aString");
         assertEquals("This is a member string", oldStr);
         _engine.eval("java-set-value $obj \"_aString\" [[new TDate] format \"yyyy-MM-dd'T'HH:mm:ss.SSSZ\"]");
-        newStr = (String)_engine.eval("java-get-value $obj _aString");
+        newStr = (String) _engine.eval("java-get-value $obj _aString");
         assertTrue(newStr.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}T.*"));
         _engine.eval("java-set-value $obj _aString \"" + oldStr + "\"");
     }
-
 
     /**
      * TSK-PDMFC-TEA-0045 InvocationTargetException must use getCause
@@ -320,7 +367,7 @@ public class SModuleReflectTest {
         try {
             java.io.File f2 = java.io.File.createTempFile("dumbPrefix", ".png", f);
             fail("The above java code ought to throw an exception!");
-        } catch(java.io.IOException e) {
+        } catch (java.io.IOException e) {
             aMsg = e.getMessage();
         }
 
@@ -329,8 +376,7 @@ public class SModuleReflectTest {
                 "define imgTmpFileJObj [java-exec-method java.io.File createTempFile \\",
                 "                          \"dumbPrefix\"  \\",
                 "                          \".png\" \\",
-                "                          $imgDirJObj]"
-                );
+                "                          $imgDirJObj]");
         try {
             _engine.eval(script);
             fail("The script of this test should throw an exception!");
@@ -338,5 +384,4 @@ public class SModuleReflectTest {
             assertTrue(e.getMessage().contains(aMsg));
         }
     }
-
 }
