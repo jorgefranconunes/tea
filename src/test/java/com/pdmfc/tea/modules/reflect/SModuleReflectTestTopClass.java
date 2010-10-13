@@ -260,6 +260,7 @@ public class SModuleReflectTestTopClass {
 
    public static int adder(Integer a, Integer b) {
 
+	   //System.out.println("public static int adder(Integer "+a+", Integer "+b+")="+(a.intValue()+b.intValue()+1));
        return a.intValue()+b.intValue()+1;
    }
 
@@ -274,8 +275,8 @@ public class SModuleReflectTestTopClass {
  **************************************************************************/
 
    public static float adder(Float a, Float b) {
-
-       return a.floatValue()+b.floatValue()+2;
+	   
+       return (a==null ? -2 : a.floatValue())+(b==null ? -2 : b.floatValue())+2;
    }
 
 
