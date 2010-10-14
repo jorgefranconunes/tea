@@ -17,13 +17,14 @@
 
 package com.pdmfc.tea.engine;
 
+import com.pdmfc.tea.STeaException;
 import javax.script.*;
 
 import com.pdmfc.tea.compiler.SCode;
 import com.pdmfc.tea.runtime.STeaRuntime;
 
 /**
- * Wrapper around an {@link SCode}.
+ * A JSR223 wrapper around an {@link SCode}.
  * 
  * @since 4.0.0
  *
@@ -38,17 +39,19 @@ public class TeaCompiledScript extends CompiledScript {
         _code   = code;
     }
 
+    /**
+     * @return the engine that created this object.
+     */
     public ScriptEngine getEngine() {
         return _engine;
     }
 
 
     /**
-     * Initialization of the Tea runtime environment is only performed
-     * when this method is 1st called for one engine. So, please keep
-     * in mind that, in this case a lot more Tea code might be
-     * executed, other than
-     * the one you are calling eval for.
+     * Executes this compiled script in the given script context.
+     *
+     * See {@link TeaScriptEngine#eval(String, ScriptContext)}
+     * for more details on script execution.
      */
     public Object eval(ScriptContext scriptContext)
         throws ScriptException {
@@ -69,11 +72,12 @@ public class TeaCompiledScript extends CompiledScript {
             Object result = teaRuntime.execute(_code); // Tea 3.1.2 or higher.
 
             return com.pdmfc.tea.modules.reflect.SModuleReflect.tea2Java(result);
-        } catch (Exception e) {
+        } catch (STeaException e) {
             //System.out.println("eval exception "+e.getMessage());
             //for(StackTraceElement ste : e.getStackTrace()) {
             //    System.out.println(ste.toString());
             //}
+            //throw TeaScriptEngine.teaException2ScriptException(e);
             throw new ScriptException(e);
         } finally {
             // retrived updated global vars to Bindings.

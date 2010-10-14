@@ -18,8 +18,6 @@ package com.pdmfc.tea.engine;
 import com.pdmfc.tea.compiler.SCompileException;
 import com.pdmfc.tea.runtime.SNoSuchVarException;
 import java.io.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.script.*;
 
 import com.pdmfc.tea.compiler.SCompiler;
@@ -30,6 +28,7 @@ import com.pdmfc.tea.runtime.STypes;
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.compiler.SCode;
 import com.pdmfc.tea.runtime.SContext;
+import com.pdmfc.tea.runtime.SRuntimeException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -72,7 +71,7 @@ public class TeaScriptEngine extends AbstractScriptEngine
 
     /**
      * <code>com.pdmfc.tea.engine.runtime</code><br />
-     * Reserved binding name for the STeaRuntime.
+     * Reserved binding name for the {@link STeaRuntime}.
      * Every ScriptContext has an associated STeaRuntime stored
      * with this key name in the bindings at ENGINE_SCOPE level.
      * <p><b>Do not attempt to set it.</b> Its purpose is to preserve
@@ -132,8 +131,8 @@ public class TeaScriptEngine extends AbstractScriptEngine
     protected volatile TeaScriptEngineFactory _factory;
 
     /**
-     * This is the default constructor that gets called when you
-     * instantiate this object directly.
+     * This is the default constructor that gets called when this object
+     * is instantiated by the programmer directly.
      * 
      * The {@link #_factory} field remains uninitialized,
      * unless you call {@link #getFactory()}.
@@ -172,6 +171,14 @@ public class TeaScriptEngine extends AbstractScriptEngine
     }
 
     /**
+     * Create an empty javax.script.Bindings using this engine's preferred
+     * implementation.
+     * 
+     * "SCR.4.3.4.1.1 Bindings, Bound Values and State" requires that a
+     * compliant engine accepts any implementation of a javax.script.Bindings.
+     * As such, at this time, this engine provides a javax.script.SimpleBindings
+     * as an implementation of its preferred javax.script.Bindings.
+     *
      * @return a new javax.script.SimpleBindings.
      */
     public Bindings createBindings() {
@@ -191,18 +198,67 @@ public class TeaScriptEngine extends AbstractScriptEngine
 
     /**
      * Evaluates the given Tea script in the given runtime context.
-     * 
+     *
+     * If its the first time that this scriptContext is used, the
+     * Tea initialization is performed (this usually means that the scripts
+     * in the <code>init.tea</code> files in the import paths are executed).
+     *
+     * <p>Before the script execution begins, all atributes in the GLOBAL_SCOPE
+     * and ENGINE_SCOPE of the ScriptContext are processed to setup the Tea
+     * execution environment.
+     * See the list of public static KEY fields in this class
+     * that represent special attribute names
+     * for ScriptContext.</p>
+     *
+     * <p>Non-reserved attribute names are
+     * converted into Tea global variables with the same name.
+     * The values of the attributes are converted into Tea using
+     * {@link com.pdmfc.tea.modules.reflect.SModuleReflect#java2Tea(java.lang.Object, com.pdmfc.tea.runtime.SContext) }.
+     * (The top level Tea context associated with the scriptContext is used for
+     * fetching TOS classes when converting some specific classes of java objects
+     * to TOS objects.
+     * Ex: a <code>java.util.Date</code> is converted to a TOS <code>TDate</code>).
+     * </p>
+     *
+     * <p>A global variable named <code>context</code> is made available
+     * to the Tea script, as a Tea object wrapper to the
+     * <code>scriptContext</code> parameter
+     * (as required by "SCR.4.3.4.1.2 Script Execution").</p>
+     *
+     * <p>After the script execution ends (regardless if a ScriptException
+     * is thrown or not), the values of the Tea global variables are fetched
+     * from the internal {@link STeaRuntime} context, and converted back to their
+     * correspondent attribute bindings using
+     * {@link com.pdmfc.tea.modules.reflect.SModuleReflect#tea2Java(java.lang.Object) }.
+     * This means that only attributes that have been <code>put</code>
+     * before script execution
+     * are fetched from the Tea global variable space. (The method
+     * <code>javax.script.Engine.get</code>
+     * does not work for fetching any value that
+     * was not <code>put</code> before execution of this method).
+     * This also means that if an unchecked exception is thrown, no attributes
+     * are updated.
+     * </p>
+     *
+     *
      * @param script a string with the complete Tea script to evaluate.
      * 
      * @param scriptContext the execution context.
      * This implementation accepts a plain javax.script.SimpleScriptContext.
-     * The Tea runtime is initialized in the first
+     * The internal {@link STeaRuntime} is initialized in the first
      * execution using this scriptContext, and it is set as an attribute
-     * at the ENGINE_SCOPE level with the name defined by {@link #KEY_RUNTIME}. 
+     * at the ENGINE_SCOPE level with the name defined by {@link #KEY_RUNTIME}
+     * (by {@link #getTeaRuntime(ScriptContext)}.
      * 
-     * @return the result of the last script instruction evaluated.
+     * @return the result of the last script instruction evaluated. converted
+     * to java using
+     * {@link com.pdmfc.tea.modules.reflect.SModuleReflect#tea2Java(java.lang.Object) }.
      * 
-     * @throws ScriptException if an exception occurs during the evaluation of the script.
+     * @throws ScriptException if a checked exception, or a script execution
+     * error is caught during the evaluation of the script. Use the
+     * <code>getCause</code> method to obtain the underlying exception.
+     * See {@link #getFullMessage(javax.script.ScriptException) } for
+     * details on obtaining the Tea stack trace (for Tea script errors).
      */
     public Object eval(String script, ScriptContext scriptContext)
             throws ScriptException {
@@ -254,6 +310,14 @@ public class TeaScriptEngine extends AbstractScriptEngine
         return _factory;
     }
 
+    /**
+     * Read a script and compile it.
+     *
+     * @param reader used to read the script into a string.
+     * @return an instance of a {@link TeaCompiledScript}
+     * @throws ScriptException any parsing or compilation errors are wrapped by a
+     * ScriptException.
+     */
     public CompiledScript compile(Reader reader)
             throws ScriptException {
         StringBuffer cb = new StringBuffer();
@@ -268,21 +332,54 @@ public class TeaScriptEngine extends AbstractScriptEngine
         return this.compile(cb.toString());
     }
 
+    /**
+     * Compile a script.
+     *
+     * @param script a string with the complete Tea script source to compile.
+     * @return an instance of a {@link TeaCompiledScript}.
+     * @throws ScriptException any parsing compilation errors are wrapped by a
+     * ScriptException.
+     */
     public CompiledScript compile(String script)
             throws ScriptException {
         try {
-            return new TeaCompiledScript(this, getCompiler().compile(script));
+            return new TeaCompiledScript(
+                    this,
+                    this.getCompiler().compile(script));
         } catch (Exception e) {
             throw new ScriptException(e);
         }
     }
 
+    /**
+     * Compile a script from a byte array.
+     *
+     * @param script an array of bytes that are converted to string using the
+     * platform default encoding. (The value of the attribute named
+     * {@link #KEY_ENCODING} is not for this purpose).
+     * @return an instance of a {@link TeaCompiledScript}.
+     * @throws ScriptException any parsing or compilation errors are wrapped by a
+     * ScriptException.
+     */
     public CompiledScript compileBytes(byte script[])
             throws ScriptException {
         String scriptString = new String(script);
         return this.compile(scriptString);
     }
 
+    /**
+     * Invoke a Tea global function in this engine's default script context.
+     *
+     * See {@link #eval(java.lang.String, javax.script.ScriptContext) }
+     * for more details on Tea script execution.
+     * 
+     * @param name a Tea global variable must exist with this name,
+     * and its value must be a function.
+     * @param args an array of java objects which are converted to
+     * Tea function arguments.
+     * @return the value returned by the function converted to java.
+     * @throws ScriptException
+     */
     public Object invokeFunction(String name, Object... args)
             throws ScriptException {
         //System.out.println("Invoke using sc=" + this.getContext());
@@ -306,6 +403,20 @@ public class TeaScriptEngine extends AbstractScriptEngine
         }
     }
 
+    /**
+     * Invoke a method in a Tea object in this engine's default script context.
+     *
+     * See {@link #eval(java.lang.String, javax.script.ScriptContext) }
+     * for more details on Tea script execution.
+     *
+     * @param thisz a reference to a global variable's value that must
+     * represent a TOS object.
+     * @param name a string with the name of the TOS class instance method to call.
+     * @param args an array of java objects which are converted to
+     * Tea method arguments.
+     * @return the value returned by the method converted to java.
+     * @throws ScriptException
+     */
     public Object invokeMethod(Object thisz, String name, Object... args)
             throws ScriptException {
         STeaRuntime teaRuntime = this.context2TeaGlobals(this.getContext());
@@ -349,7 +460,7 @@ public class TeaScriptEngine extends AbstractScriptEngine
     }
 
     /**
-     * com.pdmfc.tea.runtime.STeaRuntime should have the end() method
+     * {@link STeaRuntime#end()} method should be
      * called before unloading, so that any Tea code callbacks may be
      * called to free allocated resources.
      * As JSR-223 does not support this feature, this method is left
@@ -363,21 +474,30 @@ public class TeaScriptEngine extends AbstractScriptEngine
 
 
     /**
-     * Get the STeaRuntime for the current context.
-     * Convinience method that returns the same as
-     * <code>getTeaRuntime(getContext())</code>.
+     * Get the {@link STeaRuntime} for the current context.
+     *
+     * Convinience method that calls
+     * {@link #getTeaRuntime(javax.script.ScriptContext)}
+     * using <code>this.getContext()</code> as an argument.
      */
     public STeaRuntime getTeaRuntime() throws ScriptException {
         return this.getTeaRuntime(this.getContext());
     }
     
     /**
-     * Get a STeaRuntime from the given engine context.
-     * If non exists, create a new one.
-     * The STeaRuntime is stored in the script context, in the ENGINE_SCOPE
-     * using the reserved attribute name "com.pdmfc.tea.engine.teaRuntime".
-     * @throws ScriptException as Tea initialization code might be
-     * called to initialize the runtime.
+     * Get a {@link STeaRuntime} from the given engine context.
+     *
+     * If none exists, create a new one.
+     *
+     * <p>The STeaRuntime is stored in the script context, in the ENGINE_SCOPE
+     * using the reserved attribute with the name {@link #KEY_RUNTIME}.
+     * It is only set when this method is invoked for the first time,
+     * for the givem ScriptContext.
+     * </p>
+     *
+     * @throws ScriptException Current implementation is not expected to throw
+     * any checked exception, but future enhancements may require that
+     * context initialization code be executed at this time.
      */
     public STeaRuntime getTeaRuntime(ScriptContext sc) throws ScriptException {
         synchronized (sc) {
@@ -392,10 +512,11 @@ public class TeaScriptEngine extends AbstractScriptEngine
     }
 
 
-    /* This internal method out to be called before execution of Tea code
-     * completes inside this ScriptContext.
+    /**
+     * Internal method used to setup the pre-execution Tea runtime environment
+     * from the ScriptContext.
      */
-    public STeaRuntime context2TeaGlobals(ScriptContext sc)
+    protected STeaRuntime context2TeaGlobals(ScriptContext sc)
             throws ScriptException {
         try {
             STeaRuntime teaRuntime = this.getTeaRuntime(sc);
@@ -504,10 +625,11 @@ public class TeaScriptEngine extends AbstractScriptEngine
         }
     }
 
-    /* This internal method out to be called after the execution of Tea code
-     * completes inside this ScriptContext.
+    /**
+     * Internal method to flush post-execution values back to the
+     * ScriptContext.
      */
-    public void teaGlobals2Context(ScriptContext sc)
+    protected void teaGlobals2Context(ScriptContext sc)
             throws ScriptException {
 
         STeaRuntime teaRuntime = this.getTeaRuntime(sc);
@@ -573,6 +695,47 @@ public class TeaScriptEngine extends AbstractScriptEngine
                 throw new ScriptException(ex);
             }
             // teaRuntime.end(); -- not here. On servlet unloading ?
+        }
+    }
+
+
+//    public static ScriptException teaException2ScriptException(STeaException e) {
+//            if (e instanceof SRuntimeException) {
+//                // the full message preserves line numbers in the text of the
+//                // message itself.
+//                System.out.println("Converting SRuntimeException.getFullMessage()="+((SRuntimeException)e).getFullMessage());
+//                return new ScriptException(((SRuntimeException)e).getFullMessage());
+//            } else {
+//                return new ScriptException(e);
+//            }
+//    }
+
+    /**
+     * Obtain the full error message, including the Tea script's stack
+     * trace from a ScriptException thrown while using this framework.
+     *
+     * If the cause of the ScriptException is a {@link SRuntimeException}
+     * then there is probably underlying Tea script stack trace information
+     * which is included in the returned string value (where the list of messages
+     * in the stack trace is separated by a newline).
+     * If not, it just returns the message associated with the cause
+     * of the exception.
+     *
+     * @param ex the ScriptException thrown during the execution of a Tea
+     * script thrown while using this framework.
+     *
+     * @return a string with the message obtained from 
+     * {@link SRuntimeException#getFullMessage} or
+     * <code>ex.getCause().getMessage()</code>.
+     */
+    public static String getFullMessage(ScriptException ex) {
+        Throwable e = ex.getCause();
+        if (e != null && e instanceof SRuntimeException) {
+            // the full message preserves line numbers in the text of the
+            // message itself.
+            return ((SRuntimeException)e).getFullMessage();
+        } else {
+            return ex.getMessage();
         }
     }
 }

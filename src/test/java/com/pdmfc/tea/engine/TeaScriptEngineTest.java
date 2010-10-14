@@ -76,6 +76,28 @@ public class TeaScriptEngineTest {
     }
 
     @Test
+    public void checkEvalStringError() throws ScriptException {
+        try {
+            _e.eval(_e.getFactory().getProgram(
+                    "define f() {",
+                    "  + 1 2",
+                    "  / 1 0",
+                    "  == 1 2",
+                    "}",
+                    "",
+                    "f"
+                    ));
+            fail("The above code should have thrown a ScriptException on the / 1 0 line.");
+        } catch (ScriptException e) {
+            String teaMessage = TeaScriptEngine.getFullMessage(e);
+            System.out.println(teaMessage);
+            assertTrue(teaMessage.toLowerCase().contains("arithmetic exception"));
+            assertTrue(teaMessage.toLowerCase().contains("on line 3"));
+            assertTrue(teaMessage.toLowerCase().contains("on line 7"));
+        }
+    }
+
+    @Test
     public void checkEvalStringImportTdbc() throws ScriptException {
 
         _e.put("tdbc-connection", null);
