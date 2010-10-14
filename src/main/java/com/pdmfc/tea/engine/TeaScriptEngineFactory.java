@@ -23,6 +23,13 @@ import javax.script.*;
 
 import com.pdmfc.tea.SConfigInfo;
 
+/**
+ * The official factory provided for instantiating a {@link TeaScriptEngine} from
+ * a javax.script.ScriptEngineManager.
+ * 
+ * @since 4.0.0
+ *
+ */
 public class TeaScriptEngineFactory implements ScriptEngineFactory {
 
     final List<String> _extensions = Arrays.asList("tea");
@@ -42,8 +49,8 @@ public class TeaScriptEngineFactory implements ScriptEngineFactory {
     }
 
     /**
-     * @return A string in the format "x.y.z". This value is not
-     * related to the Tea version.
+     * @return A string in the format "x.y.z". Since Tea 4, this
+     * value is the same as the Tea version.
      */
     public String getEngineVersion() {
         // Since Tea 4, that the engine version is the same as the language version
@@ -80,7 +87,8 @@ public class TeaScriptEngineFactory implements ScriptEngineFactory {
 
     /**
      * @return A string in the format "x.y.z" containing the Tea
-     * version number (not the Tea Engine version number).
+     * version number (which is now the same as the Tea Engine
+     * version number).
      */
     public String getLanguageVersion() {
         return SConfigInfo.getProperty("com.pdmfc.tea.version");
@@ -139,8 +147,7 @@ public class TeaScriptEngineFactory implements ScriptEngineFactory {
     }
 
     /**
-     * As we are not allowed to throw a ScriptException, real
-     * initialization is delayed until you try to evaluate some Tea
+     * Tea runtime initialization is delayed until you try to evaluate some Tea
      * code.
      * @see TeaCompiledScript#eval(ScriptContext scriptContext)
      */

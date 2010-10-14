@@ -36,11 +36,15 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 /**
+ * The official implementation of the javax.script.ScriptEngine for Tea 4.
+ * 
  * Most of the functionality is implemented, except for
- * 2 getInterface() methods.
+ * the #getInterface methods.
+ * 
  * <p>The use of SimpleScriptContext is supported, and the full execution
  * context (STeaRuntime) is saved/restored from the ScriptContext
  * using the reserved attribute name com.pdmfc.tea.engine.runtime.</p>
+ * 
  * <p>Unlike the Rhino engine, the TeaScriptEngine doesn't allow the copying
  * of function (lambda) values into the GLOBAL_SCOPE. (In fact, the copying
  * of any function (lambda) values between scopes should not be allowed,
@@ -49,11 +53,19 @@ import java.util.StringTokenizer;
  * recommends that you only put/get simple data values (Strings or numerics)
  * into/out of bindings - which are mapped into/from Tea global variables
  * with the same name as the attribute name.</p>
+ * 
  * <p>A Tea global variable named <b>context</b> is introduced, and it is a
  * wrapper aroung the ScriptContext
  * object. It behaves just like a regular TOS object.</p>
+ * 
  * <p>See the examples in the programmer's guide (part of the Tea documentation)
  * for more use cases.</p>
+ * 
+ * <p>Tea script execution is not thread-safe,
+ * but you can instantiate as many TeaScriptEngines as needed
+ * for concurrent execution of Tea scripts.</p>
+ * 
+ * @since 4.0.0
  */
 public class TeaScriptEngine extends AbstractScriptEngine
         implements Compilable, Invocable {
@@ -109,7 +121,7 @@ public class TeaScriptEngine extends AbstractScriptEngine
     protected SCompiler _compiler;
 
     /**
-     * A private empty compiled code. Used internally
+     * An empty compiled code. Used internally
      * to force initialization of the STeaRuntime for the 1st time.
      */
     protected SCode _emptyCode;
@@ -120,11 +132,15 @@ public class TeaScriptEngine extends AbstractScriptEngine
     protected volatile TeaScriptEngineFactory _factory;
 
     /**
-     * Initialize _fatcory to null. 
-     * As we are not allowed to throw a ScriptException, real
+     * This is the default constructor that gets called when you
+     * instantiate this object directly.
+     * 
+     * The {@link #_factory} field remains uninitialized,
+     * unless you call {@link #getFactory()}.
+     *  
+     * As we are not allowed to throw a ScriptException, the Tea runtime
      * initialization is delayed until you try to evaluate some Tea
      * code.
-     * @see TeaCompiledScript#eval(ScriptContext scriptContext)
      */
     public TeaScriptEngine() {
         //this(null);
@@ -141,13 +157,12 @@ public class TeaScriptEngine extends AbstractScriptEngine
     }
 
     /**
-     * Initialize _factory and super-class with
-     * <code>AbstractScriptEngine(new TeaBindings())</code>
-     * so that the context now has an uninitialized TeaBindings.
-     * As we are not allowed to throw a ScriptException, real
+     * This is the constructor that gets called when the engine is
+     * instantiated through a javax.script.ScriptEngineManager.
+     * 
+     * As we are not allowed to throw a ScriptException, the Tea runtime
      * initialization is delayed until you try to evaluate some Tea
      * code.
-     * @see TeaCompiledScript#eval(ScriptContext scriptContext)
      */
     public TeaScriptEngine(TeaScriptEngineFactory aFactory) {
         //super(new TeaBindings());
@@ -166,8 +181,8 @@ public class TeaScriptEngine extends AbstractScriptEngine
     }
 
     /**
-     * @return a com.pdmfc.tea.compiler.SCompiler. There is only one
-     * per engine.
+     * @return a {@link com.pdmfc.tea.compiler.SCompiler}.
+     * There is only one per engine.
      */
     public synchronized SCompiler getCompiler() {
         return _compiler;
@@ -175,9 +190,19 @@ public class TeaScriptEngine extends AbstractScriptEngine
 
 
     /**
-     * Converts the String to
-     * <code>byte[]</code> for evaluation.
-     * @see #evalBytes(byte[] script, ScriptContext scriptContext).
+     * Evaluates the given Tea script in the given runtime context.
+     * 
+     * @param script a string with the complete Tea script to evaluate.
+     * 
+     * @param scriptContext the execution context.
+     * This implementation accepts a plain javax.script.SimpleScriptContext.
+     * The Tea runtime is initialized in the first
+     * execution using this scriptContext, and it is set as an attribute
+     * at the ENGINE_SCOPE level with the name defined by {@link #KEY_RUNTIME}. 
+     * 
+     * @return the result of the last script instruction evaluated.
+     * 
+     * @throws ScriptException if an exception occurs during the evaluation of the script.
      */
     public Object eval(String script, ScriptContext scriptContext)
             throws ScriptException {
@@ -188,8 +213,7 @@ public class TeaScriptEngine extends AbstractScriptEngine
 
     /**
      * Reads the file to memory, and converts it to
-     * <code>byte[]</code> for evaluation.
-     * @see #evalBytes(byte[] script, ScriptContext scriptContext).
+     * a string for evaluation using {@link #eval(String, ScriptContext)}.
      */
     public Object eval(Reader reader, ScriptContext scriptContext)
             throws ScriptException {
@@ -206,7 +230,9 @@ public class TeaScriptEngine extends AbstractScriptEngine
     }
 
     /**
-     * Compiles <code>byte[]</code> as a Tea script and executes it.
+     * Reads the <code>byte[]</code> as String using the platform default
+     * character encoding (not the encoding specified by {@link #KEY_ENCODING})
+     * and executes it as a Tea script using {@link #eval(String, ScriptContext)}.
      */
     public Object evalBytes(byte script[], ScriptContext scriptContext)
             throws ScriptException {
@@ -215,7 +241,9 @@ public class TeaScriptEngine extends AbstractScriptEngine
     }
 
     /**
-     * @return _factory
+     * @return _factory a new TeaScriptEngineFactory is instantiated
+     * (and {@link #_factory} updated) if {@link #_factory} was null
+     * (such as when this engine was created using the default constructor).
      */
     public ScriptEngineFactory getFactory() {
         synchronized (this) {

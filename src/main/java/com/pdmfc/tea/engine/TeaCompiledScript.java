@@ -22,6 +22,12 @@ import javax.script.*;
 import com.pdmfc.tea.compiler.SCode;
 import com.pdmfc.tea.runtime.STeaRuntime;
 
+/**
+ * Wrapper around an {@link SCode}.
+ * 
+ * @since 4.0.0
+ *
+ */
 public class TeaCompiledScript extends CompiledScript {
 
     private TeaScriptEngine    _engine;
