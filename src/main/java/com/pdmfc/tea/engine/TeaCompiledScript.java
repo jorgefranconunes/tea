@@ -24,7 +24,8 @@ import com.pdmfc.tea.compiler.SCode;
 import com.pdmfc.tea.runtime.STeaRuntime;
 
 /**
- * A JSR223 wrapper around an {@link SCode}.
+ * A JSR-223 <code>javax.script.CompiledScript</code>
+ * wrapper around an {@link SCode}.
  * 
  * @since 4.0.0
  *
