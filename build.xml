@@ -267,7 +267,8 @@ Main Ant build file for the Tea development tree.
   <property name="teadoc.source.dir" location="src/main" />
   <property name="teadoc.target.dir" location="doc/teadoc" />
 
-  <property name="teadoc.tool" location="bin/teadoc" />
+  <property name="teadoc.script.library" location="apps/teadoc/lib/tea" />
+  <property name="teadoc.script" location="${teadoc.script.library}/doc-html.tea" />
   <property name="teadoc.header" value="Tea ${BUILD_VERSION} Reference Documentation&lt;br&gt;&amp;copy; 2010 &lt;a href=&quot;http://www.pdmfc.com&quot;&gt;PDM&amp;amp;FC&lt;/a&gt;" />
   <property name="teadoc.footer" value="${teadoc.header}" />
   <property name="teadoc.bottom" value="&lt;font size=&quot;-1&quot;&gt;&lt;a href=&quot;mailto:info@pdmfc.com&quot;&gt;Report a bug or request new features&lt;/a&gt;&lt;/font&gt;&lt;br /&gt;&lt;font size=&quot;-1&quot;&gt;&amp;copy; 2010&lt;/font&gt; &lt;a href=&quot;http://www.pdmfc.com&quot;&gt;&lt;img align=&quot;absmiddle&quot; border=&quot;0&quot; src=&quot;LogoSmallPdmfc.png&quot;&gt;&lt;/a&gt;" />
@@ -280,16 +281,19 @@ Main Ant build file for the Tea development tree.
     <mkdir dir="${teadoc.target.dir}" />
     <copy file="doc/images/LogoSmallPdmfc.png" todir="${teadoc.target.dir}" />
 
-    <exec executable="${teadoc.tool}" failonerror="yes">
-      <arg value="--header=${teadoc.header}" />
-      <arg value="--footer=${teadoc.footer}" />
-      <arg value="--bottom=${teadoc.bottom}" />
-      <arg value="--doc-title=${teadoc.doctitle}" />
-      <arg value="--window-title=${teadoc.windowtitle}" />
-      <arg value="--path-list=${teadoc.pathlist}" />
-      <arg value="--output-dir=${teadoc.outputdir}" />
-    </exec>
-
+  	<java jar="${jar.file}" fork="true" failonerror="yes">
+        <arg value="--script=${teadoc.script}" />
+        <arg value="--library=${teadoc.script.library}" />
+        <arg value="--" />
+        <arg value="--header=${teadoc.header}" />
+        <arg value="--footer=${teadoc.footer}" />
+        <arg value="--bottom=${teadoc.bottom}" />
+        <arg value="--doc-title=${teadoc.doctitle}" />
+        <arg value="--window-title=${teadoc.windowtitle}" />
+        <arg value="--path-list=${teadoc.pathlist}" />
+        <arg value="--output-dir=${teadoc.outputdir}" />
+  	</java>
+  
   </target>
 
   <target name="teadoc.clean" depends="teainstall.clean" >
