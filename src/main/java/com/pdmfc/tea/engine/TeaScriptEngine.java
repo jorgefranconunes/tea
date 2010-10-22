@@ -85,9 +85,9 @@ public class TeaScriptEngine extends AbstractScriptEngine
      * <code>ENGINE_SCOPE</code> level.
      *
      * <p><b>Do not attempt to set it.</b> Its purpose is to preserve
-     * the full Tea runtime context associated with the ScriptContext,
+     * the full Tea runtime context associated with the <code>ScriptContext</code>,
      * and eventually allow the java programmer to access
-     * the STeaRuntime object after the 1st script execution.
+     * the <code>STeaRuntime</code> object after the 1st script execution.
      */
     public static final String KEY_RUNTIME =
             "com.pdmfc.tea.engine.runtime";  
@@ -113,10 +113,11 @@ public class TeaScriptEngine extends AbstractScriptEngine
      * <code>tsh --encoding</code> command line option: a string with the name
      * of a java.nio.Charset.
      *
-     * <p>Examples: UTF-8 or ISO-8859-1
+     * <p>Examples of accepted values: UTF-8 or ISO-8859-1
      * 
      * <p>If used, it <b>must be set before the 1st execution</b> of any script
-     * in the associated ScriptContext. Any changes made to this attribute
+     * in the associated <code>ScriptContext</code>.
+     * Any changes made to this attribute
      * afterwards, have no effect.
      */
     public static final String KEY_ENCODING =
@@ -131,7 +132,7 @@ public class TeaScriptEngine extends AbstractScriptEngine
 
     /**
      * An empty compiled code. Used internally
-     * to force initialization of the {@link STeaRuntime} for the 1st time.
+     * to force initialization of the {@link STeaRuntime} for the first time.
      */
     protected SCode _emptyCode;
 
@@ -148,7 +149,8 @@ public class TeaScriptEngine extends AbstractScriptEngine
      * unless you call {@link #getFactory()}.
      *  
      * As we are not allowed to throw a <code>javax.script.ScriptException</code>,
-     * the Tea runtime initialization is delayed until you try to evaluate some
+     * the Tea runtime initialization (associated with the default
+     * <code>ScriptContext</code>) is delayed until the first evaluation of
      * Tea code.
      *
      * @throws java.lang.RuntimeException If any internal checked exception
@@ -174,8 +176,8 @@ public class TeaScriptEngine extends AbstractScriptEngine
      * This is the constructor that gets called when the engine is
      * instantiated through a <code>javax.script.ScriptEngineManager</code>.
      *
-     * The {@link #_factory} field is initialized with the instance
-     * of {@link TeaScriptEngineFactory} that instantiated this object.
+     * @param aFactory  The {@link #_factory} field is initialized with this
+     * instance of {@link TeaScriptEngineFactory} that instantiated this object.
      *
      * @see #TeaScriptEngine()
      */
@@ -222,7 +224,7 @@ public class TeaScriptEngine extends AbstractScriptEngine
      * Evaluates the given Tea script in the given runtime context.
      *
      * If its the first time that this <code>scriptContext</code> is used, the
-     * Tea initialization is performed (this usually means that the scripts
+     * Tea runtime initialization is performed (this usually means that the scripts
      * in the <code>init.tea</code> files in the import paths are executed).
      *
      * <p>Before the script execution begins, all atributes in the
@@ -294,8 +296,19 @@ public class TeaScriptEngine extends AbstractScriptEngine
     }
 
     /**
-     * Reads the file to memory, and converts it to
+     * Reads the file into memory, and converts it to
      * a string for evaluation using {@link #eval(String, ScriptContext)}.
+     * The <code>reader</code> is not closed.
+     *
+     * @param reader         From where the script will be read.
+     * @param scriptContext  The context for script execution.
+     * @return An <code>Object</code> with the result of the script execution.
+     * @throws ScriptException Besides any script execution exception,
+     * any <code>java.io.IOException</code>
+     * caught while using the <code>reader</code> is also converted to
+     * a <code>ScriptException</code>.
+     *
+     * @see #eval(java.lang.String, javax.script.ScriptContext)
      */
     public Object eval(Reader reader, ScriptContext scriptContext)
             throws ScriptException {
@@ -315,6 +328,13 @@ public class TeaScriptEngine extends AbstractScriptEngine
      * Reads the <code>byte[]</code> as String using the platform default
      * character encoding (not the encoding specified by {@link #KEY_ENCODING})
      * and executes it as a Tea script using {@link #eval(String, ScriptContext)}.
+     *
+     * @param script         The script represented as an array of bytes.
+     * @param scriptContext  The context for script execution.
+     * @return An <code>Object</code> with the result of the script execution.
+     * @throws ScriptException
+     *
+     * @see #eval(java.lang.String, javax.script.ScriptContext)
      */
     public Object evalBytes(byte script[], ScriptContext scriptContext)
             throws ScriptException {
@@ -323,9 +343,13 @@ public class TeaScriptEngine extends AbstractScriptEngine
     }
 
     /**
-     * @return _factory a new TeaScriptEngineFactory is instantiated
-     * (and {@link #_factory} updated) if {@link #_factory} was null
-     * (such as when this engine was created using the default constructor).
+     * Gets the factory that was used to instantiate this engine.
+     * Create a new one, if this engine was instantiated directly.
+     * 
+     * @return {@link #_factory}. If {@link #_factory} was null
+     * (such as when this engine was created using the default constructor)
+     * a new {@link TeaScriptEngineFactory} is instantiated
+     * and {@link #_factory} updated before returning.
      */
     public ScriptEngineFactory getFactory() {
         synchronized (this) {
@@ -493,7 +517,11 @@ public class TeaScriptEngine extends AbstractScriptEngine
      * As JSR-223 does not support this feature, this method is left
      * as an extension for the programmer to call it explicitely.
      * (If the Tea code does not defines any callbacks to release
-     * resources, no real harm is done by not calling this method.)
+     * resources - and as current Tea version does not track and closes
+     * open files forgotten by the programmer - no real harm is done by not
+     * calling this method yet.)
+     *
+     * @throws ScriptException
      */
     public void end() throws ScriptException {
         this.getTeaRuntime().end();
@@ -501,11 +529,15 @@ public class TeaScriptEngine extends AbstractScriptEngine
 
 
     /**
-     * Get the {@link STeaRuntime} for the current context.
+     * Gets the {@link STeaRuntime} for the current context.
      *
      * Convinience method that calls
      * {@link #getTeaRuntime(javax.script.ScriptContext)}
      * using <code>this.getContext()</code> as an argument.
+     *
+     * @return The <code>STeaRuntime</code> associated with the default
+     * context.
+     * @throws ScriptException
      */
     public STeaRuntime getTeaRuntime() throws ScriptException {
         return this.getTeaRuntime(this.getContext());
@@ -522,6 +554,12 @@ public class TeaScriptEngine extends AbstractScriptEngine
      * using the reserved attribute with the name {@link #KEY_RUNTIME}.
      * It is only set when this method is invoked for the first time,
      * for the givem <code>ScriptContext</code>.
+     *
+     * @param sc The script context for which the <code>STeaRuntime</code>
+     * is needed.
+     *
+     * @return The <code>STeaRuntime</code> associated with the <code>sc</code>
+     * context.
      *
      * @throws ScriptException Current implementation is not expected to throw
      * any checked exception, but future enhancements may require that
@@ -543,6 +581,16 @@ public class TeaScriptEngine extends AbstractScriptEngine
     /**
      * Internal method used to setup the pre-execution Tea runtime environment
      * from the <code>ScriptContext</code>.
+     *
+     * This is the internal method that converts the reserved attributes
+     * names into {@link STeaRuntime} settings, sets up global variables,
+     * and prepares it for execution calling {@link STeaRuntime#start() }.
+     *
+     * @param sc The script context.
+     *
+     * @return The <code>STeaRuntime</code> associated with <code>sc</code>.
+     * 
+     * @throws ScriptException
      */
     protected STeaRuntime context2TeaGlobals(ScriptContext sc)
             throws ScriptException {
@@ -595,7 +643,7 @@ public class TeaScriptEngine extends AbstractScriptEngine
 
             // argv0 and argv must be set before.
             teaRuntime.start();
-            // Run an empty code to force 1st time initialization
+            // Run an empty code to force first time initialization
             // before calling SModuleReflect.java2Tea.
             // (There is no public interface for doing so in STeaRuntime.)
             // Otherwise we will get errors for some convertions resulting
@@ -655,7 +703,11 @@ public class TeaScriptEngine extends AbstractScriptEngine
 
     /**
      * Internal method to flush post-execution values back to the
-     * <code>ScriptContext</code>.
+     * <code>ScriptContext</code>, and calls  {@link STeaRuntime#stop() }.
+     *
+     * @param sc The script context.
+     *
+     * @throws ScriptException
      */
     protected void teaGlobals2Context(ScriptContext sc)
             throws ScriptException {
@@ -739,8 +791,8 @@ public class TeaScriptEngine extends AbstractScriptEngine
 //    }
 
     /**
-     * Obtain the full error message, including the Tea script's stack
-     * trace from a <code>javax.script.ScriptException</code>
+     * Obtain the full error message (including the Tea script's stack
+     * trace) from a <code>javax.script.ScriptException</code>
      * thrown while using this framework.
      *
      * If the cause of the <code>ScriptException</code> is a {@link SRuntimeException}
@@ -754,7 +806,7 @@ public class TeaScriptEngine extends AbstractScriptEngine
      * thrown during the execution of a Tea
      * script thrown while using this framework.
      *
-     * @return a string with the message obtained from 
+     * @return A string with the message obtained from
      * {@link SRuntimeException#getFullMessage} or
      * <code>ex.getCause().getMessage()</code>.
      */

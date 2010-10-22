@@ -26,6 +26,8 @@ import com.pdmfc.tea.runtime.STeaRuntime;
 /**
  * A JSR-223 <code>javax.script.CompiledScript</code>
  * wrapper around an {@link SCode}.
+ * It associates the compiled code with the engine
+ * that instantiated this object.
  * 
  * @since 4.0.0
  *
@@ -35,6 +37,12 @@ public class TeaCompiledScript extends CompiledScript {
     private TeaScriptEngine    _engine;
     private SCode              _code;
 
+    /**
+     * Constructor for this object.
+     * 
+     * @param engine The engine that has instantiated this object.
+     * @param code The compiled code wrapped by this class.
+     */
     public TeaCompiledScript(TeaScriptEngine engine, SCode code) {
         _engine = engine;
         _code   = code;

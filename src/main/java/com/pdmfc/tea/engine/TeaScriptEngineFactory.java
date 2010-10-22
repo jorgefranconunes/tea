@@ -25,7 +25,7 @@ import com.pdmfc.tea.SConfigInfo;
 
 /**
  * The official factory provided for instantiating a {@link TeaScriptEngine} from
- * a javax.script.ScriptEngineManager.
+ * a <code>javax.script.ScriptEngineManager</code>.
  * 
  * @since 4.0.0
  *
