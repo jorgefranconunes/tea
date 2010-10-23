@@ -11,6 +11,11 @@
  *
  * Revisions:
  *
+ * 2010/10/24 TSK-PDMFC-TEA-0050 java.lang.IllegalArgumentException
+ * is the only unchecked exception expected in "TDate format" if
+ * the Tea programmer makes a mistake in the date format.
+ * The others should display a java stack trace. (jpsl)
+ *
  * 2004/11/02 The "TDate format" method now generates a more user
  * friendly message when the formating string is not valid. (jfn)
  *
@@ -140,6 +145,7 @@ public class SDate
  *
  **************************************************************************/
 
+    @SuppressWarnings("fallthrough")
     public void initFromString(String str)
 	throws SRuntimeException {
 
@@ -931,12 +937,13 @@ public class SDate
 	}
 
 	String           fmt       = STypes.getString(args, 2);
-	SimpleDateFormat formatter = new SimpleDateFormat(fmt);
+	SimpleDateFormat formatter = null;
 	String           result    = null;
 
 	try {
+            formatter = new SimpleDateFormat(fmt);
 	    result = formatter.format(_calendar.getTime());
-	} catch (Throwable e) {
+	} catch (IllegalArgumentException e) {
 	    String   msg     = "Failed to format date - {0}";
 	    Object[] fmtArgs = { e.getMessage() };
 	    throw new SRuntimeException(msg, fmtArgs);
