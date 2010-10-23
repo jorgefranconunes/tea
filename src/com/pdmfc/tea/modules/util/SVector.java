@@ -11,6 +11,10 @@
  *
  * Revisions:
  *
+ * 2010/10/23 TSK-PDMFC-TEA-0029
+ * Constructor negative size, or resize with negative values
+ * ought to be handled as a regular Tea runtime exception. (jpsl)
+ *
  * 2004/11/03 The "TVector setAt", "TVector getAt" methods no longer
  * generate an internal error when the index is invalid. Now they
  * generate a regular runtime error. (jfn)
@@ -489,6 +493,11 @@ public class SVector
 	}
 
 	int newSize = STypes.getInt(args,2).intValue();
+
+        if ( newSize < 0 ) {
+	    throw new SRuntimeException("TVector size must be an integer equal or greater than zero");
+        }
+
 	int oldSize = _vector.size();
 
 	if ( newSize > oldSize ) {
