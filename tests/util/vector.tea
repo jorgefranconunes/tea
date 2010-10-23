@@ -7,11 +7,11 @@
 define print-vector ( vec ) {
 
     define size [$vec getSize]
-    int i 0
+    define i 0
 
     while { < $i $size } {
 	echo [$vec getAt $i]
-	++ $i
+	set! i [+ $i 1]
     }
 }
 
@@ -45,3 +45,8 @@ print-list [$vec getElements]
 echo "*** Printing sorted vector ***"
 print-vector [$vec sort str-cmp]
 
+
+# TSK-PDMFC-TEA-0029 TVector contructor with negative argument
+#define aVector [new TVector -1 2 4]
+#define aVector [new TVector 0]
+#$aVector resize -2 
