@@ -29,20 +29,20 @@ Preparing the Development Environment
 =====================================
 
 These instructions apply to unix environments. If you really want to
-develop under windows you should have CygWin (http://www.cygwin.com/)
+develop under windows you should have Cygwin (http://www.cygwin.com/)
 installed on your system.
 
 
 1. Fetch the source tree from the Subversion repository.
 
 
-2. Create the "build.conf" file.
+2. Create the "Makefile.conf" file.
 
-The "build.conf" file must be manually created at the top of the
+The "Makefile.conf" file must be manually created at the top of the
 development tree. It will contain information on the Java compiler to
 be used during the build. It is a file with Bourne shell syntax and it
 must define the variables described bellow. There is a
-"build.conf.example" file with example values for these variables.
+"Makefile.conf.example" file with example values for these variables.
 
 BUILD_JAVA_HOME - The java home of the JDK to be used for compiling
 and for seting up the development environment as a Tea installation.
@@ -79,7 +79,12 @@ test - Runs all unit tests.
 clean - Removes all files created as the result of a build. The
 configuration information is not affected.
 
+distclean - Removes all files that may have been created during the
+build procedure, returning the development tree to its pristine
+condition.
+
 release - Creates a release package.
+
 
 
 
@@ -105,7 +110,7 @@ at the working copy root.
 
 3. Perform testing on the release.
 
-Test out the release, by tring out the installation of the archive
+Test the release, by tring out the installation of the archive
 according to the Tea site's instructions.
 
 

@@ -1,9 +1,8 @@
 #
-# Example build.conf
+# Example Makefile.conf
 #
-# The build.conf contains configuration parameters used by the
-# makefile used in the build procdeure. It is expected to be written
-# in Bourne shell syntax.
+# The Makefile.conf contains configuration parameters used by the
+# makefile. It is expected to be written in Bourne shell syntax.
 #
 # The following parameters must be defined. See bellow for descriptions
 # and example values.

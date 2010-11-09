@@ -4,13 +4,12 @@
 # Copyright (c) 2008-2010 PDM&FC, All Rights Reserved.
 #
 #
-# Configures the development tree for performing builds.
+# Configures the Tea development tree for performing builds.
 #
 ###########################################################################
 
 _scriptDir=$(dirname $0)
 _scriptName=$(basename $0)
-
 _teaBaseDir=$(cd $_scriptDir/../..; pwd)
 
 #
@@ -35,6 +34,7 @@ CONF_ANTC_JAR=ant-contrib/ant-contrib-1.0b3.jar
 
 CONF_JUNIT_BUNDLE=${_teaBaseDir}/third-party/junit4.8.2.zip
 CONF_JUNIT_JAR=junit4.8.2/junit-4.8.2.jar
+CONF_JUNIT_JAR_BASENAME=junit-4.8.2.jar
 
 
 
@@ -46,9 +46,9 @@ CONF_JUNIT_JAR=junit4.8.2/junit-4.8.2.jar
 #
 ###########################################################################
 
-function readBuildConfig () {
+function readMakefileConfig () {
 
-    local buildConf=${_teaBaseDir}/build.conf
+    local buildConf=${_teaBaseDir}/Makefile.conf
 
     if [ ! -f $buildConf ] ; then
 	teaError "Build config file \"$buildConf\" is missing."
@@ -71,8 +71,9 @@ function readBuildConfig () {
     # Assign values to aditional config parameters.
     source ${_teaBaseDir}/config/tea-core.conf
 
-    BUILD_BASE_DIR=$_teaBaseDir
-    BUILD_VERSION=$TEA_VERSION
+    BUILD_BASE_DIR=${_teaBaseDir}
+    BUILD_VERSION=${TEA_VERSION}
+    BUILD_JUNIT_JAR=${_teaBaseDir}/devtools/lib/jars/${CONF_JUNIT_JAR_BASENAME}
 }
 
 
@@ -85,10 +86,10 @@ function readBuildConfig () {
 #
 ###########################################################################
 
-function createMakefileConfig () {
+function createBuildConfig () {
 
-    local templateFile=${_teaBaseDir}/config/Makefile.conf.template
-    local resultFile=${_teaBaseDir}/Makefile.conf
+    local templateFile=${_teaBaseDir}/devtools/conf/build.conf.template
+    local resultFile=${_teaBaseDir}/build.conf
 
     teaParseTemplate $templateFile > $resultFile
 }
@@ -105,7 +106,7 @@ function createMakefileConfig () {
 
 function antSetup () {
 
-    if [ "$BUILD_ANT" == "" ] ; then
+    if [ -z "$BUILD_ANT" ] ; then
         if [ ! -x $CONF_ANT_TOOL ] ; then
             local devtoolsDir=$(dirname ${CONF_ANT_HOME})
 
@@ -154,10 +155,10 @@ function junitSetup () {
 #
 ###########################################################################
 
-readBuildConfig
+readMakefileConfig
 antSetup
 junitSetup
-createMakefileConfig
+createBuildConfig
 
 
 

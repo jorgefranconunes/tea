@@ -1,0 +1,21 @@
+###########################################################################
+#
+# Copyright (c) 2010 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+
+
+define argc [length $argv]
+
+if { != $argc 1 } {
+    echo "Args: tea-script-file"
+    exit 1
+}
+
+define sourceFile [nth $argv 0]
+define codeBlock  [compile $sourceFile]
+
+# And execute the compile code.
+[lambda() $codeBlock]
+

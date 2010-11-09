@@ -2,8 +2,8 @@
 
 Resumo:
 
-1. (02h) tea - Removed dependencoes on the Gnu.Regexp library.Changes were
-backported from the trunk.
+1. (02h) tea - Removed dependencoes on the Gnu.Regexp library. Changes
+were backported from the trunk.
 
 
 

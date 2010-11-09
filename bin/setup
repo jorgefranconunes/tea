@@ -3,31 +3,8 @@
 #
 # Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
 #
-###########################################################################
-
-###########################################################################
-#
-# $Id$
-#
 #
 # Sets up a Tea software installation tree.
-#
-#
-# Revisions:
-#
-# 2008/08/29 Refactored such that is now structured. (jfn)
-#
-# 2005/01/18 Solved issues with detecting Cygwin. (jfn)
-#
-# 2004/09/29 The templates files were renamed to better follow current
-# naming practices. (jfn)
-#
-# 2003/02/11 Rewriten to use the new configuration files. (jfn)
-#
-# 2002/10/28 The "tsh" configuration file is now named "tsh.conf",
-# instead of "tsh.config". (jfn)
-#
-# 2001/05/12 Created. (jfn)
 #
 ###########################################################################
 
@@ -66,7 +43,7 @@ _verbose=1
 _otherClasspath=
 _pathSep=$(teaPathSeparator)
 
-_teaCoreJars=$TEA_CORE_JARS
+_teaCoreJars=tea-${TEA_VERSION}.jar
 
 
 

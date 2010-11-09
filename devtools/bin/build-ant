@@ -21,17 +21,57 @@ source ${_teaBaseDir}/bin/tea-utils
 
 
 
+#
+# The following will have to be adapted whenever a new version of
+# theses packages is used.
+#
+_junitJar=${_teaBaseDir}/devtools/lib/jars/junit-4.8.2.jar
+_antcJar=${_teaBaseDir}/devtools/lib/jars/ant-contrib-1.0b3.jar
+_defaultAntToolBasename=devtools/apache-ant-1.8.0/bin/ant
+_buildConf=${_teaBaseDir}/Makefile.conf
+
+if [ -f ${_buildConf} ] ; then
+    source ${_buildConf}
+else
+    teaError "File \"${_buildConf}\" is missing..."
+fi
+
+_classpath=${_junitJar}:${_antcJar}
+_javaHome=${BUILD_JAVA_HOME}
+_antTool=${BUILD_ANT}
+
+
+
+
+
+#########################################################################
+#
+# 
+#
+#########################################################################
+
+function setupConfig () {
+
+    if [ -z "${_antTool}" ] ; then
+        _antTool=${_teaBaseDir}/${_defaultAntToolBasename}
+    fi
+}
+
+
+
+
+
 #########################################################################
 #
 # Script main body
 #
 #########################################################################
 
-source ${_teaBaseDir}/Makefile.conf
+setupConfig
 
-JAVA_HOME=${BUILD_JAVA_HOME} \
-ANT_HOME=${_teaBaseDir}/apache-ant-1.8.0 \
-    ${BUILD_ANT} \
+JAVA_HOME=${_javaHome} \
+CLASSPATH=${_classpath} \
+${_antTool} \
     "$@"
 
 

@@ -16,20 +16,20 @@ Main Ant build file for the Tea development tree.
 
 
 
-  <!-- Global properties used througout the build. -->
+  <!-- Defines global properties BUILD_* used througout the build. -->
 
-  <property name="antc.jar" location="devtools/lib/jars/ant-contrib-1.0b3.jar" />
-  <property name="junit.jar" location="devtools/lib/jars/junit-4.8.2.jar" />
-
-  <property file="Makefile.conf" />
-
+  <property file="config/tea-core.conf" />
+  <property name="BUILD_VERSION" value="${TEA_VERSION}" />
+  <property file="build.conf" />
 
 
 
-  <!-- Defines the "outofdate" task. -->
-  <taskdef
-     resource="net/sf/antcontrib/antcontrib.properties"
-     classpath="${antc.jar}" />
+
+
+  <!-- Defines the "outofdate" task provided by Ant-Contrib. The "ant"
+  tool must be run with the Ant-Contrib JAR in its classpath.  -->
+
+  <taskdef resource="net/sf/antcontrib/antcontrib.properties" />
 
 
 
@@ -152,7 +152,6 @@ Main Ant build file for the Tea development tree.
       <classpath>
         <pathelement location="${java-test.target.dir}" />
         <pathelement path="${jar.file}" />
-        <pathelement path="${junit.jar}" />
       </classpath>
       <formatter type="plain" usefile="no" />
       <batchtest>
@@ -183,7 +182,7 @@ Main Ant build file for the Tea development tree.
        destdir="${java-test.target.dir}">
       <javac-classpath>
         <pathelement path="${jar.file}" />
-        <pathelement path="${junit.jar}" />
+        <pathelement path="${BUILD_JUNIT_JAR}" />
       </javac-classpath>
     </java-compile>
   </target>
@@ -277,48 +276,27 @@ Main Ant build file for the Tea development tree.
   <property name="teadoc.pathlist" value="${teadoc.source.dir}" />
   <property name="teadoc.outputdir" value="${teadoc.target.dir}" />
 
-  <target name="teadoc.build" depends="jar.build, teainstall.build">
+  <target name="teadoc.build" depends="jar.build">
     <mkdir dir="${teadoc.target.dir}" />
     <copy file="doc/images/LogoSmallPdmfc.png" todir="${teadoc.target.dir}" />
 
-  	<java jar="${jar.file}" fork="true" failonerror="yes">
-        <arg value="--script=${teadoc.script}" />
-        <arg value="--library=${teadoc.script.library}" />
-        <arg value="--" />
-        <arg value="--header=${teadoc.header}" />
-        <arg value="--footer=${teadoc.footer}" />
-        <arg value="--bottom=${teadoc.bottom}" />
-        <arg value="--doc-title=${teadoc.doctitle}" />
-        <arg value="--window-title=${teadoc.windowtitle}" />
-        <arg value="--path-list=${teadoc.pathlist}" />
-        <arg value="--output-dir=${teadoc.outputdir}" />
-  	</java>
+    <java jar="${jar.file}" fork="true" failonerror="yes">
+      <arg value="--script=${teadoc.script}" />
+      <arg value="--library=${teadoc.script.library}" />
+      <arg value="--" />
+      <arg value="--header=${teadoc.header}" />
+      <arg value="--footer=${teadoc.footer}" />
+      <arg value="--bottom=${teadoc.bottom}" />
+      <arg value="--doc-title=${teadoc.doctitle}" />
+      <arg value="--window-title=${teadoc.windowtitle}" />
+      <arg value="--path-list=${teadoc.pathlist}" />
+      <arg value="--output-dir=${teadoc.outputdir}" />
+    </java>
   
   </target>
 
-  <target name="teadoc.clean" depends="teainstall.clean" >
+  <target name="teadoc.clean" >
     <delete dir="${teadoc.target.dir}" />
-  </target>
-
-
-
-
-
-  <!-- -->
-
-  <property name="teainstall.conffile" location="config/tea-install.conf" />
-  <property name="teainstall.setuptool" location="bin/setup" />
-
-  <target name="teainstall.build">
-    <create-target to="${teainstall.conffile}">
-      <exec executable="${teainstall.setuptool}">
-        <arg value="--java-home=${BUILD_JAVA_HOME}" />
-      </exec>
-    </create-target>
-  </target>
-
-  <target name="teainstall.clean">
-    <delete file="${teainstall.conffile}" />
   </target>
 
 
@@ -427,24 +405,5 @@ Utility tasks bellow.
 
 
 
-  <!-- Creates a target file, if target does not exist, using a given
-  sequence of tasks. -->
-
-  <macrodef name="create-target">
-    <attribute name="to" />
-    <element name="do" implicit="yes" />
-    <sequential>
-      <if>
-        <not><available file="@{to}" /></not>
-      <then>
-        <do />
-      </then>
-      </if>
-    </sequential>
-  </macrodef>
-
-
-
-
-
 </project>
+

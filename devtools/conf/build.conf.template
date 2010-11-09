@@ -2,12 +2,6 @@
 %% 
 %% Copyright (c) 2008-2010 PDM&FC, All Rights Reserved.
 %% 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% 
-%% $Id$
-%% 
 %% 
 %% Template for generating the configuration Makefile for the Tea
 %% build environment.
@@ -25,11 +19,8 @@
 #
 # Copyright (c) 2008-2010 PDM&FC, All Rights Reserved.
 #
-###########################################################################
-
-###########################################################################
 #
-# Tea build environment configuration Makefile
+# Properties file required by the main build.xml
 #
 # Automatically created by $(teaWhoAmI) on $(teaHostname) - $(teaDate)
 #
@@ -38,7 +29,5 @@
 #
 ###########################################################################
 
-BUILD_BASE_DIR=$BUILD_BASE_DIR
-BUILD_VERSION=$BUILD_VERSION
-BUILD_JAVA_HOME=$BUILD_JAVA_HOME
-BUILD_ANT=$BUILD_ANT
+BUILD_JUNIT_JAR=${BUILD_JUNIT_JAR}
+
