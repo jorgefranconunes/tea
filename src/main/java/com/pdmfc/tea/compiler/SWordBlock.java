@@ -6,8 +6,6 @@
 
 package com.pdmfc.tea.compiler;
 
-import java.io.PrintStream;
-
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.compiler.SCode;
 import com.pdmfc.tea.compiler.SWord;

@@ -433,7 +433,6 @@ public class SExpression
 
 	String token  = getToken();
 	SNode  result = null;
-	SNode  expr   = null;
 
 	if ( token.equals("(") ) {
 	    fetchToken();

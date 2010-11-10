@@ -19,7 +19,6 @@
 package com.pdmfc.tea.compiler;
 
 import java.io.PrintStream;
-import java.text.MessageFormat;
 
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.compiler.SArithExpression;

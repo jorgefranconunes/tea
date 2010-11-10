@@ -39,11 +39,7 @@ package com.pdmfc.tea.runtime;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
 
 import com.pdmfc.tea.SConfigInfo;
 import com.pdmfc.tea.STeaException;
@@ -55,9 +51,6 @@ import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SEncodingUtils;
 import com.pdmfc.tea.runtime.SLibVarUtils;
 import com.pdmfc.tea.runtime.SModuleUtils;
-import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.SObjNull;
-import com.pdmfc.tea.runtime.SObjPair;
 
 
 

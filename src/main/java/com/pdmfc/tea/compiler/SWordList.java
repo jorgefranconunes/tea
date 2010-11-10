@@ -22,8 +22,6 @@
 
 package com.pdmfc.tea.compiler;
 
-import java.io.PrintStream;
-import java.util.Iterator;
 import java.util.List;
 
 import com.pdmfc.tea.STeaException;

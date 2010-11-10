@@ -19,12 +19,7 @@
 package com.pdmfc.tea.runtime;
 
 import com.pdmfc.tea.STeaException;
-import com.pdmfc.tea.runtime.SObjBlock;
-import com.pdmfc.tea.runtime.SObjPair;
-import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SNoSuchVarException;
-import com.pdmfc.tea.runtime.STypeException;
 
 
 

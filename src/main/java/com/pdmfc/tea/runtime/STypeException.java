@@ -19,7 +19,6 @@
 
 package com.pdmfc.tea.runtime;
 
-import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SRuntimeException;
 
 

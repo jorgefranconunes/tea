@@ -32,10 +32,8 @@ package com.pdmfc.tea.apps;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import com.pdmfc.tea.SConfigInfo;
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.apps.STeaLauncherArgs;
 import com.pdmfc.tea.compiler.SCode;

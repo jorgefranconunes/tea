@@ -18,8 +18,6 @@
 
 package com.pdmfc.tea.compiler;
 
-import java.io.PrintStream;
-
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjFunction;

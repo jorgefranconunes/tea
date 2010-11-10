@@ -6,9 +6,6 @@
 
 package com.pdmfc.tea.compiler;
 
-import java.io.PrintStream;
-import java.util.Enumeration;
-
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.compiler.SStatement;
 import com.pdmfc.tea.runtime.SContext;
