@@ -62,6 +62,7 @@ Main Ant build file for the Tea development tree.
   <property name="jar.basedir" location="target/classes" />
 
   <target name="jar.build" depends="java.build, resources.build, tea.build">
+    <mkdir dir="${jar.dir}" />
     <jar
        destfile="${jar.file}"
        basedir="${jar.basedir}"
@@ -152,6 +153,7 @@ Main Ant build file for the Tea development tree.
       <classpath>
         <pathelement location="${java-test.target.dir}" />
         <pathelement path="${jar.file}" />
+        <pathelement path="${BUILD_JUNIT_JAR}" />
       </classpath>
       <formatter type="plain" usefile="no" />
       <batchtest>
@@ -341,10 +343,6 @@ Utility tasks bellow.
 
   <!-- Generates a target file from a template. -->
 
-  <property
-     name="copy-from-template.tool"
-     location="devtools/bin/build-process-template" />
-
   <macrodef name="copy-from-template">
     <attribute name="file" />
     <attribute name="tofile" />
@@ -353,21 +351,16 @@ Utility tasks bellow.
         <echo>Processing template:
     From : @{file}
     To   : @{tofile}</echo>
-      	<!-- jpsl - avoid the use of an external tool -->
-        <!-- exec executable="${copy-from-template.tool}" failonerror="yes" -->
-          <!-- arg value="-x-input=@{file}" / -->
-          <!-- arg value="-x-output=@{tofile}" / -->
-        <!-- /exec -->
       	<copy file="@{file}"
       	      tofile="@{tofile}">
-             <filterchain>
-                 <striplinecomments>
-                     <comment value="%%" />
-                 </striplinecomments>
-             </filterchain>
-      	    <filterset begintoken="$${" endtoken="}">
-      	    	<filtersfile file="config/tea-core.conf" />
-      	    </filterset>
+          <filterchain>
+            <striplinecomments>
+              <comment value="%%" />
+            </striplinecomments>
+          </filterchain>
+      	  <filterset begintoken="$${" endtoken="}">
+      	    <filtersfile file="config/tea-core.conf" />
+      	  </filterset>
       	</copy>
       </update-target>
     </sequential>

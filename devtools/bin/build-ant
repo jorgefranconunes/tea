@@ -36,7 +36,7 @@ else
     teaError "File \"${_buildConf}\" is missing..."
 fi
 
-_classpath=${_junitJar}:${_antcJar}
+_classpath=${_antcJar}
 _javaHome=${BUILD_JAVA_HOME}
 _antTool=${BUILD_ANT}
 
