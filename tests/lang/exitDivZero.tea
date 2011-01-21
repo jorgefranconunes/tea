@@ -1,0 +1,8 @@
+# Up to release 3.2.5,
+# running running "tsh exit0.tea ; echo $?" should print "0"
+# after the arithmetic exception.
+# On further releases (TSK-PDMFC-TEA-0017)
+# running running "tsh exit0.tea ; echo $?" should print "255"
+# after the arithmetic exception.
+/ 1 0
+exit 0

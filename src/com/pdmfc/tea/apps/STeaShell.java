@@ -378,6 +378,9 @@ public class STeaShell
 	}
 
 	if ( errMsg != null ) {
+            if ( retVal == 0 ) {
+                retVal = -1;
+            }
 	    System.err.println("\nProblems: " + errMsg);
 	}
 
