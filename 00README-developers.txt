@@ -2,15 +2,14 @@ The Tea Scripting Language
 ==========================
 
 Tea is a scripting language for the Java environment. Go to the Tea
-home page (http://www.pdmfc.com/tea-site/info) for lots of aditional
+home page (http://www.pdmfc.com/tea) for lots of aditional
 information.
 
 This document contains instructions on how to setup the development
 environment for working on Tea itself. It is intended for the Tea
 development team.
 
-This development tree is for the 3.2.x branch. No new features should
-be added in this branch. Only bug fixes.
+This development tree is for the 4.y.z main development trunk.
 
 
 
@@ -50,6 +49,9 @@ and for seting up the development environment as a Tea installation.
 This file can be changed at any time. The build procedure will always
 use the values currently in this config file.
 
+If using Cygwin, please supply the Cygwin path to the JDK directory.
+Example:
+BUILD_JAVA_HOME="/cygdrive/c/Program Files/Java/jdk1.6.0_17"
 
 
 
@@ -104,7 +106,7 @@ Execute the Makefile target to build the release archive:
 
     make release
 
-The release bundle is named "tea-3.2.Z.tar.gz" and should be available
+The release bundle is named "tea-4.Y.Z.tar.gz" and should be available
 at the working copy root.
 
 
@@ -116,10 +118,10 @@ according to the Tea site's instructions.
 
 4. Update the relase on the Subversion repository
 
-    svn cp -m 'Tea 3.2.Z release.' \
+    svn cp -m 'Tea 4.Y.Z release.' \
          -r NNN \
-        svn+ssh://www.pdmfc.com/opt/develop/svnroot/tea/branches/3.2.x \
-        svn+ssh://www.pdmfc.com/opt/develop/svnroot/tea/releases/3.2.Z
+        svn+ssh://www.pdmfc.com/opt/develop/svnroot/tea/trunk \
+        svn+ssh://www.pdmfc.com/opt/develop/svnroot/tea/releases/4.Y.Z
 
 
 5. Update the Tea site.

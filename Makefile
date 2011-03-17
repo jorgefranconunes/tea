@@ -99,7 +99,7 @@ distclean :
 #
 #
 release : all doc
-	$(BUILD_BASE_DIR)/devtools/bin/build-release
+	./devtools/bin/build-release
 
 
 
