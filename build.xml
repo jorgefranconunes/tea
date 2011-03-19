@@ -50,6 +50,7 @@ Main Ant build file for the Tea development tree.
 
   <target name="clean" depends="jar.clean, test.clean, doc.clean" />
 
+  <target name="release" depends="release.build" />
 
 
 
@@ -302,6 +303,54 @@ Main Ant build file for the Tea development tree.
   </target>
 
 
+
+
+  <!-- Release related targets. -->
+
+  <property name="release.dir" location="target" />
+  <property name="release.basename" value="tea-${TEA_VERSION}" />
+
+  <target name="release.build" depends="all, doc" >
+    <mkdir dir="${release.dir}" />
+    <tar destfile="${release.dir}/${release.basename}.tar.gz"
+         compression="gzip">
+      <tarfileset file="00README.txt"
+                  prefix="tea-${TEA_VERSION}"
+                  followsymlinks="no"
+                  defaultexcludes="yes">
+        <include name="apps/**" />
+        <include name="config/tea-core.conf" />
+        <include name="config/tea-install.conf.template" />
+        <include name="bin/setup" />
+        <include name="bin/teadoc" />
+        <include name="bin/tea-utils" />
+        <include name="bin/tsh" />
+        <include name="bin/tsh.bat" />
+        <include name="doc/javadoc/**" />
+        <include name="doc/release-notes.txt" />
+        <include name="doc/teadoc/**" />
+        <include name="doc/tea-mode.el" />
+        <include name="doc/Memos/Faq.txt" />
+        <include name="lib/jars/tea-*.jar" />
+      </tarfileset>
+    </tar>
+    <tar destfile="${release.dir}/${release.basename}-src.tar.gz"
+         compression="gzip">
+      <tarfileset dir="."
+                  prefix="tea-${TEA_VERSION}"
+                  followsymlinks="no"
+                  defaultexcludes="yes">
+          <exclude name="Makefile.conf" />
+          <exclude name="build.conf" />
+          <exclude name="target/**" />
+          <exclude name="lib/jars/**" />
+          <exclude name="doc/javadoc/**" />
+          <exclude name="doc/teadoc/**" />
+          <exclude name="devtools/apache-ant*/**" />
+          <exclude name="devtools/lib/**" />
+      </tarfileset>
+    </tar>
+  </target>
 
 
 

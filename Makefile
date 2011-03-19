@@ -98,8 +98,8 @@ distclean :
 #
 #
 #
-release : all doc
-	./devtools/bin/build-release
+release : build.conf
+	@$(ANT_TOOL) $@
 
 
 
