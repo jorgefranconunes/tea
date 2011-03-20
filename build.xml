@@ -312,19 +312,28 @@ Main Ant build file for the Tea development tree.
 
   <target name="release.build" depends="all, doc" >
     <mkdir dir="${release.dir}" />
+    <delete file="${release.dir}/${release.basename}.tar.gz" />
     <tar destfile="${release.dir}/${release.basename}.tar.gz"
          compression="gzip">
-      <tarfileset file="00README.txt"
+      <!-- does not preserve permissions? - tarfileset for executables -->
+      <tarfileset dir="."
+                  prefix="tea-${TEA_VERSION}"
+                  followsymlinks="no"
+                  defaultexcludes="yes"
+                  filemode="755">
+        <include name="bin/tsh" />
+        <include name="bin/setup" />
+        <include name="bin/teadoc" />
+      </tarfileset>
+      <tarfileset dir="."
                   prefix="tea-${TEA_VERSION}"
                   followsymlinks="no"
                   defaultexcludes="yes">
+        <include name="00README.txt" />
         <include name="apps/**" />
         <include name="config/tea-core.conf" />
         <include name="config/tea-install.conf.template" />
-        <include name="bin/setup" />
-        <include name="bin/teadoc" />
         <include name="bin/tea-utils" />
-        <include name="bin/tsh" />
         <include name="bin/tsh.bat" />
         <include name="doc/javadoc/**" />
         <include name="doc/release-notes.txt" />
@@ -334,20 +343,43 @@ Main Ant build file for the Tea development tree.
         <include name="lib/jars/tea-*.jar" />
       </tarfileset>
     </tar>
+    <delete file="${release.dir}/${release.basename}-src.tar.gz" />
     <tar destfile="${release.dir}/${release.basename}-src.tar.gz"
          compression="gzip">
+      <!-- does not preserve permissions? - tarfileset for executables -->
+      <tarfileset dir="."
+                  prefix="tea-${TEA_VERSION}"
+                  followsymlinks="no"
+                  defaultexcludes="yes"
+                  filemode="755">
+        <include name="bin/tsh" />
+        <include name="bin/setup" />
+        <include name="bin/teadoc" />
+        <include name="devtools/bin/**" />
+      </tarfileset>
       <tarfileset dir="."
                   prefix="tea-${TEA_VERSION}"
                   followsymlinks="no"
                   defaultexcludes="yes">
+          <!-- exclude executables -->
+          <exclude name="bin/setup" />
+          <exclude name="bin/teadoc" />
+          <exclude name="bin/tsh" />
+          <exclude name="devtools/bin/**" />
+          <!-- exclude config files -->
           <exclude name="Makefile.conf" />
           <exclude name="build.conf" />
+          <!-- exclude compiled files and extracted devtools -->
+          <exclude name="build/**" />
           <exclude name="target/**" />
           <exclude name="lib/jars/**" />
           <exclude name="doc/javadoc/**" />
           <exclude name="doc/teadoc/**" />
           <exclude name="devtools/apache-ant*/**" />
           <exclude name="devtools/lib/**" />
+          <!-- exclude IDE files -->
+          <exclude name="eclipsews/**" />
+          <exclude name="nbproject/**" />
       </tarfileset>
     </tar>
   </target>
