@@ -379,6 +379,8 @@ Main Ant build file for the Tea development tree.
           <exclude name="devtools/lib/**" />
           <!-- exclude IDE files -->
           <exclude name="eclipsews/**" />
+          <exclude name=".classpath" />
+          <exclude name=".project" />
           <exclude name="nbproject/**" />
       </tarfileset>
     </tar>
