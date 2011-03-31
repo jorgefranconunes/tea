@@ -29,7 +29,11 @@ Preparing the Development Environment
 
 These instructions apply to unix environments. If you really want to
 develop under windows you should have Cygwin (http://www.cygwin.com/)
-installed on your system.
+installed on your system, or use a Java IDE.
+
+(If you want to use the Eclipse Java IDE, please read the file named
+00README-developer-eclipse.txt, and stop reading this file here).
+
 
 
 1. Fetch the source tree from the Subversion repository.
@@ -112,7 +116,7 @@ at the working copy root.
 
 3. Perform testing on the release.
 
-Test the release, by tring out the installation of the archive
+Test the release, by trying out the installation of the archive
 according to the Tea site's instructions.
 
 

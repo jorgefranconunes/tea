@@ -29,9 +29,6 @@ CONF_ANT_BUNDLE=${_teaBaseDir}/third-party/apache-ant-1.8.0-bin.tar.bz2
 CONF_ANT_HOME=${_teaBaseDir}/devtools/apache-ant-1.8.0
 CONF_ANT_TOOL=${CONF_ANT_HOME}/bin/ant
 
-CONF_ANTC_BUNDLE=${_teaBaseDir}/third-party/ant-contrib-1.0b3-bin.zip
-CONF_ANTC_JAR=ant-contrib/ant-contrib-1.0b3.jar
-
 CONF_JUNIT_BUNDLE=${_teaBaseDir}/third-party/junit4.8.2.zip
 CONF_JUNIT_JAR=junit4.8.2/junit-4.8.2.jar
 CONF_JUNIT_JAR_BASENAME=junit-4.8.2.jar
@@ -118,13 +115,6 @@ function antSetup () {
         BUILD_ANT=$CONF_ANT_TOOL
     fi
 
-    local antcJarDir=${_teaBaseDir}/devtools/lib/jars
-    local antcJarPath=${antcJarDir}/${CONF_JUNIT_JAR}
-
-    if [ ! -f $antcJarPath ] ; then
-        mkdir -p $antcJarDir
-        unzip -q -o -j $CONF_ANTC_BUNDLE $CONF_ANTC_JAR -d $antcJarDir
-    fi
 }
 
 

@@ -9,298 +9,289 @@ Main Ant build file for the Tea development tree.
 
 <project name="Tea" default="all">
 
-  <description>
+	<description>
     Tea build environment.
   </description>
 
 
 
 
-  <!-- Defines global properties BUILD_* used througout the build. -->
+	<!-- Defines global properties BUILD_* used througout the build. -->
 
-  <property file="config/tea-core.conf" />
-  <property name="BUILD_VERSION" value="${TEA_VERSION}" />
-  <property file="build.conf" />
-
-
-
-
-
-  <!-- Defines the "outofdate" task provided by Ant-Contrib. The "ant"
-  tool must be run with the Ant-Contrib JAR in its classpath.  -->
-
-  <taskdef resource="net/sf/antcontrib/antcontrib.properties" />
+	<property file="config/tea-core.conf" />
+	<property name="BUILD_VERSION" value="${TEA_VERSION}" />
+	<!-- property file="build.conf" / -->
 
 
 
 
 
-  <!-- Public targets. -->
 
-  <target name="all" depends="jar.build" />
 
-  <target name="test" depends="test.build" />
 
-  <target name="doc" depends="javadoc.build, teadoc.build" />
-  <target name="doc.clean" depends="javadoc.clean, teadoc.clean" />
 
-  <target name="javadoc" depends="javadoc.build" />
+	<!-- Public targets. -->
 
-  <target name="teadoc" depends="teadoc.build" />
+	<target name="all" depends="jar.build" />
 
-  <target name="clean" depends="jar.clean, test.clean, doc.clean" />
+	<target name="test" depends="test.build" />
+
+	<target name="doc" depends="javadoc.build, teadoc.build" />
+	<target name="doc.clean" depends="javadoc.clean, teadoc.clean" />
+
+	<target name="javadoc" depends="javadoc.build" />
+
+	<target name="teadoc" depends="teadoc.build" />
+
+	<target name="clean" depends="jar.clean, test.clean, doc.clean" />
+
+
 
   <target name="release" depends="release.build" />
 
 
+	<!-- -->
 
+	<property name="jar.name" value="tea-${BUILD_VERSION}.jar" />
+	<property name="jar.dir" location="lib/jars" />
+	<property name="jar.file" value="${jar.dir}/${jar.name}" />
+	<property name="jar.basedir" location="target/classes" />
 
-  <!-- -->
+	<property name="BUILD_JUNIT_JAR" value="${jar.dir}/junit-4.8.2.jar" />
+		
+	<target name="jar.build" depends="java.build, resources.build, tea.build">
+		<mkdir dir="${jar.dir}" />
+		<jar destfile="${jar.file}" basedir="${jar.basedir}" manifest="config/JarManifest">
+			<metainf dir="${resources.source.dir}/META-INF" />
+		</jar>
+	</target>
 
-  <property name="jar.name" value="tea-${BUILD_VERSION}.jar" />
-  <property name="jar.dir" location="lib/jars" />
-  <property name="jar.file" value="${jar.dir}/${jar.name}" />
-  <property name="jar.basedir" location="target/classes" />
+	<target name="jar.clean" depends="java.clean, resources.clean, tea.clean">
+		<delete>
+			<fileset dir="${jar.dir}" includes="tea-*.jar" />
+		</delete>
+	</target>
 
-  <target name="jar.build" depends="java.build, resources.build, tea.build">
-    <mkdir dir="${jar.dir}" />
-    <jar
-       destfile="${jar.file}"
-       basedir="${jar.basedir}"
-       manifest="config/JarManifest"
-    >
-        <metainf dir="${resources.source.dir}/META-INF" />
-    </jar>
-  </target>
 
-  <target name="jar.clean" depends="java.clean, resources.clean, tea.clean">
-    <delete>
-      <fileset dir="${jar.dir}" includes="tea-*.jar" />
-    </delete>
-  </target>
 
 
 
+	<!-- -->
 
+	<property name="java.source.dir" location="src/main/java" />
+	<property name="java.target.dir" location="target/classes" />
 
-  <!-- -->
+	<target name="java.build">
+		<java-compile srcdir="${java.source.dir}" destdir="${java.target.dir}" />
+	</target>
 
-  <property name="java.source.dir" location="src/main/java" />
-  <property name="java.target.dir" location="target/classes" />
+	<target name="java.clean">
+		<delete dir="${java.target.dir}" />
+	</target>
 
-  <target name="java.build">
-    <java-compile srcdir="${java.source.dir}" destdir="${java.target.dir}" />
-  </target>
 
-  <target name="java.clean">
-    <delete dir="${java.target.dir}" />
-  </target>
 
 
 
+	<!-- -->
 
+	<property name="resources.source.dir" location="src/main/resources" />
+	<property name="resources.target.dir" location="target/classes/" />
 
-  <!-- -->
+	<target name="resources.build">
+		<mkdir dir="${resources.target.dir}" />
 
-  <property name="resources.source.dir" location="src/main/resources" />
-  <property name="resources.target.dir" location="target/classes/" />
+		<copy-from-template file="${resources.source.dir}/com/pdmfc/tea/TeaConfig.properties.template" tofile="${resources.target.dir}/com/pdmfc/tea/TeaConfig.properties" />
 
-  <target name="resources.build">
-    <mkdir dir="${resources.target.dir}" />
+	</target>
 
-    <copy-from-template 
-       file="${resources.source.dir}/com/pdmfc/tea/TeaConfig.properties.template"
-       tofile="${resources.target.dir}/com/pdmfc/tea/TeaConfig.properties" />
+	<target name="resources.clean">
+		<delete dir="${resources.target.dir}" />
+	</target>
 
-  </target>
 
-  <target name="resources.clean">
-    <delete dir="${resources.target.dir}" />
-  </target>
 
 
 
+	<!-- -->
 
+	<property name="tea.source.dir" location="src/main/tea" />
+	<property name="tea.target.dir" location="target/classes/lib/tea-${BUILD_VERSION}" />
 
-  <!-- -->
+	<target name="tea.build">
+		<mkdir dir="${tea.target.dir}" />
+		<copy todir="${tea.target.dir}">
+			<fileset dir="${tea.source.dir}">
+				<include name="**/*.tea" />
+			</fileset>
+		</copy>
+	</target>
 
-  <property name="tea.source.dir" location="src/main/tea" />
-  <property name="tea.target.dir" location="target/classes/lib/tea-${BUILD_VERSION}" />
+	<target name="tea.clean">
+		<delete dir="${tea.target.dir}" />
+	</target>
 
-  <target name="tea.build">
-    <mkdir dir="${tea.target.dir}" />
-    <copy todir="${tea.target.dir}">
-      <fileset dir="${tea.source.dir}">
-        <include name="**/*.tea" />
-      </fileset>
-    </copy>
-  </target>
 
-  <target name="tea.clean">
-    <delete dir="${tea.target.dir}" />
-  </target>
 
 
 
+	<!-- -->
 
+	<target name="test.build" depends="jar.build, java-test.build, resources-test.build">
 
-  <!-- -->
-  
-  <target
-     name="test.build"
-     depends="jar.build, java-test.build, resources-test.build">
+		<junit haltonerror="yes" haltonfailure="yes" showoutput="yes">
+			<classpath>
+				<pathelement location="${java-test.target.dir}" />
+				<pathelement path="${jar.file}" />
+				<pathelement path="${BUILD_JUNIT_JAR}" />
+			</classpath>
+			<formatter type="plain" usefile="no" />
+			<batchtest>
+				<fileset dir="${java-test.source.dir}">
+					<include name="**/*Test.java" />
+				</fileset>
+			</batchtest>
+		</junit>
 
-    <junit haltonerror="yes" haltonfailure="yes" showoutput="yes">
-      <classpath>
-        <pathelement location="${java-test.target.dir}" />
-        <pathelement path="${jar.file}" />
-        <pathelement path="${BUILD_JUNIT_JAR}" />
-      </classpath>
-      <formatter type="plain" usefile="no" />
-      <batchtest>
-        <fileset dir="${java-test.source.dir}">
-          <include name="**/*Test.java" />
-        </fileset>
-      </batchtest>
-    </junit>
+	</target>
 
-  </target>
+	<target name="test.clean" depends="java-test.clean, resources-test.clean" />
 
-  <target
-     name="test.clean"
-     depends="java-test.clean, resources-test.clean" />
 
 
 
 
+	<!-- -->
 
-  <!-- -->
+	<property name="java-test.source.dir" location="src/test/java" />
+	<property name="java-test.target.dir" location="target/test-classes" />
 
-  <property name="java-test.source.dir" location="src/test/java" />
-  <property name="java-test.target.dir" location="target/test-classes" />
+	<target name="java-test.build" depends="java-test.config.check, java-test.config.create">
+		<java-compile srcdir="${java-test.source.dir}" destdir="${java-test.target.dir}">
+			<javac-classpath>
+				<pathelement path="${jar.file}" />
+				<pathelement path="${BUILD_JUNIT_JAR}" />
+			</javac-classpath>
+		</java-compile>
+	</target>
 
-  <target name="java-test.build">
-    <java-compile
-       srcdir="${java-test.source.dir}"
-       destdir="${java-test.target.dir}">
-      <javac-classpath>
-        <pathelement path="${jar.file}" />
-        <pathelement path="${BUILD_JUNIT_JAR}" />
-      </javac-classpath>
-    </java-compile>
-  </target>
+	<target name="java-test.config.check">
+		<condition property="java-test.config.ready">
+			<available file="${BUILD_JUNIT_JAR}"/>
+		</condition>
+	</target>
+			
+	<target name="java-test.config.create" unless="java-test.config.ready">
+		<unzip src="third-party/junit4.8.2.zip" dest="${java.io.tmpdir}/${user.name}/">
+			<patternset>
+				<include name="junit4.8.2/junit-4.8.2.jar" />
+			</patternset>
+		</unzip>
+		<mkdir dir="${jar.dir}" />
+		<move file="${java.io.tmpdir}/${user.name}/junit4.8.2/junit-4.8.2.jar" tofile="${BUILD_JUNIT_JAR}" />
+		<delete dir="${java.io.tmpdir}/${user.name}/junit4.8.2" />
+	</target>
 
-  <target name="java-test.clean">
-    <delete dir="${java-test.target.dir}" />
-  </target>
+	
+	<target name="java-test.clean">
+		<delete dir="${java-test.target.dir}" />
+	</target>
 
 
 
+	<!-- -->
 
+	<property name="resources-test.source.dir" location="src/test/resources" />
+	<property name="resources-test.target.dir" location="target/test-classes/" />
 
-  <!-- -->
+	<target name="resources-test.build">
+		<mkdir dir="${resources-test.target.dir}" />
 
-  <property name="resources-test.source.dir" location="src/test/resources" />
-  <property name="resources-test.target.dir" location="target/test-classes/" />
+		<copy todir="${resources-test.target.dir}">
+			<fileset dir="${resources-test.source.dir}">
+				<!-- copy all test resource files, not just one -->
+				<!-- filename name="com/pdmfc/tea/compiler/StringLiteralTests.txt" / -->
+			</fileset>
+		</copy>
 
-  <target name="resources-test.build">
-    <mkdir dir="${resources-test.target.dir}" />
+	</target>
 
-    <copy todir="${resources-test.target.dir}">
-      <fileset dir="${resources-test.source.dir}">
-        <!-- copy all test resource files, not just one -->
-        <!-- filename name="com/pdmfc/tea/compiler/StringLiteralTests.txt" / -->
-      </fileset>
-    </copy>
+	<target name="resources-test.clean">
+		<delete dir="${resources-test.target.dir}" />
+	</target>
 
-  </target>
 
-  <target name="resources-test.clean">
-    <delete dir="${resources-test.target.dir}" />
-  </target>
 
 
 
+	<!-- Javadoc related targets. -->
 
+	<property name="javadoc.source.dir" value="${java.source.dir}" />
+	<property name="javadoc.target.dir" location="doc/javadoc" />
 
-  <!-- Javadoc related targets. -->
+	<property name="javadoc.doctitle" value="Tea ${BUILD_VERSION} Java Runtime API" />
+	<property name="javadoc.windowtitle" value="${javadoc.doctitle}" />
 
-  <property name="javadoc.source.dir" value="${java.source.dir}" />
-  <property name="javadoc.target.dir" location="doc/javadoc" />
+	<target name="javadoc.build">
+		<mkdir dir="${javadoc.target.dir}" />
+		<copy file="doc/images/LogoSmallPdmfc.png" todir="${javadoc.target.dir}" />
 
-  <property
-     name="javadoc.doctitle"
-     value="Tea ${BUILD_VERSION} Java Runtime API" />
-  <property
-     name="javadoc.windowtitle"
-     value="${javadoc.doctitle}" />
+		<javadoc sourcepath="${javadoc.source.dir}" destdir="${javadoc.target.dir}" useexternalfile="yes" nodeprecatedlist="yes" author="true" splitindex="true" version="true" use="true" doctitle="${javadoc.doctitle}" windowtitle="${javadoc.windowtitle}" verbose="true">
+			<header>
+				<![CDATA[<b>Tea Java Runtime API</b>
+			<br />
+			<b>Version ${BUILD_VERSION}</b>]]></header>
+		<bottom>
+			<![CDATA[<font size="-1">&copy; 2010 <a href="http://www.pdmfc.com" target="_blank">PDM&amp;FC</a>, All Rights Reserved.</font>]]></bottom>
+</javadoc>
 
-  <target name="javadoc.build">
-    <mkdir dir="${javadoc.target.dir}" />
-    <copy file="doc/images/LogoSmallPdmfc.png" todir="${javadoc.target.dir}" />
-    
-    <javadoc
-       sourcepath="${javadoc.source.dir}"
-       destdir="${javadoc.target.dir}"
-       useexternalfile="yes"
-       nodeprecatedlist="yes"
-       author="true"
-       splitindex="true"
-       version="true"
-       use="true"
-       doctitle="${javadoc.doctitle}"
-       windowtitle="${javadoc.windowtitle}">
-      <header><![CDATA[<b>Tea Java Runtime API</b><br /><b>Version ${BUILD_VERSION}</b>]]></header>
-      <bottom><![CDATA[<font size="-1">&copy; 2010 <a href="http://www.pdmfc.com" target="_blank">PDM&amp;FC</a>, All Rights Reserved.</font>]]></bottom>
-    </javadoc>
+</target>
 
-  </target>
+<target name="javadoc.clean">
+<delete dir="${javadoc.target.dir}" />
+</target>
 
-  <target name="javadoc.clean" >
-    <delete dir="${javadoc.target.dir}" />
-  </target>
 
 
 
 
+<!-- Teadoc related targets. -->
 
-  <!-- Teadoc related targets. -->
+<property name="teadoc.source.dir" location="src/main" />
+<property name="teadoc.target.dir" location="doc/teadoc" />
 
-  <property name="teadoc.source.dir" location="src/main" />
-  <property name="teadoc.target.dir" location="doc/teadoc" />
+<property name="teadoc.script.library" location="apps/teadoc/lib/tea" />
+<property name="teadoc.script" location="${teadoc.script.library}/doc-html.tea" />
+<property name="teadoc.header" value="Tea ${BUILD_VERSION} Reference Documentation&lt;br&gt;&amp;copy; 2010 &lt;a href=&quot;http://www.pdmfc.com&quot;&gt;PDM&amp;amp;FC&lt;/a&gt;" />
+<property name="teadoc.footer" value="${teadoc.header}" />
+<property name="teadoc.bottom" value="&lt;font size=&quot;-1&quot;&gt;&lt;a href=&quot;mailto:info@pdmfc.com&quot;&gt;Report a bug or request new features&lt;/a&gt;&lt;/font&gt;&lt;br /&gt;&lt;font size=&quot;-1&quot;&gt;&amp;copy; 2010&lt;/font&gt; &lt;a href=&quot;http://www.pdmfc.com&quot;&gt;&lt;img align=&quot;absmiddle&quot; border=&quot;0&quot; src=&quot;LogoSmallPdmfc.png&quot;&gt;&lt;/a&gt;" />
+<property name="teadoc.doctitle" value="Tea ${BUILD_VERSION} Reference Documentation" />
+<property name="teadoc.windowtitle" value="${teadoc.doctitle}" />
+<property name="teadoc.pathlist" value="${teadoc.source.dir}" />
+<property name="teadoc.outputdir" value="${teadoc.target.dir}" />
 
-  <property name="teadoc.script.library" location="apps/teadoc/lib/tea" />
-  <property name="teadoc.script" location="${teadoc.script.library}/doc-html.tea" />
-  <property name="teadoc.header" value="Tea ${BUILD_VERSION} Reference Documentation&lt;br&gt;&amp;copy; 2010 &lt;a href=&quot;http://www.pdmfc.com&quot;&gt;PDM&amp;amp;FC&lt;/a&gt;" />
-  <property name="teadoc.footer" value="${teadoc.header}" />
-  <property name="teadoc.bottom" value="&lt;font size=&quot;-1&quot;&gt;&lt;a href=&quot;mailto:info@pdmfc.com&quot;&gt;Report a bug or request new features&lt;/a&gt;&lt;/font&gt;&lt;br /&gt;&lt;font size=&quot;-1&quot;&gt;&amp;copy; 2010&lt;/font&gt; &lt;a href=&quot;http://www.pdmfc.com&quot;&gt;&lt;img align=&quot;absmiddle&quot; border=&quot;0&quot; src=&quot;LogoSmallPdmfc.png&quot;&gt;&lt;/a&gt;" />
-  <property name="teadoc.doctitle" value="Tea ${BUILD_VERSION} Reference Documentation" />
-  <property name="teadoc.windowtitle" value="${teadoc.doctitle}" />
-  <property name="teadoc.pathlist" value="${teadoc.source.dir}" />
-  <property name="teadoc.outputdir" value="${teadoc.target.dir}" />
+<target name="teadoc.build" depends="jar.build">
+<mkdir dir="${teadoc.target.dir}" />
+<copy file="doc/images/LogoSmallPdmfc.png" todir="${teadoc.target.dir}" />
 
-  <target name="teadoc.build" depends="jar.build">
-    <mkdir dir="${teadoc.target.dir}" />
-    <copy file="doc/images/LogoSmallPdmfc.png" todir="${teadoc.target.dir}" />
+<java jar="${jar.file}" fork="true" failonerror="yes">
+	<arg value="--script=${teadoc.script}" />
+	<arg value="--library=${teadoc.script.library}" />
+	<arg value="--" />
+	<arg value="--header=${teadoc.header}" />
+	<arg value="--footer=${teadoc.footer}" />
+	<arg value="--bottom=${teadoc.bottom}" />
+	<arg value="--doc-title=${teadoc.doctitle}" />
+	<arg value="--window-title=${teadoc.windowtitle}" />
+	<arg value="--path-list=${teadoc.pathlist}" />
+	<arg value="--output-dir=${teadoc.outputdir}" />
+</java>
 
-    <java jar="${jar.file}" fork="true" failonerror="yes">
-      <arg value="--script=${teadoc.script}" />
-      <arg value="--library=${teadoc.script.library}" />
-      <arg value="--" />
-      <arg value="--header=${teadoc.header}" />
-      <arg value="--footer=${teadoc.footer}" />
-      <arg value="--bottom=${teadoc.bottom}" />
-      <arg value="--doc-title=${teadoc.doctitle}" />
-      <arg value="--window-title=${teadoc.windowtitle}" />
-      <arg value="--path-list=${teadoc.pathlist}" />
-      <arg value="--output-dir=${teadoc.outputdir}" />
-    </java>
-  
-  </target>
+</target>
 
-  <target name="teadoc.clean" >
-    <delete dir="${teadoc.target.dir}" />
-  </target>
+<target name="teadoc.clean">
+<delete dir="${teadoc.target.dir}" />
+</target>
 
 
 
@@ -398,84 +389,51 @@ Utility tasks bellow.
 
 
 
-  <!-- Compiles Java sources. -->
+<!-- Compiles Java sources. -->
 
-  <macrodef name="java-compile">
-    <attribute name="srcdir" />
-    <attribute name="destdir" />
-    <element name="javac-classpath" optional="yes" />
-    <sequential>
-      <mkdir dir="@{destdir}" />
-      <javac
-         srcdir="@{srcdir}"
-         destdir="@{destdir}"
-         debug="yes"
-         includeantruntime="no">
-        <compilerarg value="-Xlint" />
-        <compilerarg value="-Xlint:-serial" />
-        <classpath>
-          <javac-classpath />
-        </classpath>
-      </javac>
-    </sequential>
-  </macrodef>
+<macrodef name="java-compile">
+<attribute name="srcdir" />
+<attribute name="destdir" />
+<element name="javac-classpath" optional="yes" />
+<sequential>
+	<mkdir dir="@{destdir}" />
+	<javac srcdir="@{srcdir}" destdir="@{destdir}" debug="yes" includeantruntime="no">
+		<compilerarg value="-Xlint" />
+		<compilerarg value="-Xlint:-serial" />
+		<classpath>
+			<javac-classpath />
+		</classpath>
+	</javac>
+</sequential>
+</macrodef>
 
 
 
 
 
-  <!-- Generates a target file from a template. -->
+<!-- Generates a target file from a template. -->
 
-  <macrodef name="copy-from-template">
-    <attribute name="file" />
-    <attribute name="tofile" />
-    <sequential>
-      <update-target from="@{file}" to="@{tofile}">
-        <echo>Processing template:
-    From : @{file}
-    To   : @{tofile}</echo>
-      	<copy file="@{file}"
-      	      tofile="@{tofile}">
-          <filterchain>
-            <striplinecomments>
-              <comment value="%%" />
-            </striplinecomments>
-          </filterchain>
-      	  <filterset begintoken="$${" endtoken="}">
-      	    <filtersfile file="config/tea-core.conf" />
-      	  </filterset>
-      	</copy>
-      </update-target>
-    </sequential>
-  </macrodef>
+<macrodef name="copy-from-template">
+<attribute name="file" />
+<attribute name="tofile" />
+<sequential>
+		<copy file="@{file}" tofile="@{tofile}" verbose="true">
+			<filterchain>
+				<striplinecomments>
+					<comment value="%%" />
+				</striplinecomments>
+			</filterchain>
+			<filterset begintoken="$${" endtoken="}">
+				<filtersfile file="config/tea-core.conf" />
+			</filterset>
+		</copy>
+</sequential>
+</macrodef>
 
 
 
 
 
-  <!-- Updates a target file from a source file, if target is out of
-  date, using a given sequence of tasks. A target is out of date if:
-  a) It does not exist; b) It exists but its modification date is
-  older than the source modification date. -->
-
-  <macrodef name="update-target">
-    <attribute name="from" />
-    <attribute name="to" />
-    <element name="do" implicit="yes" />
-    <sequential>
-      <outofdate>
-        <sourcefiles>
-          <pathelement path="@{from}" />
-        </sourcefiles>
-        <targetfiles>
-          <pathelement path="@{to}" />
-        </targetfiles>
-        <sequential>
-          <do />
-        </sequential>
-      </outofdate>
-    </sequential>
-  </macrodef>
 
 
 
