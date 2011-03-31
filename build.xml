@@ -20,7 +20,6 @@ Main Ant build file for the Tea development tree.
 
 	<property file="config/tea-core.conf" />
 	<property name="BUILD_VERSION" value="${TEA_VERSION}" />
-	<!-- property file="build.conf" / -->
 
 
 
@@ -57,8 +56,6 @@ Main Ant build file for the Tea development tree.
 	<property name="jar.file" value="${jar.dir}/${jar.name}" />
 	<property name="jar.basedir" location="target/classes" />
 
-	<property name="BUILD_JUNIT_JAR" value="${jar.dir}/junit-4.8.2.jar" />
-		
 	<target name="jar.build" depends="java.build, resources.build, tea.build">
 		<mkdir dir="${jar.dir}" />
 		<jar destfile="${jar.file}" basedir="${jar.basedir}" manifest="config/JarManifest">
@@ -138,6 +135,7 @@ Main Ant build file for the Tea development tree.
 	<!-- -->
 
 	<target name="test.build" depends="jar.build, java-test.build, resources-test.build">
+<echo>${java-test.target.dir} ; ${jar.file} ; ${BUILD_JUNIT_JAR}</echo>
 
 		<junit haltonerror="yes" haltonfailure="yes" showoutput="yes">
 			<classpath>
@@ -161,12 +159,12 @@ Main Ant build file for the Tea development tree.
 
 
 
-	<!-- -->
+	<!-- compilation of tests -->
 
 	<property name="java-test.source.dir" location="src/test/java" />
 	<property name="java-test.target.dir" location="target/test-classes" />
 
-	<target name="java-test.build" depends="java-test.config.check, java-test.config.create">
+	<target name="java-test.build" depends="java-test.config.file.check, java-test.config.file.read, java-test.config.file.warn, java-test.config.create">
 		<java-compile srcdir="${java-test.source.dir}" destdir="${java-test.target.dir}">
 			<javac-classpath>
 				<pathelement path="${jar.file}" />
@@ -175,21 +173,43 @@ Main Ant build file for the Tea development tree.
 		</java-compile>
 	</target>
 
-	<target name="java-test.config.check">
-		<condition property="java-test.config.ready">
-			<available file="${BUILD_JUNIT_JAR}"/>
+        <!-- checking for the presence of configuration specifying JUnit libraries -->
+	<target name="java-test.config.file.check">
+		<condition property="java-test.config.file.exists">
+			<available file="build.conf"/>
 		</condition>
 	</target>
-			
-	<target name="java-test.config.create" unless="java-test.config.ready">
+
+        <!-- read the properties in build.conf and check BUILD_JUNIT_JAR -->	
+	<target name="java-test.config.file.read" if="java-test.config.file.exists">
+	        <property file="build.conf" />
+		<condition property="java-test.config.file.defined">
+                    <and>
+			<isset property="BUILD_JUNIT_JAR"/>
+                    </and>
+		</condition>
+	</target>
+	
+	<target name="java-test.config.file.warn" if="java-test.config.file.exists" unless="java-test.config.file.defined">
+
+	    <fail>File build.conf must define a BUILD_JUNIT_JAR property with the classpath of valid JUnit jars.  Example: BUILD_JUNIT_JAR=/opt/junit/jars/junit-4.8.2.jar;/opt/junit/jars/junit-hamcrest.4.8.2.jar
+If you remove the build.conf file, ant will setup one for you using the JUnit libraries distributed with this package.</fail>
+	</target>
+
+        <!-- extract JUnit libraries from the source release -->
+	<target name="java-test.config.create" unless="java-test.config.file.exists">
+                <property name="devtools.jars.dir" location="devtools/lib/jars" />
 		<unzip src="third-party/junit4.8.2.zip" dest="${java.io.tmpdir}/${user.name}/">
 			<patternset>
 				<include name="junit4.8.2/junit-4.8.2.jar" />
 			</patternset>
 		</unzip>
-		<mkdir dir="${jar.dir}" />
+		<mkdir dir="${devtools.jars.dir}" />
+	        <property name="BUILD_JUNIT_JAR" value="${devtools.jars.dir}/junit-4.8.2.jar" />
 		<move file="${java.io.tmpdir}/${user.name}/junit4.8.2/junit-4.8.2.jar" tofile="${BUILD_JUNIT_JAR}" />
 		<delete dir="${java.io.tmpdir}/${user.name}/junit4.8.2" />
+                <delete file="build.conf" />
+                <echoproperties destfile="build.conf" failonerror="true" regex="BUILD_JUNIT_JAR" />
 	</target>
 
 	

@@ -29,10 +29,6 @@ CONF_ANT_BUNDLE=${_teaBaseDir}/third-party/apache-ant-1.8.0-bin.tar.bz2
 CONF_ANT_HOME=${_teaBaseDir}/devtools/apache-ant-1.8.0
 CONF_ANT_TOOL=${CONF_ANT_HOME}/bin/ant
 
-CONF_JUNIT_BUNDLE=${_teaBaseDir}/third-party/junit4.8.2.zip
-CONF_JUNIT_JAR=junit4.8.2/junit-4.8.2.jar
-CONF_JUNIT_JAR_BASENAME=junit-4.8.2.jar
-
 
 
 
@@ -70,25 +66,6 @@ function readMakefileConfig () {
 
     BUILD_BASE_DIR=${_teaBaseDir}
     BUILD_VERSION=${TEA_VERSION}
-    BUILD_JUNIT_JAR=${_teaBaseDir}/devtools/lib/jars/${CONF_JUNIT_JAR_BASENAME}
-}
-
-
-
-
-
-###########################################################################
-#
-# 
-#
-###########################################################################
-
-function createBuildConfig () {
-
-    local templateFile=${_teaBaseDir}/devtools/conf/build.conf.template
-    local resultFile=${_teaBaseDir}/build.conf
-
-    teaParseTemplate $templateFile > $resultFile
 }
 
 
@@ -123,32 +100,12 @@ function antSetup () {
 
 ###########################################################################
 #
-# 
-#
-###########################################################################
-
-function junitSetup () {
-
-    local jarDir=${_teaBaseDir}/devtools/lib/jars
-
-    mkdir -p $jarDir
-    unzip -q -o -j $CONF_JUNIT_BUNDLE $CONF_JUNIT_JAR -d $jarDir
-}
-
-
-
-
-
-###########################################################################
-#
 # The main script.
 #
 ###########################################################################
 
 readMakefileConfig
 antSetup
-junitSetup
-createBuildConfig
 
 
 

@@ -36,13 +36,6 @@ default : all
 
 
 
-
-#
-# Required by the build.xml for the Ant tool.
-#
-build.conf : Makefile.conf config/tea-core.conf devtools/conf/build.conf.template
-	./devtools/bin/build-configure
-
 Makefile.conf :
 	@echo "***"
 	@echo "*** File \"Makefile.conf\" is missing."
@@ -54,27 +47,27 @@ Makefile.conf :
 #
 # Compiles all the code.
 # 
-all : build.conf
+all : Makefile.conf
 	@$(ANT_TOOL) $@
 
 
 #
 #
 #
-test : build.conf
+test : Makefile.conf
 	@$(ANT_TOOL) $@
 
 
 #
 # Builds the Tea and Java documentation
 #
-doc : build.conf
+doc : Makefile.conf
 	@$(ANT_TOOL) $@
 
-teadoc : build.conf
+teadoc : Makefile.conf
 	@$(ANT_TOOL) $@
 
-javadoc : build.conf
+javadoc : Makefile.conf
 	@$(ANT_TOOL) $@
 
 
@@ -83,7 +76,6 @@ javadoc : build.conf
 #
 clean :
 	@$(ANT_TOOL) $@
-	rm -rf build.conf
 
 #
 # Resets the working area to its initial condition. 
@@ -98,7 +90,7 @@ distclean :
 #
 #
 #
-release : build.conf
+release : Makefile.conf
 	@$(ANT_TOOL) $@
 
 
