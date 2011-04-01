@@ -19,6 +19,11 @@ If you whish participate in making an official Tea release archive,
 (after contacting the release team), please read the instructions
 in the 00README-developers.txt file.
 
+PDM does not support the maintenance of the Eclipse project settings
+folder .project (and as such, it is not part of the release), so please
+check with your project manager (or PDM services) which are the recommended
+project settings (coding conventions, etc...).
+
 Tea uses an Ant 1.7 compatible build file, so, the following
 instructions are based on importing existing sources, and using
 an ant build script under Eclipse.
@@ -76,22 +81,30 @@ an ant build script under Eclipse.
    Press "Next". It should open the "Java Settings" dialog.
 
 3.1. In the "Java Settings" dialog (which is poped-up), in the Source
-     tab, change the "Default output folder:" from tea/bin to
+     tab:
+     
+3.1.1. Delete the tea/src folder and add two folders
+         tea/src/main/java
+         tea/src/test/java
+       as the Java source folders.
+       
+3.1.2. Change the "Default output folder:" from tea/bin to
      tea/target/classes. (Do not remove the tea/bin folder).
 
 3.2. In the "Java Settings" dialog (which is poped-up), in the Libraries
      tab, click "Add Library" and add JUnit 4 libraries to the project.
+     (Is this is your first attempt to setup Tea, you may skip this step
+     and come back here later, after reading step 4 and dealing with
+     errors regarding missing JUnit classes).
 
 3.3. Click finish. (If eclipse asks you to remove the tea/bin folder and
      its contents, don't do it - say No.).
 
-4. If you have already setup a build.conf file with the JUnit libraries,
-   please skip to step 5. (For example, if you successfully executed
-   the "make" command from the command line, then the build.conf file
-   is already created specifying the JUnit libraries included in the source
-   release package). Otherwise please read these steps on how to configure
-   your JUnit libraries.
-   
+4. If you whish to use the JUnit libraries provided with the source release
+   or have already setup a build.conf file with the JUnit libraries,
+   please skip to step 5. Otherwise please read these 4.* steps on how to
+   configure JUnit libraries suitable for your IDE environment.
+  
 4.1 Selecting the tea project, menu File, New , File, create a file
     named "build.conf" in the root of the tea project (having tea as the
     parent folder).
@@ -103,11 +116,15 @@ Example:
 ----- CUT HERE ------
 BUILD_JUNIT_JAR=D:/eclipseSr1/eclipse/plugins/org.junit_4.8.1.v4_8_1_=v20100427-1100/junit.jar;D:/eclipseSr1/eclipse/plugins/org.hamcrest.core_1.=1.0.v20090501071000.jar
 ----- CUT HERE ------
+     If you attempted to use your IDE JUnit 4 framework, the jars
+     here should be the same.
      Using libraries older that 4.8 might not allow the tests to
      compile and run.
      Also, if you use the IDE to generate code templates, there
      is a risk that some code details are incompatible with the
      JUnit version supplied with the official release source tree. 
+
+4.3. You may wish to change the JUnit libraries setup in step 3.2.
 
 5. Open the build.xml file, by double-clicking on it under the expanded
    tea project, in the package explorer.
