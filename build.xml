@@ -131,7 +131,7 @@ Main Ant build file for the Tea development tree.
   <!-- performing tests -->
 
   <target name="test.build" depends="jar.build, java-test.build, resources-test.build">
-    <echo>${java-test.target.dir} ; ${jar.file} ; ${BUILD_JUNIT_JAR}</echo>
+    <!-- echo>${java-test.target.dir} ; ${jar.file} ; ${BUILD_JUNIT_JAR}</echo -->
 
     <junit haltonerror="yes" haltonfailure="yes" showoutput="yes">
       <classpath>
