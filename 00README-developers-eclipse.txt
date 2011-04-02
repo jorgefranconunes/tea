@@ -45,32 +45,8 @@ an ant build script under Eclipse.
     (You can keep the folder name with the version number if you whish.
     This is a mere suggestion for 1st timers witout SVN ssh access).
 
-   You should be left with a directory tree, such as:
-   
-   tea
-      00README.txt
-      00README-developers.txt
-      00README-developers-eclipse.txt # this file
-      build.xml
-      Makefile.conf.example     # You can ignore this under eclipse
-      bin                       # shell script executable files
-      apps                      # libraries used by some executables
-      config                    # Tea release information
-      devtools                  # scripts to help build Tea from the
-                                #   command line. You don't need them
-                                #   to build Tea under Eclipse.
-      lib                       # jars used by the application
-      src                       # tea and java source files, and resources
-      target                    # output directory - created on 1st build
-      third-party               # 3rd party tools and libraries, needed
-                                #   for building Tea. This folder
-                                #   contains the Ant and JUnit tools,
-                                #   so that you may build Tea from the
-                                #   command-line regardless of your IDE's
-                                #   version of Ant and JUnit tools.
-                                #   You will not be using this folder
-                                #   for building Tea under Eclipse. 
-      tests                     # old test scripts
+   You should be left with a directory tree, as described in the file
+   00README-developer.txt, section "Guide to the Source Tree".
       
 2. (If you have extracted tea using the SVN Repository browser,) On the
     workspace, Deleted the generic "tea" project without deleting the project
@@ -131,53 +107,10 @@ BUILD_JUNIT_JAR=D:/eclipseSr1/eclipse/plugins/org.junit_4.8.1.v4_8_1_=v20100427-
 
 5.1. On the Outline window, the build.xml ant targets are show. Run the target
      of your choice by right clicking, and select "Run As, Ant Build".
-     Please read the next section for an explanation of the targets available
-     and their purpose.
-     Observe the console with the log of the project build.
+     Please read the 00README-developers.txt "Building" section for an
+     explanation of the targets available and their purpose.
+     Observe the console with the log of target execution.
 
 
 
-
-Building
-========
-
-The Ant build.xml file supports the following targets:
-
-all - This is the default target. It will create the Tea
-interpreter. After a successfull build the development tree also
-behaves like an installation tree.
-
-javadoc - Builds the javadoc documentation for the runtime
-internals. The HTML files will be created under the "doc/javadoc"
-directory.
-
-teadoc - Builds the Tea documentation from the source code. The HTML
-files will be created under the "doc/teadoc" directory.
-
-jar - Builds the target class files and creates the single JAR needed
-to run a Tea interpreter.
-
-test - Runs all unit tests.
-
-clean - Removes all files created as the result of a build. The
-configuration information is not affected.
-
-distclean - Removes all files that may have been created during the
-build procedure, returning the development tree to its pristine
-condition.
-
-release - Creates a release package.
-
-
-
-
-
-
-
-
-
-Bug reports:
-
-Send your bug reports and requests for new features to
-tea.dev@pdmfc.com
 

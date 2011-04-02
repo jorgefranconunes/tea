@@ -27,16 +27,22 @@ Pre-Requisites
 Preparing the Development Environment
 =====================================
 
-These instructions apply to unix environments. If you really want to
+These instructions apply to unix-like environments. If you really want to
 develop under windows you should have Cygwin (http://www.cygwin.com/)
 installed on your system, or use a Java IDE.
 
-(If you want to use the Eclipse Java IDE, please read the file named
-00README-developer-eclipse.txt, and stop reading this file here).
+If you want to use the Eclipse Java IDE, please read the file named
+00README-developer-eclipse.txt, and stop reading this file here.
+
+If you want to use the Netbeans Java IDE, please read the file named
+00README-developer-netbeans.txt, and stop reading this file here.
 
 
 
 1. Fetch the source tree from the Subversion repository.
+
+Read the section "Guide to the Source Tree" below for more information on
+the layout.
 
 
 2. Create the "Makefile.conf" file.
@@ -63,8 +69,9 @@ BUILD_JAVA_HOME="/cygdrive/c/Program Files/Java/jdk1.6.0_17"
 Building
 ========
 
-To compile just run "make" at the working copy root. The "Makefile"
-recognizes the following targets:
+To compile just run "make" at the working copy root. The "Makefile" is a
+wrapper to calling Ant targets defined in the build.xml file.
+Both make's "Makefile" and Ant's "build.xml" recognize the following targets:
 
 all - This is the default target. It will create the Tea
 interpreter. After a successfull build the development tree also
@@ -87,7 +94,9 @@ configuration information is not affected.
 
 distclean - Removes all files that may have been created during the
 build procedure, returning the development tree to its pristine
-condition.
+condition. This target only exists in the Makefile, and not in the
+Ant's build.xml file (because running this target removes the Ant 1.8
+distribution setup from under devtools).
 
 release - Creates a release package.
 
@@ -131,6 +140,51 @@ according to the Tea site's instructions.
 5. Update the Tea site.
 
 If it is a public release, update the Tea site.
+
+
+
+
+Guide to the Source Tree
+========================
+
+This section is intended to give a hint on the purpose of the layout
+of the files and folders in the Tea source distribution.
+
+   tea
+      00README.txt              # This is the main README file in the binary
+                                #   distribution.
+      00README-developers.txt   # This file. (Not included in the binary
+                                #   distribution.)
+      00README-developers-netbeans.txt # Instructions for using this
+                                #   specific IDE
+      00README-developers-eclipse.txt # Instructions for using this
+                                #   specific IDE
+      build.xml                 # Ant build file.
+      Makefile.conf.example     # Template for creating the Makefile.conf file.
+                                #   You can ignore this file when working
+                                #   with an Ant based IDE (such as Netbeans
+                                #   or Eclipse).
+      bin                       # shell script executable files
+      apps                      # libraries used by some executables
+      config                    # Tea release information
+      devtools                  # software tools and scripts to help build Tea
+                                #   from the command line. You don't need them
+                                #   to build Tea under an IDE.
+      lib                       # Jars used by the application, and that will
+                                #   be included in the binary distribution.
+      src                       # tea and java source files, and resources
+      target                    # output directory - created on 1st build
+                                #   The distribution archives created by the
+                                #   "release" target also appear here.
+      third-party               # 3rd party tools and libraries, needed
+                                #   for building Tea. This folder
+                                #   contains the Ant and JUnit tools,
+                                #   so that you may build Tea from the
+                                #   command-line regardless of your IDE's
+                                #   version of Ant and JUnit tools.
+                                #   You will not be using this folder
+                                #   for building Tea under Eclipse or Netbeans.
+      tests                     # old test scripts
 
 
 
