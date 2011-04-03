@@ -323,6 +323,8 @@ If you remove the build.conf file, ant will setup one for you using the JUnit li
       </tarfileset>
       <tarfileset dir="." prefix="tea-${TEA_VERSION}" followsymlinks="no" defaultexcludes="yes">
         <include name="00README.txt" />
+        <include name="COPYING.txt" />
+        <include name="LICENSE.txt" />
         <include name="apps/**" />
         <include name="config/tea-core.conf" />
         <include name="config/tea-install.conf.template" />

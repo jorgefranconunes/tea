@@ -1,0 +1,4 @@
+Tea 4 is copyrighted free software by PDM&FC - Projecto, Desenvolvimento
+Manutencao, Formacao e Consultoria <info@pdmfc.com>.
+You can redistribute it and/or modify it under either the terms of the GPL
+(see COPYING.txt file), or under terms of a specific agreement with PDM&FC.
