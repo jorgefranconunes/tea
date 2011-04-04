@@ -104,7 +104,7 @@ public class SXmlParser
  *
  * @param parserClassName Fully qualified Java class name of the
  * object to be used as XML parser. The Java class must implement the
- * "org.xml.sax.Parser" interface.
+ * "org.xml.sax.XMLReader" interface.
  *
  **************************************************************************/
 
