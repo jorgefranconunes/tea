@@ -15,7 +15,7 @@ RELEASE, and may disappear in future releases, although PDM provides
 them in order to ease the setup of Tea development for those who
 prefer this popular IDE environment.
 
-If you whish participate in making an official Tea release archive,
+If you wish participate in making an official Tea release archive,
 (after contacting the release team), please read the instructions
 in the 00README-developers.txt file.
 
@@ -42,8 +42,8 @@ an ant build script under Eclipse.
     root will be a folder called tea-4.0.0 (the version number will change).
     For the rest of these instructions, please rename the folder
     name "tea-4.0.0" to "tea" to avoid any misunderstandings.
-    (You can keep the folder name with the version number if you whish.
-    This is a mere suggestion for 1st timers witout SVN ssh access).
+    (You can keep the folder name with the version number if you wish.
+    This is a mere suggestion for 1st timers without SVN ssh access).
 
    You should be left with a directory tree, as described in the file
    00README-developer.txt, section "Guide to the Source Tree".
@@ -56,7 +56,7 @@ an ant build script under Eclipse.
    Check "Create new project in workspace".
    Press "Next". It should open the "Java Settings" dialog.
 
-3.1. In the "Java Settings" dialog (which is poped-up), in the Source
+3.1. In the "Java Settings" dialog (which is popped-up), in the Source
      tab:
      
 3.1.1. Delete the tea/src folder and add two folders
@@ -67,7 +67,7 @@ an ant build script under Eclipse.
 3.1.2. Change the "Default output folder:" from tea/bin to
      tea/target/classes. (Do not remove the tea/bin folder).
 
-3.2. In the "Java Settings" dialog (which is poped-up), in the Libraries
+3.2. In the "Java Settings" dialog (which is popped-up), in the Libraries
      tab, click "Add Library" and add JUnit 4 libraries to the project.
      (Is this is your first attempt to setup Tea, you may skip this step
      and come back here later, after reading step 4 and dealing with
@@ -76,7 +76,7 @@ an ant build script under Eclipse.
 3.3. Click finish. (If eclipse asks you to remove the tea/bin folder and
      its contents, don't do it - say No.).
 
-4. If you whish to use the JUnit libraries provided with the source release
+4. If you wish to use the JUnit libraries provided with the source release
    or have already setup a build.conf file with the JUnit libraries,
    please skip to step 5. Otherwise please read these 4.* steps on how to
    configure JUnit libraries suitable for your IDE environment.

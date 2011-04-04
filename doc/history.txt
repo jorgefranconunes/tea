@@ -1,3 +1,17 @@
+2011/03/31 (jpsl) TSK-PDMFC-TEA-0056 The build process now only
+strictly requires ant 1.7. Build instructions included for the eclipse
+and netbeans Java IDEs.
+
+
+
+
+2010/10/04 (jpsl) TSK-PDMFC-TEA-0034 teaEngine-0.7.0 merged into
+Tea 4.0.0beta2 trunk. JSR-223 API is now part of the standard Tea
+release. Please read doc/engineProgGuide.html for details.
+
+
+
+
 2008/08/30 (jfn) Simplified the configuration of the build
 environment.
 

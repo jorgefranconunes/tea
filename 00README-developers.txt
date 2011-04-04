@@ -2,7 +2,7 @@ The Tea Scripting Language
 ==========================
 
 Tea is a scripting language for the Java environment. Go to the Tea
-home page (http://www.pdmfc.com/tea) for lots of aditional
+home page (http://www.pdmfc.com/tea) for lots of additional
 information.
 
 This document contains instructions on how to setup the development
@@ -41,8 +41,8 @@ If you want to use the Netbeans Java IDE, please read the file named
 
 1. Fetch the source tree from the Subversion repository.
 
-Read the section "Guide to the Source Tree" below for more information on
-the layout.
+For more insight on the file layout, read the section
+"Guide to the Source Tree" below.
 
 
 2. Create the "Makefile.conf" file.
@@ -129,7 +129,7 @@ Test the release, by trying out the installation of the archive
 according to the Tea site's instructions.
 
 
-4. Update the relase on the Subversion repository
+4. Update the release on the Subversion repository
 
     svn cp -m 'Tea 4.Y.Z release.' \
          -r NNN \

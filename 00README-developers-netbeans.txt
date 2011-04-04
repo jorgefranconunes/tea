@@ -15,7 +15,7 @@ RELEASE, and may disappear in future releases, although PDM provides
 them in order to ease the setup of Tea development for those who
 prefer this popular IDE environment.
 
-If you whish participate in making an official Tea release archive,
+If you wish participate in making an official Tea release archive,
 (after contacting the release team), please read the instructions
 in the 00README-developers.txt file.
 
@@ -37,8 +37,8 @@ are based on importing existing sources as a Java free-form project.
     root will be a folder called tea-4.0.0 (the version number will change).
     For the rest of these instructions, please rename the folder
     name "tea-4.0.0" to "tea" to avoid any misunderstandings.
-    (You can keep the folder name with the version number if you whish.
-    This is a mere suggestion for 1st timers witout SVN ssh access).
+    (You can keep the folder name with the version number if you wish.
+    This is a mere suggestion for 1st timers without SVN ssh access).
 
    You should be left with a directory tree, as described in the file
    00README-developer.txt, section "Guide to the Source Tree".
@@ -118,7 +118,7 @@ are based on importing existing sources as a Java free-form project.
      and then "Add JAR/Folder" ...devtools/lib/jars/junit-4.8.2.jar
      or similar (minor/micro version may vary) which should now exist.
 
-     After pressing Ok, compilation error marks should disapear.
+     After pressing Ok, compilation error marks should disappear.
 
 4. Open the build.xml file, by double-clicking on it under the expanded
    tea project, in the package explorer.
