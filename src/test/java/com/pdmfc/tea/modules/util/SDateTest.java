@@ -66,6 +66,27 @@ public class SDateTest {
 
 
     /**
+     * Test TDate.getTimeZone
+     * Default time zone is the same as Java's default time zone.
+     */
+    @Test
+    public void testTDateGetTimeZone() throws ScriptException {
+        String tzId = (String)_e.eval("[new TDate] getTimeZone");
+        assertTrue(tzId.equals(java.util.TimeZone.getDefault().getID()));
+    }
+
+    
+    /**
+     * Test TDate.setTimeZone
+     * Default time zone is the same as Java's default time zone.
+     */
+    @Test
+    public void testTDateSetTimeZone() throws ScriptException {
+        String tzId = (String)_e.eval("[[new TDate] setTimeZone \"GMT-8\"] getTimeZone");
+        assertTrue(java.util.TimeZone.getTimeZone("GMT-08:00").hasSameRules(java.util.TimeZone.getTimeZone(tzId)));
+    }
+
+    /**
      * Test TDate.format
      */
     @Test
