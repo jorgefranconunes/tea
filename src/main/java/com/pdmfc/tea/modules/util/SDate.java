@@ -11,8 +11,6 @@
  *
  * Revisions:
  *
- * 2011/04/07 TSK-PDMFC-TEA-0062 Added get/setTimeZone. (jpsl)
- * 
  * 2010/10/24 TSK-PDMFC-TEA-0050 java.lang.IllegalArgumentException
  * is the only unchecked exception expected in "TDate format" if
  * the Tea programmer makes a mistake in the date format.
@@ -64,8 +62,7 @@ import com.pdmfc.tea.runtime.STypes;
 //* <Description>
 //* Instances of <Func name="TDate"/> represent an instant in time,
 //* with the precision of a second. It is possible to obtain the
-//* system current time with the default time zone
-//* by creating an instance without passing any
+//* system current time by creating an instance without passing any
 //* arguments to the constructor.
 //* </Description>
 //*
@@ -130,7 +127,6 @@ public class SDate
 		      source.get(Calendar.HOUR_OF_DAY),
 		      source.get(Calendar.MINUTE),
 		      source.get(Calendar.SECOND));
-	_calendar.setTimeZone(source.getTimeZone());
     }
 
 
@@ -297,9 +293,6 @@ public class SDate
 //* represent a date in the "YYMMDD" format, where values of
 //* the year component less than 70 are taken to belong to the XXI
 //* century.
-//* <P>The default time zone is used, unless
-//* arguent <Arg name="aDate"/> is specified.
-//* </P>
 //* </Description>
 //* 
 //* </TeaMethod>
@@ -892,111 +885,6 @@ public class SDate
 
 
 
-    //* 
-    //* <TeaMethod name="getTimeZone"
-    //*            className="TDate">
-    //* 
-    //* <Overview>
-    //* Fetches the time zone id of this <Class name="TDate"/>.
-    //* </Overview>
-    //*
-    //* <Description>
-    //* See method <MethodRef name="setTimeZone" /> for an explanation
-    //* of the string IDs for time zones.
-    //* </Description>
-    //* 
-    //* <Returns>
-    //* A string with the id of the time zone associated with
-    //* this <Class name="TDate"/> object.
-    //* </Returns>
-    //*
-    //* <Since version="4.0.0" />
-    //*
-    //* </TeaMethod>
-    //* 
-
-    /**************************************************************************
-     *
-     * The implementation for the "getTimeZone TOS method.
-     *
-     * @param obj Reference to the object the TOS method was invoked for.
-     *
-     * @param context The context where the method invocation is taking
-     * place.
-     *
-     * @param args The arguments the TOS method was called with.
-     *
-     **************************************************************************/
-
-      public Object getTimeZone(SObjFunction obj,
-              SContext context,
-              Object[] args)
-      throws SRuntimeException {
-
-          return _calendar.getTimeZone().getID();
-      }
-
-
-
-
-  //* 
-  //* <TeaMethod name="setTimeZone"
-  //*            arguments="aTimeZoneID"
-  //* 	         className="TDate">
-  //* 
-  //* <Overview>
-  //* Changes the time zone of this <Class name="TDate"/>.
-  //* </Overview>
-  //*
-  //* <Parameter name="aTimeZoneID">
-  //* A string representing the time zone ID.
-  //* </Parameter>
-  //*
-  //* <Description>
-  //* An explanation of the ID values recognized is available in the
-  //* Java SE documentation for the <Var name="java.util.TimeZone"/>
-  //* class.
-  //* </Description>
-  //* 
-  //* <Returns>
-  //* A reference for the object where this method was called.
-  //* </Returns>
-  //*
-  //* <Since version="4.0.0" />
-  //*
-  //* </TeaMethod>
-  //* 
-
-  /**************************************************************************
-   *
-   * The implementation for the "setTimeZone TOS method.
-   *
-   * @param obj Reference to the object the TOS method was invoked for.
-   *
-   * @param context The context where the method invocation is taking
-   * place.
-   *
-   * @param args The arguments the TOS method was called with.
-   *
-   **************************************************************************/
-
-    public Object setTimeZone(SObjFunction obj,
-            SContext context,
-            Object[] args)
-    throws SRuntimeException {
-
-        if (args.length != 3) {
-            throw new SNumArgException("arguments: aTimeZoneIdString");
-        }
-
-        String tzId = STypes.getString(args, 2);
-
-        _calendar.setTimeZone(java.util.TimeZone.getTimeZone(tzId));
-
-        return obj;
-    }
-
-
 
 
 //* 
@@ -1300,8 +1188,7 @@ public class SDate
 	    && (cal.get(Calendar.DAY_OF_MONTH)==when.get(Calendar.DAY_OF_MONTH))
 	    && (cal.get(Calendar.HOUR_OF_DAY)==when.get(Calendar.HOUR_OF_DAY))
 	    && (cal.get(Calendar.MINUTE)==when.get(Calendar.MINUTE))
-	    && (cal.get(Calendar.SECOND)==when.get(Calendar.SECOND)
-	    && (cal.getTimeZone().hasSameRules(when.getTimeZone())));
+	    && (cal.get(Calendar.SECOND)==when.get(Calendar.SECOND));
 	
 	return isEqual ? Boolean.TRUE : Boolean.FALSE;
     }
@@ -1366,8 +1253,7 @@ public class SDate
 	    && (cal.get(Calendar.DAY_OF_MONTH)==when.get(Calendar.DAY_OF_MONTH))
 	    && (cal.get(Calendar.HOUR_OF_DAY)==when.get(Calendar.HOUR_OF_DAY))
 	    && (cal.get(Calendar.MINUTE)==when.get(Calendar.MINUTE))
-	    && (cal.get(Calendar.SECOND)==when.get(Calendar.SECOND))
-            && (cal.getTimeZone().hasSameRules(when.getTimeZone()));
+	    && (cal.get(Calendar.SECOND)==when.get(Calendar.SECOND));
 	
 	return isEqual ? Boolean.FALSE : Boolean.TRUE;
     }
