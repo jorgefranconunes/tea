@@ -665,7 +665,7 @@ public class TeaScriptEngineTest {
         // No need for flushing, as eval calls STeaRuntime.stop()
         // which in turns calls SModuleIO.stop() which flushes the streams.
         assertEquals("A 1st lineEOF",swOut1.toString());
-        assertEquals("A 2nd line\n",swErr1.toString());
+        assertEquals("A 2nd line\n",swErr1.toString().replaceFirst("\r", ""));
 
         // Now create another context with other redirections
         ScriptContext sc2 = new SimpleScriptContext();
