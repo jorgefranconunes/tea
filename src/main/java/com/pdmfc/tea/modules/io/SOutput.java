@@ -26,6 +26,7 @@ import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.io.PrintWriter;
 import java.io.IOException;
 
@@ -84,7 +85,7 @@ public class SOutput
 	SObjSymbol.addSymbol(CLASS_NAME);
 
     /** The output stream of this object. */
-    private OutputStream _outputStream = null;
+    private OutputStream _outputStream = null; // can be null under JSR-223
     private PrintWriter  _outputWriter = null;
 
     private boolean _streamNeedsFlush = false;
@@ -161,7 +162,35 @@ public class SOutput
 
 
 
+/**************************************************************************
+ * 
+ * Sets up the underlying stream. One of the <TT>open()</TT> methods must be
+ * called prior to any invocation of the <TT>write()</TT>,
+ * <TT>writeln()</TT>, <TT>flush()</TT>, <TT>close()</TT> methods.
+ * 
+ * @param out
+ *            The <TT>java.io.Writer</TT> associated with this object,
+ *            required by JSR-223 SCR.4.3.1.
+ *            When using a <TT>java.io.Writer</TT> instead of a
+ *            <TT>java.io.OutputStream</TT>, binary content output
+ *            methods will fail.
+ * 
+ **************************************************************************/
 
+    public void open(Writer out) {
+
+        try {
+            close();
+        } catch (IOException e) {
+            // Just ignore it...
+        }
+        _outputStream = null;
+        _outputWriter = new PrintWriter(out);
+    }
+
+
+    
+    
 //* 
 //* <TeaMethod name="setLineBuffering"
 //*            arguments="flag"
@@ -789,7 +818,9 @@ public class SOutput
 	throws IOException {
 
 	if ( _streamNeedsFlush ) {
-	    _outputStream.flush();
+	    if (_outputStream != null) {
+	        _outputStream.flush();
+	    }
 	    _streamNeedsFlush = false;
 	}
     }
@@ -873,18 +904,20 @@ public class SOutput
     public void close()
 	throws IOException {
 
+        flushStream();
+        flushWriter();
 	if ( _outputStream != null ) {
-	    flushStream();
-	    flushWriter();
 	    try {
 		_outputStream.close();
 	    } catch (IOException e) {
 		// Just ignore it.
 	    }
-	    _outputWriter.close();
-	    _outputStream = null;
-	    _outputWriter = null;
+            _outputStream = null;
 	}
+        if (_outputWriter != null) {
+            _outputWriter.close();
+            _outputWriter = null;
+        }
     }
 
 

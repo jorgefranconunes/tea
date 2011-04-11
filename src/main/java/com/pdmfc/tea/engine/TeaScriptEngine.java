@@ -597,10 +597,6 @@ public class TeaScriptEngine extends AbstractScriptEngine
             STeaRuntime teaRuntime = this.getTeaRuntime(sc);
             // prepare the context for execution of code.
 
-            // TODO: SCR.4.3.1 ScriptContext - $stdin, $stdout and $stderr
-            // should be initialized from the appropriate reader/writers
-            // in the ScriptContext.
-
             // SCR.4.3.4.1.1 Bindings, Bound Values and State
             // Set argv, argv0, etc, from javax.script.argv, javax.script.filename, etc.
             // TODO - make the argv and argv0 cast errors give a more friendly error
@@ -652,8 +648,34 @@ public class TeaScriptEngine extends AbstractScriptEngine
             } catch (STeaException ex) {
                 throw new ScriptException(ex);
             }
-
+            
             SContext teaContext = teaRuntime.getToplevelContext();
+
+            // SCR.4.3.1 ScriptContext - $stdin, $stdout and $stderr
+            // should be initialized from the appropriate reader/writers
+            // in the ScriptContext.
+            // There is no way to check that the reader/writers are associated
+            // with the default System.in, .out and .err. If there was, there
+            // was no need to set them up again, as Tea has already set them up,
+            // and in a way capable of reading/writing binary content (bytes).
+            java.io.Reader ir = sc.getReader();
+            if (ir!=null) {
+                com.pdmfc.tea.modules.io.SInput stdin =
+                    (com.pdmfc.tea.modules.io.SInput)teaContext.getVar(SObjSymbol.getSymbol("stdin"));
+                stdin.open(ir);
+            }
+            java.io.Writer ow = sc.getWriter();
+            if (ow!=null) {
+                com.pdmfc.tea.modules.io.SOutput stdout =
+                    (com.pdmfc.tea.modules.io.SOutput)teaContext.getVar(SObjSymbol.getSymbol("stdout"));
+                stdout.open(ow);
+            }
+            java.io.Writer ew = sc.getErrorWriter();
+            if (ew!=null) {
+                com.pdmfc.tea.modules.io.SOutput stderr =
+                    (com.pdmfc.tea.modules.io.SOutput)teaContext.getVar(SObjSymbol.getSymbol("stderr"));
+                stderr.open(ew);
+            }
 
             Bindings b = sc.getBindings(ScriptContext.GLOBAL_SCOPE);
             if (b != null) {

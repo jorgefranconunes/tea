@@ -25,6 +25,7 @@ package com.pdmfc.tea.modules.io;
 import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.io.IOException;
+import java.io.Reader;
 
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.modules.io.SIOException;
@@ -67,6 +68,14 @@ import com.pdmfc.tea.runtime.STypes;
 /**************************************************************************
  *
  * Instances of this class represent input streams.
+ * 
+ * <p>JSR-223 requires the ability to support a <TT>java.io.Reader</TT> instead of
+ * a <TT>java.io.InputStream</TT>. On the other hand, Tea has methods, such as
+ * <TT>copyTo</TT> that require the reading of bytes.</p>
+ * As such, when the underlying input source is a <TT>java.io.InputStream</TT>
+ * methods that read bytes (such as <TT>copyTo</TT>) work. When the
+ * undelying input source is a <TT>java.io.Reader</TT>, reading bytes is not
+ * supported and calling methods such <TT>copyTo</TT> will fail.</p>
  *
  **************************************************************************/
 
@@ -82,7 +91,10 @@ public class SInput
     private static final SObjSymbol WRITE_METHOD = SObjSymbol.addSymbol("write");
     private static final int         BUFFER_SIZE  = 8192;
 
-    private BufferedInputStream _input = null;
+    private BufferedInputStream _input       = null;
+    // JSR-223 requires support for a java.io.Reader.
+    // If the _inputReader is used, _input is not used, and vice-versa.
+    private Reader              _inputReader = null;
 
 
 
@@ -130,15 +142,58 @@ public class SInput
  * Sets up the underlying stream. One of the <TT>open()</TT> methods
  * must be called prior to any invocation of the <TT>readln()</TT>,
  * <TT>close()</TT> methods.
+ * <p>Opening with a <TT>java.io.InputStream</TT> close the underlying
+ * <TT>java.io.Reader</TT>, thus allowing reading of both bytes or characters.</p>
  *
  * @param in The <TT>InputStream</TT> associated with this object.
+ * 
+ * @throws SIOException 
  *
  **************************************************************************/
 
-   public void open(InputStream in) {
+   public void open(InputStream in) throws SIOException {
 
        _input = new BufferedInputStream(in);
+       if (_inputReader != null) {
+            try {
+                _inputReader.close();
+                _inputReader = null;
+            } catch (IOException e) {
+                throw new SIOException(e);
+            }
+       }
+
    }
+
+
+
+   /**************************************************************************
+   *
+   * Sets up the underlying stream. One of the <TT>open()</TT> methods
+   * must be called prior to any invocation of the <TT>readln()</TT>,
+   * <TT>close()</TT> methods.
+   * <p>Opening with a <TT>java.io.Reader</TT> closes the underlying
+   * <TT>java.io.InputStream</TT>, thus only allowing the reading of
+   * characters. Methods that attempt to read bytes will fail.</p>
+   *
+   * @param inReader The <TT>Reader</TT> associated with this object.
+   * 
+   * @throws SIOException 
+   *
+   **************************************************************************/
+
+     public void open(Reader inReader) throws SIOException {
+
+         _inputReader = inReader;
+         if (_input != null) {
+             try {
+                 _input.close();
+                 _input = null;
+             } catch (IOException e) {
+                 throw new SIOException(e);
+             }
+         }
+     }
 
 
 
@@ -230,11 +285,15 @@ public class SInput
 	throws IOException,
 	       SIOException {
 
-	if ( _input == null ) {
+	if (_input == null && _inputReader == null) {
 	    throw new SIOException("stream has not been opened for reading");
 	}
 
-	return readLine(_input);
+	if ( _input != null ) {
+	    return readLine(_input);
+	} else {
+            return readLine(_inputReader);	    
+	}
     }
 
 
@@ -258,7 +317,7 @@ public class SInput
 
    private static String readLine(InputStream in)
 	 throws IOException {
-
+       
       StringBuffer buffer = null;
       int          c      = in.read();
 
@@ -282,6 +341,52 @@ public class SInput
 
       return (buffer==null) ? null : buffer.toString();
    }
+
+
+
+
+
+
+   /**************************************************************************
+    *
+    * Reads a line from <TT>in</TT>. The end of a line is signaled by one
+    * of three conditions: the '<TT>\n</TT>' character; the
+    * "<TT>\r\n</TT>" sequence; end of file on <TT>in</TT>.
+    *
+    * @param in The <TT>Reader</TT> where the line will be read
+    * from.
+    *
+    * @return A <TT>String</TT> representing the line that was read
+    * without the trailing new line.  The null object if <TT>in</TT> was
+    * at end of file.
+    *
+    **************************************************************************/
+
+      private static String readLine(Reader in)
+            throws IOException {
+
+         StringBuffer buffer = null;
+         int          c      = in.read();
+
+         if ( c != -1 ) {
+            buffer = new StringBuffer();
+         }
+         while ( (c!='\n') && (c!=-1) ) {
+            if ( c == '\r' ) {
+               c = in.read();
+               if ( c != '\n' ) {
+                  buffer.append('\r');
+                  buffer.append((char)c);
+                  c = in.read();
+               }
+            } else {
+               buffer.append((char)c);
+               c = in.read();
+            }
+         }
+
+         return (buffer==null) ? null : buffer.toString();
+      }
 
 
 
@@ -380,6 +485,10 @@ public class SInput
 	throws IOException,
 	       SIOException {
 
+        if (_input == null) {
+            throw new SIOException("stream has not been opened for reading bytes");
+        }
+        
 	byte[] buffer = new byte[BUFFER_SIZE];
 	int    count  = 0;
 
@@ -413,6 +522,10 @@ public class SInput
 	methodArgs[0] = out;
 	methodArgs[1] = WRITE_METHOD;
 	methodArgs[2] = byteArray;
+
+        if (_input == null) {
+            throw new SIOException("stream has not been opened for reading bytes");
+        }
 
 	while ( (count=_input.read(buffer)) > 0 ) {
 	    byteArray.setContents(buffer, 0, count);
@@ -449,6 +562,10 @@ public class SInput
 	methodArgs[0] = out;
 	methodArgs[1] = WRITE_METHOD;
 	methodArgs[2] = byteArray;
+
+	if (_input == null) {
+            throw new SIOException("stream has not been opened for reading bytes");
+        }
 
 	while ( total > 0 ) {
 	    int bytesToRead = (total>BUFFER_SIZE) ? BUFFER_SIZE : total;
@@ -534,6 +651,16 @@ public class SInput
 	    }
 	    _input = null;
 	}
+
+        if ( _inputReader != null ) {
+            try {
+                _inputReader.close();
+            } catch (IOException e) {
+                _inputReader = null;
+                throw e;
+            }
+            _inputReader = null;
+        }
     }
 
 

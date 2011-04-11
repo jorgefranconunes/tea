@@ -70,11 +70,13 @@ public class TeaScriptEngineTest {
     public void tearDown() throws IOException {
     }
 
+    
+    
     @Test
     public void checkEvalString() throws ScriptException {
         _e.eval("global v 1");
     }
-
+    
     @Test
     public void checkEvalStringError() throws ScriptException {
         try {
@@ -630,4 +632,66 @@ public class TeaScriptEngineTest {
                 teaEngine.get("hi"));
 
     }
+    
+    
+    /**
+     * Spec 4.3.1 ScriptContext - $stdin, $stdout, $stderr
+     * should be initialized from the appropriate reader/writers
+     * in the ScriptContext. 
+     * @throws IOException 
+     */
+    @Test
+    public void testIORedirect() throws ScriptException, IOException {
+        ScriptEngineManager engineManager = new ScriptEngineManager();
+        ScriptEngine teaEngine = engineManager.getEngineByName("Tea");
+        
+        // Create a simple context with redirections to String readers/writers
+        ScriptContext sc1 = new SimpleScriptContext();
+        String anInputString = "A 1st line\nA 2nd line";
+        java.io.StringReader srIn1 = new java.io.StringReader(anInputString);
+        java.io.StringWriter swOut1 = new java.io.StringWriter();
+        java.io.StringWriter swErr1 = new java.io.StringWriter();
+        sc1.setReader(srIn1);
+        sc1.setWriter(swOut1);
+        sc1.setErrorWriter(swErr1);
+        teaEngine.setContext(sc1);
+        teaEngine.eval(
+                "define a1StLine [$stdin readln] ;"
+                +"define a2NdLine [$stdin readln] ;"
+                +"define a3RdLine [$stdin readln] ;"
+                +"$stdout write $a1StLine ;"
+                +"$stderr writeln $a2NdLine ;"
+                +"if {null? $a3RdLine} { $stdout write \"EOF\" }");
+        // No need for flushing, as eval calls STeaRuntime.stop()
+        // which in turns calls SModuleIO.stop() which flushes the streams.
+        assertEquals("A 1st lineEOF",swOut1.toString());
+        assertEquals("A 2nd line\n",swErr1.toString());
+
+        // Now create another context with other redirections
+        ScriptContext sc2 = new SimpleScriptContext();
+        String anInputString2 = "B 1st line";
+        java.io.StringReader srIn2 = new java.io.StringReader(anInputString2);
+        java.io.StringWriter swOut2 = new java.io.StringWriter();
+        sc2.setReader(srIn2);
+        sc2.setWriter(swOut2);
+        teaEngine.setContext(sc2);
+        teaEngine.eval("$stdout write [$stdin readln]");
+        assertEquals("B 1st line",swOut2.toString());
+      
+        // Now swicth back to the 1st context
+        srIn1.reset(); // reset input stream
+        teaEngine.setContext(sc1);
+        teaEngine.eval("$stdout write [$stdin readln]");
+        assertEquals("A 1st lineEOFA 1st line",swOut1.toString());
+
+        // Just check that $stdin copyTo gives an error when used under
+        // this implementation of JSR-223.
+        try {
+            teaEngine.eval("$stdin copyTo $stdout");
+            fail("$stdin copyTo ... should fail under this JSR-223 implementation");
+        } catch (ScriptException e) {
+            assertEquals(e.getCause().getClass(), com.pdmfc.tea.modules.io.SIOException.class);
+        }
+    }
+
 }
