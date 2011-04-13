@@ -133,8 +133,8 @@ according to the Tea site's instructions.
 
     svn cp -m 'Tea 4.Y.Z release.' \
          -r NNN \
-        svn+ssh://www.pdmfc.com/opt/develop/svnroot/tea/trunk \
-        svn+ssh://www.pdmfc.com/opt/develop/svnroot/tea/releases/4.Y.Z
+        svn+ssh://ssh.pdmfc.com/opt/svnroot/tea/trunk \
+        svn+ssh://ssh.pdmfc.com/opt/svnroot/tea/releases/4.Y.Z
 
 
 5. Update the Tea site.
