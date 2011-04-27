@@ -248,6 +248,38 @@ public class SModuleHtml
 
 
 
+
+
+
+
+//* 
+//* <TeaFunction name="url-encode"
+//* 		arguments="aString"
+//*             module="tea.html">
+//*
+//* <Overview>
+//* Encodes a string so it can be used as an URL GET parameter.
+//* </Overview>
+//*
+//* <Parameter name="aString">
+//* The string to be encoded.
+//* </Parameter>
+//* 
+//* <Returns>
+//* A new string resulting from encoding <Arg name ="aString"/>.
+//* </Returns>
+//*
+//* <Description>
+//* Characters
+//* " ", "?", "/", "+", "&lt;", "&gt;", "&amp;", "&quot;",
+//* "$" and "%" are encoded in x-www-form-urlencoded format.
+//* </Description>
+//* 
+//* <Since version="3.1.0"/>
+//*
+//* </TeaFunction>
+//* 
+
 /**************************************************************************
  *
  * @exception STeaException
@@ -307,7 +339,7 @@ public class SModuleHtml
 	    case '*' : buf.append("%2a"); break;
 	    case '+' : buf.append("%2b"); break;
 	    case '/' : buf.append("%2f"); break;
-	    case '&' : buf.append("%36"); break;
+	    case '&' : buf.append("%26"); break;
 	    case '<' : buf.append("%3c"); break;
 	    case '=' : buf.append("%3d"); break;
 	    case '>' : buf.append("%3e"); break;
