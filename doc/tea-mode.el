@@ -1,9 +1,9 @@
 ;;; tea-mode.el --- a major-mode for editing Tea scripts.
-
+;;
 ;; Copyright (C) 2001 PDM&FC
-
+;;
 ;; Author: Jorge Nunes (jorge.nunes@pdmfc.pt)
-
+;;
 
 
 
@@ -25,7 +25,7 @@
   :group 'tea)
 
 (defvar tea-mode-map nil
-  "Keymap used with tcl mode.")
+  "Keymap used with Tea mode.")
 
 (defvar tea-font-lock-keywords
   (eval-when-compile
@@ -36,7 +36,7 @@
        (1 font-lock-keyword-face) (2 font-lock-type-face nil t) (3 font-lock-type-face nil t))
      '("\\<\\(method\\)\\>[ \t]*\\(\\sw+\\)?[ \t]*\\(\\sw+\\)?"
        (1 font-lock-keyword-face) (2 font-lock-type-face nil t) (3 font-lock-function-name-face nil t))
-     '("\\<\\(break\\|continue\\|echo\\|exit\\|if\\|is\\|while\\|return\\)\\>"
+     '("\\<\\(break\\|continue\\|echo\\|exit\\|if\\|import\\|is\\|while\\|return\\)\\>"
        (1 font-lock-keyword-face))
      ))
   "Default expressions to highlight in Tea modes.")

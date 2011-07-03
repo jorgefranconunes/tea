@@ -1,38 +1,32 @@
 /**************************************************************************
  *
- * Copyright (c) 2010 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-/**************************************************************************
- *
- * $HeadURL$
- * $Id$
- *
- * Revisions:
- *
- * 2010-10-05 Created. (jpsl)
+ * Copyright (c) 2010-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 package com.pdmfc.tea.modules.reflect;
 
-import com.pdmfc.tea.engine.TeaScriptEngine;
-import com.pdmfc.tea.modules.util.SDate;
-import com.pdmfc.tea.modules.util.SHashtable;
-import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SObjNull;
-import com.pdmfc.tea.runtime.SObjPair;
-import com.pdmfc.tea.runtime.SObjSymbol;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import javax.script.ScriptEngineFactory;
 import javax.script.ScriptException;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+
+import com.pdmfc.tea.engine.TeaScriptEngine;
+import com.pdmfc.tea.modules.reflect.STeaJavaTypes;
+import com.pdmfc.tea.modules.util.SDate;
+import com.pdmfc.tea.modules.util.SHashtable;
+import com.pdmfc.tea.runtime.SContext;
+import com.pdmfc.tea.runtime.SObjNull;
+import com.pdmfc.tea.runtime.SObjPair;
+import com.pdmfc.tea.runtime.SObjSymbol;
+
+
+
+
 
 /**
  *
@@ -91,28 +85,29 @@ public class SModuleReflectTest {
             SObjSymbol.getSymbol("is") // Tea runtime
         };
         for (Object obj : anIdentityArray) {
-            Object result = SModuleReflect.java2Tea(obj, context);
+            Object result = STeaJavaTypes.java2Tea(obj, context);
             assertSame(obj, result);
         }
 
         // Float gets to be a Double
         assertSame(
                 Double.class,
-                SModuleReflect.java2Tea(Float.valueOf(2.33f), context).getClass());
+                STeaJavaTypes.java2Tea(Float.valueOf(2.33f), context).getClass());
 
         // a Map gets to be a THashtable
         java.util.HashMap<String, Object> m = new java.util.HashMap<String, Object>();
         m.put("k1", 1.0d);
         String s = "hello";
         m.put("k2", s);
-        SHashtable tm = (SHashtable) SModuleReflect.java2Tea(m, context);
+        SHashtable tm = (SHashtable)STeaJavaTypes.java2Tea(m, context);
         Object args[] = {tm, SObjSymbol.getSymbol("get"), "k1"};
         assertEquals(Double.valueOf(1.0d), (Double) tm.get(tm, context, args));
         Object args2[] = {tm, SObjSymbol.getSymbol("get"), "k2"};
         assertSame(s, tm.get(tm, context, args2));
 
         // Date
-        Object teaObject = SModuleReflect.java2Tea(new java.util.Date(), context);
+        Object teaObject =
+            STeaJavaTypes.java2Tea(new java.util.Date(), context);
         assertSame(teaObject.getClass(), SDate.class);
 
         // JDBC->TDBC convertion
@@ -178,7 +173,7 @@ public class SModuleReflectTest {
             "aString" // String
         };
         for (Object obj : anIdentityArray) {
-            Object result = SModuleReflect.tea2Java(obj);
+            Object result = STeaJavaTypes.tea2Java(obj);
             assertSame(obj, result);
         }
 

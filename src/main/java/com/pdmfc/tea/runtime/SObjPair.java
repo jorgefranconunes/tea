@@ -1,20 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2002/01/10 The elements() method was replaced with the iterator()
- * method. (jfn)
- *
- * 2001/05/12 Created. (jfn)
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -38,7 +24,8 @@ import com.pdmfc.tea.runtime.SRuntimeException;
  **************************************************************************/
 
 public class SObjPair
-    extends Object {
+    extends Object
+    implements Iterable {
 
 
     /** The left hand side object of the pair. */

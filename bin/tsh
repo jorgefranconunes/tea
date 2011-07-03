@@ -164,7 +164,6 @@ Available options:
 	Specifies the encoding of the Tea source files (e.g. UTF-8,
 	ISO-8859-15).  If this option is not specified then the
 	platform default encoding is assumed.
-
 --version
 	Print version information and exits.
 --help

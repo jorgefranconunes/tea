@@ -16,6 +16,7 @@ Main Ant build file for the Tea development tree.
 
 
 
+
   <!-- Defines global properties BUILD_* used througout the build. -->
 
   <property file="config/tea-core.conf" />
@@ -54,7 +55,11 @@ Main Ant build file for the Tea development tree.
   <property name="jar.file" value="${jar.dir}/${jar.name}" />
   <property name="jar.basedir" location="target/classes" />
 
-  <target name="jar.build" depends="java.build, resources.build, tea.build">
+  <target
+     name="jar.build"
+     depends="java.build,
+              resources.build,
+              tea.build">
     <mkdir dir="${jar.dir}" />
     <jar destfile="${jar.file}" basedir="${jar.basedir}" manifest="config/JarManifest">
       <metainf dir="${resources.source.dir}/META-INF" />
@@ -95,7 +100,9 @@ Main Ant build file for the Tea development tree.
 
   <target name="resources.build">
     <mkdir dir="${resources.target.dir}" />
-    <copy-from-template file="${resources.source.dir}/com/pdmfc/tea/TeaConfig.properties.template" tofile="${resources.target.dir}/com/pdmfc/tea/TeaConfig.properties" />
+    <copy-from-template
+       file="${resources.source.dir}/com/pdmfc/tea/TeaConfig.properties.template"
+       tofile="${resources.target.dir}/com/pdmfc/tea/TeaConfig.properties" />
   </target>
 
   <target name="resources.clean">
@@ -160,7 +167,12 @@ Main Ant build file for the Tea development tree.
   <property name="java-test.source.dir" location="src/test/java" />
   <property name="java-test.target.dir" location="target/test-classes" />
 
-  <target name="java-test.build" depends="java-test.config.file.check, java-test.config.file.read, java-test.config.file.warn, java-test.config.create">
+  <target
+     name="java-test.build"
+     depends="java-test.config.file.check,
+              java-test.config.file.read,
+              java-test.config.file.warn,
+              java-test.config.create">
     <java-compile srcdir="${java-test.source.dir}" destdir="${java-test.target.dir}">
       <javac-classpath>
         <pathelement path="${jar.file}" />
@@ -186,7 +198,10 @@ Main Ant build file for the Tea development tree.
     </condition>
   </target>
 
-  <target name="java-test.config.file.warn" if="java-test.config.file.exists" unless="java-test.config.file.defined">
+  <target
+     name="java-test.config.file.warn"
+     if="java-test.config.file.exists"
+     unless="java-test.config.file.defined">
 
     <fail>File build.conf must define a BUILD_JUNIT_JAR property with the classpath of valid JUnit jars.  Example: BUILD_JUNIT_JAR=/opt/junit/jars/junit-4.8.2.jar;/opt/junit/jars/junit-hamcrest.4.8.2.jar
 If you remove the build.conf file, ant will setup one for you using the JUnit libraries distributed with this package.</fail>
@@ -202,7 +217,9 @@ If you remove the build.conf file, ant will setup one for you using the JUnit li
     </unzip>
     <mkdir dir="${devtools.jars.dir}" />
     <property name="BUILD_JUNIT_JAR" value="${devtools.jars.dir}/junit-4.8.2.jar" />
-    <move file="${java.io.tmpdir}/${user.name}/junit4.8.2/junit-4.8.2.jar" tofile="${BUILD_JUNIT_JAR}" />
+    <move
+       file="${java.io.tmpdir}/${user.name}/junit4.8.2/junit-4.8.2.jar"
+       tofile="${BUILD_JUNIT_JAR}" />
     <delete dir="${java.io.tmpdir}/${user.name}/junit4.8.2" />
     <delete file="build.conf" />
     <echoproperties destfile="build.conf" failonerror="true" regex="BUILD_JUNIT_JAR" />
@@ -251,7 +268,18 @@ If you remove the build.conf file, ant will setup one for you using the JUnit li
     <mkdir dir="${javadoc.target.dir}" />
     <copy file="doc/images/LogoSmallPdmfc.png" todir="${javadoc.target.dir}" />
 
-    <javadoc sourcepath="${javadoc.source.dir}" destdir="${javadoc.target.dir}" useexternalfile="yes" nodeprecatedlist="yes" author="true" splitindex="true" version="true" use="true" doctitle="${javadoc.doctitle}" windowtitle="${javadoc.windowtitle}" verbose="true">
+    <javadoc
+       sourcepath="${javadoc.source.dir}"
+       destdir="${javadoc.target.dir}"
+       useexternalfile="yes"
+       nodeprecatedlist="yes"
+       author="true"
+       splitindex="true"
+       version="true"
+       use="true"
+       doctitle="${javadoc.doctitle}"
+       windowtitle="${javadoc.windowtitle}"
+       verbose="true">
       <header><![CDATA[<b>Tea Java Runtime API</b><br /><b>Version ${BUILD_VERSION}</b>]]></header>
       <bottom><![CDATA[<font size="-1">&copy; 2011 <a href="http://www.pdmfc.com" target="_blank"><img align="absmiddle" border="0" src="LogoSmallPdmfc.png" alt="PDM&amp;FC"></a>]]></bottom>
     </javadoc>
@@ -314,14 +342,27 @@ If you remove the build.conf file, ant will setup one for you using the JUnit li
   <target name="release.build" depends="all, doc">
     <mkdir dir="${release.dir}" />
     <delete file="${release.dir}/${release.basename}.tar.gz" />
-    <tar destfile="${release.dir}/${release.basename}.tar.gz" compression="gzip">
+    <tar
+       destfile="${release.dir}/${release.basename}.tar.gz"
+       compression="gzip">
+
       <!-- does not preserve permissions? - tarfileset for executables -->
-      <tarfileset dir="." prefix="tea-${TEA_VERSION}" followsymlinks="no" defaultexcludes="yes" filemode="755">
+      <tarfileset
+         dir="."
+         prefix="tea-${TEA_VERSION}"
+         followsymlinks="no"
+         defaultexcludes="yes"
+         filemode="755">
         <include name="bin/tsh" />
         <include name="bin/setup" />
         <include name="bin/teadoc" />
       </tarfileset>
-      <tarfileset dir="." prefix="tea-${TEA_VERSION}" followsymlinks="no" defaultexcludes="yes">
+
+      <tarfileset
+         dir="."
+         prefix="tea-${TEA_VERSION}"
+         followsymlinks="no"
+         defaultexcludes="yes">
         <include name="00README.txt" />
         <include name="COPYING.txt" />
         <include name="LICENSE.txt" />
@@ -338,16 +379,29 @@ If you remove the build.conf file, ant will setup one for you using the JUnit li
         <include name="lib/jars/tea-*.jar" />
       </tarfileset>
     </tar>
+
     <delete file="${release.dir}/${release.basename}-src.tar.gz" />
-    <tar destfile="${release.dir}/${release.basename}-src.tar.gz" compression="gzip">
+
+    <tar
+       destfile="${release.dir}/${release.basename}-src.tar.gz" compression="gzip">
       <!-- does not preserve permissions? - tarfileset for executables -->
-      <tarfileset dir="." prefix="tea-${TEA_VERSION}" followsymlinks="no" defaultexcludes="yes" filemode="755">
+      <tarfileset
+         dir="."
+         prefix="tea-${TEA_VERSION}"
+         followsymlinks="no"
+         defaultexcludes="yes"
+         filemode="755">
         <include name="bin/tsh" />
         <include name="bin/setup" />
         <include name="bin/teadoc" />
         <include name="devtools/bin/**" />
       </tarfileset>
-      <tarfileset dir="." prefix="tea-${TEA_VERSION}" followsymlinks="no" defaultexcludes="yes">
+
+      <tarfileset
+         dir="."
+         prefix="tea-${TEA_VERSION}"
+         followsymlinks="no"
+         defaultexcludes="yes">
         <!-- exclude executables -->
         <exclude name="bin/setup" />
         <exclude name="bin/teadoc" />
@@ -375,9 +429,9 @@ If you remove the build.conf file, ant will setup one for you using the JUnit li
 
 
 
-  <!-- 
+<!-- 
 
-Utility tasks bellow.
+Only utility tasks bellow.
 
 -->
 
@@ -393,7 +447,13 @@ Utility tasks bellow.
     <element name="javac-classpath" optional="yes" />
     <sequential>
       <mkdir dir="@{destdir}" />
-      <javac srcdir="@{srcdir}" destdir="@{destdir}" debug="yes" includeantruntime="no">
+      <javac
+         srcdir="@{srcdir}"
+         destdir="@{destdir}"
+         source="1.6"
+         nowarn="false"
+         debug="yes"
+         includeantruntime="no">
         <compilerarg value="-Xlint" />
         <compilerarg value="-Xlint:-serial" />
         <classpath>

@@ -1,16 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2007 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- * Revisions:
- *
- * 2006/12/24 Created. (jpsl)
+ * Copyright (c) 2007-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -20,9 +10,15 @@ import com.pdmfc.tea.STeaException;
 import javax.script.*;
 
 import com.pdmfc.tea.compiler.SCode;
+import com.pdmfc.tea.modules.reflect.STeaJavaTypes;
 import com.pdmfc.tea.runtime.STeaRuntime;
 
-/**
+
+
+
+
+/**************************************************************************
+ *
  * A JSR-223 <code>javax.script.CompiledScript</code>
  * wrapper around an {@link SCode}.
  * It associates the compiled code with the engine
@@ -30,11 +26,21 @@ import com.pdmfc.tea.runtime.STeaRuntime;
  * 
  * @since 4.0.0
  *
- */
-public class TeaCompiledScript extends CompiledScript {
+ **************************************************************************/
+
+public class TeaCompiledScript
+    extends CompiledScript {
+
+
+
+
 
     private TeaScriptEngine    _engine;
     private SCode              _code;
+
+
+
+
 
     /**
      * Constructor for this object.
@@ -47,12 +53,19 @@ public class TeaCompiledScript extends CompiledScript {
         _code   = code;
     }
 
+
+
+
+
     /**
      * @return the engine that created this object.
      */
     public ScriptEngine getEngine() {
         return _engine;
     }
+
+
+
 
 
     /**
@@ -63,6 +76,7 @@ public class TeaCompiledScript extends CompiledScript {
      */
     public Object eval(ScriptContext scriptContext)
         throws ScriptException {
+
         try {
             //System.out.println("teaCompiledScript.eval("+scriptContext+")");
 
@@ -79,7 +93,7 @@ public class TeaCompiledScript extends CompiledScript {
             // Run the code
             Object result = teaRuntime.execute(_code); // Tea 3.1.2 or higher.
 
-            return com.pdmfc.tea.modules.reflect.SModuleReflect.tea2Java(result);
+            return STeaJavaTypes.tea2Java(result);
         } catch (STeaException e) {
             //System.out.println("eval exception "+e.getMessage());
             //for(StackTraceElement ste : e.getStackTrace()) {
@@ -93,3 +107,14 @@ public class TeaCompiledScript extends CompiledScript {
         }
     }
 }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+

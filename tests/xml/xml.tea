@@ -8,7 +8,7 @@
 #
 #
 
-define nativeParserClass "org.apache.xerces.parsers.SAXParser"
+define nativeParserClass $null #"org.apache.xerces.parsers.SAXParser"
 
 
 
@@ -20,7 +20,7 @@ class TestParser TXmlParser (
 
 method TestParser constructor () {
     
-    $super constructor $nativeParserClass
+    $super constructor # $nativeParserClass
 }
 
 

@@ -21,7 +21,7 @@ import java.util.Properties;
  *
  **************************************************************************/
 
-public class SConfigInfo
+public final class SConfigInfo
     extends Object {
 
 
@@ -32,6 +32,18 @@ public class SConfigInfo
 
     private static Properties _props = new Properties();
 
+
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
     static {
 	InputStream in = SConfigInfo.class.getResourceAsStream(RES_NAME);
 
@@ -40,6 +52,8 @@ public class SConfigInfo
                 _props.load(in);
             } catch (IOException e) {
                 throw new RuntimeException(e);
+            } finally {
+                try { in.close(); } catch (IOException e) {/**/}
             }
         } else {
             String msg = "Missing resource \"" + RES_NAME + "\"";
