@@ -1,0 +1,37 @@
+TSK-PDMFC-TEA-0066 Creation of objects implementing arbitrary Java interfaces.
+
+
+The goal of the task is to implement a new Tea function in the
+"tea.java" module for creating objects implementing a given Java
+interface. The created object will behave like a TOS object but will
+delegate all method calls to another Tea function (which can also be a
+TOS object).
+
+Example description of the function to be implemented:
+
+java-proxy javaInterface function
+
+Creates and returns a new proxy object implementing the given Java
+interface.
+
+The created proxy object can be passed to Java methods that accept as
+argument the same type as the Java interface implemented by the
+proxy. That is because the proxy object actually implements that Java
+interface.
+
+The given "function" will be invoked for each method call on the proxy
+Java object. The first argument will be the method name (String) and
+the remaining arguments will be the same arguments the Java method was
+invoked with.
+
+With this functionality it will be possible to better integrate Tea
+code and components implemented in Java. It will now be possible to
+pass TOS objects (or Tea functions) to Java code (e.g. listeners of a
+given interface).
+
+
+
+
+
+Analysis
+

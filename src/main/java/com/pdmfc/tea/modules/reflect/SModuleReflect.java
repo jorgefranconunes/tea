@@ -6,53 +6,26 @@
 
 package com.pdmfc.tea.modules.reflect;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeSet;
 
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.modules.SModule;
 import com.pdmfc.tea.modules.reflect.SMethodFinder;
 import com.pdmfc.tea.modules.reflect.SReflectUtils;
 import com.pdmfc.tea.modules.reflect.STeaJavaTypes;
-import com.pdmfc.tea.modules.tdbc.SConnection;
-import com.pdmfc.tea.modules.tdbc.SStatement;
-import com.pdmfc.tea.modules.tdbc.SPreparedStatement;
-import com.pdmfc.tea.modules.tdbc.SCallableStatement;
-import com.pdmfc.tea.modules.tdbc.SResultSet;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.util.SDate;
 import com.pdmfc.tea.modules.util.SHashtable;
 import com.pdmfc.tea.modules.util.SVector;
 import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SLambdaFunction;
 import com.pdmfc.tea.runtime.SNumArgException;
-import com.pdmfc.tea.runtime.SObjBlock;
-import com.pdmfc.tea.runtime.SObjByteArray;
 import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.SObjNull;
-import com.pdmfc.tea.runtime.SObjPair;
-import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SRuntimeException;
-import com.pdmfc.tea.runtime.STypeException;
-import com.pdmfc.tea.runtime.STypes;
 
 
 
@@ -228,35 +201,6 @@ public class SModuleReflect
 
 
 
-    private static Map<String,Class<?>> _primitiveTypes =
-        new HashMap<String,Class<?>>();
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    static {
-	_primitiveTypes.put(Boolean.TYPE.getName(),   Boolean.TYPE);
-	_primitiveTypes.put(Character.TYPE.getName(), Character.TYPE);
-	_primitiveTypes.put(Byte.TYPE.getName(),      Byte.TYPE);
-	_primitiveTypes.put(Short.TYPE.getName(),     Short.TYPE);
-	_primitiveTypes.put(Integer.TYPE.getName(),   Integer.TYPE);
-	_primitiveTypes.put(Long.TYPE.getName(),      Long.TYPE);
-	_primitiveTypes.put(Float.TYPE.getName(),     Float.TYPE);
-	_primitiveTypes.put(Double.TYPE.getName(),    Double.TYPE);
-	_primitiveTypes.put(Void.TYPE.getName(),      Void.TYPE);
-    }
-
-
-
-
-
 /**************************************************************************
  *
  * 
@@ -272,11 +216,12 @@ public class SModuleReflect
 
 /**************************************************************************
  *
- * 
+ * {@inheritDoc}
  *
  **************************************************************************/
 
-    public void init(SContext context)
+    @Override
+    public void init(final SContext context)
 	throws STeaException {
 
 	context.newVar("java-get-value",
@@ -346,10 +291,11 @@ public class SModuleReflect
 
 /**************************************************************************
  *
- * 
+ * {@inheritDoc}
  *
  **************************************************************************/
 
+    @Override
     public void end() {
 
         // Nothing to do.
@@ -361,10 +307,11 @@ public class SModuleReflect
 
 /**************************************************************************
  *
- * 
+ * {@inheritDoc}
  *
  **************************************************************************/
 
+    @Override
     public void start() {
 
         // Nothing to do.
@@ -376,10 +323,11 @@ public class SModuleReflect
 
 /**************************************************************************
  *
- * 
+ * {@inheritDoc}
  *
  **************************************************************************/
 
+    @Override
     public void stop() {
 
         // Nothing to do.
@@ -423,54 +371,36 @@ public class SModuleReflect
  *
  **************************************************************************/
 
-    private static Object functionGetValue(SObjFunction func,
-					   SContext     context,
-					   Object[]     args)
+    private static Object functionGetValue(final SObjFunction func,
+					   final SContext     context,
+					   final Object[]     args)
 	throws STeaException {
 
 	if ( args.length != 3 ) {
 	    throw new SNumArgException(args[0], "[className|wrapperObj] memberName");
 	}
 
-	Object            firstArg   = args[1];
-	String            className  = null;
-	String            memberName = SReflectUtils.getStringOrSymbol(args,2);
+	Object            firstArg    = args[1];
+	String            memberName  = SReflectUtils.getStringOrSymbol(args,2);
+	Object            memberValue = null;
+	JavaWrapperObject targetObj   = null;
+        Class<?>          klass       = null;
 
-	Object            result     = null;
-	JavaWrapperObject targetObj  = null;
-
-	if (firstArg instanceof JavaWrapperObject) {
+	if ( firstArg instanceof JavaWrapperObject ) {
 	    targetObj = (JavaWrapperObject)firstArg;
 	} else {
-	    className = SReflectUtils.getStringOrSymbol(args,1);
+	    klass = SReflectUtils.getClassForName(args, 1);
 	}
 
-	try {
-	    if ( null == targetObj ) {
-		Class cl = Class.forName(className);
-		result = SReflectUtils.getFieldValue(cl, null, memberName);
-	    } else {
-		result = targetObj.getValue(memberName);
-	    }
-	} catch (ClassNotFoundException e) {
-	    throw new SRuntimeException(args[0],
-					"could not load class '" + 
-					className + "'");
-	} catch (NoSuchFieldException e) {
-	    throw new SRuntimeException(args[0],
-					"could not find member '" + 
-					memberName + "'");
-	} catch (IllegalAccessException e) {
-	    throw new SRuntimeException(args[0],
-					"cannot access member '" + 
-					memberName + "'");
-	} catch (NullPointerException e) {
-	    throw new SRuntimeException(args[0],
-					"member '" + 
-					memberName + "' is not static");
-	}
+        if ( null == targetObj ) {
+            memberValue = SReflectUtils.getFieldValue(klass, null, memberName);
+        } else {
+            memberValue = targetObj.getValue(memberName);
+        }
 
-	return STeaJavaTypes.java2Tea(result, context);
+        Object result = STeaJavaTypes.java2Tea(memberValue, context);
+
+        return result;
     }
 
 
@@ -515,9 +445,9 @@ public class SModuleReflect
  *
  **************************************************************************/
 
-    private static Object functionSetValue(SObjFunction func,
-					   SContext     context,
-					   Object[]     args)
+    private static Object functionSetValue(final SObjFunction func,
+					   final SContext     context,
+					   final Object[]     args)
 	throws STeaException {
 
 	if ( args.length != 4 ) {
@@ -525,53 +455,31 @@ public class SModuleReflect
 	}
 
 	Object            firstArg   = args[1];
-	String            className  = null;
 	String            memberName = SReflectUtils.getStringOrSymbol(args,2);
 	Object            value      = args[3];
 
-	Object            result     = null;
+	Object            oldValue   = null;
 	JavaWrapperObject targetObj  = null;
+        Class<?>          klass      = null;
 
-	Object            javaObj    = STeaJavaTypes.tea2Java(value);
+	Object            javaValue    = STeaJavaTypes.tea2Java(value);
 
-	if (firstArg instanceof JavaWrapperObject) {
+	if ( firstArg instanceof JavaWrapperObject ) {
 	    targetObj = (JavaWrapperObject)firstArg;
 	} else {
-	    className = SReflectUtils.getStringOrSymbol(args,1);
+	    klass = SReflectUtils.getClassForName(args, 1);
 	}
 
-	try {
-	    if ( null == targetObj ) {
-		Class cl = Class.forName(className);
-		result   = SReflectUtils.setFieldValue(cl,
-                                                       null,
-                                                       memberName,
-                                                       javaObj);
-	    } else {
-		result = targetObj.setValue(memberName, javaObj);
-	    }
-	} catch (ClassNotFoundException e) {
-	    throw new SRuntimeException(args[0],
-					"could not load class '" + 
-					className + "'");
-	} catch (NoSuchFieldException e) {
-	    throw new SRuntimeException(args[0],
-					"could not find member '" + 
-					memberName + "'");
-	} catch (IllegalAccessException e) {
-	    throw new SRuntimeException(args[0],
-					"cannot access member '" + 
-					memberName + "'");
-	} catch (IllegalArgumentException e) {
-	    throw new SRuntimeException(args[0],
-					e.getMessage());
-	} catch (NullPointerException e) {
-	    throw new SRuntimeException(args[0],
-					"member '" + 
-					memberName + "' is not static");
-	}
+        if ( null == targetObj ) {
+            oldValue =
+                SReflectUtils.setFieldValue(klass, null, memberName, javaValue);
+        } else {
+            oldValue = targetObj.setValue(memberName, javaValue);
+        }
 
-	return STeaJavaTypes.java2Tea(result, context);
+	Object result = STeaJavaTypes.java2Tea(oldValue, context);
+
+        return result;
     }
 
 
@@ -620,62 +528,45 @@ public class SModuleReflect
  *
  **************************************************************************/
 
-    private static Object functionGetMethod(SObjFunction func,
-					    SContext     context,
-					    Object[]     args)
+    private static Object functionGetMethod(final SObjFunction func,
+					    final SContext     context,
+					    final Object[]     args)
 	throws STeaException {
 
 	if ( args.length < 3 ) {
-	    throw new SNumArgException(args[0], "className methodName [argType1 [argType2 ...]]");
+	    throw new SNumArgException(args[0],
+                                       "className methodName [argType1 [argType2 ...]]");
 	}
 
-	String   className  = SReflectUtils.getStringOrSymbol(args,1);
-	String   methodName = SReflectUtils.getStringOrSymbol(args,2);
-	Object   result     = null;
-	Class[]  params     = new Class[args.length - 3];
-	String   paramClassName = null;
+        Class<?>   klass      = SReflectUtils.getClassForName(args, 1);
+	String     methodName = SReflectUtils.getStringOrSymbol(args,2);
+	Class<?>[] params     = new Class[args.length - 3];
 
-	try {
-	    for(int i=3; i<args.length; i++) {
-		paramClassName = SReflectUtils.getStringOrSymbol(args,i);
-		params[i-3]=getClassForName(paramClassName);
-	    }
-	} catch (ClassNotFoundException e) {
-	    throw new SRuntimeException(args[0],
-					"could not load parameter class '" + 
-					paramClassName + "'");
-	}
-	try {
-	    Class        cl  = Class.forName(className);
-	    final Method mtd =
-                SMethodFinder.findMethod(cl, methodName, params, false);
+        for ( int i=3; i<args.length; i++ ) {
+            params[i-3]    = SReflectUtils.getClassForName(args, i);
+        }
 
-	    result = new SObjFunction() {
-		    public Object exec(SObjFunction func,
-				       SContext     context,
-				       Object[]     args)
-			throws STeaException {
+        final Method method =
+            SMethodFinder.findMethod(klass, methodName, params, false);
 
-			Object[] mtdArgs = new Object[args.length - 1];
-			for(int i=1; i<args.length; i++) {
-			    mtdArgs[i-1] = args[i];
-			}
+        Object result =
+            new SObjFunction() {
+                public Object exec(SObjFunction func,
+                                   SContext     context,
+                                   Object[]     args)
+                    throws STeaException {
 
-			return SReflectUtils.invokeMethod(null, 
-                                                          mtd,
-                                                          context,
-                                                          mtdArgs);
-		    }
-		};
-	} catch (ClassNotFoundException e) {
-	    throw new SRuntimeException(args[0],
-					"could not load class '" + 
-					className + "'");
-	} catch (NoSuchMethodException e) {
-	    throw new SRuntimeException(args[0],
-					"could not find method '" + 
-					methodName + "'");
-	}
+                    Object[] methodArgs = new Object[args.length - 1];
+                    for( int i=1; i<args.length; i++ ) {
+                        methodArgs[i-1] = args[i];
+                    }
+
+                    return SReflectUtils.invokeMethod(null, 
+                                                      method,
+                                                      context,
+                                                      methodArgs);
+                }
+            };
 
 	return result;
     }
@@ -716,58 +607,50 @@ public class SModuleReflect
  *
  **************************************************************************/
 
-   private static Object functionNewInstance(SObjFunction func,
-					      SContext     context,
-					      Object[]     args)
+   private static Object functionNewInstance(final SObjFunction func,
+                                             final SContext     context,
+                                             final Object[]     args)
 	throws STeaException {
 
 	if ( args.length < 2 ) {
 	    throw new SNumArgException(args[0], "className [arg1 [arg2 ...]]");
 	}
 
-	String       className  = SReflectUtils.getStringOrSymbol(args,1);
-	Object[]     params     = new Object[args.length - 2];
-	Class[]      paramTypes = new Class[args.length - 2];
-	Object       result     = null;
-	StringBuilder paramsTxt  = new StringBuilder();
+        Class<?>   klass      = SReflectUtils.getClassForName(args, 1);
+	Object[]   params     = new Object[args.length - 2];
+	Class<?>[] paramTypes = new Class<?>[args.length - 2];
+	Object     result     = null;
 
-	for(int i=2; i<args.length; i++) {
-	    params[i-2]     = STeaJavaTypes.tea2Java(args[i]);
-	    paramTypes[i-2] = params[i-2]==null ? null : params[i-2].getClass();
-	    if (i>2) {
-		paramsTxt.append(",");
-	    }
-	    paramsTxt.append(params[i-2]==null ? "null" : paramTypes[i-2].getName());
+	for ( int i=2; i<args.length; i++ ) {
+            Object constructorArg = STeaJavaTypes.tea2Java(args[i]);
+
+	    params[i-2]     = constructorArg;
+	    paramTypes[i-2] =
+                (constructorArg==null) ? null : constructorArg.getClass();
 	}
-	try {
-	    Class        cl      = Class.forName(className);
-	    Constructor  ctr     = SMethodFinder.findConstructor(cl,paramTypes);
-	    final Object javaObj = ctr.newInstance(params);
+
+        Constructor<?>  constructor =
+            SMethodFinder.findConstructor(klass, paramTypes);
+
+	try {	    
+	    Object javaObj = constructor.newInstance(params);
 	    result = new JavaWrapperObject(new STosClass(), javaObj);
-	} catch (ClassNotFoundException e) {
-	    throw new SRuntimeException(args[0],
-					"could not load class '" + 
-					className + "'");
-	} catch (NoSuchMethodException e) {
-	    throw new SRuntimeException(args[0],
-					"could not find constructor for '" + 
-					className + "(" + 
-					paramsTxt.toString() + ")'");
 	} catch (IllegalAccessException e) {
+            String paramsTxt = SMethodFinder.buildTypesDescription(paramTypes);
 	    throw new SRuntimeException(args[0],
-					"cannot access constructor for '" + 
-					className + "(" + 
-					paramsTxt.toString() + ")'");
+					"cannot access constructor for '"
+                                        + klass.getName()
+                                        + "(" + paramsTxt + ")'");
 	} catch (InstantiationException e) {
 	    throw new SRuntimeException(e);
 	} catch (InvocationTargetException e) {
 	    throw new SRuntimeException(e.getCause());
 	} catch (IllegalArgumentException e) {
+            String paramsTxt = SMethodFinder.buildTypesDescription(paramTypes);
 	    throw new SRuntimeException(args[0],
-					"problems calling constructor for '" + 
-					className + "(" + 
-					paramsTxt.toString() + ")' with " +
-					params);	    
+					"problems calling constructor for '"
+                                        + klass.getName()
+                                        + "(" + paramsTxt.toString() + ")'");
 	}
 
 	return result;
@@ -821,65 +704,35 @@ public class SModuleReflect
  *
  **************************************************************************/
 
-    public static Object functionExecMethod(SObjFunction func,
-					    SContext     context,
-					    Object[]     args)
+    public static Object functionExecMethod(final SObjFunction func,
+					    final SContext     context,
+					    final Object[]     args)
 	throws STeaException {
 
 	if ( args.length < 3 ) {
 	    throw new SNumArgException(args[0], "className methodName [arg1 [arg2 ...]]");
 	}
 
-	String   className  = SReflectUtils.getStringOrSymbol(args,1);
+        Class<?> klass      = SReflectUtils.getClassForName(args, 1);
 	String   methodName = SReflectUtils.getStringOrSymbol(args,2);
 	Class[]  paramTypes = new Class[args.length - 3];
 	Object[] mtdArgs    = new Object[args.length - 3];
 
-	// convert value types to java
-	for(int i=3; i<args.length; i++) {
-	    mtdArgs[i-3]    = STeaJavaTypes.tea2Java(args[i]);
-	    paramTypes[i-3] = mtdArgs[i-3]==null ? null : mtdArgs[i-3].getClass();
+	// Convert value types to java.
+	for ( int i=3; i<args.length; i++ ) {
+            Object methodArg = STeaJavaTypes.tea2Java(args[i]); 
+
+	    mtdArgs[i-3]    = methodArg;
+	    paramTypes[i-3] = (methodArg==null) ? null : methodArg.getClass();
 	}
 
-	Method mtd = null;
-	try {
-	    Class cl = Class.forName(className);
-	    mtd      =
-                SMethodFinder.findMethod(cl, methodName, paramTypes, true);
-	} catch (ClassNotFoundException e) {
-	    throw new SRuntimeException(args[0],
-					"could not load class '" + 
-					className + "'");
-	} catch (NoSuchMethodException e) {
-	    throw new SRuntimeException(args[0],
-					"could not find method '" + 
-					methodName + "'");
-	}
+	Method method =
+            SMethodFinder.findMethod(klass, methodName, paramTypes, true);
 
-	return SReflectUtils.invokeMethod(null, mtd, context, mtdArgs);
-    }
+	Object result =
+            SReflectUtils.invokeMethod(null, method, context, mtdArgs);
 
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-    
-    private static Class getClassForName (String className) 
-	throws ClassNotFoundException {
-
-	// Check primitive types
-	Class result = _primitiveTypes.get(className);
-	
-	if (null==result) {
-	    result = Class.forName(className);
-	}
-
-	return result;
+        return result;
     }
 
 

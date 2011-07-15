@@ -49,7 +49,7 @@ final class JavaWrapperObject
  **************************************************************************/
 
     public JavaWrapperObject (final STosClass theClass,
-                              final Object javaObj) 
+                              final Object    javaObj) 
         throws STeaException {
 	    
         super(theClass);
@@ -104,13 +104,12 @@ final class JavaWrapperObject
  **************************************************************************/
 
     public Object getValue(final String memberName) 
-        throws NoSuchFieldException,
-               IllegalAccessException,
-               NullPointerException {
+        throws SRuntimeException {
 
-        Object result = SReflectUtils.getFieldValue(_javaObj.getClass(),
-                                                    _javaObj,
-                                                    memberName);
+        Object result =
+            SReflectUtils.getFieldValue(_javaObj.getClass(),
+                                        _javaObj,
+                                        memberName);
 
         return result;
     }
@@ -127,14 +126,13 @@ final class JavaWrapperObject
 
     public Object setValue(final String memberName,
                            final Object newValue) 
-        throws NoSuchFieldException,
-               IllegalAccessException,
-               NullPointerException {
+        throws SRuntimeException {
 
-        Object result = SReflectUtils.setFieldValue(_javaObj.getClass(),
-                                                    _javaObj, 
-                                                    memberName,
-                                                    newValue);
+        Object result =
+            SReflectUtils.setFieldValue(_javaObj.getClass(),
+                                        _javaObj, 
+                                        memberName,
+                                        newValue);
 
         return result;
     }
@@ -171,18 +169,11 @@ final class JavaWrapperObject
 	    mtdArgs[i-2] = args[i];
 	}
 
-	Method mtd = null;
-	try {
-	    mtd = SMethodFinder.findMethod(javaObj.getClass(),
-                                           methodName,
-                                           paramTypes,
-                                           true);
-	} catch (NoSuchMethodException e) {
-	    throw new SRuntimeException(args[0],
-					"could not find method '" + 
-					methodName + "'");
-	}
-
+	Method mtd =
+            SMethodFinder.findMethod(javaObj.getClass(),
+                                     methodName, 
+                                     paramTypes,
+                                     true);
 	Object result =
             SReflectUtils.invokeMethod(javaObj, mtd, context, mtdArgs);
 

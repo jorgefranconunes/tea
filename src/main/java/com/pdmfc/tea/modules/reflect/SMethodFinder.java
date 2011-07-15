@@ -13,6 +13,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeSet;
 
+import com.pdmfc.tea.runtime.SRuntimeException;
+
 
 
 
@@ -80,31 +82,23 @@ final class SMethodFinder
  *
  *
  ***************************************************************************/
+    
+    public static Constructor<?> findConstructor(final Class<?>   klass,
+                                                 final Class<?>[] paramTypes)
+	throws SRuntimeException {
 
-    public static Method findMethod(final Class<?> cl,
-                                    final String   methodName,
-                                    final Class[]  paramTypes,
-                                    final boolean  useVariants)
-	throws NoSuchMethodException {
+        Constructor<?> result = null;
 
-	Method                mtd           = null;
-	NoSuchMethodException lastException = null;
-
-	if ( useVariants ) {
-	    mtd = findMethod(cl, methodName, paramTypes);
-	} else {
-	    mtd = cl.getMethod(methodName, paramTypes);
+        try {
+            result = doFindConstructor(klass, paramTypes);
+        } catch (NoSuchMethodException e) {
+            String paramsTxt = buildTypesDescription(paramTypes);
+	    throw new SRuntimeException("could not find constructor for '"
+                                        + klass.getName()
+                                        + "(" + paramsTxt + ")'");
 	}
-
-	if ( null != mtd ) {
-	    return mtd;
-	}
-
-	if ( null != lastException ) {
-	    throw lastException;
-	}
-
-	return null;
+	
+	return result;
     }
 
 
@@ -117,20 +111,53 @@ final class SMethodFinder
  *
  ***************************************************************************/
     
-    public static Constructor findConstructor(final Class<?>   cl,
-                                              final Class<?>[] paramTypes)
+    public static String buildTypesDescription(final Class<?>[] paramTypes) {
+
+        StringBuilder builder = new StringBuilder();
+        boolean       isFirst = true;
+
+        for ( Class<?> klass : paramTypes ) {
+            String typeDescription = (klass==null) ? "null" : klass.getName();
+
+            if ( isFirst ) {
+                isFirst = false;
+            } else {
+                builder.append(",");
+            }
+
+            builder.append(typeDescription);
+        }
+
+        String result = builder.toString();
+
+        return result;
+    }
+
+
+
+
+
+/***************************************************************************
+ *
+ *
+ *
+ ***************************************************************************/
+    
+    private static Constructor<?> doFindConstructor(final Class<?>   klass,
+                                                    final Class<?>[] paramTypes)
 	throws NoSuchMethodException {
 
-	Constructor[]             consts               = cl.getConstructors();
+	Constructor<?>[]          constructors         =
+            klass.getConstructors();
 	TreeSet<ConstructorScore> possibleConstructors = 
 	    new TreeSet<ConstructorScore>();
 	int                       numParams            = paramTypes.length;
 
-	for(Constructor constructor : consts) {
-	    // check if method has the same number of params
-	    Class[] constParamTypes = constructor.getParameterTypes();
+	for ( Constructor constructor : constructors ) {
+	    // Check if method has the same number of params.
+	    Class<?>[] constParamTypes = constructor.getParameterTypes();
 
-	    if  (constParamTypes.length == numParams ) {
+	    if  ( constParamTypes.length == numParams ) {
 		if ( paramArrayMatches(paramTypes, constParamTypes) ) {
 		    int              score            =
                         paramArrayDistance(paramTypes, constParamTypes);
@@ -142,15 +169,70 @@ final class SMethodFinder
 	    }
 	}
 	
-	Constructor result = null;
+	Constructor<?> result = null;
 
-	if (possibleConstructors.isEmpty()) {
-	    result = cl.getConstructor(paramTypes);
+	if ( possibleConstructors.isEmpty() ) {
+	    result = klass.getConstructor(paramTypes);
 	} else {
 	    result = possibleConstructors.first()._constructor;
 	}
 	
 	return result;
+    }
+
+
+
+
+
+/***************************************************************************
+ *
+ *
+ *
+ ***************************************************************************/
+
+    public static Method findMethod(final Class<?>   klass,
+                                    final String     methodName,
+                                    final Class<?>[] paramTypes,
+                                    final boolean    useVariants)
+	throws SRuntimeException {
+
+        Method result = null;
+
+        try {
+            result = doFindMethod(klass, methodName, paramTypes, useVariants);
+        } catch ( NoSuchMethodException e ) {
+            throw new SRuntimeException("could not find method '"
+                                        + methodName + "'");
+        }
+
+	return result;
+    }
+
+
+
+
+
+/***************************************************************************
+ *
+ *
+ *
+ ***************************************************************************/
+
+    private static Method doFindMethod(final Class<?>   klass,
+                                       final String     methodName,
+                                       final Class<?>[] paramTypes,
+                                       final boolean    useVariants)
+	throws NoSuchMethodException {
+
+	Method method = null;
+
+	if ( useVariants ) {
+	    method = findMethod(klass, methodName, paramTypes);
+	} else {
+	    method = klass.getMethod(methodName, paramTypes);
+	}
+
+	return method;
     }
     
 
@@ -175,7 +257,7 @@ final class SMethodFinder
 	findMethod(cl, methodName, paramTypes, possibleMethods, 0);
 
 	Method result = null;
-	if (possibleMethods.isEmpty()) {
+	if ( possibleMethods.isEmpty() ) {
 	    throw new NoSuchMethodException("Can't find method "+methodName);
 	} else {
 	    result = possibleMethods.first()._method;
@@ -202,22 +284,31 @@ final class SMethodFinder
 				   final int                  initialDistance)
 	throws NoSuchMethodException {
 
-	if (Modifier.isPublic(cl.getModifiers())) {
+	if ( Modifier.isPublic(cl.getModifiers()) ) {
 	    // class is public, so we'll use the class directly
-	    findMethodInClass(cl, methodName, paramTypes, 
-			      possibleMethods, initialDistance);
+	    findMethodInClass(cl,
+                              methodName,
+                              paramTypes, 
+			      possibleMethods,
+                              initialDistance);
 	} else {
 	    // class is not public, try the interfaces and then the super class
-	    for(Class anInterf : cl.getInterfaces()) {
+	    for ( Class<?> anInterf : cl.getInterfaces() ) {
 		// TBD - maybe the calculation of distance is not the best
-		findMethod(anInterf, methodName, paramTypes,
-			   possibleMethods, 1+initialDistance);
+		findMethod(anInterf,
+                           methodName,
+                           paramTypes,
+			   possibleMethods,
+                           1+initialDistance);
 	    }
-	    Class aSuper = cl.getSuperclass();
-	    if (null != aSuper) {
+	    Class<?> aSuper = cl.getSuperclass();
+	    if ( null != aSuper ) {
 		// TBD - maybe the calculation of distance is not the best
-		findMethod(aSuper, methodName, paramTypes,
-			   possibleMethods, 1+initialDistance);
+		findMethod(aSuper,
+                           methodName,
+                           paramTypes,
+			   possibleMethods,
+                           1+initialDistance);
 	    }
 	}
     }
@@ -251,8 +342,8 @@ final class SMethodFinder
 	    if ( method.getName().equals(methodName) ) {
 
 		// Check if method has the same number of params.
-		Class[] methParamTypes = method.getParameterTypes();
-		if (methParamTypes.length == numParams) {
+		Class<?>[] methParamTypes = method.getParameterTypes();
+		if ( methParamTypes.length == numParams ) {
 		    if (paramArrayMatches(paramTypes, methParamTypes)) {
 			// TBD - maybe the calculation of distance is
 			// not the best
@@ -468,10 +559,10 @@ final class SMethodFinder
         extends Object
         implements Comparable {
 
-	public Constructor _constructor = null;
-	public int         _score       = 0;
+	public Constructor<?> _constructor = null;
+	public int            _score       = 0;
 
-	public ConstructorScore(Constructor aConstructor, int aScore) {
+	public ConstructorScore(Constructor<?> aConstructor, int aScore) {
 	    _constructor = aConstructor;
 	    _score       = aScore;
 	}
@@ -495,34 +586,43 @@ final class SMethodFinder
     private static final class ClassPair
         extends Object {
 
-	public Class _given = null;
-	public Class _known = null;
-	private int _hash = 0;
+	public  Class<?> _given = null;
+	public  Class<?> _known = null;
+	private int      _hash  = 0;
 
-	public ClassPair(Class aGiven, Class aKnown) {
+
+	public ClassPair(Class<?> aGiven, Class<?> aKnown) {
 	    _given = aGiven;
 	    _known = aKnown;
             String aGivenName = _given == null ? "null" : _given.getName();
 	    _hash = (aGivenName+_known.getName()).hashCode();
 	}
 
+
         @Override
 	public int hashCode () {
 	    return _hash;
 	}
+
 	
         @Override
 	public boolean equals (Object anObj) {
-            if (this.getClass() != anObj.getClass())
+
+            if ( this.getClass() != anObj.getClass() ) {
                 return false;
+            }
+
 	    ClassPair aPair = (ClassPair)anObj;
-	    if (_given == null ) {
-                if (aPair._given == null) {
+
+	    if ( _given == null ) {
+                if ( aPair._given == null ) {
                     return _known.equals(aPair._known);
                 } else
                     return false;
 	    } else {
-                return _given.equals(aPair._given) && _known.equals(aPair._known);
+                return
+                    _given.equals(aPair._given)
+                    && _known.equals(aPair._known);
             }
 	}
     }
