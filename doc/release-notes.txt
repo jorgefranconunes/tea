@@ -1,6 +1,6 @@
 Release Notes for Tea 3
 
-2011/07/20 *** Released the 3.2.6 at SVN version 213. (TSK-PDMFC-TEA-0067 jpsl).
+2011/07/20 *** Released the 3.2.6 at SVN version 221. (TSK-PDMFC-TEA-0067 jpsl).
 
 2011/04/07 url-encode fix for "&". (TSK-PDMFC-TEA-0064 jpsl)
 
