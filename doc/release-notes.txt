@@ -1,5 +1,13 @@
 Release Notes for Tea 3
 
+2011/07/20 *** Released the 3.2.6 at SVN version 212. (TSK-PDMFC-TEA-0067 jpsl).
+
+2011/04/07 url-encode fix for "&". (TSK-PDMFC-TEA-0064 jpsl)
+
+2010/10/24 TDate format exceptions revised. (TSK-PDMFC-TEA-0050 jpsl)
+
+2010/10/23 TVector constructor/resize exceptions revised. (TSK-PDMFC-TEA-0029 jpsl)
+
 2010/05/11 *** Released the 3.2.5 at SVN version 110.
 
 2010/05/10 SModuleReflect now handles tea-to-java $null arguments better.
