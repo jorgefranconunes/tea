@@ -1,25 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2003/12/07 If the call to the constructor fails then all registered
- * SClosedEventListeners are notified the connection was closed. This
- * is just a workaround until the final solution for counting the
- * currently opened connections is implemented. (jfn)
- *
- * 2002/11/03 Minor code adjustments to use the classes from the
- * Collections Framework. (jfn)
- *
- * 2001/05/12 Created. (jfn)
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -42,12 +23,12 @@ import com.pdmfc.tea.modules.tdbc.SStatement;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.tos.STosUtil;
+import com.pdmfc.tea.runtime.SArgs;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SRuntimeException;
-import com.pdmfc.tea.runtime.STypes;
 
 
 
@@ -225,7 +206,7 @@ public class SConnection
 	case 5 :
 	    return connect(obj, context, args);
 	default :
-	    throw new SNumArgException("[url [username password]]");
+	    throw new SNumArgException(args, "[url [username password]]");
 	}
     }
 
@@ -290,12 +271,12 @@ public class SConnection
 	throws STeaException {
 
 	if ( (args.length!=3) && (args.length!=5) ) {
-	    throw new SNumArgException("url [username password]");
+	    throw new SNumArgException(args, "url [username password]");
 	}
 
-	String url     = STypes.getString(args,2);
-	String name    = (args.length==3) ? null : STypes.getString(args,3);
-	String  passwd = (args.length==3) ? null : STypes.getString(args,4);
+	String url     = SArgs.getString(args,2);
+	String name    = (args.length==3) ? null : SArgs.getString(args,3);
+	String  passwd = (args.length==3) ? null : SArgs.getString(args,4);
 
 	try {
 	    connect(url, name, passwd);
@@ -497,10 +478,10 @@ public class SConnection
 	throws STeaException {
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException("sql-statement");
+	    throw new SNumArgException(args, "sql-statement");
 	}
 
-	String sql    = STypes.getString(args, 2);
+	String sql    = SArgs.getString(args, 2);
 	Object result = null;
 
 	try {
@@ -599,10 +580,10 @@ public class SConnection
 	throws STeaException {
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException("sql-statement");
+	    throw new SNumArgException(args, "sql-statement");
 	}
 
-	String sql    = STypes.getString(args, 2);
+	String sql    = SArgs.getString(args, 2);
 	Object result = prepareCall(context, sql);
 
 	return result;
@@ -770,10 +751,10 @@ public class SConnection
 	throws SRuntimeException {
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException("autocommit-flag");
+	    throw new SNumArgException(args, "autocommit-flag");
 	}
 
-	boolean flag = STypes.getBoolean(args, 2).booleanValue();
+	boolean flag = SArgs.getBoolean(args, 2).booleanValue();
 
 	try {
 	    autocommit(flag);

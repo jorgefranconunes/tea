@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -12,6 +12,7 @@ import java.util.Map;
 
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.modules.SModule;
+import com.pdmfc.tea.runtime.SArgs;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjBlock;
 import com.pdmfc.tea.runtime.SObjFunction;
@@ -305,24 +306,23 @@ public class SModuleTos
 	throws STeaException {
 
 	if ( (args.length<3) || (args.length>4) ) {
-	    throw new SNumArgException(args[0],
-				       "class-name [base-class] list-of-members");
+            String usage = "class-name [base-class] list-of-members";
+	    throw new SNumArgException(args, usage);
 	}
 
-	SObjSymbol className   = STypes.getSymbol(args, 1);
+	SObjSymbol className   = SArgs.getSymbol(args, 1);
 	STosClass  baseClass   = (args.length==3)
 	    ? null : STosUtil.getClass(context,args,2);
-	SObjPair   memberList  = STypes.getPair(args, (args.length==3)? 2 : 3);
+	SObjPair   memberList  = SArgs.getPair(args, (args.length==3)? 2 : 3);
 	SList      memberNames = new SList();
 
 	for ( SObjPair e=memberList; e._car!=null; e=(SObjPair)e._cdr ) {
 	    Object memberName = e._car;
 	    if ( ! (memberName instanceof SObjSymbol) ) {
-		throw new STypeException(args[0],
-					 "found a {0} when expecting a Symbol",
-					 new Object[] {
-					     STypes.getTypeName(memberName)
-					 });
+                String msg = "found a {0} when expecting a Symbol";
+		throw new SRuntimeException(args,
+                                            msg,
+                                            STypes.getTypeName(memberName));
 	    }
 	    memberNames.prepend(e._car);
 	}
@@ -381,7 +381,7 @@ public class SModuleTos
 	throws STeaException {
 
 	if ( (args.length<2) || (args.length>3) ) {
-	    throw new SNumArgException(args[0],
+	    throw new SNumArgException(args,
 				       "[base-class] list-of-members");
 	}
 
@@ -393,25 +393,23 @@ public class SModuleTos
 	switch ( args.length ) {
 	case 2:
 	    baseClass  = null;
-	    memberList = STypes.getPair(args, 1);
+	    memberList = SArgs.getPair(args, 1);
 	    break;
 	case 3 :
 	    baseClass  = STosUtil.getClass(context, args, 1);
-	    memberList = STypes.getPair(args, 2);
+	    memberList = SArgs.getPair(args, 2);
 	    break;
 	default :
-	    throw new SNumArgException(args[0],
-				       "[base-class] list-of-members");
+	    throw new SNumArgException(args, "[base-class] list-of-members");
 	}
 
 	for ( SObjPair e=memberList; e._car!=null; e=(SObjPair)e._cdr ) {
 	    Object memberName = e._car;
 	    if ( ! (memberName instanceof SObjSymbol) ) {
-		throw new STypeException(args[0],
-					 "found a {0} when expecting a Symbol",
-					 new Object[] {
-					     STypes.getTypeName(memberName)
-					 });
+                String msg = "found a {0} when expecting a Symbol";
+		throw new SRuntimeException(args,
+                                            msg,
+                                            STypes.getTypeName(memberName));
 	    }
 	    memberNames.prepend(e._car);
 	}
@@ -464,7 +462,7 @@ public class SModuleTos
 	throws STeaException {
 
 	if ( args.length < 2 ) {
-	    throw new SNumArgException(args[0], "class-name [constructor-args]");
+	    throw new SNumArgException(args, "class-name [constructor-args]");
 	}
 
 	return STosUtil.getClass(context, args, 1).newInstance(context, args);
@@ -523,7 +521,8 @@ public class SModuleTos
 	throws STeaException {
 
 	if ( args.length != 5 ) {
-	    throw new SNumArgException(args[0], "class-name method-name formal-param body");
+            String usage = "class-name method-name formal-param body";
+	    throw new SNumArgException(args, usage);
 	}
 
 	Object params = args[3];
@@ -534,7 +533,7 @@ public class SModuleTos
 	    if ( params instanceof SObjSymbol ) {
 		varArgsMethod(context, args);
 	    } else {
-		throw new STypeException("arg 2 should be a symbol or a list of symbols, not a " + STypes.getTypeName(params));
+                throw new STypeException(args, 3, "symbol or list of symbols");
 	    }
 	}
 
@@ -567,32 +566,33 @@ public class SModuleTos
     private static void fixedArgsMethod(SContext context,
 					Object[] args)
 	throws STeaException {
+        
+        STosClass    methodClass = STosUtil.getClass(context, args, 1);
+        SObjSymbol   methodName  = SArgs.getSymbol(args, 2);
+        SObjPair     paramList   = SArgs.getPair(args, 3);
+        SObjBlock    body        = SArgs.getBlock(args, 4);
+        int          numParam    = paramList.length();
+        SObjSymbol[] parameters  = new SObjSymbol[numParam];
+        Iterator     it          = paramList.iterator();
 
-      STosClass    methodClass = STosUtil.getClass(context, args, 1);
-      SObjSymbol   methodName  = STypes.getSymbol(args, 2);
-      SObjPair     paramList   = STypes.getPair(args, 3);
-      SObjBlock    body        = STypes.getBlock(args, 4);
-      int          numParam    = paramList.length();
-      SObjSymbol[] parameters  = new SObjSymbol[numParam];
-      Iterator     it          = paramList.iterator();
+        for ( int i=0; it.hasNext(); i++) {
+            try {
+                parameters[i] = (SObjSymbol)it.next();
+            } catch (ClassCastException e1) {
+                String msg = "formal parameters must be symbols";
+                throw new SRuntimeException(args, msg);
+            }
+        }
 
-      for ( int i=0; it.hasNext(); i++) {
-	 try {
-	    parameters[i] = (SObjSymbol)it.next();
-	 } catch (ClassCastException e1) {
-	    throw new STypeException(args[0],
-				     "formal parameters must be symbols");
-	 }
-      }
+        STosMethod method =
+            new STosMethod(methodClass, methodName, parameters, body);
 
-      STosMethod method = new STosMethod(methodClass, methodName, parameters, body);
-
-      if ( methodName != STosClass._constructName ) {
-         methodClass.addMethod(methodName, method);
-      } else {
-	 methodClass.addConstructor(method);
-      }
-   }
+        if ( methodName != STosClass._constructName ) {
+            methodClass.addMethod(methodName, method);
+        } else {
+            methodClass.addConstructor(method);
+        }
+    }
 
 
 
@@ -618,9 +618,9 @@ public class SModuleTos
 	throws STeaException {
 
 	STosClass    methodClass = STosUtil.getClass(context, args, 1);
-	SObjSymbol   methodName  = STypes.getSymbol(args, 2);
-	SObjSymbol   symbol      = STypes.getSymbol(args, 3);
-	SObjBlock    body        = STypes.getBlock(args, 4);
+	SObjSymbol   methodName  = SArgs.getSymbol(args, 2);
+	SObjSymbol   symbol      = SArgs.getSymbol(args, 3);
+	SObjBlock    body        = SArgs.getBlock(args, 4);
 	SObjFunction method      = new STosMethodVarArg(methodClass,
 							methodName,
 							symbol,
@@ -672,10 +672,10 @@ public class SModuleTos
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "java-class-name");
+	    throw new SNumArgException(args, "java-class-name");
 	}
 
-	String    className = STypes.getString(args,1);
+	String    className = SArgs.getString(args,1);
 	Class     javaClass = null;
 	STosClass tosClass  = _tosClasses.get(className);
 	String    msg       = null;
@@ -755,7 +755,7 @@ public class SModuleTos
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "classObject");
+	    throw new SNumArgException(args, "classObject");
 	}
 
 	STosClass tosClass  = STosUtil.getClass(context, args, 1);
@@ -803,7 +803,7 @@ public class SModuleTos
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "tosObject");
+	    throw new SNumArgException(args, "tosObject");
 	}
 
 	return STosUtil.getTosObj(args,1).getTosClass();
@@ -866,7 +866,7 @@ public class SModuleTos
 	throws STeaException {
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException(args[0], "class1 class2");
+	    throw new SNumArgException(args, "class1 class2");
 	}
 
 	STosClass tosClass1 = STosUtil.getClass(context, args, 1);
@@ -923,7 +923,7 @@ public class SModuleTos
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "classObject");
+	    throw new SNumArgException(args, "classObject");
 	}
 
 	return STosUtil.getClass(context, args, 1).getName();
@@ -970,7 +970,7 @@ public class SModuleTos
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "value");
+	    throw new SNumArgException(args, "value");
 	}
 
 	Object  value  = args[1];

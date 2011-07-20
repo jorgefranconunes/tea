@@ -9,6 +9,7 @@ package com.pdmfc.tea.modules.reflect;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.UndeclaredThrowableException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.HashMap;
@@ -207,55 +208,49 @@ final class SReflectUtils
 
 /**************************************************************************
  *
- * Invokes a java static method from tea arguments
+ * Invokes a java static method from tea arguments.
+ *
+ * @param methodArgs The arguments the method will be invoked
+ * with. These are passed to the method call as is. It is the
+ * responsability of the caller to have already converted Tea objects
+ * into the corresponding Java objects.
  *
  **************************************************************************/
 
     public static Object invokeMethod(final Object   javaObj,
-                                      final Method   mtd,
+                                      final Method   method,
                                       final SContext context,
-                                      final Object[] args) 
+                                      final Object[] methodArgs) 
 	throws STeaException {
 
-	Object  result     = null;
-	Class[] paramTypes = mtd.getParameterTypes();
-
-	if ( args.length != paramTypes.length ) {
-	    StringBuilder argsTxt = new StringBuilder();
-	    for (int i=0; i<paramTypes.length; i++) {
-		if (i>0) {
-		    argsTxt.append(" ");
-		}
-		argsTxt.append(paramTypes[i].getName());
-	    }
-	    throw new SNumArgException(argsTxt.toString());
-	}
-
-	// Convert arguments to Java objects.
-	Object[] javaArgs = new Object[args.length];
-	for ( int i=0; i<javaArgs.length; i++ ) {
-	    javaArgs[i] = STeaJavaTypes.tea2Java(args[i]);
-	}
+	Object javaResult = null;
 
 	try {
-	    result = mtd.invoke(javaObj, javaArgs);
+	    javaResult = method.invoke(javaObj, methodArgs);
 	} catch (IllegalAccessException e) {
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
             e.printStackTrace(pw);
             pw.close();
- 	    throw new SRuntimeException("cannot access method '" +
-  					mtd.getName() + "' - stack trace: " +
-                                        sw.toString());
+            String msg = "cannot access method \"{0}\" - stack trace: {1}";
+ 	    throw new SRuntimeException(msg, method.getName(), sw.toString());
 	} catch (NullPointerException e) {
- 	    throw new SRuntimeException("method '" +
-  					mtd.getName() + "' is not static");
+            String msg = "method \"{0}\" is not static";
+ 	    throw new SRuntimeException(msg, method.getName());
 	} catch (InvocationTargetException e) {
- 	    throw new SRuntimeException(e.getCause());
+            Throwable cause = e.getCause();
+            // Slight hack to accomodate Java code that executed Tea code.
+            if ( cause instanceof UndeclaredThrowableException ) {
+                cause = cause.getCause();
+            }
+            if ( cause instanceof STeaException ) {
+                throw (STeaException)cause;
+            } else {
+                throw new SRuntimeException(cause);
+            }
  	}
 
-	// Convert values back to Tea objects.
-	result = STeaJavaTypes.java2Tea(result, context);
+	Object result = STeaJavaTypes.java2Tea(javaResult, context);
 
         return result;
     }
@@ -281,10 +276,7 @@ final class SReflectUtils
 	    return ((SObjSymbol)args[index]).getName();
 	}
 
-	throw new STypeException(args[0],
-				 "argument " +index+
-				 " should be a string or a symbol, " +
-				 "not a " + STypes.getTypeName(args[index]));
+	throw new STypeException(args, index, "string or a symbol");
     }
 
 
@@ -327,9 +319,8 @@ final class SReflectUtils
             try {
                 result = Class.forName(className);
             } catch ( ClassNotFoundException e ) {
-                throw new SRuntimeException(args[0],
-                                            "could not load class '" + 
-                                            className + "'");
+                String msg = "could not load class \"{0}\"";
+                throw new SRuntimeException(args, msg, className);
             }
         }
 

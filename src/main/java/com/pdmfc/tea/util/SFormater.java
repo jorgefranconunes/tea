@@ -1,29 +1,15 @@
 /**************************************************************************
  *
- * Copyright (c) 2001, 2002, 2003, 2004 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2004/09/02 Improved error messages. (jfn)
- *
- * 2002/08/02 Moved to package "com.pdmfc.tea.util". (jfn)
- *
- * 2001/05/12 Created. (jfn)
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 package com.pdmfc.tea.util;
 
+import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypeException;
 import com.pdmfc.tea.runtime.STypes;
-import com.pdmfc.tea.runtime.SNumArgException;
 
 
 
@@ -180,8 +166,7 @@ public abstract class SFormater
     public final void format(String   fmtString,
 			     Object[] args,
 			     int      firstArg)
-	throws SNumArgException,
-	       STypeException {
+	throws STeaException {
 
 	init(fmtString, args, firstArg);
 
@@ -207,8 +192,7 @@ public abstract class SFormater
  **************************************************************************/
 
    private final void processArg()
-      throws SNumArgException,
-             STypeException {
+      throws STeaException {
 
       if ( atEnd() ) {
 	 return;
@@ -242,8 +226,7 @@ public abstract class SFormater
  **************************************************************************/
 
    private final void processFieldWidth()
-      throws SNumArgException,
-	     STypeException {
+      throws STeaException {
 
       if ( !atEnd() ) {
 	 processFieldWidth(nextChar());
@@ -262,8 +245,7 @@ public abstract class SFormater
  **************************************************************************/
 
    private final void processFieldWidth(char c)
-      throws SNumArgException,
-	     STypeException {
+      throws STeaException {
 
       if ( !Character.isDigit(c) ) {
 	 processTypeField(c);
@@ -296,8 +278,7 @@ public abstract class SFormater
  **************************************************************************/
 
    private final void processSigFigs()
-      throws SNumArgException,
-	     STypeException {
+      throws STeaException {
 
       if ( atEnd() ) {
 	 return;
@@ -325,8 +306,7 @@ public abstract class SFormater
  **************************************************************************/
 
     private final void processTypeField(char type)
-	throws SNumArgException,
-	       STypeException {
+	throws STeaException {
 
 	Object arg = nextArg();  
 
@@ -402,12 +382,12 @@ public abstract class SFormater
  **************************************************************************/
 
    private final Object nextArg()
-      throws SNumArgException {
+      throws STeaException {
 
       try {
 	 return _args[_argIndex++];
       } catch (ArrayIndexOutOfBoundsException e) {
-	 throw new SNumArgException("missing arguments requested by format string");
+	 throw new SRuntimeException("missing arguments requested by format string");
       }
    }
 

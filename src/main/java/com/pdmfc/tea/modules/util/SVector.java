@@ -1,29 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2010/10/23 TSK-PDMFC-TEA-0029
- * Constructor negative size, or resize with negative values
- * ought to be handled as a regular Tea runtime exception. (jpsl)
- *
- * 2004/11/03 The "TVector setAt", "TVector getAt" methods no longer
- * generate an internal error when the index is invalid. Now they
- * generate a regular runtime error. (jfn)
- *
- * 2002/11/01 Now uses "java.util.List" instead of
- * "java.util.Vector". (jfn) Added the methods
- * "newInstance(SContext,List)", "getInternalList()". (jfn)
- *
- * 2001/05/12 Created. (jfn)
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -36,6 +13,7 @@ import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.tos.STosUtil;
+import com.pdmfc.tea.runtime.SArgs;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjNull;
@@ -205,7 +183,7 @@ public class SVector
 	throws SRuntimeException {
 
 	if ( (args.length!=2) && (args.length!=3) ) {
-	    throw new SNumArgException("[size]");
+	    throw new SNumArgException(args, "[size]");
 	}
 
 	if ( args.length == 3 ) {
@@ -321,7 +299,7 @@ public class SVector
 	throws SRuntimeException {
 
 	if ( args.length < 3 ) {
-	    throw new SNumArgException("object");
+	    throw new SNumArgException(args, "object");
 	}
 
 	int count = args.length;
@@ -488,10 +466,10 @@ public class SVector
 	throws SRuntimeException {
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException("size");
+	    throw new SNumArgException(args, "size");
 	}
 
-	int newSize = STypes.getInt(args,2).intValue();
+	int newSize = SArgs.getInt(args,2).intValue();
 
         if ( newSize < 0 ) {
 	    throw new SRuntimeException("TVector size must be an integer equal or greater than zero");
@@ -561,11 +539,11 @@ public class SVector
 	throws SRuntimeException {
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException("index");
+	    throw new SNumArgException(args, "index");
 	}
 
 	Object result = null;
-	int    index  = STypes.getInt(args,2).intValue();
+	int    index  = SArgs.getInt(args,2).intValue();
 
 	try {
 	    result = _vector.get(index);
@@ -632,11 +610,11 @@ public class SVector
 	throws SRuntimeException {
 
 	if ( args.length != 4 ) {
-	    throw new SNumArgException("object index");
+	    throw new SNumArgException(args, "object index");
 	}
 
 	Object elem  = args[2];
-	int    index = STypes.getInt(args,3).intValue();
+	int    index = SArgs.getInt(args,3).intValue();
 
 	try {
 	    _vector.set(index, elem);
@@ -861,13 +839,13 @@ public class SVector
 	throws STeaException {
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException("comparison-function");
+	    throw new SNumArgException(args, "comparison-function");
 	}
 
 	int size = _vector.size();
 
 	if ( size > 1 ) {
-	     _compFunc = STypes.getFunction(context, args, 2);
+	     _compFunc = SArgs.getFunction(context, args, 2);
 	     _context  = context;
 	     qs(_vector, 0, size-1);
 	     _compFunc = null;
@@ -948,8 +926,7 @@ public class SVector
 	    result = (Number)value;
 	} catch (ClassCastException e) {
 	    String msg = "comparison function must return a number, not a {0}";
-	    Object[] fmtArgs = { STypes.getTypeName(value) };
-	    throw new SRuntimeException(msg, fmtArgs);
+	    throw new SRuntimeException(msg, STypes.getTypeName(value));
 	}
 
 	return result.intValue();

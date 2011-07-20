@@ -41,6 +41,9 @@ public class STosClass
     extends Object {
 
 
+
+
+
     // The base class of this one
     private STosClass _superClass;
 
@@ -51,13 +54,13 @@ public class STosClass
     private int _level;
 
     // This context stores the methods of this TOS class.
-    SMethodSet _methods;
+    private SMethodSet _methods;
 
     // The constructor proc.
-    SObjFunction _constructor;
+    private SObjFunction _constructor;
 
     // Name of the class. Just used for informational purposes.
-    String _name;
+    private String _name;
 
     // Counter of instances.
     private static int _counter = 0;
@@ -65,7 +68,8 @@ public class STosClass
     private static final String NAME_PREFIX = "Class";
 
     // The constructor method name.
-    public static final SObjSymbol _constructName = SObjSymbol.addSymbol("constructor");
+    public static final SObjSymbol _constructName =
+        SObjSymbol.addSymbol("constructor");
 
 
 

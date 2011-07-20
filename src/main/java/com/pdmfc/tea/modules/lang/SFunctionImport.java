@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -15,6 +15,7 @@ import com.pdmfc.tea.SConfigInfo;
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.compiler.SCode;
 import com.pdmfc.tea.compiler.SCompiler;
+import com.pdmfc.tea.runtime.SArgs;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SEncodingUtils;
 import com.pdmfc.tea.runtime.SNoSuchVarException;
@@ -24,7 +25,6 @@ import com.pdmfc.tea.runtime.SObjNull;
 import com.pdmfc.tea.runtime.SObjPair;
 import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SRuntimeException;
-import com.pdmfc.tea.runtime.STypes;
 
 
 
@@ -168,10 +168,10 @@ class SFunctionImport
         throws STeaException {
 
         if ( args.length != 2 ) {
-            throw new SNumArgException(args[0], "file");
+            throw new SNumArgException(args, "file");
         }
 
-        String     fileName = STypes.getString(args, 1);
+        String     fileName = SArgs.getString(args, 1);
         Object     result   = SObjNull.NULL;
         ImportItem item     = _itemsByPath.get(fileName);
 
@@ -182,9 +182,8 @@ class SFunctionImport
         }
 
         if ( result == null ) {
-            String   msg     = "could not import file \"{0}\"";
-            Object[] fmtArgs = { fileName };
-            throw new SRuntimeException(args[0], msg, fmtArgs);
+            String msg = "could not import file \"{0}\"";
+            throw new SRuntimeException(args, msg, fileName);
         }
 
         return result;

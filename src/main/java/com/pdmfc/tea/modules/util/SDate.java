@@ -1,30 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001, 2002, 2003, 2004 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2010/10/24 TSK-PDMFC-TEA-0050 java.lang.IllegalArgumentException
- * is the only unchecked exception expected in "TDate format" if
- * the Tea programmer makes a mistake in the date format.
- * The others should display a java stack trace. (jpsl)
- *
- * 2004/11/02 The "TDate format" method now generates a more user
- * friendly message when the formating string is not valid. (jfn)
- *
- * 2003/09/13 Added the "getDate()" method. (jfn)
- *
- * 2003/09/13 The static "getDate(Objtec[],int)" method is now
- * public. (jfn)
- *
- * 2001/05/12 Created. (jfn)
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -39,13 +15,13 @@ import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.tos.STosUtil;
+import com.pdmfc.tea.runtime.SArgs;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypeException;
-import com.pdmfc.tea.runtime.STypes;
 
 
 
@@ -328,28 +304,28 @@ public class SDate
 	    } else if ( dateArg instanceof String ) {
 		initFromString((String)dateArg);
 	    } else {
-		throw new STypeException("arg 2 should be an TDate or a String " +
-					 "not a " + STypes.getTypeName(dateArg));
+                throw new STypeException(args, 2, "TDate or a String");
 	    }
 	    break;
 	case 5 :
-	    _calendar.set(STypes.getInt(args, 2).intValue(),
-			  STypes.getInt(args, 3).intValue() - 1,
-			  STypes.getInt(args, 4).intValue(),
+	    _calendar.set(SArgs.getInt(args, 2).intValue(),
+			  SArgs.getInt(args, 3).intValue() - 1,
+			  SArgs.getInt(args, 4).intValue(),
 			  0,
 			  0,
 			  0);
 	    break;
 	case 8 :
-	    _calendar.set(STypes.getInt(args, 2).intValue(),
-			  STypes.getInt(args, 3).intValue() - 1,
-			  STypes.getInt(args, 4).intValue(),
-			  STypes.getInt(args, 5).intValue(),
-			  STypes.getInt(args, 6).intValue(),
-			  STypes.getInt(args, 7).intValue());
+	    _calendar.set(SArgs.getInt(args, 2).intValue(),
+			  SArgs.getInt(args, 3).intValue() - 1,
+			  SArgs.getInt(args, 4).intValue(),
+			  SArgs.getInt(args, 5).intValue(),
+			  SArgs.getInt(args, 6).intValue(),
+			  SArgs.getInt(args, 7).intValue());
 	    break;
 	default :
-	    throw new SNumArgException("arguments: [TDate] | [year month day [hour minute second]]");
+            String usage = "[TDate] | [year month day [hour minute second]]";
+	    throw new SNumArgException(args, usage);
 	}
 	_calendar.set(Calendar.MILLISECOND, 0);
 
@@ -793,27 +769,28 @@ public class SDate
 	    } else if ( dateArg instanceof String ) {
 		initFromString((String)dateArg);
 	    } else {
-		throw new STypeException("arg 2 should be a TDate or a String not a " + STypes.getTypeName(dateArg));
+                throw new STypeException(args, 2, "TDate or a String");
 	    }
 	    break;
 	case 5 :
-	    _calendar.set(STypes.getInt(args, 2).intValue(),
-			  STypes.getInt(args, 3).intValue() - 1,
-			  STypes.getInt(args, 4).intValue(),
+	    _calendar.set(SArgs.getInt(args, 2).intValue(),
+			  SArgs.getInt(args, 3).intValue() - 1,
+			  SArgs.getInt(args, 4).intValue(),
 			  0,
 			  0,
 			  0);
 	    break;
 	case 8 :
-	    _calendar.set(STypes.getInt(args, 2).intValue(),
-			  STypes.getInt(args, 3).intValue() - 1,
-			  STypes.getInt(args, 4).intValue(),
-			  STypes.getInt(args, 5).intValue(),
-			  STypes.getInt(args, 6).intValue(),
-			  STypes.getInt(args, 7).intValue());
+	    _calendar.set(SArgs.getInt(args, 2).intValue(),
+			  SArgs.getInt(args, 3).intValue() - 1,
+			  SArgs.getInt(args, 4).intValue(),
+			  SArgs.getInt(args, 5).intValue(),
+			  SArgs.getInt(args, 6).intValue(),
+			  SArgs.getInt(args, 7).intValue());
 	    break;
 	default :
-	    throw new SNumArgException("arguments: TDate | year month day [hour minute second]");
+            String usage = "TDate | year month day [hour minute second]";
+            throw new SNumArgException(args, usage);
 	}
 	
 	return obj;
@@ -873,12 +850,12 @@ public class SDate
 	throws SRuntimeException {
 
 	if ( args.length != 5 ) {
-	    throw new SNumArgException("arguments: hour minute second");
+	    throw new SNumArgException(args, "hour minute second");
 	}
 
-	_calendar.set(Calendar.HOUR_OF_DAY, STypes.getInt(args,2).intValue());
-	_calendar.set(Calendar.MINUTE, STypes.getInt(args,3).intValue());
-	_calendar.set(Calendar.SECOND, STypes.getInt(args,4).intValue());
+	_calendar.set(Calendar.HOUR_OF_DAY, SArgs.getInt(args,2).intValue());
+	_calendar.set(Calendar.MINUTE, SArgs.getInt(args,3).intValue());
+	_calendar.set(Calendar.SECOND, SArgs.getInt(args,4).intValue());
 
 	return obj;
     }
@@ -933,10 +910,10 @@ public class SDate
 	throws SRuntimeException {
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException("format-string");
+	    throw new SNumArgException(args, "format-string");
 	}
 
-	String           fmt       = STypes.getString(args, 2);
+	String           fmt       = SArgs.getString(args, 2);
 	SimpleDateFormat formatter = null;
 	String           result    = null;
 
@@ -1000,7 +977,7 @@ public class SDate
 	throws STeaException {
 
 	if ( args.length != 3 ) {
-	    new SNumArgException("args: TDate");
+	    new SNumArgException(args, "TDate");
 	}
 	
 	Calendar when   = getDate(args, 2)._calendar;
@@ -1064,7 +1041,7 @@ public class SDate
 	throws STeaException {
 
 	if ( args.length != 3 ) {
-	    new SNumArgException("args: TDate");
+	    new SNumArgException(args, "TDate");
 	}
 	
 	Calendar when = getDate(args, 2)._calendar;
@@ -1120,7 +1097,7 @@ public class SDate
 	throws STeaException {
 
 	if ( args.length != 3 ) {
-	    new SNumArgException("args: TDate");
+	    new SNumArgException(args, "TDate");
 	}
 	
 	Calendar when = getDate(args, 2)._calendar;
@@ -1176,7 +1153,7 @@ public class SDate
 	throws STeaException {
 
 	if ( args.length != 3 ) {
-	    new SNumArgException("args: TDate");
+	    new SNumArgException(args, "TDate");
 	}
 
 	Calendar cal  = _calendar;
@@ -1241,7 +1218,7 @@ public class SDate
 	throws STeaException {
 
 	if ( args.length != 3 ) {
-	    new SNumArgException("args: TDate");
+	    new SNumArgException(args, "TDate");
 	}
 
 	Calendar cal  = _calendar;
@@ -1279,18 +1256,14 @@ public class SDate
 
     public static SDate getDate(Object[] args,
 				int      index)
-	throws STeaException {
+	throws STypeException {
 
 	Object tosDate = args[index];
 
 	try {
 	    return (SDate)((STosObj)tosDate).part(0);
 	} catch (ClassCastException e) {
-	    String   msg     =
-		"Argument {0} must contain a {1}, not a \"{2}\"";
-	    Object[] fmtArgs =
-		{String.valueOf(index),CLASS_NAME,STypes.getTypeName(tosDate)};
-	    throw new STeaException(msg, fmtArgs);
+            throw new STypeException(args, index, CLASS_NAME);
 	}
     }
 

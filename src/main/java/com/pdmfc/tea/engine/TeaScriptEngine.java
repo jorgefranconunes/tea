@@ -27,13 +27,13 @@ import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.compiler.SCode;
 import com.pdmfc.tea.compiler.SCompileException;
 import com.pdmfc.tea.compiler.SCompiler;
+import com.pdmfc.tea.runtime.SArgs;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SNoSuchVarException;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STeaRuntime;
-import com.pdmfc.tea.runtime.STypes;
 import com.pdmfc.tea.modules.reflect.STeaJavaTypes;
 
 
@@ -527,7 +527,7 @@ public class TeaScriptEngine
             for (int i = 0; i < args.length; i++) {
                 newArgs[i + 1] = STeaJavaTypes.java2Tea(args[i], teaContext);
             }
-            SObjFunction obj    = STypes.getFunction(teaContext, newArgs, 0);
+            SObjFunction obj    = SArgs.getFunction(teaContext, newArgs, 0);
             Object       result =
                 STeaJavaTypes.tea2Java(obj.exec(obj, teaContext, newArgs));
             return result;
@@ -576,7 +576,7 @@ public class TeaScriptEngine
             for (int i = 0; i < args.length; i++) {
                 newArgs[i + 2] = STeaJavaTypes.java2Tea(args[i], teaContext);
             }
-            SObjFunction obj    = STypes.getFunction(teaContext, newArgs, 0);
+            SObjFunction obj    = SArgs.getFunction(teaContext, newArgs, 0);
             Object       result =
                 STeaJavaTypes.tea2Java(obj.exec(obj, teaContext, newArgs));
             return result;

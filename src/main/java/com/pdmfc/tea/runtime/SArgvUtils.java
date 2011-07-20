@@ -1,17 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2010 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2010/03/12 Created. (jfn)
+ * Copyright (c) 2010-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -32,7 +21,7 @@ import com.pdmfc.tea.runtime.SObjPair;
  *
  **************************************************************************/
 
-public class SArgvUtils
+final class SArgvUtils
     extends Object {
 
 
@@ -60,6 +49,8 @@ public class SArgvUtils
  **************************************************************************/
 
     private SArgvUtils() {
+
+        // Nothing to do.
     }
 
 
@@ -72,9 +63,9 @@ public class SArgvUtils
  *
  **************************************************************************/
 
-    public static void setArgv(SContext toplevelContext,
-                               String   argv0,
-                               String[] argv) {
+    public static void setArgv(final SContext toplevelContext,
+                               final String   argv0,
+                               final String[] argv) {
 
         // Setup the "argv0" variable.
         Object argv0Value = (argv0!=null) ? argv0 : SObjNull.NULL;

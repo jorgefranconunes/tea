@@ -1,24 +1,11 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2001/05/12
- * Created. (jfn)
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 package com.pdmfc.tea.runtime;
 
-import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SRuntimeException;
 
 
@@ -32,7 +19,7 @@ import com.pdmfc.tea.runtime.SRuntimeException;
  *
  **************************************************************************/
 
-public class SNumArgException
+public final class SNumArgException
     extends SRuntimeException {
 
 
@@ -44,10 +31,9 @@ public class SNumArgException
  *
  **************************************************************************/
 
-   public SNumArgException(Object arg0,
-			   String msg) {
+   private SNumArgException() {
 
-      super(arg0, "arguments : " + msg);
+        // Nothing to do.
    }
 
 
@@ -59,10 +45,15 @@ public class SNumArgException
  *
  **************************************************************************/
 
-   public SNumArgException(String msg) {
+   public SNumArgException(final Object[] args,
+                           final String   usage) {
 
-      super(msg);
+       String msgFmt = "args : {0}";
+
+       initForFunction(args, msgFmt, usage);
    }
+
+
 }
 
 
@@ -75,6 +66,4 @@ public class SNumArgException
  * 
  *
  **************************************************************************/
-
-
 

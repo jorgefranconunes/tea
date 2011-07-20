@@ -239,7 +239,7 @@ public class SHashtable
 	throws STeaException {
 
 	if ( args.length != 4 ) {
-	    throw new SNumArgException("key value");
+	    throw new SNumArgException(args, "key value");
 	}
 
 	_hashtable.put(args[2], args[3]);
@@ -298,7 +298,7 @@ public class SHashtable
 	throws STeaException {
 	
 	if ( args.length != 3 ) {
-	    throw new SNumArgException("key");
+	    throw new SNumArgException(args, "key");
 	}
 
 	Object result = _hashtable.get(args[2]);
@@ -477,7 +477,7 @@ public class SHashtable
 	throws STeaException {
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException("arguments: key");
+	    throw new SNumArgException(args, "key");
 	}
 
 	Object key = args[2];

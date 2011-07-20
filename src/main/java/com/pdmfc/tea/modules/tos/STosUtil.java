@@ -80,10 +80,7 @@ public class STosUtil
 	try {
 	    return (STosObj)args[index];
 	} catch (ClassCastException e) {
-	    throw new STypeException(args[0],
-				     "argument " + index
-				     + " should be a TOS object, not a "
-				     + STypes.getTypeName(args[index]));
+	    throw new STypeException(args, index, "TOS object");
       }
     }
 
@@ -125,7 +122,7 @@ public class STosUtil
 		try {
 		    ref = getClassWithEffort(context, (SObjSymbol)ref);
 		} catch (SNoSuchVarException e2) {
-		    throw new SNoSuchClassException(args[0], (SObjSymbol)ref);
+		    throw new SNoSuchClassException(args, (SObjSymbol)ref);
 		}
 	    }
 	}
@@ -133,10 +130,7 @@ public class STosUtil
 	    return (STosClass)ref;
 	}
 
-	throw new STypeException(args[0],
-				 "arg " + index +
-				 " should be either a symbol or a class, not a " +
-				 STypes.getTypeName(ref));
+	throw new STypeException(args, index, "symbol or a class");
     }
 
 

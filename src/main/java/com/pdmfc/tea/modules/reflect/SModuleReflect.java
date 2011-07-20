@@ -14,6 +14,7 @@ import java.util.List;
 
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.modules.SModule;
+import com.pdmfc.tea.modules.reflect.SFunctionNewProxy;
 import com.pdmfc.tea.modules.reflect.SMethodFinder;
 import com.pdmfc.tea.modules.reflect.SReflectUtils;
 import com.pdmfc.tea.modules.reflect.STeaJavaTypes;
@@ -283,6 +284,8 @@ public class SModuleReflect
                                                           args);
                            }
                        });
+
+        context.newVar("java-new-proxy", new SFunctionNewProxy());
    }
 
 
@@ -377,7 +380,8 @@ public class SModuleReflect
 	throws STeaException {
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException(args[0], "[className|wrapperObj] memberName");
+	    throw new SNumArgException(args,
+                                       "[className|wrapperObj] memberName");
 	}
 
 	Object            firstArg    = args[1];
@@ -451,7 +455,8 @@ public class SModuleReflect
 	throws STeaException {
 
 	if ( args.length != 4 ) {
-	    throw new SNumArgException(args[0], "[className|wrapperObj] memberName value");
+	    throw new SNumArgException(args,
+                                       "[className|wrapperObj] memberName value");
 	}
 
 	Object            firstArg   = args[1];
@@ -534,20 +539,22 @@ public class SModuleReflect
 	throws STeaException {
 
 	if ( args.length < 3 ) {
-	    throw new SNumArgException(args[0],
+	    throw new SNumArgException(args,
                                        "className methodName [argType1 [argType2 ...]]");
 	}
 
         Class<?>   klass      = SReflectUtils.getClassForName(args, 1);
 	String     methodName = SReflectUtils.getStringOrSymbol(args,2);
-	Class<?>[] params     = new Class[args.length - 3];
+	Class<?>[] paramTypes = new Class[args.length - 3];
 
         for ( int i=3; i<args.length; i++ ) {
-            params[i-3]    = SReflectUtils.getClassForName(args, i);
+            paramTypes[i-3] = SReflectUtils.getClassForName(args, i);
         }
 
-        final Method method =
-            SMethodFinder.findMethod(klass, methodName, params, false);
+        final Method method           =
+            SMethodFinder.findMethod(klass, methodName, paramTypes, false);
+        final String usageMessage     = buildUsageMessage(paramTypes);
+        final int    functionArgCount = paramTypes.length + 1;
 
         Object result =
             new SObjFunction() {
@@ -556,9 +563,13 @@ public class SModuleReflect
                                    Object[]     args)
                     throws STeaException {
 
+                    if ( args.length != functionArgCount ) {
+                        throw new SNumArgException(args, usageMessage);
+                    }
+
                     Object[] methodArgs = new Object[args.length - 1];
-                    for( int i=1; i<args.length; i++ ) {
-                        methodArgs[i-1] = args[i];
+                    for( int i=1, count=args.length; i<count; i++ ) {
+                        methodArgs[i-1] = STeaJavaTypes.tea2Java(args[i]);
                     }
 
                     return SReflectUtils.invokeMethod(null, 
@@ -569,6 +580,32 @@ public class SModuleReflect
             };
 
 	return result;
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+    
+    private static String buildUsageMessage(final Class<?>[] paramTypes) {
+
+        StringBuilder builder = new StringBuilder();
+
+        for ( int i=0, count=paramTypes.length; i<count; i++) {
+		if ( i > 0 ) {
+		    builder.append(" ");
+		}
+		builder.append(paramTypes[i].getName());
+        }
+
+        String usageMessage = builder.toString();
+    
+        return usageMessage;
     }
 
 
@@ -613,13 +650,12 @@ public class SModuleReflect
 	throws STeaException {
 
 	if ( args.length < 2 ) {
-	    throw new SNumArgException(args[0], "className [arg1 [arg2 ...]]");
+	    throw new SNumArgException(args, "className [arg1 [arg2 ...]]");
 	}
 
         Class<?>   klass      = SReflectUtils.getClassForName(args, 1);
 	Object[]   params     = new Object[args.length - 2];
 	Class<?>[] paramTypes = new Class<?>[args.length - 2];
-	Object     result     = null;
 
 	for ( int i=2; i<args.length; i++ ) {
             Object constructorArg = STeaJavaTypes.tea2Java(args[i]);
@@ -631,27 +667,25 @@ public class SModuleReflect
 
         Constructor<?>  constructor =
             SMethodFinder.findConstructor(klass, paramTypes);
+        Object          javaResult  = null;
 
 	try {	    
-	    Object javaObj = constructor.newInstance(params);
-	    result = new JavaWrapperObject(new STosClass(), javaObj);
+	    javaResult = constructor.newInstance(params);
 	} catch (IllegalAccessException e) {
             String paramsTxt = SMethodFinder.buildTypesDescription(paramTypes);
-	    throw new SRuntimeException(args[0],
-					"cannot access constructor for '"
-                                        + klass.getName()
-                                        + "(" + paramsTxt + ")'");
+            String msg = "cannot access constructor for {0}({1})";
+	    throw new SRuntimeException(args, msg, klass.getName(), paramsTxt);
 	} catch (InstantiationException e) {
 	    throw new SRuntimeException(e);
 	} catch (InvocationTargetException e) {
 	    throw new SRuntimeException(e.getCause());
 	} catch (IllegalArgumentException e) {
             String paramsTxt = SMethodFinder.buildTypesDescription(paramTypes);
-	    throw new SRuntimeException(args[0],
-					"problems calling constructor for '"
-                                        + klass.getName()
-                                        + "(" + paramsTxt.toString() + ")'");
+            String msg = "problems calling constructor for {0}({1})";
+	    throw new SRuntimeException(args, msg, klass.getName(), paramsTxt);
 	}
+
+	Object result = STeaJavaTypes.java2Tea(javaResult, context);
 
 	return result;
     }
@@ -710,19 +744,20 @@ public class SModuleReflect
 	throws STeaException {
 
 	if ( args.length < 3 ) {
-	    throw new SNumArgException(args[0], "className methodName [arg1 [arg2 ...]]");
+	    throw new SNumArgException(args,
+                                       "className methodName [arg1 [arg2 ...]]");
 	}
 
-        Class<?> klass      = SReflectUtils.getClassForName(args, 1);
-	String   methodName = SReflectUtils.getStringOrSymbol(args,2);
-	Class[]  paramTypes = new Class[args.length - 3];
-	Object[] mtdArgs    = new Object[args.length - 3];
+        Class<?>   klass      = SReflectUtils.getClassForName(args, 1);
+	String     methodName = SReflectUtils.getStringOrSymbol(args,2);
+	Class<?>[] paramTypes = new Class[args.length - 3];
+	Object[]   methodArgs = new Object[args.length - 3];
 
 	// Convert value types to java.
-	for ( int i=3; i<args.length; i++ ) {
+	for ( int i=3, count=args.length; i<count; i++ ) {
             Object methodArg = STeaJavaTypes.tea2Java(args[i]); 
 
-	    mtdArgs[i-3]    = methodArg;
+	    methodArgs[i-3] = methodArg;
 	    paramTypes[i-3] = (methodArg==null) ? null : methodArg.getClass();
 	}
 
@@ -730,7 +765,7 @@ public class SModuleReflect
             SMethodFinder.findMethod(klass, methodName, paramTypes, true);
 
 	Object result =
-            SReflectUtils.invokeMethod(null, method, context, mtdArgs);
+            SReflectUtils.invokeMethod(null, method, context, methodArgs);
 
         return result;
     }

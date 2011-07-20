@@ -1,18 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- * 
- * $Id$
- *
- *
- * Revisions:
- *
- * 2001/05/12
- * Created. (jfn)
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -40,7 +28,9 @@ public class STeaException
 
     private String   _msgFmt  = null;
     private Object[] _fmtArgs = null;
-    private String   _msg     = null;
+
+    // The formated message.
+    private String _msg = null;
 
 
 
@@ -52,44 +42,9 @@ public class STeaException
  *
  **************************************************************************/
 
-    public STeaException() {
-    }
+    protected STeaException() {
 
-
-
-
-
-/**************************************************************************
- *
- * This constructor builds an object with the message given as argument.
- *
- * @param msg
- *    The message to be associated with this object.
- *
- **************************************************************************/
-
-    public STeaException(String msg) {
-
-	_msgFmt = msg;
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * This constructor builds an object with the message from another
- * exception.
- *
- * @param e The exception whose mmessage will be associated with this
- * object.
- *
- **************************************************************************/
-
-    public STeaException(Exception e) {
-
-	_msgFmt = e.getMessage();
+        // Nothing to do.
     }
 
 
@@ -99,15 +54,41 @@ public class STeaException
 
 /**************************************************************************
  *
- * 
+ * Initializes this exception with a
+ * <code>java.text.MessageFormat</code> like message.
+ *
+ * @param msgFmt The format for the error message. This must be in the
+ * same format as used by <code>java.text.MessageFormat</code>.
+ *
+ * @param fmtArgs The arguments used for formating the actual error
+ * message.
  *
  **************************************************************************/
 
     public STeaException(String    msgFmt,
 			 Object... fmtArgs) {
 
-	_msgFmt  = msgFmt;
-	_fmtArgs = fmtArgs;
+        init(msgFmt, fmtArgs);
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * Initializes this exception with the message from another exception.
+ *
+ * @param e The exception whose message will be associated with this
+ * object.
+ *
+ **************************************************************************/
+
+    public STeaException(final Throwable e) {
+
+        String msg = e.getMessage();
+
+        init(msg);
     }
 
 
@@ -117,21 +98,56 @@ public class STeaException
 
 /**************************************************************************
  *
- * 
+ * Initializes this exception with a
+ * <code>java.text.MessageFormat</code> like message.
+ *
+ * <p>This method is intended for use by derived classes, when the
+ * message to be used is not easily given as a base constructor
+ * argument.</p>
+ *
+ * @param msgFmt The format for the error message. This must be in the
+ * same format as used by <code>java.text.MessageFormat</code>.
+ *
+ * @param fmtArgs The arguments used for formating the actual error
+ * message.
+ *
+ **************************************************************************/
+
+    protected void init(final String    msgFmt,
+                        final Object... fmtArgs) {
+
+        assert ( msgFmt != null );
+
+        _msgFmt  = msgFmt;
+        _fmtArgs = fmtArgs;
+    }
+
+
+
+
+
+
+/**************************************************************************
+ *
+ * Retrieves the formated message for this exception.
+ *
+ * @return The formated error message.
  *
  **************************************************************************/
 
     public String getMessage() {
 
 	if ( _msg == null ) {
-	    if ( _fmtArgs == null ) {
+	    if ( (_fmtArgs==null) || (_fmtArgs.length==0) ) {
 		_msg = _msgFmt;
 	    } else {
-		try {
+                //		try {
 		    _msg = MessageFormat.format(_msgFmt, _fmtArgs);
-		} catch (RuntimeException e) {
-		    _msg = _msgFmt;
-		}
+                    //		} catch (RuntimeException e) {
+                    // Something very bad just happened. Try to
+                    // recover to a common sense position...
+                    //		    _msg = _msgFmt;
+                    //		}
 	    }
 	}
 

@@ -1,22 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2002/01/20 Calls to the "addJavaFunction()" method were replaced by
- * inner classes for performance. (jfn)
- *
- * 2002/01/10 This classe now derives from SModuleCore. (jfn)
- *
- * 2001/05/12 Created. (jfn)
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -35,10 +19,10 @@ import com.pdmfc.tea.modules.io.SInput;
 import com.pdmfc.tea.modules.tos.SJavaClass;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.runtime.SContext;
+import com.pdmfc.tea.runtime.SArgs;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjNull;
 import com.pdmfc.tea.runtime.SObjPair;
-import com.pdmfc.tea.runtime.SMalformedListException;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypeException;
@@ -374,10 +358,10 @@ public class SModuleIO
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "file-name");
+	    throw new SNumArgException(args, "file-name");
 	}
 
-	return (new File(STypes.getString(args,1))).getName();
+	return (new File(SArgs.getString(args,1))).getName();
     }
 
 
@@ -424,10 +408,10 @@ public class SModuleIO
 	throws STeaException {
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException(args[0], "src-file dst-file");
+	    throw new SNumArgException(args, "src-file dst-file");
 	}
-	File    srcFile = new File(STypes.getString(args,1));
-	File    dstFile = new File(STypes.getString(args,2));
+	File    srcFile = new File(SArgs.getString(args,1));
+	File    dstFile = new File(SArgs.getString(args,2));
 	boolean status  = true;
 
 	try {
@@ -522,10 +506,10 @@ public class SModuleIO
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "file-name");
+	    throw new SNumArgException(args, "file-name");
 	}
 
-	String path    = STypes.getString(args,1);
+	String path    = SArgs.getString(args,1);
 	File   aFile   = new File(path);
 	String dirName = aFile.getParent();
 
@@ -578,10 +562,10 @@ public class SModuleIO
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "file-name");
+	    throw new SNumArgException(args, "file-name");
 	}
 
-	String pathName   = STypes.getString(args, 1);
+	String pathName   = SArgs.getString(args, 1);
 	String baseName   = (new File(pathName)).getName();
 	int    indexOfDot = baseName.lastIndexOf('.');
 	String extension  = (indexOfDot<0) ?
@@ -632,10 +616,10 @@ public class SModuleIO
 	int numArgs = args.length;
 
 	if ( numArgs != 2 ) {
-	    throw new SNumArgException(args[0], "file-name");
+	    throw new SNumArgException(args, "file-name");
 	}
 
-	String fileName = STypes.getString(args,1);
+	String fileName = SArgs.getString(args,1);
 	File   file     = new File(fileName);
 
 	return file.exists() ? Boolean.TRUE : Boolean.FALSE;
@@ -683,10 +667,10 @@ public class SModuleIO
 	int numArgs = args.length;
 
 	if ( numArgs != 2 ) {
-	    throw new SNumArgException(args[0], "file-name");
+	    throw new SNumArgException(args, "file-name");
 	}
 
-	String fileName = STypes.getString(args,1);
+	String fileName = SArgs.getString(args,1);
 	File   file     = new File(fileName);
 
 	return file.isDirectory() ? Boolean.TRUE : Boolean.FALSE;
@@ -734,10 +718,10 @@ public class SModuleIO
 	int numArgs = args.length;
 	
 	if ( numArgs != 2 ) {
-	    throw new SNumArgException(args[0], "file-name");
+	    throw new SNumArgException(args, "file-name");
 	}
 
-	String fileName = STypes.getString(args,1);
+	String fileName = SArgs.getString(args,1);
 	File   file     = new File(fileName);
 
 	return file.isFile() ? Boolean.TRUE : Boolean.FALSE;
@@ -800,7 +784,7 @@ public class SModuleIO
 		append(result, args[i]);
 	    }
 	} catch (SRuntimeException e) {
-	    throw new SRuntimeException(args[0], e.getMessage());
+	    throw new SRuntimeException(args, e.getMessage());
 	}
 
 	return result.toString();
@@ -826,8 +810,8 @@ public class SModuleIO
 	    try {
 		result.append((String)component);
 	    } catch (ClassCastException e) {
-		throw new STypeException("components must be strings" +
-					 " not " +STypes.getTypeName(component));
+                String msg = "components must be strings, not {0}";
+		throw new STypeException(msg, STypes.getTypeName(component));
 	    }
 	}
     }
@@ -849,21 +833,14 @@ public class SModuleIO
 	StringBuffer result = new StringBuffer();
 
 	if ( elems.hasNext() ) {
-	    try {
-		append(result, elems.next());
-	    } catch (NoSuchElementException e) {
-		throw new SMalformedListException(e);
-	    }
+            append(result, elems.next());
 	}
+
 	while ( elems.hasNext() ) {
 	    if ( result.length() > 0 ) {
 		result.append(File.separatorChar);
 	    }
-	    try {
-		append(result, elems.next());
-	    } catch (NoSuchElementException e) {
-		throw new SMalformedListException(e);
-	    }
+            append(result, elems.next());
 	}
 
 	return result.toString();
@@ -909,9 +886,9 @@ public class SModuleIO
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "dirPath");
+	    throw new SNumArgException(args, "dirPath");
 	}
-	File dir = new File(STypes.getString(args,1));
+	File dir = new File(SArgs.getString(args,1));
 
 	return dir.mkdir() ? Boolean.TRUE : Boolean.FALSE;
     }
@@ -961,10 +938,10 @@ public class SModuleIO
 	throws STeaException {
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException(args[0], "old-name new-name");
+	    throw new SNumArgException(args, "old-name new-name");
 	}
-	File oldFile = new File(STypes.getString(args,1));
-	File newFile = new File(STypes.getString(args,2));
+	File oldFile = new File(SArgs.getString(args,1));
+	File newFile = new File(SArgs.getString(args,2));
 
 	return oldFile.renameTo(newFile) ? Boolean.TRUE : Boolean.FALSE;
     }
@@ -1009,9 +986,9 @@ public class SModuleIO
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "fileName");
+	    throw new SNumArgException(args, "fileName");
 	}
-	long size = (new  File(STypes.getString(args,1))).length();
+	long size = (new  File(SArgs.getString(args,1))).length();
 
 	return new Integer((int)size);
     }
@@ -1061,10 +1038,10 @@ public class SModuleIO
 	int numArgs = args.length;
 
 	if ( numArgs != 2 ) {
-	    throw new SNumArgException(args[0], "string-path-list");
+	    throw new SNumArgException(args, "string-path-list");
 	}
 
-	String   pathList = STypes.getString(args,1);
+	String   pathList = SArgs.getString(args,1);
 	SObjPair result   = SUtils.buildPathList(pathList);
 
 	return result;
@@ -1117,10 +1094,10 @@ public class SModuleIO
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "file-name");
+	    throw new SNumArgException(args, "file-name");
 	}
 
-	return (new File(STypes.getString(args,1))).delete() ?
+	return (new File(SArgs.getString(args,1))).delete() ?
 	    Boolean.TRUE : Boolean.FALSE;
     }
 

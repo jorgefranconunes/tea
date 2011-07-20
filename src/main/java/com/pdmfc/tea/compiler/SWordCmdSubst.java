@@ -1,32 +1,17 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2001/05/12
- * Created. (jfn)
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 package com.pdmfc.tea.compiler;
 
 import com.pdmfc.tea.STeaException;
-import com.pdmfc.tea.compiler.SWord;
 import com.pdmfc.tea.compiler.SCode;
+import com.pdmfc.tea.compiler.SWord;
+import com.pdmfc.tea.compiler.SWordSubstUtils;
 import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SNoSuchVarException;
 import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.SObjSymbol;
-import com.pdmfc.tea.runtime.STypeException;
-import com.pdmfc.tea.runtime.STypes;
 
 
 
@@ -42,7 +27,7 @@ import com.pdmfc.tea.runtime.STypes;
  *
  **************************************************************************/
 
-class SWordCmdSubst
+final class SWordCmdSubst
     extends Object
     implements SWord {
 
@@ -108,28 +93,10 @@ class SWordCmdSubst
     public SObjFunction toFunction(SContext context)
 	throws STeaException {
 
-	Object obj = _code.exec(context);
-	Object value;
+	Object       obj    = _code.exec(context);
+	SObjFunction result = SWordSubstUtils.toFunction(obj, context);
 
-	if ( obj instanceof SObjFunction ) {
-	    return (SObjFunction)obj;
-	}
-
-	try {
-	    value = context.getVar((SObjSymbol)obj);
-	} catch (ClassCastException e1) {
-	    throw new STypeException("argument 0 should be a function or a symbol, not a " + STypes.getTypeName(obj));
-	} catch (SNoSuchVarException e2) {
-	    value = STypes.getVarWithEffort(context, (SObjSymbol)obj);
-	}
-	
-	try {
-	    return (SObjFunction)value;
-	} catch (ClassCastException e1) {
-	    throw new STypeException("variable " + ((SObjSymbol)obj).getName()+
-				     " should contain a function, " +
-				     "not a " + STypes.getTypeName(value));
-	}
+        return result;
     }
 
 

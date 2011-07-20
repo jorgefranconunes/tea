@@ -109,7 +109,7 @@ public class SLambdaFunction
 	throws STeaException {
 
 	if ( args.length != _argCountPlusOne ) {
-	    throw new SNumArgException(args[0], parametersText());
+	    throw new SNumArgException(args, parametersText());
 	}
 
 	SContext funcContext = new SContext(_bodyContext);

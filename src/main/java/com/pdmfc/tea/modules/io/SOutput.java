@@ -1,20 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2003/07/10 The "write", "writeln" TOS methods now also support Long
- * objects. (jfn)
- *
- * 2001/05/12 Created. (jfn)
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -35,6 +21,7 @@ import com.pdmfc.tea.modules.io.SIOException;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.tos.STosUtil;
+import com.pdmfc.tea.runtime.SArgs;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjByteArray;
 import com.pdmfc.tea.runtime.SObjFunction;
@@ -42,7 +29,6 @@ import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypeException;
-import com.pdmfc.tea.runtime.STypes;
 import com.pdmfc.tea.util.SFormater;
 
 
@@ -234,10 +220,10 @@ public class SOutput
 	throws SRuntimeException {
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException("Args: boolean-flag");
+	    throw new SNumArgException(args, "boolean-flag");
 	}
 
-	boolean flag = STypes.getBoolean(args,2).booleanValue();
+	boolean flag = SArgs.getBoolean(args,2).booleanValue();
 
 	setLineBuffering(flag);
 
@@ -336,7 +322,8 @@ public class SOutput
 	    } catch (IOException e) {
 		throw new SIOException(e);
 	    }
-	    throw new STypeException(args[0], "arg " + i + " is supposed to be a string or numeric, not a " + STypes.getTypeName(arg));
+
+	    throw new STypeException(args, i, "string or numeric");
 	}
 
 	return obj;
@@ -681,14 +668,14 @@ public class SOutput
     public Object printf(SObjFunction obj,
 			 SContext     context,
 			 Object[]     args)
-	throws SRuntimeException {
+	throws STeaException {
 
 	if ( args.length < 3 ) {
-	    throw new SNumArgException("arguments: format-string [...]");
+	    throw new SNumArgException(args, "format-string [...]");
 	}
 
 	try {
-	    printf(STypes.getString(args,2), args, 3);
+	    printf(SArgs.getString(args,2), args, 3);
 	} catch (IOException e) {
 	    throw new SIOException(e);
 	}
@@ -720,9 +707,7 @@ public class SOutput
 		       Object[] args,
 		       int      firstArg)
 	throws IOException,
-	       SIOException,
-	       STypeException,
-	       SNumArgException{
+	       STeaException {
 
 	if ( _outputWriter == null ) {
 	    throw new SIOException("stream is closed");

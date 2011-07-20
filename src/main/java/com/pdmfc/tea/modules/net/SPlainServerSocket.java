@@ -1,21 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2002/10/20
- * Renamed from "SServerSocketPlain" to "SPlainServerSocket". (jfn)
- *
- * 2001/05/12
- * Created. (jfn)
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -32,12 +17,12 @@ import com.pdmfc.tea.modules.net.SSocketBase;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.tos.STosUtil;
+import com.pdmfc.tea.runtime.SArgs;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SRuntimeException;
-import com.pdmfc.tea.runtime.STypes;
 
 
 
@@ -134,10 +119,10 @@ public class SPlainServerSocket
 	throws STeaException {
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException("port-number");
+	    throw new SNumArgException(args, "port-number");
 	}
 	
-	_port = STypes.getInt(args,2).intValue();
+	_port = SArgs.getInt(args,2).intValue();
 
 	return obj;
     }

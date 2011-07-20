@@ -1,22 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2010/01/28 Minor code refactorings to properly use generics. (jfn)
- *
- * 2002/08/03 The list of messages is now a java.util.List, instead of
- * an SList. (jfn)
- *
- * 2001/05/12 Created. (jfn)
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -35,9 +19,10 @@ import com.pdmfc.tea.runtime.SObjSymbol;
 
 /**************************************************************************
  *
- * Signals an abnormal condition while running a Tea script. An
- * <TT>SRuntimeException</TT> mantains a list of the messages being
- * generated as the call stack unrolls.
+ * Signals an abnormal condition while running a Tea script.
+ *
+ * <p>This type of excemtpion mantains a list of the messages being
+ * generated as the call stack unrolls.</p>
  *
  **************************************************************************/
 
@@ -54,18 +39,17 @@ public class SRuntimeException
 
 
 
+
 /**************************************************************************
  *
- * These exceptions are thrown while executing a Tea script and
- * represents abnormal conditions.
+ * Empty constructorm such that derived classes may call one of the
+ * init methods.
  *
  **************************************************************************/
 
-    public SRuntimeException(String msg) {
+    protected SRuntimeException() {
 
-	super(msg);
-
-	_msgList.add(msg);
+        // Nothing to do.
     }
 
 
@@ -79,12 +63,32 @@ public class SRuntimeException
  *
  **************************************************************************/
 
-    public SRuntimeException(String   msgFmt,
-			     Object[] fmtArgs) {
+    public SRuntimeException(final String    msgFmt,
+			     final Object... fmtArgs) {
 
-	super(msgFmt, fmtArgs);
+	init(msgFmt, fmtArgs);
+    }
 
-	_msgList.add(getMessage());
+
+
+
+
+/**************************************************************************
+ *
+ * Initializes the message from the zeroth argument of a command and
+ * from an error message.
+ *
+ * @param args The arguments the function was called with.
+ *
+ * @param msg A string with an error message.
+ *
+ **************************************************************************/
+ 
+    public SRuntimeException(final Object[]  args,
+                             final String    msgFmt,
+                             final Object... fmtArgs) {
+
+        initForFunction(args, msgFmt, fmtArgs);
     }
 
 
@@ -101,30 +105,13 @@ public class SRuntimeException
  *
  **************************************************************************/
 
-    public SRuntimeException(Throwable e) {
+    public SRuntimeException(final Throwable e) {
 
-	this(e.getMessage());
-    }
+        String errorType = e.getClass().getName();
+        String errorText = e.getMessage();
+        String msgFmt    = (errorText!=null) ? "{0} - {1}" : "{0}";
 
-
-
-
-/**************************************************************************
- *
- * Initializes the message from the zeroth argument of a command and
- * from an error message.
- *
- * @param arg0 The zeroth argument of a command.
- *
- * @param msg A string with an error message.
- *
- **************************************************************************/
-
-    public SRuntimeException(Object arg0,
-			     String msg) {
-
-	this(((arg0 instanceof SObjSymbol) ?
-	      (((SObjSymbol)arg0).getName()+": ") : "") + msg);
+        init(msgFmt, errorType, errorText);
     }
 
 
@@ -137,33 +124,27 @@ public class SRuntimeException
  * 
  *
  **************************************************************************/
- 
-    public SRuntimeException(Object   arg0,
-			     String   msgFmt,
-			     Object[] fmtArgs) {
 
-	this((arg0 instanceof SObjSymbol) ? (((SObjSymbol)arg0).getName()+": "+msgFmt) : msgFmt,
-	      fmtArgs);
+    protected void initForFunction(final Object[]  args,
+                                   final String    msgFmt,
+                                   final Object... fmtArgs) {
+
+        Object arg0 = args[0];
+        String fmt  = null;
+
+        if ( arg0 instanceof SObjSymbol ) {
+            fmt =
+                (new StringBuilder())
+                .append(arg0)
+                .append(" : ")
+                .append(msgFmt)
+                .toString();
+        } else {
+            fmt = msgFmt;
+        }
+
+        init(fmt, fmtArgs);
     }
-
-
-
-
-
-/**************************************************************************
- *
- * Adds a message to the end of the message list.
- *
- * @param msg Text of the message to be added at the end of the
- * message list.
- *
- **************************************************************************/
-
-   public void addMessage(String msg) {
-
-      _msgList.add(msg);
-   }
-
 
 
 
@@ -175,12 +156,18 @@ public class SRuntimeException
  *
  **************************************************************************/
  
-    public void addMessage(String   msgFmt,
-			   Object[] fmtArgs) {
+    public void addMessage(final String    msgFmt,
+			   final Object... fmtArgs) {
 
-	String msg = MessageFormat.format(msgFmt, fmtArgs);
+	String msg = null;
 
-	addMessage(msg);
+        if ( (fmtArgs!=null) && (fmtArgs.length>0) ) {
+            msg = MessageFormat.format(msgFmt, fmtArgs);
+        } else {
+            msg = msgFmt;
+        }
+
+	_msgList.add(msg);
     }
 
 
@@ -196,17 +183,26 @@ public class SRuntimeException
  *
  **************************************************************************/
 
-   public String getFullMessage() {
+    public String getFullMessage() {
 
-      StringBuilder message = new StringBuilder();
+        StringBuilder builder    = new StringBuilder();
+        String        topMessage = super.getMessage();
 
-      for ( String line : _msgList ) {
-          message.append(line);
-          message.append("\n");
-      }
+        builder
+            .append(topMessage)
+            .append("\n");
+        
+        for ( String line : _msgList ) {
+            builder
+                .append(line)
+                .append("\n");
+        }
 
-      return message.toString();
-   }
+        String result = builder.toString();
+
+        return result;
+    }
+
 
 }
 

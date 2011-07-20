@@ -1,36 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2010/01/28 Minor refactorings to properly use generics. (jfn)
- *
- * 2003/10/22 Corrected bug with the "registerDate" method. It was
- * storing java.lang.Timestamp into the variable instead of the
- * apropriate SDate. (jfn)
- *
- * 2003/09/13 Added the "fetchOutParameters(...)" method. (jfn)
- *
- * 2003/09/13 Added the "registerFloat(...)" method. (jfn)
- *
- * 2003/09/13 Added the "registerDate(...)" method. (jfn)
- *
- * 2003/02/13 Minor documentation updates. (jfn)
- *
- * 2002/08/03 Use of com.pdmfc.tea.util.SList was replaced by
- * java.util.ArrayList. (jfn)
- *
- * 2002/01/10 Now uses SList.iterator(). (jfn)
- *
- * 2001/05/12 Created. (jfn)
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -51,6 +21,7 @@ import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.tos.STosUtil;
 import com.pdmfc.tea.modules.util.SDate;
+import com.pdmfc.tea.runtime.SArgs;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjNull;
@@ -252,11 +223,11 @@ public class SCallableStatement
 	throws SRuntimeException {
 
 	if ( args.length != 4 ) {
-	    throw new SNumArgException("args: index symbol");
+	    throw new SNumArgException(args, "index symbol");
 	}
 
-	int     index = STypes.getInt(args,2).intValue();
-	SObjVar var   = context.getVarObject(STypes.getSymbol(args,3));
+	int     index = SArgs.getInt(args,2).intValue();
+	SObjVar var   = context.getVarObject(SArgs.getSymbol(args,3));
 
 	try {
 	    registerOutString(index, var);
@@ -351,11 +322,11 @@ public class SCallableStatement
 	throws SRuntimeException {
 
 	if ( args.length != 4 ) {
-	    throw new SNumArgException("args: index symbol");
+	    throw new SNumArgException(args, "index symbol");
 	}
 
-	int     index = STypes.getInt(args,2).intValue();
-	SObjVar var   = context.getVarObject(STypes.getSymbol(args,3));
+	int     index = SArgs.getInt(args,2).intValue();
+	SObjVar var   = context.getVarObject(SArgs.getSymbol(args,3));
 
 	try {
 	    registerOutInt(index, var);
@@ -445,16 +416,16 @@ public class SCallableStatement
  **************************************************************************/
 
     public Object registerFloat(SObjFunction obj,
-			      SContext     context,
-			      Object[]     args)
+                                SContext     context,
+                                Object[]     args)
 	throws SRuntimeException {
 
 	if ( args.length != 4 ) {
-	    throw new SNumArgException("args: index symbol");
+	    throw new SNumArgException(args, "index symbol");
 	}
 
-	int     index = STypes.getInt(args,2).intValue();
-	SObjVar var   = context.getVarObject(STypes.getSymbol(args,3));
+	int     index = SArgs.getInt(args,2).intValue();
+	SObjVar var   = context.getVarObject(SArgs.getSymbol(args,3));
 
 	try {
 	    registerOutFloat(index, var);
@@ -549,11 +520,11 @@ public class SCallableStatement
 	throws SRuntimeException {
 
 	if ( args.length != 4 ) {
-	    throw new SNumArgException("args: index symbol");
+	    throw new SNumArgException(args, "index symbol");
 	}
 
-	int        index   = STypes.getInt(args,2).intValue();
-	SObjSymbol varName = STypes.getSymbol(args,3);
+	int        index   = SArgs.getInt(args,2).intValue();
+	SObjSymbol varName = SArgs.getSymbol(args,3);
 	SObjVar    var     = context.getVarObject(varName);
 
 	try {

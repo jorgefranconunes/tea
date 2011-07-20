@@ -1,25 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2003/05/21 Added the functions "tdbc-get-open-connections-count",
- * "tdbc-close-all-connections". (jfn)
- *
- * 2002/01/20 Calls to the "addJavaFunction()" method were replaced by
- * inner classes for performance. (jfn)
- *
- * 2002/01/10 This classe now derives from SModuleCore. (jfn)
- *
- * 2001/05/12 Created. (jfn)
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -30,6 +11,7 @@ import com.pdmfc.tea.modules.SModule;
 import com.pdmfc.tea.modules.tdbc.SConnectionClass;
 import com.pdmfc.tea.modules.tos.SJavaClass;
 import com.pdmfc.tea.modules.tos.STosClass;
+import com.pdmfc.tea.runtime.SArgs;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SObjFunction;
@@ -246,17 +228,16 @@ public class SModuleTdbc
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "className");
+	    throw new SNumArgException(args, "className");
 	}
 
-	String className = STypes.getString(args,1);
+	String className = SArgs.getString(args,1);
 
 	try {
 	    Class.forName(className);
 	} catch (ClassNotFoundException e) {
-	    throw new SRuntimeException(args[0],
-					"could not load class '" + 
-					className + "'");
+            String msg = "could not load class \"{0}\"";
+	    throw new SRuntimeException(args, msg, className);
 	}
 
 	return SObjNull.NULL;
@@ -302,10 +283,10 @@ public class SModuleTdbc
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "string");
+	    throw new SNumArgException(args, "string");
 	}
 
-	String str    = STypes.getString(args, 1);
+	String str    = SArgs.getString(args, 1);
 	String result = sqlEncode(str);
 
 	return result;

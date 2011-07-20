@@ -12,8 +12,6 @@ import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.modules.reflect.SMethodFinder;
 import com.pdmfc.tea.modules.reflect.SReflectUtils;
 import com.pdmfc.tea.modules.reflect.STeaJavaTypes;
-import com.pdmfc.tea.modules.tos.STosClass;
-import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SNumArgException;
@@ -29,14 +27,16 @@ import com.pdmfc.tea.runtime.SRuntimeException;
  *
  **************************************************************************/
 
-final class JavaWrapperObject 
-    extends STosObj {
+final class JavaWrapperObject
+    extends Object
+    implements SObjFunction {
 
 
 
 
 
-    private Object _javaObj = null;
+    private Object   _javaObject     = null;
+    private Class<?> _javaObjectType = null;
 
 
 
@@ -48,13 +48,10 @@ final class JavaWrapperObject
  *
  **************************************************************************/
 
-    public JavaWrapperObject (final STosClass theClass,
-                              final Object    javaObj) 
-        throws STeaException {
-	    
-        super(theClass);
+    public JavaWrapperObject(final Object javaObject) {
 
-        _javaObj = javaObj;
+        _javaObject     = javaObject;
+        _javaObjectType = javaObject.getClass();
     }
 
 
@@ -69,7 +66,7 @@ final class JavaWrapperObject
 
     public Object getWrappedObject() {
 
-        return _javaObj;
+        return _javaObject;
     }
 
 
@@ -88,7 +85,31 @@ final class JavaWrapperObject
                        final Object[]     args)
         throws STeaException {
 
-        Object result = invokeObjectMethod(_javaObj, func, context, args);
+	if ( args.length < 2 ) {
+	    throw new SNumArgException(args, "methodName [arg1 [arg2 ...]]");
+	}
+
+	String   methodName = SReflectUtils.getStringOrSymbol(args,1);
+	Class[]  paramTypes = new Class[args.length - 2];
+	Object[] methodArgs = new Object[args.length - 2];
+
+	// Convert value types to java and create methodArgs array
+	for ( int i=2; i<args.length; i++ ) {
+            Object javaArg = STeaJavaTypes.tea2Java(args[i]);
+	    paramTypes[i-2] = (javaArg==null) ? null : javaArg.getClass();
+	    methodArgs[i-2] = javaArg;
+	}
+
+	Method method =
+            SMethodFinder.findMethod(_javaObjectType,
+                                     methodName, 
+                                     paramTypes,
+                                     true);
+	Object result =
+            SReflectUtils.invokeMethod(_javaObject,
+                                       method,
+                                       context,
+                                       methodArgs);
 
         return result;
     }
@@ -107,8 +128,8 @@ final class JavaWrapperObject
         throws SRuntimeException {
 
         Object result =
-            SReflectUtils.getFieldValue(_javaObj.getClass(),
-                                        _javaObj,
+            SReflectUtils.getFieldValue(_javaObjectType, 
+                                        _javaObject,
                                         memberName);
 
         return result;
@@ -129,53 +150,10 @@ final class JavaWrapperObject
         throws SRuntimeException {
 
         Object result =
-            SReflectUtils.setFieldValue(_javaObj.getClass(),
-                                        _javaObj, 
+            SReflectUtils.setFieldValue(_javaObjectType,
+                                        _javaObject, 
                                         memberName,
                                         newValue);
-
-        return result;
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * Invokes a java method on the given instance from tea arguments
- *
- **************************************************************************/
-
-    private Object invokeObjectMethod(final Object       javaObj,
-                                      final SObjFunction func,
-                                      final SContext     context,
-                                      final Object[]     args) 
-	throws STeaException {
-
-	if ( args.length < 2 ) {
-	    throw new SNumArgException(args[0],
-                                       "methodName [arg1 [arg2 ...]]");
-	}
-
-	String   methodName = SReflectUtils.getStringOrSymbol(args,1);
-	Class[]  paramTypes = new Class[args.length - 2];
-	Object[] mtdArgs    = new Object[args.length - 2];
-
-	// Convert value types to java and create methodArgs array
-	for ( int i=2; i<args.length; i++ ) {
-            Object o = STeaJavaTypes.tea2Java(args[i]);
-	    paramTypes[i-2] = o==null ? null : o.getClass();
-	    mtdArgs[i-2] = args[i];
-	}
-
-	Method mtd =
-            SMethodFinder.findMethod(javaObj.getClass(),
-                                     methodName, 
-                                     paramTypes,
-                                     true);
-	Object result =
-            SReflectUtils.invokeMethod(javaObj, mtd, context, mtdArgs);
 
         return result;
     }

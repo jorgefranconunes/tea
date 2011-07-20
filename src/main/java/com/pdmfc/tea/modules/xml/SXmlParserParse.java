@@ -205,7 +205,7 @@ class SXmlParserParse
 	 throws STeaException {
 
 	 if ( args.length != 3 ) {
-	    throw new SNumArgException(args[0], "xml-file");
+	    throw new SNumArgException(args, "xml-file");
 	 }
 
 	 STosObj       parser       = (STosObj)obj;
@@ -224,13 +224,13 @@ class SXmlParserParse
 	     } catch (ClassCastException e) {
                  String   msg     = "expected String or TInput, not a {0}";
                  Object[] fmtArgs = { STypes.getTypeName(input) };
-		 throw new STypeException(args[0], msg, fmtArgs);
+		 throw new SRuntimeException(args, msg, fmtArgs);
 	     }
 	     inputSource = new InputSource(tosInput.getInputStream());
 	 } else {
              String   msg     = "expected String or TInput, not a {0}";
              Object[] fmtArgs = { STypes.getTypeName(input) };
-	     throw new STypeException(args[0], msg, fmtArgs);
+	     throw new SRuntimeException(args, msg, fmtArgs);
 	 }
 
 	 if ( _handler == null ) {

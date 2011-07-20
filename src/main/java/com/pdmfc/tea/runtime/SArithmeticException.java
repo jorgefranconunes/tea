@@ -1,12 +1,11 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 package com.pdmfc.tea.runtime;
 
-import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SRuntimeException;
 
 
@@ -16,12 +15,11 @@ import com.pdmfc.tea.runtime.SRuntimeException;
 
 /**************************************************************************
  *
- * Exception thrown whenever a function expects a correctly formed
- * list of pairs but one of the cdr is not a pair object.
+ * 
  *
  **************************************************************************/
 
-public class SMalformedListException
+public final class SArithmeticException
     extends SRuntimeException {
 
 
@@ -33,9 +31,9 @@ public class SMalformedListException
  *
  **************************************************************************/
 
-   public SMalformedListException() {
+   private SArithmeticException() {
 
-      init("improperly formed list");
+        // Nothing to do.
    }
 
 
@@ -47,24 +45,16 @@ public class SMalformedListException
  *
  **************************************************************************/
 
-   public SMalformedListException(Object[] args,
-				  String   msg) {
+   public static void raise(final Object[]            args,
+                            final ArithmeticException exception)
+       throws SArithmeticException {
 
-      initForFunction(args, msg);
-   }
+       String               msgFmt = "arithmetic exception - {0}";
+       SArithmeticException error  = new SArithmeticException();
 
+       error.initForFunction(args, msgFmt, exception.getMessage());
 
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-   public SMalformedListException(Exception e) {
-
-      super(e);
+       throw error;
    }
 
 
@@ -80,6 +70,4 @@ public class SMalformedListException
  * 
  *
  **************************************************************************/
-
-
 

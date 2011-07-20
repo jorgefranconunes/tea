@@ -1,26 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001, 2002, 2003 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2003/09/13 Added the "setDate(...)" method. (jfn)
- *
- * 2003/02/13 The method "methodSetInt" was renamed to "setInt", in
- * order for the TOS method "setInt" to become available. (jfn)
- *
- * 2003/02/12 The "query(...)" method now correctly inserts into the
- * "_resultSets" vector the "SResultSet" object, instead of the
- * underlying "ResultSet". (jfn)
- *
- * 2001/05/12 Created. (jfn)
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -38,6 +18,7 @@ import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.tos.STosUtil;
 import com.pdmfc.tea.modules.util.SDate;
+import com.pdmfc.tea.runtime.SArgs;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjNull;
@@ -402,17 +383,17 @@ public class SPreparedStatement
 	throws SRuntimeException {
 
 	if ( args.length != 4 ) {
-	    throw new SNumArgException("Args: index value");
+	    throw new SNumArgException(args, "index value");
 	}
 
-	int   index    = STypes.getInt(args, 2).intValue();
+	int   index    = SArgs.getInt(args, 2).intValue();
 	Object valueArg = args[3];
 
 	try {
 	    if ( valueArg == SObjNull.NULL ) {
 		setIntNull(index);
 	    } else {
-		setInt(index, STypes.getInt(args,3).intValue());
+		setInt(index, SArgs.getInt(args,3).intValue());
 	    }
 	} catch (SQLException e) {
 	    throw new SRuntimeException(e);
@@ -510,17 +491,17 @@ public class SPreparedStatement
 	throws SRuntimeException {
 
 	if ( args.length != 4 ) {
-	    throw new SNumArgException("Args: index value");
+	    throw new SNumArgException(args, "index value");
 	}
 
-	int   index    = STypes.getInt(args, 2).intValue();
+	int   index    = SArgs.getInt(args, 2).intValue();
 	Object valueArg = args[3];
 
 	try {
 	    if ( valueArg == SObjNull.NULL ) {
 		setDoubleNull(index);
 	    } else {
-		setDouble(index, STypes.getFloat(args,3).doubleValue());
+		setDouble(index, SArgs.getFloat(args,3).doubleValue());
 	    }
 	} catch (SQLException e) {
 	    throw new SRuntimeException(e);
@@ -617,17 +598,17 @@ public class SPreparedStatement
 	throws STeaException {
 
 	if ( args.length != 4 ) {
-	    throw new SNumArgException("Args: index value");
+	    throw new SNumArgException(args, "index value");
 	}
 
-	int    index    = STypes.getInt(args, 2).intValue();
+	int    index    = SArgs.getInt(args, 2).intValue();
 	Object valueArg = args[3];
 
 	try {
 	    if ( valueArg == SObjNull.NULL ) {
 		setStringNull(index);
 	    } else {
-		setString(index, STypes.getString(args,3));
+		setString(index, SArgs.getString(args,3));
 	    }
 	} catch (SQLException e) {
 	    throw new SRuntimeException(e);
@@ -726,10 +707,10 @@ public class SPreparedStatement
 	throws STeaException {
 
 	if ( args.length != 4 ) {
-	    throw new SNumArgException("Args: index value");
+	    throw new SNumArgException(args, "index value");
 	}
 
-	int    index    = STypes.getInt(args, 2).intValue();
+	int    index    = SArgs.getInt(args, 2).intValue();
 	Object valueArg = args[3];
 
 	try {

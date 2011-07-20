@@ -1,36 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2010/01/28 Minor refactorings to properly use generics. (jfn)
- *
- * 2006/08/02 Added TeaDoc Since to get/setFetchSize. (jpsl)
- *
- * 2003/02/13 Minor code adjustments to use the classes from the
- * Collections Framework. (jfn)
- *
- * 2003/09/13 Added the methods "getResultSet(...)",
- * "getMoreResults(...)". (jfn)
- *
- * 2003/02/13 Minor code adjustments to use the classes from the
- * Collections Framework. (jfn)
- *
- * 2002/02/22 All methods now check to see if the connection is
- * already closed. (jfn)
- *
- * 2002/02/20 The "TStatement update" method now correctly returns the
- * number ow updated rows. (jfn)
- *
- * 2001/05/12 Created. (jfn)
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -48,12 +18,12 @@ import com.pdmfc.tea.modules.tdbc.SResultSet;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.tos.STosUtil;
+import com.pdmfc.tea.runtime.SArgs;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SRuntimeException;
-import com.pdmfc.tea.runtime.STypes;
 
 
 
@@ -284,10 +254,10 @@ public class SStatement
 	checkStatement();
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException("Args: sqlStatement");
+	    throw new SNumArgException(args, "sqlStatement");
 	}
 
-	String     sql     = STypes.getString(args, 2);
+	String     sql     = SArgs.getString(args, 2);
 	ResultSet  rSet    = null;
 	SResultSet tosRSet = null;
 
@@ -362,10 +332,10 @@ public class SStatement
 	checkStatement();
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException("sqlStatement");
+	    throw new SNumArgException(args, "sqlStatement");
 	}
 
-	String sql    = STypes.getString(args, 2);
+	String sql    = SArgs.getString(args, 2);
 	int    result = 0;
 
 	try {
@@ -439,10 +409,10 @@ public class SStatement
 	checkStatement();
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException("sqlStatement");
+	    throw new SNumArgException(args, "sqlStatement");
 	}
 
-	String  sql    = STypes.getString(args, 2);
+	String  sql    = SArgs.getString(args, 2);
 	boolean result = false;
 
 	try {
@@ -691,10 +661,10 @@ public class SStatement
 
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException("numberOfRows");
+	    throw new SNumArgException(args, "numberOfRows");
 	}
 
-	int numberOfRows = STypes.getInt(args, 2).intValue();
+	int numberOfRows = SArgs.getInt(args, 2).intValue();
 
 	try {
 	    _statement.setFetchSize(numberOfRows);

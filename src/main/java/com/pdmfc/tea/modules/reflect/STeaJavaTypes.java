@@ -165,7 +165,7 @@ public final class STeaJavaTypes
         }
 
 	// Wrap the object to a tea wrapped obj
-	return new JavaWrapperObject(new STosClass(), obj);
+	return new JavaWrapperObject(obj);
     }
 
 
@@ -296,7 +296,7 @@ public final class STeaJavaTypes
 	if ( obj instanceof SObjPair ) {
 	    return teaList2List((SObjPair)obj);
 	}
-	if ( (obj instanceof STosObj) && (obj instanceof JavaWrapperObject) ) {
+	if ( obj instanceof JavaWrapperObject ) {
 	    return ((JavaWrapperObject)obj).getWrappedObject();
 	}
 	if ( (obj instanceof STosObj)

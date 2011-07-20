@@ -1,20 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2009 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2007/07/21 Now uses an SInputSource to read from a file or
- * URL. (TSK-PDMFC-TEA-0044) (jfn)
- *
- * 2001/09/16 Created. (jfn)
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -28,12 +14,12 @@ import com.pdmfc.tea.modules.io.SInput;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.tos.STosUtil;
+import com.pdmfc.tea.runtime.SArgs;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SRuntimeException;
-import com.pdmfc.tea.runtime.STypes;
 import com.pdmfc.tea.util.SInputSource;
 import com.pdmfc.tea.util.SInputSourceFactory;
 
@@ -130,10 +116,10 @@ public class SUrlInput
 	throws STeaException {
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException("args: file-name");
+	    throw new SNumArgException(args, "file-name");
 	}
 
-	String      url   = STypes.getString(args,2);
+	String      url   = SArgs.getString(args,2);
 	InputStream input = null;
 
 	try {

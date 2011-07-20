@@ -189,13 +189,13 @@ public class SModuleHtml
  *
  **************************************************************************/
 
-    private static Object functionHtmlEncode(SObjFunction func,
-					     SContext     context,
-					     Object[]     args)
+    private static Object functionHtmlEncode(final SObjFunction func,
+					     final SContext     context,
+					     final Object[]     args)
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "args: string");
+	    throw new SNumArgException(args, "string");
 	}
 
 	Object arg = args[1];
@@ -210,9 +210,7 @@ public class SModuleHtml
 	    return String.valueOf(((Double)arg).doubleValue());
 	}
 
-	throw new STypeException(args[0],
-				 "arg 1 must be a string or an integer, not a "
-				 + STypes.getTypeName(arg));
+        throw new STypeException(args, 1, "string or an integer");
     }
 
 
@@ -287,30 +285,28 @@ public class SModuleHtml
  *
  **************************************************************************/
 
-    private static Object functionUrlEncode(SObjFunction func,
-					    SContext     context,
-					    Object[]     args)
+    private static Object functionUrlEncode(final SObjFunction func,
+					    final SContext     context,
+					    final Object[]     args)
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "args: string");
+	    throw new SNumArgException(args, "string");
 	}
 
 	Object arg = args[1];
-
+        
 	if ( arg instanceof String ) {
 	    return urlEncode((String)arg);
-	 }
-	 if ( arg instanceof Integer ) {
-	   return String.valueOf(((Integer)arg).intValue());
-	 }
+        }
+        if ( arg instanceof Integer ) {
+            return String.valueOf(((Integer)arg).intValue());
+        }
 	if ( arg instanceof Double ) {
 	    return String.valueOf(((Double)arg).doubleValue());
 	}
 
-	 throw new STypeException(args[0],
-				  "arg 1 must be a string or a numric, not a "
-				  + STypes.getTypeName(arg));
+        throw new STypeException(args, 1, "string or a numeric");
    }
 
 

@@ -1,22 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001, 2002, 2003, 2004 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2004/11/09 Corrected bug in the implementation of the "TInput
- * copyTo" method. Previously it was expecting an argumento with a
- * particular implementation, instead of only requiring the argument
- * to be a TOS object responding to a "write" method. (jfn)
- *
- * 2001/05/12 Created. (jfn)
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -33,6 +17,7 @@ import com.pdmfc.tea.modules.io.SOutput;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.tos.STosUtil;
+import com.pdmfc.tea.runtime.SArgs;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjByteArray;
 import com.pdmfc.tea.runtime.SObjFunction;
@@ -444,17 +429,16 @@ public class SInput
 	throws STeaException {
 
 	if ( (args.length!=3) && (args.length!=4) ) {
-	    throw new SNumArgException("args: outputStream [byteCount]");
+	    throw new SNumArgException(args, "outputStream [byteCount]");
 	}
 	
-	Integer byteCount = (args.length==3) ? null : STypes.getInt(args, 3);
+	Integer byteCount = (args.length==3) ? null : SArgs.getInt(args, 3);
 	STosObj output    = null;
 
 	try {
 	    output = (STosObj)args[2];
 	} catch (ClassCastException e) {
-	    throw new STypeException("arg 1 must be a TOutput, not a "
-				     + STypes.getTypeName(args[2]));
+            throw new STypeException(args, 2, "TOutput");
 	}
 	
 	try {

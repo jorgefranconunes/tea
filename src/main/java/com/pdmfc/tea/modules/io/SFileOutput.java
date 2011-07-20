@@ -1,18 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2001/05/12
- * Created. (jfn)
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -27,12 +15,12 @@ import com.pdmfc.tea.modules.io.SOutput;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.tos.STosUtil;
+import com.pdmfc.tea.runtime.SArgs;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SRuntimeException;
-import com.pdmfc.tea.runtime.STypes;
 
 
 
@@ -143,19 +131,19 @@ public class SFileOutput
 	int numArgs = args.length;
 
 	if ( (numArgs!=3) && (numArgs!=4) ) {
-	    throw new SNumArgException("args: file-name [append]");
+	    throw new SNumArgException(args, "file-name [append]");
 	}
 
-	String           fileName  = STypes.getString(args,2);
+	String           fileName  = SArgs.getString(args,2);
 	boolean          append    =
-            (numArgs==3) ? false : STypes.getBoolean(args,3).booleanValue();
+            (numArgs==3) ? false : SArgs.getBoolean(args,3).booleanValue();
 	FileOutputStream outStream = null;
 
 	try {
 	    outStream = new FileOutputStream(fileName, append);
 	} catch (FileNotFoundException e1) {
-	    throw new SRuntimeException("file '" + fileName +
-					"' could not be opened for writing");
+            String msg = "file \"{0}\" could not be opened for writing";
+            throw new SRuntimeException(msg, fileName);
 	}
 
 	open(outStream);

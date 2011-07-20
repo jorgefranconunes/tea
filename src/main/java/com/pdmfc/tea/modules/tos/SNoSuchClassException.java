@@ -45,7 +45,9 @@ public class SNoSuchClassException
 
    public SNoSuchClassException(SObjSymbol symbol) {
 
-      super("class '" + symbol.getName() + "' has not been defined");
+       String msg = "class \"{0}\" has not been defined";
+
+       init(msg, symbol.getName());
    }
 
 
@@ -57,10 +59,12 @@ public class SNoSuchClassException
  *
  **************************************************************************/
 
-   public SNoSuchClassException(Object     arg0,
+   public SNoSuchClassException(Object[]   args,
 				SObjSymbol symbol) {
 
-      super(arg0, "class '" + symbol.getName() + "' has not been defined");
+       String msg = "class \"{0}\" has not been defined";
+
+       initForFunction(args, msg, symbol.getName());
    }
 
 

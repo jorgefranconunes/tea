@@ -1,25 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2002/08/02 Moved to package "com.pdmfc.tea.modules". (jfn)
- *
- * 2002/01/20 Calls to the "addJavaFunction()" method were replaced by
- * inner classes for performance. (jfn)
- *
- * 2002/01/10 This classe now derives from SModuleCore. (jfn) Now uses
- * SObjPair.iterator(). (jfn)
- *
- * 2001/05/12 Created. (jfn)
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -29,6 +10,7 @@ import java.util.Iterator;
 
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.modules.SModule;
+import com.pdmfc.tea.runtime.SArgs;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SEmptyListException;
 import com.pdmfc.tea.runtime.SNumArgException;
@@ -307,7 +289,7 @@ public class SModuleList
 	throws STeaException {
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException(args[0], "obj1 obj2");
+	    throw new SNumArgException(args, "obj1 obj2");
 	}
 
 	return new SObjPair(args[1], args[2]);
@@ -355,13 +337,13 @@ public class SModuleList
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "pair");
+	    throw new SNumArgException(args, "pair");
 	}
 
-	SObjPair pair = STypes.getPair(args, 1);
+	SObjPair pair = SArgs.getPair(args, 1);
 
 	if ( pair._car == null ) {
-	    throw new SEmptyListException(args[0], "called with empty list");
+	    throw new SEmptyListException(args, 1);
 	}
 
 	return pair._car;
@@ -409,13 +391,13 @@ public class SModuleList
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "pair");
+	    throw new SNumArgException(args, "pair");
 	}
 
-	SObjPair pair = STypes.getPair(args, 1);
+	SObjPair pair = SArgs.getPair(args, 1);
 	
 	if ( pair._car == null ) {
-	    throw new SEmptyListException(args[0], "called with empty list");
+	    throw new SEmptyListException(args, 1);
 	}
 
 	return pair._cdr;
@@ -460,10 +442,10 @@ public class SModuleList
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "pair");
+	    throw new SNumArgException(args, "pair");
 	}
 
-	SObjPair pair = STypes.getPair(args, 1);
+	SObjPair pair = SArgs.getPair(args, 1);
 
 	return (pair._car==null) ? Boolean.TRUE : Boolean.FALSE;
     }
@@ -507,10 +489,10 @@ public class SModuleList
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "pair");
+	    throw new SNumArgException(args, "pair");
 	}
 
-	SObjPair pair = STypes.getPair(args, 1);
+	SObjPair pair = SArgs.getPair(args, 1);
 
 	return (pair._car==null) ? Boolean.FALSE : Boolean.TRUE;
     }
@@ -560,10 +542,10 @@ public class SModuleList
 	throws STeaException {
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException(args[0], "pair obj");
+	    throw new SNumArgException(args, "pair obj");
 	}
 
-	STypes.getPair(args, 1)._car = args[2];
+	SArgs.getPair(args, 1)._car = args[2];
 
 	return args[2];
     }
@@ -613,10 +595,10 @@ public class SModuleList
 	throws STeaException {
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException(args[0], "pair obj");
+	    throw new SNumArgException(args, "pair obj");
 	}
 
-	STypes.getPair(args, 1)._cdr = args[2];
+	SArgs.getPair(args, 1)._cdr = args[2];
 
 	return args[2];
     }
@@ -721,11 +703,11 @@ public class SModuleList
 	throws STeaException {
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException(args[0], "list index");
+	    throw new SNumArgException(args, "list index");
 	}
 
-	SObjPair pair  = STypes.getPair(args, 1);
-	int      index = STypes.getInt(args, 2).intValue();
+	SObjPair pair  = SArgs.getPair(args, 1);
+	int      index = SArgs.getInt(args, 2).intValue();
 	Object   obj   = null;
 	Iterator it    = pair.iterator();
 
@@ -735,9 +717,9 @@ public class SModuleList
 		return obj;
 	    }
 	}
-
-	throw new SRuntimeException(args[0],
-				    "index out of range (" + index + ")");
+        
+        String msg = "index out of range ({0})";
+	throw new SRuntimeException(args, msg, index);
     }
 
 
@@ -792,11 +774,11 @@ public class SModuleList
 	throws STeaException {
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException(args[0], "object list");
+	    throw new SNumArgException(args, "object list");
 	}
 
 	Object   obj  = args[1];
-	SObjPair rest = STypes.getPair(args,2);
+	SObjPair rest = SArgs.getPair(args,2);
 	SObjPair head = new SObjPair(obj, rest);
 
 	return head;
@@ -850,21 +832,20 @@ public class SModuleList
 	throws STeaException {
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException(args[0], "object list");
+	    throw new SNumArgException(args, "object list");
 	}
 
 	Object   obj  = args[1];
-	SObjPair head = STypes.getPair(args, 2);
+	SObjPair head = SArgs.getPair(args, 2);
 	SObjPair node = head;
 
 	while ( node._car != null ) {
 	    try {
 		node = (SObjPair)node._cdr;
 	    } catch (ClassCastException e) {
-		throw new SRuntimeException(args[0],
-					    "invalid list. " +
-					    "Each cdr should be a pair, not a " +
-					    STypes.getTypeName(node._cdr));
+                String msg="invalid list. Each cdr should be a pair, not a {0}";
+                String invalidTypeName = STypes.getTypeName(node._cdr);
+		throw new SRuntimeException(args,msg, invalidTypeName);
 	    }
 	}
 	node._car = obj;
@@ -912,10 +893,10 @@ public class SModuleList
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "list");
+	    throw new SNumArgException(args, "list");
 	}
 
-	return new Integer(STypes.getPair(args,1).length());
+	return new Integer(SArgs.getPair(args,1).length());
     }
 
 

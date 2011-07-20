@@ -1,40 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2008/04/01 Refactored to use classes from the "java.utils.regex"
- * package. No longer uses the "gnu.regexp" library.
- * (TSK-PDMFC-TEA-0041) (jfn)
- *
- * 2002/08/02
- * Moved to the "com.pdmfc.tea.modules" package. (jfn)
- *
- * 2002/08/01
- * All functions of the "Regexp" module are now implemented in this
- * class. (jfn)
- *
- * 2002/02/22
- * Added the following functions for downwards compatibility with
- * Tea 1.x: "matches". (jfn)
- *
- * 2002/01/20
- * Calls to the "addJavaFunction()" method were replaced by inner
- * classes for performance. (jfn)
- *
- * 2002/01/10
- * This classe now derives from SModuleCore. (jfn)
- *
- * 2001/05/12
- * Created. (jfn)
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -49,13 +15,13 @@ import java.util.regex.PatternSyntaxException;
 
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.modules.SModule;
+import com.pdmfc.tea.runtime.SArgs;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjPair;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypeException;
-import com.pdmfc.tea.runtime.STypes;
 
 
 
@@ -270,7 +236,7 @@ public class SModuleRegexp
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "pattern-string");
+	    throw new SNumArgException(args, "pattern-string");
 	}
 
 	return getPattern(args,1);
@@ -338,10 +304,10 @@ public class SModuleRegexp
 	int numArgs = args.length;
 
 	if ( numArgs < 3 ) {
-	    throw new SNumArgException(args[0],"dir-name regexp [regexp ...]");
+	    throw new SNumArgException(args,"dir-name regexp [regexp ...]");
 	}
 
-	String          dirName   = STypes.getString(args, 1);
+	String          dirName   = SArgs.getString(args, 1);
 	File            directory = new File(dirName);
 	final Pattern[] patterns  = new Pattern[numArgs-2];
 
@@ -422,12 +388,12 @@ public class SModuleRegexp
 	throws STeaException {
 
 	if ( args.length != 4 ) {
-	    throw new SNumArgException(args[0], "regex substitution input");
+	    throw new SNumArgException(args, "regex substitution input");
 	}
 
 	Pattern pattern  = getPattern(args,1);
-	String  subst    = STypes.getString(args,2);
-	String  input    = STypes.getString(args,3);
+	String  subst    = SArgs.getString(args,2);
+	String  input    = SArgs.getString(args,3);
 	Matcher matcher  = pattern.matcher(input);
 	String  result   = matcher.replaceAll(subst);
 
@@ -482,11 +448,11 @@ public class SModuleRegexp
 	throws STeaException {
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException(args[0], "regex input");
+	    throw new SNumArgException(args, "regex input");
 	}
 
 	Pattern pattern  = getPattern(args,1);
-	String  input    = STypes.getString(args,2);
+	String  input    = SArgs.getString(args,2);
 	Matcher matcher  = pattern.matcher(input);
 	Boolean result   = matcher.matches() ? Boolean.TRUE : Boolean.FALSE;
 
@@ -552,11 +518,11 @@ public class SModuleRegexp
 	throws STeaException {
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException(args[0], "regex string");
+	    throw new SNumArgException(args, "regex string");
 	}
 
 	Pattern  pattern  = getPattern(args,1);
-	String   aString  = STypes.getString(args,2);
+	String   aString  = SArgs.getString(args,2);
 	Matcher  matcher  = pattern.matcher(aString);
 	SObjPair head     = null;
 	SObjPair tail     = null;
@@ -671,10 +637,10 @@ public class SModuleRegexp
 	throws STeaException {
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException(args[0], "string split-string");
+	    throw new SNumArgException(args, "string split-string");
 	}
 
-	String str = STypes.getString(args,1);
+	String str = SArgs.getString(args,1);
 
 	if ( str.length() == 0 ) {
 	    return SObjPair.emptyList();
@@ -753,13 +719,11 @@ public class SModuleRegexp
 	    } catch (PatternSyntaxException e){
 		String   msg     = "malformed pattern ({0})";
 		Object[] fmtArgs = { e.getMessage() };
-		throw new SRuntimeException(args[0], msg, fmtArgs);
+		throw new SRuntimeException(args, msg, fmtArgs);
 	    }
 	}
 
-	String   msg     = "argument {0} should be a regex, not a {1}";
-	Object[] fmtArgs = { String.valueOf(index),STypes.getTypeName(theArg)};
-	throw new STypeException(args[0], msg, fmtArgs);
+	throw new STypeException(args, index, "regex");
     }
 
 

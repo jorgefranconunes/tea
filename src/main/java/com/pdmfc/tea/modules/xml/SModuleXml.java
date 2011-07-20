@@ -177,7 +177,7 @@ public class SModuleXml
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "args: string");
+	    throw new SNumArgException(args, "string");
 	}
 
 	Object arg = args[1];
@@ -192,9 +192,7 @@ public class SModuleXml
 	    return String.valueOf(((Double)arg).doubleValue());
 	}
 
-	throw new STypeException(args[0],
-				 "arg 1 must be a string or a numeric not a "
-				 + STypes.getTypeName(arg));
+	throw new STypeException(args, 1, "string or numeric");
     }
 
 

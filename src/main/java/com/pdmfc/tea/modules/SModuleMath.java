@@ -1,30 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2005/02/28 The unary plus operator now correctly throws an
- * exception if its argument is not numeric. (jfn)
- *
- * 2004/04/23 The error messages for incorrect types are now more
- * informative. (jfn)
- *
- * 2002/08/02 Moved to package "com.pdmfc.tea.modules". (jfn)
- *
- * 2002/01/20 Calls to the "addJavaFunction()" method were replaced by
- * inner classes for performance. (jfn)
- *
- * 2002/01/10 This classe now derives from SModuleCore. (jfn)
- *
- * 2001/05/12 Created. (jfn)
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -34,6 +10,8 @@ import java.util.Random;
 
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.modules.SModule;
+import com.pdmfc.tea.runtime.SArgs;
+import com.pdmfc.tea.runtime.SArithmeticException;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjBlock;
 import com.pdmfc.tea.runtime.SObjFunction;
@@ -883,7 +861,7 @@ public class SModuleMath
 	throws STeaException {
 
 	if ( args.length<3 ) {
-	    throw new SNumArgException(args[0], "num1 num2 ...");
+	    throw new SNumArgException(args, "num1 num2 ...");
 	}
 
 	Object  op1         = args[1];
@@ -893,9 +871,7 @@ public class SModuleMath
 	double  op1FloatVal = op1IsFloat ? ((Double)op1).doubleValue() : 0.0;
 
 	if ( !op1IsInt && !op1IsFloat ) {
-	    String   msg     = "arg 1 must be numeric, not a {0}";
-	    Object[] fmtArgs = { STypes.getTypeName(op1) };
-	    throw new STypeException(args[0], msg, fmtArgs);
+	    throw new STypeException(args, 1, "numeric");
 	}
 
 	for ( int i=2; i<args.length; i++ ) {
@@ -907,9 +883,7 @@ public class SModuleMath
 	    double  op2FloatVal = op2IsFloat ? ((Double)op2).doubleValue():0.0;
 
 	    if ( !op2IsInt && !op2IsFloat ) {
-		String   msg     = "arg {0} must be numeric, not a {1}";
-		Object[] fmtArgs = {String.valueOf(i),STypes.getTypeName(op2)};
-		throw new STypeException(args[0], msg, fmtArgs);
+		throw new STypeException(args, i, "numeric");
 	    }
 	    if ( op1IsInt ) {
 		if ( op2IsInt ) {
@@ -1178,17 +1152,17 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private static Object arithmOp(int          op,
-				   SObjFunction func,
-				   SContext     context,
-				   Object[]     args)
+    private static Object arithmOp(final int          op,
+				   final SObjFunction func,
+				   final SContext     context,
+				   final Object[]     args)
 	throws STeaException {
 
 	if ( args.length < 2 ) {
 	    return opNullValue(op);
 	}
 	if ( args.length == 2 ) {
-	    return unaryOp(op, args[0], args[1]);
+	    return unaryOp(op, args);
 	}
 
 	Object operand = args[1];
@@ -1201,12 +1175,10 @@ public class SModuleMath
 		return calcFloatOp(op, ((Double)operand).doubleValue(),args,2);
 	    }
 	} catch (ArithmeticException e) {
-	    throw new SRuntimeException(args[0],
-					"arithmetic exception (" +
-					e.getMessage() + ")");
+            SArithmeticException.raise(args, e);
 	}
-
-	throw new STypeException(args[0], "arg 1 must be either an int or a float");
+        
+        throw new STypeException(args, 1, "int or a float");
     }
 
 
@@ -1239,9 +1211,7 @@ public class SModuleMath
 				       args,
 				       i+1);
 		} else {
-		    throw new STypeException(args[0], "arg " + i +
-					     " should be a float or an int, " +
-					     "not a " + STypes.getTypeName(operand));
+                    throw new STypeException(args, i, "float or an int");
 		}
 	    }
 	}
@@ -1271,9 +1241,7 @@ public class SModuleMath
 	    if ( operand instanceof Number ) {
 		result = doOp(op, result, ((Number)operand).doubleValue());
 	    } else {
-		throw new STypeException(args[0], "arg " + i +
-					 "should be a float or an int, " +
-					 "not a " + STypes.getTypeName(operand));
+                throw new STypeException(args, i, "float or an int");
 	    }
 	}
 
@@ -1372,12 +1340,12 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private static Object unaryOp(int    op,
-				  Object arg0,
-				  Object operand)
+    private static Object unaryOp(final int      op,
+                                  final Object[] args)
 	throws STeaException {
 
-	Object result = null;
+	Object result  = null;
+        Object operand = args[1];
 
 	if ( operand instanceof Integer ) {
 	    if ( op == SUB ) {
@@ -1394,9 +1362,7 @@ public class SModuleMath
 	    }
 	}
 	else {
-	    String   msg     = "arg 1 should be a float ar an int, not a {0}";
-	    Object[] fmtArgs = { STypes.getTypeName(operand) };
-	    throw new STypeException(arg0, msg, fmtArgs);
+            throw new STypeException(args, 1, "float or an int");
 	}
 
 	return result;
@@ -1446,11 +1412,11 @@ public class SModuleMath
 	throws STeaException {
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException(args[0], "dividend divisor");
+	    throw new SNumArgException(args, "dividend divisor");
 	}
 
-	int dividend = STypes.getInt(args,1).intValue();
-	int divisor  = STypes.getInt(args,2).intValue();
+	int dividend = SArgs.getInt(args,1).intValue();
+	int divisor  = SArgs.getInt(args,2).intValue();
 	int result   = dividend % divisor;
 
 	return new Integer(result);
@@ -1528,10 +1494,7 @@ public class SModuleMath
 		    return obj;
 		}
 	    } else {
-		throw new STypeException(args[0],
-					 "arg " + i + " should be either " +
-					 "a bool or a block, not a " +
-					 STypes.getTypeName(obj));
+                throw new STypeException(args, i, "bool or a block");
 	    }
 	}
 
@@ -1581,7 +1544,7 @@ public class SModuleMath
 	throws STeaException {
 
 	if ( args.length < 2 ) {
-	    throw new SNumArgException(args[0], "exp1 ...");
+	    throw new SNumArgException(args, "exp1 ...");
 	}
 
 	for ( int i=1; i<args.length; i++ ) {
@@ -1595,10 +1558,7 @@ public class SModuleMath
 		    return Boolean.TRUE;
 		}
 	    } else {
-		throw new STypeException(args[0],
-					 "arg " + i + " should be either " +
-					 "a bool or a block, not a " +
-					 STypes.getTypeName(obj));
+                throw new STypeException(args, i, "bool or a block");
 	    }
 	}
 
@@ -1645,10 +1605,10 @@ public class SModuleMath
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "boolean");
+	    throw new SNumArgException(args, "boolean");
 	}
 
-	boolean operand = STypes.getBoolean(args,1).booleanValue();
+	boolean operand = SArgs.getBoolean(args,1).booleanValue();
 	Boolean result  = operand ? Boolean.FALSE : Boolean.TRUE;
 
 	return result;
@@ -1696,7 +1656,7 @@ public class SModuleMath
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "value");
+	    throw new SNumArgException(args, "value");
 	}
 	Object arg = args[1];
 
@@ -1751,10 +1711,10 @@ public class SModuleMath
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "value");
+	    throw new SNumArgException(args, "value");
 	}
 
-	double operand = STypes.getFloat(args, 1).doubleValue();
+	double operand = SArgs.getFloat(args, 1).doubleValue();
 	int    result  = (int)Math.round(operand);
 
 	return new Integer(result);
@@ -1800,10 +1760,10 @@ public class SModuleMath
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "value");
+	    throw new SNumArgException(args, "value");
 	}
 
-	double operand = STypes.getFloat(args, 1).doubleValue();
+	double operand = SArgs.getFloat(args, 1).doubleValue();
 	int    result  = (int)Math.floor(operand);
 
 	return new Integer(result);
@@ -1849,10 +1809,10 @@ public class SModuleMath
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "value");
+	    throw new SNumArgException(args, "value");
 	}
 
-	double operand = STypes.getNumber(args, 1).doubleValue();
+	double operand = SArgs.getNumber(args, 1).doubleValue();
 	int    result  = (int)Math.ceil(operand);
 
 	return new Integer(result);
@@ -1898,17 +1858,15 @@ public class SModuleMath
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "value");
+	    throw new SNumArgException(args, "value");
 	}
 
 	double result = 0;
 	
 	try {
-	    result = Math.sqrt(STypes.getNumber(args,1).doubleValue());
+	    result = Math.sqrt(SArgs.getNumber(args,1).doubleValue());
 	} catch (ArithmeticException e) {
-	    throw new SRuntimeException(args[0],
-					"arithmetic exception (" +
-					e.getMessage() + ")");
+            SArithmeticException.raise(args, e);
 	}
 
 	return new Double(result);
@@ -1967,7 +1925,7 @@ public class SModuleMath
 	throws STeaException {
 
 	if ( args.length < 2 ) {
-	    throw new SNumArgException(args[0], "value ...");
+	    throw new SNumArgException(args, "value ...");
 	}
 	Object valueObj = args[1];
 
@@ -2103,8 +2061,8 @@ public class SModuleMath
 	throws STeaException {
 
 	if ( args.length == 3 ) {
-	    SObjSymbol symbol = STypes.getSymbol(args, 1);
-	    int        value  = STypes.getNumber(args, 2).intValue();
+	    SObjSymbol symbol = SArgs.getSymbol(args, 1);
+	    int        value  = SArgs.getNumber(args, 2).intValue();
 	    Integer    theInt = new Integer(value);
 
 	    context.newVar(symbol, theInt);
@@ -2112,10 +2070,10 @@ public class SModuleMath
 	    return theInt;
 	}
 	if ( args.length == 2 ) {
-	    return new Integer(STypes.getNumber(args, 1).intValue());
+	    return new Integer(SArgs.getNumber(args, 1).intValue());
 	}
 
-	throw new SNumArgException(args[0], "[symbol] value");
+	throw new SNumArgException(args, "[symbol] value");
     }
 
 
@@ -2207,12 +2165,12 @@ public class SModuleMath
 	throws STeaException {
 
       if ( args.length != 3 ) {
-	 throw new SNumArgException(args[0], "symbol value");
+	 throw new SNumArgException(args, "symbol value");
       }
 
-      SObjSymbol symbol = STypes.getSymbol(args, 1);
+      SObjSymbol symbol = SArgs.getSymbol(args, 1);
       SObjVar    var    = context.getVarObject(symbol);
-      Number     val    = STypes.getNumber(args, 2);
+      Number     val    = SArgs.getNumber(args, 2);
 
       var.set(val);
 
@@ -2275,13 +2233,13 @@ public class SModuleMath
 	throws STeaException {
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException(args[0], "symbol value");
+	    throw new SNumArgException(args, "symbol value");
 	}
 
-	SObjSymbol symbol  = STypes.getSymbol(args, 1);
+	SObjSymbol symbol  = SArgs.getSymbol(args, 1);
 	SObjVar    var     = context.getVarObject(symbol);
 	Object     value   = var.get();
-	Number     incrVal = STypes.getNumber(args, 2);
+	Number     incrVal = SArgs.getNumber(args, 2);
 
 	if ( value instanceof Integer ) {
 	    int x = ((Integer)value).intValue() + incrVal.intValue();
@@ -2358,13 +2316,13 @@ public class SModuleMath
 	throws STeaException {
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException(args[0], "symbol value");
+	    throw new SNumArgException(args, "symbol value");
 	}
 
-	SObjSymbol symbol  = STypes.getSymbol(args, 1);
+	SObjSymbol symbol  = SArgs.getSymbol(args, 1);
 	SObjVar    var     = context.getVarObject(symbol);
 	Object     value   = var.get();
-	Number     incrVal = STypes.getNumber(args, 2);
+	Number     incrVal = SArgs.getNumber(args, 2);
 
 	if ( value instanceof Integer ) {
 	    int x = ((Integer)value).intValue() - incrVal.intValue();
@@ -2441,13 +2399,13 @@ public class SModuleMath
 	throws STeaException {
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException(args[0], "symbol value");
+	    throw new SNumArgException(args, "symbol value");
 	}
 
-	SObjSymbol symbol  = STypes.getSymbol(args, 1);
+	SObjSymbol symbol  = SArgs.getSymbol(args, 1);
 	SObjVar    var     = context.getVarObject(symbol);
 	Object     value   = var.get();
-	Number     incrVal = STypes.getNumber(args, 2);
+	Number     incrVal = SArgs.getNumber(args, 2);
 
 	if ( value instanceof Integer ) {
 	    int x = ((Integer)value).intValue() * incrVal.intValue();
@@ -2524,13 +2482,13 @@ public class SModuleMath
 	throws STeaException {
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException(args[0], "symbol value");
+	    throw new SNumArgException(args, "symbol value");
 	}
 
-	SObjSymbol symbol  = STypes.getSymbol(args, 1);
+	SObjSymbol symbol  = SArgs.getSymbol(args, 1);
 	SObjVar    var     = context.getVarObject(symbol);
 	Object     value   = var.get();
-	Number     incrVal = STypes.getNumber(args, 2);
+	Number     incrVal = SArgs.getNumber(args, 2);
 
 	if ( value instanceof Integer ) {
 	    int x = ((Integer)value).intValue() / incrVal.intValue();
@@ -2602,10 +2560,10 @@ public class SModuleMath
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "symbol");
+	    throw new SNumArgException(args, "symbol");
 	}
 
-	SObjSymbol symbol  = STypes.getSymbol(args, 1);
+	SObjSymbol symbol  = SArgs.getSymbol(args, 1);
 	SObjVar    var     = context.getVarObject(symbol);
 	Object     value   = var.get();
 	
@@ -2679,10 +2637,10 @@ public class SModuleMath
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "symbol");
+	    throw new SNumArgException(args, "symbol");
 	}
 
-	SObjSymbol symbol  = STypes.getSymbol(args, 1);
+	SObjSymbol symbol  = SArgs.getSymbol(args, 1);
 	SObjVar    var     = context.getVarObject(symbol);
 	Object     value   = var.get();
 	
@@ -2744,10 +2702,10 @@ public class SModuleMath
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException("value");
+	    throw new SNumArgException(args, "value");
 	}
 
-	int value  = STypes.getInt(args, 1).intValue();
+	int value  = SArgs.getInt(args, 1).intValue();
 	int result = ~value;
 
 	return new Integer(result);
@@ -2794,10 +2752,10 @@ public class SModuleMath
 	throws STeaException {
 
 	int lastIndex = args.length;
-	int result    = (lastIndex==1) ? 0 : STypes.getInt(args,1).intValue();
+	int result    = (lastIndex==1) ? 0 : SArgs.getInt(args,1).intValue();
 
 	for ( int i=2; i<lastIndex; i++ ) {
-	    int operand = STypes.getInt(args,i).intValue();
+	    int operand = SArgs.getInt(args,i).intValue();
 
 	    result &= operand;
 	}
@@ -2846,10 +2804,10 @@ public class SModuleMath
 	throws STeaException {
 
 	int lastIndex = args.length;
-	int result    = (lastIndex==1) ? 0 : STypes.getInt(args,1).intValue();
+	int result    = (lastIndex==1) ? 0 : SArgs.getInt(args,1).intValue();
 
 	for ( int i=2; i<lastIndex; i++ ) {
-	    int operand = STypes.getInt(args,i).intValue();
+	    int operand = SArgs.getInt(args,i).intValue();
 
 	    result |= operand;
 	}
@@ -2898,10 +2856,10 @@ public class SModuleMath
 	throws STeaException {
 
 	int lastIndex = args.length;
-	int result    = (lastIndex==1) ? 0 : STypes.getInt(args,1).intValue();
+	int result    = (lastIndex==1) ? 0 : SArgs.getInt(args,1).intValue();
 
 	for ( int i=2; i<lastIndex; i++ ) {
-	    int operand = STypes.getInt(args,i).intValue();
+	    int operand = SArgs.getInt(args,i).intValue();
 
 	    result ^= operand;
 	}
@@ -2948,16 +2906,16 @@ public class SModuleMath
  **************************************************************************/
 
     private Object functionBinSl(SObjFunction func,
-				  SContext     context,
-				  Object[]     args)
+                                 SContext     context,
+                                 Object[]     args)
 	throws STeaException {
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException("value shift");
+	    throw new SNumArgException(args, "value shift");
 	}
 
-	int value = STypes.getInt(args, 1).intValue();
-	int shift = STypes.getInt(args, 2).intValue();
+	int value = SArgs.getInt(args, 1).intValue();
+	int shift = SArgs.getInt(args, 2).intValue();
 	int result = value << shift;
 
 	return new Integer(result);
@@ -3002,16 +2960,16 @@ public class SModuleMath
  **************************************************************************/
 
     private Object functionBinSr(SObjFunction func,
-				  SContext     context,
-				  Object[]     args)
+                                 SContext     context,
+                                 Object[]     args)
 	throws STeaException {
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException("value shift");
+	    throw new SNumArgException(args, "value shift");
 	}
 
-	int value = STypes.getInt(args, 1).intValue();
-	int shift = STypes.getInt(args, 2).intValue();
+	int value = SArgs.getInt(args, 1).intValue();
+	int shift = SArgs.getInt(args, 2).intValue();
 	int result = value >> shift;
 
 	return new Integer(result);
@@ -3074,13 +3032,13 @@ public class SModuleMath
 	throws STeaException {
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException(args[0], "symbol value");
+	    throw new SNumArgException(args, "symbol value");
 	}
 
-	SObjSymbol symbol  = STypes.getSymbol(args, 1);
+	SObjSymbol symbol  = SArgs.getSymbol(args, 1);
 	SObjVar    var     = context.getVarObject(symbol);
 	Object     value   = var.get();
-	int        operand = STypes.getInt(args, 2).intValue();
+	int        operand = SArgs.getInt(args, 2).intValue();
 	int        result  = 0;
 	Object     resObj  = null;
 
@@ -3156,13 +3114,13 @@ public class SModuleMath
 	throws STeaException {
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException(args[0], "symbol value");
+	    throw new SNumArgException(args, "symbol value");
 	}
 
-	SObjSymbol symbol  = STypes.getSymbol(args, 1);
+	SObjSymbol symbol  = SArgs.getSymbol(args, 1);
 	SObjVar    var     = context.getVarObject(symbol);
 	Object     value   = var.get();
-	int        operand = STypes.getInt(args, 2).intValue();
+	int        operand = SArgs.getInt(args, 2).intValue();
 	int        result  = 0;
 	Object     resObj  = null;
 
@@ -3238,13 +3196,13 @@ public class SModuleMath
 	throws STeaException {
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException(args[0], "symbol value");
+	    throw new SNumArgException(args, "symbol value");
 	}
 
-	SObjSymbol symbol  = STypes.getSymbol(args, 1);
+	SObjSymbol symbol  = SArgs.getSymbol(args, 1);
 	SObjVar    var     = context.getVarObject(symbol);
 	Object     value   = var.get();
-	int        operand = STypes.getInt(args, 2).intValue();
+	int        operand = SArgs.getInt(args, 2).intValue();
 	int        result  = 0;
 	Object     resObj  = null;
 
@@ -3320,13 +3278,13 @@ public class SModuleMath
 	throws STeaException {
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException(args[0], "symbol value");
+	    throw new SNumArgException(args, "symbol value");
 	}
 
-	SObjSymbol symbol = STypes.getSymbol(args, 1);
+	SObjSymbol symbol = SArgs.getSymbol(args, 1);
 	SObjVar    var    = context.getVarObject(symbol);
 	Object     value  = var.get();
-	int        shift  = STypes.getInt(args, 2).intValue();
+	int        shift  = SArgs.getInt(args, 2).intValue();
 	int        result = 0;
 	Object     resObj = null;
 
@@ -3402,13 +3360,13 @@ public class SModuleMath
 	throws STeaException {
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException(args[0], "symbol value");
+	    throw new SNumArgException(args, "symbol value");
 	}
 
-	SObjSymbol symbol = STypes.getSymbol(args, 1);
+	SObjSymbol symbol = SArgs.getSymbol(args, 1);
 	SObjVar    var    = context.getVarObject(symbol);
 	Object     value  = var.get();
-	int        shift  = STypes.getInt(args, 2).intValue();
+	int        shift  = SArgs.getInt(args, 2).intValue();
 	int        result = 0;
 	Object     resObj = null;
 

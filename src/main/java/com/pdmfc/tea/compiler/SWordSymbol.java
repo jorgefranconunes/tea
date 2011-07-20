@@ -1,24 +1,10 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2001/05/12
- * Created. (jfn)
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 package com.pdmfc.tea.compiler;
-
-import java.io.PrintStream;
 
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.compiler.SWord;
@@ -107,21 +93,9 @@ class SWordSymbol
     public SObjFunction toFunction(SContext context)
 	throws STeaException {
 
-	Object value;
+        SObjFunction result = SWordSubstUtils.toFunction(_symbol, context);
 
-	try {
-	    value = context.getVar(_symbol);
-	} catch (SNoSuchVarException e2) {
-	    value = STypes.getVarWithEffort(context, _symbol);
-	}
-	
-	try {
-	    return (SObjFunction)value;
-	} catch (ClassCastException e1) {
-	    throw new STypeException("variable " + _symbol.getName()+
-				     " should contain a function, " +
-				     "not a " + STypes.getTypeName(value));
-	}
+        return result;
     }
 
 
@@ -134,11 +108,11 @@ class SWordSymbol
  *
  **************************************************************************/
 
-    public void prettyPrint(PrintStream out,
-		     int         indent) {
+    // public void prettyPrint(PrintStream out,
+    //                         int         indent) {
 
-	out.print(_symbol.getName());
-    }
+    //     out.print(_symbol.getName());
+    // }
 
 
 }

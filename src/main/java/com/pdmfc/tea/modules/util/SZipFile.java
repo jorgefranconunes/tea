@@ -1,18 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2001/09/14
- * Created. (jfn)
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -27,6 +15,7 @@ import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.modules.io.SInput;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
+import com.pdmfc.tea.runtime.SArgs;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SObjFunction;
@@ -132,7 +121,7 @@ public class SZipFile
 	    open(obj, context, args);
 	    break;
 	default :
-	    throw new SNumArgException("[pathName]");
+	    throw new SNumArgException(args, "[pathName]");
 	}
 
 	return obj;
@@ -179,10 +168,10 @@ public class SZipFile
 	throws STeaException {
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException("pathName");
+	    throw new SNumArgException(args, "pathName");
 	}
 
-	String fileName = STypes.getString(args, 2);
+	String fileName = SArgs.getString(args, 2);
 	
 	if ( _zipFile != null ) {
 	    try {
@@ -354,7 +343,7 @@ public class SZipFile
 	    throw new SRuntimeException("zip file is not opened");
 	}
 
-	String   entryName = STypes.getString(args, 2);
+	String   entryName = SArgs.getString(args, 2);
 	ZipEntry entry     = _zipFile.getEntry(entryName);
 	SInput   input     = SInput.newInstance(context);
 
@@ -422,13 +411,13 @@ public class SZipFile
 	    throw new SRuntimeException("zip file is not opened");
 	}
 
-	String   entryName = STypes.getString(args, 2);
+	String   entryName = SArgs.getString(args, 2);
 	ZipEntry entry     = _zipFile.getEntry(entryName);
 	Boolean  result    = Boolean.FALSE;
 
 	if ( entry == null ) {
-	    throw new SRuntimeException("entry '" + entryName
-					+ "' does not exist");
+	    throw new SRuntimeException("entry \"{0}\" does not exist",
+                                        entryName);
 	}
 
 	result = entry.isDirectory() ? Boolean.TRUE : Boolean.FALSE;

@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -29,6 +29,7 @@ import com.pdmfc.tea.modules.SModule;
 import com.pdmfc.tea.modules.SModuleMath;
 import com.pdmfc.tea.modules.io.SInput;
 import com.pdmfc.tea.modules.util.SHashtable;
+import com.pdmfc.tea.runtime.SArgs;
 import com.pdmfc.tea.runtime.SBreakException;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SContinueException;
@@ -703,11 +704,11 @@ public class SModuleLang
 	throws STeaException {
 
 	if ( args.length < 2 ) {
-	    throw new SNumArgException(args[0], "procedure obj1 ... list");
+	    throw new SNumArgException(args, "procedure obj1 ... list");
 	}
 
 	Object       result      = null;
-	SObjFunction proc        = STypes.getFunction(context, args, 1);
+	SObjFunction proc        = SArgs.getFunction(context, args, 1);
 	Object[]     procArgs    = null;
 	int          procNumArgs = 0;
 	Object       lastArg     = args[args.length-1];
@@ -784,7 +785,7 @@ public class SModuleLang
 	throws STeaException {
 	
 	if ( args.length > 2 ) {
-	    throw new SNumArgException(args[0], "[obj]");
+	    throw new SNumArgException(args, "[obj]");
 	}
 
 	throw new SBreakException((args.length==2) ? args[1] : SObjNull.NULL);
@@ -866,12 +867,12 @@ public class SModuleLang
 	throws STeaException {
 
 	if ( (args.length<2) || (args.length>4) ) {
-	    throw new SNumArgException(args[0], "block [symbol] [st-symbol]");
+	    throw new SNumArgException(args, "block [symbol] [st-symbol]");
 	}
 
-	SObjBlock  block  = STypes.getBlock(args, 1);
-	SObjSymbol symbol = (args.length>=3) ? STypes.getSymbol(args, 2) :null;
-	SObjSymbol symbSt = (args.length==4) ? STypes.getSymbol(args, 3) :null;
+	SObjBlock  block  = SArgs.getBlock(args, 1);
+	SObjSymbol symbol = (args.length>=3) ? SArgs.getSymbol(args, 2) :null;
+	SObjSymbol symbSt = (args.length==4) ? SArgs.getSymbol(args, 3) :null;
 	SContext   scope  = block.getContext().newChild();
 	Object     result = Boolean.FALSE;
 	Object     value  = null;
@@ -970,7 +971,7 @@ public class SModuleLang
 	int numArgs = args.length;
 
 	if ( numArgs < 3 ) {
-	    throw new SNumArgException(args[0], "condition result [...]");
+	    throw new SNumArgException(args, "condition result [...]");
 	}
 
 	boolean hasElseClause = (numArgs%2)==0;
@@ -985,11 +986,7 @@ public class SModuleLang
 		condition = ((SObjBlock)condition).exec();
 	    }
 	    if ( !(condition instanceof Boolean) ) {
-		throw new STypeException(args[0],
-					 "arg " + i +
-					 " must be either a boolean or a block " +
-					 "returning a boolean, not a " +
-					 STypes.getTypeName(condition));
+		throw new STypeException(args, i, "boolean or a block");
 	    }
 	    if ( ((Boolean)condition).booleanValue() ) {
 		if ( result instanceof SObjBlock ) {
@@ -1125,10 +1122,10 @@ public class SModuleLang
 	throws STeaException {
 
 	if ( (args.length<2) || (args.length>4) ) {
-	    throw new SNumArgException(args[0], "var-name [value]");
+	    throw new SNumArgException(args, "var-name [value]");
 	}
 
-	SObjSymbol symbol = STypes.getSymbol(args, 1);
+	SObjSymbol symbol = SArgs.getSymbol(args, 1);
 	Object     result  = null;
 
 	switch ( args.length ) {
@@ -1205,10 +1202,10 @@ public class SModuleLang
 	throws STeaException {
 
 	if ( (args.length<2) || (args.length>4) ) {
-	    throw new SNumArgException(args[0], "var-name [value]");
+	    throw new SNumArgException(args, "var-name [value]");
 	}
 
-	SObjSymbol symbol = STypes.getSymbol(args, 1);
+	SObjSymbol symbol = SArgs.getSymbol(args, 1);
 	Object     result  = null;
 
 	switch ( args.length ) {
@@ -1242,19 +1239,16 @@ public class SModuleLang
 	throws STeaException {
 
 	Object    formalParam = args[2];
-	SObjBlock body        = STypes.getBlock(args,3);
+	SObjBlock body        = SArgs.getBlock(args,3);
 
 	if ( formalParam instanceof SObjPair ) {
-	    return newFixedArgsFunction(args[0], (SObjPair)formalParam, body);
+	    return newFixedArgsFunction(args, (SObjPair)formalParam, body);
 	}
 	if ( formalParam instanceof SObjSymbol ) {
 	    return newVarArgsFunction((SObjSymbol)formalParam, body);
 	}
 
-	throw new STypeException(args[0],
-				 "arg 2 must be a symbol or a symbol list, "
-				 + "not a "
-				 + STypes.getTypeName(args[2]));
+	throw new STypeException(args, 2, "symbol or a symbol list");
     }
 
 
@@ -1265,7 +1259,7 @@ public class SModuleLang
  *
  * Creates a procedure with a fixed number of parameters.
  *
- * @param arg0 The name of the command from where this method is
+ * @param args The arguments for the function where this method is
  * invoked.
  *
  * @param paramList List of symbols representing the procedure formal
@@ -1278,8 +1272,8 @@ public class SModuleLang
  *
  **************************************************************************/
 
-    private static SObjFunction newFixedArgsFunction(Object   arg0,
-						     SObjPair paramList,
+    private static SObjFunction newFixedArgsFunction(Object[]  args,
+						     SObjPair  paramList,
 						     SObjBlock body)
 	throws STeaException {
 
@@ -1294,10 +1288,10 @@ public class SModuleLang
 		parameters[i] = (SObjSymbol)paramName;
 	    } catch (ClassCastException e1) {
                 String msg = "formal parameter {0} must be a symbol, not a {1}";
-                Object[] fmtArgs = {
-                    String.valueOf(i), STypes.getTypeName(paramName)
-                };
-		throw new STypeException(arg0, msg, fmtArgs);
+		throw new SRuntimeException(args,
+                                            msg,
+                                            i,
+                                            STypes.getTypeName(paramName));
 	    }
 	}
 
@@ -1388,9 +1382,8 @@ public class SModuleLang
 	    } else if ( arg instanceof Boolean ) {
 		System.out.print(((Boolean)arg).booleanValue() ? "1" : "0");
 	    } else {
-		throw new STypeException("argument " + i + " is of type " +
-					 STypes.getTypeName(arg) +
-					 " and could not be printed");
+                String msg = "could not print argument {0} is of type {1}";
+                throw new STypeException(msg, i, STypes.getTypeName(arg));
 	    }
 	}
 	System.out.println();
@@ -1433,9 +1426,9 @@ public class SModuleLang
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "args: message");
+	    throw new SNumArgException(args, "args: message");
 	}
-	throw new SRuntimeException(STypes.getString(args,1));
+	throw new SRuntimeException(SArgs.getString(args,1));
     }
 
 
@@ -1489,11 +1482,11 @@ public class SModuleLang
       throws STeaException {
 
       if ( args.length != 2 ) {
-         throw new SNumArgException(args[0], "block");
+         throw new SNumArgException(args, "block");
       }
 
       Object    result = null;
-      SObjBlock block  = STypes.getBlock(args, 1);
+      SObjBlock block  = SArgs.getBlock(args, 1);
 
       result = block.exec();
 
@@ -1535,11 +1528,11 @@ public class SModuleLang
 	throws STeaException {
 
 	if ( args.length > 2 ) {
-	    throw new SNumArgException(args[0], "[exit-code]");
+	    throw new SNumArgException(args, "[exit-code]");
 	}
 
 	Integer retVal = (args.length==1) ?
-	    SModuleMath.ZERO : STypes.getInt(args,1);
+	    SModuleMath.ZERO : SArgs.getInt(args,1);
 	
 	throw new SExitException(retVal);
     }
@@ -1610,12 +1603,12 @@ public class SModuleLang
 	throws STeaException {
 
 	if ( args.length != 4 ) {
-	    throw new SNumArgException(args[0], "var list block");
+	    throw new SNumArgException(args, "var list block");
 	}
 
-	SObjSymbol symbol     = STypes.getSymbol(args, 1);
-	SObjPair   list       = STypes.getPair(args, 2);
-	SObjBlock  block      = STypes.getBlock(args, 3);
+	SObjSymbol symbol     = SArgs.getSymbol(args, 1);
+	SObjPair   list       = SArgs.getPair(args, 2);
+	SObjBlock  block      = SArgs.getBlock(args, 3);
 	SContext   newContext = block.getContext().newChild();
 	SObjVar    var        = newContext.newVar(symbol, SObjNull.NULL);
 	Object     result     = SObjNull.NULL;
@@ -1673,10 +1666,10 @@ public class SModuleLang
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "symbol");
+	    throw new SNumArgException(args, "symbol");
 	}
 
-	return context.getVar(STypes.getSymbol(args,1));
+	return context.getVar(SArgs.getSymbol(args,1));
     }
 
 
@@ -1738,7 +1731,7 @@ public class SModuleLang
 	int numArgs = args.length;
 
 	if ( (numArgs<3) || (numArgs>4) ) {
-	    throw new SNumArgException(args[0], "condition yesBlock noBlock");
+	    throw new SNumArgException(args, "condition yesBlock noBlock");
 	}
 
 	Object condition = args[1];
@@ -1751,10 +1744,8 @@ public class SModuleLang
 	}
       
 	if ( !(condition instanceof Boolean) ) {
-	    throw new STypeException(args[0],
-				     "arg 1 must be either a boolean " +
-				     "or a block returning a boolean, not a " +
-				     STypes.getTypeName(condition));
+            String expectedTypes = "boolean or a block returning a boolean";
+	    throw new STypeException(args, 1, expectedTypes);
 	}
 	result = ((Boolean)condition).booleanValue() ? yesResult : noResult;
 
@@ -1808,7 +1799,7 @@ public class SModuleLang
        throws STeaException {
 
        if ( args.length != 2 ) {
-	   throw new SNumArgException(args[0], "object");
+	   throw new SNumArgException(args, "object");
        }
 
        return args[1];
@@ -1831,7 +1822,7 @@ public class SModuleLang
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "obj");
+	    throw new SNumArgException(args, "obj");
 	}
 
 	return
@@ -2215,7 +2206,7 @@ public class SModuleLang
 	throws STeaException {
 	
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "object");
+	    throw new SNumArgException(args, "object");
 	}
 
 	return (args[1]==SObjNull.NULL) ? Boolean.FALSE : Boolean.TRUE;
@@ -2266,7 +2257,7 @@ public class SModuleLang
 	throws STeaException {
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException(args[0], "obj1 obj2");
+	    throw new SNumArgException(args, "obj1 obj2");
 	}
 
 	return args[1].equals(args[2]) ? Boolean.FALSE : Boolean.TRUE;
@@ -2312,7 +2303,7 @@ public class SModuleLang
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "object");
+	    throw new SNumArgException(args, "object");
 	}
 
 	return (args[1]==SObjNull.NULL) ? Boolean.TRUE : Boolean.FALSE;
@@ -2363,7 +2354,7 @@ public class SModuleLang
 	throws STeaException {
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException(args[0], "obj1 obj2");
+	    throw new SNumArgException(args, "obj1 obj2");
 	}
 
 	return args[1].equals(args[2]) ? Boolean.TRUE : Boolean.FALSE;
@@ -2417,23 +2408,21 @@ public class SModuleLang
 	throws STeaException {
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException(args[0], "formal-parameters block");
+	    throw new SNumArgException(args, "formal-parameters block");
 	}
 
 	Object       formalParam  = args[1];
-	SObjBlock    body         = STypes.getBlock(args, 2);
+	SObjBlock    body         = SArgs.getBlock(args, 2);
 	SObjFunction result       = null;
 
 	if ( formalParam instanceof SObjPair ) {
-	    return newFixedArgsFunction(args[0], (SObjPair)formalParam, body);
+	    return newFixedArgsFunction(args, (SObjPair)formalParam, body);
 	}
 	if ( formalParam instanceof SObjSymbol ) {
 	    return newVarArgsFunction((SObjSymbol)formalParam, body);
 	}
-
-	throw new STypeException(args[0], "arg 1 must be a symbol or a " +
-				 "symbol list, not a " +
-				 STypes.getTypeName(args[0]));
+        
+	throw new STypeException(args, 1, "symbol or a symbol list");
     }
 
 
@@ -2477,15 +2466,15 @@ public class SModuleLang
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "java-package-name");
+	    throw new SNumArgException(args, "java-package-name");
 	}
 
-        String moduleClassName = STypes.getString(args, 1);
+        String moduleClassName = SArgs.getString(args, 1);
 	
 	try {
             SModuleUtils.addAndStartModule(_globalContext, moduleClassName);
 	} catch (STeaException e) {
-	    throw new SRuntimeException(args[0], e.getMessage());
+	    throw new SRuntimeException(args, e.getMessage());
 	}
 	
 	return SObjNull.NULL;
@@ -2534,10 +2523,10 @@ public class SModuleLang
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "java-class-name");
+	    throw new SNumArgException(args, "java-class-name");
 	}
 
-	String       className = STypes.getString(args,1);
+	String       className = SArgs.getString(args,1);
 	Class        javaClass = null;
 	SObjFunction teaFunc   = _funcs.get(className);
 	String       msg       = null;
@@ -2623,10 +2612,10 @@ public class SModuleLang
 	throws STeaException {
 
 	if ( args.length < 3 ) {
-	    throw new SNumArgException(args[0], "procedure list1 ...");
+	    throw new SNumArgException(args, "procedure list1 ...");
 	}
 	
-	SObjFunction proc      = STypes.getFunction(context, args, 1);
+	SObjFunction proc      = SArgs.getFunction(context, args, 1);
 	Iterator[]   iterators = buildListOfI(args);
 	Object[]     procArgs  = new Object[args.length-1];
 	SObjPair     resHead   = SObjPair.emptyList();
@@ -2639,8 +2628,8 @@ public class SModuleLang
 		try {
 		    procArgs[i+1] = iterators[i].next();
 		} catch (NoSuchElementException e) {
-		    throw new SRuntimeException(args[0],
-						"lists with diferent sizes");
+                    String msg = "lists with diferent sizes";
+		    throw new SRuntimeException(args, msg);
 		}
 	    }
 	    SObjPair node = new SObjPair(proc.exec(proc, context, procArgs),
@@ -2683,7 +2672,7 @@ public class SModuleLang
 	Iterator[] iterators = new Iterator[args.length-2];
 
 	for ( int i=0; i<iterators.length; i++ ) {
-	    iterators[i] = STypes.getPair(args, i+2).iterator();
+	    iterators[i] = SArgs.getPair(args, i+2).iterator();
 	}
 
 	return iterators;
@@ -2745,11 +2734,11 @@ public class SModuleLang
 	throws STeaException {
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException(args[0], "procedure list-of-arg-list");
+	    throw new SNumArgException(args, "procedure list-of-arg-list");
 	}
 
-	SObjFunction proc       = STypes.getFunction(context, args, 1);
-	Iterator     iterator   = STypes.getPair(args, 2).iterator();
+	SObjFunction proc       = SArgs.getFunction(context, args, 1);
+	Iterator     iterator   = SArgs.getPair(args, 2).iterator();
         int          iterCount  = -1;
 	int          numArgs    = 0;
 	Object[]     funcArgs   = null;
@@ -2765,10 +2754,11 @@ public class SModuleLang
             try {
                 argList = (SObjPair)o;
             } catch (ClassCastException e) {
-                throw new STypeException(args[0],
-					 "arg 2, element " + iterCount +
-					 " must be a list, not a " +
-					 STypes.getTypeName(o));
+                String msg = "arg 2, element {0} must be a list, not a {1}";
+                throw new SRuntimeException(args,
+                                            msg,
+                                            iterCount,
+                                            STypes.getTypeName(o));
             }
 	    numArgs = argList.length() + 1;
 	    funcArgs = new Object[numArgs];
@@ -2786,10 +2776,11 @@ public class SModuleLang
             try {
                 argList = (SObjPair)o;
             } catch (ClassCastException e) {
-                throw new STypeException(args[0],
-					 "arg 2, element " + iterCount +
-					 " must be a list, not a " +
-					 STypes.getTypeName(o));
+                String msg = "arg 2, element {0} must be a list, not a {1}";
+                throw new SRuntimeException(args,
+                                            msg,
+                                            iterCount,
+                                            STypes.getTypeName(o));
             }
 	    fillArgs(funcArgs, argList);
 	    Object   funcResult = proc.exec(proc, context, funcArgs);
@@ -2916,10 +2907,10 @@ public class SModuleLang
 	throws STeaException {
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException(args[0], "symbol value");
+	    throw new SNumArgException(args, "symbol value");
 	}
 
-	SObjSymbol varName = STypes.getSymbol(args, 1);
+	SObjSymbol varName = SArgs.getSymbol(args, 1);
 	Object     value   = args[2];
 
 	context.setVar(varName, value);
@@ -2968,11 +2959,11 @@ public class SModuleLang
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "args: millis-to-sleep");
+	    throw new SNumArgException(args, "millis-to-sleep");
 	}
 
 	Boolean result      = Boolean.TRUE;
-	int     timeToSleep = STypes.getInt(args,1).intValue();
+	int     timeToSleep = SArgs.getInt(args,1).intValue();
 
 	try {
 	    Thread.sleep(timeToSleep);
@@ -3161,7 +3152,7 @@ public class SModuleLang
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "file");
+	    throw new SNumArgException(args, "file");
 	}
 	
 	Object arg      = args[1];
@@ -3252,13 +3243,13 @@ public class SModuleLang
 	throws STeaException {
 
 	if ( args.length < 2 ) {
-	    throw new SNumArgException(args[0], "command [arg ...]");
+	    throw new SNumArgException(args, "command [arg ...]");
 	}
 
 	String[] cmdArgs = new String[args.length-1];
 
 	for ( int i=1; i<args.length; i++ ) {
-	    cmdArgs[i-1] = STypes.getString(args, i);
+	    cmdArgs[i-1] = SArgs.getString(args, i);
 	}
 	
 	Process     proc   = null;
@@ -3340,12 +3331,12 @@ public class SModuleLang
 	throws STeaException {
 
 	if ( (args.length<2) || (args.length>3) ) {
-	    throw new SNumArgException(args[0], "block [count]");
+	    throw new SNumArgException(args, "block [count]");
 	}
 
-	SObjBlock block        = STypes.getBlock(args, 1);
+	SObjBlock block        = SArgs.getBlock(args, 1);
 	SContext  childContext = block.getContext().newChild();
-	int       count        = (args.length==2) ? 1 : STypes.getInt(args, 2).intValue();
+	int       count        = (args.length==2) ? 1 : SArgs.getInt(args, 2).intValue();
 	long      startTime;
 	long      endTime;
 
@@ -3417,7 +3408,7 @@ public class SModuleLang
 	throws STeaException {
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException(args[0], "condition body-block");
+	    throw new SNumArgException(args, "condition body-block");
 	}
 
 	Object condition = args[1];
@@ -3448,8 +3439,8 @@ public class SModuleLang
 				     Object[] args)
       throws STeaException {
 
-      SObjBlock condBlock   = STypes.getBlock(args, 1);
-      SObjBlock block       = STypes.getBlock(args, 2);
+      SObjBlock condBlock   = SArgs.getBlock(args, 1);
+      SObjBlock block       = SArgs.getBlock(args, 2);
       Object    result      = SObjNull.NULL;
       SContext  condContext = condBlock.getContext().newChild();
       SContext  bodyContext = block.getContext().newChild();
@@ -3461,9 +3452,7 @@ public class SModuleLang
 	 try {
 	    condValue = ((Boolean)condition).booleanValue();
 	 } catch (ClassCastException e) {
-            throw new STypeException(args[0],
-				     "arg 1 must be a block returning a bool"+
-				     ", not a " + STypes.getTypeName(condition));
+             throw new STypeException(args, 1, "block returning a bool");
 	 }
 	 if ( condValue ) {
 	    try {
@@ -3498,7 +3487,7 @@ public class SModuleLang
 				      Object[] args)
       throws STeaException {
 
-      SObjBlock block      = STypes.getBlock(args, 2);
+      SObjBlock block      = SArgs.getBlock(args, 2);
       SContext  newContext = block.getContext().newChild();
       Object    result     = SObjNull.NULL;
 
@@ -3559,13 +3548,13 @@ public class SModuleLang
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "propertyName");
+	    throw new SNumArgException(args, "propertyName");
 	}
 
-	String key = STypes.getString(args, 1);
+	String key = SArgs.getString(args, 1);
 
 	if ( key.length() == 0 ) {
-	    throw new SRuntimeException(args[0], "Empty property name");
+	    throw new SRuntimeException(args, "Empty property name");
 	}
 
 	String value = null;
@@ -3575,7 +3564,7 @@ public class SModuleLang
 	} catch (Throwable e) {
 	    String   msg = "Failed to get system property \"{0}\" - {1} - {2}";
 	    Object[] fmtArgs = { key, e.getClass().getName(), e.getMessage() };
-	    throw new SRuntimeException(args[0], msg, fmtArgs);
+	    throw new SRuntimeException(args, msg, fmtArgs);
 	}
 
 	return (value==null) ? SObjNull.NULL : value;
@@ -3628,14 +3617,14 @@ public class SModuleLang
 	throws STeaException {
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException(args[0], "propertyName propertyValue");
+	    throw new SNumArgException(args, "propertyName propertyValue");
 	}
 
-	String key   = STypes.getString(args, 1);
-	String value = STypes.getString(args, 2);
+	String key   = SArgs.getString(args, 1);
+	String value = SArgs.getString(args, 2);
 
 	if ( key.length() == 0 ) {
-	    throw new SRuntimeException(args[0], "Empty property name");
+	    throw new SRuntimeException(args, "Empty property name");
 	}
 
 	String prevValue = null;
@@ -3645,7 +3634,7 @@ public class SModuleLang
 	} catch (Throwable e) {
 	    String   msg = "Failed to set system property \"{0}\" - {1} - {2}";
 	    Object[] fmtArgs = { key, e.getClass().getName(), e.getMessage() };
-	    throw new SRuntimeException(args[0], msg, fmtArgs);
+	    throw new SRuntimeException(args, msg, fmtArgs);
 	}
 
 	return (prevValue==null) ? SObjNull.NULL : prevValue;

@@ -9,7 +9,7 @@ TOS object).
 
 Example description of the function to be implemented:
 
-java-proxy javaInterface function
+java-new-proxy javaInterface function
 
 Creates and returns a new proxy object implementing the given Java
 interface.

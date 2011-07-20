@@ -1,24 +1,13 @@
 /**************************************************************************
  *
- * Copyright (c) 2002 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2002/06/24
- * Created. (jfn)
+ * Copyright (c) 2002-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 package com.pdmfc.tea.tos;
 
 import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.runtime.SArgs;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjNull;
@@ -180,7 +169,7 @@ public class STosTeaObj
 	 return SObjNull.NULL;
       }
 
-      return _myClass.getMethod(STypes.getSymbol(args,1)).exec(obj, context, args);
+      return _myClass.getMethod(SArgs.getSymbol(args,1)).exec(obj, context, args);
    }
 
 

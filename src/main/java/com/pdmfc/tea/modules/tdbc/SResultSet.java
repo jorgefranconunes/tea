@@ -1,19 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2003/09/13 Added the "getDate(...)" methods. (jfn)
- *
- * 2001/05/12 Created. (jfn)
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -32,6 +19,7 @@ import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.tos.STosUtil;
 import com.pdmfc.tea.modules.util.SDate;
+import com.pdmfc.tea.runtime.SArgs;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjNull;
@@ -455,19 +443,19 @@ public class SResultSet
 		       Object[]     args)
 	throws SRuntimeException {
 
-      if ( args.length != 3 ) {
-	 throw new SNumArgException("Args: count");
-      }
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "count");
+        }
 
-      int count = STypes.getInt(args,2).intValue();
+        int count = SArgs.getInt(args,2).intValue();
 
-      try {
-	  skip(count);
-      } catch (SQLException e) {
-	  throw new SRuntimeException(e);
-      }
+        try {
+            skip(count);
+        } catch (SQLException e) {
+            throw new SRuntimeException(e);
+        }
 
-      return obj;
+        return obj;
     }
 
 
@@ -570,7 +558,7 @@ public class SResultSet
 	throws SRuntimeException {
 
       if ( args.length != 3 ) {
-	 throw new SNumArgException("Args: column-index");
+          throw new SNumArgException(args, "column-index");
       }
 
       Object indexObj = args[2];
@@ -623,8 +611,8 @@ public class SResultSet
 	    return _resultSet.getInt(columnName);
 	}
 
-	throw new STypeException("index must be an int or a string, not a "
-				 + STypes.getTypeName(indexObj));
+        throw new STypeException("index must be an int or a string, not a {0}",
+				 STypes.getTypeName(indexObj));
     }
 
 
@@ -690,7 +678,7 @@ public class SResultSet
 	throws SRuntimeException {
 
       if ( args.length != 3 ) {
-	 throw new SNumArgException("Args: column-index");
+          throw new SNumArgException(args, "column-index");
       }
 
       Object indexObj = args[2];
@@ -743,8 +731,8 @@ public class SResultSet
 	    return _resultSet.getDouble(columnName);
 	}
 
-	throw new STypeException("index must be an int or a string, not a "
-				 + STypes.getTypeName(indexObj));
+	throw new STypeException("index must be an int or a string, not a {0}",
+				 STypes.getTypeName(indexObj));
     }
 
 
@@ -808,20 +796,20 @@ public class SResultSet
 			    Object[]     args)
 	throws SRuntimeException {
 
-      if ( args.length != 3 ) {
-	 throw new SNumArgException("Args: column-index");
-      }
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "column-index");
+        }
 
-      Object indexObj = args[2];
-      String value    = null;
+        Object indexObj = args[2];
+        String value    = null;
 
-      try {
-	  value = getString(indexObj);
-      } catch (SQLException e) {
-	  throw new SRuntimeException(e);
-      }
+        try {
+            value = getString(indexObj);
+        } catch (SQLException e) {
+            throw new SRuntimeException(e);
+        }
 
-      return (value==null) ? SObjNull.NULL : value;
+        return (value==null) ? SObjNull.NULL : value;
     }
 
 
@@ -862,8 +850,8 @@ public class SResultSet
 	    return _resultSet.getString(columnName);
 	}
 
-	throw new STypeException("index must be an int or a string, "
-				 + "not a " + STypes.getTypeName(indexObj));
+	throw new STypeException("index must be an int or a string, not a {0}",
+				 STypes.getTypeName(indexObj));
     }
 
 
@@ -930,7 +918,7 @@ public class SResultSet
 	throws STeaException {
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException("Args: column-index");
+	    throw new SNumArgException(args, "column-index");
 	}
 
 	Object indexObj = args[2];
@@ -988,8 +976,8 @@ public class SResultSet
 	    return _resultSet.getTimestamp(columnName);
 	}
 
-	throw new STypeException("index must be an int or a string, not a "
-				 + STypes.getTypeName(indexObj));
+	throw new STypeException("index must be an int or a string, not a {0}",
+				 STypes.getTypeName(indexObj));
     }
 
 
@@ -1175,10 +1163,10 @@ public class SResultSet
 	throws SRuntimeException {
 
       if ( args.length != 3 ) {
-	 throw new SNumArgException("Args: column-index");
+          throw new SNumArgException(args, "column-index");
       }
 
-      int    index  = STypes.getInt(args,2).intValue();
+      int    index  = SArgs.getInt(args,2).intValue();
       String result = null;
 
       try {

@@ -1,35 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2004/11/05 Improved the messages for the errors thrown by the
- * "str-join" function. (jfn)
- *
- * 2003/10/05 The "str-fmt" now works as expected when using SDate
- * instances as formating objects. (jfn)
- *
- * 2002/08/02 Moved to the "com.pdmfc.tea.modules" package. (jfn)
- *
- * 2002/02/22 Added the following functions for downwards
- * compatibility with Tea 1.x: "str-eq", "str-neq", "str-not-eq?",
- * "str-comp". (jfn)
- *
- * 2002/01/20 Calls to the "addJavaFunction()" method were replaced by
- * inner classes for performance. (jfn)
- *
- * 2002/01/10 This classe now derives from SModuleCore. (jfn) Now uses
- * SObjPair.iterator(). (jfn)
- *
- * 2001/05/12 Created. (jfn)
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -44,6 +15,7 @@ import com.pdmfc.tea.modules.SModule;
 import com.pdmfc.tea.modules.SModuleMath;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.util.SDate;
+import com.pdmfc.tea.runtime.SArgs;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SObjFunction;
@@ -499,17 +471,17 @@ public class SModuleString
 	throws STeaException {
 
 	if ( args.length<2 ) {
-	    throw new SNumArgException(args[0], "string [object ...]");
+	    throw new SNumArgException(args, "string [object ...]");
 	}
 
 	_formatResult.setLength(0);
 
 	try {
-	    _formater.format(STypes.getString(args,1), args, 2);
+	    _formater.format(SArgs.getString(args,1), args, 2);
 	} catch (SNumArgException e1) {
-	    throw new SNumArgException(args[0], e1.getMessage());
+	    throw new SRuntimeException(args, e1.getMessage());
 	} catch (STypeException e2) {
-	    throw new STypeException(args[0], e2.getMessage());
+	    throw new SRuntimeException(args, e2.getMessage());
 	}
 
 	return _formatResult.toString();
@@ -560,10 +532,10 @@ public class SModuleString
 	throws STeaException {
 
 	if ( args.length<2 ) {
-	    throw new SNumArgException(args[0], "string [object ...]");
+	    throw new SNumArgException(args, "string [object ...]");
 	}
 
-	String   fmt         = STypes.getString(args, 1);
+	String   fmt         = SArgs.getString(args, 1);
 	int      fmtArgCount = args.length - 2;
 	Object[] fmtArgs     = new Object[fmtArgCount];
 	String   result      = null;
@@ -574,9 +546,9 @@ public class SModuleString
 	try {
 	    result = MessageFormat.format(fmt, fmtArgs);
 	} catch (Throwable e) {
-	    throw new SRuntimeException(args[0],
-					"failed to format string (" +
-					e.getMessage() + ")");
+	    throw new SRuntimeException(args,
+                                        "failed to format string ({0})",
+                                        e.getMessage());
 	}
 
 	return result;
@@ -646,10 +618,10 @@ public class SModuleString
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "string");
+	    throw new SNumArgException(args, "string");
 	}
 
-	String str    = STypes.getString(args,1);
+	String str    = SArgs.getString(args,1);
 	String result = str.toUpperCase();
 
 	return result;
@@ -695,10 +667,10 @@ public class SModuleString
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "string");
+	    throw new SNumArgException(args, "string");
 	}
 
-	String str    = STypes.getString(args,1);
+	String str    = SArgs.getString(args,1);
 	String result = str.toLowerCase();
 
 	return result;
@@ -1061,11 +1033,11 @@ public class SModuleString
 	throws STeaException {
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException(args[0], "string1 string2");
+	    throw new SNumArgException(args, "string1 string2");
 	}
 
-	String  op1    = STypes.getString(args,1);
-	String  op2    = STypes.getString(args,2);
+	String  op1    = SArgs.getString(args,1);
+	String  op2    = SArgs.getString(args,2);
 	int     result = op1.compareTo(op2);
 
 	if ( result < 0 ) {
@@ -1118,13 +1090,13 @@ public class SModuleString
 	throws STeaException {
 
 	if ( args.length<2 ) {
-	    throw new SNumArgException(args[0], "string1 string2 ...");
+	    throw new SNumArgException(args, "string1 string2 ...");
 	}
 
-	StringBuffer buf = new StringBuffer(STypes.getString(args,1));
+	StringBuffer buf = new StringBuffer(SArgs.getString(args,1));
 
 	for ( int i=2; i<args.length; i++ ) {
-	    buf.append(STypes.getString(args,i));
+	    buf.append(SArgs.getString(args,i));
 	}
 
 	return buf.toString();
@@ -1175,11 +1147,11 @@ public class SModuleString
 	throws STeaException {
 	
 	if ( args.length!= 3) {
-	    throw new SNumArgException(args[0], "string1 string2");
+	    throw new SNumArgException(args, "string1 string2");
 	}
 
-	String str1    = STypes.getString(args,1);
-	String str2    = STypes.getString(args,2);
+	String str1    = SArgs.getString(args,1);
+	String str2    = SArgs.getString(args,2);
 	Boolean result = str1.endsWith(str2) ? Boolean.TRUE : Boolean.FALSE;
 
 	return result;
@@ -1230,11 +1202,11 @@ public class SModuleString
 	throws STeaException {
 
 	if ( args.length!= 3) {
-	    throw new SNumArgException(args[0], "string1 string2");
+	    throw new SNumArgException(args, "string1 string2");
 	}
 
-	String  str1   = STypes.getString(args,1);
-	String  str2   = STypes.getString(args,2);
+	String  str1   = SArgs.getString(args,1);
+	String  str2   = SArgs.getString(args,2);
 	Boolean result = str1.startsWith(str2) ? Boolean.TRUE : Boolean.FALSE;
 
 	return result;
@@ -1286,12 +1258,12 @@ public class SModuleString
 	throws STeaException {
 
 	if ( (args.length<3) || (args.length>4)) {
-	    throw new SNumArgException(args[0], "string sub-string [start-index]");
+	    throw new SNumArgException(args, "string sub-string [start-index]");
 	}
 
-	String str1       = STypes.getString(args,1);
-	String str2       = STypes.getString(args,2);
-	int    startIndex = (args.length==4) ? STypes.getInt(args,3).intValue() : 0;
+	String str1       = SArgs.getString(args,1);
+	String str2       = SArgs.getString(args,2);
+	int    startIndex = (args.length==4) ? SArgs.getInt(args,3).intValue() : 0;
 	int    result     = str1.indexOf(str2, startIndex);
 	
 	return new Integer(result);
@@ -1336,10 +1308,10 @@ public class SModuleString
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "string");
+	    throw new SNumArgException(args, "string");
 	}
 
-	String arg    = STypes.getString(args,1);
+	String arg    = SArgs.getString(args,1);
 	int    result = arg.length();
 
 	return new Integer(result);
@@ -1405,13 +1377,13 @@ public class SModuleString
 	throws STeaException {
 
 	if ( (args.length<3) || (args.length>4) ) {
-	    throw new SNumArgException(args[0], "string start-index [end-index]");
+	    throw new SNumArgException(args, "string start-index [end-index]");
 	}
 
-	String str    = STypes.getString(args,1);
-	int    start  = STypes.getInt(args,2).intValue();
+	String str    = SArgs.getString(args,1);
+	int    start  = SArgs.getInt(args,2).intValue();
 	int    size   = str.length();
-	int    end    = (args.length==4) ? STypes.getInt(args,3).intValue() :size;
+	int    end    = (args.length==4) ? SArgs.getInt(args,3).intValue() :size;
 	String result = null;
 
 	if ( start < 0 ) {
@@ -1470,10 +1442,10 @@ public class SModuleString
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "string");
+	    throw new SNumArgException(args, "string");
 	}
 
-	String arg    = STypes.getString(args,1);
+	String arg    = SArgs.getString(args,1);
 	String result = arg.trim();
 
 	return result;
@@ -1526,11 +1498,11 @@ public class SModuleString
 	throws STeaException {
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException(args[0], "string-list string");
+	    throw new SNumArgException(args, "string-list string");
 	}
 
-	SObjPair list      = STypes.getPair(args,1);
-	String   separator = STypes.getString(args,2);
+	SObjPair list      = SArgs.getPair(args,1);
+	String   separator = SArgs.getString(args,2);
 	Iterator i         = list.iterator();
 
 	if ( !i.hasNext() ) {
@@ -1550,36 +1522,16 @@ public class SModuleString
 		str = (String)element;
 	    } catch (ClassCastException e) {
 		String msg = "list element {0} should be a string, not a {1}";
-		Object[] fmtArgs =
-		    { String.valueOf(index), STypes.getTypeName(element) };
-		throw new STypeException(args[0], msg, fmtArgs);
+		throw new SRuntimeException(args,
+                                            msg,
+                                            String.valueOf(index),
+                                            STypes.getTypeName(element));
 	    }
 
 	    buf.append(str);
 	}
 
 	return buf.toString();
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    private static String joinGetString(Object arg0,
-					Object obj)
-	throws STypeException {
-
-	try {
-	    return (String)obj;
-	} catch (ClassCastException e) {
-	    throw new STypeException(arg0, "a list element is not a string");
-	}
     }
 
 
@@ -1622,10 +1574,10 @@ public class SModuleString
 	throws STeaException {
 
 	if ( args.length!= 2) {
-	    throw new SNumArgException(args[0], "string");
+	    throw new SNumArgException(args, "string");
 	}
 
-	String  str    = STypes.getString(args,1);
+	String  str    = SArgs.getString(args,1);
 	int     length = str.length();
 	Boolean result = (length==0) ? Boolean.TRUE : Boolean.FALSE;
 
@@ -1672,10 +1624,10 @@ public class SModuleString
 	throws STeaException {
 
 	if ( args.length!= 2) {
-	    throw new SNumArgException(args[0], "string");
+	    throw new SNumArgException(args, "string");
 	}
 
-	String  str    = STypes.getString(args,1);
+	String  str    = SArgs.getString(args,1);
 	int     length = str.length();
 	Boolean result = (length==0) ? Boolean.FALSE : Boolean.TRUE;
 
@@ -1722,10 +1674,10 @@ public class SModuleString
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "symbol");
+	    throw new SNumArgException(args, "symbol");
 	}
 
-	return STypes.getSymbol(args,1).getName();
+	return SArgs.getSymbol(args,1).getName();
     }
 
 
@@ -1777,13 +1729,13 @@ public class SModuleString
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "string");
+	    throw new SNumArgException(args, "string");
 	}
 
 	Object result = SObjNull.NULL;
 
 	try {
-	    result = new Integer(STypes.getString(args,1));
+	    result = new Integer(SArgs.getString(args,1));
 	} catch (NumberFormatException e) {
 	}
 
@@ -1832,10 +1784,10 @@ public class SModuleString
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "string");
+	    throw new SNumArgException(args, "string");
 	}
 
-	String str    = STypes.getString(args,1);
+	String str    = SArgs.getString(args,1);
 	Object result = SObjNull.NULL;
 
 	try {
@@ -1888,10 +1840,10 @@ public class SModuleString
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "integer");
+	    throw new SNumArgException(args, "integer");
 	}
 
-	return String.valueOf(STypes.getNumber(args,1).intValue());
+	return String.valueOf(SArgs.getNumber(args,1).intValue());
     }
 
 
@@ -1935,10 +1887,10 @@ public class SModuleString
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "float");
+	    throw new SNumArgException(args, "float");
 	}
 
-	return String.valueOf(STypes.getNumber(args,1).doubleValue());
+	return String.valueOf(SArgs.getNumber(args,1).doubleValue());
     }
 
 
@@ -1997,10 +1949,10 @@ public class SModuleString
 	throws STeaException {
 
 	if ( args.length != 2 ) {
-	    throw new SNumArgException(args[0], "string");
+	    throw new SNumArgException(args, "string");
 	}
 
-	String str    = STypes.getString(args,1);
+	String str    = SArgs.getString(args,1);
         String result = STeaParserUtils.parseStringLiteral(str);
 
         return result;

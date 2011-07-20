@@ -40,15 +40,32 @@ public class SEmptyListException
 
 /**************************************************************************
  *
- * 
+ * For internal use only.
  *
  **************************************************************************/
 
-   public SEmptyListException(Object arg0,
-			      String msg) {
+    private SEmptyListException() {
 
-      super(arg0, msg);
-   }
+        // Nothing to do.
+    }
+
+
+
+
+/**************************************************************************
+ *
+ * Raises an exception to signal that the argument with the given
+ * index is an empty list.
+ *
+ **************************************************************************/
+
+    public SEmptyListException(final Object[] args,
+                               final int      argIndex) {
+
+        String msgFmt = "list in argument {0} must not be empty";
+       
+        initForFunction(args, msgFmt, argIndex);
+    }
 
 
 }

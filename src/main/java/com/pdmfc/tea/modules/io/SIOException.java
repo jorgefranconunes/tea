@@ -1,18 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2001/05/12
- * Created. (jfn)
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -30,36 +18,26 @@ import com.pdmfc.tea.runtime.SRuntimeException;
  *
  **************************************************************************/
 
-public class SIOException
+public final class SIOException
     extends SRuntimeException {
 
 
 
 
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-   public SIOException(String msg) {
-
-      super(msg);
-   }
-
-
 
 
 /**************************************************************************
  *
- * 
+ * For internal use only.
  *
  **************************************************************************/
 
-   public SIOException(Throwable error) {
+    private SIOException() {
 
-      super(error.getMessage());
-   }
+        // Nothing to do.
+    }
+
+
 
 
 
@@ -70,11 +48,49 @@ public class SIOException
  *
  **************************************************************************/
 
-   public SIOException(Object arg0,
-		       String msg) {
+    public SIOException(final String    msgFmt,
+                        final Object... fmtArgs) {
 
-      super(arg0, msg);
-   }
+	init(msgFmt, fmtArgs);
+    }
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    public SIOException(final Throwable error) {
+
+        String msg = error.getMessage();
+
+        init(msg);
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * Initializes the message from the zeroth argument of a command and
+ * from an error message.
+ *
+ * @param args The arguments the function was called with.
+ *
+ * @param msgFmt A string with an error message.
+ *
+ **************************************************************************/
+ 
+    public SIOException(final Object[]  args,
+                        final String    msgFmt,
+                        final Object... fmtArgs) {
+
+        initForFunction(args, msgFmt, fmtArgs);
+    }
 
 
 }

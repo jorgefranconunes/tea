@@ -1,21 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2010/02/07 Refactored to use "org.xml.sax.XMLReader" instead of
- * "org.xml.sax.Parser". (TSK-PDMFC-TEA-0042) (jfn)
- *
- * 2001/05/12
- * Created. (jfn)
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -30,6 +15,7 @@ import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.tos.STosUtil;
+import com.pdmfc.tea.runtime.SArgs;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjSymbol;
@@ -167,7 +153,7 @@ public class SXmlParser
 	    setNativeParser(obj, context, args);
 	    break;
 	default :
-	    throw new SNumArgException("[native-parser-class-name]");
+	    throw new SNumArgException(args, "[native-parser-class-name]");
 	}
 
 	return obj;
@@ -231,10 +217,10 @@ public class SXmlParser
 	throws STeaException {
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException("java-class-name");
+	    throw new SNumArgException(args, "java-class-name");
 	}
 
-	String parserClassName = STypes.getString(args, 2);
+	String parserClassName = SArgs.getString(args, 2);
 
 	setNativeParser(parserClassName);
 
@@ -559,7 +545,7 @@ public class SXmlParser
 	throws STeaException {
 
 	if ( args.length != 3 ) {
-	    throw new SNumArgException("event-handler");
+	    throw new SNumArgException(args, "event-handler");
 	}
 
 	_handler = STosUtil.getTosObj(args, 2);

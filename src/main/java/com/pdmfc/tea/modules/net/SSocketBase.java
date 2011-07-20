@@ -1,21 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2002/10/19
- * Renamed from SSocketBase para SSocketBase. (jfn)
- *
- * 2001/05/12
- * Created. (jfn)
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -34,6 +19,7 @@ import com.pdmfc.tea.modules.net.SSocketFactory;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.tos.STosUtil;
+import com.pdmfc.tea.runtime.SArgs;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjSymbol;
@@ -112,11 +98,11 @@ public class SSocketBase
 	throws STeaException {
 
 	if ( args.length != 4 ) {
-	    throw new SNumArgException("host port");
+	    throw new SNumArgException(args, "host port");
 	}
 
-	String host = STypes.getString(args, 2);
-	int    port = STypes.getInt(args, 3).intValue();
+	String host = SArgs.getString(args, 2);
+	int    port = SArgs.getInt(args, 3).intValue();
 
 	try {
 	    close();
@@ -129,11 +115,13 @@ public class SSocketBase
 	    _input.open(_socket.getInputStream());
 	    _output.open(_socket.getOutputStream());
 	} catch (UnknownHostException e1) {
-	    throw new SIOException("host '" + host + "' is unknown");
+	    throw new SIOException("host \"{0}\" is unknown", host);
 	} catch (IOException e2) {
-	    throw new SIOException("could not connect to host '" + host
-				   + "' on port " + port + ": "
-				   + e2.getMessage());
+            String msg = "could not connect to host \"{0}\" on port {1} : {2}";
+	    throw new SIOException(msg,
+                                   host,
+                                   String.valueOf(port),
+                                   e2.getMessage());
 	}
 	_output.setLineBuffering(true);
 

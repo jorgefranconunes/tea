@@ -126,7 +126,7 @@ public class STosTeaMethod
 	throws STeaException {
 
 	if ( args.length != (_argNames.length+2) ) {
-	    throw new SNumArgException(args[0], parametersText());
+	    throw new SNumArgException(args, parametersText());
 	}
 
 	STosObj   obj          = (STosObj)func;

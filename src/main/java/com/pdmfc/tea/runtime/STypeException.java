@@ -1,19 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001, 2002, 2003, 2004 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2004/09/02 Added the constructor "STypeException(String,Object[])". (jfn)
- *
- * 2001/05/12 Created. (jfn)
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -28,58 +15,27 @@ import com.pdmfc.tea.runtime.SRuntimeException;
 
 /**************************************************************************
  *
- * 
+ * Signals an abnormal condition related with mismatched types.
  *
  **************************************************************************/
 
-public class STypeException
+public final class STypeException
     extends SRuntimeException {
 
 
 
 
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-   public STypeException(String msg) {
-
-      super(msg);
-   }
-
-
 
 
 /**************************************************************************
  *
- * 
+ * For internal use only.
  *
  **************************************************************************/
 
-   public STypeException(Object arg0,
-			 String msg) {
+    private STypeException() {
 
-      super(arg0, msg);
-   }
-
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    public STypeException(Object   arg0,
-			  String   fmtString,
-			  Object[] fmtArgs) {
-	
-	super(arg0, fmtString, fmtArgs);
+        // Nothing to do.
     }
 
 
@@ -93,10 +49,35 @@ public class STypeException
  *
  **************************************************************************/
 
-    public STypeException(String   fmtString,
-			  Object[] fmtArgs) {
+    public STypeException(final String    msgFmt,
+                          final Object... fmtArgs) {
 
-	super(fmtString, fmtArgs);
+        init(msgFmt, fmtArgs);
+    }
+
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    public STypeException(final Object[] args,
+                          final int      argIndex,
+                          final String   expectedTypeDescription) {
+
+        String msgFmt = "argument {0} should be a {1}, not a {2}";
+        String actualTypeDescription = STypes.getTypeName(args[argIndex]);
+
+        initForFunction(args,
+                        msgFmt,
+                        String.valueOf(argIndex),
+                        expectedTypeDescription,
+                        actualTypeDescription);
     }
 
 

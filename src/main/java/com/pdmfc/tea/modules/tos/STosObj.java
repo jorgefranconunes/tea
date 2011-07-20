@@ -1,18 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2001/05/12
- * Created. (jfn)
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -20,11 +8,11 @@ package com.pdmfc.tea.modules.tos;
 
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.modules.tos.STosClass;
+import com.pdmfc.tea.runtime.SArgs;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjNull;
 import com.pdmfc.tea.runtime.SObjSymbol;
-import com.pdmfc.tea.runtime.STypes;
 import com.pdmfc.tea.util.SList;
 import com.pdmfc.tea.util.SListNode;
 
@@ -39,7 +27,11 @@ import com.pdmfc.tea.util.SListNode;
  **************************************************************************/
 
 public class STosObj
+    extends Object
     implements SObjFunction {
+
+
+
 
 
     // The TOS class this instance belongs to.
@@ -271,17 +263,13 @@ public class STosObj
  *
  * <P>A TOS method is implemented by an <TT>STosMethod</TT> object.
  *
- * @param context
- *    The context inside which this command was invoked.
+ * @param context The context inside which this command was invoked.
  *
- * @param args
- *    The array of arguments passed to the command.
+ * @param args The array of arguments passed to the command.
  *
- * @return
- *    The object returned by the execution of the method.
+ * @return The object returned by the execution of the method.
  *
- * @exception com.pdmfc.tea.runtime.STException
- *    Only thrown by the execution of the method.
+ * @exception STException Only thrown by the execution of the method.
  *
  **************************************************************************/
 
@@ -294,7 +282,11 @@ public class STosObj
 	 return SObjNull.NULL;
       }
 
-      return _myClass.getMethod(STypes.getSymbol(args,1)).exec(obj, context, args);
+      SObjSymbol   methodName = SArgs.getSymbol(args, 1);
+      SObjFunction method     = _myClass.getMethod(methodName);
+      Object       result     = method.exec(obj, context, args);
+
+      return result;
    }
 
 

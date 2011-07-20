@@ -1,29 +1,17 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2001/05/12
- * Created. (jfn)
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 package com.pdmfc.tea.modules.tos;
 
 import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.runtime.SArgs;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SRuntimeException;
-import com.pdmfc.tea.runtime.STypes;
 
 
 
@@ -112,7 +100,7 @@ public class SMethodLoader
 
       STosObj    object     = (STosObj)obj;
       STosClass  objClass   = object.getTosClass();
-      SObjSymbol methodName = STypes.getSymbol(args,1);
+      SObjSymbol methodName = SArgs.getSymbol(args,1);
 
       _method = instantiateProc(_className);
       objClass.addMethod(methodName, _method);

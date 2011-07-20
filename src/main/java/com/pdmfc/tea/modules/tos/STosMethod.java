@@ -29,10 +29,7 @@ import com.pdmfc.tea.runtime.SObjBlock;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjNull;
 import com.pdmfc.tea.runtime.SObjSymbol;
-import com.pdmfc.tea.runtime.SObjVar;
 import com.pdmfc.tea.runtime.SReturnException;
-import com.pdmfc.tea.util.SList;
-import com.pdmfc.tea.util.SListNode;
 
 
 
@@ -57,9 +54,7 @@ public class STosMethod
     // The TOS method body.
     private SObjBlock    _body;
 
-    private STosClass _myClass;
     private int       _level;
-    private SListNode _memberNames;
 
     private static final SObjSymbol _thisSymbol =SObjSymbol.addSymbol("this");
     private static final SObjSymbol _superSymbol=SObjSymbol.addSymbol("super");
@@ -89,11 +84,9 @@ public class STosMethod
 		     SObjSymbol[] argNames,
 		     SObjBlock    body) {
 
-      _argNames    = argNames;
-      _body        = body;
-      _myClass     = theClass;
-      _level       = theClass.level();
-      _memberNames = theClass.memberNames().head();
+      _argNames = argNames;
+      _body     = body;
+      _level    = theClass.level();
    }
 
 
@@ -127,7 +120,7 @@ public class STosMethod
 	throws STeaException {
 
 	if ( args.length != (_argNames.length+2) ) {
-	    throw new SNumArgException(args[0], parametersText());
+	    throw new SNumArgException(args, parametersText());
 	}
 
 	STosObj   obj          = (STosObj)func;
