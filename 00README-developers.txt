@@ -19,7 +19,7 @@ be added in this branch. Only bug fixes.
 Pre-Requisites
 ==============
 
-1. Compiler for Java 1.5 or later.
+Sun JDK 1.5
 
 
 
@@ -99,8 +99,10 @@ release - Creates a release package.
 
 
 
-Making a New Release (for admins)
+Making a New Release
 ====================
+
+This information is intended for release managers only.
 
 1. Check the release version number.
 
@@ -114,8 +116,8 @@ Execute the Makefile target to build the release archive:
 
     make release
 
-The release bundle is named "tea-3.2.Z.tar.gz" and should be available
-in working copy root.
+The release bundle is named "tea-3.2.Z.tar.gz" and will be created at
+the working copy root.
 
 
 3. Perform testing on the release.
@@ -124,15 +126,28 @@ Test out the release, by tring out the installation of the archive
 according to the Tea site's instructions.
 
 
-4. Update the relase on the Subversion repository
+4. Take note of the Subversion revision. You can obtain it with the
+   following:
+
+    svn log -q -r HEAD
+
+
+5. Register the relase on the Subversion repository:
 
     svn cp -m 'Tea 3.2.Z release.' \
          -r NNN \
-        svn+ssh://www.pdmfc.com/opt/develop/svnroot/tea/branches/3.2.x \
-        svn+ssh://www.pdmfc.com/opt/develop/svnroot/tea/releases/3.2.Z
+        svn+ssh://ssh.pdmfc.com/opt/svnroot/tea/branches/3.2.x \
+        svn+ssh://ssh.pdmfc.com/opt/svnroot/tea/releases/3.2.Z
 
 
-5. Update the Tea site.
+6. And copy the release bundle also to the Subversion repository:
+
+    svn import -m 'Bundle for release 3.2.Z' \
+	./tea-3.2.Z.tar.gz \
+	svn+ssh://ssh.pdmfc.com/opt/svnroot/tea/bundles/tea-3.2.Z.tar.gz
+
+
+7. Update the Tea site.
 
 If it is a public release, update the Tea site.
 
