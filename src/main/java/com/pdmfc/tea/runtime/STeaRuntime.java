@@ -1,37 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2005/03/09 The "addModule(String)" method now generates the
- * apropriate "STeaException" if there were any problems instantiating
- * the module class. (jfn)
- *
- * 2004/04/03 Added the method "setImportDirs(List)". (jfn)
- *
- * 2002/10/28 The "setImportDirs(...)" methods now automatically add
- * to the end of the list the directory/URL for the Tea core
- * library. (jfn)
- *
- * 2002/08/03 The SList storing the modules was replaced by a
- * java.util.ArrayList. (jfn)
- *
- * 2002/07/18 Removed the "setCliArgs()" method. Its role is now
- * performed from within "STeaShell" itself. (jfn)
- *
- * 2002/01/10 The addJavaFunction(...) methods were moved to the
- * SModuleBase class. (jfn) Now uses SObjPair.iterator() instead of
- * SObjPair.elements(). (jfn)
- *
- * 2001/05/12 Created. (jfn)
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
