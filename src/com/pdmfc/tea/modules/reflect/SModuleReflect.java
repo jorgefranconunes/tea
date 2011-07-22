@@ -476,6 +476,10 @@ public class SModuleReflect
 	} catch (ClassNotFoundException e) {
 	    throw new SRuntimeException(args[0],
 					"could not load class '" + 
+					className + "'");	    
+	} catch (UnsupportedClassVersionError e) {
+	    throw new SRuntimeException(args[0],
+					"Bad version number in .class file '" + 
 					className + "'");
 	} catch (NoSuchFieldException e) {
 	    throw new SRuntimeException(args[0],
@@ -597,6 +601,10 @@ public class SModuleReflect
 	} catch (ClassNotFoundException e) {
 	    throw new SRuntimeException(args[0],
 					"could not load class '" + 
+					className + "'");	    
+	} catch (UnsupportedClassVersionError e) {
+	    throw new SRuntimeException(args[0],
+					"Bad version number in .class file '" + 
 					className + "'");
 	} catch (NoSuchFieldException e) {
 	    throw new SRuntimeException(args[0],
@@ -716,6 +724,10 @@ public class SModuleReflect
 	} catch (ClassNotFoundException e) {
 	    throw new SRuntimeException(args[0],
 					"could not load parameter class '" + 
+					paramClassName + "'");	    
+	} catch (UnsupportedClassVersionError e) {
+	    throw new SRuntimeException(args[0],
+					"Bad version number in .class file '" + 
 					paramClassName + "'");
 	}
 	try {
@@ -741,6 +753,10 @@ public class SModuleReflect
 	} catch (ClassNotFoundException e) {
 	    throw new SRuntimeException(args[0],
 					"could not load class '" + 
+					className + "'");	    
+	} catch (UnsupportedClassVersionError e) {
+	    throw new SRuntimeException(args[0],
+					"Bad version number in .class file '" + 
 					className + "'");
 	} catch (NoSuchMethodException e) {
 	    throw new SRuntimeException(args[0],
@@ -871,6 +887,10 @@ public class SModuleReflect
 	} catch (ClassNotFoundException e) {
 	    throw new SRuntimeException(args[0],
 					"could not load class '" + 
+					className + "'");	    
+	} catch (UnsupportedClassVersionError e) {
+	    throw new SRuntimeException(args[0],
+					"Bad version number in .class file '" + 
 					className + "'");
 	} catch (NoSuchMethodException e) {
 	    throw new SRuntimeException(args[0],
@@ -891,8 +911,8 @@ public class SModuleReflect
 					"problems calling constructor for '" + 
 					className + "(" + 
 					paramsTxt.toString() + ")' with " +
-					params);	    
-	}
+					params);
+        }
 
 	return result;
     }
@@ -1015,6 +1035,10 @@ public class SModuleReflect
 	} catch (ClassNotFoundException e) {
 	    throw new SRuntimeException(args[0],
 					"could not load class '" + 
+					className + "'");	    
+	} catch (UnsupportedClassVersionError e) {
+	    throw new SRuntimeException(args[0],
+					"Bad version number in .class file '" + 
 					className + "'");
 	} catch (NoSuchMethodException e) {
 	    throw new SRuntimeException(args[0],
