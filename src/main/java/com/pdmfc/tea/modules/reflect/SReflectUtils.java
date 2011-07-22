@@ -320,6 +320,9 @@ final class SReflectUtils
                 result = Class.forName(className);
             } catch ( ClassNotFoundException e ) {
                 String msg = "could not load class \"{0}\"";
+                throw new SRuntimeException(args, msg, className);	    
+            } catch (UnsupportedClassVersionError e) {
+                String msg = "Bad version number in .class file \"{0}\"";
                 throw new SRuntimeException(args, msg, className);
             }
         }
