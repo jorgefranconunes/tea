@@ -599,6 +599,12 @@ public class SModuleRegexp
 //* A list of string objects obtained from <Arg name="aString"/>
 //* by splitting it using the <Arg name="separator"/> as boundary
 //* sequence.
+//* <P>If <Arg name="aString"/> is an empty string,
+//* an empty list is returned.</P>
+//* <P>If <Arg name="aString"/> does not contain the <Arg name="separator"/>,
+//* a list with a single element <Arg name="aString"/> is returned.</P>
+//* <P>Every two consecutive ocurrences of <Arg name="separator"/> found within
+//* <Arg name="aString"/> result in an empty string element.</P>
 //* </Returns>
 //*
 //* <Description>
