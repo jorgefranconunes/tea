@@ -1,0 +1,151 @@
+<?xml version="1.0"?>
+
+<!--
+PMD rulesets for the DTrader project.
+
+For information on configuring PMD rule sets see
+http://pmd.sourceforge.net/howtomakearuleset.html
+-->
+
+<ruleset name="DTrader PMD ruleset"
+         xmlns="http://pmd.sf.net/ruleset/1.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sf.net/ruleset/1.0.0 http://pmd.sf.net/ruleset_xml_schema.xsd"
+         xsi:noNamespaceSchemaLocation="http://pmd.sf.net/ruleset_xml_schema.xsd">
+
+  <description>
+PMD rule set for Java code in the DTrader project.
+  </description>
+
+
+
+
+
+  <!-- See http://pmd.sourceforge.net/rules/basic.html for a
+  descriptions of all rules in this ruleset. We explicitly enumerate
+  all "basic" rules because we have to configure some of them. -->
+
+  <rule ref="rulesets/basic.xml">
+    <exclude name="EmptyCatchBlock" /> <!-- Needs config. -->
+    <exclude name="ExtendsObject" /> <!-- Me not like it. -->
+  </rule>
+
+  <rule ref="rulesets/basic.xml/EmptyCatchBlock">
+    <properties>
+      <!-- Allow empty catch blocks as long has they have a comment. -->
+      <property name="allowCommentedBlocks" value="true" />
+    </properties>
+  </rule>
+
+
+  <!-- And some of our own, to ensure Java coding conventions are
+  followed. -->
+
+  <rule name="ShouldExtendObject"
+  	language="java"
+        message="Explicitly declare class to extend Object."
+        class="net.sourceforge.pmd.rules.XPathRule">
+    <description>All classes should have an extends declaration.</description>
+    <priority>4</priority>
+    <properties>
+       <property name="xpath">
+          <value>
+          <![CDATA[
+//ClassOrInterfaceDeclaration[@Interface!='true' and count(ExtendsList)=0]
+          ]]>
+          </value>
+       </property>
+    </properties>
+    <example>
+    <![CDATA[
+public class Foo { 	// Should be declared with "extends Object".
+}
+    ]]>
+    </example>
+  </rule>
+
+
+
+
+
+  <!-- See http://pmd.sourceforge.net/rules/braces.html for a
+  description of all rules in this ruleset. -->
+  <rule ref="rulesets/braces.xml" />
+
+
+
+
+
+  <!-- See http://pmd.sourceforge.net/rules/coupling.html for a
+  description of all rules in this ruleset. -->
+  <rule ref="rulesets/coupling.xml" />
+
+
+
+
+
+  <!-- See http://pmd.sourceforge.net/rules/design.html for a
+  description of all rules in this ruleset. -->
+  <rule ref="rulesets/design.xml">
+    <exclude name="ConfusingTernary" /> <!-- Me not like it. -->
+    <exclude name="ImmutableField" /> <!-- Me not like it. -->
+  </rule>
+
+
+
+
+
+  <!-- See http://pmd.sourceforge.net/rules/imports.html for a
+  description of all rules in this ruleset. -->
+  <rule ref="rulesets/imports.xml">
+    <exclude name="ImportFromSamePackage" /> <!-- Me not like it. -->
+  </rule>
+
+
+
+
+
+  <!-- See http://pmd.sourceforge.net/rules/naming.html for a
+  description of all rules in this ruleset.  We explicitly enumerate
+  all "naming" rules because we have to configure some of them. -->
+
+  <rule ref="rulesets/naming.xml">
+    <exclude name="ShortVariable" /> <!-- Me not like it. -->
+    <exclude name="LongVariable" /> <!-- Me not like it. -->
+    <exclude name="VariableNamingConventions" /> <!-- Needs config. -->
+  </rule>
+
+  <!-- WARNING: This rule does not check if the members actually start
+  with the given preffix. Meaning it is useless... -->
+  <rule ref="rulesets/naming.xml/VariableNamingConventions">
+    <properties>
+      <property name="memberPrefix" value="_" />
+      <property name="staticPrefix" value="_" />
+    </properties>
+  </rule>
+
+
+
+
+
+  <!-- See http://pmd.sourceforge.net/rules/strictexception.html for a
+  description of all rules in this ruleset. -->
+  <rule ref="rulesets/strictexception.xml" />
+
+
+
+
+
+  <!-- See http://pmd.sourceforge.net/rules/strings.html for a
+  description of all rules in this ruleset. -->
+  <rule ref="rulesets/strings.xml" />
+
+
+
+
+
+  <!-- See http://pmd.sourceforge.net/rules/unusedcode.html for a
+  description of all rules in this ruleset. -->
+  <rule ref="rulesets/unusedcode.xml" />
+
+</ruleset>

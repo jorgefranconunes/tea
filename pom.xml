@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+
+Copyright (c) 2011 PDMFC, All Rights Reserved.
+
+
+Main Maven POM file.
+
+NOTE: Use of Maven to perform Tea builds is currently only intended as
+a for proof-of-concept. The official build procedure will always be
+the one described at "00README-developers.txt".
+
+-->
+
+<project
+   xmlns="http://maven.apache.org/POM/4.0.0"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                       http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.pdmfc.tea</groupId>
+  <artifactId>tea</artifactId>
+  <version>4.0.0-beta04</version>
+  <packaging>jar</packaging>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <BUILD_VERSION>${project.version}</BUILD_VERSION>
+  </properties>
+
+
+
+
+
+  <!-- Define the versions of all dependencies used in all
+       modules. This way modules will not need to know or to refer to
+       the dependency version. -->
+
+  <dependencyManagement>
+    <dependencies>
+        
+      <!-- JUnit -->
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.8.2</version>
+      </dependency>
+
+    </dependencies>
+  </dependencyManagement>
+
+
+
+
+
+  <!-- List of dependencies for this module. -->
+
+  <dependencies>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+  </dependencies>
+
+
+
+
+
+  <!-- -->
+
+  <build>
+
+    <defaultGoal>package</defaultGoal>
+
+
+    <!-- Plugins configuration that applies to all POMs inheriting
+         from this POM. -->
+    <pluginManagement>
+
+      <plugins>
+      
+
+        <!-- Compiler configuration. -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>2.3.2</version>
+          <configuration>
+            <source>1.6</source>
+            <target>1.6</target>
+            <showWarnings>true</showWarnings>
+            <compilerArgument>-Xlint</compilerArgument>
+            <compilerArgument>-Xlint:-serial</compilerArgument>
+          </configuration>
+        </plugin>
+
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>2.5</version>
+        </plugin>
+
+
+        <!-- JUnit tests configuration -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>2.8</version>
+          <configuration>
+            <!-- Run the tests in the same JVM running Maven. -->
+            <!-- <forkMode>never</forkMode> -->
+            <!-- Get rid of annoying warning when forkMode==never. -->
+            <useSystemClassLoader>false</useSystemClassLoader>
+            <!-- Show exception stack traces of tests in stdout. -->
+            <useFile>false</useFile>
+          </configuration>
+        </plugin>
+
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>2.3.2</version>
+        </plugin>
+
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-antrun-plugin</artifactId>
+          <version>1.6</version>
+        </plugin>
+
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>2.4.1</version>
+        </plugin>
+
+
+        <!-- Reporting configuration. -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-site-plugin</artifactId>
+          <version>3.0</version>
+          <configuration>
+            <reportPlugins>
+
+              <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                  <dependencyDetailsEnabled>false</dependencyDetailsEnabled>
+                  <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+                </configuration>
+                <reports>
+                  <report>cim</report>
+                  <report>dependencies</report>
+                  <report>index</report>
+                  <report>issue-tracking</report>
+                  <report>project-team</report>
+                  <report>scm</report>
+                  <report>summary</report>
+                </reports>
+              </plugin>
+
+              <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.8</version>
+                <reports>
+                  <report>javadoc</report>
+                </reports>
+                <configuration>
+                  <quiet>true</quiet>
+                  <doctitle>${project.name} ${project.version}</doctitle>
+                  <windowtitle>${project.name} ${project.version}</windowtitle>
+                  <author>true</author>
+                  <splitindex>true</splitindex>
+                  <version>true</version>
+                  <use>true</use>
+                  <header><![CDATA[<b>Tea Java Runtime API</b><br /><b>Version ${project.version}</b>]]></header>
+                  <bottom><![CDATA[<font size="-1">&copy; 2011 <a href="http://www.pdmfc.com" target="_blank">PDMFC</a>, All Rights Reserved.</font>]]></bottom>
+                </configuration>
+              </plugin>
+
+              <!-- The JXR reporting plugin must come before the PMD
+              and Surefire reporting plugins. -->
+              <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jxr-plugin</artifactId>
+                <version>2.3</version>
+                <reports>
+                  <report>jxr</report>
+                  <report>test-jxr</report>
+                </reports>
+              </plugin>
+
+              <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-report-plugin</artifactId>
+                <version>2.9</version>
+              </plugin>
+
+              <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>2.5</version>
+                <configuration>
+                  <targetJdk>1.6</targetJdk>
+                  <verbose>true</verbose>
+                  <rulesets>
+                    <ruleset>src/main/config/pmd/pmd-rulesets.xml</ruleset>
+                  </rulesets>
+                </configuration>
+              </plugin>
+
+              <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                  <configLocation>src/main/config/checkstyle/checkstyle.xml</configLocation>
+                </configuration>
+              </plugin>
+
+            </reportPlugins>
+          </configuration>
+        </plugin>
+      
+  
+      </plugins>
+
+    </pluginManagement>
+
+
+
+
+    <!--  -->
+    <plugins>
+
+
+      <!-- Include the appropriate manifest in the final JAR.-->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>com.pdmfc.tea.apps.STeaLauncher</mainClass>
+              <addClasspath>true</addClasspath>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+
+
+      <!-- Copy the final JAR to the location expected by the Tea
+      command line tools. (How low can you go?... All this just to
+      copy a file... Many kittens have died to bring us this
+      information...) -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>1.6</version>
+        <executions>
+          <execution>
+            <id>copy-final-jar</id>
+            <phase>package</phase>
+            <configuration>
+              <target>
+                <copy
+                   file="target/${project.build.finalName}.jar"
+                   todir="lib/jars"
+                   verbose="true" />
+              </target>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+
+      <!-- Add the Tea library source files to the resources included
+      in the JAR. -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-tea-lib-resources</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>target/classes/lib/tea-${project.version}</outputDirectory>
+              <resources>          
+                <resource>
+                  <directory>src/main/tea</directory>
+                  <filtering>false</filtering>
+                </resource>
+              </resources>              
+            </configuration>            
+          </execution>
+        </executions>
+      </plugin>
+
+
+      <!-- Remove the final JAR also from where it was copied to
+      during assembly. -->
+      <plugin>
+        <artifactId>maven-clean-plugin</artifactId>
+        <configuration>
+          <filesets>
+            <fileset>
+              <directory>lib/jars</directory>
+              <includes>
+                <include>**/*.jar</include>
+              </includes>
+            </fileset>
+          </filesets>
+        </configuration>
+      </plugin>
+
+    </plugins>
+
+
+
+
+    
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
+
+
+  </build>
+
+
+
+
+
+  <!-- More project information. -->
+
+  <name>Tea</name>
+
+  <description>The Tea scripting language.</description>
+
+  <url>https://redmine.pdmfc.com/projects/tea/wiki</url>
+
+  <inceptionYear>1997</inceptionYear>
+
+  <organization>
+    <name>PDMFC</name>
+    <url>http://www.pdmfc.com</url>
+  </organization>
+
+  <issueManagement>
+    <system>Redmine</system>
+    <url>https://redmine.pdmfc.com/projects/tea/issues</url>
+  </issueManagement>
+
+  <ciManagement>
+    <system>jenkins</system>
+    <url>https://ci.pdmfc.com/jenkins/job/Tea/</url>
+  </ciManagement>
+
+  <scm>
+    <developerConnection>scm:svn:svn+ssh://ssh.pdmfc.com/opt/svnroot/tea/trunk</developerConnection>
+    <tag>HEAD</tag>
+    <url>https://redmine.pdmfc.com/projects/tea/repository/show/trunk</url>
+  </scm>
+
+  <developers>
+    <developer>
+      <id>jfn</id>
+      <name>Jorge Nunes</name>
+      <email>jorge.nunes@pdmfc.com</email>
+      <organization>PDMFC</organization>
+      <roles>
+        <role>developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>pcorreia</id>
+      <name>Paulo Correia</name>
+      <email>paulo.correia@pdmfc.com</email>
+      <organization>PDMFC</organization>
+      <roles>
+        <role>developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>jpsl</id>
+      <name>João Luis</name>
+      <email>joao.luis@pdmfc.com</email>
+      <organization>PDMFC</organization>
+      <roles>
+        <role>developer</role>
+      </roles>
+    </developer>
+  </developers>
+
+
+</project>
+

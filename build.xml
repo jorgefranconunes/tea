@@ -101,7 +101,7 @@ Main Ant build file for the Tea development tree.
   <target name="resources.build">
     <mkdir dir="${resources.target.dir}" />
     <copy-from-template
-       file="${resources.source.dir}/com/pdmfc/tea/TeaConfig.properties.template"
+       file="${resources.source.dir}/com/pdmfc/tea/TeaConfig.properties"
        tofile="${resources.target.dir}/com/pdmfc/tea/TeaConfig.properties" />
   </target>
 
@@ -337,7 +337,7 @@ If you remove the build.conf file, ant will setup one for you using the JUnit li
   <!-- release related targets. -->
 
   <property name="release.dir" location="target" />
-  <property name="release.basename" value="tea-${TEA_VERSION}" />
+  <property name="release.basename" value="tea-${BUILD_VERSION}" />
 
   <target name="release.build" depends="all, doc">
     <mkdir dir="${release.dir}" />
@@ -349,7 +349,7 @@ If you remove the build.conf file, ant will setup one for you using the JUnit li
       <!-- does not preserve permissions? - tarfileset for executables -->
       <tarfileset
          dir="."
-         prefix="tea-${TEA_VERSION}"
+         prefix="tea-${BUILD_VERSION}"
          followsymlinks="no"
          defaultexcludes="yes"
          filemode="755">
@@ -360,7 +360,7 @@ If you remove the build.conf file, ant will setup one for you using the JUnit li
 
       <tarfileset
          dir="."
-         prefix="tea-${TEA_VERSION}"
+         prefix="tea-${BUILD_VERSION}"
          followsymlinks="no"
          defaultexcludes="yes">
         <include name="00README.txt" />
@@ -387,7 +387,7 @@ If you remove the build.conf file, ant will setup one for you using the JUnit li
       <!-- does not preserve permissions? - tarfileset for executables -->
       <tarfileset
          dir="."
-         prefix="tea-${TEA_VERSION}"
+         prefix="tea-${BUILD_VERSION}"
          followsymlinks="no"
          defaultexcludes="yes"
          filemode="755">
@@ -399,7 +399,7 @@ If you remove the build.conf file, ant will setup one for you using the JUnit li
 
       <tarfileset
          dir="."
-         prefix="tea-${TEA_VERSION}"
+         prefix="tea-${BUILD_VERSION}"
          followsymlinks="no"
          defaultexcludes="yes">
         <!-- exclude executables -->
@@ -478,9 +478,9 @@ Only utility tasks bellow.
           <striplinecomments>
             <comment value="%%" />
           </striplinecomments>
+          <expandproperties/>
         </filterchain>
         <filterset begintoken="$${" endtoken="}">
-          <filtersfile file="config/tea-core.conf" />
         </filterset>
       </copy>
     </sequential>
