@@ -1,0 +1,1300 @@
+Java Coding Conventions
+
+
+
+
+
+Changes:
+
+2011/08/28 (jfn) Minor changes for the Tea project context.
+
+2004/05/07 (jfn) First version.
+
+
+
+
+
+0. Introduction
+
+This document describes the Java coding conventions to be adhered to
+when developing Java code in the Tea project.
+
+The recommendations are based on a document by GeoSoft
+(http://geosoft.no/javastyle.html). Many adaptations have been
+introduced to reflect common practice at PDM&FC.
+
+The present document does not contain any Java technical
+recommendations at all, but focuses mainly on programming style.
+
+
+
+
+
+1. General Recommendations
+
+
+
+
+
+* Some violations to the guide may be allowed if it enhances
+  readability.
+
+The main goal of the recommendation is to improve readability and
+thereby the understanding and the maintainability and general quality
+of the code. It is impossible to cover all the specific cases in a
+general guide and the programmer should be flexible.
+
+
+
+
+
+2. Naming Conventions
+
+
+
+
+
+2.1. General Naming Conventions
+
+
+
+
+
+* Names representing packages should be in all lower case.
+
+
+Examples:
+
+com.pdmfc.tea.util
+
+
+
+
+
+* Names representing types must be nouns and written in mixed case
+  starting with upper case.
+
+This is common practice in the Java development community and also the
+type naming convention used by Sun for the Java core packages.
+
+
+Examples:
+
+Line
+FilePrefix 
+
+
+
+
+
+* Variable names must be in mixed case starting with lower case.
+
+This is common practice in the Java development community and also the
+naming convention for variables used by Sun for the Java core
+packages. Makes variables easy to distinguish from types, and
+effectively resolves potential naming collision as in the declaration
+"Line line;".
+
+
+Examples:
+
+line
+filePrefix
+
+
+
+
+
+* Names representing constants (final variables) must be all uppercase
+  using underscore to separate words.
+
+Common practice in the Java development community and also the naming
+convention used by Sun for the Java core packages.  In general, the
+use of such constants should be minimized.
+
+
+Examples:
+
+MAX_ITERATIONS
+COLOR_RED 
+
+
+
+
+
+* Names representing methods must be verbs and written in mixed case
+  starting with lower case.
+
+Common practice in the Java development community and also the naming
+convention used by Sun for the Java core packages. This is identical
+to variable names, but methods in Java are already distinguishable
+from variables by their specific form.
+
+
+Examples:
+
+getName()
+computeTotalWidth()
+
+
+
+
+
+* Abbreviations and acronyms should not be uppercase when used as
+  name.
+
+Using all uppercase for the base name will give conflicts with the
+naming conventions given above. A variable of this type would have to
+be named dVD, hTML etc. which obviously is not very readable. Another
+problem is illustrated in the examples bellow. When the name is
+connected to another, the readability is seriously reduced. That's
+because the word following the acronym does not stand out as it
+should.
+
+
+Examples:
+
+exportHtmlSource();    // NOT: exportHTMLSource();
+openDvdPlayer();       // NOT: openDVDPlayer();
+
+
+
+
+
+* Class variables should have a "_" as prefix.
+
+Apart from its name and its type the scope of a variable is its most
+important feature. Indicating class scope by using "_" makes it easy
+to distinguish class variables from local method variables. This is
+important because class variables are considered to have higher
+significance than method variables and should be treated with special
+care by the programmer.
+
+A side effect of the "_" naming convention is that it nicely resolves
+the problem of finding reasonable variable names for setter methods:
+
+void setDepth(int depth) {
+    _depth = depth;
+}
+
+
+Examples:
+
+class SomeClass {
+    private int _length;
+    ...
+}
+
+
+
+
+
+* Generic variables should have the same name as their type.
+
+Reduce complexity by reducing the number of terms and names used. Also
+makes it easy to deduce the type given a variable name only.
+
+If for some reason this convention doesn't seem to fit it is a strong
+indication that the type name is badly chosen.
+
+Non-generic variables have a role. These variables can often be named
+by combining role and type:
+
+Point startingPoint;
+Point centerPoint;
+Name  loginName;
+
+
+Examples:
+
+void setTopic(Topic topic)      // NOT: void setTopic(Topic value)
+                                // NOT: void setTopic(Topic aTopic) 
+                                // NOT: void setTopic(Topic x) 
+
+void connect(Database database) // NOT: void connect(Database db)
+                                // NOT: void connect(Database oracleDB)
+
+
+
+
+
+* All names should be written in English.
+
+English is the preferred language for international development.
+
+
+Examples:
+
+fileName;    // NOT:   nomeFicheiro
+
+
+
+
+
+* Variables with a large scope should have long names, variables with
+  a small scope can have short names.
+
+Scratch variables used for temporary storage or indexes are best kept
+short. A programmer reading such variables should be able to assume
+that its value is not used outside a few lines of code. Common scratch
+variables for integers are i, j, k, m, n and for characters c and d.
+
+
+
+
+
+* The name of the object is implicit, and should be avoided in a
+  method name.
+
+As shown in the example bellow, the latter seems natural in the class
+declaration, but proves superfluous in use.
+
+
+Examples:
+
+line.getLength();    // NOT:  line.getLineLength();
+
+
+
+
+
+2.2. Specific Naming Conventions
+
+
+
+
+
+* The terms get/set must be used where an attribute is accessed
+  directly.
+
+This is the naming convention for accessor methods used by Sun for the
+Java core packages. When writing Java beans this convention is
+actually enforced.
+
+
+Examples:
+
+employee.getName();
+matrix.getElement(2, 4);
+employee.setName(name);
+matrix.setElement(2, 4, value);
+
+
+
+
+
+* The "is" prefix should be used for boolean variables and methods.
+
+This is the naming convention for boolean methods and variables used
+by Sun for the Java core packages.
+
+Using the is prefix solves a common problem of choosing bad boolean
+names like "status" or "flag". "isStatus" or "isFlag" simply doesn't
+fit, and the programmer is forced to chose more meaningful names.
+
+There are a few alternatives to the is prefix that fits better in some
+situations. These are the "has", "can" and "should" prefixes:
+
+boolean hasLicense(); 
+boolean canEvaluate(); 
+boolean shouldAbort = false; 
+
+
+Examples:
+
+isSet
+isVisible
+isFinished
+isFound
+isOpen
+
+
+
+
+
+* Iterator variables should be called "i", "j", "k", etc.
+
+The notation is taken from mathematics where it is an established
+convention for indicating iterators.
+
+Variables named "j", "k", etc, should be used for nested loops only
+
+
+
+Examples:
+
+while (Iterator i = pointList.iterator(); i.hasNext(); ) {
+    :
+}
+
+for (int i = 0; i < nTables; i++) {
+    :
+}
+
+
+
+
+
+* Complement names must be used for complement entities.
+
+Reduce complexity by symmetry.
+
+
+Examples:
+
+get/set
+fetch/release
+add/remove
+create/destroy
+start/stop
+insert/delete
+increment/decrement
+old/new
+begin/end
+first/last
+up/down
+min/max
+next/previous
+old/new
+open/close
+show/hide
+
+
+
+
+
+* Abbreviations in names should be avoided.
+
+There are two types of words to consider. First are the common words
+listed in a language dictionary. These must never be
+abbreviated. Never write:
+
+cmd   instead of   command
+cp    instead of   copy
+pt    instead of   point
+comp  instead of   compute
+
+etc.
+
+Then there are domain specific phrases that are more naturally known
+through their acronym or abbreviations. These phrases should be kept
+abbreviated. Never write:
+
+HypertextMarkupLanguage  instead of   html
+CentralProcessingUnit    instead of   cpu
+PriceEarningRatio        instead of   per
+etc. 
+
+
+Examples:
+
+computeAverage();     // NOT:  compAvg();
+
+
+
+
+
+* Negated boolean variable names must be avoided.
+
+The problem arise when the logical not operator is used and double
+negative arises. Following the example bellow it is not immediately
+apparent what "!isNotError" means.
+
+
+Examples:
+
+boolean isError;    // NOT:   isNotError
+boolean isFound;    // NOT:   isNotFound
+
+
+
+
+
+* Associated constants (final variables) should be prefixed by a
+  common type name.
+
+This indicates that the constants belong together and what concept
+the constants represents.
+
+
+Examples:
+
+final int COLOR_RED   = 1;
+final int COLOR_GREEN = 2;
+final int COLOR_BLUE  = 3;
+
+
+
+
+
+* Exception classes should be suffixed with "Exception".
+
+Exception classes are really not part of the main design of the
+program, and naming them like this makes them stand out relative to
+the other classes. This standard is followed by Sun in the basic Java
+library.
+
+
+Examples:
+
+class AccessException {
+    :
+}
+
+
+
+
+
+
+3. Files
+
+
+
+
+
+* Special characters like TAB and page break must be avoided.
+
+These characters are bound to cause problem for editors, printers,
+terminal emulators or debuggers when used in a multi-programmer,
+multi-platform environment.
+
+
+
+
+
+* Copyright comment at the start of every Java source file.
+
+Every Java source file must have a comment block at the very start
+with the following structure:
+
+/************************************************************************
+ *
+ * Copyright (c) 2011 PDMFC, All Rights Reserved.
+ *
+ ************************************************************************/
+
+
+
+
+
+4. Statements
+
+
+
+
+
+4.1. Package and Import Statements
+
+
+
+
+
+* The "package" statement must be the first statement of the file. All
+  files should belong to a specific package.
+
+The "package" statement location is enforced by the Java
+language. Letting all files belong to an actual (rather than the Java
+default) package enforces Java language object oriented programming
+techniques.
+
+
+
+
+
+* The "import" statements must follow the "package"
+  statement. "import" statements should be sorted with the most
+  fundamental packages first, and grouped with associated packages
+  together and one blank line between groups.
+
+The import statement location is enforced by the Java language. The
+sorting makes it simple to browse the list when there are many
+imports, and it makes it easy to determine on which packages the
+present package is designed. The grouping reduces complexity by
+collapsing related information into a common unit.
+
+
+Examples:
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.Socket;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
+import com.pdmfc.tea.STeaException;
+
+
+
+
+
+* The "import" statement must always refer to a specific class.
+
+This makes it obvious on which external classes your code depends on.
+
+
+Examples:
+
+import java.io.IOException;    // NOT: import java.io.*
+import java.io.InputStream;
+
+
+
+
+
+
+4.2. Classes and Interfaces
+
+
+
+
+
+* Class and Interface declarations should be organized in the
+  following manner: 
+
+a) Class or interface documentation.
+
+b) "class" or "interface" statement.
+
+c) Class (static) variables in the order "public", "protected",
+package (no access modifier), "private". 
+
+d) Instance variables in the order public, protected, package (no
+access modifier), private.
+
+e) Constructors. 
+
+f) Methods (no specific order). 
+
+
+
+
+
+
+4.3. Methods
+
+
+
+
+
+* Method modifiers should be given in the following order: <access>
+  static abstract synchronized <unusual> final native. The <access>
+  modifier (if present) must be the first modifier.
+
+<access> is one of "public", "protected" or "private" while <unusual>
+includes "volatile" and "transient". The most important lesson here is
+to keep the access modifier as the first modifier. Of the possible
+modifiers, this is by far the most important, and it must stand out in
+the method declaration. For the other modifiers, the order is less
+important, but it makes sense to have a fixed convention.
+
+
+
+
+
+4.4. Types
+
+
+
+
+
+* Type conversions must always be done explicitly. Never rely on
+  implicit type conversion.
+
+By this, the programmer indicates that he is aware of the different
+types involved and that the mix is intentional.
+
+
+Examples:
+
+floatValue = (float) intValue;     // NOT:    floatValue = intValue;
+
+
+
+
+
+4.5. Variables
+
+
+
+
+
+* Variables should be initialized where they are declared and they
+  should be declared in the smallest scope possible.
+
+This ensures that variables are valid at any time. Sometimes it is
+impossible to initialize a variable to a valid value where it is
+declared. In these cases it should be left uninitialized rather than
+initialized to some phony value.
+
+
+
+
+
+* Variables must never have dual meaning.
+
+Enhances readability by ensuring all concepts are represented
+uniquely. Reduce chance of error by side effects.
+
+
+
+
+
+* Class variables should never be declared public.
+
+The concept of Java information hiding and encapsulation is violated
+by public variables. Use private variables and access functions
+instead. One exception to this rule is when the class is essentially a
+data structure, with no behavior (equivalent to a C++ struct). In this
+case it is appropriate to make the class instance variables public.
+
+
+
+
+
+* Different variables must always be declared in different statements.
+
+This way it is clear what variables are being declared.
+
+
+Examples:
+
+int     i;         // NOT: int i, j;
+int     j;
+Service service;
+
+
+
+
+
+* Variables should be kept alive for as short a time as possible.
+
+Keeping the operations on a variable within a small scope, it is
+easier to control the effects and side effects of the variable.
+
+
+
+
+
+4.6. Loops
+
+
+
+
+
+* Only loop control statements must be included in the "for ()"
+  construction.
+
+Increase maintainability and readability. Make it crystal clear what
+controls the loop and what the loop contains.
+
+
+Examples:
+
+sum = 0;                      // NOT:     for (i=0, sum=0; i<100; i++) {
+for ( i=0; i<100; i++ ) {     //              sum += value[i];
+    sum += value[i];          //          }
+}
+
+
+
+
+
+* The body of a "for ()" construction must be always a block.
+
+
+Examples:
+
+for ( int i=0; i<10; i++ ) {    // NOT:    for ( int i=0; i<10; i++ )
+    System.out.println(i);      //             System.out.println(i);
+}
+
+
+
+
+
+* The use of "do .... while" loops should be avoided.
+
+There are two reasons for this. First is that the construct is
+superfluous. Any statement that can be written as a do .... while loop
+can equally well be written as a while loop or a for loop. Complexity
+is reduced by minimizing the number of constructs being used.
+
+The other reason is of readability. A loop with the conditional part
+at the end is more difficult to read than one with the conditional at
+the top.
+
+
+
+
+
+* The use of "break" and "continue" in loops should be avoided.
+
+These statements should only be used if they prove to give higher
+readability than their structured counterparts.
+
+In general "break" should only be used in "case" statements and
+"continue" should be avoided altogether.
+
+
+
+
+
+* The form  "for (;;)" should be used for empty loops.
+
+This form is better than the functionally equivalent "while (true)"
+since this implies a test against true, which is neither necessary nor
+meaningful
+
+
+Examples:
+
+for (;;) {            // NOT:   while (true) {
+    :                 //           :
+}                     //        }
+
+
+
+
+
+4.7. Conditionals
+
+
+
+
+
+* Complex conditional expressions must be avoided. Introduce temporary
+  boolean variables instead.
+
+By assigning boolean variables to expressions, the program gets
+automatic documentation. The construction will be easier to read and
+to debug.
+
+
+Examples:
+
+if ( (elementNo<0) || (elementNo>maxElement) || (elementNo==lastElement) ) {
+    :
+} 
+
+should be replaced by: 
+
+boolean isFinished      = (elementNo<0) || (elementNo>maxElement);
+boolean isRepeatedEntry = (elementNo==lastElement);
+
+if ( isFinished || isRepeatedEntry ) {
+    :
+}
+
+
+
+
+
+* The nominal case should be put in the if-part and the exception in
+  the else-part of an "if" statement.
+
+Makes sure that the exceptions does not obscure the normal path of
+execution. This is important for both the readability and performance.
+
+
+Examples:
+
+boolean isError = readFile(fileName);
+
+if ( !isError ) {
+    :
+} else {
+    :
+}
+
+
+
+
+
+* Both the body of the if-part and of the else-part must always be
+  blocks.
+
+
+Examples:
+
+if ( something ) {         // NOT:    if ( something )
+    doSomething();         //             doSomething()
+} else {                   //         else
+    doSomethingElse();     //             doSOmethingElse();
+}
+
+
+
+
+
+* Executable statements in conditionals must be avoided.
+
+Conditionals with executable statements are simply very difficult to
+read. This is especially true for programmers new to Java.
+
+
+Examples:
+
+Do as follows:
+
+file = openFile(fileName, "w");
+if ( file != null ) {
+    :
+}
+
+and NOT like this:
+
+if ( (file = openFile(fileName, "w")) != null ) {
+    :
+}
+
+
+
+
+
+4.8. Miscellaneous
+
+
+
+
+
+* The use of magic numbers in the code should be avoided. Numbers
+  other than 0 and 1 should be considered declared as named constants
+  instead.
+
+If the number does not have an obvious meaning by itself, the
+readability is enhanced by introducing a named constant instead.
+
+
+
+
+
+* Floating point constants should always be written with decimal point
+  and at least one decimal.
+
+This emphasizes the different nature of integer and floating point
+numbers even if their values might happen to be the same in a specific
+case.
+
+Also, as in the last example bellow, it emphasizes the type of the
+assigned variable (sum) at a point in the code where this might not be
+evident.
+
+
+Examples:
+
+double total = 0.0;   // NOT: double total = 0; 
+double speed = 3.0e8; // NOT: double speed = 3e8;
+
+double sum;
+:
+sum = (a + b) * 10.0;
+
+
+
+
+
+* Floating point constants should always be written with a digit
+  before the decimal point.
+
+The number and expression system in Java is borrowed from mathematics
+and one should adhere to mathematical conventions for syntax wherever
+possible. Also, 0.5 is a lot more readable than .5; There is no way it
+can be mixed with the integer 5.
+
+
+Examples:
+
+double total = 0.5;   // NOT: double total = .5;
+
+
+
+
+
+
+5. Layout and Comments
+
+
+
+
+
+5.1. Layout
+
+
+
+
+
+* Basic indentation should be 4.
+
+
+Examples:
+
+for ( i=0; i<nElements; i++ ) {
+    a[i] = 0;
+}
+
+
+
+
+
+* File content must be kept within 80 columns.
+
+80 columns is the common dimension for editors, terminal emulators,
+printers and debuggers, and files that are shared between several
+developers should keep within these constraints. It improves
+readability when unintentional line breaks are avoided when passing a
+file between programmers.
+
+
+
+
+
+* The entire code of a method must always be visible in its entirety
+  in the code editor window.
+
+Of course different programmers may use different code editors or
+different window sizes making this rule somewhat difficult to fulfill
+when more than one programmer is involved. As a rule of thumb assume
+60 lines as the longest a method code should be.
+
+
+
+
+
+* Block layout should have the following form:
+
+while ( !isDone ) {
+  doSomething();
+  isDone = moreToDo();
+}
+
+
+
+
+
+* The "class" or "interface" declarations should have the following
+  form:
+
+class SomeClass
+    extends AnotherClass
+    implements SomeInterface,
+               AnotherInterface {
+    ...
+}
+
+
+
+
+
+* The method declarations should have the following form:
+
+public void someMethod() 
+    throws SomeException {
+    ...
+}
+
+public void methodWithArgs(String arg1,
+                           String arg2)
+    throws SomeException {
+    ...
+}
+
+
+
+
+
+* The if-else class of statements should have the following form:
+
+if ( condition ) {
+  statements;
+}
+
+if ( condition ) {
+  statements;
+} else {
+  statements;
+}
+
+if ( condition ) {
+  statements;
+} else if ( condition ) {
+  statements;
+} else {
+  statements;
+}
+
+
+
+
+
+* A for statement should have the following form:
+
+for ( initialization; condition; update ) {
+    statements;
+}
+
+
+
+
+
+* A while statement should have the following form:
+
+while ( condition ) {
+    statements;
+}
+
+
+
+
+
+* A do-while statement should have the following form:
+
+do {
+    statements;
+} while ( condition );
+
+
+
+
+
+* A "switch" statement should have the following form:
+
+switch ( condition ) {
+case ABC : 
+    statements;
+    // Fallthrough
+case DEF : 
+    statements;
+    break;
+case XYZ : 
+    statements;
+    break;
+default : 
+    statements;
+    break;
+}
+
+The explicit "Fallthrough" comment should be included whenever there
+is a case statement without a break statement. Leaving the break out
+is a common error and it must be made clear that it is intentional
+when it is not there.
+
+
+
+
+
+* A try-catch statement should have the following form:
+
+try {
+    statements;
+} catch (Exception exception) {
+    statements;
+}
+
+try {
+    statements;
+} catch (Exception exception) {
+    statements;
+} finally {
+    statements;
+}
+
+
+
+
+
+* Single statement "if-else", "for" or "while" statements must always
+  be written with brackets.
+
+
+Examples:
+
+if ( condition ) {
+    statement;
+}
+
+while ( condition ) {
+    statement;
+}
+
+for ( initialization; condition; update ) {
+    statement;
+}
+
+
+
+
+
+* The incompleteness of split lines must be made obvious.
+
+Split lines occurs when a statement exceed the 80 column limit given
+above. It is difficult to give rigid rules for how lines should be
+split, but the examples above should give a general hint.
+
+In general: 
+
+a) Break after a comma. 
+
+b) Break after an operator. 
+
+c) Align the new line with the beginning of the expression on the
+previous line.
+
+
+Examples:
+
+totalSum = a + b + c +
+           d + e;
+function(param1,
+         param2,
+         param3);
+setText("Long line split" +
+        "into two parts.");
+for ( tableNo = 0;
+      tableNo < maxTable;  
+      tableNo += tableStep )
+
+
+
+
+
+5.2. White Space
+
+
+
+
+
+* Logical units within a block should be separated by one blank line.
+
+In particular there should always be a blank line separating the
+declaration of variables from the code that follows.
+
+
+
+
+
+* Methods must be separated by 5 blank lines.
+
+By making the space larger than space within a method, the methods
+will stand out within the class.
+
+
+
+
+
+* Variables in declarations should be left aligned.
+
+Enhances readability. The variables are easier to spot from the types
+by alignment.
+
+
+Examples:
+
+AsciiFile  file;
+int        nPoints;
+float      x, y;
+
+
+
+
+
+* Assignement to variables should be aligned.
+
+Enhances readability.
+
+
+Examples:
+
+_url            = params.getString(PARAM_URL);
+_user           = params.getString(PARAM_USER);
+_passwd         = params.getString(PARAM_PASSWD);
+_maxConns       = params.getInt(PARAM_MAX_CONNS);
+_timeout        = params.getInt(PARAM_TIMEOUT);
+_verboseLogging = params.getBoolean(PARAM_VERBOSE);
+
+
+
+
+
+5.3. Comments
+
+
+
+
+
+* Tricky code should not be commented but rewritten.
+
+In general, the use of comments should be minimized by making the code
+self-documenting by appropriate name choices and an explicit logical
+structure.
+
+
+
+
+
+* All comments should be written in English. 
+
+All comments should be written in English.
+
+
+
+
+
+* Comments should be indented relative to their position in the code.
+
+Comments should be indented relative to their position in the code.
+
+
+Examples:
+
+for (;;) {                // NOT:    for (;;) {
+    // Do something       //         // Do something
+    something();          //             something();
+}                         //         }
+
+
+
+
+
+* The declaration of collection variables should be preceded by a
+  comment stating the common type of the elements of the collection.
+
+Without the extra comment it can be hard to figure out what the
+collection consist of, and thereby how to treat the elements of the
+collection. In methods taking collection variables as input, the
+common type of the elements should be given in the associated JavaDoc
+comment.
+
+Examples:
+
+// Vector of Point.
+private Vector  _pointList;
+
+// Set of Shape.
+private Set _shapeSet;
+
+
+
+
+
+* All public classes and public and protected functions within public
+  classes should be documented using the Java documentation (javadoc)
+  conventions.
+
+This makes it easy to keep up-to-date on-line code documentation.
+
+
+
+
+
+* All methods must be preceded by a comment block.
+
+The purpose of this comment block is to visually separate adjoining
+methods. The comment block may be empty if the method is private.
+
+/************************************************************************
+ *
+ * 
+ *
+ ************************************************************************/
+

@@ -48,6 +48,9 @@ Main Ant build file for the Tea development tree.
   <target name="release" depends="release.build" />
 
 
+
+
+
   <!-- Tea jar -->
 
   <property name="jar.name" value="tea-${BUILD_VERSION}.jar" />
@@ -61,7 +64,10 @@ Main Ant build file for the Tea development tree.
               resources.build,
               tea.build">
     <mkdir dir="${jar.dir}" />
-    <jar destfile="${jar.file}" basedir="${jar.basedir}" manifest="config/JarManifest">
+    <jar
+       destfile="${jar.file}"
+       basedir="${jar.basedir}"
+       manifest="config/JarManifest">
       <metainf dir="${resources.source.dir}/META-INF" />
     </jar>
   </target>
@@ -76,7 +82,7 @@ Main Ant build file for the Tea development tree.
 
 
 
-  <!-- compiling Tea java source -->
+  <!-- Compile Java source -->
 
   <property name="java.source.dir" location="src/main/java" />
   <property name="java.target.dir" location="target/classes" />
@@ -93,7 +99,7 @@ Main Ant build file for the Tea development tree.
 
 
 
-  <!-- resources -->
+  <!-- Resources -->
 
   <property name="resources.source.dir" location="src/main/resources" />
   <property name="resources.target.dir" location="target/classes/" />
@@ -113,7 +119,7 @@ Main Ant build file for the Tea development tree.
 
 
 
-  <!-- copying Tea source files -->
+  <!-- Copy Tea source files. -->
 
   <property name="tea.source.dir" location="src/main/tea" />
   <property name="tea.target.dir" location="target/classes/lib/tea-${BUILD_VERSION}" />
@@ -135,11 +141,11 @@ Main Ant build file for the Tea development tree.
 
 
 
-  <!-- performing tests -->
+  <!-- Perform tests. -->
 
-  <target name="test.build" depends="jar.build, java-test.build, resources-test.build">
-    <!-- echo>${java-test.target.dir} ; ${jar.file} ; ${BUILD_JUNIT_JAR}</echo -->
-
+  <target
+     name="test.build"
+     depends="jar.build, java-test.build, resources-test.build">
     <junit haltonerror="yes" haltonfailure="yes" showoutput="yes">
       <classpath>
         <pathelement location="${java-test.target.dir}" />
@@ -153,7 +159,6 @@ Main Ant build file for the Tea development tree.
         </fileset>
       </batchtest>
     </junit>
-
   </target>
 
   <target name="test.clean" depends="java-test.clean, resources-test.clean" />
