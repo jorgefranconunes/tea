@@ -167,7 +167,7 @@ Main Ant build file for the Tea development tree.
 
 
 
-  <!-- compilation of tests -->
+  <!-- Compile tests. -->
 
   <property name="java-test.source.dir" location="src/test/java" />
   <property name="java-test.target.dir" location="target/test-classes" />
@@ -178,7 +178,9 @@ Main Ant build file for the Tea development tree.
               java-test.config.file.read,
               java-test.config.file.warn,
               java-test.config.create">
-    <java-compile srcdir="${java-test.source.dir}" destdir="${java-test.target.dir}">
+    <java-compile
+       srcdir="${java-test.source.dir}"
+       destdir="${java-test.target.dir}">
       <javac-classpath>
         <pathelement path="${jar.file}" />
         <pathelement path="${BUILD_JUNIT_JAR}" />
@@ -236,7 +238,9 @@ If you remove the build.conf file, ant will setup one for you using the JUnit li
 
 
 
-  <!-- test resources -->
+
+
+  <!-- Test resources. -->
 
   <property name="resources-test.source.dir" location="src/test/resources" />
   <property name="resources-test.target.dir" location="target/test-classes/" />
@@ -431,6 +435,8 @@ If you remove the build.conf file, ant will setup one for you using the JUnit li
       </tarfileset>
     </tar>
   </target>
+
+
 
 
 
