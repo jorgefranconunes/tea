@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -50,7 +50,7 @@ import com.pdmfc.tea.util.SInputSourceFactory;
  *
  **************************************************************************/
 
-public class SCompiler
+public final class SCompiler
     extends Object {
 
 
@@ -59,6 +59,21 @@ public class SCompiler
 
     private SCompilerStream _in       = null;
     private String          _fileName = null;
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    public SCompiler() {
+
+        // Nothing to do.
+    }
 
 
 
@@ -91,9 +106,9 @@ public class SCompiler
  *
  **************************************************************************/
 
-    public SCode compile(String location,
-                         String encoding,
-                         String fileName)
+    public SCode compile(final String location,
+                         final String encoding,
+                         final String fileName)
         throws IOException,
                SCompileException {
 
@@ -112,7 +127,7 @@ public class SCompiler
  *
  * Compiles a Tea script read from a file or URL.
  *
- * @param locationBase File system path or URL used as base for
+ * @param baseLocation File system path or URL used as base for
  * <code>location</code>.
  *
  * @param location A path relative to <code>baseLocation</code>
@@ -138,10 +153,10 @@ public class SCompiler
  *
  **************************************************************************/
 
-    public SCode compile(String baseLocation,
-                         String location,
-                         String encoding,
-                         String fileName)
+    public SCode compile(final String baseLocation,
+                         final String location,
+                         final String encoding,
+                         final String fileName)
         throws IOException,
                SCompileException {
 
@@ -153,7 +168,7 @@ public class SCompiler
         try {
             code = compile(reader, fileName);
         } finally {
-            try { reader.close(); } catch (IOException e) {}
+            try { reader.close(); } catch (IOException e) { /* */ }
         }
 
         return code;
@@ -189,9 +204,9 @@ public class SCompiler
  *
  **************************************************************************/
 
-    public SCode compile(InputStream input,
-                         String      encoding,
-                         String      fileName)
+    public SCode compile(final InputStream input,
+                         final String      encoding,
+                         final String      fileName)
         throws IOException,
                SCompileException {
 
@@ -203,7 +218,7 @@ public class SCompiler
         try {
             code = compile(reader, fileName);
         } finally {
-            try { reader.close(); } catch (IOException e) {}
+            try { reader.close(); } catch (IOException e) { /* */ }
         }
 
         return code;
@@ -227,17 +242,19 @@ public class SCompiler
  *
  **************************************************************************/
 
-    public SCode compile(String script)
-        throws IOException,
-               SCompileException {
+    public SCode compile(final String script)
+        throws SCompileException {
 
         Reader reader = new StringReader(script);
         SCode  code   = null;
 
         try {
             code = compile(reader, null);
+        } catch (IOException e) {
+            // This should never happen...
+            throw new IllegalStateException(e);
         } finally {
-            try { reader.close(); } catch (IOException e) {}
+            try { reader.close(); } catch (IOException e) { /* */ }
         }
 
         return code;
@@ -267,8 +284,8 @@ public class SCompiler
  *
  **************************************************************************/
 
-    private SCode compile(Reader reader,
-                          String fileName)
+    private SCode compile(final Reader reader,
+                          final String fileName)
         throws IOException,
                SCompileException {
 
@@ -298,7 +315,7 @@ public class SCompiler
  *
  **************************************************************************/
 
-    private Charset findCharset(String charsetName)
+    private Charset findCharset(final String charsetName)
         throws SCompileException {
 
         Charset charset = null;
@@ -351,17 +368,17 @@ public class SCompiler
  *
  **************************************************************************/
 
-    private SCode getBlockInner(char c,
-				int  line)
-	throws IOException,
-	       SCompileException {
+    private SCode getBlockInner(final char c,
+                                final int  line)
+        throws IOException,
+               SCompileException {
 
-	SCode code = getBlock();
+        SCode code = getBlock();
 
-	if ( isAtEnd() ) {
+        if ( isAtEnd() ) {
             String msg = "no ''{0}'' found before end of script for block starting at line {1}{2}";
             compileError(msg, c, line, onFileMsg());
-	}
+        }
         if ( peek() != c ) {
             String msg = "found ''{0}'' at line {1} while expecting a ''{2}'' for block starting at line {3}{4}";
             compileError(msg, peek(), getCurrentLine(), c, line, onFileMsg());
@@ -432,7 +449,7 @@ public class SCompiler
  *
  **************************************************************************/
 
-    private List<SWord> getList(int line)
+    private List<SWord> getList(final int line)
         throws IOException,
                SCompileException {
 
@@ -535,7 +552,7 @@ public class SCompiler
 
    private SWord objIntOrFloat()
          throws IOException,
-	        SCompileException {
+                SCompileException {
 
       boolean       justDigits   = true;
       StringBuilder buffer       = new StringBuilder();
@@ -543,45 +560,45 @@ public class SCompiler
       int           sign         = 1;
 
       switch ( c ) {
-	 case '-' : sign = -1; break;
-	 case '+' : break;
-	 default  : buffer.append(c); break;
+         case '-' : sign = -1; break;
+         case '+' : break;
+         default  : buffer.append(c); break;
       }
       if ( atEndOfSymbol() ) {
-	  if ( !Character.isDigit(c) ) {
-	      return new SWordSymbol(getSymbolName(c));
-	  }
+          if ( !Character.isDigit(c) ) {
+              return new SWordSymbol(getSymbolName(c));
+          }
       } else {
-	  char cNext = peek();
-	  if ( !Character.isDigit(c) && !Character.isDigit(cNext) ) {
-	      return new SWordSymbol(getSymbolName(c));
-	  }
+          char cNext = peek();
+          if ( !Character.isDigit(c) && !Character.isDigit(cNext) ) {
+              return new SWordSymbol(getSymbolName(c));
+          }
       }
       
       while ( !atEndOfSymbol() ) {
-	 c = skip();
-	 if ( !Character.isDigit(c) )  {
-	     justDigits = false;
-	 }
-	 buffer.append(c);
+         c = skip();
+         if ( !Character.isDigit(c) )  {
+             justDigits = false;
+         }
+         buffer.append(c);
       }
 
       String value = buffer.toString();
 
       if ( justDigits ) {
-	  if ( value.charAt(0)=='0' ) {
-	      return new SWordInt(sign * parseOct(value));
-	  } else {
-	      return new SWordInt(sign * parseDec(value));
-	  }
+          if ( value.charAt(0)=='0' ) {
+              return new SWordInt(sign * parseOct(value));
+          } else {
+              return new SWordInt(sign * parseDec(value));
+          }
       } else {
-	  if ( value.charAt(value.length()-1) == 'L' ) {
-	      return new SWordLong(sign * parseLong(value));
-	  } else if ( Character.toLowerCase(value.charAt(1)) == 'x' ) {
-	      return new SWordInt(sign * parseHex(value));
-	  } else {
-	      return new SWordFloat(sign * parseFloat(value));
-	  }
+          if ( value.charAt(value.length()-1) == 'L' ) {
+              return new SWordLong(sign * parseLong(value));
+          } else if ( Character.toLowerCase(value.charAt(1)) == 'x' ) {
+              return new SWordInt(sign * parseHex(value));
+          } else {
+              return new SWordFloat(sign * parseFloat(value));
+          }
       }
    }
 
@@ -595,17 +612,17 @@ public class SCompiler
  *
  **************************************************************************/
 
-    private int parseDec(String str)
-	throws SCompileException {
+    private int parseDec(final String str)
+        throws SCompileException {
 
         int result = 0;
 
-	try {
-	    result = Integer.parseInt(str);
-	} catch (NumberFormatException e) {
+        try {
+            result = Integer.parseInt(str);
+        } catch (NumberFormatException e) {
             String msg = "invalid integer constant ({0}) at line {1}{2}";
             compileError(msg, str, getCurrentLine(), onFileMsg());
-	}
+        }
 
         return result;
     }
@@ -620,17 +637,17 @@ public class SCompiler
  *
  **************************************************************************/
 
-    private long parseLong(String str)
-	throws SCompileException {
+    private long parseLong(final String str)
+        throws SCompileException {
 
         long result = 0L;
 
-	try {
-	    result = Long.parseLong(str.substring(0,str.length()-1));
-	} catch (NumberFormatException e) {
-	    String msg = "invalid long constant ({0}) at line {1}{2}";
-	    compileError(msg, str, getCurrentLine(), onFileMsg());
-	}
+        try {
+            result = Long.parseLong(str.substring(0,str.length()-1));
+        } catch (NumberFormatException e) {
+            String msg = "invalid long constant ({0}) at line {1}{2}";
+            compileError(msg, str, getCurrentLine(), onFileMsg());
+        }
 
         return result;
     }
@@ -645,21 +662,21 @@ public class SCompiler
  *
  **************************************************************************/
 
-    private int parseOct(String str)
-	throws SCompileException {
+    private int parseOct(final String str)
+        throws SCompileException {
 
         int result = 0;
 
-	try {
-	    if ( str.length() == 1 ) {
-		result = 0;
-	    } else {
-		result = Integer.parseInt(str.substring(1), 8);
-	    }
-	} catch (NumberFormatException e) {
+        try {
+            if ( str.length() == 1 ) {
+                result = 0;
+            } else {
+                result = Integer.parseInt(str.substring(1), 8);
+            }
+        } catch (NumberFormatException e) {
             String msg = "invalid octal constant ({0}) at line {1}{2}";
             compileError(msg, str, getCurrentLine(), onFileMsg());
-	}
+        }
 
         return result;
     }
@@ -674,17 +691,17 @@ public class SCompiler
  *
  **************************************************************************/
 
-    private int parseHex(String str)
-	throws SCompileException {
+    private int parseHex(final String str)
+        throws SCompileException {
 
         int result = 0;
 
-	try {
-	    result = Integer.parseInt(str.substring(2), 16);
-	} catch (NumberFormatException e) {
+        try {
+            result = Integer.parseInt(str.substring(2), 16);
+        } catch (NumberFormatException e) {
             String msg = "invalid hexadecimal constant ({0}) at line {1}{2}";
             compileError(msg, str, getCurrentLine(), onFileMsg());
-	}
+        }
 
         return result;
     }
@@ -699,17 +716,17 @@ public class SCompiler
  *
  **************************************************************************/
 
-    private double parseFloat(String str)
-	throws SCompileException {
+    private double parseFloat(final String str)
+        throws SCompileException {
 
         double result = 0.0;
 
-	try {
-	    result = Double.parseDouble(str);
-	} catch (NumberFormatException e) {
+        try {
+            result = Double.parseDouble(str);
+        } catch (NumberFormatException e) {
             String msg = "invalid float constant ({0}) at line {1}{2}";
             compileError(msg, str, getCurrentLine(), onFileMsg());
-	}
+        }
 
         return result;
     }
@@ -730,10 +747,12 @@ public class SCompiler
       StringBuilder name = new StringBuilder();
 
       while ( !atEndOfSymbol() ) {
-	 char c = skip();
+         char c = skip();
 
-	 if ( isWhiteSpace(c) ) break;
-	 name.append(c);
+         if ( isWhiteSpace(c) ) {
+             break;
+         }
+         name.append(c);
       }
 
       return name.toString();
@@ -749,18 +768,20 @@ public class SCompiler
  *
  **************************************************************************/
 
-   private String getSymbolName(char c)
+   private String getSymbolName(final char firstChar)
          throws IOException {
 
       StringBuilder name = new StringBuilder();
 
-      name.append(c);
+      name.append(firstChar);
 
       while ( !atEndOfSymbol() ) {
-	 c = skip();
+         char c = skip();
 
-	 if ( isWhiteSpace(c) ) break;
-	 name.append(c);
+         if ( isWhiteSpace(c) ) {
+             break;
+         }
+         name.append(c);
       }
 
       return name.toString();
@@ -780,37 +801,37 @@ public class SCompiler
  *
  **************************************************************************/
 
-    private String getString(int line)
-	throws IOException,
-	       SCompileException {
+    private String getString(final int line)
+        throws IOException,
+               SCompileException {
 
-	StringBuilder name        = new StringBuilder();
-	boolean       endWasFound = false;
+        StringBuilder name        = new StringBuilder();
+        boolean       endWasFound = false;
 
-	while ( !isAtEnd() ) {
-	    char c = skip();
+        while ( !isAtEnd() ) {
+            char c = skip();
 
-	    if ( c == '"' ) {
-		endWasFound = true;
-		break;
-	    }
-	    if ( c == '\\' ) {
-		if ( isAtEnd() ) {
-		    name.append('\\');
-		} else {
+            if ( c == '"' ) {
+                endWasFound = true;
+                break;
+            }
+            if ( c == '\\' ) {
+                if ( isAtEnd() ) {
                     name.append('\\');
-		    c = skip();
+                } else {
+                    name.append('\\');
+                    c = skip();
                     name.append(c);
-		}
-	    } else {
-		name.append(c);
-	    }
-	}
+                }
+            } else {
+                name.append(c);
+            }
+        }
 
-	if ( !endWasFound ) {
+        if ( !endWasFound ) {
             String msg = "no ''\"'' found before end of script for string starting at line {0}{1}";
             compileError(msg, line, onFileMsg());
-	}
+        }
 
         String result = STeaParserUtils.parseStringLiteral(name.toString());
 
@@ -827,19 +848,19 @@ public class SCompiler
  *
  **************************************************************************/
 
-    private SArithExpression getExpressionBlock(int line)
-	throws IOException,
-	       SCompileException {
+    private SArithExpression getExpressionBlock(final int line)
+        throws IOException,
+               SCompileException {
 
-	SArithExpression result = getExpression(line);
+        SArithExpression result = getExpression(line);
 
-	if ( peek() != '}' ) {
+        if ( peek() != '}' ) {
             String msg = "unexpected ''{0}'' at line {1}{2}";
             compileError(msg, peek(), getCurrentLine(), onFileMsg());
-	}
-	skip();
+        }
+        skip();
 
-	return result;
+        return result;
     }
 
 
@@ -852,45 +873,45 @@ public class SCompiler
  *
  **************************************************************************/
 
-    private SArithExpression getExpression(int line)
-	throws IOException,
-	       SCompileException {
+    private SArithExpression getExpression(final int line)
+        throws IOException,
+               SCompileException {
 
-	SArithExpression  result      = new SArithExpression();
-	StringBuilder     buffer      = new StringBuilder();
-	boolean           endWasFound = false;
+        SArithExpression  result      = new SArithExpression();
+        StringBuilder     buffer      = new StringBuilder();
+        boolean           endWasFound = false;
 
-	while ( !isAtEnd() ) {
-	    char c = skip();
+        while ( !isAtEnd() ) {
+            char c = skip();
 
-	    if ( c == '`' ) {
-		endWasFound = true;
-		break;
-	    }
-	    if ( c == '\\' ) {
-		if ( isAtEnd() ) {
-		    buffer.append('\\');
-		} else {
-		    if ( (c=skip()) == '`' ) {
-			buffer.append('`');
-		    } else {
-			buffer.append('\\');
-			buffer.append(c);
-		    }
-		}
-	    } else {
-		buffer.append(c);
-	    }
-	}
+            if ( c == '`' ) {
+                endWasFound = true;
+                break;
+            }
+            if ( c == '\\' ) {
+                if ( isAtEnd() ) {
+                    buffer.append('\\');
+                } else {
+                    if ( (c=skip()) == '`' ) {
+                        buffer.append('`');
+                    } else {
+                        buffer.append('\\');
+                        buffer.append(c);
+                    }
+                }
+            } else {
+                buffer.append(c);
+            }
+        }
 
-	if ( !endWasFound ) {
+        if ( !endWasFound ) {
             String msg = "no ''`'' found before end of script for expression starting at line {0}{1}";
             compileError(msg, line, onFileMsg());
-	}
+        }
 
-	result.initialize(buffer.toString());
+        result.initialize(buffer.toString());
 
-	return result;
+        return result;
     }
 
 
@@ -904,13 +925,13 @@ public class SCompiler
  **************************************************************************/
 
     private void skipToEOL()
-	throws IOException {
+        throws IOException {
 
-	while ( !isAtEnd() ) {
-	    if ( skip() == '\n' ) {
-		return;
-	    }
-	}
+        while ( !isAtEnd() ) {
+            if ( skip() == '\n' ) {
+                return;
+            }
+        }
     }
 
 
@@ -924,27 +945,27 @@ public class SCompiler
  **************************************************************************/
 
     private void skipToStatement()
-	throws IOException {
+        throws IOException {
 
-	while ( !isAtEnd() ) {
-	    char c = peek();
+        while ( !isAtEnd() ) {
+            char c = peek();
 
-	    switch ( c ) {
-	    case ';' :
-	    case '\n' :
-		skip();
-		break;
-	    case '#' :
-		skipToEOL();
-		break;
-	    default :
-		if ( isWhiteSpace(c) ) {
-		    skip();
-		} else {
-		    return;
-		}
-	    }
-	}
+            switch ( c ) {
+            case ';' :
+            case '\n' :
+                skip();
+                break;
+            case '#' :
+                skipToEOL();
+                break;
+            default :
+                if ( isWhiteSpace(c) ) {
+                    skip();
+                } else {
+                    return;
+                }
+            }
+        }
     }
 
 
@@ -958,25 +979,25 @@ public class SCompiler
  **************************************************************************/
 
     private void skipToWord()
-	throws IOException {
+        throws IOException {
 
-	while ( !isAtEnd() ) {
-	    char c = peek();
+        while ( !isAtEnd() ) {
+            char c = peek();
 
-	    switch ( c ) {
-	    case '\\' :
-		skip();
-		if ( peek() == '\r' ) { skip(); }
-		if ( peek() == '\n' ) { skip(); }
-		break;
-	    default :
-		if ( isWhiteSpace(c) ) {
-		    skip();
-		} else {
-		    return;
-		}
-	    }
-	}
+            switch ( c ) {
+            case '\\' :
+                skip();
+                if ( peek() == '\r' ) { skip(); }
+                if ( peek() == '\n' ) { skip(); }
+                break;
+            default :
+                if ( isWhiteSpace(c) ) {
+                    skip();
+                } else {
+                    return;
+                }
+            }
+        }
     }
 
 
@@ -990,9 +1011,9 @@ public class SCompiler
  **************************************************************************/
 
     private void skipToWordInList()
-	throws IOException {
+        throws IOException {
 
-	skipToStatement();
+        skipToStatement();
     }
 
 
@@ -1007,7 +1028,7 @@ public class SCompiler
 
     private boolean isAtEnd() {
 
-	return _in.isAtEnd();
+        return _in.isAtEnd();
     }
 
 
@@ -1021,15 +1042,15 @@ public class SCompiler
  **************************************************************************/
 
     private boolean atEndOfBlock()
-	throws IOException {
+        throws IOException {
 
-	if ( isAtEnd() ) {
-	    return true;
-	}
+        if ( isAtEnd() ) {
+            return true;
+        }
 
-	char c = peek();
+        char c = peek();
 
-	return ((c==']') || (c=='}') || (c==')'));
+        return ((c==']') || (c=='}') || (c==')'));
     }
 
 
@@ -1043,20 +1064,20 @@ public class SCompiler
  **************************************************************************/
 
     private boolean atEndOfStatement()
-	throws IOException {
+        throws IOException {
 
-	if ( isAtEnd() ) {
-	    return true;
-	}
+        if ( isAtEnd() ) {
+            return true;
+        }
 
-	char c = peek();
+        char c = peek();
 
-	return ( (c=='\n') ||
-		 (c=='#') ||
-		 (c==';') ||
-		 (c==']') ||
-		 (c=='}') ||
-		 (c==')') );
+        return ( (c=='\n')
+                 || (c=='#')
+                 || (c==';')
+                 || (c==']')
+                 || (c=='}')
+                 || (c==')') );
     }
 
 
@@ -1073,7 +1094,7 @@ public class SCompiler
          throws IOException {
 
       if ( isAtEnd() ) {
-	 return true;
+         return true;
       }
 
       char c = peek();
@@ -1095,17 +1116,24 @@ public class SCompiler
          throws IOException {
 
       if ( isAtEnd() ) {
-	 return true;
+         return true;
       }
 
       char c = peek();
 
       if ( isWhiteSpace(c) ) {
-	 return true;
+         return true;
       }
 
-      return ((c=='\n') || (c=='#') || (c==';') || (c=='[') || (c==']') ||
-	      (c=='{')  || (c=='}') || (c=='(') || (c==')'));
+      return ((c=='\n')
+              || (c=='#')
+              || (c==';')
+              || (c=='[')
+              || (c==']')
+              || (c=='{')
+              || (c=='}')
+              || (c=='(')
+              || (c==')'));
    }
 
 
@@ -1165,7 +1193,7 @@ public class SCompiler
  *
  **************************************************************************/
 
-   private static boolean isWhiteSpace(char c) {
+   private static boolean isWhiteSpace(final char c) {
 
       return (c<=' ') && (c!='\n');
    }
@@ -1195,8 +1223,8 @@ public class SCompiler
  *
  **************************************************************************/
 
-    private void compileError(String    msg,
-                              Object... fmtArgs)
+    private void compileError(final String    msg,
+                              final Object... fmtArgs)
         throws SCompileException {
 
         throw new SCompileException(msg, fmtArgs);

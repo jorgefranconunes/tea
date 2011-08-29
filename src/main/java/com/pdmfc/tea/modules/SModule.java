@@ -1,19 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2010/03/03 This class is now an interface. (jfn)
- *
- * 2002/01/10 Created. (jfn)
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -45,9 +32,12 @@ public interface SModule {
  *
  * @param context The root context to be populated.
  *
+ * @throws STeaException If there were any problems initializing the
+ * module.
+ *
  **************************************************************************/
 
-   public void init(SContext context)
+   void init(SContext context)
        throws STeaException;
 
 
@@ -58,12 +48,13 @@ public interface SModule {
  *
  * Signals that the package will no longer be used. That means that
  * the commands that may have been created inside the
- * <TT>SContext</TT> passed to the <TT>init()</TT> method will not be
- * used again. Resources allocated to the commands may be freed.
+ * <code>SContext</code> passed to the <code>{@link
+ * #init(SContext)}</code> method will not be used again. Resources
+ * allocated to the commands may be freed.
  *
  **************************************************************************/
 
-    public void end();
+    void end();
 
 
 
@@ -75,7 +66,7 @@ public interface SModule {
  *
  **************************************************************************/
 
-    public void start();
+    void start();
 
 
 
@@ -84,11 +75,11 @@ public interface SModule {
 /**************************************************************************
  *
  * Signals that the package will not be used until a call to the
- * <TT>start()</TT> method is made again.
+ * <code>{@link #start()}</code> method is made again.
  *
  **************************************************************************/
 
-    public void stop();
+    void stop();
 
 
 }

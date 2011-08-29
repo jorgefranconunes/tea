@@ -93,13 +93,13 @@ public class SModuleString
        throws STeaException {
 
        SObjFunction fmt = new SObjFunction() {
-	       public Object exec(SObjFunction func,
-				  SContext     context,
-				  Object[]     args)
-		   throws STeaException {
-		   return functionPrintf(func, context, args);
-	       }
-	   };
+               public Object exec(SObjFunction func,
+                                  SContext     context,
+                                  Object[]     args)
+                   throws STeaException {
+                   return functionPrintf(func, context, args);
+               }
+           };
        
        context.newVar("str-printf", fmt);
 
@@ -432,7 +432,7 @@ public class SModuleString
 
 //* 
 //* <TeaFunction name="str-printf"
-//* 		arguments="formatString [arg1 ...]"
+//*                 arguments="formatString [arg1 ...]"
 //*             module="tea.string">
 //*
 //* <Overview>
@@ -466,25 +466,25 @@ public class SModuleString
  **************************************************************************/
 
     private Object functionPrintf(SObjFunction func,
-				  SContext context,
-				  Object[]   args)
-	throws STeaException {
+                                  SContext context,
+                                  Object[]   args)
+        throws STeaException {
 
-	if ( args.length<2 ) {
-	    throw new SNumArgException(args, "string [object ...]");
-	}
+        if ( args.length<2 ) {
+            throw new SNumArgException(args, "string [object ...]");
+        }
 
-	_formatResult.setLength(0);
+        _formatResult.setLength(0);
 
-	try {
-	    _formater.format(SArgs.getString(args,1), args, 2);
-	} catch (SNumArgException e1) {
-	    throw new SRuntimeException(args, e1.getMessage());
-	} catch (STypeException e2) {
-	    throw new SRuntimeException(args, e2.getMessage());
-	}
+        try {
+            _formater.format(SArgs.getString(args,1), args, 2);
+        } catch (SNumArgException e1) {
+            throw new SRuntimeException(args, e1.getMessage());
+        } catch (STypeException e2) {
+            throw new SRuntimeException(args, e2.getMessage());
+        }
 
-	return _formatResult.toString();
+        return _formatResult.toString();
     }
 
 
@@ -493,7 +493,7 @@ public class SModuleString
 
 //* 
 //* <TeaFunction name="str-fmt"
-//* 		arguments="formatString [arg1 ...]"
+//*                 arguments="formatString [arg1 ...]"
 //*             module="tea.string">
 //*
 //* <Overview>
@@ -527,31 +527,31 @@ public class SModuleString
  **************************************************************************/
 
     private Object functionFmt(SObjFunction func,
-			       SContext context,
-			       Object[]   args)
-	throws STeaException {
+                               SContext context,
+                               Object[]   args)
+        throws STeaException {
 
-	if ( args.length<2 ) {
-	    throw new SNumArgException(args, "string [object ...]");
-	}
+        if ( args.length<2 ) {
+            throw new SNumArgException(args, "string [object ...]");
+        }
 
-	String   fmt         = SArgs.getString(args, 1);
-	int      fmtArgCount = args.length - 2;
-	Object[] fmtArgs     = new Object[fmtArgCount];
-	String   result      = null;
+        String   fmt         = SArgs.getString(args, 1);
+        int      fmtArgCount = args.length - 2;
+        Object[] fmtArgs     = new Object[fmtArgCount];
+        String   result      = null;
 
-	System.arraycopy(args, 2, fmtArgs, 0, fmtArgCount);
-	convertForFormating(fmtArgs);
+        System.arraycopy(args, 2, fmtArgs, 0, fmtArgCount);
+        convertForFormating(fmtArgs);
 
-	try {
-	    result = MessageFormat.format(fmt, fmtArgs);
-	} catch (Throwable e) {
-	    throw new SRuntimeException(args,
+        try {
+            result = MessageFormat.format(fmt, fmtArgs);
+        } catch (Throwable e) {
+            throw new SRuntimeException(args,
                                         "failed to format string ({0})",
                                         e.getMessage());
-	}
+        }
 
-	return result;
+        return result;
     }
 
 
@@ -566,16 +566,16 @@ public class SModuleString
 
     private void convertForFormating(Object[] objs) {
 
-	for ( int i=0,count=objs.length; i<count; i++ ) {
-	    Object obj = objs[i];
+        for ( int i=0,count=objs.length; i<count; i++ ) {
+            Object obj = objs[i];
 
-	    if ( obj instanceof STosObj ) {
-		STosObj tosObj = ((STosObj)obj).part(0);
-		if ( tosObj instanceof SDate ) {
-		    objs[i] = ((SDate)tosObj).getDate();
-		}
-	    }
-	}
+            if ( obj instanceof STosObj ) {
+                STosObj tosObj = ((STosObj)obj).part(0);
+                if ( tosObj instanceof SDate ) {
+                    objs[i] = ((SDate)tosObj).getDate();
+                }
+            }
+        }
     }
 
 
@@ -584,7 +584,7 @@ public class SModuleString
 
 //* 
 //* <TeaFunction name="str-upper"
-//* 		arguments="aString"
+//*                 arguments="aString"
 //*             module="tea.string">
 //*
 //* <Overview>
@@ -613,18 +613,18 @@ public class SModuleString
  **************************************************************************/
 
     private static Object functionUpper(SObjFunction func,
-					SContext     context,
-					Object[]     args)
-	throws STeaException {
+                                        SContext     context,
+                                        Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 2 ) {
-	    throw new SNumArgException(args, "string");
-	}
+        if ( args.length != 2 ) {
+            throw new SNumArgException(args, "string");
+        }
 
-	String str    = SArgs.getString(args,1);
-	String result = str.toUpperCase();
+        String str    = SArgs.getString(args,1);
+        String result = str.toUpperCase();
 
-	return result;
+        return result;
     }
 
 
@@ -633,7 +633,7 @@ public class SModuleString
 
 //* 
 //* <TeaFunction name="str-lower"
-//* 		arguments="aString"
+//*                 arguments="aString"
 //*             module="tea.string">
 //*
 //* <Overview>
@@ -662,18 +662,18 @@ public class SModuleString
  **************************************************************************/
 
     private static Object functionLower(SObjFunction func,
-					SContext     context,
-					Object[]     args)
-	throws STeaException {
+                                        SContext     context,
+                                        Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 2 ) {
-	    throw new SNumArgException(args, "string");
-	}
+        if ( args.length != 2 ) {
+            throw new SNumArgException(args, "string");
+        }
 
-	String str    = SArgs.getString(args,1);
-	String result = str.toLowerCase();
+        String str    = SArgs.getString(args,1);
+        String result = str.toLowerCase();
 
-	return result;
+        return result;
     }
 
 
@@ -682,7 +682,7 @@ public class SModuleString
 
 //* 
 //* <TeaFunction name="str-cmp"
-//* 		arguments="aString1 aString2"
+//*                 arguments="aString1 aString2"
 //*             module="tea.string">
 //*
 //* <Overview>
@@ -716,14 +716,14 @@ public class SModuleString
  **************************************************************************/
 
     private static Object functionCompare(SObjFunction func,
-					  SContext     context,
-					  Object[]     args)
-	throws STeaException {
+                                          SContext     context,
+                                          Object[]     args)
+        throws STeaException {
 
-	return compare(SModuleMath.MINUS_ONE,
-		       SModuleMath.ZERO,
-		       SModuleMath.ONE,
-		       func, context, args);
+        return compare(SModuleMath.MINUS_ONE,
+                       SModuleMath.ZERO,
+                       SModuleMath.ONE,
+                       func, context, args);
     }
 
 
@@ -732,7 +732,7 @@ public class SModuleString
 
 //* 
 //* <TeaFunction name="str&gt;"
-//* 		arguments="aString1 aString2"
+//*                 arguments="aString1 aString2"
 //*             module="tea.string">
 //*
 //* <Overview>
@@ -765,12 +765,12 @@ public class SModuleString
  **************************************************************************/
 
     private static Object functionGt(SObjFunction func,
-				     SContext     context,
-				     Object[]     args)
-	throws STeaException {
+                                     SContext     context,
+                                     Object[]     args)
+        throws STeaException {
 
-	return compare(Boolean.FALSE, Boolean.FALSE, Boolean.TRUE,
-		       func, context, args);
+        return compare(Boolean.FALSE, Boolean.FALSE, Boolean.TRUE,
+                       func, context, args);
     }
 
 
@@ -779,7 +779,7 @@ public class SModuleString
 
 //* 
 //* <TeaFunction name="str&gt;="
-//* 		arguments="aString1 aString2"
+//*                 arguments="aString1 aString2"
 //*             module="tea.string">
 //*
 //* <Overview>
@@ -814,12 +814,12 @@ public class SModuleString
  **************************************************************************/
 
     private static Object functionGe(SObjFunction func,
-				     SContext     context,
-				     Object[]     args)
-	throws STeaException {
+                                     SContext     context,
+                                     Object[]     args)
+        throws STeaException {
 
-	return compare(Boolean.FALSE, Boolean.TRUE, Boolean.TRUE,
-		       func, context, args);
+        return compare(Boolean.FALSE, Boolean.TRUE, Boolean.TRUE,
+                       func, context, args);
     }
 
 
@@ -828,7 +828,7 @@ public class SModuleString
 
 //* 
 //* <TeaFunction name="str=="
-//* 		arguments="aString1 aString2"
+//*                 arguments="aString1 aString2"
 //*             module="tea.string">
 //*
 //* <Overview>
@@ -861,12 +861,12 @@ public class SModuleString
  **************************************************************************/
 
     private static Object functionEq(SObjFunction func,
-				     SContext     context,
-				     Object[]     args)
-	throws STeaException {
+                                     SContext     context,
+                                     Object[]     args)
+        throws STeaException {
 
-	return compare(Boolean.FALSE, Boolean.TRUE, Boolean.FALSE,
-		       func, context, args);
+        return compare(Boolean.FALSE, Boolean.TRUE, Boolean.FALSE,
+                       func, context, args);
     }
 
 
@@ -875,7 +875,7 @@ public class SModuleString
 
 //* 
 //* <TeaFunction name="str!="
-//* 		arguments="aString1 aString2"
+//*                 arguments="aString1 aString2"
 //*             module="tea.string">
 //*
 //* <Overview>
@@ -908,12 +908,12 @@ public class SModuleString
  **************************************************************************/
 
     private static Object functionNe(SObjFunction func,
-				     SContext     context,
-				     Object[]     args)
-	throws STeaException {
+                                     SContext     context,
+                                     Object[]     args)
+        throws STeaException {
 
-	return compare(Boolean.TRUE, Boolean.FALSE, Boolean.TRUE,
-		       func, context, args);
+        return compare(Boolean.TRUE, Boolean.FALSE, Boolean.TRUE,
+                       func, context, args);
     }
 
 
@@ -922,7 +922,7 @@ public class SModuleString
 
 //* 
 //* <TeaFunction name="str&lt;"
-//* 		arguments="aString1 aString2"
+//*                 arguments="aString1 aString2"
 //*             module="tea.string">
 //*
 //* <Overview>
@@ -957,12 +957,12 @@ public class SModuleString
  **************************************************************************/
 
     private static Object functionLt(SObjFunction func,
-				     SContext     context,
-				     Object[]     args)
-	throws STeaException {
+                                     SContext     context,
+                                     Object[]     args)
+        throws STeaException {
 
-	return compare(Boolean.TRUE, Boolean.FALSE, Boolean.FALSE,
-		       func, context, args);
+        return compare(Boolean.TRUE, Boolean.FALSE, Boolean.FALSE,
+                       func, context, args);
     }
 
 
@@ -971,7 +971,7 @@ public class SModuleString
 
 //* 
 //* <TeaFunction name="str&lt;="
-//* 		arguments="aString1 aString2"
+//*                 arguments="aString1 aString2"
 //*             module="tea.string">
 //*
 //* <Overview>
@@ -1006,12 +1006,12 @@ public class SModuleString
  **************************************************************************/
 
     private static Object functionLe(SObjFunction func,
-				     SContext     context,
-				     Object[]     args)
-	throws STeaException {
+                                     SContext     context,
+                                     Object[]     args)
+        throws STeaException {
 
-	return compare(Boolean.TRUE, Boolean.TRUE, Boolean.FALSE,
-		       func, context, args);
+        return compare(Boolean.TRUE, Boolean.TRUE, Boolean.FALSE,
+                       func, context, args);
     }
 
 
@@ -1025,29 +1025,29 @@ public class SModuleString
  **************************************************************************/
 
     private static Object compare(Object lt,
-				  Object eq,
-				  Object gt,
-				  SObjFunction func,
-				  SContext     context,
-				  Object[]     args)
-	throws STeaException {
+                                  Object eq,
+                                  Object gt,
+                                  SObjFunction func,
+                                  SContext     context,
+                                  Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "string1 string2");
-	}
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "string1 string2");
+        }
 
-	String  op1    = SArgs.getString(args,1);
-	String  op2    = SArgs.getString(args,2);
-	int     result = op1.compareTo(op2);
+        String  op1    = SArgs.getString(args,1);
+        String  op2    = SArgs.getString(args,2);
+        int     result = op1.compareTo(op2);
 
-	if ( result < 0 ) {
-	    return lt;
-	}
-	if ( result > 0 ) {
-	    return gt;
-	}
+        if ( result < 0 ) {
+            return lt;
+        }
+        if ( result > 0 ) {
+            return gt;
+        }
 
-	return eq;
+        return eq;
     }
 
 
@@ -1056,7 +1056,7 @@ public class SModuleString
 
 //* 
 //* <TeaFunction name="str-cat"
-//* 		arguments="aString1 [aString2 ...]"
+//*                 arguments="aString1 [aString2 ...]"
 //*             module="tea.string">
 //*
 //* <Overview>
@@ -1085,21 +1085,21 @@ public class SModuleString
  **************************************************************************/
 
     private static Object functionCat(SObjFunction func,
-				      SContext     context,
-				      Object[]     args)
-	throws STeaException {
+                                      SContext     context,
+                                      Object[]     args)
+        throws STeaException {
 
-	if ( args.length<2 ) {
-	    throw new SNumArgException(args, "string1 string2 ...");
-	}
+        if ( args.length<2 ) {
+            throw new SNumArgException(args, "string1 string2 ...");
+        }
 
-	StringBuffer buf = new StringBuffer(SArgs.getString(args,1));
+        StringBuffer buf = new StringBuffer(SArgs.getString(args,1));
 
-	for ( int i=2; i<args.length; i++ ) {
-	    buf.append(SArgs.getString(args,i));
-	}
+        for ( int i=2; i<args.length; i++ ) {
+            buf.append(SArgs.getString(args,i));
+        }
 
-	return buf.toString();
+        return buf.toString();
     }
 
 
@@ -1108,7 +1108,7 @@ public class SModuleString
 
 //* 
 //* <TeaFunction name="str-ends-with?"
-//* 		arguments="aString1 aString2"
+//*                 arguments="aString1 aString2"
 //*             module="tea.string">
 //*
 //* <Overview>
@@ -1142,19 +1142,19 @@ public class SModuleString
  **************************************************************************/
 
     private static  Object functionEndsWith(SObjFunction func,
-					    SContext     context,
-					    Object[]     args)
-	throws STeaException {
-	
-	if ( args.length!= 3) {
-	    throw new SNumArgException(args, "string1 string2");
-	}
+                                            SContext     context,
+                                            Object[]     args)
+        throws STeaException {
+        
+        if ( args.length!= 3) {
+            throw new SNumArgException(args, "string1 string2");
+        }
 
-	String str1    = SArgs.getString(args,1);
-	String str2    = SArgs.getString(args,2);
-	Boolean result = str1.endsWith(str2) ? Boolean.TRUE : Boolean.FALSE;
+        String str1    = SArgs.getString(args,1);
+        String str2    = SArgs.getString(args,2);
+        Boolean result = str1.endsWith(str2) ? Boolean.TRUE : Boolean.FALSE;
 
-	return result;
+        return result;
     }
 
 
@@ -1163,7 +1163,7 @@ public class SModuleString
 
 //* 
 //* <TeaFunction name="str-starts-with?"
-//* 		arguments="aString1 aString2"
+//*                 arguments="aString1 aString2"
 //*             module="tea.string">
 //*
 //* <Overview>
@@ -1197,19 +1197,19 @@ public class SModuleString
  **************************************************************************/
 
     private static Object functionStartsWith(SObjFunction func,
-					     SContext     context,
-					     Object[]     args)
-	throws STeaException {
+                                             SContext     context,
+                                             Object[]     args)
+        throws STeaException {
 
-	if ( args.length!= 3) {
-	    throw new SNumArgException(args, "string1 string2");
-	}
+        if ( args.length!= 3) {
+            throw new SNumArgException(args, "string1 string2");
+        }
 
-	String  str1   = SArgs.getString(args,1);
-	String  str2   = SArgs.getString(args,2);
-	Boolean result = str1.startsWith(str2) ? Boolean.TRUE : Boolean.FALSE;
+        String  str1   = SArgs.getString(args,1);
+        String  str2   = SArgs.getString(args,2);
+        Boolean result = str1.startsWith(str2) ? Boolean.TRUE : Boolean.FALSE;
 
-	return result;
+        return result;
     }
 
 
@@ -1218,7 +1218,7 @@ public class SModuleString
 
 //* 
 //* <TeaFunction name="str-index-of"
-//* 		arguments="aString1 aString2"
+//*                 arguments="aString1 aString2"
 //*             module="tea.string">
 //*
 //* <Overview>
@@ -1253,20 +1253,20 @@ public class SModuleString
  **************************************************************************/
 
     private static Object functionIndexOf(SObjFunction func,
-					  SContext     context,
-					  Object[]     args)
-	throws STeaException {
+                                          SContext     context,
+                                          Object[]     args)
+        throws STeaException {
 
-	if ( (args.length<3) || (args.length>4)) {
-	    throw new SNumArgException(args, "string sub-string [start-index]");
-	}
+        if ( (args.length<3) || (args.length>4)) {
+            throw new SNumArgException(args, "string sub-string [start-index]");
+        }
 
-	String str1       = SArgs.getString(args,1);
-	String str2       = SArgs.getString(args,2);
-	int    startIndex = (args.length==4) ? SArgs.getInt(args,3).intValue() : 0;
-	int    result     = str1.indexOf(str2, startIndex);
-	
-	return new Integer(result);
+        String str1       = SArgs.getString(args,1);
+        String str2       = SArgs.getString(args,2);
+        int    startIndex = (args.length==4) ? SArgs.getInt(args,3).intValue() : 0;
+        int    result     = str1.indexOf(str2, startIndex);
+        
+        return new Integer(result);
     }
 
 
@@ -1275,7 +1275,7 @@ public class SModuleString
 
 //* 
 //* <TeaFunction name="str-len"
-//* 		arguments="aString"
+//*                 arguments="aString"
 //*             module="tea.string">
 //*
 //* <Overview>
@@ -1303,18 +1303,18 @@ public class SModuleString
  **************************************************************************/
 
     private static Object functionLen(SObjFunction func,
-				      SContext context,
-				      Object[]   args)
-	throws STeaException {
+                                      SContext context,
+                                      Object[]   args)
+        throws STeaException {
 
-	if ( args.length != 2 ) {
-	    throw new SNumArgException(args, "string");
-	}
+        if ( args.length != 2 ) {
+            throw new SNumArgException(args, "string");
+        }
 
-	String arg    = SArgs.getString(args,1);
-	int    result = arg.length();
+        String arg    = SArgs.getString(args,1);
+        int    result = arg.length();
 
-	return new Integer(result);
+        return new Integer(result);
     }
 
 
@@ -1323,7 +1323,7 @@ public class SModuleString
 
 //* 
 //* <TeaFunction name="str-substring"
-//* 		arguments="aString startIndex [endIndex]"
+//*                 arguments="aString startIndex [endIndex]"
 //*             module="tea.string">
 //*
 //* <Overview>
@@ -1372,33 +1372,33 @@ public class SModuleString
  **************************************************************************/
 
     private static Object functionSubString(SObjFunction func,
-					    SContext     context,
-					    Object[]     args)
-	throws STeaException {
+                                            SContext     context,
+                                            Object[]     args)
+        throws STeaException {
 
-	if ( (args.length<3) || (args.length>4) ) {
-	    throw new SNumArgException(args, "string start-index [end-index]");
-	}
+        if ( (args.length<3) || (args.length>4) ) {
+            throw new SNumArgException(args, "string start-index [end-index]");
+        }
 
-	String str    = SArgs.getString(args,1);
-	int    start  = SArgs.getInt(args,2).intValue();
-	int    size   = str.length();
-	int    end    = (args.length==4) ? SArgs.getInt(args,3).intValue() :size;
-	String result = null;
+        String str    = SArgs.getString(args,1);
+        int    start  = SArgs.getInt(args,2).intValue();
+        int    size   = str.length();
+        int    end    = (args.length==4) ? SArgs.getInt(args,3).intValue() :size;
+        String result = null;
 
-	if ( start < 0 ) {
-	    start = 0;
-	}
-	if ( end > size ) {
-	    end = size;
-	}
-	if ( start > end ) {
-	    result= "";
-	} else {
-	    result = str.substring(start, end);
-	}
+        if ( start < 0 ) {
+            start = 0;
+        }
+        if ( end > size ) {
+            end = size;
+        }
+        if ( start > end ) {
+            result= "";
+        } else {
+            result = str.substring(start, end);
+        }
 
-	return result;
+        return result;
    }
 
 
@@ -1407,7 +1407,7 @@ public class SModuleString
 
 //* 
 //* <TeaFunction name="str-trim"
-//* 		arguments="aString"
+//*                 arguments="aString"
 //*             module="tea.string">
 //*
 //* <Overview>
@@ -1437,18 +1437,18 @@ public class SModuleString
  **************************************************************************/
 
     private static Object functionTrim(SObjFunction func,
-				       SContext     context,
-				       Object[]     args)
-	throws STeaException {
+                                       SContext     context,
+                                       Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 2 ) {
-	    throw new SNumArgException(args, "string");
-	}
+        if ( args.length != 2 ) {
+            throw new SNumArgException(args, "string");
+        }
 
-	String arg    = SArgs.getString(args,1);
-	String result = arg.trim();
+        String arg    = SArgs.getString(args,1);
+        String result = arg.trim();
 
-	return result;
+        return result;
     }
 
 
@@ -1457,7 +1457,7 @@ public class SModuleString
 
 //* 
 //* <TeaFunction name="str-join"
-//* 		arguments="stringList separator"
+//*                 arguments="stringList separator"
 //*             module="tea.string">
 //*
 //* <Overview>
@@ -1493,45 +1493,45 @@ public class SModuleString
  **************************************************************************/
 
     private static Object functionJoin(SObjFunction func,
-				       SContext     context,
-				       Object[]     args)
-	throws STeaException {
+                                       SContext     context,
+                                       Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "string-list string");
-	}
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "string-list string");
+        }
 
-	SObjPair list      = SArgs.getPair(args,1);
-	String   separator = SArgs.getString(args,2);
-	Iterator i         = list.iterator();
+        SObjPair list      = SArgs.getPair(args,1);
+        String   separator = SArgs.getString(args,2);
+        Iterator i         = list.iterator();
 
-	if ( !i.hasNext() ) {
-	    return "";
-	}
+        if ( !i.hasNext() ) {
+            return "";
+        }
 
-	StringBuffer buf = new StringBuffer(256);
+        StringBuffer buf = new StringBuffer(256);
 
-	for ( int index=0; i.hasNext(); ++index ) {
-	    if ( index > 0 ) {
-		buf.append(separator);
-	    }
-	    Object element = i.next();
-	    String str     = null;
+        for ( int index=0; i.hasNext(); ++index ) {
+            if ( index > 0 ) {
+                buf.append(separator);
+            }
+            Object element = i.next();
+            String str     = null;
 
-	    try {
-		str = (String)element;
-	    } catch (ClassCastException e) {
-		String msg = "list element {0} should be a string, not a {1}";
-		throw new SRuntimeException(args,
+            try {
+                str = (String)element;
+            } catch (ClassCastException e) {
+                String msg = "list element {0} should be a string, not a {1}";
+                throw new SRuntimeException(args,
                                             msg,
                                             String.valueOf(index),
                                             STypes.getTypeName(element));
-	    }
+            }
 
-	    buf.append(str);
-	}
+            buf.append(str);
+        }
 
-	return buf.toString();
+        return buf.toString();
     }
 
 
@@ -1540,7 +1540,7 @@ public class SModuleString
 
 //* 
 //* <TeaFunction name="str-empty?"
-//* 		arguments="aString"
+//*                 arguments="aString"
 //*             module="tea.string">
 //*
 //* <Overview>
@@ -1569,19 +1569,19 @@ public class SModuleString
  **************************************************************************/
 
     private static Object functionEmpty(SObjFunction func,
-					SContext     context,
-					Object[]     args)
-	throws STeaException {
+                                        SContext     context,
+                                        Object[]     args)
+        throws STeaException {
 
-	if ( args.length!= 2) {
-	    throw new SNumArgException(args, "string");
-	}
+        if ( args.length!= 2) {
+            throw new SNumArgException(args, "string");
+        }
 
-	String  str    = SArgs.getString(args,1);
-	int     length = str.length();
-	Boolean result = (length==0) ? Boolean.TRUE : Boolean.FALSE;
+        String  str    = SArgs.getString(args,1);
+        int     length = str.length();
+        Boolean result = (length==0) ? Boolean.TRUE : Boolean.FALSE;
 
-	return result;
+        return result;
     }
 
 
@@ -1590,7 +1590,7 @@ public class SModuleString
 
 //* 
 //* <TeaFunction name="str-not-empty?"
-//* 		arguments="aString"
+//*                 arguments="aString"
 //*             module="tea.string">
 //*
 //* <Overview>
@@ -1619,19 +1619,19 @@ public class SModuleString
  **************************************************************************/
 
     private static Object functionNotEmpty(SObjFunction func,
-					   SContext     context,
-					   Object[]     args)
-	throws STeaException {
+                                           SContext     context,
+                                           Object[]     args)
+        throws STeaException {
 
-	if ( args.length!= 2) {
-	    throw new SNumArgException(args, "string");
-	}
+        if ( args.length!= 2) {
+            throw new SNumArgException(args, "string");
+        }
 
-	String  str    = SArgs.getString(args,1);
-	int     length = str.length();
-	Boolean result = (length==0) ? Boolean.FALSE : Boolean.TRUE;
+        String  str    = SArgs.getString(args,1);
+        int     length = str.length();
+        Boolean result = (length==0) ? Boolean.FALSE : Boolean.TRUE;
 
-	return result;
+        return result;
     }
 
 
@@ -1640,7 +1640,7 @@ public class SModuleString
 
 //* 
 //* <TeaFunction name="symbol->string"
-//* 		arguments="aSymbol"
+//*                 arguments="aSymbol"
 //*             module="tea.string">
 //*
 //* <Overview>
@@ -1669,15 +1669,15 @@ public class SModuleString
  **************************************************************************/
 
     private static Object functionSymbolToString(SObjFunction func,
-						 SContext context,
-						 Object[]   args)
-	throws STeaException {
+                                                 SContext context,
+                                                 Object[]   args)
+        throws STeaException {
 
-	if ( args.length != 2 ) {
-	    throw new SNumArgException(args, "symbol");
-	}
+        if ( args.length != 2 ) {
+            throw new SNumArgException(args, "symbol");
+        }
 
-	return SArgs.getSymbol(args,1).getName();
+        return SArgs.getSymbol(args,1).getName();
     }
 
 
@@ -1686,7 +1686,7 @@ public class SModuleString
 
 //* 
 //* <TeaFunction name="string->int"
-//* 		arguments="aString"
+//*                 arguments="aString"
 //*             module="tea.string">
 //*
 //* <Overview>
@@ -1724,22 +1724,22 @@ public class SModuleString
  **************************************************************************/
 
     private static Object functionStringToInt(SObjFunction func,
-					      SContext     context,
-					      Object[]     args)
-	throws STeaException {
+                                              SContext     context,
+                                              Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 2 ) {
-	    throw new SNumArgException(args, "string");
-	}
+        if ( args.length != 2 ) {
+            throw new SNumArgException(args, "string");
+        }
 
-	Object result = SObjNull.NULL;
+        Object result = SObjNull.NULL;
 
-	try {
-	    result = new Integer(SArgs.getString(args,1));
-	} catch (NumberFormatException e) {
-	}
+        try {
+            result = new Integer(SArgs.getString(args,1));
+        } catch (NumberFormatException e) {
+        }
 
-	return result;
+        return result;
     }
 
 
@@ -1748,7 +1748,7 @@ public class SModuleString
 
 //* 
 //* <TeaFunction name="string->float"
-//* 		arguments="aString"
+//*                 arguments="aString"
 //*             module="tea.string">
 //*
 //* <Overview>
@@ -1779,23 +1779,23 @@ public class SModuleString
  **************************************************************************/
 
     private static Object functionStringToFloat(SObjFunction func,
-						SContext     context,
-						Object[]     args)
-	throws STeaException {
+                                                SContext     context,
+                                                Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 2 ) {
-	    throw new SNumArgException(args, "string");
-	}
+        if ( args.length != 2 ) {
+            throw new SNumArgException(args, "string");
+        }
 
-	String str    = SArgs.getString(args,1);
-	Object result = SObjNull.NULL;
+        String str    = SArgs.getString(args,1);
+        Object result = SObjNull.NULL;
 
-	try {
-	    result = new Double(str);
-	} catch (NumberFormatException e) {
-	}
+        try {
+            result = new Double(str);
+        } catch (NumberFormatException e) {
+        }
 
-	return result;
+        return result;
     }
 
 
@@ -1804,7 +1804,7 @@ public class SModuleString
 
 //* 
 //* <TeaFunction name="int->string"
-//* 		arguments="aValue"
+//*                 arguments="aValue"
 //*             module="tea.string">
 //*
 //* <Overview>
@@ -1835,15 +1835,15 @@ public class SModuleString
  **************************************************************************/
 
     private static Object functionIntToString(SObjFunction func,
-					      SContext     context,
-					      Object[]     args)
-	throws STeaException {
+                                              SContext     context,
+                                              Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 2 ) {
-	    throw new SNumArgException(args, "integer");
-	}
+        if ( args.length != 2 ) {
+            throw new SNumArgException(args, "integer");
+        }
 
-	return String.valueOf(SArgs.getNumber(args,1).intValue());
+        return String.valueOf(SArgs.getNumber(args,1).intValue());
     }
 
 
@@ -1852,7 +1852,7 @@ public class SModuleString
 
 //* 
 //* <TeaFunction name="float->string"
-//* 		arguments="aValue"
+//*                 arguments="aValue"
 //*             module="tea.string">
 //*
 //* <Overview>
@@ -1882,15 +1882,15 @@ public class SModuleString
  **************************************************************************/
 
     private static Object functionFloatToString(SObjFunction func,
-						SContext     context,
-						Object[]     args)
-	throws STeaException {
+                                                SContext     context,
+                                                Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 2 ) {
-	    throw new SNumArgException(args, "float");
-	}
+        if ( args.length != 2 ) {
+            throw new SNumArgException(args, "float");
+        }
 
-	return String.valueOf(SArgs.getNumber(args,1).doubleValue());
+        return String.valueOf(SArgs.getNumber(args,1).doubleValue());
     }
 
 
@@ -1899,7 +1899,7 @@ public class SModuleString
 
 //* 
 //* <TeaFunction name="str-unescape"
-//* 		arguments="aString"
+//*                 arguments="aString"
 //*             module="tea.string">
 //*
 //* <Overview>
@@ -1944,15 +1944,15 @@ public class SModuleString
  **************************************************************************/
 
     private static Object functionUnescape(SObjFunction func,
-					   SContext     context,
-					   Object[]     args)
-	throws STeaException {
+                                           SContext     context,
+                                           Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 2 ) {
-	    throw new SNumArgException(args, "string");
-	}
+        if ( args.length != 2 ) {
+            throw new SNumArgException(args, "string");
+        }
 
-	String str    = SArgs.getString(args,1);
+        String str    = SArgs.getString(args,1);
         String result = STeaParserUtils.parseStringLiteral(str);
 
         return result;
@@ -1970,10 +1970,10 @@ public class SModuleString
  **************************************************************************/
 
     private class SFormaterString
-	extends SFormater {
+        extends SFormater {
 
 
-	private StringBuffer _result;
+        private StringBuffer _result;
 
 
 
@@ -1986,10 +1986,10 @@ public class SModuleString
  *
  **************************************************************************/
 
-	public SFormaterString(StringBuffer resultString) {
-	
-	    _result = resultString;
-	}
+        public SFormaterString(StringBuffer resultString) {
+        
+            _result = resultString;
+        }
 
 
 
@@ -2004,10 +2004,10 @@ public class SModuleString
  *
  **************************************************************************/
 
-	protected void append(String s) {
+        protected void append(String s) {
 
-	    _result.append(s);
-	}
+            _result.append(s);
+        }
 
 
 
@@ -2022,10 +2022,10 @@ public class SModuleString
  *
  **************************************************************************/
 
-	protected void append(char c) {
+        protected void append(char c) {
 
-	    _result.append(c);
-	}
+            _result.append(c);
+        }
 
     }
 

@@ -92,11 +92,11 @@ public class SModuleTos
  **************************************************************************/
 
     public void init(SContext context)
-	throws STeaException {
+        throws STeaException {
 
-	_globalContext = context;
+        _globalContext = context;
 
-	context.newVar("class",
+        context.newVar("class",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -106,7 +106,7 @@ public class SModuleTos
                            }
                        });
 
-	context.newVar("new-class",
+        context.newVar("new-class",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -116,7 +116,7 @@ public class SModuleTos
                            }
                        });
 
-	context.newVar("new",
+        context.newVar("new",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -126,7 +126,7 @@ public class SModuleTos
                            }
                        });
 
-	context.newVar("method",
+        context.newVar("method",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -136,7 +136,7 @@ public class SModuleTos
                            }
                        });
 
-	context.newVar("load-class",
+        context.newVar("load-class",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -146,7 +146,7 @@ public class SModuleTos
                            }
                        });
 
-	context.newVar("class-base-of",
+        context.newVar("class-base-of",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -156,7 +156,7 @@ public class SModuleTos
                            }
                        });
 
-	context.newVar("class-of",
+        context.newVar("class-of",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -166,7 +166,7 @@ public class SModuleTos
                            }
                        });
 
-	context.newVar("class-is-a",
+        context.newVar("class-is-a",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -178,7 +178,7 @@ public class SModuleTos
                            }
                        });
 
-	context.newVar("class-get-name",
+        context.newVar("class-get-name",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -190,7 +190,7 @@ public class SModuleTos
                            }
                        });
 
-	context.newVar("tos-obj?",
+        context.newVar("tos-obj?",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -254,7 +254,7 @@ public class SModuleTos
 
 //* 
 //* <TeaFunction name="class"
-//* 		arguments="className [superClass] memberList"
+//*                 arguments="className [superClass] memberList"
 //*             module="tea.tos">
 //*
 //* <Overview>
@@ -301,38 +301,38 @@ public class SModuleTos
  **************************************************************************/
 
     private Object functionClass(SObjFunction func,
-				 SContext     context,
-				 Object[]     args)
-	throws STeaException {
+                                 SContext     context,
+                                 Object[]     args)
+        throws STeaException {
 
-	if ( (args.length<3) || (args.length>4) ) {
+        if ( (args.length<3) || (args.length>4) ) {
             String usage = "class-name [base-class] list-of-members";
-	    throw new SNumArgException(args, usage);
-	}
+            throw new SNumArgException(args, usage);
+        }
 
-	SObjSymbol className   = SArgs.getSymbol(args, 1);
-	STosClass  baseClass   = (args.length==3)
-	    ? null : STosUtil.getClass(context,args,2);
-	SObjPair   memberList  = SArgs.getPair(args, (args.length==3)? 2 : 3);
-	SList      memberNames = new SList();
+        SObjSymbol className   = SArgs.getSymbol(args, 1);
+        STosClass  baseClass   = (args.length==3)
+            ? null : STosUtil.getClass(context,args,2);
+        SObjPair   memberList  = SArgs.getPair(args, (args.length==3)? 2 : 3);
+        SList      memberNames = new SList();
 
-	for ( SObjPair e=memberList; e._car!=null; e=(SObjPair)e._cdr ) {
-	    Object memberName = e._car;
-	    if ( ! (memberName instanceof SObjSymbol) ) {
+        for ( SObjPair e=memberList; e._car!=null; e=(SObjPair)e._cdr ) {
+            Object memberName = e._car;
+            if ( ! (memberName instanceof SObjSymbol) ) {
                 String msg = "found a {0} when expecting a Symbol";
-		throw new SRuntimeException(args,
+                throw new SRuntimeException(args,
                                             msg,
                                             STypes.getTypeName(memberName));
-	    }
-	    memberNames.prepend(e._car);
-	}
+            }
+            memberNames.prepend(e._car);
+        }
 
-	STosClass theClass = new STosClass(baseClass, memberNames);
+        STosClass theClass = new STosClass(baseClass, memberNames);
 
-	theClass.setName(className.getName());
-	_globalContext.newVar(className, theClass);
+        theClass.setName(className.getName());
+        _globalContext.newVar(className, theClass);
 
-	return theClass;
+        return theClass;
     }
 
 
@@ -341,7 +341,7 @@ public class SModuleTos
 
 //* 
 //* <TeaFunction name="new-class"
-//* 		arguments="memberList"
+//*                 arguments="memberList"
 //*             module="tea.tos">
 //*
 //* <Prototype arguments="superClass memberList"/>
@@ -376,47 +376,47 @@ public class SModuleTos
  **************************************************************************/
 
     private Object functionNewClass(SObjFunction func,
-				    SContext     context,
-				    Object[]     args)
-	throws STeaException {
+                                    SContext     context,
+                                    Object[]     args)
+        throws STeaException {
 
-	if ( (args.length<2) || (args.length>3) ) {
-	    throw new SNumArgException(args,
-				       "[base-class] list-of-members");
-	}
+        if ( (args.length<2) || (args.length>3) ) {
+            throw new SNumArgException(args,
+                                       "[base-class] list-of-members");
+        }
 
-	STosClass baseClass   = null;
-	SObjPair  memberList  = null;
-	SList     memberNames = new SList();
-	STosClass result      = null;
+        STosClass baseClass   = null;
+        SObjPair  memberList  = null;
+        SList     memberNames = new SList();
+        STosClass result      = null;
 
-	switch ( args.length ) {
-	case 2:
-	    baseClass  = null;
-	    memberList = SArgs.getPair(args, 1);
-	    break;
-	case 3 :
-	    baseClass  = STosUtil.getClass(context, args, 1);
-	    memberList = SArgs.getPair(args, 2);
-	    break;
-	default :
-	    throw new SNumArgException(args, "[base-class] list-of-members");
-	}
+        switch ( args.length ) {
+        case 2:
+            baseClass  = null;
+            memberList = SArgs.getPair(args, 1);
+            break;
+        case 3 :
+            baseClass  = STosUtil.getClass(context, args, 1);
+            memberList = SArgs.getPair(args, 2);
+            break;
+        default :
+            throw new SNumArgException(args, "[base-class] list-of-members");
+        }
 
-	for ( SObjPair e=memberList; e._car!=null; e=(SObjPair)e._cdr ) {
-	    Object memberName = e._car;
-	    if ( ! (memberName instanceof SObjSymbol) ) {
+        for ( SObjPair e=memberList; e._car!=null; e=(SObjPair)e._cdr ) {
+            Object memberName = e._car;
+            if ( ! (memberName instanceof SObjSymbol) ) {
                 String msg = "found a {0} when expecting a Symbol";
-		throw new SRuntimeException(args,
+                throw new SRuntimeException(args,
                                             msg,
                                             STypes.getTypeName(memberName));
-	    }
-	    memberNames.prepend(e._car);
-	}
+            }
+            memberNames.prepend(e._car);
+        }
 
-	result = new STosClass(baseClass, memberNames);
+        result = new STosClass(baseClass, memberNames);
 
-	return result;
+        return result;
     }
 
 
@@ -425,7 +425,7 @@ public class SModuleTos
 
 //* 
 //* <TeaFunction name="new"
-//* 		arguments="className [arg1 ...]"
+//*                 arguments="className [arg1 ...]"
 //*             module="tea.tos">
 //*
 //* <Overview>
@@ -457,15 +457,15 @@ public class SModuleTos
  **************************************************************************/
 
     private static Object functionNew(SObjFunction func,
-				      SContext     context,
-				      Object[]     args)
-	throws STeaException {
+                                      SContext     context,
+                                      Object[]     args)
+        throws STeaException {
 
-	if ( args.length < 2 ) {
-	    throw new SNumArgException(args, "class-name [constructor-args]");
-	}
+        if ( args.length < 2 ) {
+            throw new SNumArgException(args, "class-name [constructor-args]");
+        }
 
-	return STosUtil.getClass(context, args, 1).newInstance(context, args);
+        return STosUtil.getClass(context, args, 1).newInstance(context, args);
     }
 
 
@@ -474,7 +474,7 @@ public class SModuleTos
 
 //* 
 //* <TeaFunction name="method"
-//* 		arguments="className methodName argList body"
+//*                 arguments="className methodName argList body"
 //*             module="tea.tos">
 //*
 //* <Overview>
@@ -516,28 +516,28 @@ public class SModuleTos
  **************************************************************************/
 
     private static Object functionMethod(SObjFunction func,
-					 SContext     context,
-					 Object[]     args)
-	throws STeaException {
+                                         SContext     context,
+                                         Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 5 ) {
+        if ( args.length != 5 ) {
             String usage = "class-name method-name formal-param body";
-	    throw new SNumArgException(args, usage);
-	}
+            throw new SNumArgException(args, usage);
+        }
 
-	Object params = args[3];
+        Object params = args[3];
 
-	if ( params instanceof SObjPair ) {
-	    fixedArgsMethod(context, args);
-	} else {
-	    if ( params instanceof SObjSymbol ) {
-		varArgsMethod(context, args);
-	    } else {
+        if ( params instanceof SObjPair ) {
+            fixedArgsMethod(context, args);
+        } else {
+            if ( params instanceof SObjSymbol ) {
+                varArgsMethod(context, args);
+            } else {
                 throw new STypeException(args, 3, "symbol or list of symbols");
-	    }
-	}
+            }
+        }
 
-	return SObjNull.NULL;
+        return SObjNull.NULL;
     }
 
 
@@ -564,8 +564,8 @@ public class SModuleTos
  **************************************************************************/
 
     private static void fixedArgsMethod(SContext context,
-					Object[] args)
-	throws STeaException {
+                                        Object[] args)
+        throws STeaException {
         
         STosClass    methodClass = STosUtil.getClass(context, args, 1);
         SObjSymbol   methodName  = SArgs.getSymbol(args, 2);
@@ -614,23 +614,23 @@ public class SModuleTos
  **************************************************************************/
 
     private static void varArgsMethod(SContext context,
-				      Object[] args)
-	throws STeaException {
+                                      Object[] args)
+        throws STeaException {
 
-	STosClass    methodClass = STosUtil.getClass(context, args, 1);
-	SObjSymbol   methodName  = SArgs.getSymbol(args, 2);
-	SObjSymbol   symbol      = SArgs.getSymbol(args, 3);
-	SObjBlock    body        = SArgs.getBlock(args, 4);
-	SObjFunction method      = new STosMethodVarArg(methodClass,
-							methodName,
-							symbol,
-							body);
+        STosClass    methodClass = STosUtil.getClass(context, args, 1);
+        SObjSymbol   methodName  = SArgs.getSymbol(args, 2);
+        SObjSymbol   symbol      = SArgs.getSymbol(args, 3);
+        SObjBlock    body        = SArgs.getBlock(args, 4);
+        SObjFunction method      = new STosMethodVarArg(methodClass,
+                                                        methodName,
+                                                        symbol,
+                                                        body);
 
-	if ( methodName != STosClass._constructName ) {
-	    methodClass.addMethod(methodName, method);
-	} else {
-	    methodClass.addConstructor(method);
-	}
+        if ( methodName != STosClass._constructName ) {
+            methodClass.addMethod(methodName, method);
+        } else {
+            methodClass.addConstructor(method);
+        }
    }
 
 
@@ -639,7 +639,7 @@ public class SModuleTos
 
 //* 
 //* <TeaFunction name="load-class"
-//* 		arguments="javaClassName"
+//*                 arguments="javaClassName"
 //*             module="tea.tos">
 //*
 //* <Overview>
@@ -667,51 +667,51 @@ public class SModuleTos
  **************************************************************************/
 
     private Object functionLoadClass(SObjFunction func,
-				     SContext     context,
-				     Object[]     args)
-	throws STeaException {
+                                     SContext     context,
+                                     Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 2 ) {
-	    throw new SNumArgException(args, "java-class-name");
-	}
+        if ( args.length != 2 ) {
+            throw new SNumArgException(args, "java-class-name");
+        }
 
-	String    className = SArgs.getString(args,1);
-	Class     javaClass = null;
-	STosClass tosClass  = _tosClasses.get(className);
-	String    msg       = null;
+        String    className = SArgs.getString(args,1);
+        Class     javaClass = null;
+        STosClass tosClass  = _tosClasses.get(className);
+        String    msg       = null;
 
-	if ( tosClass == null ) {
-	    try {
-		javaClass = Class.forName(className);
-		if ( STosClass.class.isAssignableFrom(javaClass) ) {
-		    tosClass  = (STosClass)javaClass.newInstance();
-		} else {
-		    tosClass = new SJavaClass(javaClass);
-		}
-	    } catch (ClassNotFoundException e1) {
-		msg = "could not find class '" + className + "'";
-	    } catch (IllegalArgumentException e2) {
-		msg = "illegal initializer for class '" + className + "'";
-	    } catch (IllegalAccessException e3) {
-		msg = "class '" + className+"' or its initializer are not accessible";
-	    } catch (ClassCastException e4) {
-		msg = "class '" + className + "' singleton is not of class STosClass";
-	    } catch (NoSuchMethodError e5) {
-		msg = "class '" + className + "' does not have the correct initializer";
-	    } catch (InstantiationException e6) {
-		msg = "instatiation of class '" + className + "' failed";
-	    } catch (ExceptionInInitializerError e8) {
-		msg = "initializer for class '" + className + "' failed";
-	    } catch (SecurityException e10) {
-		msg = "access to class '" + className + "' information is denied";
-	    }
-	    if ( msg != null ) {
-		throw new SRuntimeException(msg);
-	    }
-	    _tosClasses.put(className, tosClass);
-	}
+        if ( tosClass == null ) {
+            try {
+                javaClass = Class.forName(className);
+                if ( STosClass.class.isAssignableFrom(javaClass) ) {
+                    tosClass  = (STosClass)javaClass.newInstance();
+                } else {
+                    tosClass = new SJavaClass(javaClass);
+                }
+            } catch (ClassNotFoundException e1) {
+                msg = "could not find class '" + className + "'";
+            } catch (IllegalArgumentException e2) {
+                msg = "illegal initializer for class '" + className + "'";
+            } catch (IllegalAccessException e3) {
+                msg = "class '" + className+"' or its initializer are not accessible";
+            } catch (ClassCastException e4) {
+                msg = "class '" + className + "' singleton is not of class STosClass";
+            } catch (NoSuchMethodError e5) {
+                msg = "class '" + className + "' does not have the correct initializer";
+            } catch (InstantiationException e6) {
+                msg = "instatiation of class '" + className + "' failed";
+            } catch (ExceptionInInitializerError e8) {
+                msg = "initializer for class '" + className + "' failed";
+            } catch (SecurityException e10) {
+                msg = "access to class '" + className + "' information is denied";
+            }
+            if ( msg != null ) {
+                throw new SRuntimeException(msg);
+            }
+            _tosClasses.put(className, tosClass);
+        }
 
-	return tosClass;
+        return tosClass;
     }
 
 
@@ -720,7 +720,7 @@ public class SModuleTos
 
 //* 
 //* <TeaFunction name="class-base-of"
-//* 		arguments="classObject"
+//*                 arguments="classObject"
 //*             module="tea.tos">
 //*
 //* <Overview>
@@ -750,18 +750,18 @@ public class SModuleTos
  **************************************************************************/
 
     private static Object functionBaseOf(SObjFunction func,
-					 SContext     context,
-					 Object[]     args)
-	throws STeaException {
+                                         SContext     context,
+                                         Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 2 ) {
-	    throw new SNumArgException(args, "classObject");
-	}
+        if ( args.length != 2 ) {
+            throw new SNumArgException(args, "classObject");
+        }
 
-	STosClass tosClass  = STosUtil.getClass(context, args, 1);
-	STosClass baseClass = tosClass.getSuperClass();
+        STosClass tosClass  = STosUtil.getClass(context, args, 1);
+        STosClass baseClass = tosClass.getSuperClass();
 
-	return (baseClass==null) ? SObjNull.NULL : baseClass;
+        return (baseClass==null) ? SObjNull.NULL : baseClass;
     }
 
 
@@ -770,7 +770,7 @@ public class SModuleTos
 
 //* 
 //* <TeaFunction name="class-of"
-//* 		arguments="tosObject"
+//*                 arguments="tosObject"
 //*             module="tea.tos">
 //*
 //* <Overview>
@@ -798,15 +798,15 @@ public class SModuleTos
  **************************************************************************/
 
     private static Object functionClassOf(SObjFunction func,
-					  SContext     context,
-					  Object[]     args)
-	throws STeaException {
+                                          SContext     context,
+                                          Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 2 ) {
-	    throw new SNumArgException(args, "tosObject");
-	}
+        if ( args.length != 2 ) {
+            throw new SNumArgException(args, "tosObject");
+        }
 
-	return STosUtil.getTosObj(args,1).getTosClass();
+        return STosUtil.getTosObj(args,1).getTosClass();
     }
 
 
@@ -815,7 +815,7 @@ public class SModuleTos
 
 //* 
 //* <TeaFunction name="class-is-a"
-//* 		arguments="class1 class2"
+//*                 arguments="class1 class2"
 //*             module="tea.tos">
 //*
 //* <Overview>
@@ -861,25 +861,25 @@ public class SModuleTos
  **************************************************************************/
 
     private static Object functionIsA(SObjFunction func,
-				      SContext     context,
-				      Object[]     args)
-	throws STeaException {
+                                      SContext     context,
+                                      Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "class1 class2");
-	}
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "class1 class2");
+        }
 
-	STosClass tosClass1 = STosUtil.getClass(context, args, 1);
-	STosClass tosClass2 = STosUtil.getClass(context, args, 2);
+        STosClass tosClass1 = STosUtil.getClass(context, args, 1);
+        STosClass tosClass2 = STosUtil.getClass(context, args, 2);
 
-	while ( tosClass1 != null ) {
-	    if ( tosClass1 == tosClass2 ) {
-		return Boolean.TRUE;
-	    }
-	    tosClass1 = tosClass1.getSuperClass();
-	}
+        while ( tosClass1 != null ) {
+            if ( tosClass1 == tosClass2 ) {
+                return Boolean.TRUE;
+            }
+            tosClass1 = tosClass1.getSuperClass();
+        }
 
-	return Boolean.FALSE;
+        return Boolean.FALSE;
     }
 
 
@@ -888,7 +888,7 @@ public class SModuleTos
 
 //* 
 //* <TeaFunction name="class-get-name"
-//* 		arguments="classObject"
+//*                 arguments="classObject"
 //*             module="tea.tos">
 //*
 //* <Overview>
@@ -918,15 +918,15 @@ public class SModuleTos
  **************************************************************************/
 
     private static Object functionGetName(SObjFunction func,
-					  SContext     context,
-					  Object[]     args)
-	throws STeaException {
+                                          SContext     context,
+                                          Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 2 ) {
-	    throw new SNumArgException(args, "classObject");
-	}
+        if ( args.length != 2 ) {
+            throw new SNumArgException(args, "classObject");
+        }
 
-	return STosUtil.getClass(context, args, 1).getName();
+        return STosUtil.getClass(context, args, 1).getName();
     }
 
 
@@ -935,7 +935,7 @@ public class SModuleTos
 
 //* 
 //* <TeaFunction name="tos-obj?"
-//* 		arguments="value"
+//*                 arguments="value"
 //*             module="tea.tos">
 //*
 //* <Overview>
@@ -965,18 +965,18 @@ public class SModuleTos
  **************************************************************************/
 
     private static Object functionIsTosObj(SObjFunction func,
-					   SContext     context,
-					   Object[]     args)
-	throws STeaException {
+                                           SContext     context,
+                                           Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 2 ) {
-	    throw new SNumArgException(args, "value");
-	}
+        if ( args.length != 2 ) {
+            throw new SNumArgException(args, "value");
+        }
 
-	Object  value  = args[1];
-	boolean result = value instanceof STosObj;
+        Object  value  = args[1];
+        boolean result = value instanceof STosObj;
 
-	return result ? Boolean.TRUE : Boolean.FALSE;
+        return result ? Boolean.TRUE : Boolean.FALSE;
     }
 
 

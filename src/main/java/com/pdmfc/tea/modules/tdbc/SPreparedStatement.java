@@ -66,7 +66,7 @@ public class SPreparedStatement
 
     private static final String     CLASS_NAME   = "TPreparedStatement";
     private static final SObjSymbol CLASS_NAME_S =
-	SObjSymbol.addSymbol(CLASS_NAME);
+        SObjSymbol.addSymbol(CLASS_NAME);
 
     private PreparedStatement _prepStat = null;
 
@@ -81,9 +81,9 @@ public class SPreparedStatement
  **************************************************************************/
 
     public SPreparedStatement(STosClass myClass)
-	throws STeaException {
+        throws STeaException {
 
-	super(myClass);
+        super(myClass);
     }
 
 
@@ -102,8 +102,8 @@ public class SPreparedStatement
 
     public void setPreparedStatement(PreparedStatement stat) {
 
-	_prepStat = stat;
-	setStatement(stat);
+        _prepStat = stat;
+        setStatement(stat);
     }
 
 
@@ -120,7 +120,7 @@ public class SPreparedStatement
 
     public static String getTosClassName() {
 
-	return CLASS_NAME;
+        return CLASS_NAME;
     }
 
 
@@ -134,15 +134,15 @@ public class SPreparedStatement
  **************************************************************************/
 
     public static SStatement newInstance(SContext context)
-	throws STeaException {
+        throws STeaException {
 
-	STosObj prepStat = STosUtil.newInstance(CLASS_NAME_S, context);
+        STosObj prepStat = STosUtil.newInstance(CLASS_NAME_S, context);
 
-	if ( !(prepStat instanceof SPreparedStatement) ) {
-	    throw new SRuntimeException("invalid " + CLASS_NAME + " class");
-	}
+        if ( !(prepStat instanceof SPreparedStatement) ) {
+            throw new SRuntimeException("invalid " + CLASS_NAME + " class");
+        }
 
-	return (SStatement)prepStat;
+        return (SStatement)prepStat;
     }
 
 
@@ -163,11 +163,11 @@ public class SPreparedStatement
  **************************************************************************/
 
     public Object constructor(SObjFunction obj,
-			      SContext     context,
-			      Object[]     args)
-	throws STeaException {
+                              SContext     context,
+                              Object[]     args)
+        throws STeaException {
 
-	return obj;
+        return obj;
     }
 
 
@@ -176,7 +176,7 @@ public class SPreparedStatement
 
 //* 
 //* <TeaMethod name="query"
-//* 	   className="TPreparedStatement">
+//*            className="TPreparedStatement">
 //* 
 //* <Overview>
 //* Executes the SQL query represented by this prepared statement.
@@ -207,24 +207,24 @@ public class SPreparedStatement
  **************************************************************************/
 
     public Object query(SObjFunction obj,
-			SContext     context,
-			Object[]     args)
-	throws STeaException {
+                        SContext     context,
+                        Object[]     args)
+        throws STeaException {
 
-	ResultSet  rSet    = null;
-	SResultSet tosRSet = null;
+        ResultSet  rSet    = null;
+        SResultSet tosRSet = null;
 
-	try {
-	    rSet = _prepStat.executeQuery();
-	    tosRSet = SResultSet.newInstance(context);
-	    tosRSet.setResultSet(rSet);
-	    tosRSet.addClosedListener(this);
-	    _resultSets.add(tosRSet);
-	} catch (SQLException e) {
-	    throw new SRuntimeException(e);
-	}
+        try {
+            rSet = _prepStat.executeQuery();
+            tosRSet = SResultSet.newInstance(context);
+            tosRSet.setResultSet(rSet);
+            tosRSet.addClosedListener(this);
+            _resultSets.add(tosRSet);
+        } catch (SQLException e) {
+            throw new SRuntimeException(e);
+        }
 
-	return tosRSet;
+        return tosRSet;
     }
 
 
@@ -233,7 +233,7 @@ public class SPreparedStatement
 
 //* 
 //* <TeaMethod name="update"
-//* 	   className="TPreparedStatement">
+//*            className="TPreparedStatement">
 //* 
 //* <Overview>
 //* Executes the SQL statement that modifies the contents of the database
@@ -265,19 +265,19 @@ public class SPreparedStatement
  **************************************************************************/
 
     public Object update(SObjFunction obj,
-			 SContext     context,
-			 Object[]     args)
-	throws STeaException {
+                         SContext     context,
+                         Object[]     args)
+        throws STeaException {
 
-	int result = 0;
+        int result = 0;
 
-	try {
-	    result = _prepStat.executeUpdate();
-	} catch (SQLException e) {
-	    throw new SRuntimeException(e);
-	}
+        try {
+            result = _prepStat.executeUpdate();
+        } catch (SQLException e) {
+            throw new SRuntimeException(e);
+        }
 
-	return new Integer(result);
+        return new Integer(result);
     }
 
 
@@ -286,7 +286,7 @@ public class SPreparedStatement
 
 //* 
 //* <TeaMethod name="execute"
-//* 	   className="TPreparedStatement">
+//*            className="TPreparedStatement">
 //* 
 //* <Overview>
 //* Executes an arbitrary SQL statement.
@@ -312,19 +312,19 @@ public class SPreparedStatement
  **************************************************************************/
 
     public Object execute(SObjFunction obj,
-			  SContext     context,
-			  Object[]     args)
-	throws STeaException {
+                          SContext     context,
+                          Object[]     args)
+        throws STeaException {
 
-	boolean result = false;
+        boolean result = false;
 
-	try {
-	    result = _prepStat.execute();
-	} catch (SQLException e) {
-	    throw new SRuntimeException(e);
-	}
+        try {
+            result = _prepStat.execute();
+        } catch (SQLException e) {
+            throw new SRuntimeException(e);
+        }
 
-	return result ? Boolean.TRUE : Boolean.FALSE;
+        return result ? Boolean.TRUE : Boolean.FALSE;
     }
 
 
@@ -334,7 +334,7 @@ public class SPreparedStatement
 //* 
 //* <TeaMethod name="setInt"
 //*            arguments="index value"
-//* 	   className="TPreparedStatement">
+//*            className="TPreparedStatement">
 //* 
 //* <Overview>
 //* Sets the value of one of the value placeholders.
@@ -378,28 +378,28 @@ public class SPreparedStatement
  **************************************************************************/
 
     public Object setInt(SObjFunction obj,
-			 SContext     context,
-			 Object[]     args)
-	throws SRuntimeException {
+                         SContext     context,
+                         Object[]     args)
+        throws SRuntimeException {
 
-	if ( args.length != 4 ) {
-	    throw new SNumArgException(args, "index value");
-	}
+        if ( args.length != 4 ) {
+            throw new SNumArgException(args, "index value");
+        }
 
-	int   index    = SArgs.getInt(args, 2).intValue();
-	Object valueArg = args[3];
+        int   index    = SArgs.getInt(args, 2).intValue();
+        Object valueArg = args[3];
 
-	try {
-	    if ( valueArg == SObjNull.NULL ) {
-		setIntNull(index);
-	    } else {
-		setInt(index, SArgs.getInt(args,3).intValue());
-	    }
-	} catch (SQLException e) {
-	    throw new SRuntimeException(e);
-	}
+        try {
+            if ( valueArg == SObjNull.NULL ) {
+                setIntNull(index);
+            } else {
+                setInt(index, SArgs.getInt(args,3).intValue());
+            }
+        } catch (SQLException e) {
+            throw new SRuntimeException(e);
+        }
 
-	return obj;
+        return obj;
     }
 
 
@@ -413,10 +413,10 @@ public class SPreparedStatement
  **************************************************************************/
 
     private void setInt(int index,
-		       int value)
-	throws SQLException {
+                       int value)
+        throws SQLException {
 
-	_prepStat.setInt(index, value);
+        _prepStat.setInt(index, value);
     }
 
 
@@ -430,9 +430,9 @@ public class SPreparedStatement
  **************************************************************************/
 
     private void setIntNull(int index)
-	throws SQLException {
+        throws SQLException {
        
-	_prepStat.setNull(index, java.sql.Types.INTEGER);
+        _prepStat.setNull(index, java.sql.Types.INTEGER);
     }
 
 
@@ -442,7 +442,7 @@ public class SPreparedStatement
 //* 
 //* <TeaMethod name="setFloat"
 //*            arguments="index value"
-//* 	   className="TPreparedStatement">
+//*            className="TPreparedStatement">
 //* 
 //* <Overview>
 //* Sets the value of one of the value placeholders.
@@ -486,28 +486,28 @@ public class SPreparedStatement
  **************************************************************************/
 
     public Object setFloat(SObjFunction obj,
-			   SContext     context,
-			   Object[]     args)
-	throws SRuntimeException {
+                           SContext     context,
+                           Object[]     args)
+        throws SRuntimeException {
 
-	if ( args.length != 4 ) {
-	    throw new SNumArgException(args, "index value");
-	}
+        if ( args.length != 4 ) {
+            throw new SNumArgException(args, "index value");
+        }
 
-	int   index    = SArgs.getInt(args, 2).intValue();
-	Object valueArg = args[3];
+        int   index    = SArgs.getInt(args, 2).intValue();
+        Object valueArg = args[3];
 
-	try {
-	    if ( valueArg == SObjNull.NULL ) {
-		setDoubleNull(index);
-	    } else {
-		setDouble(index, SArgs.getFloat(args,3).doubleValue());
-	    }
-	} catch (SQLException e) {
-	    throw new SRuntimeException(e);
-	}
+        try {
+            if ( valueArg == SObjNull.NULL ) {
+                setDoubleNull(index);
+            } else {
+                setDouble(index, SArgs.getFloat(args,3).doubleValue());
+            }
+        } catch (SQLException e) {
+            throw new SRuntimeException(e);
+        }
 
-	return obj;
+        return obj;
     }
 
 
@@ -521,10 +521,10 @@ public class SPreparedStatement
  **************************************************************************/
 
     private void setDouble(int    index,
-			   double value)
-	throws SQLException {
+                           double value)
+        throws SQLException {
 
-	_prepStat.setDouble(index, value);
+        _prepStat.setDouble(index, value);
    }
 
 
@@ -538,9 +538,9 @@ public class SPreparedStatement
  **************************************************************************/
 
     private void setDoubleNull(int index)
-	throws SQLException {
+        throws SQLException {
 
-	_prepStat.setNull(index, java.sql.Types.DOUBLE);
+        _prepStat.setNull(index, java.sql.Types.DOUBLE);
     }
 
 
@@ -550,7 +550,7 @@ public class SPreparedStatement
 //* 
 //* <TeaMethod name="setString"
 //*            arguments="index value"
-//* 	   className="TPreparedStatement">
+//*            className="TPreparedStatement">
 //* 
 //* <Overview>
 //* Sets the value of one of the value placeholders.
@@ -593,28 +593,28 @@ public class SPreparedStatement
  **************************************************************************/
 
     public Object setString(SObjFunction obj,
-			    SContext     context,
-			    Object[]     args)
-	throws STeaException {
+                            SContext     context,
+                            Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 4 ) {
-	    throw new SNumArgException(args, "index value");
-	}
+        if ( args.length != 4 ) {
+            throw new SNumArgException(args, "index value");
+        }
 
-	int    index    = SArgs.getInt(args, 2).intValue();
-	Object valueArg = args[3];
+        int    index    = SArgs.getInt(args, 2).intValue();
+        Object valueArg = args[3];
 
-	try {
-	    if ( valueArg == SObjNull.NULL ) {
-		setStringNull(index);
-	    } else {
-		setString(index, SArgs.getString(args,3));
-	    }
-	} catch (SQLException e) {
-	    throw new SRuntimeException(e);
-	}
+        try {
+            if ( valueArg == SObjNull.NULL ) {
+                setStringNull(index);
+            } else {
+                setString(index, SArgs.getString(args,3));
+            }
+        } catch (SQLException e) {
+            throw new SRuntimeException(e);
+        }
 
-	return obj;
+        return obj;
     }
 
 
@@ -628,10 +628,10 @@ public class SPreparedStatement
  **************************************************************************/
 
     private void setString(int    index,
-			   String value)
-	throws SQLException {
+                           String value)
+        throws SQLException {
 
-	_prepStat.setString(index, value);
+        _prepStat.setString(index, value);
     }
 
 
@@ -645,9 +645,9 @@ public class SPreparedStatement
  **************************************************************************/
 
     private void setStringNull(int index)
-	throws SQLException {
+        throws SQLException {
 
-	_prepStat.setNull(index, java.sql.Types.VARCHAR);
+        _prepStat.setNull(index, java.sql.Types.VARCHAR);
     }
 
 
@@ -657,7 +657,7 @@ public class SPreparedStatement
 //* 
 //* <TeaMethod name="setDate"
 //*            arguments="index value"
-//* 	   className="TPreparedStatement">
+//*            className="TPreparedStatement">
 //* 
 //* <Overview>
 //* Sets the value of one of the value placeholders as a date object.
@@ -702,28 +702,28 @@ public class SPreparedStatement
  **************************************************************************/
 
     public Object setDate(SObjFunction obj,
-			  SContext     context,
-			  Object[]     args)
-	throws STeaException {
+                          SContext     context,
+                          Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 4 ) {
-	    throw new SNumArgException(args, "index value");
-	}
+        if ( args.length != 4 ) {
+            throw new SNumArgException(args, "index value");
+        }
 
-	int    index    = SArgs.getInt(args, 2).intValue();
-	Object valueArg = args[3];
+        int    index    = SArgs.getInt(args, 2).intValue();
+        Object valueArg = args[3];
 
-	try {
-	    if ( valueArg == SObjNull.NULL ) {
-		setTimestampNull(index);
-	    } else {
-		setTimestamp(index, SDate.getDate(args,3));
-	    }
-	} catch (SQLException e) {
-	    throw new SRuntimeException(e);
-	}
+        try {
+            if ( valueArg == SObjNull.NULL ) {
+                setTimestampNull(index);
+            } else {
+                setTimestamp(index, SDate.getDate(args,3));
+            }
+        } catch (SQLException e) {
+            throw new SRuntimeException(e);
+        }
 
-	return obj;
+        return obj;
     }
 
 
@@ -737,13 +737,13 @@ public class SPreparedStatement
  **************************************************************************/
 
     private void setTimestamp(int   index,
-			      SDate value)
-	throws SQLException {
+                              SDate value)
+        throws SQLException {
 
-	Date      date      = value.getDate();
-	Timestamp timestamp = new Timestamp(date.getTime());
+        Date      date      = value.getDate();
+        Timestamp timestamp = new Timestamp(date.getTime());
 
-	_prepStat.setTimestamp(index, timestamp);
+        _prepStat.setTimestamp(index, timestamp);
     }
 
 
@@ -757,9 +757,9 @@ public class SPreparedStatement
  **************************************************************************/
 
     private void setTimestampNull(int index)
-	throws SQLException {
+        throws SQLException {
 
-	_prepStat.setNull(index, java.sql.Types.TIMESTAMP);
+        _prepStat.setNull(index, java.sql.Types.TIMESTAMP);
     }
 
 

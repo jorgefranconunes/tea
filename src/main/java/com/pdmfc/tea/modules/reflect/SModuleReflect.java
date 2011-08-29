@@ -223,9 +223,9 @@ public class SModuleReflect
 
     @Override
     public void init(final SContext context)
-	throws STeaException {
+        throws STeaException {
 
-	context.newVar("java-get-value",
+        context.newVar("java-get-value",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -237,7 +237,7 @@ public class SModuleReflect
                            }
                        });
 
-	context.newVar("java-set-value",
+        context.newVar("java-set-value",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -249,7 +249,7 @@ public class SModuleReflect
                            }
                        });
 
-	context.newVar("java-get-method",
+        context.newVar("java-get-method",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -261,7 +261,7 @@ public class SModuleReflect
                            }
                        });
 
-	context.newVar("java-exec-method",
+        context.newVar("java-exec-method",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -273,7 +273,7 @@ public class SModuleReflect
                            }
                        });
 
-	context.newVar("java-new-instance",
+        context.newVar("java-new-instance",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -342,7 +342,7 @@ public class SModuleReflect
 
 //* 
 //* <TeaFunction name="java-get-value"
-//* 		 arguments="[javaClassName|wrapperObject] memberName"
+//*                  arguments="[javaClassName|wrapperObject] memberName"
 //*              module="tea.java">
 //*
 //* <Overview>
@@ -375,26 +375,26 @@ public class SModuleReflect
  **************************************************************************/
 
     private static Object functionGetValue(final SObjFunction func,
-					   final SContext     context,
-					   final Object[]     args)
-	throws STeaException {
+                                           final SContext     context,
+                                           final Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args,
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args,
                                        "[className|wrapperObj] memberName");
-	}
+        }
 
-	Object            firstArg    = args[1];
-	String            memberName  = SReflectUtils.getStringOrSymbol(args,2);
-	Object            memberValue = null;
-	JavaWrapperObject targetObj   = null;
+        Object            firstArg    = args[1];
+        String            memberName  = SReflectUtils.getStringOrSymbol(args,2);
+        Object            memberValue = null;
+        JavaWrapperObject targetObj   = null;
         Class<?>          klass       = null;
 
-	if ( firstArg instanceof JavaWrapperObject ) {
-	    targetObj = (JavaWrapperObject)firstArg;
-	} else {
-	    klass = SReflectUtils.getClassForName(args, 1);
-	}
+        if ( firstArg instanceof JavaWrapperObject ) {
+            targetObj = (JavaWrapperObject)firstArg;
+        } else {
+            klass = SReflectUtils.getClassForName(args, 1);
+        }
 
         if ( null == targetObj ) {
             memberValue = SReflectUtils.getFieldValue(klass, null, memberName);
@@ -413,7 +413,7 @@ public class SModuleReflect
 
 //* 
 //* <TeaFunction name="java-set-value"
-//* 		 arguments="[javaClassName|wrapperObject] memberName value"
+//*                  arguments="[javaClassName|wrapperObject] memberName value"
 //*              module="tea.java">
 //*
 //* <Overview>
@@ -450,30 +450,30 @@ public class SModuleReflect
  **************************************************************************/
 
     private static Object functionSetValue(final SObjFunction func,
-					   final SContext     context,
-					   final Object[]     args)
-	throws STeaException {
+                                           final SContext     context,
+                                           final Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 4 ) {
-	    throw new SNumArgException(args,
+        if ( args.length != 4 ) {
+            throw new SNumArgException(args,
                                        "[className|wrapperObj] memberName value");
-	}
+        }
 
-	Object            firstArg   = args[1];
-	String            memberName = SReflectUtils.getStringOrSymbol(args,2);
-	Object            value      = args[3];
+        Object            firstArg   = args[1];
+        String            memberName = SReflectUtils.getStringOrSymbol(args,2);
+        Object            value      = args[3];
 
-	Object            oldValue   = null;
-	JavaWrapperObject targetObj  = null;
+        Object            oldValue   = null;
+        JavaWrapperObject targetObj  = null;
         Class<?>          klass      = null;
 
-	Object            javaValue    = STeaJavaTypes.tea2Java(value);
+        Object            javaValue    = STeaJavaTypes.tea2Java(value);
 
-	if ( firstArg instanceof JavaWrapperObject ) {
-	    targetObj = (JavaWrapperObject)firstArg;
-	} else {
-	    klass = SReflectUtils.getClassForName(args, 1);
-	}
+        if ( firstArg instanceof JavaWrapperObject ) {
+            targetObj = (JavaWrapperObject)firstArg;
+        } else {
+            klass = SReflectUtils.getClassForName(args, 1);
+        }
 
         if ( null == targetObj ) {
             oldValue =
@@ -482,7 +482,7 @@ public class SModuleReflect
             oldValue = targetObj.setValue(memberName, javaValue);
         }
 
-	Object result = STeaJavaTypes.java2Tea(oldValue, context);
+        Object result = STeaJavaTypes.java2Tea(oldValue, context);
 
         return result;
     }
@@ -493,7 +493,7 @@ public class SModuleReflect
 
 //* 
 //* <TeaFunction name="java-get-method"
-//* 		 arguments="javaClassName methodName [argType1 [argType2 ...]]"
+//*                  arguments="javaClassName methodName [argType1 [argType2 ...]]"
 //*              module="tea.java">
 //*
 //* <Overview>
@@ -534,18 +534,18 @@ public class SModuleReflect
  **************************************************************************/
 
     private static Object functionGetMethod(final SObjFunction func,
-					    final SContext     context,
-					    final Object[]     args)
-	throws STeaException {
+                                            final SContext     context,
+                                            final Object[]     args)
+        throws STeaException {
 
-	if ( args.length < 3 ) {
-	    throw new SNumArgException(args,
+        if ( args.length < 3 ) {
+            throw new SNumArgException(args,
                                        "className methodName [argType1 [argType2 ...]]");
-	}
+        }
 
         Class<?>   klass      = SReflectUtils.getClassForName(args, 1);
-	String     methodName = SReflectUtils.getStringOrSymbol(args,2);
-	Class<?>[] paramTypes = new Class[args.length - 3];
+        String     methodName = SReflectUtils.getStringOrSymbol(args,2);
+        Class<?>[] paramTypes = new Class[args.length - 3];
 
         for ( int i=3; i<args.length; i++ ) {
             paramTypes[i-3] = SReflectUtils.getClassForName(args, i);
@@ -579,7 +579,7 @@ public class SModuleReflect
                 }
             };
 
-	return result;
+        return result;
     }
 
 
@@ -597,10 +597,10 @@ public class SModuleReflect
         StringBuilder builder = new StringBuilder();
 
         for ( int i=0, count=paramTypes.length; i<count; i++) {
-		if ( i > 0 ) {
-		    builder.append(" ");
-		}
-		builder.append(paramTypes[i].getName());
+                if ( i > 0 ) {
+                    builder.append(" ");
+                }
+                builder.append(paramTypes[i].getName());
         }
 
         String usageMessage = builder.toString();
@@ -614,7 +614,7 @@ public class SModuleReflect
 
 //* 
 //* <TeaFunction name="java-new-instance"
-//* 		 arguments="javaClassName [arg1 [arg2 ...]]"
+//*                  arguments="javaClassName [arg1 [arg2 ...]]"
 //*              module="tea.java">
 //*
 //* <Overview>
@@ -647,47 +647,47 @@ public class SModuleReflect
    private static Object functionNewInstance(final SObjFunction func,
                                              final SContext     context,
                                              final Object[]     args)
-	throws STeaException {
+        throws STeaException {
 
-	if ( args.length < 2 ) {
-	    throw new SNumArgException(args, "className [arg1 [arg2 ...]]");
-	}
+        if ( args.length < 2 ) {
+            throw new SNumArgException(args, "className [arg1 [arg2 ...]]");
+        }
 
         Class<?>   klass      = SReflectUtils.getClassForName(args, 1);
-	Object[]   params     = new Object[args.length - 2];
-	Class<?>[] paramTypes = new Class<?>[args.length - 2];
+        Object[]   params     = new Object[args.length - 2];
+        Class<?>[] paramTypes = new Class<?>[args.length - 2];
 
-	for ( int i=2; i<args.length; i++ ) {
+        for ( int i=2; i<args.length; i++ ) {
             Object constructorArg = STeaJavaTypes.tea2Java(args[i]);
 
-	    params[i-2]     = constructorArg;
-	    paramTypes[i-2] =
+            params[i-2]     = constructorArg;
+            paramTypes[i-2] =
                 (constructorArg==null) ? null : constructorArg.getClass();
-	}
+        }
 
         Constructor<?>  constructor =
             SMethodFinder.findConstructor(klass, paramTypes);
         Object          javaResult  = null;
 
-	try {	    
-	    javaResult = constructor.newInstance(params);
-	} catch (IllegalAccessException e) {
+        try {            
+            javaResult = constructor.newInstance(params);
+        } catch (IllegalAccessException e) {
             String paramsTxt = SMethodFinder.buildTypesDescription(paramTypes);
             String msg = "cannot access constructor for {0}({1})";
-	    throw new SRuntimeException(args, msg, klass.getName(), paramsTxt);
-	} catch (InstantiationException e) {
-	    throw new SRuntimeException(e);
-	} catch (InvocationTargetException e) {
-	    throw new SRuntimeException(e.getCause());
-	} catch (IllegalArgumentException e) {
+            throw new SRuntimeException(args, msg, klass.getName(), paramsTxt);
+        } catch (InstantiationException e) {
+            throw new SRuntimeException(e);
+        } catch (InvocationTargetException e) {
+            throw new SRuntimeException(e.getCause());
+        } catch (IllegalArgumentException e) {
             String paramsTxt = SMethodFinder.buildTypesDescription(paramTypes);
             String msg = "problems calling constructor for {0}({1})";
-	    throw new SRuntimeException(args, msg, klass.getName(), paramsTxt);
-	}
+            throw new SRuntimeException(args, msg, klass.getName(), paramsTxt);
+        }
 
-	Object result = STeaJavaTypes.java2Tea(javaResult, context);
+        Object result = STeaJavaTypes.java2Tea(javaResult, context);
 
-	return result;
+        return result;
     }
 
 
@@ -696,7 +696,7 @@ public class SModuleReflect
 
 //* 
 //* <TeaFunction name="java-exec-method"
-//* 		 arguments="javaClassName methodName [arg1 [arg2 ...]]"
+//*                  arguments="javaClassName methodName [arg1 [arg2 ...]]"
 //*              module="tea.java">
 //*
 //* <Overview>
@@ -739,32 +739,32 @@ public class SModuleReflect
  **************************************************************************/
 
     public static Object functionExecMethod(final SObjFunction func,
-					    final SContext     context,
-					    final Object[]     args)
-	throws STeaException {
+                                            final SContext     context,
+                                            final Object[]     args)
+        throws STeaException {
 
-	if ( args.length < 3 ) {
-	    throw new SNumArgException(args,
+        if ( args.length < 3 ) {
+            throw new SNumArgException(args,
                                        "className methodName [arg1 [arg2 ...]]");
-	}
+        }
 
         Class<?>   klass      = SReflectUtils.getClassForName(args, 1);
-	String     methodName = SReflectUtils.getStringOrSymbol(args,2);
-	Class<?>[] paramTypes = new Class[args.length - 3];
-	Object[]   methodArgs = new Object[args.length - 3];
+        String     methodName = SReflectUtils.getStringOrSymbol(args,2);
+        Class<?>[] paramTypes = new Class[args.length - 3];
+        Object[]   methodArgs = new Object[args.length - 3];
 
-	// Convert value types to java.
-	for ( int i=3, count=args.length; i<count; i++ ) {
+        // Convert value types to java.
+        for ( int i=3, count=args.length; i<count; i++ ) {
             Object methodArg = STeaJavaTypes.tea2Java(args[i]); 
 
-	    methodArgs[i-3] = methodArg;
-	    paramTypes[i-3] = (methodArg==null) ? null : methodArg.getClass();
-	}
+            methodArgs[i-3] = methodArg;
+            paramTypes[i-3] = (methodArg==null) ? null : methodArg.getClass();
+        }
 
-	Method method =
+        Method method =
             SMethodFinder.findMethod(klass, methodName, paramTypes, true);
 
-	Object result =
+        Object result =
             SReflectUtils.invokeMethod(null, method, context, methodArgs);
 
         return result;

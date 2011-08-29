@@ -62,7 +62,7 @@ public class SVector
 
     private static final String     CLASS_NAME   = "TVector";
     private static final SObjSymbol CLASS_NAME_S =
-	SObjSymbol.addSymbol(CLASS_NAME);
+        SObjSymbol.addSymbol(CLASS_NAME);
 
     private List<Object> _vector   = null;
     private SContext     _context  = null;
@@ -83,11 +83,11 @@ public class SVector
  **************************************************************************/
 
     public SVector(STosClass myClass)
-	throws STeaException {
+        throws STeaException {
 
-	super(myClass);
+        super(myClass);
 
-	_vector = new ArrayList<Object>();
+        _vector = new ArrayList<Object>();
     }
 
 
@@ -108,12 +108,12 @@ public class SVector
  **************************************************************************/
 
     private SVector(STosClass    myClass,
-		    List<Object> contents)
-	throws STeaException {
+                    List<Object> contents)
+        throws STeaException {
 
-	super(myClass);
+        super(myClass);
 
-	_vector = contents;
+        _vector = contents;
     }
 
 
@@ -134,7 +134,7 @@ public class SVector
 
     public List<Object> getInternalList() {
 
-	return _vector;
+        return _vector;
     }
 
 
@@ -144,7 +144,7 @@ public class SVector
 //* 
 //* <TeaMethod name="constructor"
 //*            arguments="[theSize]"
-//* 	       className="TVector">
+//*                className="TVector">
 //* 
 //* <Overview>
 //* Initializes a <Func name="TVector"/> with a given number of
@@ -178,19 +178,19 @@ public class SVector
  **************************************************************************/
 
     public Object constructor(SObjFunction obj,
-			      SContext     context,
-			      Object[]     args)
-	throws SRuntimeException {
+                              SContext     context,
+                              Object[]     args)
+        throws SRuntimeException {
 
-	if ( (args.length!=2) && (args.length!=3) ) {
-	    throw new SNumArgException(args, "[size]");
-	}
+        if ( (args.length!=2) && (args.length!=3) ) {
+            throw new SNumArgException(args, "[size]");
+        }
 
-	if ( args.length == 3 ) {
-	    resize(obj, context, args);
-	}
+        if ( args.length == 3 ) {
+            resize(obj, context, args);
+        }
 
-	return obj;
+        return obj;
     }
 
 
@@ -200,7 +200,7 @@ public class SVector
 //* 
 //* <TeaMethod name="push"
 //*            arguments="anObject"
-//* 	       className="TVector">
+//*                className="TVector">
 //* 
 //* <Overview>
 //* Inserts a new element at the end of the <Func name="TVector"/>.
@@ -242,11 +242,11 @@ public class SVector
  **************************************************************************/
 
     public Object push(SObjFunction obj,
-		       SContext     context,
-		       Object[]     args)
-	throws SRuntimeException {
+                       SContext     context,
+                       Object[]     args)
+        throws SRuntimeException {
 
-	return append(obj, context, args);
+        return append(obj, context, args);
     }
 
 
@@ -256,7 +256,7 @@ public class SVector
 //* 
 //* <TeaMethod name="append"
 //*            arguments="anObject ..."
-//* 	       className="TVector">
+//*                className="TVector">
 //* 
 //* <Overview>
 //* Inserts one or more elements at the end of the <Func name="TVector"/>.
@@ -294,21 +294,21 @@ public class SVector
  **************************************************************************/
 
     public Object append(SObjFunction obj,
-			 SContext     context,
-			 Object[]     args)
-	throws SRuntimeException {
+                         SContext     context,
+                         Object[]     args)
+        throws SRuntimeException {
 
-	if ( args.length < 3 ) {
-	    throw new SNumArgException(args, "object");
-	}
+        if ( args.length < 3 ) {
+            throw new SNumArgException(args, "object");
+        }
 
-	int count = args.length;
+        int count = args.length;
 
-	for ( int i=2; i<count; i++ ) {
-	    _vector.add(args[i]);
-	}
+        for ( int i=2; i<count; i++ ) {
+            _vector.add(args[i]);
+        }
 
-	return obj;
+        return obj;
     }
 
 
@@ -318,7 +318,7 @@ public class SVector
 //* 
 //* <TeaMethod name="init"
 //*            arguments="[obj1 ...]"
-//* 	       className="TVector">
+//*                className="TVector">
 //* 
 //* <Overview>
 //* Initializes the <Func name="TVector"/> object with a given set of
@@ -355,18 +355,18 @@ public class SVector
  **************************************************************************/
 
     public Object init(SObjFunction obj,
-		       SContext     context,
-		       Object[]     args) {
+                       SContext     context,
+                       Object[]     args) {
 
-	int newSize = args.length - 2;
+        int newSize = args.length - 2;
 
-	_vector.clear();
+        _vector.clear();
 
-	for ( int i=0; i<newSize; i++ ) {
-	    _vector.add(args[i+2]);
-	}
+        for ( int i=0; i<newSize; i++ ) {
+            _vector.add(args[i+2]);
+        }
 
-	return obj;
+        return obj;
     }
 
 
@@ -375,7 +375,7 @@ public class SVector
 
 //* 
 //* <TeaMethod name="getSize"
-//* 	       className="TVector">
+//*                className="TVector">
 //* 
 //* <Overview>
 //* Fetches the number of elements in the <Func name="TVector"/>.
@@ -406,12 +406,12 @@ public class SVector
  **************************************************************************/
 
     public Object getSize(SObjFunction obj,
-			  SContext     context,
-			  Object[]     args) {
+                          SContext     context,
+                          Object[]     args) {
 
-	int size = _vector.size();
+        int size = _vector.size();
 
-	return new Integer(size);
+        return new Integer(size);
     }
 
 
@@ -421,7 +421,7 @@ public class SVector
 //* 
 //* <TeaMethod name="resize"
 //*            arguments="newSize"
-//* 	       className="TVector">
+//*                className="TVector">
 //* 
 //* <Overview>
 //* Changes the size of the <Func name="TVector"/>.
@@ -461,33 +461,33 @@ public class SVector
  **************************************************************************/
 
     public Object resize(SObjFunction obj,
-			 SContext     context,
-			 Object[]     args)
-	throws SRuntimeException {
+                         SContext     context,
+                         Object[]     args)
+        throws SRuntimeException {
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "size");
-	}
-
-	int newSize = SArgs.getInt(args,2).intValue();
-
-        if ( newSize < 0 ) {
-	    throw new SRuntimeException("TVector size must be an integer equal or greater than zero");
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "size");
         }
 
-	int oldSize = _vector.size();
+        int newSize = SArgs.getInt(args,2).intValue();
 
-	if ( newSize > oldSize ) {
-	    for ( int i=oldSize; i<newSize; i++ ) {
-		_vector.add(SObjNull.NULL);
-	    }
-	} else {
-	    for ( int i=oldSize; (i--)>newSize; ) {
-		_vector.remove(i);
-	    }
-	}
+        if ( newSize < 0 ) {
+            throw new SRuntimeException("TVector size must be an integer equal or greater than zero");
+        }
 
-	return obj;
+        int oldSize = _vector.size();
+
+        if ( newSize > oldSize ) {
+            for ( int i=oldSize; i<newSize; i++ ) {
+                _vector.add(SObjNull.NULL);
+            }
+        } else {
+            for ( int i=oldSize; (i--)>newSize; ) {
+                _vector.remove(i);
+            }
+        }
+
+        return obj;
     }
 
 
@@ -497,7 +497,7 @@ public class SVector
 //* 
 //* <TeaMethod name="getAt"
 //*            arguments="index"
-//* 	       className="TVector">
+//*                className="TVector">
 //* 
 //* <Overview>
 //* Fetches one element of the <Func name="TVector"/> at a given
@@ -534,27 +534,27 @@ public class SVector
  **************************************************************************/
 
     public Object getAt(SObjFunction obj,
-			SContext     context,
-			Object[]     args)
-	throws SRuntimeException {
+                        SContext     context,
+                        Object[]     args)
+        throws SRuntimeException {
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "index");
-	}
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "index");
+        }
 
-	Object result = null;
-	int    index  = SArgs.getInt(args,2).intValue();
+        Object result = null;
+        int    index  = SArgs.getInt(args,2).intValue();
 
-	try {
-	    result = _vector.get(index);
-	} catch (IndexOutOfBoundsException e) {
-	    String   msg    = "index {0} out of bounds for vector of size {1}";
-	    Object[] msgFmt =
-		{ String.valueOf(index), String.valueOf(_vector.size()) };
-	    throw new SRuntimeException(msg, msgFmt);
-	}
+        try {
+            result = _vector.get(index);
+        } catch (IndexOutOfBoundsException e) {
+            String   msg    = "index {0} out of bounds for vector of size {1}";
+            Object[] msgFmt =
+                { String.valueOf(index), String.valueOf(_vector.size()) };
+            throw new SRuntimeException(msg, msgFmt);
+        }
 
-	return result;
+        return result;
     }
 
 
@@ -564,7 +564,7 @@ public class SVector
 //* 
 //* <TeaMethod name="setAt"
 //*            arguments="anObject index"
-//* 	       className="TVector">
+//*                className="TVector">
 //* 
 //* <Overview>
 //* Changes one element of the <Func name="TVector"/> at a given
@@ -605,27 +605,27 @@ public class SVector
  **************************************************************************/
 
     public Object setAt(SObjFunction obj,
-			SContext     context,
-			Object[]     args)
-	throws SRuntimeException {
+                        SContext     context,
+                        Object[]     args)
+        throws SRuntimeException {
 
-	if ( args.length != 4 ) {
-	    throw new SNumArgException(args, "object index");
-	}
+        if ( args.length != 4 ) {
+            throw new SNumArgException(args, "object index");
+        }
 
-	Object elem  = args[2];
-	int    index = SArgs.getInt(args,3).intValue();
+        Object elem  = args[2];
+        int    index = SArgs.getInt(args,3).intValue();
 
-	try {
-	    _vector.set(index, elem);
-	} catch (IndexOutOfBoundsException e) {
-	    String   msg    = "index {0} out of bounds for vector of size {1}";
-	    Object[] msgFmt =
-		{ String.valueOf(index), String.valueOf(_vector.size()) };
-	    throw new SRuntimeException(msg, msgFmt);
-	}
+        try {
+            _vector.set(index, elem);
+        } catch (IndexOutOfBoundsException e) {
+            String   msg    = "index {0} out of bounds for vector of size {1}";
+            Object[] msgFmt =
+                { String.valueOf(index), String.valueOf(_vector.size()) };
+            throw new SRuntimeException(msg, msgFmt);
+        }
 
-	return obj;
+        return obj;
     }
 
 
@@ -634,7 +634,7 @@ public class SVector
 
 //* 
 //* <TeaMethod name="getElements"
-//* 	       className="TVector">
+//*                className="TVector">
 //* 
 //* <Overview>
 //* Fetches a list containing the <Func name="TVector"/> elements.
@@ -666,25 +666,25 @@ public class SVector
  **************************************************************************/
 
     public Object getElements(SObjFunction obj,
-			      SContext     context,
-			      Object[]     args) {
+                              SContext     context,
+                              Object[]     args) {
 
-	SObjPair    empty  = SObjPair.emptyList();
-	SObjPair    head   = empty;
-	SObjPair    node   = null;
+        SObjPair    empty  = SObjPair.emptyList();
+        SObjPair    head   = empty;
+        SObjPair    node   = null;
 
         for ( Object value : _vector ) {
-	    SObjPair newNode = new SObjPair(value, empty);
+            SObjPair newNode = new SObjPair(value, empty);
 
-	    if ( node == null ) {
-		head = newNode;
-	    } else {
-		node._cdr = newNode;
-	    }
-	    node = newNode;
-	}
+            if ( node == null ) {
+                head = newNode;
+            } else {
+                node._cdr = newNode;
+            }
+            node = newNode;
+        }
 
-	return head;
+        return head;
     }
 
 
@@ -693,7 +693,7 @@ public class SVector
 
 //* 
 //* <TeaMethod name="pop"
-//* 	       className="TVector">
+//*                className="TVector">
 //* 
 //* <Overview>
 //* Retrieves and removes the last element of the <Func name="TVector"/>.
@@ -726,21 +726,21 @@ public class SVector
  **************************************************************************/
 
     public Object pop(SObjFunction obj,
-		      SContext     context,
-		      Object[]     args)
-	throws SRuntimeException {
+                      SContext     context,
+                      Object[]     args)
+        throws SRuntimeException {
 
-	int    lastIndex = _vector.size() - 1;
-	Object result    = null;
+        int    lastIndex = _vector.size() - 1;
+        Object result    = null;
 
-	if ( lastIndex >= 0 ) {
-	    result = _vector.get(lastIndex);
-	    _vector.remove(lastIndex);
-	} else {
-	    throw new SRuntimeException("can not pop from an empty vector");
-	}
+        if ( lastIndex >= 0 ) {
+            result = _vector.get(lastIndex);
+            _vector.remove(lastIndex);
+        } else {
+            throw new SRuntimeException("can not pop from an empty vector");
+        }
 
-	return result;
+        return result;
     }
 
 
@@ -749,7 +749,7 @@ public class SVector
 
 //* 
 //* <TeaMethod name="clear"
-//* 	       className="TVector">
+//*                className="TVector">
 //* 
 //* <Overview>
 //* Removes all the elements from the <Func name="TVector"/>.
@@ -779,12 +779,12 @@ public class SVector
  **************************************************************************/
 
     public Object clear(SObjFunction obj,
-			SContext     context,
-			Object[]     args) {
+                        SContext     context,
+                        Object[]     args) {
 
-	_vector.clear();
+        _vector.clear();
 
-	return obj;
+        return obj;
     }
 
 
@@ -794,7 +794,7 @@ public class SVector
 //* 
 //* <TeaMethod name="sort"
 //*            arguments="aFunction"
-//* 	       className="TVector">
+//*                className="TVector">
 //* 
 //* <Overview>
 //* Sorts the elements of the <Func name="TVector"/> acording to a
@@ -834,25 +834,25 @@ public class SVector
  **************************************************************************/
 
     public Object sort(SObjFunction obj,
-		       SContext     context,
-		       Object[]     args)
-	throws STeaException {
+                       SContext     context,
+                       Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "comparison-function");
-	}
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "comparison-function");
+        }
 
-	int size = _vector.size();
+        int size = _vector.size();
 
-	if ( size > 1 ) {
-	     _compFunc = SArgs.getFunction(context, args, 2);
-	     _context  = context;
-	     qs(_vector, 0, size-1);
-	     _compFunc = null;
-	     _context  = null;
-	 }
+        if ( size > 1 ) {
+             _compFunc = SArgs.getFunction(context, args, 2);
+             _context  = context;
+             qs(_vector, 0, size-1);
+             _compFunc = null;
+             _context  = null;
+         }
 
-	 return obj;
+         return obj;
     }
 
 
@@ -866,37 +866,37 @@ public class SVector
  **************************************************************************/
 
     private void qs(List<Object> v,
-		    int          left,
-		    int          right)
-	throws STeaException {
+                    int          left,
+                    int          right)
+        throws STeaException {
 
-	int    i = left;
-	int    j = right;
-	Object x = v.get((left+right) / 2);
-	Object y;
+        int    i = left;
+        int    j = right;
+        Object x = v.get((left+right) / 2);
+        Object y;
 
-	do {
-	    while ( (compare(v.get(i),x)<0) && (i<right) ) {
-		i++;
-	    }
-	    while ( (compare(x,v.get(j))<0) && (j>left) ) {
-		j--;
-	    }
-	    if ( i <= j ) {
-		y = v.get(i);
-		v.set(i, v.get(j));
-		v.set(j, y);
-		i++;
-		j--;
-	    }
-	} while ( i <= j );
-	
-	if ( left < j ) {
-	    qs(v, left, j);
-	}
-	if ( i < right ) {
-	    qs(v, i, right);
-	}
+        do {
+            while ( (compare(v.get(i),x)<0) && (i<right) ) {
+                i++;
+            }
+            while ( (compare(x,v.get(j))<0) && (j>left) ) {
+                j--;
+            }
+            if ( i <= j ) {
+                y = v.get(i);
+                v.set(i, v.get(j));
+                v.set(j, y);
+                i++;
+                j--;
+            }
+        } while ( i <= j );
+        
+        if ( left < j ) {
+            qs(v, left, j);
+        }
+        if ( i < right ) {
+            qs(v, i, right);
+        }
     }
 
 
@@ -910,26 +910,26 @@ public class SVector
  **************************************************************************/
 
     private int compare(Object x,
-			Object y)
-	throws STeaException {
+                        Object y)
+        throws STeaException {
 
-	Object[] args   = new Object[3];
-	Object   value  = null;
-	Number   result = null;
+        Object[] args   = new Object[3];
+        Object   value  = null;
+        Number   result = null;
 
-	args[0] = _compFunc;
-	args[1] = x;
-	args[2] = y;
-	value   = _compFunc.exec(_compFunc, _context, args);
+        args[0] = _compFunc;
+        args[1] = x;
+        args[2] = y;
+        value   = _compFunc.exec(_compFunc, _context, args);
 
-	try {
-	    result = (Number)value;
-	} catch (ClassCastException e) {
-	    String msg = "comparison function must return a number, not a {0}";
-	    throw new SRuntimeException(msg, STypes.getTypeName(value));
-	}
+        try {
+            result = (Number)value;
+        } catch (ClassCastException e) {
+            String msg = "comparison function must return a number, not a {0}";
+            throw new SRuntimeException(msg, STypes.getTypeName(value));
+        }
 
-	return result.intValue();
+        return result.intValue();
     }
 
 
@@ -948,7 +948,7 @@ public class SVector
 
     public static String getTosClassName() {
 
-	return CLASS_NAME;
+        return CLASS_NAME;
     }
 
 
@@ -972,15 +972,15 @@ public class SVector
  **************************************************************************/
 
     public static SVector newInstance(SContext context)
-	throws STeaException {
+        throws STeaException {
 
-	STosClass theClass = STosUtil.getClass(context, CLASS_NAME_S);
-	SVector   vector   = new SVector(theClass);
-	Object[]  ctorArgs = { null, null };
+        STosClass theClass = STosUtil.getClass(context, CLASS_NAME_S);
+        SVector   vector   = new SVector(theClass);
+        Object[]  ctorArgs = { null, null };
 
-	vector.init(context, ctorArgs);
+        vector.init(context, ctorArgs);
 
-	return vector;
+        return vector;
     }
 
 
@@ -1003,16 +1003,16 @@ public class SVector
  **************************************************************************/
 
     public static SVector newInstance(SContext     context,
-				      List<Object> contents)
-	throws STeaException {
+                                      List<Object> contents)
+        throws STeaException {
 
-	STosClass theClass = STosUtil.getClass(context, CLASS_NAME_S);
-	SVector   vector   = new SVector(theClass, contents);
-	Object[]  ctorArgs = { null, null };
+        STosClass theClass = STosUtil.getClass(context, CLASS_NAME_S);
+        SVector   vector   = new SVector(theClass, contents);
+        Object[]  ctorArgs = { null, null };
 
-	vector.init(context, ctorArgs);
+        vector.init(context, ctorArgs);
 
-	return vector;
+        return vector;
     }
 
 

@@ -50,7 +50,7 @@ public class SConnection
 
     static final String     CLASS_NAME   = "TConnection";
     static final SObjSymbol CLASS_NAME_S =
-	SObjSymbol.addSymbol(CLASS_NAME);
+        SObjSymbol.addSymbol(CLASS_NAME);
 
     private Connection _connection = null;
 
@@ -79,9 +79,9 @@ public class SConnection
  **************************************************************************/
 
     SConnection(STosClass myClass)
-	throws STeaException {
+        throws STeaException {
 
-	super(myClass);
+        super(myClass);
     }
     
 
@@ -99,7 +99,7 @@ public class SConnection
 
     public Connection getInternalConnection() {
 
-	return _connection;
+        return _connection;
     }
 
 
@@ -116,7 +116,7 @@ public class SConnection
 
     public static String getTosClassName() {
 
-	return CLASS_NAME;
+        return CLASS_NAME;
     }
 
 
@@ -134,7 +134,7 @@ public class SConnection
 
     public void addClosedListener(SClosedEventListener listener) {
 
-	_listeners.add(listener);
+        _listeners.add(listener);
     }
 
 
@@ -144,7 +144,7 @@ public class SConnection
 //* 
 //* <TeaMethod name="constructor"
 //*            arguments="[url [username password]]"
-//* 	       className="TConnection">
+//*                className="TConnection">
 //* 
 //* <Overview>
 //* Initializes the object and, optionally, opens a connection to a
@@ -195,19 +195,19 @@ public class SConnection
  **************************************************************************/
 
     public Object constructor(SObjFunction obj,
-			      SContext     context,
-			      Object[]     args)
-	throws STeaException {
+                              SContext     context,
+                              Object[]     args)
+        throws STeaException {
 
-	switch ( args.length ) {
-	case 2 :
-	    return obj;
-	case 3 :
-	case 5 :
-	    return connect(obj, context, args);
-	default :
-	    throw new SNumArgException(args, "[url [username password]]");
-	}
+        switch ( args.length ) {
+        case 2 :
+            return obj;
+        case 3 :
+        case 5 :
+            return connect(obj, context, args);
+        default :
+            throw new SNumArgException(args, "[url [username password]]");
+        }
     }
 
 
@@ -217,7 +217,7 @@ public class SConnection
 //* 
 //* <TeaMethod name="connect"
 //*            arguments="url [username password]"
-//* 	       className="TConnection">
+//*                className="TConnection">
 //* 
 //* <Overview>
 //* Opens a connection to a database.
@@ -266,27 +266,27 @@ public class SConnection
  **************************************************************************/
 
     public Object connect(SObjFunction obj,
-			  SContext     context,
-			  Object[]     args)
-	throws STeaException {
+                          SContext     context,
+                          Object[]     args)
+        throws STeaException {
 
-	if ( (args.length!=3) && (args.length!=5) ) {
-	    throw new SNumArgException(args, "url [username password]");
-	}
+        if ( (args.length!=3) && (args.length!=5) ) {
+            throw new SNumArgException(args, "url [username password]");
+        }
 
-	String url     = SArgs.getString(args,2);
-	String name    = (args.length==3) ? null : SArgs.getString(args,3);
-	String  passwd = (args.length==3) ? null : SArgs.getString(args,4);
+        String url     = SArgs.getString(args,2);
+        String name    = (args.length==3) ? null : SArgs.getString(args,3);
+        String  passwd = (args.length==3) ? null : SArgs.getString(args,4);
 
-	try {
-	    connect(url, name, passwd);
-	} catch (SQLException e) {
-	    // This connection is now as good as closed.
-	    fireClosedEvent();
-	    throw new SRuntimeException(e);
-	}
+        try {
+            connect(url, name, passwd);
+        } catch (SQLException e) {
+            // This connection is now as good as closed.
+            fireClosedEvent();
+            throw new SRuntimeException(e);
+        }
 
-	return obj;
+        return obj;
     }
 
 
@@ -312,23 +312,23 @@ public class SConnection
  **************************************************************************/
 
     private void connect(String url,
-			 String username,
-			 String password)
-	throws SQLException {
-	
-	try {
-	    close();
-	} catch (SQLException e) {
-	    // Never mind...
-	}
-	
-	if ( (username!=null) && (password!=null) ) {
-	    _connection = DriverManager.getConnection(url, username, password);
-	} else {
-	    _connection = DriverManager.getConnection(url);
-	}
-	_ownsConnection = true;
-	_connection.setAutoCommit(false);
+                         String username,
+                         String password)
+        throws SQLException {
+        
+        try {
+            close();
+        } catch (SQLException e) {
+            // Never mind...
+        }
+        
+        if ( (username!=null) && (password!=null) ) {
+            _connection = DriverManager.getConnection(url, username, password);
+        } else {
+            _connection = DriverManager.getConnection(url);
+        }
+        _ownsConnection = true;
+        _connection.setAutoCommit(false);
    }
 
 
@@ -355,8 +355,8 @@ public class SConnection
 
     private void connect(Connection conn) {
 
-	_connection     = conn;
-	_ownsConnection = false;
+        _connection     = conn;
+        _ownsConnection = false;
    }
 
 
@@ -365,7 +365,7 @@ public class SConnection
 
 //* 
 //* <TeaMethod name="statement"
-//* 	   className="TConnection">
+//*            className="TConnection">
 //* 
 //* <Overview>
 //* Creates a <ClassRef name="TStatement"/> object in order to execute
@@ -396,31 +396,31 @@ public class SConnection
  **************************************************************************/
 
     public Object statement(SObjFunction obj,
-			    SContext     context,
-			    Object[]     args)
-	throws STeaException {
+                            SContext     context,
+                            Object[]     args)
+        throws STeaException {
 
-	checkConnection();
+        checkConnection();
 
-	Statement  stat    = null;
-	SStatement tosStat = null;
+        Statement  stat    = null;
+        SStatement tosStat = null;
 
-	try {
-	    stat = _connection.createStatement();
-	} catch (SQLException e) {
-	    throw new SRuntimeException(e);
-	}
-	tosStat = SStatement.newInstance(context);
-	tosStat.setStatement(stat);
-	tosStat.addClosedListener(new SClosedEventListener() {
+        try {
+            stat = _connection.createStatement();
+        } catch (SQLException e) {
+            throw new SRuntimeException(e);
+        }
+        tosStat = SStatement.newInstance(context);
+        tosStat.setStatement(stat);
+        tosStat.addClosedListener(new SClosedEventListener() {
                 public void closedEvent(Object closedObject) {
                     myClosedEvent((SStatement)closedObject);
                 }
             });
 
-	_statements.add(tosStat);
-	
-	return tosStat;
+        _statements.add(tosStat);
+        
+        return tosStat;
     }
 
 
@@ -430,7 +430,7 @@ public class SConnection
 //* 
 //* <TeaMethod name="prepare"
 //*            arguments="sqlStatement"
-//* 	   className="TConnection">
+//*            className="TConnection">
 //* 
 //* <Overview>
 //* Creates a pre-compiled statement object.
@@ -473,24 +473,24 @@ public class SConnection
  **************************************************************************/
 
     public Object prepare(SObjFunction obj,
-			  SContext     context,
-			  Object[]     args)
-	throws STeaException {
+                          SContext     context,
+                          Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "sql-statement");
-	}
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "sql-statement");
+        }
 
-	String sql    = SArgs.getString(args, 2);
-	Object result = null;
+        String sql    = SArgs.getString(args, 2);
+        Object result = null;
 
-	try {
-	    result = prepareStatement(context, sql);
-	} catch (SQLException e) {
-	    throw new SRuntimeException(e);
-	}
+        try {
+            result = prepareStatement(context, sql);
+        } catch (SQLException e) {
+            throw new SRuntimeException(e);
+        }
 
-	return result;
+        return result;
     }
 
 
@@ -509,26 +509,26 @@ public class SConnection
  **************************************************************************/
 
     private SPreparedStatement prepareStatement(SContext context,
-						String   sql)
-	throws STeaException,
-	       SQLException {
+                                                String   sql)
+        throws STeaException,
+               SQLException {
 
-	checkConnection();
+        checkConnection();
 
-	PreparedStatement  prepStat = _connection.prepareStatement(sql);
-	SPreparedStatement stat     =
-	    (SPreparedStatement)SPreparedStatement.newInstance(context);
+        PreparedStatement  prepStat = _connection.prepareStatement(sql);
+        SPreparedStatement stat     =
+            (SPreparedStatement)SPreparedStatement.newInstance(context);
 
-	stat.setPreparedStatement(prepStat);
-	stat.addClosedListener(new SClosedEventListener() {
+        stat.setPreparedStatement(prepStat);
+        stat.addClosedListener(new SClosedEventListener() {
                 public void closedEvent(Object closedObject) {
                     myClosedEvent((SPreparedStatement)closedObject);
                 }
             });
 
-	_statements.add(stat);
+        _statements.add(stat);
 
-	return stat;
+        return stat;
     }
 
 
@@ -538,7 +538,7 @@ public class SConnection
 //* 
 //* <TeaMethod name="prepareCall"
 //*            arguments="sqlStatement"
-//* 	   className="TConnection">
+//*            className="TConnection">
 //* 
 //* <Overview>
 //* Creates a pre-compiled statement object to execute stored procedures.
@@ -575,18 +575,18 @@ public class SConnection
  **************************************************************************/
 
     public Object prepareCall(SObjFunction obj,
-			      SContext     context,
-			      Object[]     args)
-	throws STeaException {
+                              SContext     context,
+                              Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "sql-statement");
-	}
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "sql-statement");
+        }
 
-	String sql    = SArgs.getString(args, 2);
-	Object result = prepareCall(context, sql);
+        String sql    = SArgs.getString(args, 2);
+        Object result = prepareCall(context, sql);
 
-	return result;
+        return result;
     }
 
 
@@ -606,30 +606,30 @@ public class SConnection
  **************************************************************************/
 
     private SCallableStatement prepareCall(SContext context,
-					   String   sql)
-	throws STeaException {
+                                           String   sql)
+        throws STeaException {
 
-	checkConnection();
+        checkConnection();
 
-	CallableStatement  clbStat = null;
-	SCallableStatement stat    = null;
+        CallableStatement  clbStat = null;
+        SCallableStatement stat    = null;
 
-	try {
-	    clbStat = _connection.prepareCall(sql);
-	} catch (SQLException e) {
-	    throw new SRuntimeException(e);
-	}
-	stat = (SCallableStatement)SCallableStatement.newInstance(context);
-	stat.setCallableStatement(clbStat);
-	stat.addClosedListener(new SClosedEventListener() {
+        try {
+            clbStat = _connection.prepareCall(sql);
+        } catch (SQLException e) {
+            throw new SRuntimeException(e);
+        }
+        stat = (SCallableStatement)SCallableStatement.newInstance(context);
+        stat.setCallableStatement(clbStat);
+        stat.addClosedListener(new SClosedEventListener() {
                 public void closedEvent(Object closedObject) {
                     myClosedEvent((SCallableStatement)closedObject);
                 }
             });
 
-	_statements.add(stat);
-	
-	return stat;
+        _statements.add(stat);
+        
+        return stat;
     }
 
 
@@ -638,7 +638,7 @@ public class SConnection
 
 //* 
 //* <TeaMethod name="commit"
-//* 	   className="TConnection">
+//*            className="TConnection">
 //* 
 //* <Overview>
 //* Commits all the changes made to the database since the start of
@@ -677,19 +677,19 @@ public class SConnection
  **************************************************************************/
 
     public Object commit(SObjFunction obj,
-			 SContext     context,
-			 Object[]     args)
-	throws STeaException {
+                         SContext     context,
+                         Object[]     args)
+        throws STeaException {
 
-	checkConnection();
+        checkConnection();
 
-	try {
-	    _connection.commit();
-	} catch (SQLException e) {
-	    throw new SRuntimeException(e);
-	}
+        try {
+            _connection.commit();
+        } catch (SQLException e) {
+            throw new SRuntimeException(e);
+        }
 
-	return obj;
+        return obj;
     }
 
 
@@ -699,7 +699,7 @@ public class SConnection
 //* 
 //* <TeaMethod name="autocommit"
 //*            arguments="flag"
-//* 	       className="TConnection">
+//*                className="TConnection">
 //* 
 //* <Parameter name="flag">
 //* </Parameter>
@@ -746,23 +746,23 @@ public class SConnection
  **************************************************************************/
 
     public Object autocommit(SObjFunction obj,
-			     SContext     context,
-			     Object[]     args)
-	throws SRuntimeException {
+                             SContext     context,
+                             Object[]     args)
+        throws SRuntimeException {
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "autocommit-flag");
-	}
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "autocommit-flag");
+        }
 
-	boolean flag = SArgs.getBoolean(args, 2).booleanValue();
+        boolean flag = SArgs.getBoolean(args, 2).booleanValue();
 
-	try {
-	    autocommit(flag);
-	} catch (SQLException e) {
-	    throw new SRuntimeException(e);
-	}
+        try {
+            autocommit(flag);
+        } catch (SQLException e) {
+            throw new SRuntimeException(e);
+        }
 
-	return obj;
+        return obj;
     }
 
 
@@ -781,12 +781,12 @@ public class SConnection
  **************************************************************************/
 
     private void autocommit(boolean flag)
-	throws SRuntimeException,
-	       SQLException {
+        throws SRuntimeException,
+               SQLException {
 
-	checkConnection();
+        checkConnection();
 
-	_connection.setAutoCommit(flag);
+        _connection.setAutoCommit(flag);
     }
 
 
@@ -795,7 +795,7 @@ public class SConnection
 
 //* 
 //* <TeaMethod name="rollback"
-//* 	   className="TConnection">
+//*            className="TConnection">
 //* 
 //* <Overview>
 //* Undoes all the changes made to the database since the start of
@@ -834,19 +834,19 @@ public class SConnection
  **************************************************************************/
 
     public Object rollback(SObjFunction obj,
-			   SContext     context,
-			   Object[]     args)
-	throws SRuntimeException {
+                           SContext     context,
+                           Object[]     args)
+        throws SRuntimeException {
 
-	checkConnection();
+        checkConnection();
 
-	try {
-	    _connection.rollback();
-	} catch (SQLException e) {
-	    throw new SRuntimeException(e);
-	}
+        try {
+            _connection.rollback();
+        } catch (SQLException e) {
+            throw new SRuntimeException(e);
+        }
 
-	return obj;
+        return obj;
    }
 
 
@@ -855,7 +855,7 @@ public class SConnection
 
 //* 
 //* <TeaMethod name="close"
-//* 	   className="TConnection">
+//*            className="TConnection">
 //* 
 //* <Overview>
 //* Closes the connection to the database.
@@ -889,17 +889,17 @@ public class SConnection
  **************************************************************************/
 
     public Object close(SObjFunction obj,
-			SContext     context,
-			Object[]     args)
-	throws STeaException {
+                        SContext     context,
+                        Object[]     args)
+        throws STeaException {
 
-	try {
-	    close();
-	} catch (SQLException e) {
-	    throw new SRuntimeException(e);
-	}
+        try {
+            close();
+        } catch (SQLException e) {
+            throw new SRuntimeException(e);
+        }
 
-	return obj;
+        return obj;
     }
 
 
@@ -917,12 +917,12 @@ public class SConnection
  **************************************************************************/
 
     void close()
-	throws SQLException {
+        throws SQLException {
 
-	if ( _connection == null ) {
-	    // Database connection is not open. Just bail out.
-	    return;
-	}
+        if ( _connection == null ) {
+            // Database connection is not open. Just bail out.
+            return;
+        }
 
         // We make a copy of the statements list because as we close
         // them we get notified of the close event and myCloseEvent
@@ -931,27 +931,27 @@ public class SConnection
         Set<SStatement> myStatements = new HashSet<SStatement>(_statements);
 
         for ( SStatement stat : myStatements ) {
-	    try {
-		stat.close();
-	    } catch (SQLException e) {
-		// There should be a way to log the error message
-		// somewhere.
-	    }
-	}
+            try {
+                stat.close();
+            } catch (SQLException e) {
+                // There should be a way to log the error message
+                // somewhere.
+            }
+        }
 
-	try {
-	    _connection.rollback();
-	} catch (SQLException e) {
-	    // There should be a way to log the error message
-	    // somewhere.
-	}
-	if ( _ownsConnection ) {
-	    _connection.close();
-	}
-	fireClosedEvent();
-	_connection     = null;
-	_ownsConnection = false;
-	_listeners.clear();
+        try {
+            _connection.rollback();
+        } catch (SQLException e) {
+            // There should be a way to log the error message
+            // somewhere.
+        }
+        if ( _ownsConnection ) {
+            _connection.close();
+        }
+        fireClosedEvent();
+        _connection     = null;
+        _ownsConnection = false;
+        _listeners.clear();
     }
 
 
@@ -968,8 +968,8 @@ public class SConnection
     private void fireClosedEvent() {
 
         for ( SClosedEventListener listener : _listeners ) {
-	    listener.closedEvent(this);
-	}
+            listener.closedEvent(this);
+        }
     }
 
 
@@ -984,7 +984,7 @@ public class SConnection
 
     private void myClosedEvent(SStatement closedObject) {
 
-	_statements.remove(closedObject);
+        _statements.remove(closedObject);
     }
 
 
@@ -1002,11 +1002,11 @@ public class SConnection
  **************************************************************************/
 
     private void checkConnection()
-	throws SRuntimeException {
+        throws SRuntimeException {
 
-	if ( _connection == null ) {
-	    throw new SRuntimeException("connection is closed");
-	}
+        if ( _connection == null ) {
+            throw new SRuntimeException("connection is closed");
+        }
     }
 
 
@@ -1043,24 +1043,24 @@ public class SConnection
  **************************************************************************/
 
     public static SConnection newInstance(SContext   context,
-					  Connection connection)
-	throws STeaException {
+                                          Connection connection)
+        throws STeaException {
 
-	Object[] ctorArgs = { null, null };
-	STosObj  tosConn  =
-	    STosUtil.newInstance(CLASS_NAME_S, context, ctorArgs);
+        Object[] ctorArgs = { null, null };
+        STosObj  tosConn  =
+            STosUtil.newInstance(CLASS_NAME_S, context, ctorArgs);
 
-	if ( !(tosConn instanceof SConnection) ) {
-	    String   msg     = "Invalid class \"{0}\"";
-	    Object[] fmtArgs = { CLASS_NAME_S };
-	    throw new STeaException(msg, fmtArgs);
-	}
+        if ( !(tosConn instanceof SConnection) ) {
+            String   msg     = "Invalid class \"{0}\"";
+            Object[] fmtArgs = { CLASS_NAME_S };
+            throw new STeaException(msg, fmtArgs);
+        }
 
-	SConnection result = (SConnection)tosConn;
+        SConnection result = (SConnection)tosConn;
 
-	result.connect(connection);
+        result.connect(connection);
 
-	return result;
+        return result;
     }
 
 

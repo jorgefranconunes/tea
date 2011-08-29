@@ -2538,21 +2538,21 @@ public class SModuleLang
 	    } catch (ClassNotFoundException e1) {
 		msg = "could not find class '" + className + "'";
 	    } catch (InstantiationException e2) {
-		msg = "failed instantiation for object of class '" + className + "'";
-	    } catch (IllegalAccessException e3) {
-		msg = "class '" + className+"' or its initializer are not accessible";
-	    } catch (ClassCastException e4) {
-		msg = "class '" + className + "' is not a SObjFunction";
-	    } catch (NoSuchMethodError e5) {
-		msg = "class '" + className + "' does not have a default constructor";
-	    }
-	    if ( msg != null ) {
-		throw new SRuntimeException(msg);
-	    }
-	    _funcs.put(className, teaFunc);
-	}
+                msg = "failed instantiation for object of class '" + className + "'";
+            } catch (IllegalAccessException e3) {
+                msg = "class '" + className+"' or its initializer are not accessible";
+            } catch (ClassCastException e4) {
+                msg = "class '" + className + "' is not a SObjFunction";
+            } catch (NoSuchMethodError e5) {
+                msg = "class '" + className + "' does not have a default constructor";
+            }
+            if ( msg != null ) {
+                throw new SRuntimeException(msg);
+            }
+            _funcs.put(className, teaFunc);
+        }
 
-	return teaFunc;
+        return teaFunc;
     }
 
 
@@ -2561,7 +2561,7 @@ public class SModuleLang
 
 //* 
 //* <TeaFunction name="map"
-//* 		arguments="aFunction argList1 [argList2 ...]"
+//*                 arguments="aFunction argList1 [argList2 ...]"
 //*             module="tea.lang">
 //*
 //* <Overview>
@@ -2607,42 +2607,42 @@ public class SModuleLang
  **************************************************************************/
 
     private static Object functionMap(SObjFunction func,
-				      SContext     context,
-				      Object[]     args)
-	throws STeaException {
+                                      SContext     context,
+                                      Object[]     args)
+        throws STeaException {
 
-	if ( args.length < 3 ) {
-	    throw new SNumArgException(args, "procedure list1 ...");
-	}
-	
-	SObjFunction proc      = SArgs.getFunction(context, args, 1);
-	Iterator[]   iterators = buildListOfI(args);
-	Object[]     procArgs  = new Object[args.length-1];
-	SObjPair     resHead   = SObjPair.emptyList();
-	SObjPair     resElem   = null;
-	
-	procArgs[0] = args[1];
+        if ( args.length < 3 ) {
+            throw new SNumArgException(args, "procedure list1 ...");
+        }
+        
+        SObjFunction proc      = SArgs.getFunction(context, args, 1);
+        Iterator[]   iterators = buildListOfI(args);
+        Object[]     procArgs  = new Object[args.length-1];
+        SObjPair     resHead   = SObjPair.emptyList();
+        SObjPair     resElem   = null;
+        
+        procArgs[0] = args[1];
 
-	while ( iterators[0].hasNext() ) {
-	    for ( int i=0; i<iterators.length; i++ ) {
-		try {
-		    procArgs[i+1] = iterators[i].next();
-		} catch (NoSuchElementException e) {
+        while ( iterators[0].hasNext() ) {
+            for ( int i=0; i<iterators.length; i++ ) {
+                try {
+                    procArgs[i+1] = iterators[i].next();
+                } catch (NoSuchElementException e) {
                     String msg = "lists with diferent sizes";
-		    throw new SRuntimeException(args, msg);
-		}
-	    }
-	    SObjPair node = new SObjPair(proc.exec(proc, context, procArgs),
-					 SObjPair.emptyList());
-	    if ( resElem == null ) {
-		resHead = node;
-	    } else {
-		resElem._cdr = node;
-	    }
-	    resElem = node;
-	}
+                    throw new SRuntimeException(args, msg);
+                }
+            }
+            SObjPair node = new SObjPair(proc.exec(proc, context, procArgs),
+                                         SObjPair.emptyList());
+            if ( resElem == null ) {
+                resHead = node;
+            } else {
+                resElem._cdr = node;
+            }
+            resElem = node;
+        }
 
-	return resHead;
+        return resHead;
     }
 
 
@@ -2667,22 +2667,22 @@ public class SModuleLang
  **************************************************************************/
 
     private static Iterator[] buildListOfI(Object[] args)
-	throws STeaException {
+        throws STeaException {
 
-	Iterator[] iterators = new Iterator[args.length-2];
+        Iterator[] iterators = new Iterator[args.length-2];
 
-	for ( int i=0; i<iterators.length; i++ ) {
-	    iterators[i] = SArgs.getPair(args, i+2).iterator();
-	}
+        for ( int i=0; i<iterators.length; i++ ) {
+            iterators[i] = SArgs.getPair(args, i+2).iterator();
+        }
 
-	return iterators;
+        return iterators;
     }
 
 
 
 //* 
 //* <TeaFunction name="map-apply"
-//* 		arguments="aFunction aList"
+//*                 arguments="aFunction aList"
 //*             module="tea.lang">
 //*
 //* <Overview>
@@ -2729,25 +2729,25 @@ public class SModuleLang
  **************************************************************************/
 
     private static Object functionMapApply(SObjFunction func,
-					   SContext     context,
-					   Object[]     args)
-	throws STeaException {
+                                           SContext     context,
+                                           Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "procedure list-of-arg-list");
-	}
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "procedure list-of-arg-list");
+        }
 
-	SObjFunction proc       = SArgs.getFunction(context, args, 1);
-	Iterator     iterator   = SArgs.getPair(args, 2).iterator();
+        SObjFunction proc       = SArgs.getFunction(context, args, 1);
+        Iterator     iterator   = SArgs.getPair(args, 2).iterator();
         int          iterCount  = -1;
-	int          numArgs    = 0;
-	Object[]     funcArgs   = null;
-	SObjPair     emptyList  = SObjPair.emptyList();
-	SObjPair     resultHead = emptyList;
-	SObjPair     resultTail = null;
-	SObjPair     node       = null;
+        int          numArgs    = 0;
+        Object[]     funcArgs   = null;
+        SObjPair     emptyList  = SObjPair.emptyList();
+        SObjPair     resultHead = emptyList;
+        SObjPair     resultTail = null;
+        SObjPair     node       = null;
 
-	if ( iterator.hasNext() ) {
+        if ( iterator.hasNext() ) {
             iterCount++;
             Object o = iterator.next();
             SObjPair argList = null;
@@ -2760,16 +2760,16 @@ public class SModuleLang
                                             iterCount,
                                             STypes.getTypeName(o));
             }
-	    numArgs = argList.length() + 1;
-	    funcArgs = new Object[numArgs];
-	    funcArgs[0] = proc;
-	    fillArgs(funcArgs, argList);
-	    Object funcResult = proc.exec(proc, context, funcArgs);
-	    resultHead = new SObjPair(funcResult, emptyList);
-	    resultTail = resultHead;
-	}
+            numArgs = argList.length() + 1;
+            funcArgs = new Object[numArgs];
+            funcArgs[0] = proc;
+            fillArgs(funcArgs, argList);
+            Object funcResult = proc.exec(proc, context, funcArgs);
+            resultHead = new SObjPair(funcResult, emptyList);
+            resultTail = resultHead;
+        }
 
-	while ( iterator.hasNext() ) {
+        while ( iterator.hasNext() ) {
             iterCount++;
             Object o = iterator.next();
             SObjPair argList = null;
@@ -2782,14 +2782,14 @@ public class SModuleLang
                                             iterCount,
                                             STypes.getTypeName(o));
             }
-	    fillArgs(funcArgs, argList);
-	    Object   funcResult = proc.exec(proc, context, funcArgs);
-	    node = new SObjPair(funcResult ,emptyList);
-	    resultTail._cdr = node;
-	    resultTail      = node;
-	}
+            fillArgs(funcArgs, argList);
+            Object   funcResult = proc.exec(proc, context, funcArgs);
+            node = new SObjPair(funcResult ,emptyList);
+            resultTail._cdr = node;
+            resultTail      = node;
+        }
 
-	return resultHead;
+        return resultHead;
     }
 
 
@@ -2803,19 +2803,19 @@ public class SModuleLang
  **************************************************************************/
 
     private static void fillArgs(Object[] args,
-				 SObjPair argList)
-	throws SRuntimeException {
+                                 SObjPair argList)
+        throws SRuntimeException {
 
-	int      argCount = args.length;
-	Iterator iterator = argList.iterator();
+        int      argCount = args.length;
+        Iterator iterator = argList.iterator();
 
-	for ( int i=1; i<argCount; i++ ) {
-	    try {
-	        args[i] = iterator.next();
-	    } catch (NoSuchElementException e) {
-		throw new SRuntimeException("argument list too short");
-	    }
-	}
+        for ( int i=1; i<argCount; i++ ) {
+            try {
+                args[i] = iterator.next();
+            } catch (NoSuchElementException e) {
+                throw new SRuntimeException("argument list too short");
+            }
+        }
     }
 
 
@@ -2824,7 +2824,7 @@ public class SModuleLang
 
 //* 
 //* <TeaFunction name="return"
-//* 		arguments="[anObject]"
+//*                 arguments="[anObject]"
 //*             module="tea.lang">
 //*
 //* <Overview>
@@ -2849,8 +2849,8 @@ public class SModuleLang
  **************************************************************************/
 
    private static Object functionReturn(SObjFunction func,
-					SContext     context,
-					Object[]     args)
+                                        SContext     context,
+                                        Object[]     args)
        throws STeaException {
 
        throw new SReturnException((args.length>1) ? args[1] : SObjNull.NULL);
@@ -2862,7 +2862,7 @@ public class SModuleLang
 
 //* 
 //* <TeaFunction name="set!"
-//* 		arguments="varName value"
+//*                 arguments="varName value"
 //*             module="tea.lang">
 //*
 //* <Overview>
@@ -2902,20 +2902,20 @@ public class SModuleLang
  **************************************************************************/
 
     private static Object functionSet(SObjFunction func,
-				      SContext     context,
-				      Object[]     args)
-	throws STeaException {
+                                      SContext     context,
+                                      Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "symbol value");
-	}
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "symbol value");
+        }
 
-	SObjSymbol varName = SArgs.getSymbol(args, 1);
-	Object     value   = args[2];
+        SObjSymbol varName = SArgs.getSymbol(args, 1);
+        Object     value   = args[2];
 
-	context.setVar(varName, value);
+        context.setVar(varName, value);
 
-	return value;
+        return value;
     }
 
 
@@ -2924,7 +2924,7 @@ public class SModuleLang
 
 //* 
 //* <TeaFunction name="sleep"
-//* 		arguments="duration"
+//*                 arguments="duration"
 //*             module="tea.lang">
 //*
 //* <Overview>
@@ -2954,24 +2954,24 @@ public class SModuleLang
  **************************************************************************/
 
     private static Object functionSleep(SObjFunction func,
-					SContext     context,
-					Object[]     args)
-	throws STeaException {
+                                        SContext     context,
+                                        Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 2 ) {
-	    throw new SNumArgException(args, "millis-to-sleep");
-	}
+        if ( args.length != 2 ) {
+            throw new SNumArgException(args, "millis-to-sleep");
+        }
 
-	Boolean result      = Boolean.TRUE;
-	int     timeToSleep = SArgs.getInt(args,1).intValue();
+        Boolean result      = Boolean.TRUE;
+        int     timeToSleep = SArgs.getInt(args,1).intValue();
 
-	try {
-	    Thread.sleep(timeToSleep);
-	} catch (InterruptedException e) {
-	    result = Boolean.FALSE;
-	}
+        try {
+            Thread.sleep(timeToSleep);
+        } catch (InterruptedException e) {
+            result = Boolean.FALSE;
+        }
 
-	return result;
+        return result;
     }
 
 
@@ -2980,7 +2980,7 @@ public class SModuleLang
 
 //* 
 //* <TeaFunction name="source"
-//* 		arguments="fileName"
+//*                 arguments="fileName"
 //*             module="tea.lang">
 //* 
 //* <Prototype arguments="inputStream"/>
@@ -3040,15 +3040,15 @@ public class SModuleLang
  **************************************************************************/
 
     private Object functionSource(SObjFunction func,
-				  SContext     context,
-				  Object[]     args)
-	throws STeaException {
+                                  SContext     context,
+                                  Object[]     args)
+        throws STeaException {
 
         SCode    program    = compileFromSource(func, context, args);
-	SContext runContext = _globalContext.newChild();
-	Object   result     = program.exec(runContext);
+        SContext runContext = _globalContext.newChild();
+        Object   result     = program.exec(runContext);
 
-	return result;
+        return result;
     }
 
 
@@ -3057,7 +3057,7 @@ public class SModuleLang
 
 //* 
 //* <TeaFunction name="compile"
-//* 		arguments="fileName"
+//*                 arguments="fileName"
 //*             module="tea.lang">
 //* 
 //* <Prototype arguments="inputStream"/>
@@ -3114,7 +3114,7 @@ public class SModuleLang
     private Object functionCompile(SObjFunction func,
                                    SContext     context,
                                    Object[]     args)
-	throws STeaException {
+        throws STeaException {
 
         final SCode     program      = compileFromSource(func, context, args);
         final SContext  blockContext = _globalContext;
@@ -3124,16 +3124,16 @@ public class SModuleLang
                     return blockContext;
                 }
                 public Object exec(SContext context)
-		    throws STeaException {
+                    throws STeaException {
                     return program.exec(context);
                 }
                 public Object exec()
-		    throws STeaException {
+                    throws STeaException {
                     return program.exec(blockContext.newChild());
                 }
             };
 
-	return result;
+        return result;
     }
 
 
@@ -3149,18 +3149,18 @@ public class SModuleLang
     private SCode compileFromSource(SObjFunction func,
                                     SContext     context,
                                     Object[]     args)
-	throws STeaException {
+        throws STeaException {
 
-	if ( args.length != 2 ) {
-	    throw new SNumArgException(args, "file");
-	}
-	
-	Object arg      = args[1];
+        if ( args.length != 2 ) {
+            throw new SNumArgException(args, "file");
+        }
+        
+        Object arg      = args[1];
         String encoding = SEncodingUtils.getSourceEncoding(context);
-	SCode  program  = null;
+        SCode  program  = null;
 
-	if ( arg instanceof String ) {
-	    String fileName = (String)arg;
+        if ( arg instanceof String ) {
+            String fileName = (String)arg;
             
             try {
                 program  = _compiler.compile(fileName, encoding, fileName);
@@ -3169,11 +3169,11 @@ public class SModuleLang
                 Object[] fmtArgs = { fileName, e.getMessage() };
                 throw new SRuntimeException(msg, fmtArgs);
             }
-	} else if ( arg instanceof SInput ) {
-	    InputStream    input     = ((SInput)arg).getInputStream();
-	    if ( input == null ) {
-		throw new SRuntimeException("input stream is closed");
-	    }
+        } else if ( arg instanceof SInput ) {
+            InputStream    input     = ((SInput)arg).getInputStream();
+            if ( input == null ) {
+                throw new SRuntimeException("input stream is closed");
+            }
 
             try {
                 program = _compiler.compile(input, encoding, null);
@@ -3184,13 +3184,13 @@ public class SModuleLang
             } finally {
                 try { ((SInput)arg).close(); } catch (IOException e) {}
             }
-	} else {
+        } else {
             String msg = "argument 1 must be string or input stream, not {0}";
             Object[] fmtArgs = { STypes.getTypeName(arg) };
-	    throw new STypeException(msg, fmtArgs);
-	}
+            throw new STypeException(msg, fmtArgs);
+        }
 
-	return program;
+        return program;
     }
 
 
@@ -3200,7 +3200,7 @@ public class SModuleLang
 //* 
 //* <TeaFunction name="system"
 //*             arguments="command [arg1 ...]"
-//* 	        module="tea.lang">
+//*                 module="tea.lang">
 //* 
 //* <Overview>
 //* Runs a native platform process.
@@ -3238,52 +3238,52 @@ public class SModuleLang
  **************************************************************************/
 
     private static Object functionSystem(SObjFunction func,
-					 SContext     context,
-					 Object[]     args)
-	throws STeaException {
+                                         SContext     context,
+                                         Object[]     args)
+        throws STeaException {
 
-	if ( args.length < 2 ) {
-	    throw new SNumArgException(args, "command [arg ...]");
-	}
+        if ( args.length < 2 ) {
+            throw new SNumArgException(args, "command [arg ...]");
+        }
 
-	String[] cmdArgs = new String[args.length-1];
+        String[] cmdArgs = new String[args.length-1];
 
-	for ( int i=1; i<args.length; i++ ) {
-	    cmdArgs[i-1] = SArgs.getString(args, i);
-	}
-	
-	Process     proc   = null;
-	InputStream input  = null;  // Linked to the child process stdout.
-	byte[]      buffer = new byte[BUFFER_SIZE];
-	int         count;
-	int         status = 0;
+        for ( int i=1; i<args.length; i++ ) {
+            cmdArgs[i-1] = SArgs.getString(args, i);
+        }
+        
+        Process     proc   = null;
+        InputStream input  = null;  // Linked to the child process stdout.
+        byte[]      buffer = new byte[BUFFER_SIZE];
+        int         count;
+        int         status = 0;
 
-	try {
-	    proc = Runtime.getRuntime().exec(cmdArgs);
-	} catch (IOException e) {
-	    throw new SRuntimeException(e);
-	}
-	input = proc.getInputStream();
+        try {
+            proc = Runtime.getRuntime().exec(cmdArgs);
+        } catch (IOException e) {
+            throw new SRuntimeException(e);
+        }
+        input = proc.getInputStream();
 
-	try {
-	    while ( (count=input.read(buffer)) > 0 ) {
-		System.out.write(buffer, 0, count);
-	    }
-	} catch (IOException e) {
-	    throw new SRuntimeException(e);
-	}
+        try {
+            while ( (count=input.read(buffer)) > 0 ) {
+                System.out.write(buffer, 0, count);
+            }
+        } catch (IOException e) {
+            throw new SRuntimeException(e);
+        }
 
-	try {
-	    status = proc.waitFor();
-	} catch (InterruptedException e) {
-	    throw new SRuntimeException(e);
-	}
+        try {
+            status = proc.waitFor();
+        } catch (InterruptedException e) {
+            throw new SRuntimeException(e);
+        }
 
-	if ( _requiresGc ) {
-	    System.gc();
-	}
+        if ( _requiresGc ) {
+            System.gc();
+        }
 
-	return new Integer(status);
+        return new Integer(status);
     }
 
 
@@ -3292,7 +3292,7 @@ public class SModuleLang
 
 //* 
 //* <TeaFunction name="time"
-//* 		arguments="aBlock count"
+//*                 arguments="aBlock count"
 //*             module="tea.lang">
 //*
 //* <Overview>
@@ -3326,27 +3326,27 @@ public class SModuleLang
  **************************************************************************/
 
     private static Object functionTime(SObjFunction func,
-				       SContext     context,
-				       Object[]     args)
-	throws STeaException {
+                                       SContext     context,
+                                       Object[]     args)
+        throws STeaException {
 
-	if ( (args.length<2) || (args.length>3) ) {
-	    throw new SNumArgException(args, "block [count]");
-	}
+        if ( (args.length<2) || (args.length>3) ) {
+            throw new SNumArgException(args, "block [count]");
+        }
 
-	SObjBlock block        = SArgs.getBlock(args, 1);
-	SContext  childContext = block.getContext().newChild();
-	int       count        = (args.length==2) ? 1 : SArgs.getInt(args, 2).intValue();
-	long      startTime;
-	long      endTime;
+        SObjBlock block        = SArgs.getBlock(args, 1);
+        SContext  childContext = block.getContext().newChild();
+        int       count        = (args.length==2) ? 1 : SArgs.getInt(args, 2).intValue();
+        long      startTime;
+        long      endTime;
 
-	startTime = System. currentTimeMillis();
-	for ( int i=0; i<count; i++ ) {
-	    block.exec(childContext);
-	}
-	endTime = System. currentTimeMillis();
+        startTime = System. currentTimeMillis();
+        for ( int i=0; i<count; i++ ) {
+            block.exec(childContext);
+        }
+        endTime = System. currentTimeMillis();
 
-	return new Integer((int)(endTime-startTime));
+        return new Integer((int)(endTime-startTime));
     }
 
 
@@ -3355,7 +3355,7 @@ public class SModuleLang
 
 //* 
 //* <TeaFunction name="while"
-//* 		arguments="condition body"
+//*                 arguments="condition body"
 //*             module="tea.lang">
 //*
 //* <Overview>
@@ -3380,14 +3380,14 @@ public class SModuleLang
 //* <Description>
 //* Just for the sake of ilustration, you could define the
 //* <Func name="while"/> function like this:
-//* 	<Code>
-//* 	define while ( condBlock bodyBlock ) {
-//* 	    if $condBlock {
-//* 		[lambda () $bodyBlock]
-//* 		while $condBlock $bodyBlock
+//*         <Code>
+//*         define while ( condBlock bodyBlock ) {
+//*             if $condBlock {
+//*                 [lambda () $bodyBlock]
+//*                 while $condBlock $bodyBlock
 //*         }
-//* 	}
-//* 	</Code>
+//*         }
+//*         </Code>
 //* Mind you this would not be particularly efficient, since tail
 //* recursion is not implemented in the current version of the Tea
 //* interpreter.
@@ -3403,25 +3403,25 @@ public class SModuleLang
  **************************************************************************/
 
     private static Object functionWhile(SObjFunction func,
-					SContext     context,
-					Object[]     args)
-	throws STeaException {
+                                        SContext     context,
+                                        Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "condition body-block");
-	}
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "condition body-block");
+        }
 
-	Object condition = args[1];
+        Object condition = args[1];
 
-	if ( condition instanceof Boolean ) {
-	    if ( ((Boolean)condition).booleanValue() ) {
-		return infiniteLoop(context, args);
-	    } else {
-		return SObjNull.NULL;
-	    }
-	}
+        if ( condition instanceof Boolean ) {
+            if ( ((Boolean)condition).booleanValue() ) {
+                return infiniteLoop(context, args);
+            } else {
+                return SObjNull.NULL;
+            }
+        }
 
-	return normalLoop(context, args);
+        return normalLoop(context, args);
     }
 
 
@@ -3436,7 +3436,7 @@ public class SModuleLang
  **************************************************************************/
 
     private static Object normalLoop(SContext context,
-				     Object[] args)
+                                     Object[] args)
       throws STeaException {
 
       SObjBlock condBlock   = SArgs.getBlock(args, 1);
@@ -3446,27 +3446,27 @@ public class SModuleLang
       SContext  bodyContext = block.getContext().newChild();
 
       while ( true ) {
-	 Object condition = condBlock.exec(condContext);
-	 boolean condValue;
+         Object condition = condBlock.exec(condContext);
+         boolean condValue;
 
-	 try {
-	    condValue = ((Boolean)condition).booleanValue();
-	 } catch (ClassCastException e) {
+         try {
+            condValue = ((Boolean)condition).booleanValue();
+         } catch (ClassCastException e) {
              throw new STypeException(args, 1, "block returning a bool");
-	 }
-	 if ( condValue ) {
-	    try {
-	       result = block.exec(bodyContext);
-	    } catch (SContinueException e1) {
-	       // Continue from the beggining of the block.
-	    } catch (SBreakException e2) {
-	       // Stop looping.
-	       result  = e2._object;
-	       break;
-	    }
-	 } else {
-	    break;
-	 }
+         }
+         if ( condValue ) {
+            try {
+               result = block.exec(bodyContext);
+            } catch (SContinueException e1) {
+               // Continue from the beggining of the block.
+            } catch (SBreakException e2) {
+               // Stop looping.
+               result  = e2._object;
+               break;
+            }
+         } else {
+            break;
+         }
       }
 
       return result;
@@ -3484,7 +3484,7 @@ public class SModuleLang
  **************************************************************************/
 
    private static Object infiniteLoop(SContext context,
-				      Object[] args)
+                                      Object[] args)
       throws STeaException {
 
       SObjBlock block      = SArgs.getBlock(args, 2);
@@ -3492,15 +3492,15 @@ public class SModuleLang
       Object    result     = SObjNull.NULL;
 
       while ( true ) {
-	 try {
-	    result = block.exec(newContext);
-	 } catch (SContinueException e1) {
-	    // Continue from the beggining of the block.
-	 } catch (SBreakException e2) {
-	    // Stop looping.
-	    result  = e2._object;
-	    break;
-	 }
+         try {
+            result = block.exec(newContext);
+         } catch (SContinueException e1) {
+            // Continue from the beggining of the block.
+         } catch (SBreakException e2) {
+            // Stop looping.
+            result  = e2._object;
+            break;
+         }
       }
 
       return result;
@@ -3512,7 +3512,7 @@ public class SModuleLang
 
 //* 
 //* <TeaFunction name="tea-get-system-property"
-//* 		 arguments="propertyName"
+//*                  arguments="propertyName"
 //*              module="tea.lang">
 //*
 //* <Overview>
@@ -3543,31 +3543,31 @@ public class SModuleLang
  **************************************************************************/
 
     private Object functionGetProp(SObjFunction obj,
-				   SContext     context,
-				   Object[]     args)
-	throws STeaException {
+                                   SContext     context,
+                                   Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 2 ) {
-	    throw new SNumArgException(args, "propertyName");
-	}
+        if ( args.length != 2 ) {
+            throw new SNumArgException(args, "propertyName");
+        }
 
-	String key = SArgs.getString(args, 1);
+        String key = SArgs.getString(args, 1);
 
-	if ( key.length() == 0 ) {
-	    throw new SRuntimeException(args, "Empty property name");
-	}
+        if ( key.length() == 0 ) {
+            throw new SRuntimeException(args, "Empty property name");
+        }
 
-	String value = null;
+        String value = null;
 
-	try {
-	    value = System.getProperty(key);
-	} catch (Throwable e) {
-	    String   msg = "Failed to get system property \"{0}\" - {1} - {2}";
-	    Object[] fmtArgs = { key, e.getClass().getName(), e.getMessage() };
-	    throw new SRuntimeException(args, msg, fmtArgs);
-	}
+        try {
+            value = System.getProperty(key);
+        } catch (Throwable e) {
+            String   msg = "Failed to get system property \"{0}\" - {1} - {2}";
+            Object[] fmtArgs = { key, e.getClass().getName(), e.getMessage() };
+            throw new SRuntimeException(args, msg, fmtArgs);
+        }
 
-	return (value==null) ? SObjNull.NULL : value;
+        return (value==null) ? SObjNull.NULL : value;
     }
 
 
@@ -3576,7 +3576,7 @@ public class SModuleLang
 
 //* 
 //* <TeaFunction name="tea-set-system-property"
-//* 		 arguments="propertyName propertyValue"
+//*                  arguments="propertyName propertyValue"
 //*              module="tea.lang">
 //*
 //* <Overview>
@@ -3612,32 +3612,32 @@ public class SModuleLang
  **************************************************************************/
 
     private Object functionSetProp(SObjFunction obj,
-				   SContext     context,
-				   Object[]     args)
-	throws STeaException {
+                                   SContext     context,
+                                   Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "propertyName propertyValue");
-	}
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "propertyName propertyValue");
+        }
 
-	String key   = SArgs.getString(args, 1);
-	String value = SArgs.getString(args, 2);
+        String key   = SArgs.getString(args, 1);
+        String value = SArgs.getString(args, 2);
 
-	if ( key.length() == 0 ) {
-	    throw new SRuntimeException(args, "Empty property name");
-	}
+        if ( key.length() == 0 ) {
+            throw new SRuntimeException(args, "Empty property name");
+        }
 
-	String prevValue = null;
+        String prevValue = null;
 
-	try {
-	    prevValue = System.setProperty(key, value);
-	} catch (Throwable e) {
-	    String   msg = "Failed to set system property \"{0}\" - {1} - {2}";
-	    Object[] fmtArgs = { key, e.getClass().getName(), e.getMessage() };
-	    throw new SRuntimeException(args, msg, fmtArgs);
-	}
+        try {
+            prevValue = System.setProperty(key, value);
+        } catch (Throwable e) {
+            String   msg = "Failed to set system property \"{0}\" - {1} - {2}";
+            Object[] fmtArgs = { key, e.getClass().getName(), e.getMessage() };
+            throw new SRuntimeException(args, msg, fmtArgs);
+        }
 
-	return (prevValue==null) ? SObjNull.NULL : prevValue;
+        return (prevValue==null) ? SObjNull.NULL : prevValue;
     }
 
 
@@ -3672,16 +3672,16 @@ public class SModuleLang
  **************************************************************************/
 
     private Object functionGetProps(SObjFunction obj,
-				    SContext     context,
-				    Object[]     args)
-	throws STeaException {
+                                    SContext     context,
+                                    Object[]     args)
+        throws STeaException {
 
-	if ( _systemProps == null ) {
-	    Properties props = System.getProperties();
-	    _systemProps = SHashtable.newInstance(context, props);
-	}
+        if ( _systemProps == null ) {
+            Properties props = System.getProperties();
+            _systemProps = SHashtable.newInstance(context, props);
+        }
 
-	return _systemProps;
+        return _systemProps;
     }
 
 

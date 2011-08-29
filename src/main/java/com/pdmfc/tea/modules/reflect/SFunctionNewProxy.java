@@ -27,7 +27,7 @@ import com.pdmfc.tea.runtime.SRuntimeException;
 
 //* 
 //* <TeaFunction name="java-new-proxy"
-//* 		 arguments="function javaInterface [javaInterface ...]"
+//*              arguments="function javaInterface [javaInterface ...]"
 //*              module="tea.java">
 //*
 //* <Overview>

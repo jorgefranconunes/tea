@@ -47,15 +47,15 @@ final class SMethodFinder
  **************************************************************************/
 
     static {
-	_primitiveToClass.put(Boolean.TYPE,   Boolean.class);
-	_primitiveToClass.put(Character.TYPE, Character.class);
-	_primitiveToClass.put(Byte.TYPE,      Byte.class);
-	_primitiveToClass.put(Short.TYPE,     Short.class);
-	_primitiveToClass.put(Integer.TYPE,   Integer.class);
-	_primitiveToClass.put(Long.TYPE,      Long.class);
-	_primitiveToClass.put(Float.TYPE,     Float.class);
-	_primitiveToClass.put(Double.TYPE,    Double.class);
-	_primitiveToClass.put(Void.TYPE,      Void.class);
+        _primitiveToClass.put(Boolean.TYPE,   Boolean.class);
+        _primitiveToClass.put(Character.TYPE, Character.class);
+        _primitiveToClass.put(Byte.TYPE,      Byte.class);
+        _primitiveToClass.put(Short.TYPE,     Short.class);
+        _primitiveToClass.put(Integer.TYPE,   Integer.class);
+        _primitiveToClass.put(Long.TYPE,      Long.class);
+        _primitiveToClass.put(Float.TYPE,     Float.class);
+        _primitiveToClass.put(Double.TYPE,    Double.class);
+        _primitiveToClass.put(Void.TYPE,      Void.class);
     }
 
 
@@ -85,7 +85,7 @@ final class SMethodFinder
     
     public static Constructor<?> findConstructor(final Class<?>   klass,
                                                  final Class<?>[] paramTypes)
-	throws SRuntimeException {
+        throws SRuntimeException {
 
         Constructor<?> result = null;
 
@@ -93,12 +93,12 @@ final class SMethodFinder
             result = doFindConstructor(klass, paramTypes);
         } catch (NoSuchMethodException e) {
             String paramsTxt = buildTypesDescription(paramTypes);
-	    throw new SRuntimeException("could not find constructor for '"
+            throw new SRuntimeException("could not find constructor for '"
                                         + klass.getName()
                                         + "(" + paramsTxt + ")'");
-	}
-	
-	return result;
+        }
+        
+        return result;
     }
 
 
@@ -145,39 +145,39 @@ final class SMethodFinder
     
     private static Constructor<?> doFindConstructor(final Class<?>   klass,
                                                     final Class<?>[] paramTypes)
-	throws NoSuchMethodException {
+        throws NoSuchMethodException {
 
-	Constructor<?>[]          constructors         =
+        Constructor<?>[]          constructors         =
             klass.getConstructors();
-	TreeSet<ConstructorScore> possibleConstructors = 
-	    new TreeSet<ConstructorScore>();
-	int                       numParams            = paramTypes.length;
+        TreeSet<ConstructorScore> possibleConstructors = 
+            new TreeSet<ConstructorScore>();
+        int                       numParams            = paramTypes.length;
 
-	for ( Constructor constructor : constructors ) {
-	    // Check if method has the same number of params.
-	    Class<?>[] constParamTypes = constructor.getParameterTypes();
+        for ( Constructor constructor : constructors ) {
+            // Check if method has the same number of params.
+            Class<?>[] constParamTypes = constructor.getParameterTypes();
 
-	    if  ( constParamTypes.length == numParams ) {
-		if ( paramArrayMatches(paramTypes, constParamTypes) ) {
-		    int              score            =
+            if  ( constParamTypes.length == numParams ) {
+                if ( paramArrayMatches(paramTypes, constParamTypes) ) {
+                    int              score            =
                         paramArrayDistance(paramTypes, constParamTypes);
                     ConstructorScore constructorScore =
                         new ConstructorScore(constructor, score);
 
-		    possibleConstructors.add(constructorScore);
-		}
-	    }
-	}
-	
-	Constructor<?> result = null;
+                    possibleConstructors.add(constructorScore);
+                }
+            }
+        }
+        
+        Constructor<?> result = null;
 
-	if ( possibleConstructors.isEmpty() ) {
-	    result = klass.getConstructor(paramTypes);
-	} else {
-	    result = possibleConstructors.first()._constructor;
-	}
-	
-	return result;
+        if ( possibleConstructors.isEmpty() ) {
+            result = klass.getConstructor(paramTypes);
+        } else {
+            result = possibleConstructors.first()._constructor;
+        }
+        
+        return result;
     }
 
 
@@ -194,7 +194,7 @@ final class SMethodFinder
                                     final String     methodName,
                                     final Class<?>[] paramTypes,
                                     final boolean    useVariants)
-	throws SRuntimeException {
+        throws SRuntimeException {
 
         Method result = null;
 
@@ -205,7 +205,7 @@ final class SMethodFinder
                                         + methodName + "'");
         }
 
-	return result;
+        return result;
     }
 
 
@@ -222,17 +222,17 @@ final class SMethodFinder
                                        final String     methodName,
                                        final Class<?>[] paramTypes,
                                        final boolean    useVariants)
-	throws NoSuchMethodException {
+        throws NoSuchMethodException {
 
-	Method method = null;
+        Method method = null;
 
-	if ( useVariants ) {
-	    method = findMethod(klass, methodName, paramTypes);
-	} else {
-	    method = klass.getMethod(methodName, paramTypes);
-	}
+        if ( useVariants ) {
+            method = findMethod(klass, methodName, paramTypes);
+        } else {
+            method = klass.getMethod(methodName, paramTypes);
+        }
 
-	return method;
+        return method;
     }
     
 
@@ -246,24 +246,24 @@ final class SMethodFinder
  ***************************************************************************/
 
     private static Method findMethod(final Class   cl, 
-				     final String  methodName, 
-				     final Class[] paramTypes) 
-	throws NoSuchMethodException {
+                                     final String  methodName, 
+                                     final Class[] paramTypes) 
+        throws NoSuchMethodException {
 
-	// TBD - Cache <cl, methodName, paramTypes> -> method ?
+        // TBD - Cache <cl, methodName, paramTypes> -> method ?
 
-	TreeSet<MethodScore> possibleMethods = new TreeSet<MethodScore>();
+        TreeSet<MethodScore> possibleMethods = new TreeSet<MethodScore>();
 
-	findMethod(cl, methodName, paramTypes, possibleMethods, 0);
+        findMethod(cl, methodName, paramTypes, possibleMethods, 0);
 
-	Method result = null;
-	if ( possibleMethods.isEmpty() ) {
-	    throw new NoSuchMethodException("Can't find method "+methodName);
-	} else {
-	    result = possibleMethods.first()._method;
-	}
-	
-	return result;
+        Method result = null;
+        if ( possibleMethods.isEmpty() ) {
+            throw new NoSuchMethodException("Can't find method "+methodName);
+        } else {
+            result = possibleMethods.first()._method;
+        }
+        
+        return result;
     }
 
 
@@ -278,39 +278,39 @@ final class SMethodFinder
  ***************************************************************************/
 
     private static void findMethod(final Class<?>             cl,
-				   final String               methodName,
-				   final Class<?>[]           paramTypes,
-				   final TreeSet<MethodScore> possibleMethods,
-				   final int                  initialDistance)
-	throws NoSuchMethodException {
+                                   final String               methodName,
+                                   final Class<?>[]           paramTypes,
+                                   final TreeSet<MethodScore> possibleMethods,
+                                   final int                  initialDistance)
+        throws NoSuchMethodException {
 
-	if ( Modifier.isPublic(cl.getModifiers()) ) {
-	    // class is public, so we'll use the class directly
-	    findMethodInClass(cl,
+        if ( Modifier.isPublic(cl.getModifiers()) ) {
+            // class is public, so we'll use the class directly
+            findMethodInClass(cl,
                               methodName,
                               paramTypes, 
-			      possibleMethods,
+                              possibleMethods,
                               initialDistance);
-	} else {
-	    // class is not public, try the interfaces and then the super class
-	    for ( Class<?> anInterf : cl.getInterfaces() ) {
-		// TBD - maybe the calculation of distance is not the best
-		findMethod(anInterf,
+        } else {
+            // class is not public, try the interfaces and then the super class
+            for ( Class<?> anInterf : cl.getInterfaces() ) {
+                // TBD - maybe the calculation of distance is not the best
+                findMethod(anInterf,
                            methodName,
                            paramTypes,
-			   possibleMethods,
+                           possibleMethods,
                            1+initialDistance);
-	    }
-	    Class<?> aSuper = cl.getSuperclass();
-	    if ( null != aSuper ) {
-		// TBD - maybe the calculation of distance is not the best
-		findMethod(aSuper,
+            }
+            Class<?> aSuper = cl.getSuperclass();
+            if ( null != aSuper ) {
+                // TBD - maybe the calculation of distance is not the best
+                findMethod(aSuper,
                            methodName,
                            paramTypes,
-			   possibleMethods,
+                           possibleMethods,
                            1+initialDistance);
-	    }
-	}
+            }
+        }
     }
 
 
@@ -331,32 +331,32 @@ final class SMethodFinder
                          final Class<?>[]           paramTypes,
                          final TreeSet<MethodScore> possibleMethods,
                          final int                  initialDistance)
-	throws NoSuchMethodException {
+        throws NoSuchMethodException {
 
-	Method[] meths     = cl.getMethods();
-	int      numParams = paramTypes.length;
+        Method[] meths     = cl.getMethods();
+        int      numParams = paramTypes.length;
 
-	for ( Method method : meths ) {
+        for ( Method method : meths ) {
 
-	    // Check if method has the same name.
-	    if ( method.getName().equals(methodName) ) {
+            // Check if method has the same name.
+            if ( method.getName().equals(methodName) ) {
 
-		// Check if method has the same number of params.
-		Class<?>[] methParamTypes = method.getParameterTypes();
-		if ( methParamTypes.length == numParams ) {
-		    if (paramArrayMatches(paramTypes, methParamTypes)) {
-			// TBD - maybe the calculation of distance is
-			// not the best
-			int score =
+                // Check if method has the same number of params.
+                Class<?>[] methParamTypes = method.getParameterTypes();
+                if ( methParamTypes.length == numParams ) {
+                    if (paramArrayMatches(paramTypes, methParamTypes)) {
+                        // TBD - maybe the calculation of distance is
+                        // not the best
+                        int score =
                             initialDistance
                             +
-			    paramArrayDistance(paramTypes, methParamTypes);
+                            paramArrayDistance(paramTypes, methParamTypes);
 
-			possibleMethods.add(new MethodScore(method,score));
-		    }
-		}
-	    }
-	}
+                        possibleMethods.add(new MethodScore(method,score));
+                    }
+                }
+            }
+        }
     }
     
     
@@ -370,12 +370,12 @@ final class SMethodFinder
  ***************************************************************************/
 
     private static boolean paramArrayMatches(final Class<?>[] givenParamTypes,
-					     final Class<?>[] knownParamTypes) {
+                                             final Class<?>[] knownParamTypes) {
 
-	boolean paramsMatch = true;
-	int     numParams   = givenParamTypes.length;
+        boolean paramsMatch = true;
+        int     numParams   = givenParamTypes.length;
 
-	for ( int i=0; i<numParams && paramsMatch; i++ ) {
+        for ( int i=0; i<numParams && paramsMatch; i++ ) {
             Class<?> givenParamType = givenParamTypes[i];
             Class<?> knownParamType = knownParamTypes[i];
 
@@ -385,15 +385,15 @@ final class SMethodFinder
                 paramsMatch = knownParamType.isAssignableFrom(givenParamType);
             }
 
-	    // If the parameter is primitive, check with correct class.
-	    if ( !paramsMatch && knownParamType.isPrimitive()
+            // If the parameter is primitive, check with correct class.
+            if ( !paramsMatch && knownParamType.isPrimitive()
                  && (givenParamType!=null) ) {
-		paramsMatch =
+                paramsMatch =
                     (_primitiveToClass.get(knownParamType).isAssignableFrom(givenParamType));
-	    }
-	}
-	
-	return paramsMatch;
+            }
+        }
+        
+        return paramsMatch;
     }
     
 
@@ -408,23 +408,23 @@ final class SMethodFinder
  ***************************************************************************/
 
     private static int paramArrayDistance(final Class[] givenParamTypes,
-					  final Class[] knownParamTypes) {
+                                          final Class[] knownParamTypes) {
 
-	int score    = 0;
-	int distance = 0;
+        int score    = 0;
+        int distance = 0;
 
-	for (int i=0; i<givenParamTypes.length; i++ ) {
-	    // TBD - Maybe the calculation of distance is not the
-	    // best...
-	    distance =
+        for (int i=0; i<givenParamTypes.length; i++ ) {
+            // TBD - Maybe the calculation of distance is not the
+            // best...
+            distance =
                 paramClassDistance(givenParamTypes[i], knownParamTypes[i]);
 
-	    if ( distance >= 0) {
-		score += distance;
-	    }
-	}
-	
-	return score;
+            if ( distance >= 0) {
+                score += distance;
+            }
+        }
+        
+        return score;
     }
 
 
@@ -455,62 +455,62 @@ final class SMethodFinder
  ***************************************************************************/
 
     private static Map<ClassPair,Integer> _classDistances = 
-	new HashMap<ClassPair,Integer>();
-	
+        new HashMap<ClassPair,Integer>();
+        
     private static int paramClassDistance(final Class<?> givenParamType,
-					  final Class<?> knownParamType) {
-	
-	ClassPair aPair    = new ClassPair(givenParamType,knownParamType);
-	int       distance = 0;
+                                          final Class<?> knownParamType) {
+        
+        ClassPair aPair    = new ClassPair(givenParamType,knownParamType);
+        int       distance = 0;
 
-	if (_classDistances.containsKey(aPair)) {
-	    distance=_classDistances.get(aPair).intValue();
-	} else {
-	    if (givenParamType == null) {
+        if (_classDistances.containsKey(aPair)) {
+            distance=_classDistances.get(aPair).intValue();
+        } else {
+            if (givenParamType == null) {
                 if (knownParamType.isPrimitive()) {
                     // null does not match any primitive type
-	            distance = -1;
+                    distance = -1;
                 } else {
                     // null matches any non-primitive argument with a zero distance
-	            distance = 0;
+                    distance = 0;
                 }
             } else if (!givenParamType.equals(knownParamType)) {
                 // If classes are diferent, then calculate the distance
-		TreeSet<Integer> distanceSet = new TreeSet<Integer>();
-		// check super class of givenParamType that is 
-		// assignable to knownParamType for the lowest distance
-		Class aSuper = givenParamType.getSuperclass();
-		if(null != aSuper && knownParamType.isAssignableFrom(aSuper)) {
-		    // TBD - maybe the calculation of distance is not the best
-		    int aDist=paramClassDistance(aSuper,knownParamType);
-		    if (aDist>=0) {
-			distanceSet.add(new Integer(1+aDist));
-		    }
-		}
-		// Check every interfaces of givenParamType that are
-		// assignable to knownParamType for the lowest distance
-		for(Class anInterf : givenParamType.getInterfaces()) {
-		    if (knownParamType.isAssignableFrom(anInterf)) {
-			// TBD - maybe the calculation of distance is not the best
-			int aDist=paramClassDistance(anInterf,knownParamType);
-			if (aDist>=0) {
-			    distanceSet.add(new Integer(1+aDist));
-			}
-		    }
-		}
-		// there might not be any method!!!
-		if (distanceSet.isEmpty()) {
-		    distance=-1;
-		} else {
-		    distance = distanceSet.first().intValue();
-		}
-	    }
-	    // store the distance if it exists
-	    if (distance>=0) {
-		_classDistances.put(aPair,new Integer(distance));
-	    }
-	}
-	return distance;
+                TreeSet<Integer> distanceSet = new TreeSet<Integer>();
+                // check super class of givenParamType that is 
+                // assignable to knownParamType for the lowest distance
+                Class aSuper = givenParamType.getSuperclass();
+                if(null != aSuper && knownParamType.isAssignableFrom(aSuper)) {
+                    // TBD - maybe the calculation of distance is not the best
+                    int aDist=paramClassDistance(aSuper,knownParamType);
+                    if (aDist>=0) {
+                        distanceSet.add(new Integer(1+aDist));
+                    }
+                }
+                // Check every interfaces of givenParamType that are
+                // assignable to knownParamType for the lowest distance
+                for(Class anInterf : givenParamType.getInterfaces()) {
+                    if (knownParamType.isAssignableFrom(anInterf)) {
+                        // TBD - maybe the calculation of distance is not the best
+                        int aDist=paramClassDistance(anInterf,knownParamType);
+                        if (aDist>=0) {
+                            distanceSet.add(new Integer(1+aDist));
+                        }
+                    }
+                }
+                // there might not be any method!!!
+                if (distanceSet.isEmpty()) {
+                    distance=-1;
+                } else {
+                    distance = distanceSet.first().intValue();
+                }
+            }
+            // store the distance if it exists
+            if (distance>=0) {
+                _classDistances.put(aPair,new Integer(distance));
+            }
+        }
+        return distance;
     }
 
 
@@ -529,18 +529,18 @@ final class SMethodFinder
         extends Object
         implements Comparable {
 
-	public Method _method = null;
-	public int    _score  = 0;
+        public Method _method = null;
+        public int    _score  = 0;
 
-	public MethodScore(Method aMethod, int aScore) {
-	    _method = aMethod;
-	    _score = aScore;
-	}
+        public MethodScore(Method aMethod, int aScore) {
+            _method = aMethod;
+            _score = aScore;
+        }
 
-	public int compareTo (Object anObject) {
-	    MethodScore aMethodScore = (MethodScore) anObject;
-	    return _score - aMethodScore._score;
-	}
+        public int compareTo (Object anObject) {
+            MethodScore aMethodScore = (MethodScore) anObject;
+            return _score - aMethodScore._score;
+        }
     }
 
 
@@ -559,18 +559,18 @@ final class SMethodFinder
         extends Object
         implements Comparable {
 
-	public Constructor<?> _constructor = null;
-	public int            _score       = 0;
+        public Constructor<?> _constructor = null;
+        public int            _score       = 0;
 
-	public ConstructorScore(Constructor<?> aConstructor, int aScore) {
-	    _constructor = aConstructor;
-	    _score       = aScore;
-	}
+        public ConstructorScore(Constructor<?> aConstructor, int aScore) {
+            _constructor = aConstructor;
+            _score       = aScore;
+        }
 
-	public int compareTo (Object anObject) {
-	    ConstructorScore aConstructorScore = (ConstructorScore) anObject;
-	    return _score - aConstructorScore._score;
-	}
+        public int compareTo (Object anObject) {
+            ConstructorScore aConstructorScore = (ConstructorScore) anObject;
+            return _score - aConstructorScore._score;
+        }
     }
 
 
@@ -586,45 +586,45 @@ final class SMethodFinder
     private static final class ClassPair
         extends Object {
 
-	public  Class<?> _given = null;
-	public  Class<?> _known = null;
-	private int      _hash  = 0;
+        public  Class<?> _given = null;
+        public  Class<?> _known = null;
+        private int      _hash  = 0;
 
 
-	public ClassPair(Class<?> aGiven, Class<?> aKnown) {
-	    _given = aGiven;
-	    _known = aKnown;
+        public ClassPair(Class<?> aGiven, Class<?> aKnown) {
+            _given = aGiven;
+            _known = aKnown;
             String aGivenName = _given == null ? "null" : _given.getName();
-	    _hash = (aGivenName+_known.getName()).hashCode();
-	}
+            _hash = (aGivenName+_known.getName()).hashCode();
+        }
 
 
         @Override
-	public int hashCode () {
-	    return _hash;
-	}
+        public int hashCode () {
+            return _hash;
+        }
 
-	
+        
         @Override
-	public boolean equals (Object anObj) {
+        public boolean equals (Object anObj) {
 
             if ( this.getClass() != anObj.getClass() ) {
                 return false;
             }
 
-	    ClassPair aPair = (ClassPair)anObj;
+            ClassPair aPair = (ClassPair)anObj;
 
-	    if ( _given == null ) {
+            if ( _given == null ) {
                 if ( aPair._given == null ) {
                     return _known.equals(aPair._known);
                 } else
                     return false;
-	    } else {
+            } else {
                 return
                     _given.equals(aPair._given)
                     && _known.equals(aPair._known);
             }
-	}
+        }
     }
 
 

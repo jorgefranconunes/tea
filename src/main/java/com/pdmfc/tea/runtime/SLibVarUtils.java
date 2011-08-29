@@ -48,7 +48,7 @@ public class SLibVarUtils
     // names where the <code>import</code> function looks for Tea
     // source files.
     private static final String VAR_LIBRARY   =
-	SConfigInfo.getProperty("com.pdmfc.tea.libraryVarName");
+        SConfigInfo.getProperty("com.pdmfc.tea.libraryVarName");
 
     private static final SObjSymbol SYMBOL_LIBRARY =
         SObjSymbol.addSymbol(VAR_LIBRARY);
@@ -90,7 +90,7 @@ public class SLibVarUtils
 
         SObjPair teaLocations  = SListUtils.buildTeaList(myLocations);
 
-	context.newVar(VAR_LIBRARY, teaLocations);
+        context.newVar(VAR_LIBRARY, teaLocations);
     }
 
 

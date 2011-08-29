@@ -78,9 +78,9 @@ public class SPlainServerSocket
  **************************************************************************/
 
     public SPlainServerSocket(STosClass myClass)
-	throws STeaException {
+        throws STeaException {
 
-	super(myClass);
+        super(myClass);
     }
 
 
@@ -90,7 +90,7 @@ public class SPlainServerSocket
 //* 
 //* <TeaMethod name="constructor"
 //*            arguments="portNumber"
-//* 	       className="TServerSocketPlain">
+//*                className="TServerSocketPlain">
 //* 
 //* <Overview>
 //* Initializes the server socket.
@@ -114,17 +114,17 @@ public class SPlainServerSocket
  **************************************************************************/
 
     public Object constructor(SObjFunction obj,
-			      SContext     context,
-			      Object[]     args)
-	throws STeaException {
+                              SContext     context,
+                              Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "port-number");
-	}
-	
-	_port = SArgs.getInt(args,2).intValue();
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "port-number");
+        }
+        
+        _port = SArgs.getInt(args,2).intValue();
 
-	return obj;
+        return obj;
     }
 
 
@@ -133,7 +133,7 @@ public class SPlainServerSocket
 
 //* 
 //* <TeaMethod name="accept"
-//* 	       className="TServerSocketPlain">
+//*                className="TServerSocketPlain">
 //* 
 //* <Overview>
 //* Waits for an incoming connection.
@@ -158,32 +158,32 @@ public class SPlainServerSocket
  **************************************************************************/
 
     public Object accept(SObjFunction obj,
-			 SContext     context,
-			 Object[]     args)
-	throws STeaException {
+                         SContext     context,
+                         Object[]     args)
+        throws STeaException {
 
-	if ( _serverSocket == null ) {
-	    try {
-		_serverSocket = new ServerSocket(_port);
-	    } catch (IOException e) {
-		throw new SIOException("failed to create server socket: "
-				       + e.getMessage());
-	    }
-	}
+        if ( _serverSocket == null ) {
+            try {
+                _serverSocket = new ServerSocket(_port);
+            } catch (IOException e) {
+                throw new SIOException("failed to create server socket: "
+                                       + e.getMessage());
+            }
+        }
 
-	Socket      sock    = null;
-	SSocketBase tosSock = SPlainSocketBase.newInstance(context);
+        Socket      sock    = null;
+        SSocketBase tosSock = SPlainSocketBase.newInstance(context);
 
-	try {
-	    sock = _serverSocket.accept();
-	} catch (IOException e) {
-	    throw new SIOException("failed to accept on server socket: "
-				   + e.getMessage());
-	}
+        try {
+            sock = _serverSocket.accept();
+        } catch (IOException e) {
+            throw new SIOException("failed to accept on server socket: "
+                                   + e.getMessage());
+        }
 
-	tosSock.connect(sock);
+        tosSock.connect(sock);
 
-	return tosSock;
+        return tosSock;
     }
 
 
@@ -192,7 +192,7 @@ public class SPlainServerSocket
 
 //* 
 //* <TeaMethod name="close"
-//* 	       className="TServerSocketPlain">
+//*                className="TServerSocketPlain">
 //* 
 //* <Overview>
 //* Closes this server socket.
@@ -215,18 +215,18 @@ public class SPlainServerSocket
  **************************************************************************/
 
     public Object close(SObjFunction obj,
-			SContext     context,
-			Object[]     args)
-	throws STeaException {
+                        SContext     context,
+                        Object[]     args)
+        throws STeaException {
 
-	try {
-	    close();
-	} catch (IOException e) {
-	    throw new SIOException("failed to close socket: " 
-				   + e.getMessage());
-	}
+        try {
+            close();
+        } catch (IOException e) {
+            throw new SIOException("failed to close socket: " 
+                                   + e.getMessage());
+        }
 
-	return obj;
+        return obj;
     }
 
 
@@ -240,12 +240,12 @@ public class SPlainServerSocket
  **************************************************************************/
 
     public void close()
-	throws IOException {
+        throws IOException {
 
-	if ( _serverSocket != null ) {
-	    _serverSocket.close();
-	    _serverSocket = null;
-	}
+        if ( _serverSocket != null ) {
+            _serverSocket.close();
+            _serverSocket = null;
+        }
     }
 
 
@@ -259,16 +259,16 @@ public class SPlainServerSocket
  **************************************************************************/
 
     public static Object newInstance(SContext context,
-				     Object[] args)
-	throws STeaException {
+                                     Object[] args)
+        throws STeaException {
 
-	STosObj servSock = STosUtil.newInstance(CLASS_NAME_S, context, args);
+        STosObj servSock = STosUtil.newInstance(CLASS_NAME_S, context, args);
 
-	if ( !(servSock instanceof SPlainServerSocket) ) {
-	    throw new SRuntimeException("invalid " + CLASS_NAME + " class");
-	}
+        if ( !(servSock instanceof SPlainServerSocket) ) {
+            throw new SRuntimeException("invalid " + CLASS_NAME + " class");
+        }
 
-	return servSock;
+        return servSock;
     }
 
 

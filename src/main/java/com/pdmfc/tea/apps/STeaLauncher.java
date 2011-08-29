@@ -1,30 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2009/10/13 Backported to the 3.2.x branch. (TSK-PDMFC-TEA-0044) (jfn)
- *
- * 2009/03/11 Improved documentation. (jfn)
- *
- * 2007/04/18 Refactored to receive the Tea library path list as a
- * command line argument. (jfn)
- *
- * 2004/04/02 Slight API refactoring to make it possible for this
- * class to be used from inside Java code. (jfn)
- *
- * 2002/07/18 It is now responsible for setting the "argv"
- * variable. (jfn)
- *
- * 2001/05/12 Created. (jfn)
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -53,7 +29,7 @@ import com.pdmfc.tea.runtime.SRuntimeException;
  *
  **************************************************************************/
 
-public class STeaLauncher
+public final class STeaLauncher
     extends Object {
 
 
@@ -75,6 +51,8 @@ public class STeaLauncher
  **************************************************************************/
 
     public STeaLauncher() {
+
+        // Nothing to do.
     }
 
 
@@ -95,9 +73,9 @@ public class STeaLauncher
  *
  **************************************************************************/
 
-    public void setScriptLocation(String location) {
+    public void setScriptLocation(final String location) {
 
-	_scriptLocation = location;
+        _scriptLocation = location;
     }
 
 
@@ -106,11 +84,17 @@ public class STeaLauncher
 
 /**************************************************************************
  *
- * 
+ * Specifies the encoding of the Tea source files to be executed.
+ *
+ * <p>If this method is not called the platform default encoding will
+ * be used.</p>
+ *
+ * @param encoding The encoding to be assumed for the Tea source
+ * files.
  *
  **************************************************************************/
 
-    public void setEncoding(String encoding) {
+    public void setEncoding(final String encoding) {
 
         _encoding = encoding;
     }
@@ -130,9 +114,9 @@ public class STeaLauncher
  *
  **************************************************************************/
 
-    public void addImportDirLocation(String location) {
+    public void addImportDirLocation(final String location) {
 
-	_importDirList.add(location);
+        _importDirList.add(location);
     }
 
 
@@ -155,15 +139,18 @@ public class STeaLauncher
  * @exception STeaException Thrown if there were any problems
  * compiling or executing the script.
  *
+ * @return The system exit status obtained from the execution of the
+ * Tea code.
+ *
  **************************************************************************/
 
-    public int execute(String[] args)
-	throws IOException,
-	       STeaException {
+    public int execute(final String[] args)
+        throws IOException,
+               STeaException {
 
-	int         retVal  = 0;
-	SCode       code    = compileScript();
-	STeaRuntime context = new STeaRuntime();
+        int         retVal  = 0;
+        SCode       code    = compileScript();
+        STeaRuntime context = new STeaRuntime();
 
         context.setArgv0(_scriptLocation);
         context.setArgv(args);
@@ -171,19 +158,19 @@ public class STeaLauncher
         context.setImportLocations(_importDirList);
         context.start();
 
-	try {
-	    context.execute(code);
-	} catch (SExitException e2) {
-	    retVal = e2._value.intValue();
-	} catch (SFlowControlException e3) {
-	    // Just ignore it. Somebody did a "return", "break" or
-	    // "continue" outside of a function or loop.
-	} finally {
-	    context.stop();
-	    context.end();
-	}
+        try {
+            context.execute(code);
+        } catch (SExitException e2) {
+            retVal = e2._value.intValue();
+        } catch (SFlowControlException e3) {
+            // Just ignore it. Somebody did a "return", "break" or
+            // "continue" outside of a function or loop.
+        } finally {
+            context.stop();
+            context.end();
+        }
 
-	return retVal;
+        return retVal;
     }
 
 
@@ -197,11 +184,11 @@ public class STeaLauncher
  **************************************************************************/
 
     private SCode compileScript()
-	throws IOException,
-	       STeaException {
+        throws IOException,
+               STeaException {
 
-	SCompiler compiler = new SCompiler();
-	SCode     code     = null;
+        SCompiler compiler = new SCompiler();
+        SCode     code     = null;
 
         if ( _scriptLocation == null ) {
             code = compiler.compile(System.in, _encoding, null);
@@ -209,7 +196,7 @@ public class STeaLauncher
             code = compiler.compile(_scriptLocation,_encoding,_scriptLocation);
         }
 
-	return code;
+        return code;
     }
 
 
@@ -251,59 +238,61 @@ public class STeaLauncher
  *
  * </ul>
  *
+ * @param args The command line arguments passed to this Java program.
+ *
  **************************************************************************/
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
 
-	int              retVal    = 0;
-	boolean          isOk      = true;
-	String           errorMsg  = null;
-	STeaLauncher     shell     = new STeaLauncher();
-	STeaLauncherArgs shellArgs = new STeaLauncherArgs();
+        int              retVal    = 0;
+        boolean          isOk      = true;
+        String           errorMsg  = null;
+        STeaLauncher     shell     = new STeaLauncher();
+        STeaLauncherArgs shellArgs = new STeaLauncherArgs();
 
-	if ( isOk ) {
-	    try {
-		shellArgs.parse(args);
-	    } catch (STeaException e) {
-		isOk     = false;
-		errorMsg = e.getMessage();
-	    }
-	}
+        if ( isOk ) {
+            try {
+                shellArgs.parse(args);
+            } catch (STeaException e) {
+                isOk     = false;
+                errorMsg = e.getMessage();
+            }
+        }
 
-	if ( isOk ) {
-	    shell.setScriptLocation(shellArgs.getScriptPath());
+        if ( isOk ) {
+            shell.setScriptLocation(shellArgs.getScriptPath());
             shell.setEncoding(shellArgs.getEncoding());
 
             for ( String libPath : shellArgs.getLibraryList() ) {
-		shell.addImportDirLocation(libPath);
-	    }
-	}
-	
-	if ( isOk ) {
-	    String[] scriptArgs = shellArgs.getScriptCliArgs();
+                shell.addImportDirLocation(libPath);
+            }
+        }
+        
+        if ( isOk ) {
+            String[] scriptArgs = shellArgs.getScriptCliArgs();
 
-	    try {
-		retVal = shell.execute(scriptArgs);
-	    } catch (IOException e) {
-		isOk     = false;
-		errorMsg = "Failed to read script - " + e.getMessage();
-	    }  catch (SRuntimeException e1) {
-		isOk     = false;
-		errorMsg = e1.getFullMessage();
-	    } catch (STeaException e) {
-		isOk     = false;
-		errorMsg = e.getMessage();
-	    }
-	}
+            try {
+                retVal = shell.execute(scriptArgs);
+            } catch (IOException e) {
+                isOk     = false;
+                errorMsg = "Failed to read script - " + e.getMessage();
+            }  catch (SRuntimeException e1) {
+                isOk     = false;
+                errorMsg = e1.getFullMessage();
+            } catch (STeaException e) {
+                isOk     = false;
+                errorMsg = e.getMessage();
+            }
+        }
 
-	if ( !isOk ) {
-	    if ( retVal == 0 ) {
-		retVal = -1;
-	    }
-	    System.err.println("\nProblems: " + errorMsg);
-	}
+        if ( !isOk ) {
+            if ( retVal == 0 ) {
+                retVal = -1;
+            }
+            System.err.println("\nProblems: " + errorMsg);
+        }
 
-	System.exit(retVal);
+        System.exit(retVal);
     }
 
 

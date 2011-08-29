@@ -95,7 +95,7 @@ public class SInput
  **************************************************************************/
 
    public SInput(STosClass myClass)
-	 throws STeaException {
+         throws STeaException {
 
       super(myClass);
    }
@@ -111,11 +111,11 @@ public class SInput
  **************************************************************************/
 
     public Object constructor(SObjFunction obj,
-			      SContext     context,
-			      Object[]     args)
-	throws STeaException {
+                              SContext     context,
+                              Object[]     args)
+        throws STeaException {
 
-	return obj;
+        return obj;
     }
 
 
@@ -196,7 +196,7 @@ public class SInput
 
     public InputStream getInputStream() {
 
-	return _input;
+        return _input;
     }
 
 
@@ -205,7 +205,7 @@ public class SInput
 
 //* 
 //* <TeaMethod name="readln"
-//* 	       className="TInput">
+//*                className="TInput">
 //* 
 //* <Overview>
 //* Reads a line from the input stream represented by the object.
@@ -229,19 +229,19 @@ public class SInput
  **************************************************************************/
 
     public Object readln(SObjFunction obj,
-			 SContext     context,
-			 Object[]     args)
-	throws SIOException {
+                         SContext     context,
+                         Object[]     args)
+        throws SIOException {
 
-	String result = null;
+        String result = null;
 
-	try {
-	    result = readln();
-	} catch (IOException e) {
-	    throw new SIOException(e);
-	}
+        try {
+            result = readln();
+        } catch (IOException e) {
+            throw new SIOException(e);
+        }
 
-	return (result==null) ? SObjNull.NULL : result;
+        return (result==null) ? SObjNull.NULL : result;
     }
 
 
@@ -267,18 +267,18 @@ public class SInput
  **************************************************************************/
 
     public String readln()
-	throws IOException,
-	       SIOException {
+        throws IOException,
+               SIOException {
 
-	if (_input == null && _inputReader == null) {
-	    throw new SIOException("stream has not been opened for reading");
-	}
+        if (_input == null && _inputReader == null) {
+            throw new SIOException("stream has not been opened for reading");
+        }
 
-	if ( _input != null ) {
-	    return readLine(_input);
-	} else {
-            return readLine(_inputReader);	    
-	}
+        if ( _input != null ) {
+            return readLine(_input);
+        } else {
+            return readLine(_inputReader);            
+        }
     }
 
 
@@ -301,27 +301,27 @@ public class SInput
  **************************************************************************/
 
    private static String readLine(InputStream in)
-	 throws IOException {
+         throws IOException {
        
       StringBuffer buffer = null;
       int          c      = in.read();
 
       if ( c != -1 ) {
-	 buffer = new StringBuffer();
+         buffer = new StringBuffer();
       }
 
       while ( (c!='\n') && (c!=-1) ) {
-	 if ( c == '\r' ) {
-	    c = in.read();
-	    if ( c != '\n' ) {
-	       buffer.append('\r');
-	       buffer.append((char)c);
-	       c = in.read();
-	    }
-	 } else {
-	    buffer.append((char)c);
-	    c = in.read();
-	 }
+         if ( c == '\r' ) {
+            c = in.read();
+            if ( c != '\n' ) {
+               buffer.append('\r');
+               buffer.append((char)c);
+               c = in.read();
+            }
+         } else {
+            buffer.append((char)c);
+            c = in.read();
+         }
       }
 
       return (buffer==null) ? null : buffer.toString();
@@ -380,7 +380,7 @@ public class SInput
 //* 
 //* <TeaMethod name="copyTo"
 //*            arguments="output [byteCount]"
-//* 	       className="TInput">
+//*                className="TInput">
 //* 
 //* <Overview>
 //* Copies the contents of the stream into an output stream.
@@ -424,34 +424,34 @@ public class SInput
  **************************************************************************/
 
     public Object copyTo(SObjFunction obj,
-			 SContext     context,
-			 Object[]     args)
-	throws STeaException {
+                         SContext     context,
+                         Object[]     args)
+        throws STeaException {
 
-	if ( (args.length!=3) && (args.length!=4) ) {
-	    throw new SNumArgException(args, "outputStream [byteCount]");
-	}
-	
-	Integer byteCount = (args.length==3) ? null : SArgs.getInt(args, 3);
-	STosObj output    = null;
+        if ( (args.length!=3) && (args.length!=4) ) {
+            throw new SNumArgException(args, "outputStream [byteCount]");
+        }
+        
+        Integer byteCount = (args.length==3) ? null : SArgs.getInt(args, 3);
+        STosObj output    = null;
 
-	try {
-	    output = (STosObj)args[2];
-	} catch (ClassCastException e) {
+        try {
+            output = (STosObj)args[2];
+        } catch (ClassCastException e) {
             throw new STypeException(args, 2, "TOutput");
-	}
-	
-	try {
-	    if ( byteCount == null) {
-		copyTo(context, output);
-	    } else {
-		copyTo(context, output, byteCount.intValue());
-	    }
-	} catch (IOException e) {
-	    throw new SIOException(e);
-	}
+        }
+        
+        try {
+            if ( byteCount == null) {
+                copyTo(context, output);
+            } else {
+                copyTo(context, output, byteCount.intValue());
+            }
+        } catch (IOException e) {
+            throw new SIOException(e);
+        }
 
-	return obj;
+        return obj;
     }
 
 
@@ -466,19 +466,19 @@ public class SInput
  **************************************************************************/
 
     public void copyTo(SOutput out)
-	throws IOException,
-	       SIOException {
+        throws IOException,
+               SIOException {
 
         if (_input == null) {
             throw new SIOException("stream has not been opened for reading bytes");
         }
         
-	byte[] buffer = new byte[BUFFER_SIZE];
-	int    count  = 0;
+        byte[] buffer = new byte[BUFFER_SIZE];
+        int    count  = 0;
 
-	while ( (count=_input.read(buffer)) > 0 ) {
-	    out.write(buffer, 0, count);
-	}
+        while ( (count=_input.read(buffer)) > 0 ) {
+            out.write(buffer, 0, count);
+        }
     }
 
 
@@ -492,29 +492,29 @@ public class SInput
  **************************************************************************/
 
     public void copyTo(SContext context,
-		       STosObj   out)
-	throws IOException,
-	       STeaException {
+                       STosObj   out)
+        throws IOException,
+               STeaException {
 
-	SObjFunction  writeMethod = null;
-	SObjByteArray byteArray   = new SObjByteArray();
-	Object[]      methodArgs  = new Object[3];
-	byte[]        buffer      = new byte[BUFFER_SIZE];
-	int           count       = 0;
+        SObjFunction  writeMethod = null;
+        SObjByteArray byteArray   = new SObjByteArray();
+        Object[]      methodArgs  = new Object[3];
+        byte[]        buffer      = new byte[BUFFER_SIZE];
+        int           count       = 0;
 
-	writeMethod   = out.getTosClass().getMethod(WRITE_METHOD);
-	methodArgs[0] = out;
-	methodArgs[1] = WRITE_METHOD;
-	methodArgs[2] = byteArray;
+        writeMethod   = out.getTosClass().getMethod(WRITE_METHOD);
+        methodArgs[0] = out;
+        methodArgs[1] = WRITE_METHOD;
+        methodArgs[2] = byteArray;
 
         if (_input == null) {
             throw new SIOException("stream has not been opened for reading bytes");
         }
 
-	while ( (count=_input.read(buffer)) > 0 ) {
-	    byteArray.setContents(buffer, 0, count);
-	    writeMethod.exec(out, context, methodArgs);
-	}
+        while ( (count=_input.read(buffer)) > 0 ) {
+            byteArray.setContents(buffer, 0, count);
+            writeMethod.exec(out, context, methodArgs);
+        }
     }
 
 
@@ -530,39 +530,39 @@ public class SInput
  **************************************************************************/
 
     public int copyTo(SContext context,
-		      STosObj   out,
-		      int       total)
-	throws IOException,
-	       STeaException {
+                      STosObj   out,
+                      int       total)
+        throws IOException,
+               STeaException {
 
-	SObjFunction  writeMethod = null;
-	SObjByteArray byteArray   = new SObjByteArray();
-	Object[]      methodArgs  = new Object[3];
-	byte[]        buffer      = new byte[BUFFER_SIZE];
-	int           totalRead   = 0;
-	int           count       = 0;
+        SObjFunction  writeMethod = null;
+        SObjByteArray byteArray   = new SObjByteArray();
+        Object[]      methodArgs  = new Object[3];
+        byte[]        buffer      = new byte[BUFFER_SIZE];
+        int           totalRead   = 0;
+        int           count       = 0;
 
-	writeMethod   = out.getTosClass().getMethod(WRITE_METHOD);
-	methodArgs[0] = out;
-	methodArgs[1] = WRITE_METHOD;
-	methodArgs[2] = byteArray;
+        writeMethod   = out.getTosClass().getMethod(WRITE_METHOD);
+        methodArgs[0] = out;
+        methodArgs[1] = WRITE_METHOD;
+        methodArgs[2] = byteArray;
 
-	if (_input == null) {
+        if (_input == null) {
             throw new SIOException("stream has not been opened for reading bytes");
         }
 
-	while ( total > 0 ) {
-	    int bytesToRead = (total>BUFFER_SIZE) ? BUFFER_SIZE : total;
-	    if ( (count=_input.read(buffer, 0, bytesToRead)) < 0 ) {
-		break;
-	    }
-	    byteArray.setContents(buffer, 0, count);
-	    writeMethod.exec(out, context, methodArgs);
-	    total     -= count;
-	    totalRead += count;
-	}
+        while ( total > 0 ) {
+            int bytesToRead = (total>BUFFER_SIZE) ? BUFFER_SIZE : total;
+            if ( (count=_input.read(buffer, 0, bytesToRead)) < 0 ) {
+                break;
+            }
+            byteArray.setContents(buffer, 0, count);
+            writeMethod.exec(out, context, methodArgs);
+            total     -= count;
+            totalRead += count;
+        }
 
-	return totalRead;
+        return totalRead;
     }
 
 
@@ -571,7 +571,7 @@ public class SInput
 
 //* 
 //* <TeaMethod name="close"
-//* 	       className="TInput">
+//*                className="TInput">
 //* 
 //* <Overview>
 //* Closes the input stream represented by the object.
@@ -596,17 +596,17 @@ public class SInput
  **************************************************************************/
 
     public Object close(SObjFunction obj,
-			SContext     context,
-			Object[]     args)
-	throws SIOException {
+                        SContext     context,
+                        Object[]     args)
+        throws SIOException {
 
-	try {
-	    close();
-	} catch (IOException e) {
-	    throw new SIOException(e);
-	}
+        try {
+            close();
+        } catch (IOException e) {
+            throw new SIOException(e);
+        }
 
-	return obj;
+        return obj;
     }
 
 
@@ -624,17 +624,17 @@ public class SInput
  **************************************************************************/
 
     public void close()
-	throws IOException {
+        throws IOException {
 
-	if ( _input != null ) {
-	    try {
-		_input.close();
-	    } catch (IOException e) {
-		_input = null;
-		throw e;
-	    }
-	    _input = null;
-	}
+        if ( _input != null ) {
+            try {
+                _input.close();
+            } catch (IOException e) {
+                _input = null;
+                throw e;
+            }
+            _input = null;
+        }
 
         if ( _inputReader != null ) {
             try {
@@ -659,7 +659,7 @@ public class SInput
 
     public static String getTosClassName() {
 
-	return CLASS_NAME;
+        return CLASS_NAME;
     }
 
 
@@ -673,15 +673,15 @@ public class SInput
  **************************************************************************/
 
     public static SInput newInstance(SContext context)
-	throws STeaException {
+        throws STeaException {
 
-	STosObj input = STosUtil.newInstance(CLASS_NAME_S, context);
+        STosObj input = STosUtil.newInstance(CLASS_NAME_S, context);
 
-	if ( !(input instanceof SInput) ) {
-	    throw new SRuntimeException("invalid " + CLASS_NAME + " class");
-	}
+        if ( !(input instanceof SInput) ) {
+            throw new SRuntimeException("invalid " + CLASS_NAME + " class");
+        }
 
-	return (SInput)input;
+        return (SInput)input;
     }
 
 

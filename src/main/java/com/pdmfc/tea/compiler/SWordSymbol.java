@@ -8,12 +8,9 @@ package com.pdmfc.tea.compiler;
 
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.compiler.SWord;
-import com.pdmfc.tea.runtime.SNoSuchVarException;
 import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.STypeException;
-import com.pdmfc.tea.runtime.STypes;
 
 
 
@@ -25,7 +22,7 @@ import com.pdmfc.tea.runtime.STypes;
  *
  **************************************************************************/
 
-class SWordSymbol
+final class SWordSymbol
     extends Object
     implements SWord {
 
@@ -45,9 +42,9 @@ class SWordSymbol
  *
  **************************************************************************/
 
-    SWordSymbol(String name) {
+    public SWordSymbol(final String name) {
 
-	_symbol = SObjSymbol.addSymbol(name);
+        _symbol = SObjSymbol.addSymbol(name);
     }
 
 
@@ -60,9 +57,9 @@ class SWordSymbol
  *
  **************************************************************************/
 
-    public Object get(SContext context) {
+    public Object get(final SContext context) {
 
-	return _symbol;
+        return _symbol;
     }
 
 
@@ -77,7 +74,7 @@ class SWordSymbol
 
     public SObjSymbol getSymbol() {
 
-	return _symbol;
+        return _symbol;
     }
 
 
@@ -90,8 +87,8 @@ class SWordSymbol
  *
  **************************************************************************/
 
-    public SObjFunction toFunction(SContext context)
-	throws STeaException {
+    public SObjFunction toFunction(final SContext context)
+        throws STeaException {
 
         SObjFunction result = SWordSubstUtils.toFunction(_symbol, context);
 
@@ -108,8 +105,8 @@ class SWordSymbol
  *
  **************************************************************************/
 
-    // public void prettyPrint(PrintStream out,
-    //                         int         indent) {
+    // public void prettyPrint(final PrintStream out,
+    //                         final int         indent) {
 
     //     out.print(_symbol.getName());
     // }

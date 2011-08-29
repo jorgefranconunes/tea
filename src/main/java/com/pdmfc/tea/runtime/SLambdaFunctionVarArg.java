@@ -80,10 +80,10 @@ public class SLambdaFunctionVarArg
  **************************************************************************/
 
     public SLambdaFunctionVarArg(SObjSymbol argName,
-				 SObjBlock  body) {
+                                 SObjBlock  body) {
 
-	_argName = argName;
-	_body    = body;
+        _argName = argName;
+        _body    = body;
     }
 
 
@@ -110,42 +110,42 @@ public class SLambdaFunctionVarArg
  **************************************************************************/
 
     public Object exec(SObjFunction obj,
-		       SContext     context,
-		       Object[]     args)
-	throws STeaException {
+                       SContext     context,
+                       Object[]     args)
+        throws STeaException {
 
-	SContext funcContext = new SContext(_body.getContext());
-	Object   result      = SObjNull.NULL;
-	SObjPair emptyList   = SObjPair.emptyList();
-	SObjPair head        = emptyList;
-	SObjPair element     = null;
+        SContext funcContext = new SContext(_body.getContext());
+        Object   result      = SObjNull.NULL;
+        SObjPair emptyList   = SObjPair.emptyList();
+        SObjPair head        = emptyList;
+        SObjPair element     = null;
 
-	// Creates the list with the actual function arguments.  The
-	// loop starts at 1 because args[0] contains the function
-	// being called (or a symbol with its name).
-	for ( int i=1; i<args.length; i++ ) {
-	    SObjPair node = new SObjPair(args[i], emptyList);
+        // Creates the list with the actual function arguments.  The
+        // loop starts at 1 because args[0] contains the function
+        // being called (or a symbol with its name).
+        for ( int i=1; i<args.length; i++ ) {
+            SObjPair node = new SObjPair(args[i], emptyList);
 
-	    if ( element == null ) {
-		head = node;
-	    } else {
-		element._cdr = node;
-	    }
-	    element = node;
-	}
+            if ( element == null ) {
+                head = node;
+            } else {
+                element._cdr = node;
+            }
+            element = node;
+        }
 
-	funcContext.newVar(_argName, head);
+        funcContext.newVar(_argName, head);
 
-	try {
-	    result = _body.exec(funcContext);
-	} catch (SReturnException e1) {
-	    result = e1._value;
-	} catch (SBreakException e2) {
-	    result = e2._object;
-	} catch (SContinueException e3) {
-	}
+        try {
+            result = _body.exec(funcContext);
+        } catch (SReturnException e1) {
+            result = e1._value;
+        } catch (SBreakException e2) {
+            result = e2._object;
+        } catch (SContinueException e3) {
+        }
 
-	return result;
+        return result;
     }
 
 

@@ -68,7 +68,7 @@ public class SOutput
       
     private static final String     CLASS_NAME   = "TOutput";
     private static final SObjSymbol CLASS_NAME_S =
-	SObjSymbol.addSymbol(CLASS_NAME);
+        SObjSymbol.addSymbol(CLASS_NAME);
 
     /** The output stream of this object. */
     private OutputStream _outputStream = null; // can be null under JSR-223
@@ -96,9 +96,9 @@ public class SOutput
  **************************************************************************/
 
     public SOutput(STosClass myClass)
-	throws STeaException {
+        throws STeaException {
 
-	super(myClass);
+        super(myClass);
     }
 
 
@@ -112,11 +112,11 @@ public class SOutput
  **************************************************************************/
 
     public Object constructor(SObjFunction obj,
-			      SContext     context,
-			      Object[]     args)
-	throws STeaException {
+                              SContext     context,
+                              Object[]     args)
+        throws STeaException {
 
-	return obj;
+        return obj;
     }
 
 
@@ -135,14 +135,14 @@ public class SOutput
 
     public void open(OutputStream out) {
 
-	try {
-	    close();
-	} catch (IOException e) {
-	    // Just ignore it...
-	}
-	_outputStream = new BufferedOutputStream(out);
-	_outputWriter =
-	    new PrintWriter(new BufferedWriter(new OutputStreamWriter(out)));
+        try {
+            close();
+        } catch (IOException e) {
+            // Just ignore it...
+        }
+        _outputStream = new BufferedOutputStream(out);
+        _outputWriter =
+            new PrintWriter(new BufferedWriter(new OutputStreamWriter(out)));
    }
 
 
@@ -180,7 +180,7 @@ public class SOutput
 //* 
 //* <TeaMethod name="setLineBuffering"
 //*            arguments="flag"
-//* 	       className="TOutput">
+//*                className="TOutput">
 //* 
 //* <Overview>
 //* Sets the buffering mode
@@ -215,19 +215,19 @@ public class SOutput
  **************************************************************************/
 
     public Object setLineBuffering(SObjFunction obj,
-				   SContext     context,
-				   Object[]     args)
-	throws SRuntimeException {
+                                   SContext     context,
+                                   Object[]     args)
+        throws SRuntimeException {
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "boolean-flag");
-	}
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "boolean-flag");
+        }
 
-	boolean flag = SArgs.getBoolean(args,2).booleanValue();
+        boolean flag = SArgs.getBoolean(args,2).booleanValue();
 
-	setLineBuffering(flag);
+        setLineBuffering(flag);
 
-	return obj;
+        return obj;
     }
 
 
@@ -241,14 +241,14 @@ public class SOutput
  * the <TT>writeln</TT> methods a flush will be performed.
  *
  * @param flag
- *	If true then line buffering should be used.
- *	Otherwise full beffering will be used.
+ *        If true then line buffering should be used.
+ *        Otherwise full beffering will be used.
  *
  **************************************************************************/
 
     public void setLineBuffering(boolean flag) {
 
-	_lineBuffering = flag;
+        _lineBuffering = flag;
     }
 
 
@@ -258,7 +258,7 @@ public class SOutput
 //* 
 //* <TeaMethod name="write"
 //*            arguments="[arg1 ...]"
-//* 	       className="TOutput">
+//*                className="TOutput">
 //* 
 //* <Overview>
 //* Sends the contents of a string into the underlying output stream.
@@ -289,44 +289,44 @@ public class SOutput
  **************************************************************************/
 
     public Object write(SObjFunction obj,
-			SContext     context,
-			Object[]     args)
-	throws SRuntimeException {
+                        SContext     context,
+                        Object[]     args)
+        throws SRuntimeException {
 
-	int numArgs = args.length;
-	
-	for ( int i=2; i<numArgs; i++ ) {
-	    Object arg = args[i];
-	    
-	    try {
-		if ( arg instanceof String ) {
-		    write((String)arg);
-		    continue;
-		}
-		if ( arg instanceof Integer ) {
-		    write(((Integer)arg).intValue());
-		    continue;
-		}
-		if ( arg instanceof Long ) {
-		    write(arg.toString());
-		    continue;
-		}
-		if ( arg instanceof Double ) {
-		    write(((Double)arg).doubleValue());
-		    continue;
-		}
-		if ( arg instanceof SObjByteArray ) {
-		    write((SObjByteArray)arg);
-		    continue;
-		}
-	    } catch (IOException e) {
-		throw new SIOException(e);
-	    }
+        int numArgs = args.length;
+        
+        for ( int i=2; i<numArgs; i++ ) {
+            Object arg = args[i];
+            
+            try {
+                if ( arg instanceof String ) {
+                    write((String)arg);
+                    continue;
+                }
+                if ( arg instanceof Integer ) {
+                    write(((Integer)arg).intValue());
+                    continue;
+                }
+                if ( arg instanceof Long ) {
+                    write(arg.toString());
+                    continue;
+                }
+                if ( arg instanceof Double ) {
+                    write(((Double)arg).doubleValue());
+                    continue;
+                }
+                if ( arg instanceof SObjByteArray ) {
+                    write((SObjByteArray)arg);
+                    continue;
+                }
+            } catch (IOException e) {
+                throw new SIOException(e);
+            }
 
-	    throw new STypeException(args, i, "string or numeric");
-	}
+            throw new STypeException(args, i, "string or numeric");
+        }
 
-	return obj;
+        return obj;
     }
 
 
@@ -341,11 +341,11 @@ public class SOutput
  **************************************************************************/
 
     public void write(byte[] buffer, int off, int len)
-	throws IOException {
+        throws IOException {
 
-	flushWriter();
-	_outputStream.write(buffer, off, len);
-	_streamNeedsFlush = true;
+        flushWriter();
+        _outputStream.write(buffer, off, len);
+        _streamNeedsFlush = true;
     }
 
 
@@ -360,9 +360,9 @@ public class SOutput
  **************************************************************************/
 
     public void write(SObjByteArray bytes)
-	throws IOException {
+        throws IOException {
 
-	write(bytes.getBytes(), bytes.getOffset(), bytes.getCount());
+        write(bytes.getBytes(), bytes.getOffset(), bytes.getCount());
     }
 
 
@@ -381,16 +381,16 @@ public class SOutput
  **************************************************************************/
 
     public void write(String aString)
-	throws IOException,
-	       SIOException {
+        throws IOException,
+               SIOException {
 
-	if ( _outputWriter == null ) {
-	    throw new SIOException("stream is closed");
-	}
+        if ( _outputWriter == null ) {
+            throw new SIOException("stream is closed");
+        }
 
-	flushStream();
-	_outputWriter.print(aString);
-	_writerNeedsFlush = true;
+        flushStream();
+        _outputWriter.print(aString);
+        _writerNeedsFlush = true;
    }
 
 
@@ -410,16 +410,16 @@ public class SOutput
  **************************************************************************/
 
     public void write(int value)
-	throws IOException,
-	       SIOException {
+        throws IOException,
+               SIOException {
 
-	if ( _outputWriter == null ) {
-	    throw new SIOException("stream is closed");
-	}
+        if ( _outputWriter == null ) {
+            throw new SIOException("stream is closed");
+        }
 
-	flushStream();
-	_outputWriter.print(value);
-	_writerNeedsFlush = true;
+        flushStream();
+        _outputWriter.print(value);
+        _writerNeedsFlush = true;
     }
 
 
@@ -439,16 +439,16 @@ public class SOutput
  **************************************************************************/
 
     public void write(double value)
-	throws IOException,
-	       SIOException {
+        throws IOException,
+               SIOException {
 
-	if ( _outputWriter == null ) {
-	    throw new SIOException("stream is closed");
-	}
+        if ( _outputWriter == null ) {
+            throw new SIOException("stream is closed");
+        }
 
-	flushStream();
-	_outputWriter.print(value);
-	_writerNeedsFlush = true;
+        flushStream();
+        _outputWriter.print(value);
+        _writerNeedsFlush = true;
    }
 
 
@@ -458,7 +458,7 @@ public class SOutput
 //* 
 //* <TeaMethod name="writeln"
 //*            arguments="[arg1 ...]"
-//* 	       className="TOutput">
+//*                className="TOutput">
 //* 
 //* <Overview>
 //* Sends the contents of a string into the underlying output stream
@@ -491,19 +491,19 @@ public class SOutput
  **************************************************************************/
 
     public Object writeln(SObjFunction obj,
-			  SContext     context,
-			  Object[]     args)
-	throws SRuntimeException {
+                          SContext     context,
+                          Object[]     args)
+        throws SRuntimeException {
 
-	write(obj, context, args);
+        write(obj, context, args);
 
-	try {
-	    writeln();
-	} catch (IOException e) {
-	    throw new SIOException(e);
-	}
+        try {
+            writeln();
+        } catch (IOException e) {
+            throw new SIOException(e);
+        }
 
-	return obj;
+        return obj;
     }
 
 
@@ -517,19 +517,19 @@ public class SOutput
  **************************************************************************/
 
     public void writeln()
-	throws IOException,
-	       SIOException {
+        throws IOException,
+               SIOException {
 
-	if ( _outputWriter == null ) {
-	    throw new SIOException("stream is closed");
-	}
+        if ( _outputWriter == null ) {
+            throw new SIOException("stream is closed");
+        }
 
-	flushStream();
-	_outputWriter.println();
-	_writerNeedsFlush = true;
-	if ( _lineBuffering ) {
-	    flushWriter();
-	}
+        flushStream();
+        _outputWriter.println();
+        _writerNeedsFlush = true;
+        if ( _lineBuffering ) {
+            flushWriter();
+        }
     }
    
 
@@ -550,19 +550,19 @@ public class SOutput
  **************************************************************************/
 
     public void writeln(String aString)
-	throws IOException,
-	       SIOException {
+        throws IOException,
+               SIOException {
 
-	if ( _outputWriter == null ) {
-	    throw new SIOException("stream is closed");
-	}
+        if ( _outputWriter == null ) {
+            throw new SIOException("stream is closed");
+        }
 
-	flushStream();
-	_outputWriter.println(aString);
-	_writerNeedsFlush = true;
-	if ( _lineBuffering ) {
-	    flushWriter();
-	}
+        flushStream();
+        _outputWriter.println(aString);
+        _writerNeedsFlush = true;
+        if ( _lineBuffering ) {
+            flushWriter();
+        }
     }
 
 
@@ -582,19 +582,19 @@ public class SOutput
  **************************************************************************/
 
     public void writeln(int value)
-	throws IOException,
-	       SIOException {
+        throws IOException,
+               SIOException {
 
-	if ( _outputWriter == null ) {
-	    throw new SIOException("stream is closed");
-	}
+        if ( _outputWriter == null ) {
+            throw new SIOException("stream is closed");
+        }
 
-	flushStream();
-	_outputWriter.println(value);
-	_writerNeedsFlush = true;
-	if ( _lineBuffering ) {
-	    flushWriter();
-	}
+        flushStream();
+        _outputWriter.println(value);
+        _writerNeedsFlush = true;
+        if ( _lineBuffering ) {
+            flushWriter();
+        }
     }
 
 
@@ -614,19 +614,19 @@ public class SOutput
  **************************************************************************/
     
     public void writeln(double value)
-	throws IOException,
-	       SIOException {
+        throws IOException,
+               SIOException {
 
-	if ( _outputWriter == null ) {
-	    throw new SIOException("stream is closed");
-	}
+        if ( _outputWriter == null ) {
+            throw new SIOException("stream is closed");
+        }
 
-	flushStream();
-	_outputWriter.println(value);
-	_writerNeedsFlush = true;
-	if ( _lineBuffering ) {
-	    flushWriter();
-	}
+        flushStream();
+        _outputWriter.println(value);
+        _writerNeedsFlush = true;
+        if ( _lineBuffering ) {
+            flushWriter();
+        }
     }
 
 
@@ -636,7 +636,7 @@ public class SOutput
 //* 
 //* <TeaMethod name="printf"
 //*            arguments="formatString [arg1 ...]"
-//* 	       className="TOutput">
+//*                className="TOutput">
 //* 
 //* <Overview>
 //* Outputs a string built from a template string, in the same way
@@ -666,21 +666,21 @@ public class SOutput
  **************************************************************************/
 
     public Object printf(SObjFunction obj,
-			 SContext     context,
-			 Object[]     args)
-	throws STeaException {
+                         SContext     context,
+                         Object[]     args)
+        throws STeaException {
 
-	if ( args.length < 3 ) {
-	    throw new SNumArgException(args, "format-string [...]");
-	}
+        if ( args.length < 3 ) {
+            throw new SNumArgException(args, "format-string [...]");
+        }
 
-	try {
-	    printf(SArgs.getString(args,2), args, 3);
-	} catch (IOException e) {
-	    throw new SIOException(e);
-	}
+        try {
+            printf(SArgs.getString(args,2), args, 3);
+        } catch (IOException e) {
+            throw new SIOException(e);
+        }
 
-	return obj;
+        return obj;
     }
 
 
@@ -704,22 +704,22 @@ public class SOutput
  **************************************************************************/
 
     public void printf(String   formatString,
-		       Object[] args,
-		       int      firstArg)
-	throws IOException,
-	       STeaException {
+                       Object[] args,
+                       int      firstArg)
+        throws IOException,
+               STeaException {
 
-	if ( _outputWriter == null ) {
-	    throw new SIOException("stream is closed");
-	}
-	if ( _formater == null ) {
-	    _formater = new SFormaterOutput();
-	}
-	flushStream();
-	_formater.setOutput(_outputWriter);
-	_formater.format(formatString, args, firstArg);
-	_formater.setOutput(null);
-	_writerNeedsFlush = true;
+        if ( _outputWriter == null ) {
+            throw new SIOException("stream is closed");
+        }
+        if ( _formater == null ) {
+            _formater = new SFormaterOutput();
+        }
+        flushStream();
+        _formater.setOutput(_outputWriter);
+        _formater.format(formatString, args, firstArg);
+        _formater.setOutput(null);
+        _writerNeedsFlush = true;
     }
 
 
@@ -728,7 +728,7 @@ public class SOutput
 
 //* 
 //* <TeaMethod name="flush"
-//* 	       className="TOutput">
+//*                className="TOutput">
 //* 
 //* <Overview>
 //* Flushes the internal buffers by sending its contents into the output
@@ -752,17 +752,17 @@ public class SOutput
  **************************************************************************/
 
     public Object flush(SObjFunction obj,
-			SContext     context,
-			Object []    args)
-	throws SIOException {
+                        SContext     context,
+                        Object []    args)
+        throws SIOException {
 
-	try {
-	    flush();
-	} catch (IOException e) {
-	    throw new SIOException(e);
-	}
+        try {
+            flush();
+        } catch (IOException e) {
+            throw new SIOException(e);
+        }
 
-	return obj;
+        return obj;
     }
 
 
@@ -780,13 +780,13 @@ public class SOutput
  **************************************************************************/
 
     public void flush()
-	throws IOException,
-	       SIOException {
+        throws IOException,
+               SIOException {
 
-	if ( _outputWriter != null ) {
-	    flushStream();
-	    flushWriter();
-	}
+        if ( _outputWriter != null ) {
+            flushStream();
+            flushWriter();
+        }
    }
 
 
@@ -800,14 +800,14 @@ public class SOutput
  **************************************************************************/
 
     private void flushStream()
-	throws IOException {
+        throws IOException {
 
-	if ( _streamNeedsFlush ) {
-	    if (_outputStream != null) {
-	        _outputStream.flush();
-	    }
-	    _streamNeedsFlush = false;
-	}
+        if ( _streamNeedsFlush ) {
+            if (_outputStream != null) {
+                _outputStream.flush();
+            }
+            _streamNeedsFlush = false;
+        }
     }
 
 
@@ -822,10 +822,10 @@ public class SOutput
 
     private void flushWriter() {
 
-	if ( _writerNeedsFlush ) {
-	    _outputWriter.flush();
-	    _writerNeedsFlush = false;
-	}
+        if ( _writerNeedsFlush ) {
+            _outputWriter.flush();
+            _writerNeedsFlush = false;
+        }
     }
 
 
@@ -834,7 +834,7 @@ public class SOutput
 
 //* 
 //* <TeaMethod name="close"
-//* 	       className="TOutput">
+//*                className="TOutput">
 //* 
 //* <Overview>
 //* Closes the output stream represented by the object.
@@ -859,17 +859,17 @@ public class SOutput
  **************************************************************************/
 
     public Object close(SObjFunction obj,
-			SContext     context,
-			Object[]     args)
-	throws SIOException{
+                        SContext     context,
+                        Object[]     args)
+        throws SIOException{
 
-	try {
-	    close();
-	} catch (IOException e) {
-	    throw new SIOException(e);
-	}
+        try {
+            close();
+        } catch (IOException e) {
+            throw new SIOException(e);
+        }
 
-	return obj;
+        return obj;
     }
 
 
@@ -887,18 +887,18 @@ public class SOutput
  **************************************************************************/
 
     public void close()
-	throws IOException {
+        throws IOException {
 
         flushStream();
         flushWriter();
-	if ( _outputStream != null ) {
-	    try {
-		_outputStream.close();
-	    } catch (IOException e) {
-		// Just ignore it.
-	    }
+        if ( _outputStream != null ) {
+            try {
+                _outputStream.close();
+            } catch (IOException e) {
+                // Just ignore it.
+            }
             _outputStream = null;
-	}
+        }
         if (_outputWriter != null) {
             _outputWriter.close();
             _outputWriter = null;
@@ -917,7 +917,7 @@ public class SOutput
 
     public static String getTosClassName() {
 
-	return CLASS_NAME;
+        return CLASS_NAME;
     }
 
 
@@ -931,15 +931,15 @@ public class SOutput
  **************************************************************************/
 
     public static SOutput newInstance(SContext context)
-	throws STeaException {
+        throws STeaException {
 
-	STosObj output = STosUtil.newInstance(CLASS_NAME_S, context);
+        STosObj output = STosUtil.newInstance(CLASS_NAME_S, context);
 
-	if ( !(output instanceof SOutput) ) {
-	    throw new SRuntimeException("invalid " + CLASS_NAME + " class");
-	}
+        if ( !(output instanceof SOutput) ) {
+            throw new SRuntimeException("invalid " + CLASS_NAME + " class");
+        }
 
-	return (SOutput)output;
+        return (SOutput)output;
     }
 
 
@@ -977,7 +977,7 @@ class SFormaterOutput
 
     public void setOutput(PrintWriter out) {
 
-	_out = out;
+        _out = out;
     }
 
 
@@ -992,7 +992,7 @@ class SFormaterOutput
 
     public void append(String s) {
 
-	_out.print(s);
+        _out.print(s);
     }
 
 
@@ -1007,7 +1007,7 @@ class SFormaterOutput
 
     public void append(char c) {
 
-	_out.print(c);
+        _out.print(c);
     }
 
 

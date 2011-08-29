@@ -72,7 +72,7 @@ public class SLambdaFunction
  **************************************************************************/
 
    public SLambdaFunction(SObjSymbol[] argNames,
-			  SObjBlock    body) {
+                          SObjBlock    body) {
 
       _argNames        = argNames;
       _argCountPlusOne = argNames.length + 1;
@@ -104,36 +104,36 @@ public class SLambdaFunction
  **************************************************************************/
 
     public Object exec(SObjFunction func,
-		       SContext     context,
-		       Object[]     args)
-	throws STeaException {
+                       SContext     context,
+                       Object[]     args)
+        throws STeaException {
 
-	if ( args.length != _argCountPlusOne ) {
-	    throw new SNumArgException(args, parametersText());
-	}
+        if ( args.length != _argCountPlusOne ) {
+            throw new SNumArgException(args, parametersText());
+        }
 
-	SContext funcContext = new SContext(_bodyContext);
-	Object   result      = SObjNull.NULL;
+        SContext funcContext = new SContext(_bodyContext);
+        Object   result      = SObjNull.NULL;
 
-	// Initializes the actual arguments.
-	int i = _argCountPlusOne;
-	int j = i - 1 ;
-	while ( j > 0 ) {
-	    --i;
-	    --j;
-	    funcContext.newVar(_argNames[j], args[i]);
-	}
+        // Initializes the actual arguments.
+        int i = _argCountPlusOne;
+        int j = i - 1 ;
+        while ( j > 0 ) {
+            --i;
+            --j;
+            funcContext.newVar(_argNames[j], args[i]);
+        }
 
-	try {
-	    result = _body.exec(funcContext);
-	} catch (SReturnException e1) {
-	    result = e1._value;
-	} catch (SBreakException e2) {
-	    result = e2._object;
-	} catch (SContinueException e3) {
-	}
+        try {
+            result = _body.exec(funcContext);
+        } catch (SReturnException e1) {
+            result = e1._value;
+        } catch (SBreakException e2) {
+            result = e2._object;
+        } catch (SContinueException e3) {
+        }
 
-	return result;
+        return result;
     }
 
 
@@ -148,17 +148,17 @@ public class SLambdaFunction
 
     private String parametersText() {
 
-	if ( _argNames.length == 0 ) {
-	    return "this function takes no arguments";
-	}
+        if ( _argNames.length == 0 ) {
+            return "this function takes no arguments";
+        }
 
-	StringBuffer text = new StringBuffer(_argNames[0].getName());
+        StringBuffer text = new StringBuffer(_argNames[0].getName());
 
-	for ( int i=1; i<_argNames.length; i++ ) {
-	    text.append(' ').append(_argNames[i].getName());
-	}
+        for ( int i=1; i<_argNames.length; i++ ) {
+            text.append(' ').append(_argNames[i].getName());
+        }
 
-	return text.toString();
+        return text.toString();
     }
 
 

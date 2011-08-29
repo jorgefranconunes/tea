@@ -60,7 +60,7 @@ public class SNoSuchClassException
  **************************************************************************/
 
    public SNoSuchClassException(Object[]   args,
-				SObjSymbol symbol) {
+                                SObjSymbol symbol) {
 
        String msg = "class \"{0}\" has not been defined";
 

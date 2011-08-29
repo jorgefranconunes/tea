@@ -47,7 +47,7 @@ import com.pdmfc.tea.runtime.STypes;
  *
  **************************************************************************/
 
-public class SModuleList
+public final class SModuleList
     extends Object
     implements SModule {
 
@@ -62,6 +62,8 @@ public class SModuleList
  **************************************************************************/
 
     public SModuleList() {
+
+        // Nothing to do.
     }
 
 
@@ -70,131 +72,128 @@ public class SModuleList
 
 /**************************************************************************
  *
- * 
- *
- * @param context The context where the commands and variables will be
- * created.
+ * {@inheritDoc}
  *
  **************************************************************************/
 
-    public void init(SContext context)
-	throws STeaException {
+    public void init(final SContext context)
+        throws STeaException {
 
-	context.newVar("cons",
+        context.newVar("cons",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionCons(func, context, args);
                            }
                        });
 
-	context.newVar("car",
+        context.newVar("car",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionCar(func, context, args);
                            }
                        });
-	
-	context.newVar("cdr",
+        
+        context.newVar("cdr",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionCdr(func, context, args);
                            }
                        });
 
-	context.newVar("empty?",
+        context.newVar("empty?",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionEmpty(func, context, args);
                            }
                        });
-	
-	context.newVar("not-empty?",
+        
+        context.newVar("not-empty?",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionNotEmpty(func, context, args);
                            }
                        });
-	
-	context.newVar("set-car!",
+        
+        context.newVar("set-car!",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionSetCar(func, context, args);
                            }
                        });
-	
-	context.newVar("set-cdr!",
+        
+        context.newVar("set-cdr!",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionSetCdr(func, context, args);
                            }
                        });
-	
-	context.newVar("list",
+        
+        context.newVar("list",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionList(func, context, args);
                            }
                        });
-	
-	context.newVar("nth",
+        
+        context.newVar("nth",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionNth(func, context, args);
                            }
                        });
-	
-	context.newVar("prepend",
+        
+        context.newVar("prepend",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionPrepend(func, context, args);
                            }
                        });
-	
-	context.newVar("append",
+        
+        context.newVar("append",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionAppend(func, context, args);
                            }
                        });
-	
-	context.newVar("length",
+        
+        context.newVar("length",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionLength(func, context, args);
                            }
@@ -207,7 +206,7 @@ public class SModuleList
 
 /**************************************************************************
  *
- * 
+ * {@inheritDoc}
  *
  **************************************************************************/
 
@@ -222,7 +221,7 @@ public class SModuleList
 
 /**************************************************************************
  *
- * 
+ * {@inheritDoc}
  *
  **************************************************************************/
 
@@ -237,7 +236,7 @@ public class SModuleList
 
 /**************************************************************************
  *
- * 
+ * {@inheritDoc}
  *
  **************************************************************************/
 
@@ -252,7 +251,7 @@ public class SModuleList
 
 //* 
 //* <TeaFunction name="cons"
-//* 		arguments="obj1 obj2"
+//*                 arguments="obj1 obj2"
 //*             module="tea.lists">
 //*
 //* <Overview>
@@ -283,16 +282,16 @@ public class SModuleList
  *
  **************************************************************************/
 
-    private static Object functionCons(SObjFunction func,
-				       SContext     context,
-				       Object[]     args)
-	throws STeaException {
+    private static Object functionCons(final SObjFunction func,
+                                       final SContext     context,
+                                       final Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "obj1 obj2");
-	}
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "obj1 obj2");
+        }
 
-	return new SObjPair(args[1], args[2]);
+        return new SObjPair(args[1], args[2]);
     }
 
 
@@ -301,7 +300,7 @@ public class SModuleList
 
 //* 
 //* <TeaFunction name="car"
-//* 		arguments="aPair"
+//*                 arguments="aPair"
 //*             module="tea.lists">
 //*
 //* <Overview>
@@ -331,22 +330,22 @@ public class SModuleList
  *
  **************************************************************************/
 
-    private static Object functionCar(SObjFunction func,
-				      SContext     context,
-				      Object[]     args)
-	throws STeaException {
+    private static Object functionCar(final SObjFunction func,
+                                      final SContext     context,
+                                      final Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 2 ) {
-	    throw new SNumArgException(args, "pair");
-	}
+        if ( args.length != 2 ) {
+            throw new SNumArgException(args, "pair");
+        }
 
-	SObjPair pair = SArgs.getPair(args, 1);
+        SObjPair pair = SArgs.getPair(args, 1);
 
-	if ( pair._car == null ) {
-	    throw new SEmptyListException(args, 1);
-	}
+        if ( pair._car == null ) {
+            throw new SEmptyListException(args, 1);
+        }
 
-	return pair._car;
+        return pair._car;
     }
 
 
@@ -355,7 +354,7 @@ public class SModuleList
 
 //* 
 //* <TeaFunction name="cdr"
-//* 		arguments="aPair"
+//*                 arguments="aPair"
 //*             module="tea.lists">
 //*
 //* <Overview>
@@ -385,22 +384,22 @@ public class SModuleList
  *
  **************************************************************************/
 
-    private static Object functionCdr(SObjFunction func,
-				      SContext     context,
-				      Object[]     args)
-	throws STeaException {
+    private static Object functionCdr(final SObjFunction func,
+                                      final SContext     context,
+                                      final Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 2 ) {
-	    throw new SNumArgException(args, "pair");
-	}
+        if ( args.length != 2 ) {
+            throw new SNumArgException(args, "pair");
+        }
 
-	SObjPair pair = SArgs.getPair(args, 1);
-	
-	if ( pair._car == null ) {
-	    throw new SEmptyListException(args, 1);
-	}
+        SObjPair pair = SArgs.getPair(args, 1);
+        
+        if ( pair._car == null ) {
+            throw new SEmptyListException(args, 1);
+        }
 
-	return pair._cdr;
+        return pair._cdr;
     }
 
 
@@ -409,7 +408,7 @@ public class SModuleList
 
 //* 
 //* <TeaFunction name="empty?"
-//* 		arguments="aList"
+//*                 arguments="aList"
 //*             module="tea.lists">
 //*
 //* <Overview>
@@ -436,18 +435,18 @@ public class SModuleList
  * 
  **************************************************************************/
 
-    private static Object functionEmpty(SObjFunction func,
-					SContext     context,
-					Object[]     args)
-	throws STeaException {
+    private static Object functionEmpty(final SObjFunction func,
+                                        final SContext     context,
+                                        final Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 2 ) {
-	    throw new SNumArgException(args, "pair");
-	}
+        if ( args.length != 2 ) {
+            throw new SNumArgException(args, "pair");
+        }
 
-	SObjPair pair = SArgs.getPair(args, 1);
+        SObjPair pair = SArgs.getPair(args, 1);
 
-	return (pair._car==null) ? Boolean.TRUE : Boolean.FALSE;
+        return (pair._car==null) ? Boolean.TRUE : Boolean.FALSE;
     }
 
 
@@ -456,7 +455,7 @@ public class SModuleList
 
 //* 
 //* <TeaFunction name="not-empty?"
-//* 		arguments="aList"
+//*                 arguments="aList"
 //*             module="tea.lists">
 //*
 //* <Overview>
@@ -483,18 +482,18 @@ public class SModuleList
  *
  **************************************************************************/
 
-    private static Object functionNotEmpty(SObjFunction func,
-					   SContext     context,
-					   Object[]     args)
-	throws STeaException {
+    private static Object functionNotEmpty(final SObjFunction func,
+                                           final SContext     context,
+                                           final Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 2 ) {
-	    throw new SNumArgException(args, "pair");
-	}
+        if ( args.length != 2 ) {
+            throw new SNumArgException(args, "pair");
+        }
 
-	SObjPair pair = SArgs.getPair(args, 1);
+        SObjPair pair = SArgs.getPair(args, 1);
 
-	return (pair._car==null) ? Boolean.FALSE : Boolean.TRUE;
+        return (pair._car==null) ? Boolean.FALSE : Boolean.TRUE;
     }
 
 
@@ -503,7 +502,7 @@ public class SModuleList
 
 //* 
 //* <TeaFunction name="set-car!"
-//* 		arguments="aPair anObject"
+//*                 arguments="aPair anObject"
 //*             module="tea.lists">
 //*
 //* <Overview>
@@ -536,18 +535,18 @@ public class SModuleList
  *
  **************************************************************************/
 
-    private static Object functionSetCar(SObjFunction func,
-					 SContext     context,
-					 Object[]     args)
-	throws STeaException {
+    private static Object functionSetCar(final SObjFunction func,
+                                         final SContext     context,
+                                         final Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "pair obj");
-	}
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "pair obj");
+        }
 
-	SArgs.getPair(args, 1)._car = args[2];
+        SArgs.getPair(args, 1)._car = args[2];
 
-	return args[2];
+        return args[2];
     }
 
 
@@ -556,7 +555,7 @@ public class SModuleList
 
 //* 
 //* <TeaFunction name="set-cdr!"
-//* 		arguments="aPair anObject"
+//*                 arguments="aPair anObject"
 //*             module="tea.lists">
 //*
 //* <Overview>
@@ -589,18 +588,18 @@ public class SModuleList
  *
  **************************************************************************/
 
-    private static Object functionSetCdr(SObjFunction func,
-					 SContext context,
-					 Object[]   args)
-	throws STeaException {
+    private static Object functionSetCdr(final SObjFunction func,
+                                         final SContext context,
+                                         final Object[]   args)
+        throws STeaException {
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "pair obj");
-	}
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "pair obj");
+        }
 
-	SArgs.getPair(args, 1)._cdr = args[2];
+        SArgs.getPair(args, 1)._cdr = args[2];
 
-	return args[2];
+        return args[2];
     }
 
 
@@ -609,7 +608,7 @@ public class SModuleList
 
 //* 
 //* <TeaFunction name="list"
-//* 		arguments="[obj1 ...]"
+//*                 arguments="[obj1 ...]"
 //*             module="tea.lists">
 //*
 //* <Overview>
@@ -637,26 +636,26 @@ public class SModuleList
  *
  **************************************************************************/
 
-    private static Object functionList(SObjFunction func,
-				       SContext     context,
-				       Object[]     args)
-	throws STeaException {
+    private static Object functionList(final SObjFunction func,
+                                       final SContext     context,
+                                       final Object[]     args)
+        throws STeaException {
 
-	SObjPair head    = SObjPair.emptyList();
-	SObjPair element = null;
+        SObjPair head    = SObjPair.emptyList();
+        SObjPair element = null;
 
-	for ( int i=1; i<args.length; i++ ) {
-	    SObjPair node = new SObjPair(args[i], SObjPair.emptyList());
+        for ( int i=1; i<args.length; i++ ) {
+            SObjPair node = new SObjPair(args[i], SObjPair.emptyList());
 
-	    if ( element == null ) {
-		head = node;
-	    } else {
-		element._cdr = node;
-	    }
-	    element = node;
-	}
+            if ( element == null ) {
+                head = node;
+            } else {
+                element._cdr = node;
+            }
+            element = node;
+        }
 
-	return head;
+        return head;
     }
 
 
@@ -665,7 +664,7 @@ public class SModuleList
 
 //* 
 //* <TeaFunction name="nth"
-//* 		arguments="aList index"
+//*                 arguments="aList index"
 //*             module="tea.lists">
 //*
 //* <Overview>
@@ -697,29 +696,29 @@ public class SModuleList
  *
  **************************************************************************/
 
-    private static Object functionNth(SObjFunction func,
-				      SContext     context,
-				      Object[]     args)
-	throws STeaException {
+    private static Object functionNth(final SObjFunction func,
+                                      final SContext     context,
+                                      final Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "list index");
-	}
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "list index");
+        }
 
-	SObjPair pair  = SArgs.getPair(args, 1);
-	int      index = SArgs.getInt(args, 2).intValue();
-	Object   obj   = null;
-	Iterator it    = pair.iterator();
+        SObjPair pair  = SArgs.getPair(args, 1);
+        int      index = SArgs.getInt(args, 2).intValue();
+        Object   obj   = null;
+        Iterator it    = pair.iterator();
 
-	for ( int i=0; it.hasNext(); i++ ) {
-	    obj = it.next();
-	    if ( i == index ) {
-		return obj;
-	    }
-	}
+        for ( int i=0; it.hasNext(); i++ ) {
+            obj = it.next();
+            if ( i == index ) {
+                return obj;
+            }
+        }
         
         String msg = "index out of range ({0})";
-	throw new SRuntimeException(args, msg, index);
+        throw new SRuntimeException(args, msg, index);
     }
 
 
@@ -728,7 +727,7 @@ public class SModuleList
 
 //* 
 //* <TeaFunction name="prepend"
-//* 		arguments="anObject aList"
+//*                 arguments="anObject aList"
 //*             module="tea.lists">
 //*
 //* <Overview>
@@ -752,11 +751,11 @@ public class SModuleList
 //*
 //* <Description>
 //* The <Func name="prepend"/> function could be defined as follows:
-//* 	<Code>
-//* 	define prepend ( anObject aList ) {
-//* 	    cons $anObject $aList
-//* 	}
-//* 	</Code>
+//*         <Code>
+//*         define prepend ( anObject aList ) {
+//*             cons $anObject $aList
+//*         }
+//*         </Code>
 //* </Description>
 //* 
 //* </TeaFunction>
@@ -768,20 +767,20 @@ public class SModuleList
  *
  **************************************************************************/
 
-    private static Object functionPrepend(SObjFunction func,
-					  SContext     context,
-					  Object[]     args)
-	throws STeaException {
+    private static Object functionPrepend(final SObjFunction func,
+                                          final SContext     context,
+                                          final Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "object list");
-	}
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "object list");
+        }
 
-	Object   obj  = args[1];
-	SObjPair rest = SArgs.getPair(args,2);
-	SObjPair head = new SObjPair(obj, rest);
+        Object   obj  = args[1];
+        SObjPair rest = SArgs.getPair(args,2);
+        SObjPair head = new SObjPair(obj, rest);
 
-	return head;
+        return head;
     }
 
 
@@ -790,7 +789,7 @@ public class SModuleList
 
 //* 
 //* <TeaFunction name="append"
-//* 		arguments="anObject aList"
+//*                 arguments="anObject aList"
 //*             module="tea.lists">
 //*
 //* <Overview>
@@ -826,32 +825,32 @@ public class SModuleList
  *
  **************************************************************************/
 
-    private static Object functionAppend(SObjFunction func,
-					 SContext     context,
-					 Object[]     args)
-	throws STeaException {
+    private static Object functionAppend(final SObjFunction func,
+                                         final SContext     context,
+                                         final Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "object list");
-	}
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "object list");
+        }
 
-	Object   obj  = args[1];
-	SObjPair head = SArgs.getPair(args, 2);
-	SObjPair node = head;
+        Object   obj  = args[1];
+        SObjPair head = SArgs.getPair(args, 2);
+        SObjPair node = head;
 
-	while ( node._car != null ) {
-	    try {
-		node = (SObjPair)node._cdr;
-	    } catch (ClassCastException e) {
+        while ( node._car != null ) {
+            try {
+                node = (SObjPair)node._cdr;
+            } catch (ClassCastException e) {
                 String msg="invalid list. Each cdr should be a pair, not a {0}";
                 String invalidTypeName = STypes.getTypeName(node._cdr);
-		throw new SRuntimeException(args,msg, invalidTypeName);
-	    }
-	}
-	node._car = obj;
-	node._cdr = SObjPair.emptyList();
+                throw new SRuntimeException(args,msg, invalidTypeName);
+            }
+        }
+        node._car = obj;
+        node._cdr = SObjPair.emptyList();
 
-	return head;
+        return head;
     }
 
 
@@ -860,7 +859,7 @@ public class SModuleList
 
 //* 
 //* <TeaFunction name="length"
-//* 		arguments="aList"
+//*                 arguments="aList"
 //*             module="tea.lists">
 //*
 //* <Overview>
@@ -887,16 +886,16 @@ public class SModuleList
  *
  **************************************************************************/
 
-    private static Object functionLength(SObjFunction func,
-					SContext     context,
-					Object[]     args)
-	throws STeaException {
+    private static Object functionLength(final SObjFunction func,
+                                         final SContext     context,
+                                         final Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 2 ) {
-	    throw new SNumArgException(args, "list");
-	}
+        if ( args.length != 2 ) {
+            throw new SNumArgException(args, "list");
+        }
 
-	return new Integer(SArgs.getPair(args,1).length());
+        return new Integer(SArgs.getPair(args,1).length());
     }
 
 

@@ -47,11 +47,11 @@ public class SNoSuchMethodException
  **************************************************************************/
 
    public SNoSuchMethodException(SObjSymbol symbol,
-				 String     className) {
+                                 String     className) {
 
       super("class "
-	    + ((className==null) ? "" : ("'" + className + "' "))
-	    + "has no method '" + symbol.getName() + "'");
+            + ((className==null) ? "" : ("'" + className + "' "))
+            + "has no method '" + symbol.getName() + "'");
    }
 
 

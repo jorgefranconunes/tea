@@ -85,7 +85,7 @@ public class SFileOutput
 //* 
 //* <TeaMethod name="constructor"
 //*            arguments="fileName [appendFlag]"
-//* 	       className="TFileOutput">
+//*                className="TFileOutput">
 //* 
 //* <Overview>
 //* Opens the file for writing.
@@ -124,31 +124,31 @@ public class SFileOutput
  **************************************************************************/
 
     public Object constructor(SObjFunction obj,
-			      SContext     context,
-			      Object[]     args)
-	throws SRuntimeException {
-	
-	int numArgs = args.length;
+                              SContext     context,
+                              Object[]     args)
+        throws SRuntimeException {
+        
+        int numArgs = args.length;
 
-	if ( (numArgs!=3) && (numArgs!=4) ) {
-	    throw new SNumArgException(args, "file-name [append]");
-	}
+        if ( (numArgs!=3) && (numArgs!=4) ) {
+            throw new SNumArgException(args, "file-name [append]");
+        }
 
-	String           fileName  = SArgs.getString(args,2);
-	boolean          append    =
+        String           fileName  = SArgs.getString(args,2);
+        boolean          append    =
             (numArgs==3) ? false : SArgs.getBoolean(args,3).booleanValue();
-	FileOutputStream outStream = null;
+        FileOutputStream outStream = null;
 
-	try {
-	    outStream = new FileOutputStream(fileName, append);
-	} catch (FileNotFoundException e1) {
+        try {
+            outStream = new FileOutputStream(fileName, append);
+        } catch (FileNotFoundException e1) {
             String msg = "file \"{0}\" could not be opened for writing";
             throw new SRuntimeException(msg, fileName);
-	}
+        }
 
-	open(outStream);
+        open(outStream);
 
-	return obj;
+        return obj;
     }
 
 
@@ -163,7 +163,7 @@ public class SFileOutput
 
     public static String getTosClassName() {
 
-	return CLASS_NAME;
+        return CLASS_NAME;
     }
 
 
@@ -177,16 +177,16 @@ public class SFileOutput
  **************************************************************************/
 
     public static SFileOutput newInstance(SContext context,
-					  Object[] args)
-	throws STeaException {
+                                          Object[] args)
+        throws STeaException {
 
-	STosObj input = STosUtil.newInstance(CLASS_NAME_S, context, args);
+        STosObj input = STosUtil.newInstance(CLASS_NAME_S, context, args);
 
-	if ( !(input instanceof SFileOutput) ) {
-	    throw new SRuntimeException("invalid " + CLASS_NAME + " class");
-	}
+        if ( !(input instanceof SFileOutput) ) {
+            throw new SRuntimeException("invalid " + CLASS_NAME + " class");
+        }
 
-	return (SFileOutput)input;
+        return (SFileOutput)input;
     }
 
 

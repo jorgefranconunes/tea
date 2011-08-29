@@ -77,9 +77,9 @@ public class SModuleXml
  **************************************************************************/
 
     public void init(SContext context)
-	throws STeaException {
+        throws STeaException {
 
-	context.newVar("xml-encode",
+        context.newVar("xml-encode",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -143,7 +143,7 @@ public class SModuleXml
 
 //* 
 //* <TeaFunction name="xml-encode"
-//* 		arguments="aString"
+//*                 arguments="aString"
 //*             module="tea.xml">
 //*
 //* <Overview>
@@ -172,27 +172,27 @@ public class SModuleXml
  **************************************************************************/
 
     private static Object functionXmlEncode(SObjFunction func,
-					    SContext     context,
-					    Object[]     args)
-	throws STeaException {
+                                            SContext     context,
+                                            Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 2 ) {
-	    throw new SNumArgException(args, "string");
-	}
+        if ( args.length != 2 ) {
+            throw new SNumArgException(args, "string");
+        }
 
-	Object arg = args[1];
+        Object arg = args[1];
 
-	if ( arg instanceof String ) {
-	   return xmlEncode((String)arg);
-	}
-	if ( arg instanceof Integer ) {
-	   return String.valueOf(((Integer)arg).intValue());
-	}
-	if ( arg instanceof Double ) {
-	    return String.valueOf(((Double)arg).doubleValue());
-	}
+        if ( arg instanceof String ) {
+           return xmlEncode((String)arg);
+        }
+        if ( arg instanceof Integer ) {
+           return String.valueOf(((Integer)arg).intValue());
+        }
+        if ( arg instanceof Double ) {
+            return String.valueOf(((Double)arg).doubleValue());
+        }
 
-	throw new STypeException(args, 1, "string or numeric");
+        throw new STypeException(args, 1, "string or numeric");
     }
 
 
@@ -207,34 +207,34 @@ public class SModuleXml
 
     private static String xmlEncode(String s) {
 
-	StringBuffer buf  = new StringBuffer();
-	int          size = s.length();
+        StringBuffer buf  = new StringBuffer();
+        int          size = s.length();
 
-	for ( int i=0; i<size; i++ ) {
-	    char c = s.charAt(i);
+        for ( int i=0; i<size; i++ ) {
+            char c = s.charAt(i);
 
-	    switch ( c ) {
-	    case '<' :
-		buf.append("&lt;");
-		break;
-	    case '>' :
-		buf.append("&gt;");
-		break;
-	    case '&' :
-		buf.append("&amp;");
-		break;
-	    case '"' :
-		buf.append("&quot;");
-		break;
-	    default  : 
+            switch ( c ) {
+            case '<' :
+                buf.append("&lt;");
+                break;
+            case '>' :
+                buf.append("&gt;");
+                break;
+            case '&' :
+                buf.append("&amp;");
+                break;
+            case '"' :
+                buf.append("&quot;");
+                break;
+            default  : 
                 if (c > 127) {
                   buf.append("&#").append((int)c).append(';');
                 } else {
                   buf.append(c);
                 } break;
-	    }
-	}
-	return buf.toString();
+            }
+        }
+        return buf.toString();
     }
 
 

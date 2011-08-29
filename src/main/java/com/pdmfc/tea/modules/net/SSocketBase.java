@@ -60,9 +60,9 @@ public class SSocketBase
  **************************************************************************/
 
     public SSocketBase(STosClass myClass)
-	throws STeaException {
+        throws STeaException {
 
-	super(myClass);
+        super(myClass);
     }
 
 
@@ -76,10 +76,10 @@ public class SSocketBase
  **************************************************************************/
 
     void initialize(SContext     context)
-	throws STeaException {
+        throws STeaException {
 
-	_input  = SInput.newInstance(context);
-	_output = SOutput.newInstance(context);
+        _input  = SInput.newInstance(context);
+        _output = SOutput.newInstance(context);
     }
 
 
@@ -93,39 +93,39 @@ public class SSocketBase
  **************************************************************************/
 
     public Object connect(SObjFunction obj,
-			  SContext     context,
-			  Object[]     args)
-	throws STeaException {
+                          SContext     context,
+                          Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 4 ) {
-	    throw new SNumArgException(args, "host port");
-	}
+        if ( args.length != 4 ) {
+            throw new SNumArgException(args, "host port");
+        }
 
-	String host = SArgs.getString(args, 2);
-	int    port = SArgs.getInt(args, 3).intValue();
+        String host = SArgs.getString(args, 2);
+        int    port = SArgs.getInt(args, 3).intValue();
 
-	try {
-	    close();
-	} catch (SIOException e) {
-	    // Just ignore it.
-	}
+        try {
+            close();
+        } catch (SIOException e) {
+            // Just ignore it.
+        }
 
-	try {
-	    _socket = createSocket(host, port);
-	    _input.open(_socket.getInputStream());
-	    _output.open(_socket.getOutputStream());
-	} catch (UnknownHostException e1) {
-	    throw new SIOException("host \"{0}\" is unknown", host);
-	} catch (IOException e2) {
+        try {
+            _socket = createSocket(host, port);
+            _input.open(_socket.getInputStream());
+            _output.open(_socket.getOutputStream());
+        } catch (UnknownHostException e1) {
+            throw new SIOException("host \"{0}\" is unknown", host);
+        } catch (IOException e2) {
             String msg = "could not connect to host \"{0}\" on port {1} : {2}";
-	    throw new SIOException(msg,
+            throw new SIOException(msg,
                                    host,
                                    String.valueOf(port),
                                    e2.getMessage());
-	}
-	_output.setLineBuffering(true);
+        }
+        _output.setLineBuffering(true);
 
-	return obj;
+        return obj;
     }
 
 
@@ -139,24 +139,24 @@ public class SSocketBase
  **************************************************************************/
 
     public void connect(Socket sock)
-	throws SIOException {
+        throws SIOException {
 
-	try {
-	    close();
-	} catch (SIOException e) {
-	    // Just ignore it.
-	}
+        try {
+            close();
+        } catch (SIOException e) {
+            // Just ignore it.
+        }
 
-	_socket = sock;
+        _socket = sock;
 
-	try {
-	    _input.open(_socket.getInputStream());
-	    _output.open(_socket.getOutputStream());
-	} catch (IOException e) {
-	    throw new SIOException("could not associate with native socket: "
-				    + e.getMessage());
-	}
-	_output.setLineBuffering(true);
+        try {
+            _input.open(_socket.getInputStream());
+            _output.open(_socket.getOutputStream());
+        } catch (IOException e) {
+            throw new SIOException("could not associate with native socket: "
+                                    + e.getMessage());
+        }
+        _output.setLineBuffering(true);
     }
 
 
@@ -170,13 +170,13 @@ public class SSocketBase
  **************************************************************************/
 
     public Object close(SObjFunction obj,
-			SContext     context,
-			Object[]     args)
-	throws STeaException {
+                        SContext     context,
+                        Object[]     args)
+        throws STeaException {
 
-	close();
+        close();
 
-	return obj;
+        return obj;
     }
 
 
@@ -190,38 +190,38 @@ public class SSocketBase
  **************************************************************************/
 
     private void close()
-	throws SIOException {
+        throws SIOException {
 
-	IOException error = null;
+        IOException error = null;
 
-	try {
-	    _output.flush();
-	} catch (IOException e1) {
-	    error = e1;
-	}
-	try {
-	    if ( _socket != null ) {
-		_socket.close();
-	    }
-	} catch (IOException e2) {
-	    if ( error == null ) {
-		error = e2;
-	    }
-	}
-	try {
-	    _input.close();
-	} catch (IOException e3) {
-	    // Ignore any error.
-	}
-	try {
-	    _output.close();
-	} catch (IOException e4) {
-	    // Ignore any error.
-	}
-	_socket = null;
-	if ( error != null ) {
-	    throw new SIOException(error);
-	}
+        try {
+            _output.flush();
+        } catch (IOException e1) {
+            error = e1;
+        }
+        try {
+            if ( _socket != null ) {
+                _socket.close();
+            }
+        } catch (IOException e2) {
+            if ( error == null ) {
+                error = e2;
+            }
+        }
+        try {
+            _input.close();
+        } catch (IOException e3) {
+            // Ignore any error.
+        }
+        try {
+            _output.close();
+        } catch (IOException e4) {
+            // Ignore any error.
+        }
+        _socket = null;
+        if ( error != null ) {
+            throw new SIOException(error);
+        }
     }
 
 
@@ -235,11 +235,11 @@ public class SSocketBase
  **************************************************************************/
 
     public Object getInput(SObjFunction obj,
-			   SContext     context,
-			   Object[]     args)
-	throws STeaException {
+                           SContext     context,
+                           Object[]     args)
+        throws STeaException {
 
-	return _input;
+        return _input;
     }
 
 
@@ -253,11 +253,11 @@ public class SSocketBase
  **************************************************************************/
 
     public Object getOutput(SObjFunction obj,
-			    SContext     context,
-			    Object[]     args)
-	throws STeaException {
+                            SContext     context,
+                            Object[]     args)
+        throws STeaException {
 
-	return _output;
+        return _output;
     }
 
 
@@ -271,24 +271,24 @@ public class SSocketBase
  **************************************************************************/
 
     private Socket createSocket(String host,
-				int    port)
-	throws STeaException {
+                                int    port)
+        throws STeaException {
 
-	if ( _sockFactory == null ) {
-	    throw new SRuntimeException("internal socket factory not set");
-	}
+        if ( _sockFactory == null ) {
+            throw new SRuntimeException("internal socket factory not set");
+        }
 
-	Socket sock = null;
+        Socket sock = null;
 
-	try {
-	    sock = _sockFactory.createSocket(host, port);
-	} catch (IOException e) {
-	    String   msg     = "unable to crete socket - {0}";
-	    Object[] fmtArgs = { e.getMessage() };
-	    throw new SRuntimeException(msg, fmtArgs);
-	}
+        try {
+            sock = _sockFactory.createSocket(host, port);
+        } catch (IOException e) {
+            String   msg     = "unable to crete socket - {0}";
+            Object[] fmtArgs = { e.getMessage() };
+            throw new SRuntimeException(msg, fmtArgs);
+        }
 
-	return sock;
+        return sock;
     }
 
 
@@ -303,7 +303,7 @@ public class SSocketBase
 
     void setSocketFactory(SSocketFactory factory) {
 
-	_sockFactory = factory;
+        _sockFactory = factory;
     }
 
 

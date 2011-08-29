@@ -1,27 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2007-2010 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2010/03/02 Added method "getEncoding()". (jfn)
- *
- * 2009/10/13 Backported to the 3.2.x branch. (TSK-PDMFC-TEA-0044) (jfn)
- *
- * 2009/03/11 Added the "--library-item" option. (jfn)
- *
- * 2008/04/18 Refactored use command line options. This was done in
- * order to receive the Tea library path list as a command line
- * argument. (TSK-PDMFC-TEA-0044) (jfn)
- *
- * 2007/08/11 Created. (jfn)
+ * Copyright (c) 2007-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -44,18 +23,18 @@ import com.pdmfc.tea.STeaException;
  *
  **************************************************************************/
 
-class STeaLauncherArgs
+final class STeaLauncherArgs
     extends Object {
 
 
 
 
 
-    private String OPTION_LIBRARY  = "--library";
-    private String OPTION_LIB_ITEM = "--library-item";
-    private String OPTION_SCRIPT   = "--script";
-    private String OPTION_ENCODING = "--encoding";
-    private String OPTION_END      = "--";
+    private static final String OPTION_LIBRARY  = "--library";
+    private static final String OPTION_LIB_ITEM = "--library-item";
+    private static final String OPTION_SCRIPT   = "--script";
+    private static final String OPTION_ENCODING = "--encoding";
+    private static final String OPTION_END      = "--";
 
 
 
@@ -89,25 +68,26 @@ class STeaLauncherArgs
  *
  * Parses the given command line arguments.
  *
- * @param cliArgs 
+ * @param cliArgs The command line arguments passed to the Tea
+ * launcher.
  *
  * @exception STeaException Thrown in the case of an unknown option.
  *
  **************************************************************************/
 
-    public void parse(String[] cliArgs)
-	throws STeaException {
+    public void parse(final String[] cliArgs)
+        throws STeaException {
 
-	_isParsingOptions = true;
-	_scriptPath       = null;
-	_libraryList.clear();
-	_scriptCliArgsList.clear();
+        _isParsingOptions = true;
+        _scriptPath       = null;
+        _libraryList.clear();
+        _scriptCliArgsList.clear();
 
-	for ( int i=0, count=cliArgs.length; i<count; ++i ) {
-	    parseArg(cliArgs[i]);
-	}
+        for ( int i=0, count=cliArgs.length; i<count; ++i ) {
+            parseArg(cliArgs[i]);
+        }
 
-	_scriptCliArgs = _scriptCliArgsList.toArray(new String[0]);
+        _scriptCliArgs = _scriptCliArgsList.toArray(new String[0]);
     }
 
 
@@ -120,14 +100,14 @@ class STeaLauncherArgs
  *
  **************************************************************************/
 
-    private void parseArg(String arg)
-	throws STeaException {
+    private void parseArg(final String arg)
+        throws STeaException {
 
-	if ( _isParsingOptions ) {
-	    parseOption(arg);
-	} else {
-	    _scriptCliArgsList.add(arg);
-	}
+        if ( _isParsingOptions ) {
+            parseOption(arg);
+        } else {
+            _scriptCliArgsList.add(arg);
+        }
     }
 
 
@@ -140,28 +120,28 @@ class STeaLauncherArgs
  *
  **************************************************************************/
 
-    private void parseOption(String arg)
-	throws STeaException {
+    private void parseOption(final String arg)
+        throws STeaException {
 
-	SCliOption option      = new SCliOption(arg);
-	String     optionName  = option.getName();
-	String     optionValue = option.getValue();
+        SCliOption option      = new SCliOption(arg);
+        String     optionName  = option.getName();
+        String     optionValue = option.getValue();
 
-	if ( OPTION_LIBRARY.equals(optionName) ) {
-	    optionSetLibrary(optionValue);
+        if ( OPTION_LIBRARY.equals(optionName) ) {
+            optionSetLibrary(optionValue);
         } else if ( OPTION_LIB_ITEM.equals(optionName) ) {
             optionAddLibItem(optionValue);
-	} else if ( OPTION_SCRIPT.equals(optionName) ) {
-	    optionSetScriptPath(optionValue);
-	} else if ( OPTION_ENCODING.equals(optionName) ) {
-	    optionSetEncoding(optionValue);
-	} else if ( OPTION_END.equals(optionName) ) {
-	    _isParsingOptions = false;
-	} else {
-	    String   msg     = "Unknown option \"{0}\"";
-	    Object[] fmtArgs = { optionName };
-	    throw new STeaException(msg, fmtArgs);
-	}
+        } else if ( OPTION_SCRIPT.equals(optionName) ) {
+            optionSetScriptPath(optionValue);
+        } else if ( OPTION_ENCODING.equals(optionName) ) {
+            optionSetEncoding(optionValue);
+        } else if ( OPTION_END.equals(optionName) ) {
+            _isParsingOptions = false;
+        } else {
+            String   msg     = "Unknown option \"{0}\"";
+            Object[] fmtArgs = { optionName };
+            throw new STeaException(msg, fmtArgs);
+        }
     }
 
 
@@ -174,21 +154,21 @@ class STeaLauncherArgs
  *
  **************************************************************************/
 
-    private void optionSetLibrary(String libraryStr) {
+    private void optionSetLibrary(final String libraryStr) {
 
-	String pathSep = File.pathSeparator;
+        String pathSep = File.pathSeparator;
 
-	if ( libraryStr != null ) {
-	    StringTokenizer i=new StringTokenizer(libraryStr, pathSep);
+        if ( libraryStr != null ) {
+            StringTokenizer i=new StringTokenizer(libraryStr, pathSep);
 
-	    while ( i.hasMoreTokens() ) {
-		String path = i.nextToken();
-		
-		path = path.replace('|', ':');
+            while ( i.hasMoreTokens() ) {
+                String path = i.nextToken();
+                
+                path = path.replace('|', ':');
 
                 _libraryList.add(path);
-	    }
-	}
+            }
+        }
     }
 
 
@@ -201,11 +181,11 @@ class STeaLauncherArgs
  *
  **************************************************************************/
 
-    private void optionAddLibItem(String path) {
+    private void optionAddLibItem(final String path) {
 
-        path = path.replace('|', ':');
+       String processedPath = path.replace('|', ':');
 
-        _libraryList.add(path);
+        _libraryList.add(processedPath);
     }
 
 
@@ -218,14 +198,16 @@ class STeaLauncherArgs
  *
  **************************************************************************/
 
-    private void optionSetScriptPath(String path) {
+    private void optionSetScriptPath(final String path) {
 
-	if ( path.equals("-") || path.equals("") ) {
-	    // A null path means the script is to be read from stdin.
-	    path = null;
-	}
+        String scriptPath = path;
 
-	_scriptPath = path;
+        if ( scriptPath.equals("-") || scriptPath.equals("") ) {
+            // A null path means the script is to be read from stdin.
+            scriptPath = null;
+        }
+
+        _scriptPath = scriptPath;
     }
 
 
@@ -238,13 +220,15 @@ class STeaLauncherArgs
  *
  **************************************************************************/
 
-    private void optionSetEncoding(String encoding) {
+    private void optionSetEncoding(final String enc) {
 
-	if ( (encoding!=null) && encoding.equals("") ) {
+        String encoding = enc;
+
+        if ( (encoding!=null) && encoding.equals("") ) {
             encoding = null;
-	}
+        }
 
-	_encoding = encoding;
+        _encoding = encoding;
     }
 
 
@@ -259,9 +243,9 @@ class STeaLauncherArgs
 
     public List<String> getLibraryList() {
 
-	List<String> result = new ArrayList<String>(_libraryList);
+        List<String> result = new ArrayList<String>(_libraryList);
 
-	return result;
+        return result;
     }
 
 
@@ -281,7 +265,7 @@ class STeaLauncherArgs
 
     public String getScriptPath() {
 
-	return _scriptPath;
+        return _scriptPath;
     }
 
 
@@ -298,7 +282,7 @@ class STeaLauncherArgs
 
     public String getEncoding() {
 
-	return _encoding;
+        return _encoding;
     }
 
 
@@ -317,7 +301,7 @@ class STeaLauncherArgs
 
     public String[] getScriptCliArgs() {
 
-	return _scriptCliArgs;
+        return _scriptCliArgs;
     }
 
 
@@ -331,42 +315,14 @@ class STeaLauncherArgs
  **************************************************************************/
 
     private static final class SCliOption
-	extends Object {
+        extends Object {
 
 
 
 
 
-	private String _optionName  = null;
-	private String _optionValue = null;
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-	public SCliOption(String arg) {
-
-	    String name     = null;
-	    String value    = null;
-	    int    sepIndex = arg.indexOf('=');
-
-	    if ( sepIndex >= 0 ) {
-		name  = arg.substring(0, sepIndex);
-		value = arg.substring(sepIndex+1);
-	    } else {
-		name  = arg;
-		value = "";
-	    }
-
-	    _optionName  = name;
-	    _optionValue = value;
-	}
+        private String _optionName  = null;
+        private String _optionValue = null;
 
 
 
@@ -378,10 +334,23 @@ class STeaLauncherArgs
  *
  **************************************************************************/
 
-	public String getName() {
+        public SCliOption(final String arg) {
 
-	    return _optionName;
-	}
+            String name     = null;
+            String value    = null;
+            int    sepIndex = arg.indexOf('=');
+
+            if ( sepIndex >= 0 ) {
+                name  = arg.substring(0, sepIndex);
+                value = arg.substring(sepIndex+1);
+            } else {
+                name  = arg;
+                value = "";
+            }
+
+            _optionName  = name;
+            _optionValue = value;
+        }
 
 
 
@@ -393,10 +362,25 @@ class STeaLauncherArgs
  *
  **************************************************************************/
 
-	public String getValue() {
+        public String getName() {
 
-	    return _optionValue;
-	}
+            return _optionName;
+        }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+        public String getValue() {
+
+            return _optionValue;
+        }
 
 
     }

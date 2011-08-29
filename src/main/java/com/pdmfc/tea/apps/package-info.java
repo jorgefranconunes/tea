@@ -6,8 +6,8 @@
 
 /**
  *
- * Classes central to the entire Tea Java API.
+ * Standalone applications that make use of the Tea runtime.
  *
  */
-package com.pdmfc.tea;
+package com.pdmfc.tea.apps;
 

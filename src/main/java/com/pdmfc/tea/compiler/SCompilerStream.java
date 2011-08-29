@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2010 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2010-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -20,7 +20,7 @@ import java.io.Reader;
  *
  **************************************************************************/
 
-class SCompilerStream
+final class SCompilerStream
     extends Object {
 
 
@@ -47,11 +47,11 @@ class SCompilerStream
  *
  **************************************************************************/
 
-    public SCompilerStream(Reader reader)
-	throws IOException {
+    public SCompilerStream(final Reader reader)
+        throws IOException {
 
-	_in          = new BufferedReader(reader);
-	_currentChar = _in.read();
+        _in          = new BufferedReader(reader);
+        _currentChar = _in.read();
     }
 
 
@@ -87,12 +87,12 @@ class SCompilerStream
  **************************************************************************/
 
     public char peek()
-	throws IOException {
+        throws IOException {
 
-	if ( _currentChar == -1 ) {
-	    throw new IllegalStateException("read beyond end of stream");
-	}
-	return (char)_currentChar;
+        if ( _currentChar == -1 ) {
+            throw new IllegalStateException("read beyond end of stream");
+        }
+        return (char)_currentChar;
     }
 
 
@@ -109,19 +109,19 @@ class SCompilerStream
  **************************************************************************/
 
     public char skip()
-	throws IOException {
+        throws IOException {
 
-	int previousChar = _currentChar;
+        int previousChar = _currentChar;
 
-	if ( previousChar == -1 ) {
-	    throw new IllegalStateException("read beyond end of stream");
-	}
-	if ( previousChar == '\n' ) {
-	    _line++;
-	}
-	_currentChar = _in.read();
+        if ( previousChar == -1 ) {
+            throw new IllegalStateException("read beyond end of stream");
+        }
+        if ( previousChar == '\n' ) {
+            _line++;
+        }
+        _currentChar = _in.read();
 
-	return (char)previousChar;
+        return (char)previousChar;
     }
 
 
@@ -136,7 +136,7 @@ class SCompilerStream
 
     public boolean isAtEnd() {
 
-	return _currentChar == -1;
+        return _currentChar == -1;
     }
 
 
@@ -152,7 +152,7 @@ class SCompilerStream
 
     public int getCurrentLine() {
 
-	return _line;
+        return _line;
     }
 
 

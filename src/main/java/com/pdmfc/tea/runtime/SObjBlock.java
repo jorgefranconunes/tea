@@ -68,7 +68,7 @@ public interface SObjBlock {
  **************************************************************************/
 
     public Object exec(SContext aContext)
-	throws STeaException;
+        throws STeaException;
 
 
 
@@ -88,7 +88,7 @@ public interface SObjBlock {
  **************************************************************************/
 
     public Object exec()
-	throws STeaException;
+        throws STeaException;
 
 
 }

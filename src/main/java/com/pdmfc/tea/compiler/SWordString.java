@@ -1,24 +1,10 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2001/05/12
- * Created. (jfn)
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 package com.pdmfc.tea.compiler;
-
-import java.io.PrintStream;
 
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.compiler.SWord;
@@ -36,7 +22,7 @@ import com.pdmfc.tea.runtime.SRuntimeException;
  *
  **************************************************************************/
 
-class SWordString
+final class SWordString
     extends Object
     implements SWord {
 
@@ -44,7 +30,7 @@ class SWordString
 
 
 
-   private String _string = null;
+    private String _string = null;
 
 
 
@@ -56,9 +42,9 @@ class SWordString
  *
  **************************************************************************/
 
-    SWordString(String s) {
+    public SWordString(final String s) {
 
-	_string = s;
+        _string = s;
     }
 
 
@@ -71,9 +57,9 @@ class SWordString
  *
  **************************************************************************/
 
-    public Object get(SContext context) {
+    public Object get(final SContext context) {
 
-	return _string;
+        return _string;
     }
 
 
@@ -86,10 +72,10 @@ class SWordString
  *
  **************************************************************************/
 
-    public SObjFunction toFunction(SContext context)
-	throws STeaException {
+    public SObjFunction toFunction(final SContext context)
+        throws STeaException {
 
-	throw new SRuntimeException("a string can not be used as a function");
+        throw new SRuntimeException("a string can not be used as a function");
     }
 
 
@@ -102,34 +88,34 @@ class SWordString
  *
  **************************************************************************/
 
-    public void prettyPrint(PrintStream out, int indent) {
+    // public void prettyPrint(final PrintStream out, final int indent) {
 
-	out.print("\"");
+    //     out.print("\"");
 
-	String s = _string;
-	for ( int i=0; i<s.length(); i++ ) {
-	    char c = s.charAt(i);
-	    switch ( c ) {
-	    case '"'  :
-		out.print("\\\"");
-		break;
-	    case '\t' :
-		out.print("\\t");
-		break;
-	    case '\n' :
-		out.print("\\n");
-		break;
-	    default   :
-		if ( c < ' ' ) {
-		    out.print("\\" + ((char)(c+'a')));
-		} else {
-		    out.print(c);
-		}
-	    }
-	}
+    //     String s = _string;
+    //     for ( int i=0; i<s.length(); i++ ) {
+    //         char c = s.charAt(i);
+    //         switch ( c ) {
+    //         case '"'  :
+    //             out.print("\\\"");
+    //             break;
+    //         case '\t' :
+    //             out.print("\\t");
+    //             break;
+    //         case '\n' :
+    //             out.print("\\n");
+    //             break;
+    //         default   :
+    //             if ( c < ' ' ) {
+    //                 out.print("\\" + ((char)(c+'a')));
+    //             } else {
+    //                 out.print(c);
+    //             }
+    //         }
+    //     }
 
-	out.print("\"");
-    }
+    //     out.print("\"");
+    // }
 
 
 }

@@ -36,7 +36,7 @@ final class SArgvUtils
     // The name of the Tea global variable that will contain the list
     // of command line arguments.
     private static final String VAR_ARGV =
-	SConfigInfo.getProperty("com.pdmfc.tea.argvVarName");
+        SConfigInfo.getProperty("com.pdmfc.tea.argvVarName");
 
 
 
@@ -70,7 +70,7 @@ final class SArgvUtils
         // Setup the "argv0" variable.
         Object argv0Value = (argv0!=null) ? argv0 : SObjNull.NULL;
 
-	toplevelContext.newVar(VAR_ARGV0, argv0Value);
+        toplevelContext.newVar(VAR_ARGV0, argv0Value);
 
 
         // Setup the "argv" variable.

@@ -70,7 +70,7 @@ public class SContext
 
     public SContext() {
 
-	_parent = null;
+        _parent = null;
     }
 
 
@@ -92,7 +92,7 @@ public class SContext
 
     protected SContext(SContext parent) {
 
-	_parent = parent;
+        _parent = parent;
     }
 
 
@@ -109,9 +109,9 @@ public class SContext
 
     public SContext newChild() {
 
-	SContext result = new SContext(this);
+        SContext result = new SContext(this);
 
-	return result;
+        return result;
     }
    
 
@@ -126,13 +126,13 @@ public class SContext
 
     public SContext clone(SContext parent) {
 
-	SContext result = new SContext(parent);
+        SContext result = new SContext(parent);
 
-	result._varTable      = _varTable;
-	result._varCount      = _varCount;
-	result._hashThreshold = _hashThreshold;
+        result._varTable      = _varTable;
+        result._varCount      = _varCount;
+        result._hashThreshold = _hashThreshold;
 
-	return result;
+        return result;
     }
 
 
@@ -151,7 +151,7 @@ public class SContext
 
     public SContext getParent() {
 
-	return _parent;
+        return _parent;
     }
 
 
@@ -166,8 +166,8 @@ public class SContext
 
     private void initHashtable() {
 
-	_varTable           = new SVarSet[INITIAL_CAPACITY];
-	_hashThreshold      = (int)(INITIAL_CAPACITY * HASH_LOAD_FACTOR);
+        _varTable           = new SVarSet[INITIAL_CAPACITY];
+        _hashThreshold      = (int)(INITIAL_CAPACITY * HASH_LOAD_FACTOR);
     }
 
 
@@ -182,8 +182,8 @@ public class SContext
 
     protected void clearAll() {
 
-	_varTable           = null;
-	_hashThreshold      = 0;
+        _varTable           = null;
+        _hashThreshold      = 0;
     }
 
 
@@ -205,33 +205,33 @@ public class SContext
 
     public final boolean isDefined(SObjSymbol name) {
 
-	if ( _varTable == null ) {
-	    if (_parent != null) {
-		return _parent.isDefined(name);
-	    } else {
-		return false;
-	    }
-	}
+        if ( _varTable == null ) {
+            if (_parent != null) {
+                return _parent.isDefined(name);
+            } else {
+                return false;
+            }
+        }
       
-	// Search for a variable with that name.
-	SVarSet[] table = _varTable;
-	int       hash  = name.hashCode();
-	int       index = (hash & 0x7FFFFFFF) % table.length;
-	
-	for ( SVarSet entry=table[index]; entry!=null; entry=entry._next ) {
-	    if ( entry._symbolHash == hash ) {
-		// We found it!
-		return true;
-	    }
-	}
+        // Search for a variable with that name.
+        SVarSet[] table = _varTable;
+        int       hash  = name.hashCode();
+        int       index = (hash & 0x7FFFFFFF) % table.length;
+        
+        for ( SVarSet entry=table[index]; entry!=null; entry=entry._next ) {
+            if ( entry._symbolHash == hash ) {
+                // We found it!
+                return true;
+            }
+        }
 
-	// There is no variable with that name in this context.
-	// So search in the parent context.
-	if ( _parent != null) {
-	    return _parent.isDefined(name);
-	} else {
-	    return false;
-	}
+        // There is no variable with that name in this context.
+        // So search in the parent context.
+        if ( _parent != null) {
+            return _parent.isDefined(name);
+        } else {
+            return false;
+        }
    }
 
 
@@ -253,9 +253,9 @@ public class SContext
  **************************************************************************/
 
     public final SObjVar newVar(String name,
-				Object value) {
+                                Object value) {
 
-	return newVar(SObjSymbol.addSymbol(name), value);
+        return newVar(SObjSymbol.addSymbol(name), value);
     }
 
 
@@ -274,40 +274,40 @@ public class SContext
  **************************************************************************/
 
     public final SObjVar newVar(SObjSymbol name,
-				Object     value) {
+                                Object     value) {
 
-	if ( _varTable == null ) {
-	    initHashtable();
-	}
+        if ( _varTable == null ) {
+            initHashtable();
+        }
       
-	// First check if there is already a variable with that name.
-	SVarSet[] table = _varTable;
-	int       hash  = name.hashCode();
-	int       index = (hash & 0x7FFFFFFF) % table.length;
+        // First check if there is already a variable with that name.
+        SVarSet[] table = _varTable;
+        int       hash  = name.hashCode();
+        int       index = (hash & 0x7FFFFFFF) % table.length;
 
-	for ( SVarSet entry=table[index]; entry!=null; entry=entry._next ){
-	    if ( entry._symbolHash == hash ) {
-		// There was already a variable with the same name:
-		entry._value = value;
-		return entry;
-	    }
-	}
+        for ( SVarSet entry=table[index]; entry!=null; entry=entry._next ){
+            if ( entry._symbolHash == hash ) {
+                // There was already a variable with the same name:
+                entry._value = value;
+                return entry;
+            }
+        }
 
-	// There is no variable with that name, so create the new entry:
-	SVarSet entry = new SVarSet();
+        // There is no variable with that name, so create the new entry:
+        SVarSet entry = new SVarSet();
 
-	entry._symbolHash = hash;
-	entry._value      = value;
-	entry._next       = table[index];
-	table[index]      = entry;
-	_varCount++;
+        entry._symbolHash = hash;
+        entry._value      = value;
+        entry._next       = table[index];
+        table[index]      = entry;
+        _varCount++;
 
-	// Rehash the table if the threshold is exceeded.
-	if ( _varCount > _hashThreshold ) {
-	    rehashHashtable();
-	}
+        // Rehash the table if the threshold is exceeded.
+        if ( _varCount > _hashThreshold ) {
+            rehashHashtable();
+        }
 
-	return entry;
+        return entry;
     }
 
 
@@ -323,24 +323,24 @@ public class SContext
 
     private void rehashHashtable() {
 
-	int     prevCapacity = _varTable.length;
-	SVarSet prevTable[]  = _varTable;
-	int     newCapacity  = prevCapacity * 2 + 1;
-	SVarSet newTable[]   = new SVarSet[newCapacity];
+        int     prevCapacity = _varTable.length;
+        SVarSet prevTable[]  = _varTable;
+        int     newCapacity  = prevCapacity * 2 + 1;
+        SVarSet newTable[]   = new SVarSet[newCapacity];
 
-	_hashThreshold = (int)(newCapacity * HASH_LOAD_FACTOR);
-	_varTable      = newTable;
+        _hashThreshold = (int)(newCapacity * HASH_LOAD_FACTOR);
+        _varTable      = newTable;
 
-	for ( int i=prevCapacity; i-->0; ) {
-	    for ( SVarSet prev=prevTable[i]; prev!=null; ) {
-		SVarSet entry = prev;
-		int     index = (entry._symbolHash & 0x7FFFFFFF) % newCapacity;
+        for ( int i=prevCapacity; i-->0; ) {
+            for ( SVarSet prev=prevTable[i]; prev!=null; ) {
+                SVarSet entry = prev;
+                int     index = (entry._symbolHash & 0x7FFFFFFF) % newCapacity;
 
-		prev            = prev._next;
-		entry._next     = newTable[index];
-		newTable[index] = entry;
-	    }
-	}
+                prev            = prev._next;
+                entry._next     = newTable[index];
+                newTable[index] = entry;
+            }
+        }
     }
 
 
@@ -365,38 +365,38 @@ public class SContext
  **************************************************************************/
 
     public final void setVar(SObjSymbol name,
-			     Object     value) 
-	throws SNoSuchVarException {
+                             Object     value) 
+        throws SNoSuchVarException {
 
-	if ( _varTable == null ) {
-	    if (_parent != null) {
-		_parent.setVar(name, value);
-		return;
-	    } else {
-		throw new SNoSuchVarException(name);
-	    }
-	}
+        if ( _varTable == null ) {
+            if (_parent != null) {
+                _parent.setVar(name, value);
+                return;
+            } else {
+                throw new SNoSuchVarException(name);
+            }
+        }
       
-	// Search for a variable with that name.
-	SVarSet[] table = _varTable;
-	int       hash  = name.hashCode();
-	int       index = (hash & 0x7FFFFFFF) % table.length;
-	
-	for ( SVarSet entry=table[index]; entry!=null; entry=entry._next ) {
-	    if ( entry._symbolHash == hash ) {
-		// We found it!
-		entry._value = value;
-		return;
-	    }
-	}
+        // Search for a variable with that name.
+        SVarSet[] table = _varTable;
+        int       hash  = name.hashCode();
+        int       index = (hash & 0x7FFFFFFF) % table.length;
+        
+        for ( SVarSet entry=table[index]; entry!=null; entry=entry._next ) {
+            if ( entry._symbolHash == hash ) {
+                // We found it!
+                entry._value = value;
+                return;
+            }
+        }
 
-	// There is no variable with that name in this context.
-	// So search in the parent context.
-	if ( _parent != null) {
-	    _parent.setVar(name, value);
-	} else {
-	    throw new SNoSuchVarException(name);
-	}
+        // There is no variable with that name in this context.
+        // So search in the parent context.
+        if ( _parent != null) {
+            _parent.setVar(name, value);
+        } else {
+            throw new SNoSuchVarException(name);
+        }
    }
 
 
@@ -424,33 +424,33 @@ public class SContext
    public final Object getVar(SObjSymbol name) 
          throws SNoSuchVarException {
 
-	if ( _varTable == null ) {
-	    if ( _parent != null ) {
-		return _parent.getVar(name);
-	    } else {
-		throw new SNoSuchVarException(name);
-	    }
-	}
+        if ( _varTable == null ) {
+            if ( _parent != null ) {
+                return _parent.getVar(name);
+            } else {
+                throw new SNoSuchVarException(name);
+            }
+        }
       
-	// Search for a variable with that name.
-	SVarSet[] table = _varTable;
-	int       hash  = name.hashCode();
-	int       index = (hash & 0x7FFFFFFF) % table.length;
-	
-	for ( SVarSet entry=table[index]; entry!=null; entry=entry._next ) {
-	    if ( entry._symbolHash == hash ) {
-		// We found it!
-		return entry._value;
-	    }
-	}
+        // Search for a variable with that name.
+        SVarSet[] table = _varTable;
+        int       hash  = name.hashCode();
+        int       index = (hash & 0x7FFFFFFF) % table.length;
+        
+        for ( SVarSet entry=table[index]; entry!=null; entry=entry._next ) {
+            if ( entry._symbolHash == hash ) {
+                // We found it!
+                return entry._value;
+            }
+        }
 
-	// There is no variable with that name in this context.
-	// So search in the parent context.
-	if ( _parent != null ) {
-	    return _parent.getVar(name);
-	} else {
-	    throw new SNoSuchVarException(name);
-	}
+        // There is no variable with that name in this context.
+        // So search in the parent context.
+        if ( _parent != null ) {
+            return _parent.getVar(name);
+        } else {
+            throw new SNoSuchVarException(name);
+        }
    }
 
 
@@ -476,13 +476,13 @@ public class SContext
  **************************************************************************/
 
     public final SObjVar getVarObject(SObjSymbol name) 
-	throws SNoSuchVarException {
+        throws SNoSuchVarException {
 
         SObjVar result = getVarObjectIfPossible(name);
 
         if ( result == null ) {
-	    throw new SNoSuchVarException(name);
-	}
+            throw new SNoSuchVarException(name);
+        }
 
         return result;
    }
@@ -508,11 +508,11 @@ public class SContext
 
         SObjVar result = null;
 
-	if ( _varTable == null ) {
-	    if ( _parent != null ) {
-		result = _parent.getVarObjectIfPossible(name);
-	    }
-	} else {
+        if ( _varTable == null ) {
+            if ( _parent != null ) {
+                result = _parent.getVarObjectIfPossible(name);
+            }
+        } else {
             // Search for a variable with that name.
             SVarSet[] table = _varTable;
             int       hash  = name.hashCode();

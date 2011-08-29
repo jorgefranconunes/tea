@@ -54,11 +54,11 @@ class SEmptyMethod
  **************************************************************************/
 
       public Object exec(SObjFunction obj,
-			 SContext     context,
-			 Object[]     args)
+                         SContext     context,
+                         Object[]     args)
          throws STeaException {
 
-	 return SObjNull.NULL;
+         return SObjNull.NULL;
       }
 
 
@@ -68,16 +68,16 @@ class SEmptyMethod
 /**************************************************************************
  *
  * @return
- *	Always returns the same instance of <TT>SEmptyMethod</TT>.
+ *        Always returns the same instance of <TT>SEmptyMethod</TT>.
  *
  **************************************************************************/
 
     public static SObjFunction singleton() {
 
-	if ( _singleton == null ) {
-	    _singleton = new SEmptyMethod();
-	}
-	return _singleton;
+        if ( _singleton == null ) {
+            _singleton = new SEmptyMethod();
+        }
+        return _singleton;
     }
 }
 

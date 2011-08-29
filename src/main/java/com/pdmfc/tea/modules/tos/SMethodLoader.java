@@ -90,12 +90,12 @@ public class SMethodLoader
  **************************************************************************/
 
    public Object exec(SObjFunction obj,
-		      SContext     context,
-		      Object[]     args)
+                      SContext     context,
+                      Object[]     args)
       throws STeaException {
 
       if ( _method != null ) {
-	 return _method.exec(obj, context, args);
+         return _method.exec(obj, context, args);
       }
 
       STosObj    object     = (STosObj)obj;
@@ -137,17 +137,17 @@ public class SMethodLoader
       } catch (ClassNotFoundException e1) {
          msg = "could not find class '" + className + "'";
       } catch (InstantiationException e2) {
-	 msg = "failed instantiation for object of class '" + className + "'";
+         msg = "failed instantiation for object of class '" + className + "'";
       } catch (IllegalAccessException e3) {
          msg = "class '" + className + "' or its initializer are not accessible";
       } catch (ClassCastException e4) {
-	 msg = "class '" + className + "' does not implement SObjFunction";
+         msg = "class '" + className + "' does not implement SObjFunction";
       } catch (NoSuchMethodError e5) {
-	 msg = "class '" + className + "' does not have a default constructor";
+         msg = "class '" + className + "' does not have a default constructor";
       }
 
       if ( msg != null ) {
-	 throw new SRuntimeException(msg);
+         throw new SRuntimeException(msg);
       }
 
       return proc;

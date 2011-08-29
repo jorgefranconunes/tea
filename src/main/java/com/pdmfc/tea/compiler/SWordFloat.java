@@ -1,24 +1,10 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2001/05/12
- * Created. (jfn)
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 package com.pdmfc.tea.compiler;
-
-import java.io.PrintStream;
 
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.compiler.SWord;
@@ -36,7 +22,7 @@ import com.pdmfc.tea.runtime.SRuntimeException;
  *
  **************************************************************************/
 
-class SWordFloat
+final class SWordFloat
     extends Object
     implements SWord {
 
@@ -53,17 +39,17 @@ class SWordFloat
 /**************************************************************************
  *
  * Initializes the object internal state. This word will evaluate into
- * an <TT>SObjFloat</TT> object storing the value <TT>value</TT>.
+ * an <code>java.lang.Double</code> object storing the given
+ * <code>value</code>.
  *
- * @param value
- *    The double value of the <TT>SObjFloat</TT> this word will evaluate
- *    to.
+ * @param value The double value of the <code>java.lang.Double</code>
+ * this word will evaluate to.
  *
  **************************************************************************/
 
-    SWordFloat(double value) {
+    public SWordFloat(final double value) {
 
-	_value = new Double(value);
+        _value = new Double(value);
     }
 
 
@@ -74,18 +60,16 @@ class SWordFloat
  *
  * Evaluates this word.
  *
- * @param context
- *    The <TT>SContext</TT> where this word is being evaluated.
+ * @param context The context where this word is being evaluated.
  *
- * @return
- *    The <TT>Object</TT> object this word evaluated to. It is an
- *    <TT>SObjFloat<\TT> object.
+ * @return The object this word evaluated to. It is a
+ * <code>java.lang.Double</code> object.
  *
  **************************************************************************/
 
-    public Object get(SContext context) {
+    public Object get(final SContext context) {
 
-	return _value;
+        return _value;
     }
 
 
@@ -98,10 +82,10 @@ class SWordFloat
  *
  **************************************************************************/
 
-    public SObjFunction toFunction(SContext context)
-	throws STeaException {
+    public SObjFunction toFunction(final SContext context)
+        throws STeaException {
 
-	throw new SRuntimeException("a float can not be used as a function");
+        throw new SRuntimeException("a float can not be used as a function");
     }
 
 
@@ -120,11 +104,11 @@ class SWordFloat
  *
  **************************************************************************/
 
-    public void prettyPrint(PrintStream out,
-			    int         indent) {
-	
-	out.print(_value + "d");
-    }
+    // public void prettyPrint(final PrintStream out,
+    //                         final int         indent) {
+        
+    //     out.print(_value + "d");
+    // }
 
 
 }

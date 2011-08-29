@@ -52,7 +52,7 @@ public class SNoSuchVarException
    public SNoSuchVarException(SObjSymbol symbol) {
 
       super("Variable '" + symbol.getName() +
-	    "' not defined on current context");
+            "' not defined on current context");
    }
 
 

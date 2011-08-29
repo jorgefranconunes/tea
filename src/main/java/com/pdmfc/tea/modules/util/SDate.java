@@ -60,7 +60,7 @@ public class SDate
 
     private static final String     CLASS_NAME   = "TDate";
     private static final SObjSymbol CLASS_NAME_S =
-	SObjSymbol.addSymbol(CLASS_NAME);
+        SObjSymbol.addSymbol(CLASS_NAME);
 
     public final Calendar _calendar = new GregorianCalendar();
 
@@ -95,14 +95,14 @@ public class SDate
 
     public void initFromDate(SDate aDate) {
 
-	Calendar source = aDate._calendar;
+        Calendar source = aDate._calendar;
 
-	_calendar.set(source.get(Calendar.YEAR),
-		      source.get(Calendar.MONTH),
-		      source.get(Calendar.DAY_OF_MONTH),
-		      source.get(Calendar.HOUR_OF_DAY),
-		      source.get(Calendar.MINUTE),
-		      source.get(Calendar.SECOND));
+        _calendar.set(source.get(Calendar.YEAR),
+                      source.get(Calendar.MONTH),
+                      source.get(Calendar.DAY_OF_MONTH),
+                      source.get(Calendar.HOUR_OF_DAY),
+                      source.get(Calendar.MINUTE),
+                      source.get(Calendar.SECOND));
     }
 
 
@@ -123,52 +123,52 @@ public class SDate
 
     @SuppressWarnings("fallthrough")
     public void initFromString(String str)
-	throws SRuntimeException {
+        throws SRuntimeException {
 
-	boolean ok    = true;
-	int     size  = str.length();
-	int     year  = 0;
-	int     month = 0;
-	int     day   = 0;
-	int     hour  = 0;
-	int     min   = 0;
-	int     sec   = 0;
+        boolean ok    = true;
+        int     size  = str.length();
+        int     year  = 0;
+        int     month = 0;
+        int     day   = 0;
+        int     hour  = 0;
+        int     min   = 0;
+        int     sec   = 0;
 
-	try {
-	    switch ( size ) {
-	    case 6 :
-		year  = Integer.parseInt(str.substring(0,2));
-		if ( year < 70 ) {
-		    year += 2000;
-		} else {
-		    year += 1900;
-		}
-		month = Integer.parseInt(str.substring(2,4)) - 1;
-		day   = Integer.parseInt(str.substring(4,6));
-		break;
-	    case 14 :
-		sec = Integer.parseInt(str.substring(12,14));
-		// Fallthrough.
-	    case 12 :
-		hour = Integer.parseInt(str.substring(8,10));
-		min  = Integer.parseInt(str.substring(10,12));
-		// Fallthrough.
-	    case 8 :
-		year  = Integer.parseInt(str.substring(0,4));
-		month = Integer.parseInt(str.substring(4,6)) - 1;
-		day   = Integer.parseInt(str.substring(6,8));
-		break;
-	    default :
-		ok = false;
-	    }
-	} catch ( NumberFormatException e) {
-	    ok = false;
-	}
-	if ( !ok ) {
-	    throw new SRuntimeException("invalid date string (" + str + ")");
-	}
+        try {
+            switch ( size ) {
+            case 6 :
+                year  = Integer.parseInt(str.substring(0,2));
+                if ( year < 70 ) {
+                    year += 2000;
+                } else {
+                    year += 1900;
+                }
+                month = Integer.parseInt(str.substring(2,4)) - 1;
+                day   = Integer.parseInt(str.substring(4,6));
+                break;
+            case 14 :
+                sec = Integer.parseInt(str.substring(12,14));
+                // Fallthrough.
+            case 12 :
+                hour = Integer.parseInt(str.substring(8,10));
+                min  = Integer.parseInt(str.substring(10,12));
+                // Fallthrough.
+            case 8 :
+                year  = Integer.parseInt(str.substring(0,4));
+                month = Integer.parseInt(str.substring(4,6)) - 1;
+                day   = Integer.parseInt(str.substring(6,8));
+                break;
+            default :
+                ok = false;
+            }
+        } catch ( NumberFormatException e) {
+            ok = false;
+        }
+        if ( !ok ) {
+            throw new SRuntimeException("invalid date string (" + str + ")");
+        }
 
-	_calendar.set(year, month, day, hour, min, sec);
+        _calendar.set(year, month, day, hour, min, sec);
     }
 
 
@@ -185,7 +185,7 @@ public class SDate
 
     public void initFromDate(Date date) {
 
-	_calendar.setTime(date);
+        _calendar.setTime(date);
     }
 
 
@@ -204,9 +204,9 @@ public class SDate
 
     public Date getDate() {
 
-	Date result = _calendar.getTime();
+        Date result = _calendar.getTime();
 
-	return result;
+        return result;
     }
 
 
@@ -215,7 +215,7 @@ public class SDate
 
 //* 
 //* <TeaMethod name="constructor"
-//* 	       className="TDate">
+//*                className="TDate">
 //* 
 //* <Prototype arguments="aYear aMonth aDay anHour aMinute aSecond"/>
 //* 
@@ -288,48 +288,48 @@ public class SDate
  **************************************************************************/
 
     public Object constructor(SObjFunction obj,
-			      SContext     context,
-			      Object[]     args)
-	throws SRuntimeException {
+                              SContext     context,
+                              Object[]     args)
+        throws SRuntimeException {
 
-	int      numArgs = args.length;
+        int      numArgs = args.length;
 
-	switch ( numArgs ) {
-	case 2 :
-	    break;
-	case 3 :
-	    Object dateArg = args[2];
-	    if ( dateArg instanceof SDate ) {
-		initFromDate((SDate)dateArg);
-	    } else if ( dateArg instanceof String ) {
-		initFromString((String)dateArg);
-	    } else {
+        switch ( numArgs ) {
+        case 2 :
+            break;
+        case 3 :
+            Object dateArg = args[2];
+            if ( dateArg instanceof SDate ) {
+                initFromDate((SDate)dateArg);
+            } else if ( dateArg instanceof String ) {
+                initFromString((String)dateArg);
+            } else {
                 throw new STypeException(args, 2, "TDate or a String");
-	    }
-	    break;
-	case 5 :
-	    _calendar.set(SArgs.getInt(args, 2).intValue(),
-			  SArgs.getInt(args, 3).intValue() - 1,
-			  SArgs.getInt(args, 4).intValue(),
-			  0,
-			  0,
-			  0);
-	    break;
-	case 8 :
-	    _calendar.set(SArgs.getInt(args, 2).intValue(),
-			  SArgs.getInt(args, 3).intValue() - 1,
-			  SArgs.getInt(args, 4).intValue(),
-			  SArgs.getInt(args, 5).intValue(),
-			  SArgs.getInt(args, 6).intValue(),
-			  SArgs.getInt(args, 7).intValue());
-	    break;
-	default :
+            }
+            break;
+        case 5 :
+            _calendar.set(SArgs.getInt(args, 2).intValue(),
+                          SArgs.getInt(args, 3).intValue() - 1,
+                          SArgs.getInt(args, 4).intValue(),
+                          0,
+                          0,
+                          0);
+            break;
+        case 8 :
+            _calendar.set(SArgs.getInt(args, 2).intValue(),
+                          SArgs.getInt(args, 3).intValue() - 1,
+                          SArgs.getInt(args, 4).intValue(),
+                          SArgs.getInt(args, 5).intValue(),
+                          SArgs.getInt(args, 6).intValue(),
+                          SArgs.getInt(args, 7).intValue());
+            break;
+        default :
             String usage = "[TDate] | [year month day [hour minute second]]";
-	    throw new SNumArgException(args, usage);
-	}
-	_calendar.set(Calendar.MILLISECOND, 0);
+            throw new SNumArgException(args, usage);
+        }
+        _calendar.set(Calendar.MILLISECOND, 0);
 
-	return obj;
+        return obj;
     }
 
 
@@ -338,7 +338,7 @@ public class SDate
 
 //* 
 //* <TeaMethod name="getYear"
-//* 	       className="TDate">
+//*                className="TDate">
 //* 
 //* <Overview>
 //* Fetches the value of the year component of the
@@ -372,12 +372,12 @@ public class SDate
  **************************************************************************/
 
     public Object getYear(SObjFunction obj,
-			  SContext     context,
-			  Object[]     args) {
+                          SContext     context,
+                          Object[]     args) {
 
-	int year = _calendar.get(Calendar.YEAR);
+        int year = _calendar.get(Calendar.YEAR);
 
-	return new Integer(year);
+        return new Integer(year);
     }
 
 
@@ -386,7 +386,7 @@ public class SDate
 
 //* 
 //* <TeaMethod name="getMonth"
-//* 	       className="TDate">
+//*                className="TDate">
 //* 
 //* <Overview>
 //* Fetches the value of the month component of the
@@ -421,12 +421,12 @@ public class SDate
  **************************************************************************/
 
     public Object getMonth(SObjFunction obj,
-			   SContext     context,
-			   Object[]     args) {
+                           SContext     context,
+                           Object[]     args) {
 
-	int month = _calendar.get(Calendar.MONTH) + 1;
+        int month = _calendar.get(Calendar.MONTH) + 1;
 
-	return new Integer(month);
+        return new Integer(month);
     }
 
 
@@ -435,7 +435,7 @@ public class SDate
 
 //* 
 //* <TeaMethod name="getDay"
-//* 	       className="TDate">
+//*                className="TDate">
 //* 
 //* <Overview>
 //* Fetches the value of the day component of the
@@ -470,12 +470,12 @@ public class SDate
  **************************************************************************/
 
     public Object getDay(SObjFunction obj,
-			 SContext     context,
-			 Object[]     args) {
+                         SContext     context,
+                         Object[]     args) {
 
-	int day = _calendar.get(Calendar.DAY_OF_MONTH);
+        int day = _calendar.get(Calendar.DAY_OF_MONTH);
 
-	return new Integer(day);
+        return new Integer(day);
     }
 
 
@@ -484,7 +484,7 @@ public class SDate
 
 //* 
 //* <TeaMethod name="getHour"
-//* 	       className="TDate">
+//*                className="TDate">
 //* 
 //* <Overview>
 //* Fetches the value of the hour component of the
@@ -519,12 +519,12 @@ public class SDate
  **************************************************************************/
 
     public Object getHour(SObjFunction obj,
-			  SContext     context,
-			  Object[]     args) {
+                          SContext     context,
+                          Object[]     args) {
 
-	int hour = _calendar.get(Calendar.HOUR_OF_DAY);
+        int hour = _calendar.get(Calendar.HOUR_OF_DAY);
 
-	return new Integer(hour);
+        return new Integer(hour);
     }
 
 
@@ -533,7 +533,7 @@ public class SDate
 
 //* 
 //* <TeaMethod name="getMinute"
-//* 	       className="TDate">
+//*                className="TDate">
 //* 
 //* <Overview>
 //* Fetches the value of the minutes component of the
@@ -568,12 +568,12 @@ public class SDate
  **************************************************************************/
 
     public Object getMinute(SObjFunction obj,
-			    SContext     context,
-			    Object[]     args) {
+                            SContext     context,
+                            Object[]     args) {
 
-	int minute = _calendar.get(Calendar.MINUTE);
+        int minute = _calendar.get(Calendar.MINUTE);
 
-	return new Integer(minute);
+        return new Integer(minute);
     }
 
 
@@ -582,7 +582,7 @@ public class SDate
 
 //* 
 //* <TeaMethod name="getSecond"
-//* 	       className="TDate">
+//*                className="TDate">
 //* 
 //* <Overview>
 //* Fetches the value of the seconds component of the
@@ -617,12 +617,12 @@ public class SDate
  **************************************************************************/
 
     public Object getSecond(SObjFunction obj,
-			    SContext     context,
-			    Object[]     args) {
+                            SContext     context,
+                            Object[]     args) {
 
-	int second = _calendar.get(Calendar.SECOND);
+        int second = _calendar.get(Calendar.SECOND);
 
-	return new Integer(second);
+        return new Integer(second);
     }
 
 
@@ -631,7 +631,7 @@ public class SDate
 
 //* 
 //* <TeaMethod name="getDayOfWeek"
-//* 	       className="TDate">
+//*                className="TDate">
 //* 
 //* <Overview>
 //* Fetches the day of the week associated with the
@@ -665,12 +665,12 @@ public class SDate
  **************************************************************************/
 
     public Object getDayOfWeek(SObjFunction obj,
-			       SContext     context,
-			       Object[]     args) {
+                               SContext     context,
+                               Object[]     args) {
 
-	int day = _calendar.get(Calendar.DAY_OF_WEEK) - 1;
+        int day = _calendar.get(Calendar.DAY_OF_WEEK) - 1;
 
-	return new Integer(day);
+        return new Integer(day);
     }
 
 
@@ -680,7 +680,7 @@ public class SDate
 //* 
 //* <TeaMethod name="setDate"
 //*            arguments="aYear aMonth aDay anHour aMinute aSecond"
-//* 	       className="TDate">
+//*                className="TDate">
 //* 
 //* <Prototype arguments="aYear aMonth aDay"/>
 //* 
@@ -755,45 +755,45 @@ public class SDate
  **************************************************************************/
 
     public Object setDate(SObjFunction obj,
-			  SContext     context,
-			  Object[]     args)
-	throws SRuntimeException {
+                          SContext     context,
+                          Object[]     args)
+        throws SRuntimeException {
 
-	int numArgs = args.length;
+        int numArgs = args.length;
 
-	switch ( numArgs ) {
-	case 3 : 
-	    Object dateArg = args[2];
-	    if ( dateArg instanceof SDate ) {
-		initFromDate((SDate)dateArg);
-	    } else if ( dateArg instanceof String ) {
-		initFromString((String)dateArg);
-	    } else {
+        switch ( numArgs ) {
+        case 3 : 
+            Object dateArg = args[2];
+            if ( dateArg instanceof SDate ) {
+                initFromDate((SDate)dateArg);
+            } else if ( dateArg instanceof String ) {
+                initFromString((String)dateArg);
+            } else {
                 throw new STypeException(args, 2, "TDate or a String");
-	    }
-	    break;
-	case 5 :
-	    _calendar.set(SArgs.getInt(args, 2).intValue(),
-			  SArgs.getInt(args, 3).intValue() - 1,
-			  SArgs.getInt(args, 4).intValue(),
-			  0,
-			  0,
-			  0);
-	    break;
-	case 8 :
-	    _calendar.set(SArgs.getInt(args, 2).intValue(),
-			  SArgs.getInt(args, 3).intValue() - 1,
-			  SArgs.getInt(args, 4).intValue(),
-			  SArgs.getInt(args, 5).intValue(),
-			  SArgs.getInt(args, 6).intValue(),
-			  SArgs.getInt(args, 7).intValue());
-	    break;
-	default :
+            }
+            break;
+        case 5 :
+            _calendar.set(SArgs.getInt(args, 2).intValue(),
+                          SArgs.getInt(args, 3).intValue() - 1,
+                          SArgs.getInt(args, 4).intValue(),
+                          0,
+                          0,
+                          0);
+            break;
+        case 8 :
+            _calendar.set(SArgs.getInt(args, 2).intValue(),
+                          SArgs.getInt(args, 3).intValue() - 1,
+                          SArgs.getInt(args, 4).intValue(),
+                          SArgs.getInt(args, 5).intValue(),
+                          SArgs.getInt(args, 6).intValue(),
+                          SArgs.getInt(args, 7).intValue());
+            break;
+        default :
             String usage = "TDate | year month day [hour minute second]";
             throw new SNumArgException(args, usage);
-	}
-	
-	return obj;
+        }
+        
+        return obj;
     }
 
 
@@ -803,7 +803,7 @@ public class SDate
 //* 
 //* <TeaMethod name="setTime"
 //*            arguments="anHour aMinute aSecond"
-//* 	       className="TDate">
+//*                className="TDate">
 //* 
 //* <Overview>
 //* Changes the hour, minute and second components of the
@@ -845,19 +845,19 @@ public class SDate
  **************************************************************************/
 
     public Object setTime(SObjFunction obj,
-			  SContext     context,
-			  Object[]     args)
-	throws SRuntimeException {
+                          SContext     context,
+                          Object[]     args)
+        throws SRuntimeException {
 
-	if ( args.length != 5 ) {
-	    throw new SNumArgException(args, "hour minute second");
-	}
+        if ( args.length != 5 ) {
+            throw new SNumArgException(args, "hour minute second");
+        }
 
-	_calendar.set(Calendar.HOUR_OF_DAY, SArgs.getInt(args,2).intValue());
-	_calendar.set(Calendar.MINUTE, SArgs.getInt(args,3).intValue());
-	_calendar.set(Calendar.SECOND, SArgs.getInt(args,4).intValue());
+        _calendar.set(Calendar.HOUR_OF_DAY, SArgs.getInt(args,2).intValue());
+        _calendar.set(Calendar.MINUTE, SArgs.getInt(args,3).intValue());
+        _calendar.set(Calendar.SECOND, SArgs.getInt(args,4).intValue());
 
-	return obj;
+        return obj;
     }
 
 
@@ -867,7 +867,7 @@ public class SDate
 //* 
 //* <TeaMethod name="format"
 //*            arguments="formatString"
-//* 	       className="TDate">
+//*                className="TDate">
 //* 
 //* <Overview>
 //* Generates a string with a representation of the date.
@@ -905,28 +905,28 @@ public class SDate
  **************************************************************************/
 
     public Object format(SObjFunction obj,
-			 SContext     context,
-			 Object[]     args)
-	throws SRuntimeException {
+                         SContext     context,
+                         Object[]     args)
+        throws SRuntimeException {
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "format-string");
-	}
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "format-string");
+        }
 
-	String           fmt       = SArgs.getString(args, 2);
-	SimpleDateFormat formatter = null;
-	String           result    = null;
+        String           fmt       = SArgs.getString(args, 2);
+        SimpleDateFormat formatter = null;
+        String           result    = null;
 
-	try {
+        try {
             formatter = new SimpleDateFormat(fmt);
-	    result = formatter.format(_calendar.getTime());
-	} catch (IllegalArgumentException e) {
-	    String   msg     = "Failed to format date - {0}";
-	    Object[] fmtArgs = { e.getMessage() };
-	    throw new SRuntimeException(msg, fmtArgs);
-	}
+            result = formatter.format(_calendar.getTime());
+        } catch (IllegalArgumentException e) {
+            String   msg     = "Failed to format date - {0}";
+            Object[] fmtArgs = { e.getMessage() };
+            throw new SRuntimeException(msg, fmtArgs);
+        }
 
-	return result;
+        return result;
     }
 
 
@@ -936,7 +936,7 @@ public class SDate
 //* 
 //* <TeaMethod name="compare"
 //*            arguments="aDate"
-//* 	       className="TDate">
+//*                className="TDate">
 //* 
 //* <Overview>
 //* Compares this date object with another.
@@ -972,26 +972,26 @@ public class SDate
  **************************************************************************/
 
     public Object compare(SObjFunction obj,
-			 SContext     context,
-			 Object[]     args)
-	throws STeaException {
+                         SContext     context,
+                         Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 3 ) {
-	    new SNumArgException(args, "TDate");
-	}
-	
-	Calendar when   = getDate(args, 2)._calendar;
-	int      result = 0;
+        if ( args.length != 3 ) {
+            new SNumArgException(args, "TDate");
+        }
+        
+        Calendar when   = getDate(args, 2)._calendar;
+        int      result = 0;
 
-	if ( _calendar.before(when) ) {
-	    result = -1;
-	} else {
-	    if ( _calendar.after(when) ) {
-		result = 1;
-	    }
-	}
+        if ( _calendar.before(when) ) {
+            result = -1;
+        } else {
+            if ( _calendar.after(when) ) {
+                result = 1;
+            }
+        }
 
-	return new Integer(result);
+        return new Integer(result);
     }
 
 
@@ -1001,7 +1001,7 @@ public class SDate
 //* 
 //* <TeaMethod name="before"
 //*            arguments="aDate"
-//* 	       className="TDate">
+//*                className="TDate">
 //* 
 //* <Overview>
 //* Checks if the date represented by the object precedes another date.
@@ -1036,17 +1036,17 @@ public class SDate
  **************************************************************************/
 
     public Object before(SObjFunction obj,
-			 SContext     context,
-			 Object[]     args)
-	throws STeaException {
+                         SContext     context,
+                         Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 3 ) {
-	    new SNumArgException(args, "TDate");
-	}
-	
-	Calendar when = getDate(args, 2)._calendar;
+        if ( args.length != 3 ) {
+            new SNumArgException(args, "TDate");
+        }
+        
+        Calendar when = getDate(args, 2)._calendar;
 
-	return _calendar.before(when) ? Boolean.TRUE : Boolean.FALSE;
+        return _calendar.before(when) ? Boolean.TRUE : Boolean.FALSE;
     }
 
 
@@ -1056,7 +1056,7 @@ public class SDate
 //* 
 //* <TeaMethod name="after"
 //*            arguments="aDate"
-//* 	       className="TDate">
+//*                className="TDate">
 //* 
 //* <Overview>
 //* Checks if the date represented by the object is more recent than
@@ -1092,17 +1092,17 @@ public class SDate
  **************************************************************************/
 
     public Object after(SObjFunction obj,
-			SContext     context,
-			Object[]     args)
-	throws STeaException {
+                        SContext     context,
+                        Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 3 ) {
-	    new SNumArgException(args, "TDate");
-	}
-	
-	Calendar when = getDate(args, 2)._calendar;
+        if ( args.length != 3 ) {
+            new SNumArgException(args, "TDate");
+        }
+        
+        Calendar when = getDate(args, 2)._calendar;
 
-	return _calendar.after(when) ? Boolean.TRUE : Boolean.FALSE;
+        return _calendar.after(when) ? Boolean.TRUE : Boolean.FALSE;
     }
 
 
@@ -1112,7 +1112,7 @@ public class SDate
 //* 
 //* <TeaMethod name="same"
 //*            arguments="aDate"
-//* 	       className="TDate">
+//*                className="TDate">
 //* 
 //* <Overview>
 //* Checks if the date represented by the object is the same as
@@ -1148,26 +1148,26 @@ public class SDate
  **************************************************************************/
 
     public Object same(SObjFunction obj,
-		       SContext     context,
-		       Object[]     args)
-	throws STeaException {
+                       SContext     context,
+                       Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 3 ) {
-	    new SNumArgException(args, "TDate");
-	}
+        if ( args.length != 3 ) {
+            new SNumArgException(args, "TDate");
+        }
 
-	Calendar cal  = _calendar;
-	Calendar when = getDate(args, 2)._calendar;
+        Calendar cal  = _calendar;
+        Calendar when = getDate(args, 2)._calendar;
 
-	boolean isEqual =
-	    (cal.get(Calendar.YEAR)==when.get(Calendar.YEAR))
-	    && (cal.get(Calendar.MONTH)==when.get(Calendar.MONTH))
-	    && (cal.get(Calendar.DAY_OF_MONTH)==when.get(Calendar.DAY_OF_MONTH))
-	    && (cal.get(Calendar.HOUR_OF_DAY)==when.get(Calendar.HOUR_OF_DAY))
-	    && (cal.get(Calendar.MINUTE)==when.get(Calendar.MINUTE))
-	    && (cal.get(Calendar.SECOND)==when.get(Calendar.SECOND));
-	
-	return isEqual ? Boolean.TRUE : Boolean.FALSE;
+        boolean isEqual =
+            (cal.get(Calendar.YEAR)==when.get(Calendar.YEAR))
+            && (cal.get(Calendar.MONTH)==when.get(Calendar.MONTH))
+            && (cal.get(Calendar.DAY_OF_MONTH)==when.get(Calendar.DAY_OF_MONTH))
+            && (cal.get(Calendar.HOUR_OF_DAY)==when.get(Calendar.HOUR_OF_DAY))
+            && (cal.get(Calendar.MINUTE)==when.get(Calendar.MINUTE))
+            && (cal.get(Calendar.SECOND)==when.get(Calendar.SECOND));
+        
+        return isEqual ? Boolean.TRUE : Boolean.FALSE;
     }
 
 
@@ -1177,7 +1177,7 @@ public class SDate
 //* 
 //* <TeaMethod name="notSame"
 //*            arguments="aDate"
-//* 	       className="TDate">
+//*                className="TDate">
 //* 
 //* <Overview>
 //* Checks if the date represented by the object is not the same as
@@ -1213,26 +1213,26 @@ public class SDate
  **************************************************************************/
 
     public Object notSame(SObjFunction obj,
-			  SContext     context,
-			  Object[]     args)
-	throws STeaException {
+                          SContext     context,
+                          Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 3 ) {
-	    new SNumArgException(args, "TDate");
-	}
+        if ( args.length != 3 ) {
+            new SNumArgException(args, "TDate");
+        }
 
-	Calendar cal  = _calendar;
-	Calendar when = getDate(args, 2)._calendar;
+        Calendar cal  = _calendar;
+        Calendar when = getDate(args, 2)._calendar;
 
-	boolean isEqual =
-	    (cal.get(Calendar.YEAR)==when.get(Calendar.YEAR))
-	    && (cal.get(Calendar.MONTH)==when.get(Calendar.MONTH))
-	    && (cal.get(Calendar.DAY_OF_MONTH)==when.get(Calendar.DAY_OF_MONTH))
-	    && (cal.get(Calendar.HOUR_OF_DAY)==when.get(Calendar.HOUR_OF_DAY))
-	    && (cal.get(Calendar.MINUTE)==when.get(Calendar.MINUTE))
-	    && (cal.get(Calendar.SECOND)==when.get(Calendar.SECOND));
-	
-	return isEqual ? Boolean.FALSE : Boolean.TRUE;
+        boolean isEqual =
+            (cal.get(Calendar.YEAR)==when.get(Calendar.YEAR))
+            && (cal.get(Calendar.MONTH)==when.get(Calendar.MONTH))
+            && (cal.get(Calendar.DAY_OF_MONTH)==when.get(Calendar.DAY_OF_MONTH))
+            && (cal.get(Calendar.HOUR_OF_DAY)==when.get(Calendar.HOUR_OF_DAY))
+            && (cal.get(Calendar.MINUTE)==when.get(Calendar.MINUTE))
+            && (cal.get(Calendar.SECOND)==when.get(Calendar.SECOND));
+        
+        return isEqual ? Boolean.FALSE : Boolean.TRUE;
     }
 
 
@@ -1255,16 +1255,16 @@ public class SDate
  **************************************************************************/
 
     public static SDate getDate(Object[] args,
-				int      index)
-	throws STypeException {
+                                int      index)
+        throws STypeException {
 
-	Object tosDate = args[index];
+        Object tosDate = args[index];
 
-	try {
-	    return (SDate)((STosObj)tosDate).part(0);
-	} catch (ClassCastException e) {
+        try {
+            return (SDate)((STosObj)tosDate).part(0);
+        } catch (ClassCastException e) {
             throw new STypeException(args, index, CLASS_NAME);
-	}
+        }
     }
 
 
@@ -1279,7 +1279,7 @@ public class SDate
 
     public static String getTosClassName() {
 
-	return CLASS_NAME;
+        return CLASS_NAME;
     }
 
 
@@ -1293,15 +1293,15 @@ public class SDate
  **************************************************************************/
 
     public static SDate newInstance(SContext context)
-	throws STeaException {
+        throws STeaException {
 
-	STosObj date = STosUtil.newInstance(CLASS_NAME_S, context);
+        STosObj date = STosUtil.newInstance(CLASS_NAME_S, context);
 
-	if ( !(date instanceof SDate) ) {
-	    throw new SRuntimeException("invalid " + CLASS_NAME + " class");
-	}
+        if ( !(date instanceof SDate) ) {
+            throw new SRuntimeException("invalid " + CLASS_NAME + " class");
+        }
 
-	return (SDate)date;
+        return (SDate)date;
     }
 
 

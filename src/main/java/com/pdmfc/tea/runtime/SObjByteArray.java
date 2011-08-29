@@ -83,8 +83,8 @@ public class SObjByteArray
  **************************************************************************/
 
    public SObjByteArray(byte[] bytes,
-			int    offset,
-			int    count) {
+                        int    offset,
+                        int    count) {
 
        setContents(bytes, offset, count);
    }
@@ -100,8 +100,8 @@ public class SObjByteArray
  **************************************************************************/
 
     public void setContents(byte[] bytes,
-			    int    offset,
-			    int    count) {
+                            int    offset,
+                            int    count) {
 
        _bytes  = bytes;
        _offset = offset;
@@ -124,7 +124,7 @@ public class SObjByteArray
 
     public byte[] getBytes() {
 
-	return _bytes;
+        return _bytes;
     }
 
 
@@ -139,7 +139,7 @@ public class SObjByteArray
 
     public int getOffset() {
 
-	return _offset;
+        return _offset;
     }
 
 
@@ -157,7 +157,7 @@ public class SObjByteArray
 
     public int getCount() {
 
-	return _count;
+        return _count;
     }
 
 
@@ -175,10 +175,10 @@ public class SObjByteArray
 
     public String getStringValue() {
 
-	if ( _string == null ) {
-	    _string = new String(_bytes, _offset, _count);
-	}
-	return _string;
+        if ( _string == null ) {
+            _string = new String(_bytes, _offset, _count);
+        }
+        return _string;
     }
 
 

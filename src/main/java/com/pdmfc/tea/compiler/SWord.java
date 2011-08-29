@@ -1,18 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2001/05/12
- * Created. (jfn)
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -53,8 +41,8 @@ interface SWord {
  *
  **************************************************************************/
 
-    public Object get(SContext context)
-	throws STeaException;
+    Object get(SContext context)
+        throws STeaException;
 
 
 
@@ -62,12 +50,18 @@ interface SWord {
 
 /**************************************************************************
  *
- * 
+ * Evaluates a word and attempts to use as a function.
+ *
+ * <p>This is used for obtaining the function to execute from the
+ * zero-th argument of a statement. Most word types will just throw an
+ * exception.</p>
+ *
+ * @param context
  *
  **************************************************************************/
 
-    public SObjFunction toFunction(SContext context)
-	throws STeaException;
+    SObjFunction toFunction(SContext context)
+        throws STeaException;
 
 }
 

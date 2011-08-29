@@ -48,7 +48,7 @@ public class SMalformedListException
  **************************************************************************/
 
    public SMalformedListException(Object[] args,
-				  String   msg) {
+                                  String   msg) {
 
       initForFunction(args, msg);
    }

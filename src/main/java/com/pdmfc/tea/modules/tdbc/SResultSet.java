@@ -79,7 +79,7 @@ public class SResultSet
 
     private static final String     CLASS_NAME   = "TResultSet";
     private static final SObjSymbol CLASS_NAME_S =
-	SObjSymbol.addSymbol(CLASS_NAME);
+        SObjSymbol.addSymbol(CLASS_NAME);
 
     private ResultSet         _resultSet  = null;
     private ResultSetMetaData _metaData   = null;
@@ -102,9 +102,9 @@ public class SResultSet
  **************************************************************************/
 
     public SResultSet(STosClass myClass)
-	throws STeaException {
+        throws STeaException {
 
-	super(myClass);
+        super(myClass);
    }
 
 
@@ -125,12 +125,12 @@ public class SResultSet
  **************************************************************************/
 
     public void setResultSet(ResultSet rSet)
-	throws SQLException {
+        throws SQLException {
 
-	_resultSet  = rSet;
-	_hasRows    = rSet.next();
-	_rowWasRead = _hasRows;
-	_atEnd      = !_hasRows;
+        _resultSet  = rSet;
+        _hasRows    = rSet.next();
+        _rowWasRead = _hasRows;
+        _atEnd      = !_hasRows;
     }
 
 
@@ -148,7 +148,7 @@ public class SResultSet
 
     public ResultSet getInternalResultSet() {
 
-	return _resultSet;
+        return _resultSet;
     }
 
 
@@ -165,7 +165,7 @@ public class SResultSet
 
     public static String getTosClassName() {
 
-	return CLASS_NAME;
+        return CLASS_NAME;
     }
 
 
@@ -179,15 +179,15 @@ public class SResultSet
  **************************************************************************/
 
     public static SResultSet newInstance(SContext context)
-	throws STeaException {
+        throws STeaException {
 
-	STosObj rSet = STosUtil.newInstance(CLASS_NAME_S, context);
+        STosObj rSet = STosUtil.newInstance(CLASS_NAME_S, context);
 
-	if ( !(rSet instanceof SResultSet) ) {
-	    throw new SRuntimeException("invalid " + CLASS_NAME + " class");
-	}
+        if ( !(rSet instanceof SResultSet) ) {
+            throw new SRuntimeException("invalid " + CLASS_NAME + " class");
+        }
 
-	return (SResultSet)rSet;
+        return (SResultSet)rSet;
     }
 
 
@@ -206,7 +206,7 @@ public class SResultSet
 
     public void addClosedListener(SClosedEventListener listener) {
 
-	_listeners.add(listener);
+        _listeners.add(listener);
     }
 
 
@@ -220,11 +220,11 @@ public class SResultSet
  **************************************************************************/
 
     public Object constructor(SObjFunction obj,
-			      SContext     context,
-			      Object[]     args)
-	throws STeaException {
+                              SContext     context,
+                              Object[]     args)
+        throws STeaException {
 
-	return obj;
+        return obj;
     }
 
 
@@ -233,7 +233,7 @@ public class SResultSet
 
 //* 
 //* <TeaMethod name="hasRows"
-//* 	       className="TResultSet">
+//*                className="TResultSet">
 //* 
 //* <Overview>
 //* Checks if this <Class name="TResultSet"/> has any records.
@@ -261,13 +261,13 @@ public class SResultSet
  **************************************************************************/
 
     public Object hasRows(SObjFunction obj,
-			  SContext     context,
-			  Object[]     args)
-	throws SRuntimeException {
+                          SContext     context,
+                          Object[]     args)
+        throws SRuntimeException {
 
-	checkResultSet();
+        checkResultSet();
 
-	return _hasRows ? Boolean.TRUE : Boolean.FALSE;
+        return _hasRows ? Boolean.TRUE : Boolean.FALSE;
     }
 
 
@@ -276,7 +276,7 @@ public class SResultSet
 
 //* 
 //* <TeaMethod name="next"
-//* 	   className="TResultSet">
+//*            className="TResultSet">
 //* 
 //* <Overview>
 //* Advances the cursor current position by one to the next record of
@@ -309,34 +309,34 @@ public class SResultSet
  **************************************************************************/
 
     public Object next(SObjFunction obj,
-		       SContext     context,
-		       Object[]     args)
-	throws SRuntimeException {
+                       SContext     context,
+                       Object[]     args)
+        throws SRuntimeException {
 
-	checkResultSet();
+        checkResultSet();
 
-	boolean gotIt = false;
+        boolean gotIt = false;
 
-	// We will not call _resultSet.next() any more if it has
-	// previously returned false.
+        // We will not call _resultSet.next() any more if it has
+        // previously returned false.
 
-	try {
-	    if ( _rowWasRead ) {
-		gotIt = true;
-	    } else {
-		gotIt = _atEnd ? false : _resultSet.next();
-	    }
-	} catch (SQLException e) {
-	    throw new SRuntimeException(e);
-	} finally {
-	    _rowWasRead = false;
-	}
+        try {
+            if ( _rowWasRead ) {
+                gotIt = true;
+            } else {
+                gotIt = _atEnd ? false : _resultSet.next();
+            }
+        } catch (SQLException e) {
+            throw new SRuntimeException(e);
+        } finally {
+            _rowWasRead = false;
+        }
       
-	if ( !gotIt ) {
-	    _atEnd = true;
-	}
+        if ( !gotIt ) {
+            _atEnd = true;
+        }
 
-	return gotIt ? Boolean.TRUE : Boolean.FALSE;
+        return gotIt ? Boolean.TRUE : Boolean.FALSE;
     }
 
 
@@ -345,7 +345,7 @@ public class SResultSet
 
 //* 
 //* <TeaMethod name="hasMoreRows"
-//* 	       className="TResultSet">
+//*                className="TResultSet">
 //* 
 //* <Overview>
 //* Checks if this <Func name="TResultSet"/> still has more records
@@ -380,27 +380,27 @@ public class SResultSet
  **************************************************************************/
 
     public Object hasMoreRows(SObjFunction obj,
-			      SContext     context,
-			      Object[]     args)
-	throws SRuntimeException {
+                              SContext     context,
+                              Object[]     args)
+        throws SRuntimeException {
 
-	checkResultSet();
+        checkResultSet();
 
-	if ( _rowWasRead ) {
-	    return Boolean.TRUE;
-	}
+        if ( _rowWasRead ) {
+            return Boolean.TRUE;
+        }
 
-	try {
-	    _rowWasRead = _atEnd ? false : _resultSet.next();
-	} catch (SQLException e) {
-	    throw new SRuntimeException(e);
-	}
+        try {
+            _rowWasRead = _atEnd ? false : _resultSet.next();
+        } catch (SQLException e) {
+            throw new SRuntimeException(e);
+        }
       
-	if ( !_rowWasRead ) {
-	    _atEnd = true;
-	}
+        if ( !_rowWasRead ) {
+            _atEnd = true;
+        }
 
-	return _rowWasRead ? Boolean.TRUE : Boolean.FALSE;
+        return _rowWasRead ? Boolean.TRUE : Boolean.FALSE;
     }
 
 
@@ -410,7 +410,7 @@ public class SResultSet
 //* 
 //* <TeaMethod name="skip"
 //*            arguments="count"
-//* 	   className="TResultSet">
+//*            className="TResultSet">
 //* 
 //* <Overview>
 //* Advances the cursor current position by <Arg name="count"/>
@@ -439,9 +439,9 @@ public class SResultSet
  **************************************************************************/
 
     public Object skip(SObjFunction obj,
-		       SContext     context,
-		       Object[]     args)
-	throws SRuntimeException {
+                       SContext     context,
+                       Object[]     args)
+        throws SRuntimeException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "count");
@@ -472,27 +472,27 @@ public class SResultSet
  **************************************************************************/
 
     private void skip(int n)
-	throws SRuntimeException,
-	       SQLException {
+        throws SRuntimeException,
+               SQLException {
 
-	checkResultSet();
+        checkResultSet();
 
-	if ( _atEnd ) {
-	    return;
-	}
+        if ( _atEnd ) {
+            return;
+        }
 
-	if ( n > 0 ) {
-	    if ( _rowWasRead ) {
-		--n;
-	    }
-	    while ( n-- > 0 ) {
-		if ( !_resultSet.next() ) {
-		    _atEnd = true;
-		    break;
-		}
-	    }
-	    _rowWasRead = false;
-	}
+        if ( n > 0 ) {
+            if ( _rowWasRead ) {
+                --n;
+            }
+            while ( n-- > 0 ) {
+                if ( !_resultSet.next() ) {
+                    _atEnd = true;
+                    break;
+                }
+            }
+            _rowWasRead = false;
+        }
     }
 
 
@@ -502,7 +502,7 @@ public class SResultSet
 //* 
 //* <TeaMethod name="getInt"
 //*            arguments="columnIndex"
-//* 	   className="TResultSet">
+//*            className="TResultSet">
 //* 
 //* <Prototype arguments="columnName"/>
 //* 
@@ -553,9 +553,9 @@ public class SResultSet
  **************************************************************************/
 
     public Object getInt(SObjFunction obj,
-			 SContext     context,
-			 Object[]     args)
-	throws SRuntimeException {
+                         SContext     context,
+                         Object[]     args)
+        throws SRuntimeException {
 
       if ( args.length != 3 ) {
           throw new SNumArgException(args, "column-index");
@@ -565,9 +565,9 @@ public class SResultSet
       int    value    = 0;
 
       try {
-	  value = getInt(indexObj);
+          value = getInt(indexObj);
       } catch (SQLException e) {
-	  throw new SRuntimeException(e);
+          throw new SRuntimeException(e);
       }
 
       return new Integer(value);
@@ -593,26 +593,26 @@ public class SResultSet
  **************************************************************************/
 
     private int getInt(Object indexObj)
-	throws SRuntimeException,
-	       SQLException  {
+        throws SRuntimeException,
+               SQLException  {
 
-	checkResultSet();
+        checkResultSet();
 
-	if ( _atEnd ) {
-	    throw new SRuntimeException("no more rows");
-	}
+        if ( _atEnd ) {
+            throw new SRuntimeException("no more rows");
+        }
 
-	if ( indexObj instanceof Integer ) {
-	    int index = ((Integer)indexObj).intValue();
-	    return _resultSet.getInt(index);
-	}
-	if ( indexObj instanceof String ) {
-	    String columnName = (String)indexObj;
-	    return _resultSet.getInt(columnName);
-	}
+        if ( indexObj instanceof Integer ) {
+            int index = ((Integer)indexObj).intValue();
+            return _resultSet.getInt(index);
+        }
+        if ( indexObj instanceof String ) {
+            String columnName = (String)indexObj;
+            return _resultSet.getInt(columnName);
+        }
 
         throw new STypeException("index must be an int or a string, not a {0}",
-				 STypes.getTypeName(indexObj));
+                                 STypes.getTypeName(indexObj));
     }
 
 
@@ -622,7 +622,7 @@ public class SResultSet
 //* 
 //* <TeaMethod name="getFloat"
 //*            arguments="columnIndex"
-//* 	   className="TResultSet">
+//*            className="TResultSet">
 //* 
 //* <Prototype arguments="columnName"/>
 //* 
@@ -673,9 +673,9 @@ public class SResultSet
  **************************************************************************/
 
     public Object getFloat(SObjFunction obj,
-			   SContext     context,
-			   Object[]     args)
-	throws SRuntimeException {
+                           SContext     context,
+                           Object[]     args)
+        throws SRuntimeException {
 
       if ( args.length != 3 ) {
           throw new SNumArgException(args, "column-index");
@@ -685,9 +685,9 @@ public class SResultSet
       double value    = 0;
 
       try {
-	  value = getFloat(indexObj);
+          value = getFloat(indexObj);
       } catch (SQLException e) {
-	  throw new SRuntimeException(e);
+          throw new SRuntimeException(e);
       }
 
       return new Double(value);
@@ -713,26 +713,26 @@ public class SResultSet
  **************************************************************************/
 
     private double getFloat(Object indexObj)
-	throws SRuntimeException,
-	       SQLException {
+        throws SRuntimeException,
+               SQLException {
 
-	checkResultSet();
+        checkResultSet();
 
-	if ( _atEnd ) {
-	    throw new SRuntimeException("no more rows");
-	}
+        if ( _atEnd ) {
+            throw new SRuntimeException("no more rows");
+        }
 
-	if ( indexObj instanceof Integer ) {
-	    int index = ((Integer)indexObj).intValue();
-	    return _resultSet.getDouble(index);
-	}
-	if ( indexObj instanceof String ) {
-	    String columnName = (String)indexObj;
-	    return _resultSet.getDouble(columnName);
-	}
+        if ( indexObj instanceof Integer ) {
+            int index = ((Integer)indexObj).intValue();
+            return _resultSet.getDouble(index);
+        }
+        if ( indexObj instanceof String ) {
+            String columnName = (String)indexObj;
+            return _resultSet.getDouble(columnName);
+        }
 
-	throw new STypeException("index must be an int or a string, not a {0}",
-				 STypes.getTypeName(indexObj));
+        throw new STypeException("index must be an int or a string, not a {0}",
+                                 STypes.getTypeName(indexObj));
     }
 
 
@@ -742,7 +742,7 @@ public class SResultSet
 //* 
 //* <TeaMethod name="getString"
 //*            arguments="columnIndex"
-//* 	   className="TResultSet">
+//*            className="TResultSet">
 //* 
 //* <Prototype arguments="columnName"/>
 //* 
@@ -792,9 +792,9 @@ public class SResultSet
  **************************************************************************/
 
     public Object getString(SObjFunction obj,
-			    SContext     context,
-			    Object[]     args)
-	throws SRuntimeException {
+                            SContext     context,
+                            Object[]     args)
+        throws SRuntimeException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "column-index");
@@ -832,26 +832,26 @@ public class SResultSet
  **************************************************************************/
 
     private String getString(Object indexObj)
-	throws SRuntimeException,
-	       SQLException {
+        throws SRuntimeException,
+               SQLException {
 
-	checkResultSet();
+        checkResultSet();
 
-	if ( _atEnd ) {
-	    throw new SRuntimeException("no more rows");
-	}
+        if ( _atEnd ) {
+            throw new SRuntimeException("no more rows");
+        }
 
-	if ( indexObj instanceof Integer ) {
-	    int index = ((Integer)indexObj).intValue();
-	    return _resultSet.getString(index);
-	}
-	if ( indexObj instanceof String ) {
-	    String columnName = (String)indexObj;
-	    return _resultSet.getString(columnName);
-	}
+        if ( indexObj instanceof Integer ) {
+            int index = ((Integer)indexObj).intValue();
+            return _resultSet.getString(index);
+        }
+        if ( indexObj instanceof String ) {
+            String columnName = (String)indexObj;
+            return _resultSet.getString(columnName);
+        }
 
-	throw new STypeException("index must be an int or a string, not a {0}",
-				 STypes.getTypeName(indexObj));
+        throw new STypeException("index must be an int or a string, not a {0}",
+                                 STypes.getTypeName(indexObj));
     }
 
 
@@ -861,7 +861,7 @@ public class SResultSet
 //* 
 //* <TeaMethod name="getDate"
 //*            arguments="columnIndex"
-//* 	   className="TResultSet">
+//*            className="TResultSet">
 //* 
 //* <Prototype arguments="columnName"/>
 //* 
@@ -913,29 +913,29 @@ public class SResultSet
  **************************************************************************/
 
     public Object getDate(SObjFunction obj,
-			  SContext   context,
-			  Object[]   args)
-	throws STeaException {
+                          SContext   context,
+                          Object[]   args)
+        throws STeaException {
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "column-index");
-	}
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "column-index");
+        }
 
-	Object indexObj = args[2];
-	Date   date     = null;
-	SDate  result   = null;
+        Object indexObj = args[2];
+        Date   date     = null;
+        SDate  result   = null;
 
-	try {
-	    date   = getDate(indexObj);
-	    if ( date != null ) {
-		result = SDate.newInstance(context);
-		result.initFromDate(date);
-	    }
-	} catch (SQLException e) {
-	    throw new SRuntimeException(e);
-	}
+        try {
+            date   = getDate(indexObj);
+            if ( date != null ) {
+                result = SDate.newInstance(context);
+                result.initFromDate(date);
+            }
+        } catch (SQLException e) {
+            throw new SRuntimeException(e);
+        }
 
-	return (result==null) ? SObjNull.NULL : result;
+        return (result==null) ? SObjNull.NULL : result;
     }
 
 
@@ -958,26 +958,26 @@ public class SResultSet
  **************************************************************************/
 
     private Date getDate(Object indexObj)
-	throws SRuntimeException,
-	       SQLException {
+        throws SRuntimeException,
+               SQLException {
 
-	checkResultSet();
+        checkResultSet();
 
-	if ( _atEnd ) {
-	    throw new SRuntimeException("no more rows");
-	}
+        if ( _atEnd ) {
+            throw new SRuntimeException("no more rows");
+        }
 
-	if ( indexObj instanceof Integer ) {
-	    int index = ((Integer)indexObj).intValue();
-	    return _resultSet.getTimestamp(index);
-	}
-	if ( indexObj instanceof String ) {
-	    String columnName = (String)indexObj;
-	    return _resultSet.getTimestamp(columnName);
-	}
+        if ( indexObj instanceof Integer ) {
+            int index = ((Integer)indexObj).intValue();
+            return _resultSet.getTimestamp(index);
+        }
+        if ( indexObj instanceof String ) {
+            String columnName = (String)indexObj;
+            return _resultSet.getTimestamp(columnName);
+        }
 
-	throw new STypeException("index must be an int or a string, not a {0}",
-				 STypes.getTypeName(indexObj));
+        throw new STypeException("index must be an int or a string, not a {0}",
+                                 STypes.getTypeName(indexObj));
     }
 
 
@@ -986,7 +986,7 @@ public class SResultSet
 
 //* 
 //* <TeaMethod name="close"
-//* 	   className="TResultSet">
+//*            className="TResultSet">
 //* 
 //* <Overview>
 //* Closes this result set and releases all the database resources
@@ -1008,17 +1008,17 @@ public class SResultSet
  **************************************************************************/
 
     public Object close(SObjFunction obj,
-			SContext     context,
-			Object[]     args)
-	throws STeaException {
+                        SContext     context,
+                        Object[]     args)
+        throws STeaException {
 
-	try {
-	    close();
-	} catch (SQLException e) {
-	    throw new SRuntimeException(e);
-	}
+        try {
+            close();
+        } catch (SQLException e) {
+            throw new SRuntimeException(e);
+        }
 
-	return obj;
+        return obj;
     }
 
 
@@ -1033,16 +1033,16 @@ public class SResultSet
  **************************************************************************/
 
     public void close()
-	throws SQLException {
+        throws SQLException {
 
-	if ( _resultSet == null ) {
-	    return;
-	}
+        if ( _resultSet == null ) {
+            return;
+        }
 
-	_resultSet.close();
-	_resultSet = null;
-	fireClosedEvent();
-	_listeners.clear();
+        _resultSet.close();
+        _resultSet = null;
+        fireClosedEvent();
+        _listeners.clear();
     }
 
 
@@ -1058,10 +1058,10 @@ public class SResultSet
 
     private void fireClosedEvent() {
 
-	for ( int i=_listeners.size(); (i--)>0; ) {
-	    SClosedEventListener lstnr = _listeners.get(i);
-	    lstnr.closedEvent(this);
-	}
+        for ( int i=_listeners.size(); (i--)>0; ) {
+            SClosedEventListener lstnr = _listeners.get(i);
+            lstnr.closedEvent(this);
+        }
     }
 
 
@@ -1069,7 +1069,7 @@ public class SResultSet
 
 //* 
 //* <TeaMethod name="getColumnCount"
-//* 	   className="TResultSet">
+//*            className="TResultSet">
 //* 
 //* <Overview>
 //* Retrieves the number of columns in this result set.
@@ -1100,24 +1100,24 @@ public class SResultSet
  **************************************************************************/
 
     public Object getColumnCount(SObjFunction obj,
-				 SContext     context,
-				 Object[]     args)
-	throws STeaException {
+                                 SContext     context,
+                                 Object[]     args)
+        throws STeaException {
 
-	checkResultSet();
+        checkResultSet();
 
-	int result = 0;
+        int result = 0;
 
-	try {
-	    if ( _metaData == null ) {
-		_metaData = _resultSet.getMetaData();
-	    }
-	    result = _metaData.getColumnCount();
-	} catch (SQLException e) {
-	    throw new SRuntimeException(e);
-	}
+        try {
+            if ( _metaData == null ) {
+                _metaData = _resultSet.getMetaData();
+            }
+            result = _metaData.getColumnCount();
+        } catch (SQLException e) {
+            throw new SRuntimeException(e);
+        }
 
-	return new Integer(result);
+        return new Integer(result);
     }
 
 
@@ -1127,7 +1127,7 @@ public class SResultSet
 //* 
 //* <TeaMethod name="getColumnName"
 //*            arguments="columnIndex"
-//* 	   className="TResultSet">
+//*            className="TResultSet">
 //* 
 //* <Overview>
 //* Retrieves the name of one of the columns in this result set.
@@ -1158,9 +1158,9 @@ public class SResultSet
  **************************************************************************/
 
     public Object getColumnName(SObjFunction obj,
-				SContext     context,
-				Object[]     args)
-	throws SRuntimeException {
+                                SContext     context,
+                                Object[]     args)
+        throws SRuntimeException {
 
       if ( args.length != 3 ) {
           throw new SNumArgException(args, "column-index");
@@ -1170,9 +1170,9 @@ public class SResultSet
       String result = null;
 
       try {
-	  result = getColumnName(index);
+          result = getColumnName(index);
       } catch (SQLException e) {
-	  throw new SRuntimeException(e);
+          throw new SRuntimeException(e);
       }
 
       return result;
@@ -1198,16 +1198,16 @@ public class SResultSet
  **************************************************************************/
 
     String getColumnName(int index)
-	throws SRuntimeException,
-	       SQLException {
+        throws SRuntimeException,
+               SQLException {
 
-	checkResultSet();
+        checkResultSet();
 
-	if ( _metaData == null ) {
-	    _metaData = _resultSet.getMetaData();
-	}
+        if ( _metaData == null ) {
+            _metaData = _resultSet.getMetaData();
+        }
 
-	return _metaData.getColumnName(index);
+        return _metaData.getColumnName(index);
    }
 
 
@@ -1221,11 +1221,11 @@ public class SResultSet
  **************************************************************************/
 
     private void checkResultSet()
-	throws SRuntimeException {
+        throws SRuntimeException {
 
-	if ( _resultSet == null ) {
-	    throw new SRuntimeException("result set is closed");
-	}
+        if ( _resultSet == null ) {
+            throw new SRuntimeException("result set is closed");
+        }
     }
 
 

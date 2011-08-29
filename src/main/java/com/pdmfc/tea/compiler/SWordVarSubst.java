@@ -26,7 +26,7 @@ import com.pdmfc.tea.runtime.SObjSymbol;
  *
  **************************************************************************/
 
-class SWordVarSubst
+final class SWordVarSubst
     extends Object
     implements SWord {
 
@@ -48,9 +48,9 @@ class SWordVarSubst
  *
  **************************************************************************/
 
-    SWordVarSubst(String name) {
+    public SWordVarSubst(final String name) {
 
-	_symbol = SObjSymbol.addSymbol(name);
+        _symbol = SObjSymbol.addSymbol(name);
     }
 
 
@@ -63,9 +63,9 @@ class SWordVarSubst
  *
  **************************************************************************/
 
-    SWordVarSubst(SObjSymbol symbol) {
+    public SWordVarSubst(final SObjSymbol symbol) {
 
-	_symbol = symbol;
+        _symbol = symbol;
     }
 
 
@@ -87,10 +87,10 @@ class SWordVarSubst
  *
  **************************************************************************/
 
-    public Object get(SContext context)
-	throws STeaException {
+    public Object get(final SContext context)
+        throws STeaException {
 
-	return context.getVar(_symbol);
+        return context.getVar(_symbol);
     }
 
 
@@ -103,11 +103,11 @@ class SWordVarSubst
  *
  **************************************************************************/
 
-    public SObjFunction toFunction(SContext context)
-	throws STeaException {
+    public SObjFunction toFunction(final SContext context)
+        throws STeaException {
 
-	Object       obj    = context.getVar(_symbol);
-	SObjFunction result = SWordSubstUtils.toFunction(obj, context);
+        Object       obj    = context.getVar(_symbol);
+        SObjFunction result = SWordSubstUtils.toFunction(obj, context);
 
         return result;
     }
@@ -123,8 +123,8 @@ class SWordVarSubst
  *
  **************************************************************************/
 
-    // public void prettyPrint(PrintStream out,
-    //     		    int         indent) {
+    // public void prettyPrint(final PrintStream out,
+    //                         final int         indent) {
 
     //     out.print("$" + _symbol.getName());
     // }

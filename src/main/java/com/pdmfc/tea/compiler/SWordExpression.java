@@ -1,24 +1,10 @@
 /**************************************************************************
  *
- * Copyright (c) 2002 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2002/09/11
- * Created. (jfn)
+ * Copyright (c) 2002-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 package com.pdmfc.tea.compiler;
-
-import java.io.PrintStream;
 
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.compiler.SArithExpression;
@@ -37,7 +23,7 @@ import com.pdmfc.tea.runtime.SRuntimeException;
  *
  **************************************************************************/
 
-class SWordExpression
+final class SWordExpression
     extends Object
     implements SWord {
 
@@ -57,9 +43,9 @@ class SWordExpression
  *
  **************************************************************************/
 
-    SWordExpression(SArithExpression expression) {
+    public SWordExpression(final SArithExpression expression) {
 
-	_expr = expression;
+        _expr = expression;
     }
 
 
@@ -72,10 +58,10 @@ class SWordExpression
  *
  **************************************************************************/
 
-    public Object get(SContext context)
-	throws STeaException {
+    public Object get(final SContext context)
+        throws STeaException {
 
-	return _expr.evaluate(context);
+        return _expr.evaluate(context);
     }
 
 
@@ -88,10 +74,11 @@ class SWordExpression
  *
  **************************************************************************/
 
-    public SObjFunction toFunction(SContext context)
-	throws STeaException {
+    public SObjFunction toFunction(final SContext context)
+        throws STeaException {
 
-	throw new SRuntimeException("an expression can not be used as a function");
+        String msg = "an expression can not be used as a function";
+        throw new SRuntimeException(msg);
     }
 
 
@@ -108,11 +95,11 @@ class SWordExpression
  *
  **************************************************************************/
 
-    public void prettyPrint(PrintStream out,
-			    int         indent) {
+    // public void prettyPrint(final PrintStream out,
+    //                         final int         indent) {
 
-	throw new RuntimeException("not implemented");
-    }
+    //     throw new RuntimeException("not implemented");
+    // }
 
 
 }

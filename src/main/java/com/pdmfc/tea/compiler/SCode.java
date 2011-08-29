@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -24,7 +24,7 @@ import com.pdmfc.tea.runtime.SRuntimeException;
  *
  **************************************************************************/
 
-public class SCode
+public final class SCode
     extends Object {
 
 
@@ -36,10 +36,10 @@ public class SCode
     private String    _fileName  = null;
 
     private static final String ERR_STAT =
-	"While evaluating statement on line {0}";
+        "While evaluating statement on line {0}";
 
     private static final String ERR_STAT_FILE =
-	"While evaluating statement on line {0} ({1})";
+        "While evaluating statement on line {0} ({1})";
 
 
 
@@ -51,9 +51,9 @@ public class SCode
  *
  **************************************************************************/
 
-    SCode(String fileName) {
+    SCode(final String fileName) {
 
-	_fileName = fileName;
+        _fileName = fileName;
     }
 
 
@@ -75,36 +75,36 @@ public class SCode
  *
  **************************************************************************/
 
-    public final Object exec(SContext context)
-	throws STeaException {
+    public Object exec(final SContext context)
+        throws STeaException {
 
-	Object value = SObjNull.NULL;
+        Object value = SObjNull.NULL;
 
-	for ( SCodeNode node=_statsHead; node!=null; node=node._next ) {
-	    SStatement statement = node._element;
-	    try {
-		value = statement.exec(context);
-	    } catch (SRuntimeException e) {
-		int      lineNum = statement.getLineNumber();
-		Object[] fmtArgs = { String.valueOf(lineNum), _fileName };
-		String   fmtMsg  = (_fileName==null) ? ERR_STAT :ERR_STAT_FILE;
+        for ( SCodeNode node=_statsHead; node!=null; node=node._next ) {
+            SStatement statement = node._element;
+            try {
+                value = statement.exec(context);
+            } catch (SRuntimeException e) {
+                int      lineNum = statement.getLineNumber();
+                Object[] fmtArgs = { String.valueOf(lineNum), _fileName };
+                String   fmtMsg  = (_fileName==null) ? ERR_STAT :ERR_STAT_FILE;
 
-		e.addMessage(fmtMsg, fmtArgs);
-		throw e;
-	    } catch (SFlowControlException e) {
-		throw e;
-	    } catch (STeaException e) {
-		int      lineNum = statement.getLineNumber();
-		Object[] fmtArgs = { String.valueOf(lineNum), _fileName };
-		String   fmtMsg  = (_fileName==null) ? ERR_STAT :ERR_STAT_FILE;
-		SRuntimeException error =new SRuntimeException(e.getMessage());
+                e.addMessage(fmtMsg, fmtArgs);
+                throw e;
+            } catch (SFlowControlException e) {
+                throw e;
+            } catch (STeaException e) {
+                int      lineNum = statement.getLineNumber();
+                Object[] fmtArgs = { String.valueOf(lineNum), _fileName };
+                String   fmtMsg  = (_fileName==null) ? ERR_STAT :ERR_STAT_FILE;
+                SRuntimeException error =new SRuntimeException(e.getMessage());
 
-		error.addMessage(fmtMsg, fmtArgs);
-		throw error;		
-	    }
-	}
+                error.addMessage(fmtMsg, fmtArgs);
+                throw error;                
+            }
+        }
 
-	return value;
+        return value;
     }
 
 
@@ -116,22 +116,22 @@ public class SCode
  *
  * Adds a new Tea statement at the end of the sequence.
  *
- * @param aStatement Reference to the new statement to be appended to
+ * @param statement Reference to the new statement to be appended to
  * the sequence.
  *
  **************************************************************************/
 
-    final void addStatement(SStatement aStatement) {
+    void addStatement(final SStatement statement) {
 
-	SCodeNode newStat = new SCodeNode(aStatement);
+        SCodeNode newStat = new SCodeNode(statement);
 
-	if ( _statsHead == null ) {
-	    _statsHead = newStat;
-	} else {
-	    _statsTail._next = newStat;
-	}
-	_statsTail = newStat;
-	_statCount++;
+        if ( _statsHead == null ) {
+            _statsHead = newStat;
+        } else {
+            _statsTail._next = newStat;
+        }
+        _statsTail = newStat;
+        _statCount++;
     }
 
 
@@ -151,13 +151,10 @@ public class SCode
 
 //    public final void prettyPrint(PrintStream out, int indent) {
 //
-//	for (  SCodeNode node=_statsHead; node!=null; node=node._next ) {
-//	    node._element.prettyPrint(out, indent);
-//	}
+//        for (  SCodeNode node=_statsHead; node!=null; node=node._next ) {
+//            node._element.prettyPrint(out, indent);
+//        }
 //    }
-
-
-}
 
 
 
@@ -169,15 +166,15 @@ public class SCode
  *
  **************************************************************************/
 
-class SCodeNode
-    extends Object {
+    private static final class SCodeNode
+        extends Object {
 
 
 
 
 
-    public SStatement _element = null;
-    public SCodeNode  _next    = null;
+        public SStatement _element = null;
+        public SCodeNode  _next    = null;
 
 
 
@@ -189,10 +186,13 @@ class SCodeNode
  *
  **************************************************************************/
 
-    public SCodeNode(SStatement statement) {
+        public SCodeNode(final SStatement statement) {
 
-	_element = statement;
+            _element = statement;
+        }
+
     }
+
 
 }
 

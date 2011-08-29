@@ -6,8 +6,8 @@
 
 /**
  *
- * Classes central to the entire Tea Java API.
+ * Provides classes used for implementing Tea modules.
  *
  */
-package com.pdmfc.tea;
+package com.pdmfc.tea.modules;
 

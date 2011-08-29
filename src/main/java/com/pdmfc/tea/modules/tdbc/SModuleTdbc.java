@@ -77,26 +77,26 @@ public class SModuleTdbc
  **************************************************************************/
 
     public void init(SContext context)
-	throws STeaException {
+        throws STeaException {
 
-	STosClass rSetClass =
-	    new SJavaClass("com.pdmfc.tea.modules.tdbc.SResultSet");
-	STosClass statClass =
-	    new SJavaClass("com.pdmfc.tea.modules.tdbc.SStatement");
-	STosClass prepStatC =
-	    new SJavaClass("com.pdmfc.tea.modules.tdbc.SPreparedStatement");
-	STosClass callStatC =
-	    new SJavaClass("com.pdmfc.tea.modules.tdbc.SCallableStatement");
+        STosClass rSetClass =
+            new SJavaClass("com.pdmfc.tea.modules.tdbc.SResultSet");
+        STosClass statClass =
+            new SJavaClass("com.pdmfc.tea.modules.tdbc.SStatement");
+        STosClass prepStatC =
+            new SJavaClass("com.pdmfc.tea.modules.tdbc.SPreparedStatement");
+        STosClass callStatC =
+            new SJavaClass("com.pdmfc.tea.modules.tdbc.SCallableStatement");
 
-	_connClass = new SConnectionClass();
+        _connClass = new SConnectionClass();
 
-	context.newVar(rSetClass.getName(), rSetClass);
-	context.newVar(statClass.getName(), statClass);
-	context.newVar(prepStatC.getName(), prepStatC);
-	context.newVar(callStatC.getName(), callStatC);
-	context.newVar(_connClass.getName(), _connClass);
+        context.newVar(rSetClass.getName(), rSetClass);
+        context.newVar(statClass.getName(), statClass);
+        context.newVar(prepStatC.getName(), prepStatC);
+        context.newVar(callStatC.getName(), callStatC);
+        context.newVar(_connClass.getName(), _connClass);
 
-	context.newVar("tdbc-register-driver",
+        context.newVar("tdbc-register-driver",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -108,7 +108,7 @@ public class SModuleTdbc
                            }
                        });
 
-	context.newVar("sql-encode",
+        context.newVar("sql-encode",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -120,7 +120,7 @@ public class SModuleTdbc
                            }
                        });
 
-	context.newVar("tdbc-get-open-connections-count",
+        context.newVar("tdbc-get-open-connections-count",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -132,7 +132,7 @@ public class SModuleTdbc
                            }
                        });
 
-	context.newVar("tdbc-close-all-connections",
+        context.newVar("tdbc-close-all-connections",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -157,7 +157,7 @@ public class SModuleTdbc
 
     public void end() {
 
-	stop();
+        stop();
     }
 
 
@@ -187,9 +187,9 @@ public class SModuleTdbc
 
     public void stop() {
 
-	if ( _connClass != null ) {
-	    _connClass.closeAll();
-	}
+        if ( _connClass != null ) {
+            _connClass.closeAll();
+        }
     }
 
 
@@ -198,7 +198,7 @@ public class SModuleTdbc
 
 //* 
 //* <TeaFunction name="tdbc-register-driver"
-//* 		 arguments="javaClassName"
+//*                  arguments="javaClassName"
 //*              module="tea.tdbc">
 //*
 //* <Overview>
@@ -223,24 +223,24 @@ public class SModuleTdbc
  **************************************************************************/
 
     private static Object functionRegisterDriver(SObjFunction func,
-						 SContext     context,
-						 Object[]     args)
-	throws STeaException {
+                                                 SContext     context,
+                                                 Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 2 ) {
-	    throw new SNumArgException(args, "className");
-	}
+        if ( args.length != 2 ) {
+            throw new SNumArgException(args, "className");
+        }
 
-	String className = SArgs.getString(args,1);
+        String className = SArgs.getString(args,1);
 
-	try {
-	    Class.forName(className);
-	} catch (ClassNotFoundException e) {
+        try {
+            Class.forName(className);
+        } catch (ClassNotFoundException e) {
             String msg = "could not load class \"{0}\"";
-	    throw new SRuntimeException(args, msg, className);
-	}
+            throw new SRuntimeException(args, msg, className);
+        }
 
-	return SObjNull.NULL;
+        return SObjNull.NULL;
     }
 
 
@@ -249,7 +249,7 @@ public class SModuleTdbc
 
 //* 
 //* <TeaFunction name="sql-encode"
-//* 		arguments="aString"
+//*                 arguments="aString"
 //*             module="tea.tdbc">
 //*
 //* <Overview>
@@ -278,18 +278,18 @@ public class SModuleTdbc
  **************************************************************************/
 
     private static Object functionSqlEncode(SObjFunction func,
-					    SContext     context,
-					    Object[]     args)
-	throws STeaException {
+                                            SContext     context,
+                                            Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 2 ) {
-	    throw new SNumArgException(args, "string");
-	}
+        if ( args.length != 2 ) {
+            throw new SNumArgException(args, "string");
+        }
 
-	String str    = SArgs.getString(args, 1);
-	String result = sqlEncode(str);
+        String str    = SArgs.getString(args, 1);
+        String result = sqlEncode(str);
 
-	return result;
+        return result;
     }
 
 
@@ -304,23 +304,23 @@ public class SModuleTdbc
 
     private static String sqlEncode(String s) {
 
-	StringBuffer buf = new StringBuffer();
+        StringBuffer buf = new StringBuffer();
 
-	int size = s.length();
+        int size = s.length();
 
-	for ( int i=0; i<size; i++ ) {
-	    char c = s.charAt(i);
+        for ( int i=0; i<size; i++ ) {
+            char c = s.charAt(i);
 
-	    switch ( c ) {
-	    case '\'' : buf.append("''"); break;
-	    case 180  : buf.append("''"); break;
-// 	    case '%'  : buf.append("%%"); break;
-// 	    case '_'  : buf.append("\\_"); break;
-	    default   : buf.append(c); break;
-	    }
-	}
+            switch ( c ) {
+            case '\'' : buf.append("''"); break;
+            case 180  : buf.append("''"); break;
+//             case '%'  : buf.append("%%"); break;
+//             case '_'  : buf.append("\\_"); break;
+            default   : buf.append(c); break;
+            }
+        }
 
-	return buf.toString();
+        return buf.toString();
     }
 
 
@@ -354,14 +354,14 @@ public class SModuleTdbc
  **************************************************************************/
 
     private Object functionGetOpenConnCount(SObjFunction func,
-					    SContext     context,
-					    Object[]     args)
-	throws STeaException {
+                                            SContext     context,
+                                            Object[]     args)
+        throws STeaException {
 
-	int     count  = _connClass.getOpenConnectionsCount();
-	Integer result = new Integer(count);
+        int     count  = _connClass.getOpenConnectionsCount();
+        Integer result = new Integer(count);
 
-	return result;
+        return result;
     }
 
 
@@ -395,13 +395,13 @@ public class SModuleTdbc
  **************************************************************************/
 
     private Object functionCloseAllConn(SObjFunction func,
-					SContext     context,
-					Object[]     args)
-	throws STeaException {
+                                        SContext     context,
+                                        Object[]     args)
+        throws STeaException {
 
-	_connClass.closeAll();
+        _connClass.closeAll();
 
-	return SObjNull.NULL;
+        return SObjNull.NULL;
     }
 
 

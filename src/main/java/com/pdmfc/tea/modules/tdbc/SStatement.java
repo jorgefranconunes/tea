@@ -78,9 +78,9 @@ public class SStatement
  **************************************************************************/
 
     public SStatement(STosClass myClass)
-	throws STeaException {
+        throws STeaException {
 
-	super(myClass);
+        super(myClass);
     }
 
 
@@ -96,7 +96,7 @@ public class SStatement
 
     public void setStatement(Statement stat) {
 
-	_statement = stat;
+        _statement = stat;
     }
 
 
@@ -114,7 +114,7 @@ public class SStatement
 
     public Statement getInternalStatement() {
 
-	return _statement;
+        return _statement;
     }
 
 
@@ -129,7 +129,7 @@ public class SStatement
 
     public static String getTosClassName() {
 
-	return CLASS_NAME;
+        return CLASS_NAME;
     }
 
 
@@ -143,15 +143,15 @@ public class SStatement
  **************************************************************************/
 
     public static SStatement newInstance(SContext context)
-	throws STeaException {
+        throws STeaException {
 
-	STosObj stat = STosUtil.newInstance(CLASS_NAME_S, context);
+        STosObj stat = STosUtil.newInstance(CLASS_NAME_S, context);
 
-	if ( !(stat instanceof SStatement) ) {
-	    throw new SRuntimeException("invalid " + CLASS_NAME + " class");
-	}
+        if ( !(stat instanceof SStatement) ) {
+            throw new SRuntimeException("invalid " + CLASS_NAME + " class");
+        }
 
-	return (SStatement)stat;
+        return (SStatement)stat;
     }
 
 
@@ -166,7 +166,7 @@ public class SStatement
 
     public void addClosedListener(SClosedEventListener listener) {
 
-	_listeners.add(listener);
+        _listeners.add(listener);
     }
 
 
@@ -187,11 +187,11 @@ public class SStatement
  **************************************************************************/
 
     public Object constructor(SObjFunction obj,
-			      SContext     context,
-			      Object[]     args)
-	throws STeaException {
+                              SContext     context,
+                              Object[]     args)
+        throws STeaException {
 
-	return obj;
+        return obj;
     }
 
 
@@ -201,7 +201,7 @@ public class SStatement
 //* 
 //* <TeaMethod name="query"
 //*            arguments="sqlStatement"
-//* 	   className="TStatement">
+//*            className="TStatement">
 //* 
 //* <Overview>
 //* Executes a SQL query.
@@ -247,32 +247,32 @@ public class SStatement
  **************************************************************************/
 
     public Object query(SObjFunction obj,
-			SContext     context,
-			Object[]     args)
-	throws STeaException {
+                        SContext     context,
+                        Object[]     args)
+        throws STeaException {
 
-	checkStatement();
+        checkStatement();
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "sqlStatement");
-	}
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "sqlStatement");
+        }
 
-	String     sql     = SArgs.getString(args, 2);
-	ResultSet  rSet    = null;
-	SResultSet tosRSet = null;
+        String     sql     = SArgs.getString(args, 2);
+        ResultSet  rSet    = null;
+        SResultSet tosRSet = null;
 
-	try {
-	    rSet    = _statement.executeQuery(sql);
-	    tosRSet = SResultSet.newInstance(context);
-	    tosRSet.setResultSet(rSet);
-	} catch (SQLException e) {
-	    throw new SRuntimeException(e);
-	}
+        try {
+            rSet    = _statement.executeQuery(sql);
+            tosRSet = SResultSet.newInstance(context);
+            tosRSet.setResultSet(rSet);
+        } catch (SQLException e) {
+            throw new SRuntimeException(e);
+        }
 
-	tosRSet.addClosedListener(this);
-	_resultSets.add(tosRSet);
+        tosRSet.addClosedListener(this);
+        _resultSets.add(tosRSet);
 
-	return tosRSet;
+        return tosRSet;
     }
 
 
@@ -282,7 +282,7 @@ public class SStatement
 //* 
 //* <TeaMethod name="update"
 //*            arguments="sqlStatement"
-//* 	       className="TStatement">
+//*                className="TStatement">
 //* 
 //* <Overview>
 //* Executes a SQL statement that modifies the contents of the database.
@@ -325,26 +325,26 @@ public class SStatement
  **************************************************************************/
 
     public Object update(SObjFunction obj,
-			 SContext     context,
-			 Object[]     args)
-	throws STeaException {
+                         SContext     context,
+                         Object[]     args)
+        throws STeaException {
 
-	checkStatement();
+        checkStatement();
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "sqlStatement");
-	}
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "sqlStatement");
+        }
 
-	String sql    = SArgs.getString(args, 2);
-	int    result = 0;
+        String sql    = SArgs.getString(args, 2);
+        int    result = 0;
 
-	try {
-	    result = _statement.executeUpdate(sql);
-	} catch (SQLException e) {
-	    throw new SRuntimeException(e);
-	}
+        try {
+            result = _statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            throw new SRuntimeException(e);
+        }
 
-	return new Integer(result);
+        return new Integer(result);
     }
 
 
@@ -354,7 +354,7 @@ public class SStatement
 //* 
 //* <TeaMethod name="execute"
 //*            arguments="sqlStatement"
-//* 	       className="TStatement">
+//*                className="TStatement">
 //* 
 //* <Overview>
 //* Executes an arbitrary SQL statement.
@@ -402,26 +402,26 @@ public class SStatement
  **************************************************************************/
 
     public Object execute(SObjFunction obj,
-			  SContext     context,
-			  Object[]     args)
-	throws STeaException {
+                          SContext     context,
+                          Object[]     args)
+        throws STeaException {
 
-	checkStatement();
+        checkStatement();
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "sqlStatement");
-	}
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "sqlStatement");
+        }
 
-	String  sql    = SArgs.getString(args, 2);
-	boolean result = false;
+        String  sql    = SArgs.getString(args, 2);
+        boolean result = false;
 
-	try {
-	    _statement.execute(sql);
-	} catch (SQLException e) {
-	    throw new SRuntimeException(e);
-	}
+        try {
+            _statement.execute(sql);
+        } catch (SQLException e) {
+            throw new SRuntimeException(e);
+        }
 
-	return new Boolean(result);
+        return new Boolean(result);
     }
 
 
@@ -430,7 +430,7 @@ public class SStatement
 
 //* 
 //* <TeaMethod name="getResultSet"
-//* 	       className="TStatement">
+//*                className="TStatement">
 //* 
 //* <Overview>
 //* Returns the current result as a <Class name="TResultSet"/>.
@@ -465,24 +465,24 @@ public class SStatement
  **************************************************************************/
 
     public Object getResultSet(SObjFunction obj,
-			       SContext     context,
-			       Object[]     args)
-	throws STeaException {
+                               SContext     context,
+                               Object[]     args)
+        throws STeaException {
 
-	checkStatement();
+        checkStatement();
 
-	ResultSet  rSet    = null;
-	SResultSet tosRSet = null;
+        ResultSet  rSet    = null;
+        SResultSet tosRSet = null;
 
-	try {
-	    rSet    = _statement.getResultSet();
-	    tosRSet = SResultSet.newInstance(context);
-	    tosRSet.setResultSet(rSet);
-	} catch (SQLException e) {
-	    throw new SRuntimeException(e);
-	}
+        try {
+            rSet    = _statement.getResultSet();
+            tosRSet = SResultSet.newInstance(context);
+            tosRSet.setResultSet(rSet);
+        } catch (SQLException e) {
+            throw new SRuntimeException(e);
+        }
 
-	return tosRSet;
+        return tosRSet;
     }
 
 
@@ -491,7 +491,7 @@ public class SStatement
 
 //* 
 //* <TeaMethod name="getMoreResults"
-//* 	       className="TStatement">
+//*                className="TStatement">
 //* 
 //* <Overview>
 //* Fetches the <Class name="TStatement"/> next result.
@@ -528,25 +528,25 @@ public class SStatement
  **************************************************************************/
 
     public Object getMoreResults(SObjFunction obj,
-				 SContext     context,
-				 Object[]     args)
-	throws STeaException {
+                                 SContext     context,
+                                 Object[]     args)
+        throws STeaException {
 
-	checkStatement();
+        checkStatement();
 
-	Boolean result = null;
+        Boolean result = null;
 
-	try {
-	    if ( _statement.getMoreResults() ) {
-		result = Boolean.TRUE;
-	    } else {
-		result = Boolean.FALSE;
-	    }
-	} catch (SQLException e) {
-	    throw new SRuntimeException(e);
-	}
+        try {
+            if ( _statement.getMoreResults() ) {
+                result = Boolean.TRUE;
+            } else {
+                result = Boolean.FALSE;
+            }
+        } catch (SQLException e) {
+            throw new SRuntimeException(e);
+        }
 
-	return result;
+        return result;
     }
 
 
@@ -556,7 +556,7 @@ public class SStatement
 
 //* 
 //* <TeaMethod name="getFetchSize"
-//* 	       className="TStatement">
+//*                className="TStatement">
 //* 
 //* <Overview>
 //* Fetches the number of rows that are internally retrieved for a
@@ -591,19 +591,19 @@ public class SStatement
     public Object getFetchSize(SObjFunction obj,
                                SContext     context,
                                Object[]     args)
-	throws STeaException {
+        throws STeaException {
 
-	checkStatement();
+        checkStatement();
 
-	int result = 0;
+        int result = 0;
 
-	try {
-	    result = _statement.getFetchSize();
-	} catch (SQLException e) {
-	    throw new SRuntimeException(e);
-	}
+        try {
+            result = _statement.getFetchSize();
+        } catch (SQLException e) {
+            throw new SRuntimeException(e);
+        }
 
-	return new Integer(result);
+        return new Integer(result);
     }
 
 
@@ -614,7 +614,7 @@ public class SStatement
 //* 
 //* <TeaMethod name="setFetchSize"
 //*            arguments="numberOfRows"
-//* 	       className="TStatement">
+//*                className="TStatement">
 //* 
 //* <Overview>
 //* Sets the number of rows that should be internally retrieved for a
@@ -655,24 +655,24 @@ public class SStatement
     public Object setFetchSize(SObjFunction obj,
                                SContext     context,
                                Object[]     args)
-	throws STeaException {
+        throws STeaException {
 
-	checkStatement();
+        checkStatement();
 
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "numberOfRows");
-	}
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "numberOfRows");
+        }
 
-	int numberOfRows = SArgs.getInt(args, 2).intValue();
+        int numberOfRows = SArgs.getInt(args, 2).intValue();
 
-	try {
-	    _statement.setFetchSize(numberOfRows);
-	} catch (SQLException e) {
-	    throw new SRuntimeException(e);
-	}
+        try {
+            _statement.setFetchSize(numberOfRows);
+        } catch (SQLException e) {
+            throw new SRuntimeException(e);
+        }
 
-	return obj;
+        return obj;
     }
 
 
@@ -681,7 +681,7 @@ public class SStatement
 
 //* 
 //* <TeaMethod name="close"
-//* 	   className="TStatement">
+//*            className="TStatement">
 //* 
 //* <Overview>
 //* Releases all the database resources held by this object.
@@ -712,17 +712,17 @@ public class SStatement
  **************************************************************************/
 
     public Object close(SObjFunction obj,
-			SContext     context,
-			Object[]     args)
-	throws STeaException {
+                        SContext     context,
+                        Object[]     args)
+        throws STeaException {
 
-	try {
-	    close();
-	} catch (SQLException e) {
-	    throw new SRuntimeException(e);
-	}
+        try {
+            close();
+        } catch (SQLException e) {
+            throw new SRuntimeException(e);
+        }
 
-	return obj;
+        return obj;
     }
 
 
@@ -737,31 +737,31 @@ public class SStatement
  **************************************************************************/
 
     void close()
-	throws SQLException {
-	
-	if ( _statement == null ) {
-	    return;
-	}
+        throws SQLException {
+        
+        if ( _statement == null ) {
+            return;
+        }
 
-	Object[] rSets = _resultSets.toArray();
-	int      count = rSets.length;
+        Object[] rSets = _resultSets.toArray();
+        int      count = rSets.length;
 
-	// Close all the still open result sets.
-	for ( int i=0; i<count; i++ ) {
-	    SResultSet rSet = (SResultSet)rSets[i];
+        // Close all the still open result sets.
+        for ( int i=0; i<count; i++ ) {
+            SResultSet rSet = (SResultSet)rSets[i];
 
-	    try {
-		rSet.close();
-	    } catch (SQLException exc) {
-		// There should be a way to log the error message
-		// somewhere.
-	    }
-	}
+            try {
+                rSet.close();
+            } catch (SQLException exc) {
+                // There should be a way to log the error message
+                // somewhere.
+            }
+        }
 
-	_statement.close();
-	_statement = null;
-	fireClosedEvent();
-	_listeners.clear();
+        _statement.close();
+        _statement = null;
+        fireClosedEvent();
+        _listeners.clear();
     }
 
 
@@ -777,11 +777,11 @@ public class SStatement
 
     private void fireClosedEvent() {
 
-	for ( int i=_listeners.size(); (i--)>0; ) {
-	    SClosedEventListener lstnr = _listeners.get(i);
+        for ( int i=_listeners.size(); (i--)>0; ) {
+            SClosedEventListener lstnr = _listeners.get(i);
 
-	    lstnr.closedEvent(this);
-	}
+            lstnr.closedEvent(this);
+        }
     }
 
 
@@ -803,7 +803,7 @@ public class SStatement
             throw new IllegalArgumentException(msg);
         }
 
-	_resultSets.remove(closedObject);
+        _resultSets.remove(closedObject);
     }
 
 
@@ -817,11 +817,11 @@ public class SStatement
  **************************************************************************/
 
     private void checkStatement()
-	throws SRuntimeException {
+        throws SRuntimeException {
 
-	if ( _statement == null ) {
-	    throw new SRuntimeException("statement is closed");
-	}
+        if ( _statement == null ) {
+            throw new SRuntimeException("statement is closed");
+        }
     }
 
 

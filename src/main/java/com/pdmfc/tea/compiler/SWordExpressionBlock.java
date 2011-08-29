@@ -1,18 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2002 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2002/09/11
- * Created. (jfn)
+ * Copyright (c) 2002-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -38,7 +26,7 @@ import com.pdmfc.tea.runtime.SRuntimeException;
  *
  **************************************************************************/
 
-class SWordExpressionBlock
+final class SWordExpressionBlock
     extends Object
     implements SWord {
 
@@ -58,9 +46,9 @@ class SWordExpressionBlock
  *
  **************************************************************************/
 
-    SWordExpressionBlock(SArithExpression expression) {
+    public SWordExpressionBlock(final SArithExpression expression) {
 
-	_expr = expression;
+        _expr = expression;
     }
 
 
@@ -75,21 +63,21 @@ class SWordExpressionBlock
 
     public Object get(final SContext context) {
 
-	SObjBlock block = new SObjBlock() {
-		public SContext getContext() {
-		    return context;
-		}
-		public Object exec(SContext cntxt)
-		    throws STeaException {
-		    return _expr.evaluate(cntxt);
-		}
-		public Object exec()
-		    throws STeaException {
-		    return _expr.evaluate(context);
-		}
-	    };
+        SObjBlock block = new SObjBlock() {
+                public SContext getContext() {
+                    return context;
+                }
+                public Object exec(final SContext cntxt)
+                    throws STeaException {
+                    return _expr.evaluate(cntxt);
+                }
+                public Object exec()
+                    throws STeaException {
+                    return _expr.evaluate(context);
+                }
+            };
 
-	return block;
+        return block;
     }
 
 
@@ -102,10 +90,11 @@ class SWordExpressionBlock
  *
  **************************************************************************/
 
-    public SObjFunction toFunction(SContext context)
-	throws STeaException {
+    public SObjFunction toFunction(final SContext context)
+        throws STeaException {
 
-	throw new SRuntimeException("an expression block can not be used as a function");
+        String msg = "an expression block can not be used as a function";
+        throw new SRuntimeException(msg);
     }
 
 
@@ -119,10 +108,10 @@ class SWordExpressionBlock
  *
  **************************************************************************/
 
-    public void prettyPrint(PrintStream out,
-			    int         indent) {
+    public void prettyPrint(final PrintStream out,
+                            final int         indent) {
 
-	throw new RuntimeException("not yet implemented...");
+        throw new RuntimeException("not yet implemented...");
     }
 
 

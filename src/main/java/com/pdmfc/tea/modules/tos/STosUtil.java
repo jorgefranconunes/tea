@@ -74,13 +74,13 @@ public class STosUtil
  **************************************************************************/
 
     public static STosObj getTosObj(Object[] args,
-				    int      index)
+                                    int      index)
         throws STypeException {
 
-	try {
-	    return (STosObj)args[index];
-	} catch (ClassCastException e) {
-	    throw new STypeException(args, index, "TOS object");
+        try {
+            return (STosObj)args[index];
+        } catch (ClassCastException e) {
+            throw new STypeException(args, index, "TOS object");
       }
     }
 
@@ -109,28 +109,28 @@ public class STosUtil
  **************************************************************************/
 
     public static STosClass getClass(SContext context,
-				     Object[] args,
-				     int      index)
-	throws STeaException {
+                                     Object[] args,
+                                     int      index)
+        throws STeaException {
 
-	Object ref = args[index];
+        Object ref = args[index];
 
-	if ( ref instanceof SObjSymbol ) {
-	    try {
-		ref = context.getVar((SObjSymbol)ref);
-	    } catch (SNoSuchVarException e) {
-		try {
-		    ref = getClassWithEffort(context, (SObjSymbol)ref);
-		} catch (SNoSuchVarException e2) {
-		    throw new SNoSuchClassException(args, (SObjSymbol)ref);
-		}
-	    }
-	}
-	if ( ref instanceof STosClass ) {
-	    return (STosClass)ref;
-	}
+        if ( ref instanceof SObjSymbol ) {
+            try {
+                ref = context.getVar((SObjSymbol)ref);
+            } catch (SNoSuchVarException e) {
+                try {
+                    ref = getClassWithEffort(context, (SObjSymbol)ref);
+                } catch (SNoSuchVarException e2) {
+                    throw new SNoSuchClassException(args, (SObjSymbol)ref);
+                }
+            }
+        }
+        if ( ref instanceof STosClass ) {
+            return (STosClass)ref;
+        }
 
-	throw new STypeException(args, index, "symbol or a class");
+        throw new STypeException(args, index, "symbol or a class");
     }
 
 
@@ -149,27 +149,27 @@ public class STosUtil
  **************************************************************************/
 
     public static STosClass getClass(SContext   context,
-				     SObjSymbol className)
-	throws STeaException  {
+                                     SObjSymbol className)
+        throws STeaException  {
 
-	Object classObject;
+        Object classObject;
 
-	try {
-	    classObject = context.getVar(className);
-	} catch (SNoSuchVarException e) {
-	    try {
-		classObject = getClassWithEffort(context, className);
-	    } catch (SNoSuchVarException e2) {
-		throw new SNoSuchClassException(className);
-	    }
-	}
-	try {
-	    return (STosClass)classObject;
-	} catch (ClassCastException e) {
-	    throw new STypeException("Variable "
-				     + className.getName()
-				     + " does not contain a class object.");
-	}
+        try {
+            classObject = context.getVar(className);
+        } catch (SNoSuchVarException e) {
+            try {
+                classObject = getClassWithEffort(context, className);
+            } catch (SNoSuchVarException e2) {
+                throw new SNoSuchClassException(className);
+            }
+        }
+        try {
+            return (STosClass)classObject;
+        } catch (ClassCastException e) {
+            throw new STypeException("Variable "
+                                     + className.getName()
+                                     + " does not contain a class object.");
+        }
     }
 
 
@@ -183,28 +183,28 @@ public class STosUtil
  **************************************************************************/
 
     private static Object getClassWithEffort(SContext context,
-					     SObjSymbol name)
-	throws STeaException {
+                                             SObjSymbol name)
+        throws STeaException {
 
-	SObjFunction callbackFunc   = null;
-	Object       callbackArgs[] = new Object[2];
+        SObjFunction callbackFunc   = null;
+        Object       callbackArgs[] = new Object[2];
      
-	callbackArgs[0] = CALLBACK_NAME;
-	callbackArgs[1] = name;
+        callbackArgs[0] = CALLBACK_NAME;
+        callbackArgs[1] = name;
     
-	try {
-	    callbackFunc = (SObjFunction)context.getVar(CALLBACK_NAME);
-	} catch (ClassCastException e1) {
-	    // Variable TEA_NOCLASS_CALLBACK does not containg a Tea function.
-	    throw new SNoSuchVarException(name);
-	} catch (SNoSuchVarException e2) {
-	    // Variable TEA_NOCLASS_CALLBACK is not defined.
-	    throw new SNoSuchVarException(name);
-	}
+        try {
+            callbackFunc = (SObjFunction)context.getVar(CALLBACK_NAME);
+        } catch (ClassCastException e1) {
+            // Variable TEA_NOCLASS_CALLBACK does not containg a Tea function.
+            throw new SNoSuchVarException(name);
+        } catch (SNoSuchVarException e2) {
+            // Variable TEA_NOCLASS_CALLBACK is not defined.
+            throw new SNoSuchVarException(name);
+        }
 
-	callbackFunc.exec(callbackFunc, context, callbackArgs);
+        callbackFunc.exec(callbackFunc, context, callbackArgs);
      
-	return context.getVar(name);
+        return context.getVar(name);
     }
 
 
@@ -218,14 +218,14 @@ public class STosUtil
  **************************************************************************/
 
     public static STosObj newInstance(SObjSymbol className,
-				      SContext   context,
-				      Object[]   constructorArgs)
-	throws STeaException {
+                                      SContext   context,
+                                      Object[]   constructorArgs)
+        throws STeaException {
 
-	STosClass tosClass = getClass(context, className);
-	STosObj   tosObj   = tosClass.newInstance(context, constructorArgs);
+        STosClass tosClass = getClass(context, className);
+        STosObj   tosObj   = tosClass.newInstance(context, constructorArgs);
 
-	return tosObj;
+        return tosObj;
     }
 
 
@@ -239,12 +239,12 @@ public class STosUtil
  **************************************************************************/
 
     public static STosObj newInstance(SObjSymbol className,
-				      SContext   context) 
-	throws STeaException {
+                                      SContext   context) 
+        throws STeaException {
 
-	Object[] constructorArgs = new Object[2];
+        Object[] constructorArgs = new Object[2];
 
-	return newInstance(className, context, constructorArgs);
+        return newInstance(className, context, constructorArgs);
     }
 
 }

@@ -85,15 +85,15 @@ public class STosMethodVarArg
  **************************************************************************/
 
     public STosMethodVarArg(STosClass  theClass,
-			    SObjSymbol methodName,
-			    SObjSymbol argName,
-			    SObjBlock  body) {
+                            SObjSymbol methodName,
+                            SObjSymbol argName,
+                            SObjBlock  body) {
 
-	_argName    = argName;
-	_body       = body;
-	_myClass     = theClass;
-	_level       = theClass.level();
-	_memberNames = theClass.memberNames().head();
+        _argName    = argName;
+        _body       = body;
+        _myClass     = theClass;
+        _level       = theClass.level();
+        _memberNames = theClass.memberNames().head();
     }
 
 
@@ -120,49 +120,49 @@ public class STosMethodVarArg
  **************************************************************************/
 
     public Object exec(SObjFunction func,
-		       SContext     context,
-		       Object[]     args)
-	throws STeaException {
+                       SContext     context,
+                       Object[]     args)
+        throws STeaException {
 
-	STosObj   obj          = (STosObj)func;
-	SContext memberContext = obj.members(_level).clone(_body.getContext());
-	SContext procContext   = memberContext.newChild();
-	Object   result        = SObjNull.NULL;
+        STosObj   obj          = (STosObj)func;
+        SContext memberContext = obj.members(_level).clone(_body.getContext());
+        SContext procContext   = memberContext.newChild();
+        Object   result        = SObjNull.NULL;
 
-	// Initializes the "this" and "super", if aplicable, local variables:
-	procContext.newVar(_thisSymbol, obj.selfObj());
-	if ( _level > 0 ) {
-	    procContext.newVar(_superSymbol, obj.part(_level-1));
-	}
+        // Initializes the "this" and "super", if aplicable, local variables:
+        procContext.newVar(_thisSymbol, obj.selfObj());
+        if ( _level > 0 ) {
+            procContext.newVar(_superSymbol, obj.part(_level-1));
+        }
 
-	// Initializes the formal parameters with the actual values.
-	SObjPair emptyList = SObjPair.emptyList();
-	SObjPair head      = emptyList;
-	SObjPair element   = null;
+        // Initializes the formal parameters with the actual values.
+        SObjPair emptyList = SObjPair.emptyList();
+        SObjPair head      = emptyList;
+        SObjPair element   = null;
 
-	for ( int i=2; i<args.length; i++ ) {
-	    SObjPair node = new SObjPair(args[i], emptyList);
+        for ( int i=2; i<args.length; i++ ) {
+            SObjPair node = new SObjPair(args[i], emptyList);
 
-	    if ( element == null ) {
-		head = node;
-	    } else {
-		element._cdr = node;
-	    }
-	    element = node;
-	}
+            if ( element == null ) {
+                head = node;
+            } else {
+                element._cdr = node;
+            }
+            element = node;
+        }
 
-	procContext.newVar(_argName, head);
+        procContext.newVar(_argName, head);
 
-	try {
-	    result = _body.exec(procContext);
-	} catch (SReturnException e1) {
-	    result = e1._value;
-	} catch (SBreakException e2) {
-	    result = e2._object;
-	} catch (SContinueException e3) {
-	}
+        try {
+            result = _body.exec(procContext);
+        } catch (SReturnException e1) {
+            result = e1._value;
+        } catch (SBreakException e2) {
+            result = e2._object;
+        } catch (SContinueException e3) {
+        }
 
-	return result;
+        return result;
     }
 
 

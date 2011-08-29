@@ -122,12 +122,12 @@ class SFunctionImport
     // Keys are import paths (String). Values are ImportItem
     // instances.
     private HashMap<String,ImportItem> _itemsByPath =
-	new HashMap<String,ImportItem>();
+        new HashMap<String,ImportItem>();
 
     // Keys are import items full paths (String). Values are
     // ImportItem instances.
     private HashMap<String,ImportItem> _itemsByFullPath =
-	new HashMap<String,ImportItem>();
+        new HashMap<String,ImportItem>();
 
     // Used to compile the code in the imported files.
     private SCompiler _compiler = new SCompiler();
@@ -205,7 +205,7 @@ class SFunctionImport
         throws STeaException {
 
         Object   result  = null;
-        SObjPair urlList = null;	
+        SObjPair urlList = null;        
 
         try {
             urlList = (SObjPair)context.getVar(LIB_VAR);
@@ -351,7 +351,7 @@ class SFunctionImport
             String sourceEncoding =
                 SEncodingUtils.getSourceEncoding(_rootContext);
             SCode  code           = null;
-	    
+            
             try {
                 code = _compiler.compile(path, sourceEncoding, _importPath);
             } catch (IOException e) {
@@ -364,12 +364,12 @@ class SFunctionImport
                 // eventual infinite recursion (if this file is
                 // imported again while executing).
                 _lastImportTime = 
-		    _isFile ? 
-		    _file.lastModified() :
-		    System.currentTimeMillis();
+                    _isFile ? 
+                    _file.lastModified() :
+                    System.currentTimeMillis();
 
                 SContext execContext = _rootContext.newChild();
-		
+                
                 result = code.exec(execContext);
             }
 

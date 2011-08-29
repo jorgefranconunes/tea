@@ -50,9 +50,9 @@ final class SWordCmdSubst
  *
  **************************************************************************/
 
-    SWordCmdSubst(SCode code) {
+    public SWordCmdSubst(final SCode code) {
 
-	_code = code;
+        _code = code;
     }
 
 
@@ -74,10 +74,10 @@ final class SWordCmdSubst
  *
  **************************************************************************/
 
-    public Object get(SContext context)
-	throws STeaException {
+    public Object get(final SContext context)
+        throws STeaException {
 
-	return _code.exec(context);
+        return _code.exec(context);
     }
 
 
@@ -90,11 +90,11 @@ final class SWordCmdSubst
  *
  **************************************************************************/
 
-    public SObjFunction toFunction(SContext context)
-	throws STeaException {
+    public SObjFunction toFunction(final SContext context)
+        throws STeaException {
 
-	Object       obj    = _code.exec(context);
-	SObjFunction result = SWordSubstUtils.toFunction(obj, context);
+        Object       obj    = _code.exec(context);
+        SObjFunction result = SWordSubstUtils.toFunction(obj, context);
 
         return result;
     }
@@ -115,16 +115,16 @@ final class SWordCmdSubst
  **************************************************************************/
 
 //    public void prettyPrint(PrintStream out,
-//			    int         indent) {
+//                            int         indent) {
 //
-//	out.println("[");
-//	_code.prettyPrint(out, indent+4);
+//        out.println("[");
+//        _code.prettyPrint(out, indent+4);
 //
-//	for ( int i=0; i<indent; i++ ) {
-//	    out.print(' ');
-//	}
+//        for ( int i=0; i<indent; i++ ) {
+//            out.print(' ');
+//        }
 //
-//	out.print("]");
+//        out.print("]");
 //    }
 
 

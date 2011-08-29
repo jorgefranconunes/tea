@@ -59,9 +59,9 @@ final class SWordSubstUtils
 
         SObjFunction result = null;
 
-	if ( firstWord instanceof SObjFunction ) {
-	    result = (SObjFunction)firstWord;
-	} else {
+        if ( firstWord instanceof SObjFunction ) {
+            result = (SObjFunction)firstWord;
+        } else {
             try {
                 result = toFunction((SObjSymbol)firstWord, context);
             } catch (ClassCastException e) {
@@ -69,7 +69,7 @@ final class SWordSubstUtils
                     "argument 0 should be a function or a symbol, not a {0}";
                 throw new STypeException(msg, STypes.getTypeName(firstWord));
             }
-	}
+        }
 
         return result;
     }
@@ -90,20 +90,20 @@ final class SWordSubstUtils
 
         Object value = null;
 
-	try {
-	    value = context.getVar(firstWord);
-	} catch (SNoSuchVarException e2) {
-	    value = STypes.getVarWithEffort(context, firstWord);
-	}
+        try {
+            value = context.getVar(firstWord);
+        } catch (SNoSuchVarException e2) {
+            value = STypes.getVarWithEffort(context, firstWord);
+        }
 
         SObjFunction result = null;
-	
-	try {
-	    result = (SObjFunction)value;
-	} catch (ClassCastException e) {
+        
+        try {
+            result = (SObjFunction)value;
+        } catch (ClassCastException e) {
             String msg = "variable {0} should contain a function, not a {1}";
-	    throw new STypeException(msg, firstWord, STypes.getTypeName(value));
-	}
+            throw new STypeException(msg, firstWord, STypes.getTypeName(value));
+        }
 
         return result;
     }

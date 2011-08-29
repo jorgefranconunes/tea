@@ -85,7 +85,7 @@ public class SUrlInput
 //* 
 //* <TeaMethod name="constructor"
 //*            arguments="url"
-//* 	       className="TUrlInput">
+//*                className="TUrlInput">
 //* 
 //* <Overview>
 //* Opens the a connection to the URL and initializes the object for
@@ -111,31 +111,31 @@ public class SUrlInput
  **************************************************************************/
 
     public Object constructor(SObjFunction obj,
-			      SContext     context,
-			      Object[]     args)
-	throws STeaException {
+                              SContext     context,
+                              Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "file-name");
-	}
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "file-name");
+        }
 
-	String      url   = SArgs.getString(args,2);
-	InputStream input = null;
+        String      url   = SArgs.getString(args,2);
+        InputStream input = null;
 
-	try {
+        try {
             SInputSource inputSource =
                 SInputSourceFactory.createInputSource(url);
 
             input = inputSource.openStream();
-	} catch (IOException e) {
+        } catch (IOException e) {
             String   msg     = "URL \"{0}\" could not be opened for reading";
             Object[] fmtArgs = { url, e.getMessage() };
-	    throw new SRuntimeException(msg, fmtArgs);
-	}
+            throw new SRuntimeException(msg, fmtArgs);
+        }
 
-	open(input);
+        open(input);
 
-	return obj;
+        return obj;
     }
 
 
@@ -150,7 +150,7 @@ public class SUrlInput
 
     public static String getTosClassName() {
 
-	return CLASS_NAME;
+        return CLASS_NAME;
     }
 
 
@@ -164,16 +164,16 @@ public class SUrlInput
  **************************************************************************/
 
     public static SUrlInput newInstance(SContext context,
-					 Object[]  args)
-	throws STeaException {
+                                         Object[]  args)
+        throws STeaException {
 
-	STosObj input = STosUtil.newInstance(CLASS_NAME_S, context, args);
+        STosObj input = STosUtil.newInstance(CLASS_NAME_S, context, args);
 
-	if ( !(input instanceof SUrlInput) ) {
-	    throw new SRuntimeException("invalid " + CLASS_NAME + " class");
-	}
+        if ( !(input instanceof SUrlInput) ) {
+            throw new SRuntimeException("invalid " + CLASS_NAME + " class");
+        }
 
-	return (SUrlInput)input;
+        return (SUrlInput)input;
     }
 
 

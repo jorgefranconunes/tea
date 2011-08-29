@@ -46,7 +46,7 @@ public class SNoSuchFunctionException
    public SNoSuchFunctionException(SObjSymbol symbol) {
 
       super("Function '" + symbol.getName() +
-	    "' not defined on current context");
+            "' not defined on current context");
    }
 
 

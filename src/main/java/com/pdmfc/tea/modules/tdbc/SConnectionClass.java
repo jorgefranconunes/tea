@@ -96,25 +96,25 @@ class SConnectionClass
 
     public SConnectionClass() {
 
-	setName(SConnection.CLASS_NAME);
+        setName(SConnection.CLASS_NAME);
 
-	addConstructor(new SJavaMethod(SConnection.class, "constructor"));
-	addMethod("connect",   
-		  new SJavaMethod(SConnection.class, "connect"));
-	addMethod("statement",   
-		  new SJavaMethod(SConnection.class, "statement"));
-	addMethod("autocommit",  
-		  new SJavaMethod(SConnection.class, "autocommit"));
-	addMethod("commit",      
-		  new SJavaMethod(SConnection.class, "commit"));
-	addMethod("rollback",    
-		  new SJavaMethod(SConnection.class, "rollback"));
-	addMethod("prepare",     
-		  new SJavaMethod(SConnection.class, "prepare"));
-	addMethod("prepareCall", 
-		  new SJavaMethod(SConnection.class, "prepareCall"));
-	addMethod("close",       
-		  new SJavaMethod(SConnection.class, "close"));
+        addConstructor(new SJavaMethod(SConnection.class, "constructor"));
+        addMethod("connect",   
+                  new SJavaMethod(SConnection.class, "connect"));
+        addMethod("statement",   
+                  new SJavaMethod(SConnection.class, "statement"));
+        addMethod("autocommit",  
+                  new SJavaMethod(SConnection.class, "autocommit"));
+        addMethod("commit",      
+                  new SJavaMethod(SConnection.class, "commit"));
+        addMethod("rollback",    
+                  new SJavaMethod(SConnection.class, "rollback"));
+        addMethod("prepare",     
+                  new SJavaMethod(SConnection.class, "prepare"));
+        addMethod("prepareCall", 
+                  new SJavaMethod(SConnection.class, "prepareCall"));
+        addMethod("close",       
+                  new SJavaMethod(SConnection.class, "close"));
     }
 
 
@@ -131,18 +131,18 @@ class SConnectionClass
  **************************************************************************/
 
     public STosObj newInstance()
-	throws STeaException {
+        throws STeaException {
 
-	SConnection connection = new SConnection(this);
+        SConnection connection = new SConnection(this);
 
-	_connections.add(connection);
-	connection.addClosedListener(new SClosedEventListener() {
-		public void closedEvent(Object closedObject) {
-		    myClosedEvent((SConnection)closedObject);
-		}
-	    });
-	
-	return connection;
+        _connections.add(connection);
+        connection.addClosedListener(new SClosedEventListener() {
+                public void closedEvent(Object closedObject) {
+                    myClosedEvent((SConnection)closedObject);
+                }
+            });
+        
+        return connection;
     }
 
 
@@ -160,13 +160,13 @@ class SConnectionClass
         Set<SConnection> myConnections = new HashSet<SConnection>(_connections);
 
         for ( SConnection conn : myConnections ) {
-	    try {
-		conn.close();
-	    } catch (SQLException e) {
-		// There should be a way to log the error message
-		// somewhere.
-	    }
-	}
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                // There should be a way to log the error message
+                // somewhere.
+            }
+        }
     }
 
 
@@ -183,9 +183,9 @@ class SConnectionClass
 
     public int getOpenConnectionsCount() {
 
-	int result = _connections.size();
+        int result = _connections.size();
 
-	return result;
+        return result;
     }
 
 
@@ -200,7 +200,7 @@ class SConnectionClass
 
     private void myClosedEvent(SConnection closedObject) {
 
-	_connections.remove(closedObject);
+        _connections.remove(closedObject);
     }
 
 

@@ -1,18 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2001/05/12
- * Created. (jfn)
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -30,7 +18,7 @@ import com.pdmfc.tea.STeaException;
  *
  **************************************************************************/
 
-public class SCompileException
+public final class SCompileException
     extends STeaException {
 
 
@@ -39,13 +27,13 @@ public class SCompileException
 
 /**************************************************************************
  *
- * 
+ * @param msg The message to use as error message.
  *
  **************************************************************************/
 
-    SCompileException(String msg) {
+    public SCompileException(final String msg) {
 
-	super(msg);
+        super(msg);
     }
 
 
@@ -54,14 +42,18 @@ public class SCompileException
 
 /**************************************************************************
  *
- * 
+ * @param msgFmt The <code>java.text.MessageFormat</code> like format
+ * to use as error message.
+ *
+ * @param fmtArgs Formating arguments to use when building the actual
+ * error message.
  *
  **************************************************************************/
 
-    SCompileException(String    msgFmt,
-		      Object... fmtArgs) {
+    public SCompileException(final String    msgFmt,
+                             final Object... fmtArgs) {
 
-	super(msgFmt, fmtArgs);
+        super(msgFmt, fmtArgs);
     }
 
 

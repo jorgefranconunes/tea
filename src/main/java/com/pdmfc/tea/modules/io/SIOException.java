@@ -51,7 +51,7 @@ public final class SIOException
     public SIOException(final String    msgFmt,
                         final Object... fmtArgs) {
 
-	init(msgFmt, fmtArgs);
+        init(msgFmt, fmtArgs);
     }
 
 

@@ -85,7 +85,7 @@ public class SFileInput
 //* 
 //* <TeaMethod name="constructor"
 //*            arguments="fileName"
-//* 	       className="TFileInput">
+//*                className="TFileInput">
 //* 
 //* <Overview>
 //* Opens the file for reading.
@@ -112,27 +112,27 @@ public class SFileInput
  **************************************************************************/
 
     public Object constructor(SObjFunction obj,
-			      SContext     context,
-			      Object[]     args)
-	throws STeaException {
+                              SContext     context,
+                              Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "file-name");
-	}
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "file-name");
+        }
 
-	String          fileName    = SArgs.getString(args,2);
-	FileInputStream aFileInput  = null;
+        String          fileName    = SArgs.getString(args,2);
+        FileInputStream aFileInput  = null;
 
-	try {
-	    aFileInput = new FileInputStream(fileName);
-	} catch (FileNotFoundException e1) {
-	    throw new SRuntimeException("file '" + fileName +
-					"' could not be opened");
-	}
+        try {
+            aFileInput = new FileInputStream(fileName);
+        } catch (FileNotFoundException e1) {
+            throw new SRuntimeException("file '" + fileName +
+                                        "' could not be opened");
+        }
 
-	open(aFileInput);
+        open(aFileInput);
 
-	return obj;
+        return obj;
     }
 
 
@@ -147,7 +147,7 @@ public class SFileInput
 
     public static String getTosClassName() {
 
-	return CLASS_NAME;
+        return CLASS_NAME;
     }
 
 
@@ -161,16 +161,16 @@ public class SFileInput
  **************************************************************************/
 
     public static SFileInput newInstance(SContext context,
-					 Object[]  args)
-	throws STeaException {
+                                         Object[]  args)
+        throws STeaException {
 
-	STosObj input = STosUtil.newInstance(CLASS_NAME_S, context, args);
+        STosObj input = STosUtil.newInstance(CLASS_NAME_S, context, args);
 
-	if ( !(input instanceof SFileInput) ) {
-	    throw new SRuntimeException("invalid " + CLASS_NAME + " class");
-	}
+        if ( !(input instanceof SFileInput) ) {
+            throw new SRuntimeException("invalid " + CLASS_NAME + " class");
+        }
 
-	return (SFileInput)input;
+        return (SFileInput)input;
     }
 
 

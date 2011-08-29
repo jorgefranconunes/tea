@@ -112,9 +112,9 @@ public class SModuleMath
  **************************************************************************/
 
     public void init(SContext context)
-	throws STeaException {
+        throws STeaException {
 
-	context.newVar("==",
+        context.newVar("==",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -123,8 +123,8 @@ public class SModuleMath
                                return functionEq(func, context, args);
                            }
                        });
-	
-	context.newVar("!=",
+        
+        context.newVar("!=",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -133,8 +133,8 @@ public class SModuleMath
                                return functionNe(func, context, args);
                            }
                        });
-	
-	context.newVar(">",
+        
+        context.newVar(">",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -143,8 +143,8 @@ public class SModuleMath
                                return functionGt(func, context, args);
                            }
                        });
-	
-	context.newVar(">=",
+        
+        context.newVar(">=",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -153,8 +153,8 @@ public class SModuleMath
                                return functionGe(func, context, args);
                            }
                        });
-	
-	context.newVar("<",
+        
+        context.newVar("<",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -163,8 +163,8 @@ public class SModuleMath
                                return functionLt(func, context, args);
                            }
                        });
-	
-	context.newVar("<=",
+        
+        context.newVar("<=",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -173,8 +173,8 @@ public class SModuleMath
                                return functionLe(func, context, args);
                            }
                        });
-	
-	context.newVar("+",
+        
+        context.newVar("+",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -183,8 +183,8 @@ public class SModuleMath
                                return functionAdd(func, context, args);
                            }
                        });
-	
-	context.newVar("-",
+        
+        context.newVar("-",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -193,8 +193,8 @@ public class SModuleMath
                                return functionSub(func, context, args);
                            }
                        });
-	
-	context.newVar("*",
+        
+        context.newVar("*",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -203,8 +203,8 @@ public class SModuleMath
                                return functionMul(func, context, args);
                            }
                        });
-	
-	context.newVar("/",
+        
+        context.newVar("/",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -213,8 +213,8 @@ public class SModuleMath
                                return functionDiv(func, context, args);
                            }
                        });
-	
-	context.newVar("%",
+        
+        context.newVar("%",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -223,8 +223,8 @@ public class SModuleMath
                                return functionMod(func, context, args);
                            }
                        });
-	
-	context.newVar("and",
+        
+        context.newVar("and",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -233,8 +233,8 @@ public class SModuleMath
                                return functionAnd(func, context, args);
                            }
                        });
-	
-	context.newVar("or",
+        
+        context.newVar("or",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -243,8 +243,8 @@ public class SModuleMath
                                return functionOr(func, context, args);
                            }
                        });
-	
-	context.newVar("not",
+        
+        context.newVar("not",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -253,8 +253,8 @@ public class SModuleMath
                                return functionNot(func, context, args);
                            }
                        });
-	
-	context.newVar("abs",
+        
+        context.newVar("abs",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -263,8 +263,8 @@ public class SModuleMath
                                return functionAbs(func, context, args);
                            }
                        });
-	
-	context.newVar("round",
+        
+        context.newVar("round",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -273,8 +273,8 @@ public class SModuleMath
                                return functionRound(func, context, args);
                            }
                        });
-	
-	context.newVar("floor",
+        
+        context.newVar("floor",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -283,8 +283,8 @@ public class SModuleMath
                                return functionFloor(func, context, args);
                            }
                        });
-	
-	context.newVar("ceil",
+        
+        context.newVar("ceil",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -293,8 +293,8 @@ public class SModuleMath
                                return functionCeil(func, context, args);
                            }
                        });
-	
-	context.newVar("sqrt",
+        
+        context.newVar("sqrt",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -303,8 +303,8 @@ public class SModuleMath
                                return functionSqrt(func, context, args);
                            }
                        });
-	
-	context.newVar("min",
+        
+        context.newVar("min",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -313,8 +313,8 @@ public class SModuleMath
                                return functionMin(func, context, args);
                            }
                        });
-	
-	context.newVar("max",
+        
+        context.newVar("max",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -323,8 +323,8 @@ public class SModuleMath
                                return functionMax(func, context, args);
                            }
                        });
-	
-	context.newVar("rand-int",
+        
+        context.newVar("rand-int",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -333,8 +333,8 @@ public class SModuleMath
                                return functionRandInt(func, context, args);
                            }
                        });
-	
-	context.newVar("int",
+        
+        context.newVar("int",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -343,8 +343,8 @@ public class SModuleMath
                                return functionInt(func, context, args);
                            }
                        });
-	
-	context.newVar("=",
+        
+        context.newVar("=",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -353,8 +353,8 @@ public class SModuleMath
                                return functionSetValue(func, context, args);
                            }
                        });
-	
-	context.newVar("+=",
+        
+        context.newVar("+=",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -363,8 +363,8 @@ public class SModuleMath
                                return functionIncBy(func, context, args);
                            }
                        });
-	
-	context.newVar("-=",
+        
+        context.newVar("-=",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -373,8 +373,8 @@ public class SModuleMath
                                return functionDecBy(func, context, args);
                            }
                        });
-	
-	context.newVar("*=",
+        
+        context.newVar("*=",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -383,8 +383,8 @@ public class SModuleMath
                                return functionMulBy(func, context, args);
                            }
                        });
-	
-	context.newVar("/=",
+        
+        context.newVar("/=",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -393,8 +393,8 @@ public class SModuleMath
                                return functionDivBy(func, context, args);
                            }
                        });
-	
-	context.newVar("++",
+        
+        context.newVar("++",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -403,8 +403,8 @@ public class SModuleMath
                                return functionInc(func, context, args);
                            }
                        });
-	
-	context.newVar("--",
+        
+        context.newVar("--",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -413,8 +413,8 @@ public class SModuleMath
                                return functionDec(func, context, args);
                            }
                        });
-	
-	context.newVar("~",
+        
+        context.newVar("~",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -423,8 +423,8 @@ public class SModuleMath
                                return functionBinNeg(func, context, args);
                            }
                        });
-	
-	context.newVar("&",
+        
+        context.newVar("&",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -433,8 +433,8 @@ public class SModuleMath
                                return functionBinAnd(func, context, args);
                            }
                        });
-	
-	context.newVar("|",
+        
+        context.newVar("|",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -443,8 +443,8 @@ public class SModuleMath
                                return functionBinOr(func, context, args);
                            }
                        });
-	
-	context.newVar("^",
+        
+        context.newVar("^",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -453,8 +453,8 @@ public class SModuleMath
                                return functionBinXor(func, context, args);
                            }
                        });
-	
-	context.newVar("<<",
+        
+        context.newVar("<<",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -463,8 +463,8 @@ public class SModuleMath
                                return functionBinSl(func, context, args);
                            }
                        });
-	
-	context.newVar(">>",
+        
+        context.newVar(">>",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -473,8 +473,8 @@ public class SModuleMath
                                return functionBinSr(func, context, args);
                            }
                        });
-	
-	context.newVar("&=",
+        
+        context.newVar("&=",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -484,7 +484,7 @@ public class SModuleMath
                            }
                        });
 
-	context.newVar("|=",
+        context.newVar("|=",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -494,7 +494,7 @@ public class SModuleMath
                            }
                        });
 
-	context.newVar("^=",
+        context.newVar("^=",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -504,7 +504,7 @@ public class SModuleMath
                            }
                        });
 
-	context.newVar("<<=",
+        context.newVar("<<=",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -514,7 +514,7 @@ public class SModuleMath
                            }
                        });
 
-	context.newVar(">>=",
+        context.newVar(">>=",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -576,7 +576,7 @@ public class SModuleMath
 
 //* 
 //* <TeaFunction name="=="
-//* 		arguments="[value1 ...]"
+//*                 arguments="[value1 ...]"
 //*             module="tea.math">
 //*
 //* <Overview>
@@ -605,11 +605,11 @@ public class SModuleMath
  **************************************************************************/
 
     private static Object functionEq(SObjFunction func,
-				     SContext     context,
-				     Object[]     args)
-	throws STeaException {
+                                     SContext     context,
+                                     Object[]     args)
+        throws STeaException {
 
-	return compare(EQ, func, context, args);
+        return compare(EQ, func, context, args);
     }
 
 
@@ -618,7 +618,7 @@ public class SModuleMath
 
 //* 
 //* <TeaFunction name="!="
-//* 		arguments="value1 value2"
+//*                 arguments="value1 value2"
 //*             module="tea.math">
 //*
 //* <Overview>
@@ -651,11 +651,11 @@ public class SModuleMath
  **************************************************************************/
 
     private static Object functionNe(SObjFunction func,
-				     SContext     context,
-				     Object[]     args)
-	throws STeaException {
+                                     SContext     context,
+                                     Object[]     args)
+        throws STeaException {
 
-	return compare(NE, func, context, args);
+        return compare(NE, func, context, args);
     }
 
 
@@ -664,7 +664,7 @@ public class SModuleMath
 
 //* 
 //* <TeaFunction name="&gt;"
-//* 		arguments="value1 value2"
+//*                 arguments="value1 value2"
 //*             module="tea.math">
 //*
 //* <Overview>
@@ -697,11 +697,11 @@ public class SModuleMath
  **************************************************************************/
 
     private static Object functionGt(SObjFunction func,
-				     SContext     context,
-				     Object[]     args)
-	throws STeaException {
+                                     SContext     context,
+                                     Object[]     args)
+        throws STeaException {
 
-	return compare(GT, func, context, args);
+        return compare(GT, func, context, args);
     }
 
 
@@ -710,7 +710,7 @@ public class SModuleMath
 
 //* 
 //* <TeaFunction name="&gt;="
-//* 		arguments="value1 value2"
+//*                 arguments="value1 value2"
 //*             module="tea.math">
 //*
 //* <Overview>
@@ -744,11 +744,11 @@ public class SModuleMath
  **************************************************************************/
 
     private static Object functionGe(SObjFunction func,
-				     SContext     context,
-				     Object[]     args)
-	throws STeaException {
+                                     SContext     context,
+                                     Object[]     args)
+        throws STeaException {
 
-	return compare(GE, func, context, args);
+        return compare(GE, func, context, args);
     }
 
 
@@ -757,7 +757,7 @@ public class SModuleMath
 
 //* 
 //* <TeaFunction name="&lt;"
-//* 		arguments="value1 value2"
+//*                 arguments="value1 value2"
 //*             module="tea.math">
 //*
 //* <Overview>
@@ -790,11 +790,11 @@ public class SModuleMath
  **************************************************************************/
 
     private static Object functionLt(SObjFunction func,
-				     SContext     context,
-				     Object[]     args)
-	throws STeaException {
+                                     SContext     context,
+                                     Object[]     args)
+        throws STeaException {
 
-	return compare(LT, func, context, args);
+        return compare(LT, func, context, args);
     }
 
 
@@ -803,7 +803,7 @@ public class SModuleMath
 
 //* 
 //* <TeaFunction name="&lt;="
-//* 		arguments="value1 value2"
+//*                 arguments="value1 value2"
 //*             module="tea.math">
 //*
 //* <Overview>
@@ -837,11 +837,11 @@ public class SModuleMath
  **************************************************************************/
 
     private static Object functionLe(SObjFunction func,
-				     SContext     context,
-				     Object[]     args)
-	throws STeaException {
+                                     SContext     context,
+                                     Object[]     args)
+        throws STeaException {
 
-	return compare(LE, func, context, args);
+        return compare(LE, func, context, args);
     }
 
 
@@ -855,59 +855,59 @@ public class SModuleMath
  **************************************************************************/
 
     private static Object compare(int          compOp,
-				  SObjFunction func,
-				  SContext     context,
-				  Object[]     args)
-	throws STeaException {
+                                  SObjFunction func,
+                                  SContext     context,
+                                  Object[]     args)
+        throws STeaException {
 
-	if ( args.length<3 ) {
-	    throw new SNumArgException(args, "num1 num2 ...");
-	}
+        if ( args.length<3 ) {
+            throw new SNumArgException(args, "num1 num2 ...");
+        }
 
-	Object  op1         = args[1];
-	boolean op1IsInt    = op1 instanceof Integer;
-	boolean op1IsFloat  = op1 instanceof Double;
-	int     op1IntVal   = op1IsInt ? ((Integer)op1).intValue() : 0;
-	double  op1FloatVal = op1IsFloat ? ((Double)op1).doubleValue() : 0.0;
+        Object  op1         = args[1];
+        boolean op1IsInt    = op1 instanceof Integer;
+        boolean op1IsFloat  = op1 instanceof Double;
+        int     op1IntVal   = op1IsInt ? ((Integer)op1).intValue() : 0;
+        double  op1FloatVal = op1IsFloat ? ((Double)op1).doubleValue() : 0.0;
 
-	if ( !op1IsInt && !op1IsFloat ) {
-	    throw new STypeException(args, 1, "numeric");
-	}
+        if ( !op1IsInt && !op1IsFloat ) {
+            throw new STypeException(args, 1, "numeric");
+        }
 
-	for ( int i=2; i<args.length; i++ ) {
-	    boolean result;
-	    Object   op2        = args[i];
-	    boolean op2IsInt    = op2 instanceof Integer;
-	    boolean op2IsFloat  = op2 instanceof Double;
-	    int     op2IntVal   = op2IsInt ? ((Integer)op2).intValue() : 0;
-	    double  op2FloatVal = op2IsFloat ? ((Double)op2).doubleValue():0.0;
+        for ( int i=2; i<args.length; i++ ) {
+            boolean result;
+            Object   op2        = args[i];
+            boolean op2IsInt    = op2 instanceof Integer;
+            boolean op2IsFloat  = op2 instanceof Double;
+            int     op2IntVal   = op2IsInt ? ((Integer)op2).intValue() : 0;
+            double  op2FloatVal = op2IsFloat ? ((Double)op2).doubleValue():0.0;
 
-	    if ( !op2IsInt && !op2IsFloat ) {
-		throw new STypeException(args, i, "numeric");
-	    }
-	    if ( op1IsInt ) {
-		if ( op2IsInt ) {
-		    result = compareI(compOp, op1IntVal, op2IntVal);
-		} else {
-		    result = compareF(compOp, op1IntVal, op2FloatVal);
-		}
-	    } else {
-		if ( op2IsInt ) {
-		    result = compareF(compOp, op1FloatVal, op2IntVal);
-		} else {
-		    result = compareF(compOp, op1FloatVal, op2FloatVal);
-		}
-	    }
-	    if ( result == false ) {
-		return Boolean.FALSE;
-	    }
-	    op1         = op2;
-	    op1IsInt    = op2IsInt;
-	    op1IntVal   = op2IntVal;
-	    op1FloatVal = op1FloatVal;
-	}
+            if ( !op2IsInt && !op2IsFloat ) {
+                throw new STypeException(args, i, "numeric");
+            }
+            if ( op1IsInt ) {
+                if ( op2IsInt ) {
+                    result = compareI(compOp, op1IntVal, op2IntVal);
+                } else {
+                    result = compareF(compOp, op1IntVal, op2FloatVal);
+                }
+            } else {
+                if ( op2IsInt ) {
+                    result = compareF(compOp, op1FloatVal, op2IntVal);
+                } else {
+                    result = compareF(compOp, op1FloatVal, op2FloatVal);
+                }
+            }
+            if ( result == false ) {
+                return Boolean.FALSE;
+            }
+            op1         = op2;
+            op1IsInt    = op2IsInt;
+            op1IntVal   = op2IntVal;
+            op1FloatVal = op1FloatVal;
+        }
 
-	return Boolean.TRUE;
+        return Boolean.TRUE;
     }
 
 
@@ -921,18 +921,18 @@ public class SModuleMath
  **************************************************************************/
 
     private static boolean compareI(int compOp,
-				    int op1,
-				    int op2) {
+                                    int op1,
+                                    int op2) {
 
-	switch ( compOp ) {
-	case EQ : return op1 == op2;
-	case NE : return op1 != op2;
-	case GT : return op1 > op2;
-	case GE : return op1 >= op2;
-	case LT : return op1 < op2;
-	case LE : return op1 <= op2;
-	}
-	return false;
+        switch ( compOp ) {
+        case EQ : return op1 == op2;
+        case NE : return op1 != op2;
+        case GT : return op1 > op2;
+        case GE : return op1 >= op2;
+        case LT : return op1 < op2;
+        case LE : return op1 <= op2;
+        }
+        return false;
     }
 
 
@@ -946,18 +946,18 @@ public class SModuleMath
  **************************************************************************/
 
     private static boolean compareF(int    compOp,
-				    double op1,
-				    double op2) {
+                                    double op1,
+                                    double op2) {
 
-	switch ( compOp ) {
-	case EQ : return op1 == op2;
-	case NE : return op1 != op2;
-	case GT : return op1 > op2;
-	case GE : return op1 >= op2;
-	case LT : return op1 < op2;
-	case LE : return op1 <= op2;
-	}
-	return false;
+        switch ( compOp ) {
+        case EQ : return op1 == op2;
+        case NE : return op1 != op2;
+        case GT : return op1 > op2;
+        case GE : return op1 >= op2;
+        case LT : return op1 < op2;
+        case LE : return op1 <= op2;
+        }
+        return false;
     }
 
 
@@ -966,7 +966,7 @@ public class SModuleMath
 
 //* 
 //* <TeaFunction name="+"
-//* 		arguments="[value ...]"
+//*                 arguments="[value ...]"
 //*             module="tea.math">
 //*
 //* <Overview>
@@ -998,11 +998,11 @@ public class SModuleMath
  **************************************************************************/
 
     private static Object functionAdd(SObjFunction func,
-				      SContext     context,
-				      Object[]     args)
-	throws STeaException {
+                                      SContext     context,
+                                      Object[]     args)
+        throws STeaException {
 
-	return arithmOp(ADD, func, context, args);
+        return arithmOp(ADD, func, context, args);
     }
 
 
@@ -1011,7 +1011,7 @@ public class SModuleMath
 
 //* 
 //* <TeaFunction name="-"
-//* 		arguments="[value ...]"
+//*                 arguments="[value ...]"
 //*             module="tea.math">
 //*
 //* <Overview>
@@ -1044,11 +1044,11 @@ public class SModuleMath
  **************************************************************************/
 
     private static Object functionSub(SObjFunction func,
-				      SContext     context,
-				      Object[]     args)
-	throws STeaException {
+                                      SContext     context,
+                                      Object[]     args)
+        throws STeaException {
 
-	return arithmOp(SUB, func, context, args);
+        return arithmOp(SUB, func, context, args);
     }
 
 
@@ -1057,7 +1057,7 @@ public class SModuleMath
 
 //* 
 //* <TeaFunction name="*"
-//* 		arguments="[value ...]"
+//*                 arguments="[value ...]"
 //*             module="tea.math">
 //*
 //* <Overview>
@@ -1089,11 +1089,11 @@ public class SModuleMath
  **************************************************************************/
 
     private static Object functionMul(SObjFunction func,
-				      SContext     context,
-				      Object[]     args)
-	throws STeaException {
+                                      SContext     context,
+                                      Object[]     args)
+        throws STeaException {
 
-	return arithmOp(MUL, func, context, args);
+        return arithmOp(MUL, func, context, args);
     }
 
 
@@ -1102,7 +1102,7 @@ public class SModuleMath
 
 //* 
 //* <TeaFunction name="/"
-//* 		arguments="[value ...]"
+//*                 arguments="[value ...]"
 //*             module="tea.math">
 //*
 //* <Overview>
@@ -1135,11 +1135,11 @@ public class SModuleMath
  **************************************************************************/
 
     private static Object functionDiv(SObjFunction func,
-				      SContext     context,
-				      Object[]     args)
-	throws STeaException {
+                                      SContext     context,
+                                      Object[]     args)
+        throws STeaException {
 
-	return arithmOp(DIV, func, context, args);
+        return arithmOp(DIV, func, context, args);
     }
 
 
@@ -1153,30 +1153,30 @@ public class SModuleMath
  **************************************************************************/
 
     private static Object arithmOp(final int          op,
-				   final SObjFunction func,
-				   final SContext     context,
-				   final Object[]     args)
-	throws STeaException {
+                                   final SObjFunction func,
+                                   final SContext     context,
+                                   final Object[]     args)
+        throws STeaException {
 
-	if ( args.length < 2 ) {
-	    return opNullValue(op);
-	}
-	if ( args.length == 2 ) {
-	    return unaryOp(op, args);
-	}
+        if ( args.length < 2 ) {
+            return opNullValue(op);
+        }
+        if ( args.length == 2 ) {
+            return unaryOp(op, args);
+        }
 
-	Object operand = args[1];
+        Object operand = args[1];
 
-	try {
-	    if ( operand instanceof Integer ) {
-		return calcIntOp(op, ((Integer)operand).intValue(), args, 2);
-	    }
-	    if ( operand instanceof Double ) {
-		return calcFloatOp(op, ((Double)operand).doubleValue(),args,2);
-	    }
-	} catch (ArithmeticException e) {
+        try {
+            if ( operand instanceof Integer ) {
+                return calcIntOp(op, ((Integer)operand).intValue(), args, 2);
+            }
+            if ( operand instanceof Double ) {
+                return calcFloatOp(op, ((Double)operand).doubleValue(),args,2);
+            }
+        } catch (ArithmeticException e) {
             SArithmeticException.raise(args, e);
-	}
+        }
         
         throw new STypeException(args, 1, "int or a float");
     }
@@ -1192,31 +1192,31 @@ public class SModuleMath
  **************************************************************************/
 
     private static Object calcIntOp(int      op,
-				    int      result,
-				    Object[] args,
-				    int      first)
-	throws STeaException {
+                                    int      result,
+                                    Object[] args,
+                                    int      first)
+        throws STeaException {
 
-	for ( int i=first; i<args.length; i++ ) {
-	    Object operand = args[i];
+        for ( int i=first; i<args.length; i++ ) {
+            Object operand = args[i];
 
-	    if ( operand instanceof Integer ) {
-		result = doOp(op, result, ((Integer)operand).intValue());
-	    } else {
-		if ( operand instanceof Double ) {
-		    return calcFloatOp(op,
-				       doOp(op,
-					    (double)result,
-					    ((Double)operand).doubleValue()),
-				       args,
-				       i+1);
-		} else {
+            if ( operand instanceof Integer ) {
+                result = doOp(op, result, ((Integer)operand).intValue());
+            } else {
+                if ( operand instanceof Double ) {
+                    return calcFloatOp(op,
+                                       doOp(op,
+                                            (double)result,
+                                            ((Double)operand).doubleValue()),
+                                       args,
+                                       i+1);
+                } else {
                     throw new STypeException(args, i, "float or an int");
-		}
-	    }
-	}
+                }
+            }
+        }
 
-	return new Integer(result);
+        return new Integer(result);
     }
 
 
@@ -1230,22 +1230,22 @@ public class SModuleMath
  **************************************************************************/
 
     private static Object calcFloatOp(int      op,
-				      double   result,
-				      Object[] args,
-				      int      first)
-	throws STeaException {
+                                      double   result,
+                                      Object[] args,
+                                      int      first)
+        throws STeaException {
 
-	for ( int i=first; i<args.length; i++ ) {
-	    Object operand = args[i];
+        for ( int i=first; i<args.length; i++ ) {
+            Object operand = args[i];
 
-	    if ( operand instanceof Number ) {
-		result = doOp(op, result, ((Number)operand).doubleValue());
-	    } else {
+            if ( operand instanceof Number ) {
+                result = doOp(op, result, ((Number)operand).doubleValue());
+            } else {
                 throw new STypeException(args, i, "float or an int");
-	    }
-	}
+            }
+        }
 
-	return new Double(result);
+        return new Double(result);
     }
 
 
@@ -1259,16 +1259,16 @@ public class SModuleMath
  **************************************************************************/
 
     private static int doOp(int op,
-			    int op1,
-			    int op2) {
+                            int op1,
+                            int op2) {
 
-	switch ( op ) {
-	case ADD : return op1+op2;
-	case SUB : return op1-op2;
-	case MUL : return op1*op2;
-	case DIV : return op1/op2;
-	}
-	return 0;
+        switch ( op ) {
+        case ADD : return op1+op2;
+        case SUB : return op1-op2;
+        case MUL : return op1*op2;
+        case DIV : return op1/op2;
+        }
+        return 0;
     }
 
 
@@ -1282,16 +1282,16 @@ public class SModuleMath
  **************************************************************************/
 
     private static double doOp(int    op,
-			       double op1,
-			       double op2) {
+                               double op1,
+                               double op2) {
 
-	switch ( op ) {
-	case ADD : return op1+op2;
-	case SUB : return op1-op2;
-	case MUL : return op1*op2;
-	case DIV : return op1/op2;
-	}
-	return 0.0;
+        switch ( op ) {
+        case ADD : return op1+op2;
+        case SUB : return op1-op2;
+        case MUL : return op1*op2;
+        case DIV : return op1/op2;
+        }
+        return 0.0;
     }
 
 
@@ -1309,13 +1309,13 @@ public class SModuleMath
 
     private static Object opNullValue(int op) {
 
-	switch ( op ) {
-	case ADD :
-	case SUB : return ZERO;
-	case MUL :
-	case DIV : return ONE;
-	}
-	return  ZERO;
+        switch ( op ) {
+        case ADD :
+        case SUB : return ZERO;
+        case MUL :
+        case DIV : return ONE;
+        }
+        return  ZERO;
     }
 
 
@@ -1342,30 +1342,30 @@ public class SModuleMath
 
     private static Object unaryOp(final int      op,
                                   final Object[] args)
-	throws STeaException {
+        throws STeaException {
 
-	Object result  = null;
+        Object result  = null;
         Object operand = args[1];
 
-	if ( operand instanceof Integer ) {
-	    if ( op == SUB ) {
-		result = new Integer(-((Integer)operand).intValue());
-	    } else {
-		result = operand;
-	    }
-	}
-	else if ( operand instanceof Double ) {
-	    if ( op == SUB ) {
-		result = new Double(-((Double)operand).doubleValue());
-	    } else {
-		result = operand;
-	    }
-	}
-	else {
+        if ( operand instanceof Integer ) {
+            if ( op == SUB ) {
+                result = new Integer(-((Integer)operand).intValue());
+            } else {
+                result = operand;
+            }
+        }
+        else if ( operand instanceof Double ) {
+            if ( op == SUB ) {
+                result = new Double(-((Double)operand).doubleValue());
+            } else {
+                result = operand;
+            }
+        }
+        else {
             throw new STypeException(args, 1, "float or an int");
-	}
+        }
 
-	return result;
+        return result;
     }
 
 
@@ -1374,7 +1374,7 @@ public class SModuleMath
 
 //* 
 //* <TeaFunction name="%"
-//* 		arguments="dividend divisor"
+//*                 arguments="dividend divisor"
 //*             module="tea.math">
 //*
 //* <Overview>
@@ -1407,19 +1407,19 @@ public class SModuleMath
  **************************************************************************/
 
     private static Object functionMod(SObjFunction func,
-				      SContext     context,
-				      Object[]     args)
-	throws STeaException {
+                                      SContext     context,
+                                      Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "dividend divisor");
-	}
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "dividend divisor");
+        }
 
-	int dividend = SArgs.getInt(args,1).intValue();
-	int divisor  = SArgs.getInt(args,2).intValue();
-	int result   = dividend % divisor;
+        int dividend = SArgs.getInt(args,1).intValue();
+        int divisor  = SArgs.getInt(args,2).intValue();
+        int result   = dividend % divisor;
 
-	return new Integer(result);
+        return new Integer(result);
     }
 
 
@@ -1428,7 +1428,7 @@ public class SModuleMath
 
 //* 
 //* <TeaFunction name="and"
-//* 		arguments="[obj1 ...]"
+//*                 arguments="[obj1 ...]"
 //*             module="tea.math">
 //*
 //* <Overview>
@@ -1479,26 +1479,26 @@ public class SModuleMath
  **************************************************************************/
 
     private static Object functionAnd(SObjFunction func,
-				      SContext     context,
-				      Object[]     args)
-	throws STeaException {
+                                      SContext     context,
+                                      Object[]     args)
+        throws STeaException {
 
-	for ( int i=1; i<args.length; i++ ) {
-	    Object obj = args[i];
+        for ( int i=1; i<args.length; i++ ) {
+            Object obj = args[i];
 
-	    if ( obj instanceof SObjBlock ) {
-		obj = ((SObjBlock)obj).exec();
-	    }
-	    if ( obj instanceof Boolean ) {
-		if ( !((Boolean)obj).booleanValue() ) {
-		    return obj;
-		}
-	    } else {
+            if ( obj instanceof SObjBlock ) {
+                obj = ((SObjBlock)obj).exec();
+            }
+            if ( obj instanceof Boolean ) {
+                if ( !((Boolean)obj).booleanValue() ) {
+                    return obj;
+                }
+            } else {
                 throw new STypeException(args, i, "bool or a block");
-	    }
-	}
+            }
+        }
 
-	return Boolean.TRUE;
+        return Boolean.TRUE;
     }
 
 
@@ -1507,7 +1507,7 @@ public class SModuleMath
 
 //* 
 //* <TeaFunction name="or"
-//* 		arguments="[obj1 ...]"
+//*                 arguments="[obj1 ...]"
 //*             module="tea.math">
 //*
 //* <Overview>
@@ -1539,30 +1539,30 @@ public class SModuleMath
  **************************************************************************/
 
     private static Object functionOr(SObjFunction func,
-				     SContext     context,
-				     Object[]     args)
-	throws STeaException {
+                                     SContext     context,
+                                     Object[]     args)
+        throws STeaException {
 
-	if ( args.length < 2 ) {
-	    throw new SNumArgException(args, "exp1 ...");
-	}
+        if ( args.length < 2 ) {
+            throw new SNumArgException(args, "exp1 ...");
+        }
 
-	for ( int i=1; i<args.length; i++ ) {
-	    Object obj = args[i];
+        for ( int i=1; i<args.length; i++ ) {
+            Object obj = args[i];
 
-	    if ( obj instanceof SObjBlock ) {
-		obj = ((SObjBlock)obj).exec();
-	    }
-	    if ( obj instanceof Boolean ) {
-		if ( ((Boolean)obj).booleanValue() ) {
-		    return Boolean.TRUE;
-		}
-	    } else {
+            if ( obj instanceof SObjBlock ) {
+                obj = ((SObjBlock)obj).exec();
+            }
+            if ( obj instanceof Boolean ) {
+                if ( ((Boolean)obj).booleanValue() ) {
+                    return Boolean.TRUE;
+                }
+            } else {
                 throw new STypeException(args, i, "bool or a block");
-	    }
-	}
+            }
+        }
 
-	return Boolean.FALSE;
+        return Boolean.FALSE;
     }
 
 
@@ -1571,7 +1571,7 @@ public class SModuleMath
 
 //* 
 //* <TeaFunction name="not"
-//* 		arguments="aBoolean"
+//*                 arguments="aBoolean"
 //*             module="tea.math">
 //*
 //* <Overview>
@@ -1600,18 +1600,18 @@ public class SModuleMath
  **************************************************************************/
 
     private static Object functionNot(SObjFunction func,
-				      SContext     context,
-				      Object[]     args)
-	throws STeaException {
+                                      SContext     context,
+                                      Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 2 ) {
-	    throw new SNumArgException(args, "boolean");
-	}
+        if ( args.length != 2 ) {
+            throw new SNumArgException(args, "boolean");
+        }
 
-	boolean operand = SArgs.getBoolean(args,1).booleanValue();
-	Boolean result  = operand ? Boolean.FALSE : Boolean.TRUE;
+        boolean operand = SArgs.getBoolean(args,1).booleanValue();
+        Boolean result  = operand ? Boolean.FALSE : Boolean.TRUE;
 
-	return result;
+        return result;
     }
 
 
@@ -1620,7 +1620,7 @@ public class SModuleMath
 
 //* 
 //* <TeaFunction name="abs"
-//* 		arguments="aValue"
+//*                 arguments="aValue"
 //*             module="tea.math">
 //*
 //* <Overview>
@@ -1651,24 +1651,24 @@ public class SModuleMath
  **************************************************************************/
 
     private static Object functionAbs(SObjFunction func,
-				      SContext     context,
-				      Object[]     args)
-	throws STeaException {
+                                      SContext     context,
+                                      Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 2 ) {
-	    throw new SNumArgException(args, "value");
-	}
-	Object arg = args[1];
+        if ( args.length != 2 ) {
+            throw new SNumArgException(args, "value");
+        }
+        Object arg = args[1];
 
-	if ( arg instanceof Integer ) {
-	    return new Integer(Math.abs(((Integer)arg).intValue()));
-	}
-	if ( arg instanceof Double ) {
-	    return new Double(Math.abs(((Double)arg).floatValue()));
-	}
+        if ( arg instanceof Integer ) {
+            return new Integer(Math.abs(((Integer)arg).intValue()));
+        }
+        if ( arg instanceof Double ) {
+            return new Double(Math.abs(((Double)arg).floatValue()));
+        }
 
-	throw new STypeException("arg 1 should be either an int or a float, " +
-				 "not a " + STypes.getTypeName(arg));
+        throw new STypeException("arg 1 should be either an int or a float, " +
+                                 "not a " + STypes.getTypeName(arg));
     }
 
 
@@ -1677,7 +1677,7 @@ public class SModuleMath
 
 //* 
 //* <TeaFunction name="round"
-//* 		 arguments="aValue"
+//*                  arguments="aValue"
 //*              module="tea.math">
 //*
 //* <Overview>
@@ -1706,18 +1706,18 @@ public class SModuleMath
  **************************************************************************/
 
     private static Object functionRound(SObjFunction func,
-					SContext     context,
-					Object[]     args)
-	throws STeaException {
+                                        SContext     context,
+                                        Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 2 ) {
-	    throw new SNumArgException(args, "value");
-	}
+        if ( args.length != 2 ) {
+            throw new SNumArgException(args, "value");
+        }
 
-	double operand = SArgs.getFloat(args, 1).doubleValue();
-	int    result  = (int)Math.round(operand);
+        double operand = SArgs.getFloat(args, 1).doubleValue();
+        int    result  = (int)Math.round(operand);
 
-	return new Integer(result);
+        return new Integer(result);
     }
 
 
@@ -1726,7 +1726,7 @@ public class SModuleMath
 
 //* 
 //* <TeaFunction name="floor"
-//* 		arguments="aValue"
+//*                 arguments="aValue"
 //*             module="tea.math">
 //*
 //* <Overview>
@@ -1755,18 +1755,18 @@ public class SModuleMath
  **************************************************************************/
 
     private static Object functionFloor(SObjFunction func,
-					SContext     context,
-					Object[]     args)
-	throws STeaException {
+                                        SContext     context,
+                                        Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 2 ) {
-	    throw new SNumArgException(args, "value");
-	}
+        if ( args.length != 2 ) {
+            throw new SNumArgException(args, "value");
+        }
 
-	double operand = SArgs.getFloat(args, 1).doubleValue();
-	int    result  = (int)Math.floor(operand);
+        double operand = SArgs.getFloat(args, 1).doubleValue();
+        int    result  = (int)Math.floor(operand);
 
-	return new Integer(result);
+        return new Integer(result);
     }
 
 
@@ -1775,7 +1775,7 @@ public class SModuleMath
 
 //* 
 //* <TeaFunction name="ceil"
-//* 		arguments="aValue"
+//*                 arguments="aValue"
 //*             module="tea.math">
 //*
 //* <Overview>
@@ -1804,18 +1804,18 @@ public class SModuleMath
  **************************************************************************/
 
     private static Object functionCeil(SObjFunction func,
-				       SContext     context,
-				       Object[]     args)
-	throws STeaException {
+                                       SContext     context,
+                                       Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 2 ) {
-	    throw new SNumArgException(args, "value");
-	}
+        if ( args.length != 2 ) {
+            throw new SNumArgException(args, "value");
+        }
 
-	double operand = SArgs.getNumber(args, 1).doubleValue();
-	int    result  = (int)Math.ceil(operand);
+        double operand = SArgs.getNumber(args, 1).doubleValue();
+        int    result  = (int)Math.ceil(operand);
 
-	return new Integer(result);
+        return new Integer(result);
     }
 
 
@@ -1824,7 +1824,7 @@ public class SModuleMath
 
 //* 
 //* <TeaFunction name="sqrt"
-//* 		 arguments="aValue"
+//*                  arguments="aValue"
 //*              module="tea.math">
 //*
 //* <Overview>
@@ -1853,23 +1853,23 @@ public class SModuleMath
  **************************************************************************/
 
     private static Object functionSqrt(SObjFunction func,
-				       SContext     context,
-				       Object[]     args)
-	throws STeaException {
+                                       SContext     context,
+                                       Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 2 ) {
-	    throw new SNumArgException(args, "value");
-	}
+        if ( args.length != 2 ) {
+            throw new SNumArgException(args, "value");
+        }
 
-	double result = 0;
-	
-	try {
-	    result = Math.sqrt(SArgs.getNumber(args,1).doubleValue());
-	} catch (ArithmeticException e) {
+        double result = 0;
+        
+        try {
+            result = Math.sqrt(SArgs.getNumber(args,1).doubleValue());
+        } catch (ArithmeticException e) {
             SArithmeticException.raise(args, e);
-	}
+        }
 
-	return new Double(result);
+        return new Double(result);
     }
 
 
@@ -1883,11 +1883,11 @@ public class SModuleMath
  **************************************************************************/
 
     private static Object functionMin(SObjFunction func,
-				      SContext     context,
-				      Object[]     args)
-	throws STeaException {
+                                      SContext     context,
+                                      Object[]     args)
+        throws STeaException {
 
-	return findExtreme(_lt, func, context, args);
+        return findExtreme(_lt, func, context, args);
     }
 
 
@@ -1901,11 +1901,11 @@ public class SModuleMath
  **************************************************************************/
 
     private static Object functionMax(SObjFunction func,
-				      SContext     context,
-				      Object[]     args)
-	throws STeaException {
+                                      SContext     context,
+                                      Object[]     args)
+        throws STeaException {
 
-	return findExtreme(_gt, func, context, args);
+        return findExtreme(_gt, func, context, args);
     }
 
 
@@ -1919,26 +1919,26 @@ public class SModuleMath
  **************************************************************************/
 
     private static Object findExtreme(SComparator  comparator,
-				      SObjFunction func,
-				      SContext     context,
-				      Object[]     args)
-	throws STeaException {
+                                      SObjFunction func,
+                                      SContext     context,
+                                      Object[]     args)
+        throws STeaException {
 
-	if ( args.length < 2 ) {
-	    throw new SNumArgException(args, "value ...");
-	}
-	Object valueObj = args[1];
+        if ( args.length < 2 ) {
+            throw new SNumArgException(args, "value ...");
+        }
+        Object valueObj = args[1];
 
-	if ( valueObj instanceof Integer ) {
-	    int operand1 = ((Integer)valueObj).intValue();
-	    return calcExtremeInt(comparator, operand1, args, 2);
-	}
-	if ( valueObj instanceof Double ) {
-	    double operand1 = ((Double)valueObj).doubleValue();
-	    return calcExtremeDouble(comparator, operand1, args, 2);
-	}
-	throw new STypeException("arg 1 should be an int or a float"+
-				 ", not a " + STypes.getTypeName(valueObj));
+        if ( valueObj instanceof Integer ) {
+            int operand1 = ((Integer)valueObj).intValue();
+            return calcExtremeInt(comparator, operand1, args, 2);
+        }
+        if ( valueObj instanceof Double ) {
+            double operand1 = ((Double)valueObj).doubleValue();
+            return calcExtremeDouble(comparator, operand1, args, 2);
+        }
+        throw new STypeException("arg 1 should be an int or a float"+
+                                 ", not a " + STypes.getTypeName(valueObj));
     }
 
 
@@ -1953,29 +1953,29 @@ public class SModuleMath
  **************************************************************************/
 
     private static Object calcExtremeInt(SComparator comparator,
-					 int         min,
-					 Object[]    args,
-					 int         firstIndex)
-	throws STypeException{
+                                         int         min,
+                                         Object[]    args,
+                                         int         firstIndex)
+        throws STypeException{
 
-	for ( int i=args.length; (--i)>=firstIndex; ) {
-	    Object valueObj = args[i];
-	    
-	    if ( valueObj instanceof Integer ) {
-		int value = ((Integer)valueObj).intValue();
-		
-		if ( comparator.compareInt(value, min) ) {
-		    min = value;
-		}
-		continue;
-	    }
-	    if ( valueObj instanceof Double ) {
-		return calcExtremeDouble(comparator, min, args, i);
-	    }
-	    throw new STypeException("arg " + i + " should be an int or a float"+
-				     ", not a " + STypes.getTypeName(valueObj));
-	}
-	return new Integer(min);
+        for ( int i=args.length; (--i)>=firstIndex; ) {
+            Object valueObj = args[i];
+            
+            if ( valueObj instanceof Integer ) {
+                int value = ((Integer)valueObj).intValue();
+                
+                if ( comparator.compareInt(value, min) ) {
+                    min = value;
+                }
+                continue;
+            }
+            if ( valueObj instanceof Double ) {
+                return calcExtremeDouble(comparator, min, args, i);
+            }
+            throw new STypeException("arg " + i + " should be an int or a float"+
+                                     ", not a " + STypes.getTypeName(valueObj));
+        }
+        return new Integer(min);
     }
 
 
@@ -1990,27 +1990,27 @@ public class SModuleMath
  **************************************************************************/
 
     private static Object calcExtremeDouble(SComparator comparator,
-					   double      min,
-					   Object[]    args,
-					   int         firstIndex)
-	throws STypeException{
+                                           double      min,
+                                           Object[]    args,
+                                           int         firstIndex)
+        throws STypeException{
 
-	for ( int i=args.length; (--i)>=firstIndex; ) {
-	    Object valueObj = args[i];
+        for ( int i=args.length; (--i)>=firstIndex; ) {
+            Object valueObj = args[i];
 
-	    if ( valueObj instanceof Number ) {
-		double value = ((Number)valueObj).doubleValue();
+            if ( valueObj instanceof Number ) {
+                double value = ((Number)valueObj).doubleValue();
 
-		if ( comparator.compareDouble(value, min) ) {
-		    min = value;
-		}
-	    } else {
-		throw new STypeException("arg " + i +
-					 " should be an int or a float"+
-					 ", not a " + STypes.getTypeName(valueObj));
-	    }
-	}
-	return new Double(min);
+                if ( comparator.compareDouble(value, min) ) {
+                    min = value;
+                }
+            } else {
+                throw new STypeException("arg " + i +
+                                         " should be an int or a float"+
+                                         ", not a " + STypes.getTypeName(valueObj));
+            }
+        }
+        return new Double(min);
     }
 
 
@@ -2019,7 +2019,7 @@ public class SModuleMath
 
 //* 
 //* <TeaFunction name="int"
-//* 		arguments="[aSymbol] aValue"
+//*                 arguments="[aSymbol] aValue"
 //*             module="tea.math">
 //*
 //* <Overview>
@@ -2056,24 +2056,24 @@ public class SModuleMath
  **************************************************************************/
 
     private static Object functionInt(SObjFunction func,
-				      SContext     context,
-				      Object[]     args)
-	throws STeaException {
+                                      SContext     context,
+                                      Object[]     args)
+        throws STeaException {
 
-	if ( args.length == 3 ) {
-	    SObjSymbol symbol = SArgs.getSymbol(args, 1);
-	    int        value  = SArgs.getNumber(args, 2).intValue();
-	    Integer    theInt = new Integer(value);
+        if ( args.length == 3 ) {
+            SObjSymbol symbol = SArgs.getSymbol(args, 1);
+            int        value  = SArgs.getNumber(args, 2).intValue();
+            Integer    theInt = new Integer(value);
 
-	    context.newVar(symbol, theInt);
+            context.newVar(symbol, theInt);
 
-	    return theInt;
-	}
-	if ( args.length == 2 ) {
-	    return new Integer(SArgs.getNumber(args, 1).intValue());
-	}
+            return theInt;
+        }
+        if ( args.length == 2 ) {
+            return new Integer(SArgs.getNumber(args, 1).intValue());
+        }
 
-	throw new SNumArgException(args, "[symbol] value");
+        throw new SNumArgException(args, "[symbol] value");
     }
 
 
@@ -2111,11 +2111,11 @@ public class SModuleMath
  **************************************************************************/
 
     private Object functionRandInt(SObjFunction func,
-				   SContext     context,
-				   Object[]     args)
-	throws STeaException {
+                                   SContext     context,
+                                   Object[]     args)
+        throws STeaException {
 
-	return new Integer(_generator.nextInt());
+        return new Integer(_generator.nextInt());
     }
 
 
@@ -2124,7 +2124,7 @@ public class SModuleMath
 
 //* 
 //* <TeaFunction name="="
-//* 		arguments="symbol value"
+//*                 arguments="symbol value"
 //*             module="tea.math">
 //*
 //* <Overview>
@@ -2160,12 +2160,12 @@ public class SModuleMath
  **************************************************************************/
 
     private static Object functionSetValue(SObjFunction func,
-					   SContext     context,
-					   Object[]     args)
-	throws STeaException {
+                                           SContext     context,
+                                           Object[]     args)
+        throws STeaException {
 
       if ( args.length != 3 ) {
-	 throw new SNumArgException(args, "symbol value");
+         throw new SNumArgException(args, "symbol value");
       }
 
       SObjSymbol symbol = SArgs.getSymbol(args, 1);
@@ -2183,7 +2183,7 @@ public class SModuleMath
 
 //* 
 //* <TeaFunction name="+="
-//* 		arguments="symbol value"
+//*                 arguments="symbol value"
 //*             module="tea.math">
 //*
 //* <Overview>
@@ -2228,35 +2228,35 @@ public class SModuleMath
  **************************************************************************/
 
     private static Object functionIncBy(SObjFunction func,
-					SContext     context,
-					Object[]     args)
-	throws STeaException {
+                                        SContext     context,
+                                        Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "symbol value");
-	}
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "symbol value");
+        }
 
-	SObjSymbol symbol  = SArgs.getSymbol(args, 1);
-	SObjVar    var     = context.getVarObject(symbol);
-	Object     value   = var.get();
-	Number     incrVal = SArgs.getNumber(args, 2);
+        SObjSymbol symbol  = SArgs.getSymbol(args, 1);
+        SObjVar    var     = context.getVarObject(symbol);
+        Object     value   = var.get();
+        Number     incrVal = SArgs.getNumber(args, 2);
 
-	if ( value instanceof Integer ) {
-	    int x = ((Integer)value).intValue() + incrVal.intValue();
-	    value = new Integer(x);
-	} else if ( value instanceof Double ) {
-	    double x = ((Double)value).doubleValue() + incrVal.doubleValue();
-	    value = new Double(x);
-	} else {
-	    String   msg     =
-		"Variable \"{0}\" must contain a numeric, not a {1}";
-	    Object[] fmtArgs = { symbol, STypes.getTypeName(value) };
-	    throw new STeaException(msg, fmtArgs);
-	}
+        if ( value instanceof Integer ) {
+            int x = ((Integer)value).intValue() + incrVal.intValue();
+            value = new Integer(x);
+        } else if ( value instanceof Double ) {
+            double x = ((Double)value).doubleValue() + incrVal.doubleValue();
+            value = new Double(x);
+        } else {
+            String   msg     =
+                "Variable \"{0}\" must contain a numeric, not a {1}";
+            Object[] fmtArgs = { symbol, STypes.getTypeName(value) };
+            throw new STeaException(msg, fmtArgs);
+        }
 
-	var.set(value);
+        var.set(value);
 
-	return value;
+        return value;
     }
 
 
@@ -2265,7 +2265,7 @@ public class SModuleMath
 
 //* 
 //* <TeaFunction name="-="
-//* 		arguments="symbol value"
+//*                 arguments="symbol value"
 //*             module="tea.math">
 //*
 //* <Overview>
@@ -2311,35 +2311,35 @@ public class SModuleMath
  **************************************************************************/
 
     private static Object functionDecBy(SObjFunction func,
-					SContext     context,
-					Object[]     args)
-	throws STeaException {
+                                        SContext     context,
+                                        Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "symbol value");
-	}
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "symbol value");
+        }
 
-	SObjSymbol symbol  = SArgs.getSymbol(args, 1);
-	SObjVar    var     = context.getVarObject(symbol);
-	Object     value   = var.get();
-	Number     incrVal = SArgs.getNumber(args, 2);
+        SObjSymbol symbol  = SArgs.getSymbol(args, 1);
+        SObjVar    var     = context.getVarObject(symbol);
+        Object     value   = var.get();
+        Number     incrVal = SArgs.getNumber(args, 2);
 
-	if ( value instanceof Integer ) {
-	    int x = ((Integer)value).intValue() - incrVal.intValue();
-	    value = new Integer(x);
-	} else if ( value instanceof Double ) {
-	    double x = ((Double)value).doubleValue() - incrVal.doubleValue();
-	    value = new Double(x);
-	} else {
-	    String   msg     =
-		"Variable \"{0}\" must contain a numeric, not a {1}";
-	    Object[] fmtArgs = { symbol, STypes.getTypeName(value) };
-	    throw new STeaException(msg, fmtArgs);
-	}
+        if ( value instanceof Integer ) {
+            int x = ((Integer)value).intValue() - incrVal.intValue();
+            value = new Integer(x);
+        } else if ( value instanceof Double ) {
+            double x = ((Double)value).doubleValue() - incrVal.doubleValue();
+            value = new Double(x);
+        } else {
+            String   msg     =
+                "Variable \"{0}\" must contain a numeric, not a {1}";
+            Object[] fmtArgs = { symbol, STypes.getTypeName(value) };
+            throw new STeaException(msg, fmtArgs);
+        }
 
-	var.set(value);
+        var.set(value);
 
-	return value;
+        return value;
     }
 
 
@@ -2348,7 +2348,7 @@ public class SModuleMath
 
 //* 
 //* <TeaFunction name="*="
-//* 		arguments="symbol value"
+//*                 arguments="symbol value"
 //*             module="tea.math">
 //*
 //* <Overview>
@@ -2394,35 +2394,35 @@ public class SModuleMath
  **************************************************************************/
 
     private static Object functionMulBy(SObjFunction func,
-					SContext     context,
-					Object[]     args)
-	throws STeaException {
+                                        SContext     context,
+                                        Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "symbol value");
-	}
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "symbol value");
+        }
 
-	SObjSymbol symbol  = SArgs.getSymbol(args, 1);
-	SObjVar    var     = context.getVarObject(symbol);
-	Object     value   = var.get();
-	Number     incrVal = SArgs.getNumber(args, 2);
+        SObjSymbol symbol  = SArgs.getSymbol(args, 1);
+        SObjVar    var     = context.getVarObject(symbol);
+        Object     value   = var.get();
+        Number     incrVal = SArgs.getNumber(args, 2);
 
-	if ( value instanceof Integer ) {
-	    int x = ((Integer)value).intValue() * incrVal.intValue();
-	    value = new Integer(x);
-	} else if ( value instanceof Double ) {
-	    double x = ((Double)value).doubleValue() * incrVal.doubleValue();
-	    value = new Double(x);
-	} else {
-	    String   msg     =
-		"Variable \"{0}\" must contain a numeric, not a {1}";
-	    Object[] fmtArgs = { symbol, STypes.getTypeName(value) };
-	    throw new STeaException(msg, fmtArgs);
-	}
+        if ( value instanceof Integer ) {
+            int x = ((Integer)value).intValue() * incrVal.intValue();
+            value = new Integer(x);
+        } else if ( value instanceof Double ) {
+            double x = ((Double)value).doubleValue() * incrVal.doubleValue();
+            value = new Double(x);
+        } else {
+            String   msg     =
+                "Variable \"{0}\" must contain a numeric, not a {1}";
+            Object[] fmtArgs = { symbol, STypes.getTypeName(value) };
+            throw new STeaException(msg, fmtArgs);
+        }
 
-	var.set(value);
+        var.set(value);
 
-	return value;
+        return value;
     }
 
 
@@ -2431,7 +2431,7 @@ public class SModuleMath
 
 //* 
 //* <TeaFunction name="/="
-//* 		arguments="symbol value"
+//*                 arguments="symbol value"
 //*             module="tea.math">
 //*
 //* <Overview>
@@ -2477,35 +2477,35 @@ public class SModuleMath
  **************************************************************************/
 
     private static Object functionDivBy(SObjFunction func,
-					SContext     context,
-					Object[]     args)
-	throws STeaException {
+                                        SContext     context,
+                                        Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "symbol value");
-	}
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "symbol value");
+        }
 
-	SObjSymbol symbol  = SArgs.getSymbol(args, 1);
-	SObjVar    var     = context.getVarObject(symbol);
-	Object     value   = var.get();
-	Number     incrVal = SArgs.getNumber(args, 2);
+        SObjSymbol symbol  = SArgs.getSymbol(args, 1);
+        SObjVar    var     = context.getVarObject(symbol);
+        Object     value   = var.get();
+        Number     incrVal = SArgs.getNumber(args, 2);
 
-	if ( value instanceof Integer ) {
-	    int x = ((Integer)value).intValue() / incrVal.intValue();
-	    value = new Integer(x);
-	} else if ( value instanceof Double ) {
-	    double x = ((Double)value).doubleValue() / incrVal.doubleValue();
-	    value = new Double(x);
-	} else {
-	    String   msg     =
-		"Variable \"{0}\" must contain a numeric, not a {1}";
-	    Object[] fmtArgs = { symbol, STypes.getTypeName(value) };
-	    throw new STeaException(msg, fmtArgs);
-	}
+        if ( value instanceof Integer ) {
+            int x = ((Integer)value).intValue() / incrVal.intValue();
+            value = new Integer(x);
+        } else if ( value instanceof Double ) {
+            double x = ((Double)value).doubleValue() / incrVal.doubleValue();
+            value = new Double(x);
+        } else {
+            String   msg     =
+                "Variable \"{0}\" must contain a numeric, not a {1}";
+            Object[] fmtArgs = { symbol, STypes.getTypeName(value) };
+            throw new STeaException(msg, fmtArgs);
+        }
 
-	var.set(value);
-	
-	return value;
+        var.set(value);
+        
+        return value;
     }
 
 
@@ -2514,7 +2514,7 @@ public class SModuleMath
 
 //* 
 //* <TeaFunction name="++"
-//* 		arguments="symbol"
+//*                 arguments="symbol"
 //*             module="tea.math">
 //*
 //* <Overview>
@@ -2555,34 +2555,34 @@ public class SModuleMath
  **************************************************************************/
 
     private static Object functionInc(SObjFunction func,
-				      SContext     context,
-				      Object[]     args)
-	throws STeaException {
+                                      SContext     context,
+                                      Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 2 ) {
-	    throw new SNumArgException(args, "symbol");
-	}
+        if ( args.length != 2 ) {
+            throw new SNumArgException(args, "symbol");
+        }
 
-	SObjSymbol symbol  = SArgs.getSymbol(args, 1);
-	SObjVar    var     = context.getVarObject(symbol);
-	Object     value   = var.get();
-	
-	if ( value instanceof Integer ) {
-	    int x = ((Integer)value).intValue() + 1;
-	    value = new Integer(x);
-	} else if ( value instanceof Double ) {
-	    double x = ((Double)value).doubleValue() + 1.0;
-	    value = new Double(x);
-	} else {
-	    String   msg     =
-		"Variable \"{0}\" must contain a numeric, not a {1}";
-	    Object[] fmtArgs = { symbol, STypes.getTypeName(value) };
-	    throw new STeaException(msg, fmtArgs);
-	}
+        SObjSymbol symbol  = SArgs.getSymbol(args, 1);
+        SObjVar    var     = context.getVarObject(symbol);
+        Object     value   = var.get();
+        
+        if ( value instanceof Integer ) {
+            int x = ((Integer)value).intValue() + 1;
+            value = new Integer(x);
+        } else if ( value instanceof Double ) {
+            double x = ((Double)value).doubleValue() + 1.0;
+            value = new Double(x);
+        } else {
+            String   msg     =
+                "Variable \"{0}\" must contain a numeric, not a {1}";
+            Object[] fmtArgs = { symbol, STypes.getTypeName(value) };
+            throw new STeaException(msg, fmtArgs);
+        }
 
-	var.set(value);
-	
-	return value;
+        var.set(value);
+        
+        return value;
     }
 
 
@@ -2591,7 +2591,7 @@ public class SModuleMath
 
 //* 
 //* <TeaFunction name="--"
-//* 		arguments="symbol"
+//*                 arguments="symbol"
 //*             module="tea.math">
 //*
 //* <Overview>
@@ -2632,34 +2632,34 @@ public class SModuleMath
  **************************************************************************/
 
     private static Object functionDec(SObjFunction func,
-				      SContext     context,
-				      Object[]     args)
-	throws STeaException {
+                                      SContext     context,
+                                      Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 2 ) {
-	    throw new SNumArgException(args, "symbol");
-	}
+        if ( args.length != 2 ) {
+            throw new SNumArgException(args, "symbol");
+        }
 
-	SObjSymbol symbol  = SArgs.getSymbol(args, 1);
-	SObjVar    var     = context.getVarObject(symbol);
-	Object     value   = var.get();
-	
-	if ( value instanceof Integer ) {
-	    int x = ((Integer)value).intValue() - 1;
-	    value = new Integer(x);
-	} else if ( value instanceof Double ) {
-	    double x = ((Double)value).doubleValue() - 1;
-	    value = new Double(x);
-	} else {
-	    String   msg     =
-		"Variable \"{0}\" must contain a numeric, not a {1}";
-	    Object[] fmtArgs = { symbol, STypes.getTypeName(value) };
-	    throw new STeaException(msg, fmtArgs);
-	}
+        SObjSymbol symbol  = SArgs.getSymbol(args, 1);
+        SObjVar    var     = context.getVarObject(symbol);
+        Object     value   = var.get();
+        
+        if ( value instanceof Integer ) {
+            int x = ((Integer)value).intValue() - 1;
+            value = new Integer(x);
+        } else if ( value instanceof Double ) {
+            double x = ((Double)value).doubleValue() - 1;
+            value = new Double(x);
+        } else {
+            String   msg     =
+                "Variable \"{0}\" must contain a numeric, not a {1}";
+            Object[] fmtArgs = { symbol, STypes.getTypeName(value) };
+            throw new STeaException(msg, fmtArgs);
+        }
 
-	var.set(value);
-	
-	return value;
+        var.set(value);
+        
+        return value;
     }
 
 
@@ -2668,7 +2668,7 @@ public class SModuleMath
 
 //* 
 //* <TeaFunction name="~"
-//* 		arguments="value"
+//*                 arguments="value"
 //*             module="tea.math">
 //*
 //* <Overview>
@@ -2697,18 +2697,18 @@ public class SModuleMath
  **************************************************************************/
 
     private Object functionBinNeg(SObjFunction func,
-				  SContext     context,
-				  Object[]     args)
-	throws STeaException {
+                                  SContext     context,
+                                  Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 2 ) {
-	    throw new SNumArgException(args, "value");
-	}
+        if ( args.length != 2 ) {
+            throw new SNumArgException(args, "value");
+        }
 
-	int value  = SArgs.getInt(args, 1).intValue();
-	int result = ~value;
+        int value  = SArgs.getInt(args, 1).intValue();
+        int result = ~value;
 
-	return new Integer(result);
+        return new Integer(result);
     }
 
 
@@ -2717,7 +2717,7 @@ public class SModuleMath
 
 //* 
 //* <TeaFunction name="&amp;"
-//* 		arguments="[value ...]"
+//*                 arguments="[value ...]"
 //*             module="tea.math">
 //*
 //* <Overview>
@@ -2747,20 +2747,20 @@ public class SModuleMath
  **************************************************************************/
 
     private Object functionBinAnd(SObjFunction func,
-				  SContext     context,
-				  Object[]     args)
-	throws STeaException {
+                                  SContext     context,
+                                  Object[]     args)
+        throws STeaException {
 
-	int lastIndex = args.length;
-	int result    = (lastIndex==1) ? 0 : SArgs.getInt(args,1).intValue();
+        int lastIndex = args.length;
+        int result    = (lastIndex==1) ? 0 : SArgs.getInt(args,1).intValue();
 
-	for ( int i=2; i<lastIndex; i++ ) {
-	    int operand = SArgs.getInt(args,i).intValue();
+        for ( int i=2; i<lastIndex; i++ ) {
+            int operand = SArgs.getInt(args,i).intValue();
 
-	    result &= operand;
-	}
+            result &= operand;
+        }
 
-	return new Integer(result);
+        return new Integer(result);
     }
 
 
@@ -2769,7 +2769,7 @@ public class SModuleMath
 
 //* 
 //* <TeaFunction name="|"
-//* 		arguments="[value ...]"
+//*                 arguments="[value ...]"
 //*             module="tea.math">
 //*
 //* <Overview>
@@ -2799,20 +2799,20 @@ public class SModuleMath
  **************************************************************************/
 
     private Object functionBinOr(SObjFunction func,
-				  SContext     context,
-				  Object[]     args)
-	throws STeaException {
+                                  SContext     context,
+                                  Object[]     args)
+        throws STeaException {
 
-	int lastIndex = args.length;
-	int result    = (lastIndex==1) ? 0 : SArgs.getInt(args,1).intValue();
+        int lastIndex = args.length;
+        int result    = (lastIndex==1) ? 0 : SArgs.getInt(args,1).intValue();
 
-	for ( int i=2; i<lastIndex; i++ ) {
-	    int operand = SArgs.getInt(args,i).intValue();
+        for ( int i=2; i<lastIndex; i++ ) {
+            int operand = SArgs.getInt(args,i).intValue();
 
-	    result |= operand;
-	}
+            result |= operand;
+        }
 
-	return new Integer(result);
+        return new Integer(result);
     }
 
 
@@ -2821,7 +2821,7 @@ public class SModuleMath
 
 //* 
 //* <TeaFunction name="^"
-//* 		arguments="[value ...]"
+//*                 arguments="[value ...]"
 //*             module="tea.math">
 //*
 //* <Overview>
@@ -2851,20 +2851,20 @@ public class SModuleMath
  **************************************************************************/
 
     private Object functionBinXor(SObjFunction func,
-				  SContext     context,
-				  Object[]     args)
-	throws STeaException {
+                                  SContext     context,
+                                  Object[]     args)
+        throws STeaException {
 
-	int lastIndex = args.length;
-	int result    = (lastIndex==1) ? 0 : SArgs.getInt(args,1).intValue();
+        int lastIndex = args.length;
+        int result    = (lastIndex==1) ? 0 : SArgs.getInt(args,1).intValue();
 
-	for ( int i=2; i<lastIndex; i++ ) {
-	    int operand = SArgs.getInt(args,i).intValue();
+        for ( int i=2; i<lastIndex; i++ ) {
+            int operand = SArgs.getInt(args,i).intValue();
 
-	    result ^= operand;
-	}
+            result ^= operand;
+        }
 
-	return new Integer(result);
+        return new Integer(result);
     }
 
 
@@ -2873,7 +2873,7 @@ public class SModuleMath
 
 //* 
 //* <TeaFunction name="&lt;&lt;"
-//* 		arguments="value shift"
+//*                 arguments="value shift"
 //*             module="tea.math">
 //*
 //* <Overview>
@@ -2908,17 +2908,17 @@ public class SModuleMath
     private Object functionBinSl(SObjFunction func,
                                  SContext     context,
                                  Object[]     args)
-	throws STeaException {
+        throws STeaException {
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "value shift");
-	}
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "value shift");
+        }
 
-	int value = SArgs.getInt(args, 1).intValue();
-	int shift = SArgs.getInt(args, 2).intValue();
-	int result = value << shift;
+        int value = SArgs.getInt(args, 1).intValue();
+        int shift = SArgs.getInt(args, 2).intValue();
+        int result = value << shift;
 
-	return new Integer(result);
+        return new Integer(result);
     }
 
 
@@ -2927,7 +2927,7 @@ public class SModuleMath
 
 //* 
 //* <TeaFunction name="&gt;&gt;"
-//* 		arguments="value shift"
+//*                 arguments="value shift"
 //*             module="tea.math">
 //*
 //* <Overview>
@@ -2962,17 +2962,17 @@ public class SModuleMath
     private Object functionBinSr(SObjFunction func,
                                  SContext     context,
                                  Object[]     args)
-	throws STeaException {
+        throws STeaException {
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "value shift");
-	}
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "value shift");
+        }
 
-	int value = SArgs.getInt(args, 1).intValue();
-	int shift = SArgs.getInt(args, 2).intValue();
-	int result = value >> shift;
+        int value = SArgs.getInt(args, 1).intValue();
+        int shift = SArgs.getInt(args, 2).intValue();
+        int result = value >> shift;
 
-	return new Integer(result);
+        return new Integer(result);
     }
 
 
@@ -2981,7 +2981,7 @@ public class SModuleMath
 
 //* 
 //* <TeaFunction name="&amp;="
-//* 		arguments="symbol value"
+//*                 arguments="symbol value"
 //*             module="tea.math">
 //*
 //* <Overview>
@@ -3027,34 +3027,34 @@ public class SModuleMath
  **************************************************************************/
 
     private static Object functionBinAndBy(SObjFunction func,
-					   SContext     context,
-					   Object[]     args)
-	throws STeaException {
+                                           SContext     context,
+                                           Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "symbol value");
-	}
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "symbol value");
+        }
 
-	SObjSymbol symbol  = SArgs.getSymbol(args, 1);
-	SObjVar    var     = context.getVarObject(symbol);
-	Object     value   = var.get();
-	int        operand = SArgs.getInt(args, 2).intValue();
-	int        result  = 0;
-	Object     resObj  = null;
+        SObjSymbol symbol  = SArgs.getSymbol(args, 1);
+        SObjVar    var     = context.getVarObject(symbol);
+        Object     value   = var.get();
+        int        operand = SArgs.getInt(args, 2).intValue();
+        int        result  = 0;
+        Object     resObj  = null;
 
-	try {
-	    result = ((Integer)value).intValue() & operand;
-	} catch (ClassCastException e) {
-	    String   msg     =
-		"Variable \"{0}\" must contain a numeric, not a {1}";
-	    Object[] fmtArgs = { symbol, STypes.getTypeName(value) };
-	    throw new STeaException(msg, fmtArgs);
-	}
-	resObj = new Integer(result);
+        try {
+            result = ((Integer)value).intValue() & operand;
+        } catch (ClassCastException e) {
+            String   msg     =
+                "Variable \"{0}\" must contain a numeric, not a {1}";
+            Object[] fmtArgs = { symbol, STypes.getTypeName(value) };
+            throw new STeaException(msg, fmtArgs);
+        }
+        resObj = new Integer(result);
 
-	var.set(resObj);
+        var.set(resObj);
 
-	return resObj;
+        return resObj;
     }
 
 
@@ -3063,7 +3063,7 @@ public class SModuleMath
 
 //* 
 //* <TeaFunction name="|="
-//* 		arguments="symbol value"
+//*                 arguments="symbol value"
 //*             module="tea.math">
 //*
 //* <Overview>
@@ -3109,34 +3109,34 @@ public class SModuleMath
  **************************************************************************/
 
     private static Object functionBinOrBy(SObjFunction func,
-					  SContext     context,
-					  Object[]     args)
-	throws STeaException {
+                                          SContext     context,
+                                          Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "symbol value");
-	}
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "symbol value");
+        }
 
-	SObjSymbol symbol  = SArgs.getSymbol(args, 1);
-	SObjVar    var     = context.getVarObject(symbol);
-	Object     value   = var.get();
-	int        operand = SArgs.getInt(args, 2).intValue();
-	int        result  = 0;
-	Object     resObj  = null;
+        SObjSymbol symbol  = SArgs.getSymbol(args, 1);
+        SObjVar    var     = context.getVarObject(symbol);
+        Object     value   = var.get();
+        int        operand = SArgs.getInt(args, 2).intValue();
+        int        result  = 0;
+        Object     resObj  = null;
 
-	try {
-	    result = ((Integer)value).intValue() | operand;
-	} catch (ClassCastException e) {
-	    String   msg     =
-		"Variable \"{0}\" must contain a numeric, not a {1}";
-	    Object[] fmtArgs = { symbol, STypes.getTypeName(value) };
-	    throw new STeaException(msg, fmtArgs);
-	}
-	resObj = new Integer(result);
+        try {
+            result = ((Integer)value).intValue() | operand;
+        } catch (ClassCastException e) {
+            String   msg     =
+                "Variable \"{0}\" must contain a numeric, not a {1}";
+            Object[] fmtArgs = { symbol, STypes.getTypeName(value) };
+            throw new STeaException(msg, fmtArgs);
+        }
+        resObj = new Integer(result);
 
-	var.set(resObj);
+        var.set(resObj);
 
-	return resObj;
+        return resObj;
     }
 
 
@@ -3145,7 +3145,7 @@ public class SModuleMath
 
 //* 
 //* <TeaFunction name="^="
-//* 		arguments="symbol value"
+//*                 arguments="symbol value"
 //*             module="tea.math">
 //*
 //* <Overview>
@@ -3191,34 +3191,34 @@ public class SModuleMath
  **************************************************************************/
 
     private static Object functionBinXorBy(SObjFunction func,
-					   SContext     context,
-					   Object[]     args)
-	throws STeaException {
+                                           SContext     context,
+                                           Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "symbol value");
-	}
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "symbol value");
+        }
 
-	SObjSymbol symbol  = SArgs.getSymbol(args, 1);
-	SObjVar    var     = context.getVarObject(symbol);
-	Object     value   = var.get();
-	int        operand = SArgs.getInt(args, 2).intValue();
-	int        result  = 0;
-	Object     resObj  = null;
+        SObjSymbol symbol  = SArgs.getSymbol(args, 1);
+        SObjVar    var     = context.getVarObject(symbol);
+        Object     value   = var.get();
+        int        operand = SArgs.getInt(args, 2).intValue();
+        int        result  = 0;
+        Object     resObj  = null;
 
-	try {
-	    result = ((Integer)value).intValue() ^ operand;
-	} catch (ClassCastException e) {
-	    String   msg     =
-		"Variable \"{0}\" must contain a numeric, not a {1}";
-	    Object[] fmtArgs = { symbol, STypes.getTypeName(value) };
-	    throw new STeaException(msg, fmtArgs);
-	}
-	resObj = new Integer(result);
+        try {
+            result = ((Integer)value).intValue() ^ operand;
+        } catch (ClassCastException e) {
+            String   msg     =
+                "Variable \"{0}\" must contain a numeric, not a {1}";
+            Object[] fmtArgs = { symbol, STypes.getTypeName(value) };
+            throw new STeaException(msg, fmtArgs);
+        }
+        resObj = new Integer(result);
 
-	var.set(resObj);
+        var.set(resObj);
 
-	return resObj;
+        return resObj;
     }
 
 
@@ -3227,7 +3227,7 @@ public class SModuleMath
 
 //* 
 //* <TeaFunction name="&lt;&lt;="
-//* 		arguments="symbol value"
+//*                 arguments="symbol value"
 //*             module="tea.math">
 //*
 //* <Overview>
@@ -3273,34 +3273,34 @@ public class SModuleMath
  **************************************************************************/
 
     private static Object functionBinSlBy(SObjFunction func,
-					  SContext     context,
-					  Object[]     args)
-	throws STeaException {
+                                          SContext     context,
+                                          Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "symbol value");
-	}
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "symbol value");
+        }
 
-	SObjSymbol symbol = SArgs.getSymbol(args, 1);
-	SObjVar    var    = context.getVarObject(symbol);
-	Object     value  = var.get();
-	int        shift  = SArgs.getInt(args, 2).intValue();
-	int        result = 0;
-	Object     resObj = null;
+        SObjSymbol symbol = SArgs.getSymbol(args, 1);
+        SObjVar    var    = context.getVarObject(symbol);
+        Object     value  = var.get();
+        int        shift  = SArgs.getInt(args, 2).intValue();
+        int        result = 0;
+        Object     resObj = null;
 
-	try {
-	    result = ((Integer)value).intValue() << shift;
-	} catch (ClassCastException e) {
-	    String   msg     =
-		"Variable \"{0}\" must contain a numeric, not a {1}";
-	    Object[] fmtArgs = { symbol, STypes.getTypeName(value) };
-	    throw new STeaException(msg, fmtArgs);
-	}
-	resObj = new Integer(result);
+        try {
+            result = ((Integer)value).intValue() << shift;
+        } catch (ClassCastException e) {
+            String   msg     =
+                "Variable \"{0}\" must contain a numeric, not a {1}";
+            Object[] fmtArgs = { symbol, STypes.getTypeName(value) };
+            throw new STeaException(msg, fmtArgs);
+        }
+        resObj = new Integer(result);
 
-	var.set(resObj);
+        var.set(resObj);
 
-	return resObj;
+        return resObj;
     }
 
 
@@ -3309,7 +3309,7 @@ public class SModuleMath
 
 //* 
 //* <TeaFunction name="&gt;&gt;="
-//* 		arguments="symbol value"
+//*                 arguments="symbol value"
 //*             module="tea.math">
 //*
 //* <Overview>
@@ -3355,34 +3355,34 @@ public class SModuleMath
  **************************************************************************/
 
     private static Object functionBinSrBy(SObjFunction func,
-					  SContext     context,
-					  Object[]     args)
-	throws STeaException {
+                                          SContext     context,
+                                          Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "symbol value");
-	}
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "symbol value");
+        }
 
-	SObjSymbol symbol = SArgs.getSymbol(args, 1);
-	SObjVar    var    = context.getVarObject(symbol);
-	Object     value  = var.get();
-	int        shift  = SArgs.getInt(args, 2).intValue();
-	int        result = 0;
-	Object     resObj = null;
+        SObjSymbol symbol = SArgs.getSymbol(args, 1);
+        SObjVar    var    = context.getVarObject(symbol);
+        Object     value  = var.get();
+        int        shift  = SArgs.getInt(args, 2).intValue();
+        int        result = 0;
+        Object     resObj = null;
 
-	try {
-	    result = ((Integer)value).intValue() >> shift;
-	} catch (ClassCastException e) {
-	    String   msg     =
-		"Variable \"{0}\" must contain a numeric, not a {1}";
-	    Object[] fmtArgs = { symbol, STypes.getTypeName(value) };
-	    throw new STeaException(msg, fmtArgs);
-	}
-	resObj = new Integer(result);
+        try {
+            result = ((Integer)value).intValue() >> shift;
+        } catch (ClassCastException e) {
+            String   msg     =
+                "Variable \"{0}\" must contain a numeric, not a {1}";
+            Object[] fmtArgs = { symbol, STypes.getTypeName(value) };
+            throw new STeaException(msg, fmtArgs);
+        }
+        resObj = new Integer(result);
 
-	var.set(resObj);
+        var.set(resObj);
 
-	return resObj;
+        return resObj;
     }
 
 
@@ -3419,11 +3419,11 @@ class SGt
     implements SComparator {
     
     public boolean compareInt(int x, int y) {
-	return x > y;
+        return x > y;
     }
     
     public boolean compareDouble(double x, double y) {
-	return x > y;
+        return x > y;
     }
 }
 
@@ -3442,11 +3442,11 @@ class SLt
     implements SComparator {
     
     public boolean compareInt(int x, int y) {
-	return x < y;
+        return x < y;
     }
     
     public boolean compareDouble(double x, double y) {
-	return x < y;
+        return x < y;
     }
 }
 

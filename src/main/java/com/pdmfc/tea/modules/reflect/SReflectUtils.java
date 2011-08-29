@@ -56,15 +56,15 @@ final class SReflectUtils
  **************************************************************************/
 
     static {
-	_primitiveTypes.put(Boolean.TYPE.getName(),   Boolean.TYPE);
-	_primitiveTypes.put(Character.TYPE.getName(), Character.TYPE);
-	_primitiveTypes.put(Byte.TYPE.getName(),      Byte.TYPE);
-	_primitiveTypes.put(Short.TYPE.getName(),     Short.TYPE);
-	_primitiveTypes.put(Integer.TYPE.getName(),   Integer.TYPE);
-	_primitiveTypes.put(Long.TYPE.getName(),      Long.TYPE);
-	_primitiveTypes.put(Float.TYPE.getName(),     Float.TYPE);
-	_primitiveTypes.put(Double.TYPE.getName(),    Double.TYPE);
-	_primitiveTypes.put(Void.TYPE.getName(),      Void.TYPE);
+        _primitiveTypes.put(Boolean.TYPE.getName(),   Boolean.TYPE);
+        _primitiveTypes.put(Character.TYPE.getName(), Character.TYPE);
+        _primitiveTypes.put(Byte.TYPE.getName(),      Byte.TYPE);
+        _primitiveTypes.put(Short.TYPE.getName(),     Short.TYPE);
+        _primitiveTypes.put(Integer.TYPE.getName(),   Integer.TYPE);
+        _primitiveTypes.put(Long.TYPE.getName(),      Long.TYPE);
+        _primitiveTypes.put(Float.TYPE.getName(),     Float.TYPE);
+        _primitiveTypes.put(Double.TYPE.getName(),    Double.TYPE);
+        _primitiveTypes.put(Void.TYPE.getName(),      Void.TYPE);
     }
 
 
@@ -97,24 +97,24 @@ final class SReflectUtils
     public static Object getFieldValue(final Class<?> klass, 
                                        final Object   obj, 
                                        final String   memberName)
-	throws SRuntimeException {
+        throws SRuntimeException {
 
         Object result = null;
 
         try {
             result = doGetFieldValue(klass, obj, memberName);
         } catch (NoSuchFieldException e) {
-	    throw new SRuntimeException("could not find member '" + 
-					memberName + "'");
-	} catch (IllegalAccessException e) {
-	    throw new SRuntimeException("cannot access member '" + 
-					memberName + "'");
-	} catch (NullPointerException e) {
-	    throw new SRuntimeException("member '" + 
-					memberName + "' is not static");
-	}
-	
-	return result;
+            throw new SRuntimeException("could not find member '" + 
+                                        memberName + "'");
+        } catch (IllegalAccessException e) {
+            throw new SRuntimeException("cannot access member '" + 
+                                        memberName + "'");
+        } catch (NullPointerException e) {
+            throw new SRuntimeException("member '" + 
+                                        memberName + "' is not static");
+        }
+        
+        return result;
     }
 
 
@@ -132,13 +132,13 @@ final class SReflectUtils
     private static Object doGetFieldValue(final Class<?> klass, 
                                           final Object   obj, 
                                           final String   memberName)
-	throws NoSuchFieldException,
-	       IllegalAccessException {
-	
-	Field  field  = klass.getField(memberName);
-	Object result = field.get(obj);
-	
-	return result;
+        throws NoSuchFieldException,
+               IllegalAccessException {
+        
+        Field  field  = klass.getField(memberName);
+        Object result = field.get(obj);
+        
+        return result;
     }
 
 
@@ -156,24 +156,24 @@ final class SReflectUtils
                                        final Object   obj, 
                                        final String   memberName,
                                        final Object   value)
-	throws SRuntimeException {
+        throws SRuntimeException {
 
         Object result = null;
 
         try {
             result = doSetFieldValue(klass, obj, memberName, value);
         } catch (NoSuchFieldException e) {
-	    throw new SRuntimeException("could not find member '" + 
-					memberName + "'");
-	} catch (IllegalAccessException e) {
-	    throw new SRuntimeException("cannot access member '" + 
-					memberName + "'");
-	} catch (NullPointerException e) {
-	    throw new SRuntimeException("member '" + 
-					memberName + "' is not static");
-	}
+            throw new SRuntimeException("could not find member '" + 
+                                        memberName + "'");
+        } catch (IllegalAccessException e) {
+            throw new SRuntimeException("cannot access member '" + 
+                                        memberName + "'");
+        } catch (NullPointerException e) {
+            throw new SRuntimeException("member '" + 
+                                        memberName + "' is not static");
+        }
 
-	return result;
+        return result;
     }
 
 
@@ -191,15 +191,15 @@ final class SReflectUtils
                                           final Object   obj, 
                                           final String   memberName,
                                           final Object   value)
-	throws NoSuchFieldException,
-	       IllegalAccessException {
-	
+        throws NoSuchFieldException,
+               IllegalAccessException {
+        
         Object result = doGetFieldValue(klass, obj, memberName);
-	Field  field  = klass.getField(memberName);
+        Field  field  = klass.getField(memberName);
 
-	field.set(obj, value);
+        field.set(obj, value);
 
-	return result;
+        return result;
     }
 
 
@@ -221,23 +221,23 @@ final class SReflectUtils
                                       final Method   method,
                                       final SContext context,
                                       final Object[] methodArgs) 
-	throws STeaException {
+        throws STeaException {
 
-	Object javaResult = null;
+        Object javaResult = null;
 
-	try {
-	    javaResult = method.invoke(javaObj, methodArgs);
-	} catch (IllegalAccessException e) {
+        try {
+            javaResult = method.invoke(javaObj, methodArgs);
+        } catch (IllegalAccessException e) {
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
             e.printStackTrace(pw);
             pw.close();
             String msg = "cannot access method \"{0}\" - stack trace: {1}";
- 	    throw new SRuntimeException(msg, method.getName(), sw.toString());
-	} catch (NullPointerException e) {
+             throw new SRuntimeException(msg, method.getName(), sw.toString());
+        } catch (NullPointerException e) {
             String msg = "method \"{0}\" is not static";
- 	    throw new SRuntimeException(msg, method.getName());
-	} catch (InvocationTargetException e) {
+             throw new SRuntimeException(msg, method.getName());
+        } catch (InvocationTargetException e) {
             Throwable cause = e.getCause();
             // Slight hack to accomodate Java code that executed Tea code.
             if ( cause instanceof UndeclaredThrowableException ) {
@@ -248,9 +248,9 @@ final class SReflectUtils
             } else {
                 throw new SRuntimeException(cause);
             }
- 	}
+         }
 
-	Object result = STeaJavaTypes.java2Tea(javaResult, context);
+        Object result = STeaJavaTypes.java2Tea(javaResult, context);
 
         return result;
     }
@@ -267,16 +267,16 @@ final class SReflectUtils
     
     public static String getStringOrSymbol(final Object[] args,
                                            final int      index)
-	throws STypeException {
-	
-	if (args[index] instanceof String) {
-	    return (String)args[index];
-	}
-	if (args[index] instanceof SObjSymbol) {
-	    return ((SObjSymbol)args[index]).getName();
-	}
+        throws STypeException {
+        
+        if (args[index] instanceof String) {
+            return (String)args[index];
+        }
+        if (args[index] instanceof SObjSymbol) {
+            return ((SObjSymbol)args[index]).getName();
+        }
 
-	throw new STypeException(args, index, "string or a symbol");
+        throw new STypeException(args, index, "string or a symbol");
     }
 
 
@@ -320,7 +320,7 @@ final class SReflectUtils
                 result = Class.forName(className);
             } catch ( ClassNotFoundException e ) {
                 String msg = "could not load class \"{0}\"";
-                throw new SRuntimeException(args, msg, className);	    
+                throw new SRuntimeException(args, msg, className);    
             } catch (UnsupportedClassVersionError e) {
                 String msg = "Bad version number in .class file \"{0}\"";
                 throw new SRuntimeException(args, msg, className);

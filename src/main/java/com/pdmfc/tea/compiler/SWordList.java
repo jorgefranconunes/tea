@@ -1,22 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $id$
- *
- *
- * Revisions:
- *
- * 2010/01/28 Minor refactorings to properly use generics. (jfn)
- *
- * 2002/08/03 The constructor now receives a java.util.List as
- * argument instead of a SList. (jfn)
- *
- * 2001/05/12 Created. (jfn)
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -41,7 +25,7 @@ import com.pdmfc.tea.runtime.SRuntimeException;
  *
  **************************************************************************/
 
-class SWordList
+final class SWordList
     extends Object
     implements SWord {
 
@@ -61,9 +45,9 @@ class SWordList
  *
  **************************************************************************/
 
-    SWordList(List<SWord> list) {
+    public SWordList(final List<SWord> list) {
 
-	_list = list;
+        _list = list;
     }
 
 
@@ -76,26 +60,26 @@ class SWordList
  *
  **************************************************************************/
 
-    public Object get(SContext context)
-	throws STeaException {
+    public Object get(final SContext context)
+        throws STeaException {
 
-	SObjPair empty = new SObjPair(null, null);
-	SObjPair head  = empty;
-	SObjPair elem  = null;
+        SObjPair empty = new SObjPair(null, null);
+        SObjPair head  = empty;
+        SObjPair elem  = null;
 
         for ( SWord word : _list ) {
-	    Object   car  = word.get(context);
-	    SObjPair node = new SObjPair(car, empty);
-	    
-	    if ( elem == null ) {
-		head = node;
-	    } else {
-		elem._cdr = node;
-	    }
-	    elem = node;
-	}
+            Object   car  = word.get(context);
+            SObjPair node = new SObjPair(car, empty);
+            
+            if ( elem == null ) {
+                head = node;
+            } else {
+                elem._cdr = node;
+            }
+            elem = node;
+        }
 
-	return head;
+        return head;
     }
 
 
@@ -108,10 +92,10 @@ class SWordList
  *
  **************************************************************************/
 
-    public SObjFunction toFunction(SContext context)
-	throws STeaException {
+    public SObjFunction toFunction(final SContext context)
+        throws STeaException {
 
-	throw new SRuntimeException("a list can not be used as a function");
+        throw new SRuntimeException("a list can not be used as a function");
     }
 
 
@@ -125,17 +109,17 @@ class SWordList
  *
  **************************************************************************/
 
-//    public void prettyPrint(PrintStream out,
-//			    int         indent) {
+//    public void prettyPrint(final PrintStream out,
+//                            final int         indent) {
 //
-//	out.print("( ");
+//        out.print("( ");
 //
-//	for ( Iterator i=_list.iterator(); i.hasNext(); ) {
-//	    ((SWord)i.next()).prettyPrint(out, indent+4);
-//	    out. print(' ');
-//	}
+//        for ( Iterator i=_list.iterator(); i.hasNext(); ) {
+//            ((SWord)i.next()).prettyPrint(out, indent+4);
+//            out. print(' ');
+//        }
 //
-//	out.print(")");
+//        out.print(")");
 //    }
 
 

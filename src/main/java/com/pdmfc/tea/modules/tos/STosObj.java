@@ -70,7 +70,7 @@ public class STosObj
  **************************************************************************/
 
    public STosObj(STosClass theClass)
-	 throws STeaException {
+         throws STeaException {
 
       _selfObj = this;
       _myClass = theClass;
@@ -98,7 +98,7 @@ public class STosObj
  **************************************************************************/
 
    public void init(SContext context,
-		    Object   args[])
+                    Object   args[])
          throws STeaException {
 
       SObjFunction constructor = _myClass.getConstructor();
@@ -109,12 +109,12 @@ public class STosObj
       _parts[_level]   = this;
 
       if ( _superObj != null ) {
-	 _superObj.init(_selfObj, _members, _parts);
+         _superObj.init(_selfObj, _members, _parts);
       }
       // WARNING: No checking should be needed for "context" and "args".
       // CHECK THE CLIENT CODE!!!
       if ( (context!=null) && (args!=null) && (constructor!=null) ) {
-	 args[0] = this;
+         args[0] = this;
          constructor.exec(_selfObj, context, args);
       }
    }
@@ -137,8 +137,8 @@ public class STosObj
  **************************************************************************/
 
    private void init(STosObj      selfObj,
-		     SMemberSet[] members,
-		     STosObj[]    parts) {
+                     SMemberSet[] members,
+                     STosObj[]    parts) {
 
       _selfObj = selfObj;
       _members = members;
@@ -147,7 +147,7 @@ public class STosObj
       _parts[_level] = this;
 
       if ( _superObj != null ) {
-	 _superObj.init(selfObj, members, parts);
+         _superObj.init(selfObj, members, parts);
       }
    }
 
@@ -170,8 +170,8 @@ public class STosObj
       SListNode node = _myClass.memberNames().head(); 
 
       while ( node != null ) {
-      	  members.newVar((SObjSymbol)node._element, SObjNull.NULL);
-	  node = node._next;
+                members.newVar((SObjSymbol)node._element, SObjNull.NULL);
+          node = node._next;
       }
 
       return members;
@@ -245,7 +245,7 @@ public class STosObj
 
       public STosClass getTosClass() {
 
-	 return _myClass;
+         return _myClass;
       }
 
 
@@ -274,12 +274,12 @@ public class STosObj
  **************************************************************************/
 
    public Object exec(SObjFunction obj,
-		      SContext     context,
-		      Object[]     args)
+                      SContext     context,
+                      Object[]     args)
       throws STeaException {
 
       if ( args.length < 2 ) {
-	 return SObjNull.NULL;
+         return SObjNull.NULL;
       }
 
       SObjSymbol   methodName = SArgs.getSymbol(args, 1);
@@ -300,7 +300,7 @@ public class STosObj
  **************************************************************************/
 
     class SMemberSet
-	extends SContext {
+        extends SContext {
 
 
 
@@ -312,8 +312,8 @@ public class STosObj
  *
  **************************************************************************/
 
-	public SMemberSet() {
-	}
+        public SMemberSet() {
+        }
 
 
     }

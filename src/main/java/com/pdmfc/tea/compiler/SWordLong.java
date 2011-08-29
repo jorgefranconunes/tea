@@ -1,17 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2003 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2003/07/10 Created. (jfn)
+ * Copyright (c) 2003-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -33,7 +22,7 @@ import com.pdmfc.tea.runtime.SRuntimeException;
  *
  **************************************************************************/
 
-class SWordLong
+final class SWordLong
     extends Object
     implements SWord {
 
@@ -56,9 +45,9 @@ class SWordLong
  *
  **************************************************************************/
 
-    SWordLong(long value) {
+    public SWordLong(final long value) {
 
-	_value = new Long(value);
+        _value = new Long(value);
     }
 
 
@@ -69,17 +58,16 @@ class SWordLong
  *
  * Evaluates this word.
  *
- * @param context The <code>SContext</code> where this word is being
- * evaluated.
+ * @param context The context where this word is being evaluated.
  *
  * @return The object this word evaluated to. It is an
- * <code>java.lang.Long<\code> object.
+ * <code>java.lang.Long</code> object.
  *
  **************************************************************************/
 
-    public Object get(SContext context) {
+    public Object get(final SContext context) {
 
-	return _value;
+        return _value;
     }
 
 
@@ -92,10 +80,11 @@ class SWordLong
  *
  **************************************************************************/
 
-    public SObjFunction toFunction(SContext context)
-	throws STeaException {
+    public SObjFunction toFunction(final SContext context)
+        throws STeaException {
 
-	throw new SRuntimeException("a long can not be used as a function");
+        String msg = "a long can not be used as a function";
+        throw new SRuntimeException(msg);
     }
 
 

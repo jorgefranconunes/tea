@@ -130,14 +130,14 @@ public final class SArgs
  **************************************************************************/
 
     public static SObjBlock getBlock(final Object[] args,
-				     final int      index)
-	throws STypeException {
+                                     final int      index)
+        throws STypeException {
 
-	try {
-	    return (SObjBlock)args[index];
-	} catch (ClassCastException e) {
+        try {
+            return (SObjBlock)args[index];
+        } catch (ClassCastException e) {
             throw new STypeException(args, index, "block");
-	}
+        }
     }
 
 
@@ -160,14 +160,14 @@ public final class SArgs
  **************************************************************************/
 
     public static SObjPair getPair(final Object[] args,
-				   final int      index)
-	throws STypeException {
+                                   final int      index)
+        throws STypeException {
 
-	try {
-	    return (SObjPair)args[index];
-	} catch (ClassCastException e) {
-	    throw new STypeException(args, index, "pair");
-	}
+        try {
+            return (SObjPair)args[index];
+        } catch (ClassCastException e) {
+            throw new STypeException(args, index, "pair");
+        }
     }
 
 
@@ -191,17 +191,17 @@ public final class SArgs
  **************************************************************************/
 
     public static SObjSymbol getSymbol(final Object[] args,
-				       final int      index)
-	throws STypeException {
+                                       final int      index)
+        throws STypeException {
 
         Object     value  = args[index];
         SObjSymbol result = null;
 
-	try {
-	    result = (SObjSymbol)value;
-	} catch (ClassCastException e) {
-	    throw new STypeException(args, index, "symbol");
-	}
+        try {
+            result = (SObjSymbol)value;
+        } catch (ClassCastException e) {
+            throw new STypeException(args, index, "symbol");
+        }
 
         return result;
     }
@@ -227,14 +227,14 @@ public final class SArgs
  **************************************************************************/
 
     static public Number getNumber(final Object[] args,
-				   final int      index)
-	throws STypeException {
+                                   final int      index)
+        throws STypeException {
 
-	try {
-	    return (Number)args[index];
-	} catch (ClassCastException e) {
-	    throw new STypeException(args, index, "numeric");
-	}
+        try {
+            return (Number)args[index];
+        } catch (ClassCastException e) {
+            throw new STypeException(args, index, "numeric");
+        }
     }
 
 
@@ -258,14 +258,14 @@ public final class SArgs
  **************************************************************************/
 
     public static Integer getInt(final Object[] args,
-				 final int      index)
-	throws STypeException {
+                                 final int      index)
+        throws STypeException {
 
-	try {
-	    return (Integer)args[index];
-	} catch (ClassCastException e) {
-	    throw new STypeException(args, index, "int");
-	}
+        try {
+            return (Integer)args[index];
+        } catch (ClassCastException e) {
+            throw new STypeException(args, index, "int");
+        }
     }
 
 
@@ -289,14 +289,14 @@ public final class SArgs
  **************************************************************************/
 
     public static Double getFloat(final Object[] args,
-				  final int      index)
-	throws STypeException {
+                                  final int      index)
+        throws STypeException {
 
-	try {
-	    return (Double)args[index];
-	} catch (ClassCastException e) {
-	    throw new STypeException(args, index, "float");
-	}
+        try {
+            return (Double)args[index];
+        } catch (ClassCastException e) {
+            throw new STypeException(args, index, "float");
+        }
     }
 
 
@@ -321,13 +321,13 @@ public final class SArgs
 
     public static Boolean getBoolean(final Object[] args,
                                      final int      index)
-	throws STypeException {
+        throws STypeException {
 
-	try {
-	    return (Boolean)args[index];
-	} catch (ClassCastException e) {
-	    throw new STypeException(args, index, "boolean");
-	}
+        try {
+            return (Boolean)args[index];
+        } catch (ClassCastException e) {
+            throw new STypeException(args, index, "boolean");
+        }
     }
 
 
@@ -351,14 +351,14 @@ public final class SArgs
  **************************************************************************/
 
     public static String getString(final Object[] args,
-				   final int      index)
-	throws STypeException {
+                                   final int      index)
+        throws STypeException {
 
-	try {
-	    return (String)args[index];
-	} catch (ClassCastException e) {
-	    throw new STypeException(args, index, "string");
-	}
+        try {
+            return (String)args[index];
+        } catch (ClassCastException e) {
+            throw new STypeException(args, index, "string");
+        }
     }
 
 
@@ -388,34 +388,34 @@ public final class SArgs
  **************************************************************************/
 
     public static SObjFunction getFunction(final SContext context,
-					   final Object[]  args,
-					   final int       index)
-	throws STeaException {
+                                           final Object[]  args,
+                                           final int       index)
+        throws STeaException {
 
-	Object obj = args[index];
-	Object value;
+        Object obj = args[index];
+        Object value;
 
-	if ( obj instanceof SObjFunction ) {
-	    return (SObjFunction)obj;
-	}
+        if ( obj instanceof SObjFunction ) {
+            return (SObjFunction)obj;
+        }
 
-	try {
-	    value = context.getVar((SObjSymbol)obj);
-	} catch (ClassCastException e1) {
-	    throw new STypeException(args, index, "function or a symbol");
-	} catch (SNoSuchVarException e2) {
-	    value = STypes.getVarWithEffort(context, (SObjSymbol)obj);
-	}
-	
-	try {
-	    return (SObjFunction)value;
-	} catch (ClassCastException e1) {
+        try {
+            value = context.getVar((SObjSymbol)obj);
+        } catch (ClassCastException e1) {
+            throw new STypeException(args, index, "function or a symbol");
+        } catch (SNoSuchVarException e2) {
+            value = STypes.getVarWithEffort(context, (SObjSymbol)obj);
+        }
+        
+        try {
+            return (SObjFunction)value;
+        } catch (ClassCastException e1) {
             String msg = "variable {0} should contain a function, not a {1}";
-	    throw new SRuntimeException(args,
+            throw new SRuntimeException(args,
                                         msg,
                                         obj,
                                         STypes.getTypeName(value));
-	}
+        }
     }
                                      
 

@@ -72,7 +72,7 @@ public class SHashtable
 
     private static final String     CLASS_NAME   = "THashtable";
     private static final SObjSymbol CLASS_NAME_S =
-	SObjSymbol.addSymbol(CLASS_NAME);
+        SObjSymbol.addSymbol(CLASS_NAME);
 
     private Map<Object,Object> _hashtable = null;
 
@@ -91,11 +91,11 @@ public class SHashtable
  **************************************************************************/
 
     public SHashtable(STosClass myClass)
-	throws STeaException {
+        throws STeaException {
 
-	super(myClass);
+        super(myClass);
 
-	_hashtable = new HashMap<Object,Object>();
+        _hashtable = new HashMap<Object,Object>();
     }
 
 
@@ -116,12 +116,12 @@ public class SHashtable
  **************************************************************************/
 
     private SHashtable(STosClass          myClass,
-		       Map<Object,Object> contents)
-	throws STeaException {
+                       Map<Object,Object> contents)
+        throws STeaException {
 
-	super(myClass);
+        super(myClass);
 
-	_hashtable = contents;
+        _hashtable = contents;
     }
 
 
@@ -142,7 +142,7 @@ public class SHashtable
 
     public Map<Object,Object> getInternalMap() {
 
-	return _hashtable;
+        return _hashtable;
     }
 
 
@@ -151,7 +151,7 @@ public class SHashtable
 
 //* 
 //* <TeaMethod name="constructor"
-//* 	       className="THashtable">
+//*                className="THashtable">
 //* 
 //* <Overview>
 //* Initializes an empty hashtable.
@@ -177,11 +177,11 @@ public class SHashtable
  **************************************************************************/
 
     public Object constructor(SObjFunction obj,
-			      SContext     context,
-			      Object[]     args)
-	throws STeaException {
+                              SContext     context,
+                              Object[]     args)
+        throws STeaException {
 
-	return obj;
+        return obj;
     }
 
 
@@ -191,7 +191,7 @@ public class SHashtable
 //* 
 //* <TeaMethod name="put"
 //*            arguments="key value"
-//* 	       className="THashtable">
+//*                className="THashtable">
 //* 
 //* <Overview>
 //* Adds an object to the <Class name="THashtable"/>.
@@ -234,17 +234,17 @@ public class SHashtable
  **************************************************************************/
 
     public Object put(SObjFunction obj,
-		      SContext     context,
-		      Object[]     args)
-	throws STeaException {
+                      SContext     context,
+                      Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 4 ) {
-	    throw new SNumArgException(args, "key value");
-	}
+        if ( args.length != 4 ) {
+            throw new SNumArgException(args, "key value");
+        }
 
-	_hashtable.put(args[2], args[3]);
+        _hashtable.put(args[2], args[3]);
 
-	return obj;
+        return obj;
     }
 
 
@@ -254,7 +254,7 @@ public class SHashtable
 //* 
 //* <TeaMethod name="get"
 //*            arguments="key"
-//* 	       className="THashtable">
+//*                className="THashtable">
 //* 
 //* <Overview>
 //* Fetches an object stored in the <Func name="THashtable"/>.
@@ -293,17 +293,17 @@ public class SHashtable
  **************************************************************************/
 
     public Object get(SObjFunction obj,
-		      SContext     context,
-		      Object[]     args)
-	throws STeaException {
-	
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "key");
-	}
+                      SContext     context,
+                      Object[]     args)
+        throws STeaException {
+        
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "key");
+        }
 
-	Object result = _hashtable.get(args[2]);
+        Object result = _hashtable.get(args[2]);
 
-	return (result==null) ? SObjNull.NULL : result;
+        return (result==null) ? SObjNull.NULL : result;
     }
 
 
@@ -312,7 +312,7 @@ public class SHashtable
 
 //* 
 //* <TeaMethod name="getKeys"
-//* 	       className="THashtable">
+//*                className="THashtable">
 //* 
 //* <Overview>
 //* Fetches a list of the keys of the objects stored in the
@@ -346,27 +346,27 @@ public class SHashtable
  **************************************************************************/
 
     public Object getKeys(SObjFunction obj,
-			  SContext     context,
-			  Object[]     args)
-	throws STeaException {
+                          SContext     context,
+                          Object[]     args)
+        throws STeaException {
 
-	SObjPair    empty   = SObjPair.emptyList();
-	SObjPair    head    = empty;
-	SObjPair    element = null;
+        SObjPair    empty   = SObjPair.emptyList();
+        SObjPair    head    = empty;
+        SObjPair    element = null;
 
-	for ( Iterator i=_hashtable.keySet().iterator(); i.hasNext(); ) {
-	    Object   key  = i.next();
-	    SObjPair node = new SObjPair(key, empty);
+        for ( Iterator i=_hashtable.keySet().iterator(); i.hasNext(); ) {
+            Object   key  = i.next();
+            SObjPair node = new SObjPair(key, empty);
 
-	    if ( element == null ) {
-		head = node;
-	    } else {
-		element._cdr = node;
-	    }
-	    element = node;
-	}
+            if ( element == null ) {
+                head = node;
+            } else {
+                element._cdr = node;
+            }
+            element = node;
+        }
 
-	return head;
+        return head;
     }
 
 
@@ -375,7 +375,7 @@ public class SHashtable
 
 //* 
 //* <TeaMethod name="getElements"
-//* 	       className="THashtable">
+//*                className="THashtable">
 //* 
 //* <Overview>
 //* Fetches a list of the objects stored in the
@@ -409,27 +409,27 @@ public class SHashtable
  **************************************************************************/
 
     public Object getElements(SObjFunction obj,
-			      SContext     context,
-			      Object[]     args)
-	throws STeaException {
+                              SContext     context,
+                              Object[]     args)
+        throws STeaException {
 
-	SObjPair   empty     = SObjPair.emptyList();
-	SObjPair   head      = empty;
-	SObjPair   element   = null;
+        SObjPair   empty     = SObjPair.emptyList();
+        SObjPair   head      = empty;
+        SObjPair   element   = null;
 
-	for ( Iterator i= _hashtable.values().iterator(); i.hasNext(); ) {
-	    Object   value = i.next();
-	    SObjPair node  = new SObjPair(value, empty);
+        for ( Iterator i= _hashtable.values().iterator(); i.hasNext(); ) {
+            Object   value = i.next();
+            SObjPair node  = new SObjPair(value, empty);
 
-	    if ( element == null ) {
-		head = node;
-	    } else {
-		element._cdr = node;
-	    }
-	    element = node;
-	}
+            if ( element == null ) {
+                head = node;
+            } else {
+                element._cdr = node;
+            }
+            element = node;
+        }
 
-	return head;
+        return head;
     }
 
 
@@ -439,7 +439,7 @@ public class SHashtable
 //* 
 //* <TeaMethod name="isKey"
 //*            arguments="object"
-//* 	       className="THashtable">
+//*                className="THashtable">
 //* 
 //* <Overview>
 //* Checks if an object is being used as key for one of the elements in
@@ -472,17 +472,17 @@ public class SHashtable
  **************************************************************************/
 
     public Object isKey(SObjFunction obj,
-			SContext     context,
-			Object[]     args)
-	throws STeaException {
+                        SContext     context,
+                        Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "key");
-	}
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "key");
+        }
 
-	Object key = args[2];
+        Object key = args[2];
 
-	return _hashtable.containsKey(key) ? Boolean.TRUE : Boolean.FALSE;
+        return _hashtable.containsKey(key) ? Boolean.TRUE : Boolean.FALSE;
     }
 
 
@@ -491,7 +491,7 @@ public class SHashtable
 
 //* 
 //* <TeaMethod name="clear"
-//* 	       className="THashtable">
+//*                className="THashtable">
 //* 
 //* <Overview>
 //* Removes all the elements from the <Func name="THashtable"/>.
@@ -522,13 +522,13 @@ public class SHashtable
  **************************************************************************/
 
     public Object clear(SObjFunction obj,
-			SContext     context,
-			Object[]     args)
-	throws STeaException {
+                        SContext     context,
+                        Object[]     args)
+        throws STeaException {
 
-	_hashtable.clear();
+        _hashtable.clear();
 
-	return obj;
+        return obj;
     }
 
 
@@ -538,7 +538,7 @@ public class SHashtable
 //* 
 //* <TeaMethod name="remove"
 //*            arguments="[key ...]"
-//* 	       className="THashtable">
+//*                className="THashtable">
 //* 
 //* <Overview>
 //* Removes one or more elements from the <Class name="THashtable"/>.
@@ -578,17 +578,17 @@ public class SHashtable
  **************************************************************************/
 
     public Object remove(SObjFunction obj,
-			 SContext     context,
-			 Object[]     args)
-	throws STeaException {
+                         SContext     context,
+                         Object[]     args)
+        throws STeaException {
 
-	int keyCount = args.length - 2;
+        int keyCount = args.length - 2;
 
-	for ( int i=0; i<keyCount; i++ ) {
-	    _hashtable.remove(args[i+2]);
-	}
+        for ( int i=0; i<keyCount; i++ ) {
+            _hashtable.remove(args[i+2]);
+        }
 
-	return obj;
+        return obj;
     }
 
 
@@ -607,7 +607,7 @@ public class SHashtable
 
     public static String getTosClassName() {
 
-	return CLASS_NAME;
+        return CLASS_NAME;
     }
 
 
@@ -631,15 +631,15 @@ public class SHashtable
  **************************************************************************/
 
     public static SHashtable newInstance(SContext context)
-	throws STeaException {
+        throws STeaException {
 
-	STosClass  theClass = STosUtil.getClass(context, CLASS_NAME_S);
-	SHashtable table    = new SHashtable(theClass);
-	Object[]   ctorArgs = { null, null };
+        STosClass  theClass = STosUtil.getClass(context, CLASS_NAME_S);
+        SHashtable table    = new SHashtable(theClass);
+        Object[]   ctorArgs = { null, null };
 
-	table.init(context, ctorArgs);
+        table.init(context, ctorArgs);
 
-	return table;
+        return table;
     }
 
 
@@ -662,16 +662,16 @@ public class SHashtable
  **************************************************************************/
 
     public static SHashtable newInstance(SContext           context,
-					 Map<Object,Object> contents)
-	throws STeaException {
+                                         Map<Object,Object> contents)
+        throws STeaException {
 
-	STosClass  theClass = STosUtil.getClass(context, CLASS_NAME_S);
-	SHashtable table    = new SHashtable(theClass, contents);
-	Object[]   ctorArgs = { null, null };
+        STosClass  theClass = STosUtil.getClass(context, CLASS_NAME_S);
+        SHashtable table    = new SHashtable(theClass, contents);
+        Object[]   ctorArgs = { null, null };
 
-	table.init(context, ctorArgs);
+        table.init(context, ctorArgs);
 
-	return table;
+        return table;
     }
 
 

@@ -90,15 +90,15 @@ public class STosClass
  **************************************************************************/
 
     public STosClass(STosClass superClass,
-		     SList     members) {
+                     SList     members) {
 
-	_name        = null;
-	_superClass  = superClass;
-	_members     = members;
-	_constructor = null;
-	_methods     = new SMethodSet((_superClass==null)
-				      ? null : _superClass._methods);
-	_level   = (_superClass==null) ? 0 : (1+_superClass.level());
+        _name        = null;
+        _superClass  = superClass;
+        _members     = members;
+        _constructor = null;
+        _methods     = new SMethodSet((_superClass==null)
+                                      ? null : _superClass._methods);
+        _level   = (_superClass==null) ? 0 : (1+_superClass.level());
     }
 
 
@@ -232,7 +232,7 @@ public class STosClass
  **************************************************************************/
 
    public STosObj newInstance()
-	 throws STeaException {
+         throws STeaException {
 
       return new STosObj(this);
    }
@@ -257,7 +257,7 @@ public class STosClass
  **************************************************************************/
 
    public STosObj newInstance(SContext context,
-			      Object[] args)
+                              Object[] args)
          throws STeaException {
 
       STosObj obj = newInstance();
@@ -287,7 +287,7 @@ public class STosClass
  **************************************************************************/
 
    public void addMethod(SObjSymbol   methodName,
-			 SObjFunction method) {
+                         SObjFunction method) {
 
       _methods.newVar(methodName, method);
    }
@@ -313,7 +313,7 @@ public class STosClass
  **************************************************************************/
 
    public void addMethod(String       methodName,
-			 SObjFunction method) {
+                         SObjFunction method) {
 
       addMethod(SObjSymbol.addSymbol(methodName), method);
    }
@@ -359,7 +359,7 @@ public class STosClass
          throws SNoSuchMethodException {
 
       try {
-	 return (SObjFunction)_methods.getVar(methodName);
+         return (SObjFunction)_methods.getVar(methodName);
       } catch (SNoSuchVarException e) {
          throw new SNoSuchMethodException(methodName, _name);
       }
@@ -400,13 +400,13 @@ public class STosClass
  * name. There may even be more than one class with the same name.
  *
  * @param name
- *	The name that will be associated with the class.
+ *        The name that will be associated with the class.
  *
  **************************************************************************/
 
     public void setName(String name) {
 
-	_name = name;
+        _name = name;
     }
 
 
@@ -419,17 +419,17 @@ public class STosClass
  * passed to last call to the <code>setName<(String)</code> method.
  *
  * @return
- *	The name associated with the class.
+ *        The name associated with the class.
  *
  **************************************************************************/
 
     public String getName() {
 
-	if ( _name == null ) {
-	    _name = createName();
-	}
+        if ( _name == null ) {
+            _name = createName();
+        }
 
-	return _name;
+        return _name;
     }
 
 
@@ -444,7 +444,7 @@ public class STosClass
 
     private static synchronized String createName() {
 
-	return NAME_PREFIX + (_counter++);
+        return NAME_PREFIX + (_counter++);
     }
 
 
@@ -458,7 +458,7 @@ public class STosClass
  **************************************************************************/
 
     private class SMethodSet
-	extends SContext {
+        extends SContext {
 
 
 
@@ -470,10 +470,10 @@ public class STosClass
  *
  **************************************************************************/
 
-	public SMethodSet(SMethodSet superClassMethods) {
+        public SMethodSet(SMethodSet superClassMethods) {
 
-	    super(superClassMethods);
-	}
+            super(superClassMethods);
+        }
 
 
     }

@@ -72,7 +72,7 @@ public class SPlainSocketBase
 
     private static final String     CLASS_NAME   = "TSocketBase";
     private static final SObjSymbol CLASS_NAME_S =
-	SObjSymbol.addSymbol(CLASS_NAME);
+        SObjSymbol.addSymbol(CLASS_NAME);
 
 
 
@@ -85,9 +85,9 @@ public class SPlainSocketBase
  **************************************************************************/
 
     public SPlainSocketBase(STosClass myClass)
-	throws STeaException {
+        throws STeaException {
 
-	super(myClass);
+        super(myClass);
     }
 
 
@@ -101,15 +101,15 @@ public class SPlainSocketBase
  **************************************************************************/
 
     public Object constructor(SObjFunction obj,
-			      SContext     context,
-			      Object[]     args)
-	throws STeaException {
+                              SContext     context,
+                              Object[]     args)
+        throws STeaException {
 
-	initialize(context);
+        initialize(context);
 
-	setSocketFactory(SPlainSocketFactory.SELF);
+        setSocketFactory(SPlainSocketFactory.SELF);
 
-	return obj;
+        return obj;
     }
 
 
@@ -119,7 +119,7 @@ public class SPlainSocketBase
 //* 
 //* <TeaMethod name="connect"
 //*            arguments="host port"
-//* 	       className="TSocketBase">
+//*                className="TSocketBase">
 //* 
 //* <Overview>
 //* Connects the socket to a remote server.
@@ -152,7 +152,7 @@ public class SPlainSocketBase
 
 //* 
 //* <TeaMethod name="close"
-//* 	       className="TSocketBase">
+//*                className="TSocketBase">
 //* 
 //* <Overview>
 //* Closes the socket.
@@ -176,7 +176,7 @@ public class SPlainSocketBase
 
 //* 
 //* <TeaMethod name="getInput"
-//* 	       className="TSocketBase">
+//*                className="TSocketBase">
 //* 
 //* <Overview>
 //* Fetches the input stream associated with the socket.
@@ -203,7 +203,7 @@ public class SPlainSocketBase
 
 //* 
 //* <TeaMethod name="getOutput"
-//* 	       className="TSocketBase">
+//*                className="TSocketBase">
 //* 
 //* <Overview>
 //* Fetches the output stream associated with the socket.
@@ -235,19 +235,19 @@ public class SPlainSocketBase
  **************************************************************************/
 
     public static SPlainSocketBase newInstance(SContext context)
-	throws STeaException {
+        throws STeaException {
 
-	SPlainSocketBase socket = null;
+        SPlainSocketBase socket = null;
 
-	try {
-	    socket = (SPlainSocketBase)STosUtil.newInstance(CLASS_NAME_S, context);
-	} catch (ClassCastException e) {
-	    String   msg     = "invalid \"{0}\" class";
-	    Object[] fmtArgs = { CLASS_NAME };
-	    throw new SRuntimeException(msg, fmtArgs);
-	}
+        try {
+            socket = (SPlainSocketBase)STosUtil.newInstance(CLASS_NAME_S, context);
+        } catch (ClassCastException e) {
+            String   msg     = "invalid \"{0}\" class";
+            Object[] fmtArgs = { CLASS_NAME };
+            throw new SRuntimeException(msg, fmtArgs);
+        }
 
-	return socket;
+        return socket;
     }
 
 

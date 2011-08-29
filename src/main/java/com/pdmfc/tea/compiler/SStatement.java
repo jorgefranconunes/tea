@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -46,9 +46,9 @@ abstract class SStatement
  *
  **************************************************************************/
 
-    public SStatement(int line) {
+    public SStatement(final int line) {
 
-	_lineNumber = line;
+        _lineNumber = line;
     }
 
 
@@ -63,7 +63,7 @@ abstract class SStatement
 
     public int getLineNumber() {
 
-	return _lineNumber;
+        return _lineNumber;
     }
 
 
@@ -112,7 +112,7 @@ abstract class SStatement
  **************************************************************************/
 
     public abstract Object exec(SContext context)
-	throws STeaException;
+        throws STeaException;
 
 
 
@@ -124,7 +124,7 @@ abstract class SStatement
  *
  **************************************************************************/
 
-    public static class Factory
+    public static final class Factory
         extends Object {
 
 
@@ -150,7 +150,7 @@ abstract class SStatement
  *
  **************************************************************************/
 
-        public Factory(int line) {
+        public Factory(final int line) {
 
             _lineNumber = line;
         }
@@ -168,7 +168,7 @@ abstract class SStatement
  *
  **************************************************************************/
 
-        public void addWord(SWord aWord) {
+        public void addWord(final SWord aWord) {
 
             SStatement.Node newWord = new SStatement.Node(aWord);
 
@@ -248,7 +248,7 @@ abstract class SStatement
         private SWord          _firstWord = null;
 
         private static final String ERR_WORD =
-            "	while evaluating argument {0} on line {1}";
+            "        while evaluating argument {0} on line {1}";
 
 
 
@@ -262,9 +262,9 @@ abstract class SStatement
  *
  **************************************************************************/
 
-        public Generic(int            lineNumber,
-                       SStatement.Node head,
-                       int            wordCount) {
+        public Generic(final int             lineNumber,
+                       final SStatement.Node head,
+                       final int             wordCount) {
 
             super(lineNumber);
 
@@ -279,46 +279,11 @@ abstract class SStatement
 
 /**************************************************************************
  *
- * Executes this statement. The first word must be either a symbol
- * refering to a variable containing an <code>{@link
- * SObjFunction}</code>, or an <code>{@link SObjFunction}</code>
- * object.
- *
- * <p>The following steps are followed, in this order:</p>
- *
- * <ul>
- *
- * <li>The arguments are evaluated, left to right.</li>
- *
- * <li>The command to execute is fecthed from the first argument.</li>
- *
- * <li>The command is asked to executed with the given arguments.</li>
- *
- * </ul>
- *
- * @param context The context where the command will be executed.
- *
- * @return The object returned by the execution of the command.
- *
- * @exception STeaException An exception can be thrown in four cases:
- *
- * <ul>
- *
- * <li>While evaluating one of the arguments.</li>
- *
- * <li>The first word was a symbol but either there was no variable
- * with that name or it did not contain an <TT>SObjFunction</TT>.</li>
- *
- * <li>The first word was neither an <TT>SObjSymbol</TT> nor a
- * <TT>SObjFunction</TT>.</li>
- *
- * <li>an exception was raised during the execution of the command.</li>
- *
- * </ul>
+ * {@inheritDoc}
  *
  **************************************************************************/
 
-        public final Object exec(SContext context)
+        public final Object exec(final SContext context)
             throws STeaException {
 
             int            numArgs  = _wordCount;
@@ -361,7 +326,7 @@ abstract class SStatement
  *
  **************************************************************************/
 
-    private static class Node
+    private static final class Node
         extends Object {
 
 
@@ -381,7 +346,7 @@ abstract class SStatement
  *
  **************************************************************************/
 
-        public Node(SWord word) {
+        public Node(final SWord word) {
 
             _element = word;
         }
@@ -398,7 +363,7 @@ abstract class SStatement
  *
  **************************************************************************/
 
-    private static class Order1
+    private static final class Order1
         extends SStatement {
 
 
@@ -417,8 +382,8 @@ abstract class SStatement
  *
  **************************************************************************/
 
-        public Order1(int            lineNumber,
-                      SStatement.Node head) {
+        public Order1(final int             lineNumber,
+                      final SStatement.Node head) {
 
             super(lineNumber);
 
@@ -437,7 +402,7 @@ abstract class SStatement
  *
  **************************************************************************/
 
-        public Object exec(SContext context)
+        public Object exec(final SContext context)
             throws STeaException {
 
             SObjFunction function = _word0.toFunction(context);
@@ -462,7 +427,7 @@ abstract class SStatement
  *
  **************************************************************************/
 
-    private static class Order2
+    private static final class Order2
         extends SStatement {
 
 
@@ -482,8 +447,8 @@ abstract class SStatement
  *
  **************************************************************************/
 
-        public Order2(int            lineNumber,
-                      SStatement.Node head) {
+        public Order2(final int            lineNumber,
+                      final SStatement.Node head) {
 
             super(lineNumber);
 
@@ -504,7 +469,7 @@ abstract class SStatement
  *
  **************************************************************************/
 
-        public Object exec(SContext context)
+        public Object exec(final SContext context)
             throws STeaException {
 
             SObjFunction function = _word0.toFunction(context);
@@ -530,7 +495,7 @@ abstract class SStatement
  *
  **************************************************************************/
 
-    private static class Order3
+    private static final class Order3
         extends SStatement {
 
 
@@ -551,18 +516,18 @@ abstract class SStatement
  *
  **************************************************************************/
 
-    public Order3(int            lineNumber,
-                  SStatement.Node head) {
+    public Order3(final int             lineNumber,
+                  final SStatement.Node head) {
 
-	super(lineNumber);
+        super(lineNumber);
 
-	SStatement.Node node = head;
+        SStatement.Node node = head;
 
-	_word0 = node._element;
-	node   = node._next;
-	_word1 = node._element;
-	node   = node._next;
-	_word2 = node._element;
+        _word0 = node._element;
+        node   = node._next;
+        _word1 = node._element;
+        node   = node._next;
+        _word2 = node._element;
     }
 
 
@@ -575,7 +540,7 @@ abstract class SStatement
  *
  **************************************************************************/
 
-        public Object exec(SContext context)
+        public Object exec(final SContext context)
             throws STeaException {
 
             SObjFunction function = _word0.toFunction(context);
@@ -602,7 +567,7 @@ abstract class SStatement
  *
  **************************************************************************/
 
-    private static class Order4
+    private static final class Order4
         extends SStatement {
 
 
@@ -624,8 +589,8 @@ abstract class SStatement
  *
  **************************************************************************/
 
-        public Order4(int            lineNumber,
-                      SStatement.Node head) {
+        public Order4(final int            lineNumber,
+                      final SStatement.Node head) {
 
             super(lineNumber);
 
@@ -650,7 +615,7 @@ abstract class SStatement
  *
  **************************************************************************/
 
-        public Object exec(SContext context)
+        public Object exec(final SContext context)
             throws STeaException {
 
             SObjFunction function = _word0.toFunction(context);
@@ -676,7 +641,7 @@ abstract class SStatement
  *
  **************************************************************************/
 
-    private static class Order5
+    private static final class Order5
         extends SStatement {
 
 
@@ -699,8 +664,8 @@ abstract class SStatement
  *
  **************************************************************************/
 
-        public Order5(int            lineNumber,
-                      SStatement.Node head) {
+        public Order5(final int            lineNumber,
+                      final SStatement.Node head) {
 
             super(lineNumber);
 
@@ -727,7 +692,7 @@ abstract class SStatement
  *
  **************************************************************************/
 
-        public Object exec(SContext context)
+        public Object exec(final SContext context)
             throws STeaException {
 
             SObjFunction function = _word0.toFunction(context);

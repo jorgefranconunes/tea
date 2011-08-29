@@ -67,7 +67,7 @@ public class SCallableStatement
 
     private static final String     CLASS_NAME   = "TCallableStatement";
     private static final SObjSymbol CLASS_NAME_S =
-	SObjSymbol.addSymbol(CLASS_NAME);
+        SObjSymbol.addSymbol(CLASS_NAME);
 
     private CallableStatement   _callStat = null;
     private List<SOutParameter> _outList  = new ArrayList<SOutParameter>();
@@ -84,9 +84,9 @@ public class SCallableStatement
  **************************************************************************/
 
     public SCallableStatement(STosClass myClass)
-	throws STeaException {
-	
-	super(myClass);
+        throws STeaException {
+        
+        super(myClass);
     }
 
 
@@ -101,8 +101,8 @@ public class SCallableStatement
 
     public void setCallableStatement(CallableStatement stat) {
 
-	_callStat = stat;
-	setPreparedStatement(_callStat);
+        _callStat = stat;
+        setPreparedStatement(_callStat);
     }
 
 
@@ -117,7 +117,7 @@ public class SCallableStatement
 
     public static String getTosClassName() {
 
-	return CLASS_NAME;
+        return CLASS_NAME;
     }
 
 
@@ -131,15 +131,15 @@ public class SCallableStatement
  **************************************************************************/
 
     public static SStatement newInstance(SContext context)
-	throws STeaException {
+        throws STeaException {
 
-	STosObj callStat = STosUtil.newInstance(CLASS_NAME_S, context);
+        STosObj callStat = STosUtil.newInstance(CLASS_NAME_S, context);
 
-	if ( !(callStat instanceof SCallableStatement) ) {
-	    throw new SRuntimeException("invalid " + CLASS_NAME + " class");
-	}
+        if ( !(callStat instanceof SCallableStatement) ) {
+            throw new SRuntimeException("invalid " + CLASS_NAME + " class");
+        }
 
-	return (SStatement)callStat;
+        return (SStatement)callStat;
     }
 
 
@@ -160,11 +160,11 @@ public class SCallableStatement
  **************************************************************************/
 
     public Object constructor(SObjFunction obj,
-			      SContext     context,
-			      Object[]     args)
-	throws STeaException {
+                              SContext     context,
+                              Object[]     args)
+        throws STeaException {
 
-	return obj;
+        return obj;
     }
 
 
@@ -174,7 +174,7 @@ public class SCallableStatement
 //* 
 //* <TeaMethod name="registerString"
 //*            arguments="index symbol"
-//* 	       className="TCallableStatement">
+//*                className="TCallableStatement">
 //* 
 //* <Overview>
 //* Register a variable to receive the value of astring output parameter.
@@ -218,24 +218,24 @@ public class SCallableStatement
  **************************************************************************/
 
     public Object registerString(SObjFunction obj,
-				 SContext     context,
-				 Object[]     args)
-	throws SRuntimeException {
+                                 SContext     context,
+                                 Object[]     args)
+        throws SRuntimeException {
 
-	if ( args.length != 4 ) {
-	    throw new SNumArgException(args, "index symbol");
-	}
+        if ( args.length != 4 ) {
+            throw new SNumArgException(args, "index symbol");
+        }
 
-	int     index = SArgs.getInt(args,2).intValue();
-	SObjVar var   = context.getVarObject(SArgs.getSymbol(args,3));
+        int     index = SArgs.getInt(args,2).intValue();
+        SObjVar var   = context.getVarObject(SArgs.getSymbol(args,3));
 
-	try {
-	    registerOutString(index, var);
-	} catch (SQLException e) {
-	    throw new SRuntimeException(e);
-	}
-	
-	return obj;
+        try {
+            registerOutString(index, var);
+        } catch (SQLException e) {
+            throw new SRuntimeException(e);
+        }
+        
+        return obj;
     }
 
 
@@ -258,11 +258,11 @@ public class SCallableStatement
  **************************************************************************/
 
     private void registerOutString(int     index,
-				   SObjVar var)
-	throws SQLException {
+                                   SObjVar var)
+        throws SQLException {
 
-	_callStat.registerOutParameter(index, Types.VARCHAR);
-	_outList.add(new SOutParameterString(index, var));
+        _callStat.registerOutParameter(index, Types.VARCHAR);
+        _outList.add(new SOutParameterString(index, var));
     }
 
 
@@ -272,7 +272,7 @@ public class SCallableStatement
 //* 
 //* <TeaMethod name="registerInt"
 //*            arguments="index symbol"
-//* 	       className="TCallableStatement">
+//*                className="TCallableStatement">
 //* 
 //* <Overview>
 //* Register a variable to receive the value of an integer output
@@ -317,24 +317,24 @@ public class SCallableStatement
  **************************************************************************/
 
     public Object registerInt(SObjFunction obj,
-			      SContext     context,
-			      Object[]     args)
-	throws SRuntimeException {
+                              SContext     context,
+                              Object[]     args)
+        throws SRuntimeException {
 
-	if ( args.length != 4 ) {
-	    throw new SNumArgException(args, "index symbol");
-	}
+        if ( args.length != 4 ) {
+            throw new SNumArgException(args, "index symbol");
+        }
 
-	int     index = SArgs.getInt(args,2).intValue();
-	SObjVar var   = context.getVarObject(SArgs.getSymbol(args,3));
+        int     index = SArgs.getInt(args,2).intValue();
+        SObjVar var   = context.getVarObject(SArgs.getSymbol(args,3));
 
-	try {
-	    registerOutInt(index, var);
-	} catch (SQLException e) {
-	    throw new SRuntimeException(e);
-	}
-	
-	return obj;
+        try {
+            registerOutInt(index, var);
+        } catch (SQLException e) {
+            throw new SRuntimeException(e);
+        }
+        
+        return obj;
     }
 
 
@@ -357,11 +357,11 @@ public class SCallableStatement
  **************************************************************************/
 
     private void registerOutInt(int     index,
-				SObjVar var)
-	throws SQLException {
+                                SObjVar var)
+        throws SQLException {
 
-	_callStat.registerOutParameter(index, Types.INTEGER);
-	_outList.add(new SOutParameterInt(index, var));
+        _callStat.registerOutParameter(index, Types.INTEGER);
+        _outList.add(new SOutParameterInt(index, var));
     }
 
 
@@ -371,7 +371,7 @@ public class SCallableStatement
 //* 
 //* <TeaMethod name="registerFloat"
 //*            arguments="index symbol"
-//* 	       className="TCallableStatement">
+//*                className="TCallableStatement">
 //* 
 //* <Overview>
 //* Register a variable to receive the value of an float output
@@ -418,22 +418,22 @@ public class SCallableStatement
     public Object registerFloat(SObjFunction obj,
                                 SContext     context,
                                 Object[]     args)
-	throws SRuntimeException {
+        throws SRuntimeException {
 
-	if ( args.length != 4 ) {
-	    throw new SNumArgException(args, "index symbol");
-	}
+        if ( args.length != 4 ) {
+            throw new SNumArgException(args, "index symbol");
+        }
 
-	int     index = SArgs.getInt(args,2).intValue();
-	SObjVar var   = context.getVarObject(SArgs.getSymbol(args,3));
+        int     index = SArgs.getInt(args,2).intValue();
+        SObjVar var   = context.getVarObject(SArgs.getSymbol(args,3));
 
-	try {
-	    registerOutFloat(index, var);
-	} catch (SQLException e) {
-	    throw new SRuntimeException(e);
-	}
-	
-	return obj;
+        try {
+            registerOutFloat(index, var);
+        } catch (SQLException e) {
+            throw new SRuntimeException(e);
+        }
+        
+        return obj;
     }
 
 
@@ -456,11 +456,11 @@ public class SCallableStatement
  **************************************************************************/
 
     private void registerOutFloat(int     index,
-				SObjVar var)
-	throws SQLException {
+                                SObjVar var)
+        throws SQLException {
 
-	_callStat.registerOutParameter(index, Types.DOUBLE);
-	_outList.add(new SOutParameterFloat(index, var));
+        _callStat.registerOutParameter(index, Types.DOUBLE);
+        _outList.add(new SOutParameterFloat(index, var));
     }
 
 
@@ -470,7 +470,7 @@ public class SCallableStatement
 //* 
 //* <TeaMethod name="registerDate"
 //*            arguments="index symbol"
-//* 	       className="TCallableStatement">
+//*                className="TCallableStatement">
 //* 
 //* <Overview>
 //* Register a variable to receive the value of an date output
@@ -515,25 +515,25 @@ public class SCallableStatement
  **************************************************************************/
 
     public Object registerDate(SObjFunction obj,
-			       SContext     context,
-			       Object[]     args)
-	throws SRuntimeException {
+                               SContext     context,
+                               Object[]     args)
+        throws SRuntimeException {
 
-	if ( args.length != 4 ) {
-	    throw new SNumArgException(args, "index symbol");
-	}
+        if ( args.length != 4 ) {
+            throw new SNumArgException(args, "index symbol");
+        }
 
-	int        index   = SArgs.getInt(args,2).intValue();
-	SObjSymbol varName = SArgs.getSymbol(args,3);
-	SObjVar    var     = context.getVarObject(varName);
+        int        index   = SArgs.getInt(args,2).intValue();
+        SObjSymbol varName = SArgs.getSymbol(args,3);
+        SObjVar    var     = context.getVarObject(varName);
 
-	try {
-	    registerOutDate(index, var, context);
-	} catch (SQLException e) {
-	    throw new SRuntimeException(e);
-	}
-	
-	return obj;
+        try {
+            registerOutDate(index, var, context);
+        } catch (SQLException e) {
+            throw new SRuntimeException(e);
+        }
+        
+        return obj;
     }
 
 
@@ -556,12 +556,12 @@ public class SCallableStatement
  **************************************************************************/
 
     private void registerOutDate(int      index,
-				SObjVar   var,
-				 SContext context)
-	throws SQLException {
+                                SObjVar   var,
+                                 SContext context)
+        throws SQLException {
 
-	_callStat.registerOutParameter(index, Types.TIMESTAMP);
-	_outList.add(new SOutParameterDate(index, var, context));
+        _callStat.registerOutParameter(index, Types.TIMESTAMP);
+        _outList.add(new SOutParameterDate(index, var, context));
     }
 
 
@@ -570,7 +570,7 @@ public class SCallableStatement
 
 //* 
 //* <TeaMethod name="fetchOutParameters"
-//* 	       className="TCallableStatement">
+//*                className="TCallableStatement">
 //* 
 //* <Overview>
 //* Fetches the values of the output parameters.
@@ -601,19 +601,19 @@ public class SCallableStatement
  **************************************************************************/
 
     public Object fetchOutParameters(SObjFunction obj,
-				     SContext     context,
-				     Object[]     args)
-	throws STeaException {
+                                     SContext     context,
+                                     Object[]     args)
+        throws STeaException {
 
- 	try {
+         try {
             for ( SOutParameter outParam : _outList ) {
-		outParam.retrieve(_callStat);
-	    }
- 	} catch (SQLException e) {
- 	    throw new SRuntimeException(e);
- 	}
+                outParam.retrieve(_callStat);
+            }
+         } catch (SQLException e) {
+             throw new SRuntimeException(e);
+         }
 
-	return obj;
+        return obj;
     }
 
 
@@ -654,10 +654,10 @@ abstract class SOutParameter
  **************************************************************************/
 
     SOutParameter(int     index,
-		  SObjVar var) {
+                  SObjVar var) {
 
-	_index = index;
-	_var   = var;
+        _index = index;
+        _var   = var;
     }
 
 
@@ -671,8 +671,8 @@ abstract class SOutParameter
  **************************************************************************/
 
     public abstract void retrieve(CallableStatement stat)
-	throws STeaException,
-	       SQLException;
+        throws STeaException,
+               SQLException;
 
 
 }
@@ -701,9 +701,9 @@ class SOutParameterString
  **************************************************************************/
 
     public SOutParameterString(int     index,
-			       SObjVar var) {
+                               SObjVar var) {
 
-	super(index, var);
+        super(index, var);
     }
 
 
@@ -717,9 +717,9 @@ class SOutParameterString
  **************************************************************************/
 
     public void retrieve(CallableStatement stat)
-	throws SQLException {
+        throws SQLException {
 
-	_var.set(stat.getString(_index));
+        _var.set(stat.getString(_index));
     }
 
 
@@ -749,9 +749,9 @@ class SOutParameterInt
  **************************************************************************/
 
     public SOutParameterInt(int     index,
-			    SObjVar var) {
+                            SObjVar var) {
 
-	super(index, var);
+        super(index, var);
     }
 
 
@@ -765,9 +765,9 @@ class SOutParameterInt
  **************************************************************************/
 
     public void retrieve(CallableStatement stat)
-	throws SQLException {
+        throws SQLException {
 
-	_var.set(new Integer(stat.getInt(_index)));
+        _var.set(new Integer(stat.getInt(_index)));
     }
 
 
@@ -797,9 +797,9 @@ class SOutParameterFloat
  **************************************************************************/
 
     public SOutParameterFloat(int     index,
-			      SObjVar var) {
+                              SObjVar var) {
 
-	super(index, var);
+        super(index, var);
     }
 
 
@@ -813,9 +813,9 @@ class SOutParameterFloat
  **************************************************************************/
 
     public void retrieve(CallableStatement stat)
-	throws SQLException {
+        throws SQLException {
 
-	_var.set(new Double(stat.getDouble(_index)));
+        _var.set(new Double(stat.getDouble(_index)));
    }
 
 
@@ -851,12 +851,12 @@ class SOutParameterDate
  **************************************************************************/
 
     public SOutParameterDate(int      index,
-			     SObjVar  var,
-			     SContext context) {
+                             SObjVar  var,
+                             SContext context) {
 
-	super(index, var);
+        super(index, var);
 
-	_context = context;
+        _context = context;
     }
 
 
@@ -870,23 +870,23 @@ class SOutParameterDate
  **************************************************************************/
 
     public void retrieve(CallableStatement stat)
-	throws STeaException,
-	       SQLException {
+        throws STeaException,
+               SQLException {
 
-	Date  date   = stat.getTimestamp(_index);
-	SDate result = null;
+        Date  date   = stat.getTimestamp(_index);
+        SDate result = null;
 
-	if ( date != null ) {
-	    result = SDate.newInstance(_context);
-	    date   = new Date(date.getTime());
-	    result.initFromDate(date);
-	}
+        if ( date != null ) {
+            result = SDate.newInstance(_context);
+            date   = new Date(date.getTime());
+            result.initFromDate(date);
+        }
 
-	if ( result != null ) {
-	    _var.set(result);
-	} else {
-	    _var.set(SObjNull.NULL);
-	}
+        if ( result != null ) {
+            _var.set(result);
+        } else {
+            _var.set(SObjNull.NULL);
+        }
    }
 
 

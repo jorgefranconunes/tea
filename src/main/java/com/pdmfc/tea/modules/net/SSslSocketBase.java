@@ -78,7 +78,7 @@ public class SSslSocketBase
 
     private static final String     CLASS_NAME   = "TSslSocketBase";
     private static final SObjSymbol CLASS_NAME_S =
-	SObjSymbol.addSymbol(CLASS_NAME);
+        SObjSymbol.addSymbol(CLASS_NAME);
 
 
 
@@ -91,9 +91,9 @@ public class SSslSocketBase
  **************************************************************************/
 
     public SSslSocketBase(STosClass myClass)
-	throws STeaException {
+        throws STeaException {
 
-	super(myClass);
+        super(myClass);
     }
 
 
@@ -107,15 +107,15 @@ public class SSslSocketBase
  **************************************************************************/
 
     public Object constructor(SObjFunction obj,
-			      SContext     context,
-			      Object[]     args)
-	throws STeaException {
+                              SContext     context,
+                              Object[]     args)
+        throws STeaException {
 
-	initialize(context);
+        initialize(context);
 
-	setSocketFactory(SSslSocketFactory.SELF);
+        setSocketFactory(SSslSocketFactory.SELF);
 
-	return obj;
+        return obj;
     }
 
 

@@ -80,9 +80,9 @@ public class STosMethod
  **************************************************************************/
 
    public STosMethod(STosClass    theClass,
-		     SObjSymbol   methodName,
-		     SObjSymbol[] argNames,
-		     SObjBlock    body) {
+                     SObjSymbol   methodName,
+                     SObjSymbol[] argNames,
+                     SObjBlock    body) {
 
       _argNames = argNames;
       _body     = body;
@@ -115,41 +115,41 @@ public class STosMethod
  **************************************************************************/
 
     public Object exec(SObjFunction func,
-		       SContext     context,
-		       Object[]     args)
-	throws STeaException {
+                       SContext     context,
+                       Object[]     args)
+        throws STeaException {
 
-	if ( args.length != (_argNames.length+2) ) {
-	    throw new SNumArgException(args, parametersText());
-	}
+        if ( args.length != (_argNames.length+2) ) {
+            throw new SNumArgException(args, parametersText());
+        }
 
-	STosObj   obj          = (STosObj)func;
-	SContext memberContext = obj.members(_level).clone(_body.getContext());
-	SContext procContext   = memberContext.newChild();
-	Object   result        = SObjNull.NULL;
+        STosObj   obj          = (STosObj)func;
+        SContext memberContext = obj.members(_level).clone(_body.getContext());
+        SContext procContext   = memberContext.newChild();
+        Object   result        = SObjNull.NULL;
 
-	// Initializes the "this" and "super", if aplicable, local
-	// variables:
-	procContext.newVar(_thisSymbol, obj.selfObj());
-	if ( _level > 0 ) {
-	    procContext.newVar(_superSymbol, obj.part(_level-1));
-	}
+        // Initializes the "this" and "super", if aplicable, local
+        // variables:
+        procContext.newVar(_thisSymbol, obj.selfObj());
+        if ( _level > 0 ) {
+            procContext.newVar(_superSymbol, obj.part(_level-1));
+        }
 
-	// Initializes the formal parameters with the actual values.
-	for ( int i=_argNames.length; i-->0; ) {
-	    procContext.newVar(_argNames[i], args[i+2]);
-	}
+        // Initializes the formal parameters with the actual values.
+        for ( int i=_argNames.length; i-->0; ) {
+            procContext.newVar(_argNames[i], args[i+2]);
+        }
 
-	try {
-	    result = _body.exec(procContext);
-	} catch (SReturnException e1) {
-	    result = e1._value;
-	} catch (SBreakException e2) {
-	    result = e2._object;
-	} catch (SContinueException e3) {
-	}
+        try {
+            result = _body.exec(procContext);
+        } catch (SReturnException e1) {
+            result = e1._value;
+        } catch (SBreakException e2) {
+            result = e2._object;
+        } catch (SContinueException e3) {
+        }
 
-	return result;
+        return result;
     }
 
 
@@ -164,17 +164,17 @@ public class STosMethod
 
     private String parametersText() {
 
-	if ( _argNames.length == 0 ) {
-	    return "this function takes no arguments";
-	}
+        if ( _argNames.length == 0 ) {
+            return "this function takes no arguments";
+        }
 
-	StringBuffer text = new StringBuffer(_argNames[0].getName());
+        StringBuffer text = new StringBuffer(_argNames[0].getName());
 
-	for ( int i=1; i<_argNames.length; i++ ) {
-	    text.append(' ').append(_argNames[i].getName());
-	}
+        for ( int i=1; i<_argNames.length; i++ ) {
+            text.append(' ').append(_argNames[i].getName());
+        }
 
-	return text.toString();
+        return text.toString();
     }
 
 

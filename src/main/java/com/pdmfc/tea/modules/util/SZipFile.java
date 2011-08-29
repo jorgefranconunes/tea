@@ -71,9 +71,9 @@ public class SZipFile
  **************************************************************************/
 
     public SZipFile(STosClass myClass)
-	throws STeaException {
+        throws STeaException {
 
-	super(myClass);
+        super(myClass);
     }
 
 
@@ -83,7 +83,7 @@ public class SZipFile
 //* 
 //* <TeaMethod name="constructor"
 //*            arguments="[pathName]"
-//* 	       className="TZipFile">
+//*                className="TZipFile">
 //* 
 //* <Overview>
 //* Initializes the object internal state and optionaly opens a ZIP file.
@@ -110,21 +110,21 @@ public class SZipFile
  **************************************************************************/
 
     public Object constructor(SObjFunction obj,
-			      SContext     context,
-			      Object[]     args)
-	throws STeaException {
+                              SContext     context,
+                              Object[]     args)
+        throws STeaException {
 
-	switch ( args.length ) {
-	case 2 :
-	    break;
-	case 3 :
-	    open(obj, context, args);
-	    break;
-	default :
-	    throw new SNumArgException(args, "[pathName]");
-	}
+        switch ( args.length ) {
+        case 2 :
+            break;
+        case 3 :
+            open(obj, context, args);
+            break;
+        default :
+            throw new SNumArgException(args, "[pathName]");
+        }
 
-	return obj;
+        return obj;
     }
 
 
@@ -134,7 +134,7 @@ public class SZipFile
 //* 
 //* <TeaMethod name="open"
 //*            arguments="pathName"
-//* 	       className="TZipFile">
+//*                className="TZipFile">
 //* 
 //* <Overview>
 //* Opens an existing ZIP file.
@@ -163,32 +163,32 @@ public class SZipFile
  **************************************************************************/
 
     public Object open(SObjFunction obj,
-		       SContext     context,
-		       Object[]     args)
-	throws STeaException {
+                       SContext     context,
+                       Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "pathName");
-	}
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "pathName");
+        }
 
-	String fileName = SArgs.getString(args, 2);
-	
-	if ( _zipFile != null ) {
-	    try {
-		_zipFile.close();
-	    } catch (IOException e) {
-		// Never mind about it.
-	    }
-	}
+        String fileName = SArgs.getString(args, 2);
+        
+        if ( _zipFile != null ) {
+            try {
+                _zipFile.close();
+            } catch (IOException e) {
+                // Never mind about it.
+            }
+        }
 
-	try {
-	    _zipFile = new ZipFile(fileName);
-	} catch (IOException e) {
-	    throw new SRuntimeException("failed to open zip file " + fileName
-					+ " : " + e.getMessage());
-	}
+        try {
+            _zipFile = new ZipFile(fileName);
+        } catch (IOException e) {
+            throw new SRuntimeException("failed to open zip file " + fileName
+                                        + " : " + e.getMessage());
+        }
 
-	return obj;
+        return obj;
     }
 
 
@@ -197,7 +197,7 @@ public class SZipFile
 
 //* 
 //* <TeaMethod name="close"
-//* 	       className="TZipFile">
+//*                className="TZipFile">
 //* 
 //* <Overview>
 //* Closes the ZIP file currently opened.
@@ -222,23 +222,23 @@ public class SZipFile
  **************************************************************************/
 
     public Object close(SObjFunction obj,
-			SContext     context,
-			Object[]     args)
-	throws STeaException {
+                        SContext     context,
+                        Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 2 ) {
-	    throw new SRuntimeException("no arguments are needed");
-	}
-	
-	if ( _zipFile != null ) {
-	    try {
-		_zipFile.close();
-	    } catch (IOException e) {
-		// Never mind about it.
-	    }
-	}
+        if ( args.length != 2 ) {
+            throw new SRuntimeException("no arguments are needed");
+        }
+        
+        if ( _zipFile != null ) {
+            try {
+                _zipFile.close();
+            } catch (IOException e) {
+                // Never mind about it.
+            }
+        }
 
-	return obj;
+        return obj;
     }
 
 
@@ -247,7 +247,7 @@ public class SZipFile
 
 //* 
 //* <TeaMethod name="getEntryNames"
-//* 	       className="TZipFile">
+//*                className="TZipFile">
 //* 
 //* <Overview>
 //* Fetches the names of all entries in the currently opened ZIP file.
@@ -271,36 +271,36 @@ public class SZipFile
  **************************************************************************/
 
     public Object getEntryNames(SObjFunction obj,
-				SContext     context,
-				Object[]     args)
-	throws STeaException {
+                                SContext     context,
+                                Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 2 ) {
-	    throw new SRuntimeException("no arguments are needed");
-	}
-	if ( _zipFile == null ) {
-	    throw new SRuntimeException("zip file is not opened");
-	}
+        if ( args.length != 2 ) {
+            throw new SRuntimeException("no arguments are needed");
+        }
+        if ( _zipFile == null ) {
+            throw new SRuntimeException("zip file is not opened");
+        }
 
-	SObjPair    empty  = SObjPair.emptyList();
-	SObjPair    head   = empty;
-	SObjPair    node   = null;
-	Enumeration elems  = _zipFile.entries();
+        SObjPair    empty  = SObjPair.emptyList();
+        SObjPair    head   = empty;
+        SObjPair    node   = null;
+        Enumeration elems  = _zipFile.entries();
 
-	while ( elems.hasMoreElements() ) {
-	    ZipEntry entry   = (ZipEntry)elems.nextElement();
-	    String   value   = entry.getName();
-	    SObjPair newNode = new SObjPair(value, empty);
+        while ( elems.hasMoreElements() ) {
+            ZipEntry entry   = (ZipEntry)elems.nextElement();
+            String   value   = entry.getName();
+            SObjPair newNode = new SObjPair(value, empty);
 
-	    if ( node == null ) {
-		head = newNode;
-	    } else {
-		node._cdr = newNode;
-	    }
-	    node = newNode;
-	}
+            if ( node == null ) {
+                head = newNode;
+            } else {
+                node._cdr = newNode;
+            }
+            node = newNode;
+        }
 
-	return head;
+        return head;
     }
 
 
@@ -309,7 +309,7 @@ public class SZipFile
 
 //* 
 //* <TeaMethod name="getInput"
-//* 	       className="TZipFile">
+//*                className="TZipFile">
 //* 
 //* <Overview>
 //* Fetches the contents of one ZIP file entry as a <ClassRef name="TInput"/>.
@@ -332,34 +332,34 @@ public class SZipFile
  **************************************************************************/
 
     public Object getInput(SObjFunction obj,
-			   SContext     context,
-			   Object[]     args)
-	throws STeaException {
+                           SContext     context,
+                           Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 3 ) {
-	    throw new SRuntimeException("entryName");
-	}
-	if ( _zipFile == null ) {
-	    throw new SRuntimeException("zip file is not opened");
-	}
+        if ( args.length != 3 ) {
+            throw new SRuntimeException("entryName");
+        }
+        if ( _zipFile == null ) {
+            throw new SRuntimeException("zip file is not opened");
+        }
 
-	String   entryName = SArgs.getString(args, 2);
-	ZipEntry entry     = _zipFile.getEntry(entryName);
-	SInput   input     = SInput.newInstance(context);
+        String   entryName = SArgs.getString(args, 2);
+        ZipEntry entry     = _zipFile.getEntry(entryName);
+        SInput   input     = SInput.newInstance(context);
 
-	if ( entry == null ) {
-	    throw new SRuntimeException("entry '" + entryName
-					+ "' does not exist");
-	}
+        if ( entry == null ) {
+            throw new SRuntimeException("entry '" + entryName
+                                        + "' does not exist");
+        }
 
-	try {
-	    input.open(_zipFile.getInputStream(entry));
-	} catch (IOException e) {
-	    throw new SRuntimeException("failed to access entry '"
-					+ entryName + "'");
-	}
+        try {
+            input.open(_zipFile.getInputStream(entry));
+        } catch (IOException e) {
+            throw new SRuntimeException("failed to access entry '"
+                                        + entryName + "'");
+        }
 
-	return input;
+        return input;
     }
 
 
@@ -369,7 +369,7 @@ public class SZipFile
 //* 
 //* <TeaMethod name="isDirectory"
 //*            arguments="entryName"
-//* 	       className="TZipFile">
+//*                className="TZipFile">
 //* 
 //* <Overview>
 //* Checks if a given entry is a directory.
@@ -400,29 +400,29 @@ public class SZipFile
  **************************************************************************/
 
     public Object isDirectory(SObjFunction obj,
-			      SContext     context,
-			      Object[]     args)
-	throws STeaException {
+                              SContext     context,
+                              Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 3 ) {
-	    throw new SRuntimeException("entryName");
-	}
-	if ( _zipFile == null ) {
-	    throw new SRuntimeException("zip file is not opened");
-	}
+        if ( args.length != 3 ) {
+            throw new SRuntimeException("entryName");
+        }
+        if ( _zipFile == null ) {
+            throw new SRuntimeException("zip file is not opened");
+        }
 
-	String   entryName = SArgs.getString(args, 2);
-	ZipEntry entry     = _zipFile.getEntry(entryName);
-	Boolean  result    = Boolean.FALSE;
+        String   entryName = SArgs.getString(args, 2);
+        ZipEntry entry     = _zipFile.getEntry(entryName);
+        Boolean  result    = Boolean.FALSE;
 
-	if ( entry == null ) {
-	    throw new SRuntimeException("entry \"{0}\" does not exist",
+        if ( entry == null ) {
+            throw new SRuntimeException("entry \"{0}\" does not exist",
                                         entryName);
-	}
+        }
 
-	result = entry.isDirectory() ? Boolean.TRUE : Boolean.FALSE;
+        result = entry.isDirectory() ? Boolean.TRUE : Boolean.FALSE;
 
-	return result;
+        return result;
     }
 
     

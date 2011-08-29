@@ -76,7 +76,7 @@ public class SXmlParser
       public SXmlParser(STosClass myClass)
          throws STeaException {
 
-	 super(myClass);
+         super(myClass);
       }
 
 
@@ -95,19 +95,19 @@ public class SXmlParser
  **************************************************************************/
 
     public void setNativeParser(String parserClassName)
-	throws SRuntimeException {
+        throws SRuntimeException {
 
-	try {
-	    if ( parserClassName != null ) {
-		_parser = XMLReaderFactory.createXMLReader(parserClassName);
-	    } else {
-		_parser = XMLReaderFactory.createXMLReader();
-	    }
-	} catch (SAXException e) {
-	    String   msg     = "Failed to create XML parser - {0} - {1}";
-	    Object[] fmtArgs = { e.getClass().getName(), e.getMessage() };
-	    throw new SRuntimeException(msg, fmtArgs);
-	}
+        try {
+            if ( parserClassName != null ) {
+                _parser = XMLReaderFactory.createXMLReader(parserClassName);
+            } else {
+                _parser = XMLReaderFactory.createXMLReader();
+            }
+        } catch (SAXException e) {
+            String   msg     = "Failed to create XML parser - {0} - {1}";
+            Object[] fmtArgs = { e.getClass().getName(), e.getMessage() };
+            throw new SRuntimeException(msg, fmtArgs);
+        }
     }
 
 
@@ -117,7 +117,7 @@ public class SXmlParser
 //* 
 //* <TeaMethod name="constructor"
 //*            arguments="[javaClassName]"
-//* 	       className="TXmlParser">
+//*                className="TXmlParser">
 //* 
 //* <Overview>
 //* Initializes the object and optionally specifies the XML parser to
@@ -142,21 +142,21 @@ public class SXmlParser
  **************************************************************************/
 
     public Object constructor(SObjFunction obj,
-			      SContext     context,
-			      Object[]     args)
-	throws STeaException {
+                              SContext     context,
+                              Object[]     args)
+        throws STeaException {
 
-	switch ( args.length ) {
-	case 2 :
-	    break;
-	case 3 :
-	    setNativeParser(obj, context, args);
-	    break;
-	default :
-	    throw new SNumArgException(args, "[native-parser-class-name]");
-	}
+        switch ( args.length ) {
+        case 2 :
+            break;
+        case 3 :
+            setNativeParser(obj, context, args);
+            break;
+        default :
+            throw new SNumArgException(args, "[native-parser-class-name]");
+        }
 
-	return obj;
+        return obj;
     }
 
 
@@ -170,13 +170,13 @@ public class SXmlParser
  **************************************************************************/
 
     public XMLReader getParser()
-	throws SRuntimeException {
+        throws SRuntimeException {
 
-	if ( _parser == null ) {
-	    setNativeParser(null);
-	}
+        if ( _parser == null ) {
+            setNativeParser(null);
+        }
 
-	return _parser;
+        return _parser;
     }
 
 
@@ -186,7 +186,7 @@ public class SXmlParser
 //* 
 //* <TeaMethod name="setNativeParser"
 //*            arguments="javaClassName"
-//* 	       className="TXmlParser">
+//*                className="TXmlParser">
 //* 
 //* <Overview>
 //* Specifies the XML parser to be used internally.
@@ -212,19 +212,19 @@ public class SXmlParser
  **************************************************************************/
 
     public Object setNativeParser(SObjFunction obj,
-				  SContext     context,
-				  Object[]     args)
-	throws STeaException {
+                                  SContext     context,
+                                  Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "java-class-name");
-	}
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "java-class-name");
+        }
 
-	String parserClassName = SArgs.getString(args, 2);
+        String parserClassName = SArgs.getString(args, 2);
 
-	setNativeParser(parserClassName);
+        setNativeParser(parserClassName);
 
-	return obj;
+        return obj;
     }
 
 
@@ -234,7 +234,7 @@ public class SXmlParser
 //* 
 //* <TeaMethod name="parse"
 //*            arguments="xmlFile"
-//* 	       className="TXmlParser">
+//*                className="TXmlParser">
 //*
 //* <Prototype arguments="inputStream"/>
 //* 
@@ -265,15 +265,15 @@ public class SXmlParser
  **************************************************************************/
 
     public Object parse(SObjFunction obj,
-			SContext     context,
-			Object[]     args)
-	throws STeaException {
+                        SContext     context,
+                        Object[]     args)
+        throws STeaException {
 
-	SXmlParserParse parseMethod = new SXmlParserParse();
+        SXmlParserParse parseMethod = new SXmlParserParse();
 
-	parseMethod.setHandler((_handler==null) ? (STosObj)obj : _handler);
+        parseMethod.setHandler((_handler==null) ? (STosObj)obj : _handler);
 
-	return parseMethod.exec(obj, context, args);
+        return parseMethod.exec(obj, context, args);
     }
 
 
@@ -282,7 +282,7 @@ public class SXmlParser
 
 //* 
 //* <TeaMethod name="startDocument"
-//* 	       className="TXmlParser">
+//*                className="TXmlParser">
 //* 
 //* <Overview>
 //* Called at the start of processing of the XML file.
@@ -301,11 +301,11 @@ public class SXmlParser
  **************************************************************************/
 
     public Object startDocument(SObjFunction obj,
-				SContext     context,
-				Object[]     args)
-	throws STeaException {
+                                SContext     context,
+                                Object[]     args)
+        throws STeaException {
 
-	return obj;
+        return obj;
     }
 
 
@@ -314,7 +314,7 @@ public class SXmlParser
 
 //* 
 //* <TeaMethod name="endDocument"
-//* 	       className="TXmlParser">
+//*                className="TXmlParser">
 //* 
 //* <Overview>
 //* Called at the end of processing of the XML file.
@@ -333,11 +333,11 @@ public class SXmlParser
  **************************************************************************/
 
     public Object endDocument(SObjFunction obj,
-			      SContext     context,
-			      Object[]     args)
-	throws STeaException {
+                              SContext     context,
+                              Object[]     args)
+        throws STeaException {
 
-	return obj;
+        return obj;
     }
 
 
@@ -347,7 +347,7 @@ public class SXmlParser
 //* 
 //* <TeaMethod name="startElement"
 //*            arguments="tagName attributes"
-//* 	       className="TXmlParser">
+//*                className="TXmlParser">
 //* 
 //* <Overview>
 //* Called at the start of an element.
@@ -378,11 +378,11 @@ public class SXmlParser
  **************************************************************************/
 
     public Object startElement(SObjFunction obj,
-			       SContext     context,
-			       Object[]     args)
-	throws STeaException {
+                               SContext     context,
+                               Object[]     args)
+        throws STeaException {
 
-	return obj;
+        return obj;
     }
 
 
@@ -392,7 +392,7 @@ public class SXmlParser
 //* 
 //* <TeaMethod name="endElement"
 //*            arguments="tagName"
-//* 	       className="TXmlParser">
+//*                className="TXmlParser">
 //* 
 //* <Overview>
 //* Called at the end of an element.
@@ -415,11 +415,11 @@ public class SXmlParser
  **************************************************************************/
 
     public Object endElement(SObjFunction obj,
-			     SContext     context,
-			     Object[]     args)
-	throws STeaException {
+                             SContext     context,
+                             Object[]     args)
+        throws STeaException {
 
-	return obj;
+        return obj;
     }
 
 
@@ -429,7 +429,7 @@ public class SXmlParser
 //* 
 //* <TeaMethod name="characters"
 //*            arguments="aString"
-//* 	       className="TXmlParser">
+//*                className="TXmlParser">
 //* 
 //* <Overview>
 //* Called at the start of a block of text.
@@ -452,11 +452,11 @@ public class SXmlParser
  **************************************************************************/
 
     public Object characters(SObjFunction obj,
-			     SContext     context,
-			     Object[]     args)
-	throws STeaException {
+                             SContext     context,
+                             Object[]     args)
+        throws STeaException {
 
-	return obj;
+        return obj;
     }
 
 
@@ -466,7 +466,7 @@ public class SXmlParser
 //* 
 //* <TeaMethod name="processingInstruction"
 //*            arguments="target data"
-//* 	       className="TXmlParser">
+//*                className="TXmlParser">
 //* 
 //* <Overview>
 //* Called for every processing instruction in the XML file.
@@ -496,11 +496,11 @@ public class SXmlParser
  **************************************************************************/
 
     public Object processingInstruction(SObjFunction obj,
-					SContext     context,
-					Object[]     args)
-	throws STeaException {
+                                        SContext     context,
+                                        Object[]     args)
+        throws STeaException {
 
-	return obj;
+        return obj;
     }
 
 
@@ -510,7 +510,7 @@ public class SXmlParser
 //* 
 //* <TeaMethod name="setHandler"
 //*            arguments="obj"
-//* 	       className="TXmlParser">
+//*                className="TXmlParser">
 //* 
 //* <Overview>
 //* Specifies the object responsible for handling the parsing events.
@@ -540,17 +540,17 @@ public class SXmlParser
  **************************************************************************/
 
     public Object setHandler(SObjFunction obj,
-			     SContext     context,
-			     Object[]     args)
-	throws STeaException {
+                             SContext     context,
+                             Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "event-handler");
-	}
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "event-handler");
+        }
 
-	_handler = STosUtil.getTosObj(args, 2);
+        _handler = STosUtil.getTosObj(args, 2);
 
-	return obj;
+        return obj;
     }
 
 
@@ -565,7 +565,7 @@ public class SXmlParser
 
     public static String getTosClassName() {
 
-	return CLASS_NAME;
+        return CLASS_NAME;
     }
 
 
@@ -579,16 +579,16 @@ public class SXmlParser
  **************************************************************************/
 
     public static SXmlParser newInstance(SContext context,
-					 Object[] args)
-	throws STeaException {
+                                         Object[] args)
+        throws STeaException {
 
-	STosObj parser = STosUtil.newInstance(CLASS_NAME_S, context);
+        STosObj parser = STosUtil.newInstance(CLASS_NAME_S, context);
 
-	if ( !(parser instanceof SXmlParser) ) {
-	    throw new SRuntimeException("invalid " + CLASS_NAME + " class");
-	}
+        if ( !(parser instanceof SXmlParser) ) {
+            throw new SRuntimeException("invalid " + CLASS_NAME + " class");
+        }
 
-	return (SXmlParser)parser;
+        return (SXmlParser)parser;
     }
 
 

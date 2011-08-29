@@ -121,7 +121,7 @@ public class SModuleRegexp
            };
 
        context.newVar("matches?", matches);
-	
+        
        // For backwards compatibility with Tea 1.x.
        context.newVar("matches", matches);
 
@@ -197,7 +197,7 @@ public class SModuleRegexp
 
 //* 
 //* <TeaFunction name="regexp-pattern"
-//* 		arguments="aString"
+//*                 arguments="aString"
 //*             module="tea.regexp">
 //*
 //* <Overview>
@@ -231,15 +231,15 @@ public class SModuleRegexp
  **************************************************************************/
 
     private static Object functionPattern(SObjFunction func,
-					  SContext     context,
-					  Object[]     args)
-	throws STeaException {
+                                          SContext     context,
+                                          Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 2 ) {
-	    throw new SNumArgException(args, "pattern-string");
-	}
+        if ( args.length != 2 ) {
+            throw new SNumArgException(args, "pattern-string");
+        }
 
-	return getPattern(args,1);
+        return getPattern(args,1);
     }
 
 
@@ -248,7 +248,7 @@ public class SModuleRegexp
 
 //* 
 //* <TeaFunction name="glob"
-//* 		 arguments="dirName fileSpec [...]"
+//*                  arguments="dirName fileSpec [...]"
 //*              module="tea.io">
 //*
 //* <Overview>
@@ -297,45 +297,45 @@ public class SModuleRegexp
  **************************************************************************/
 
     private Object functionGlob(SObjFunction func,
-				SContext     context,
-				Object[]     args)
-	throws STeaException {
+                                SContext     context,
+                                Object[]     args)
+        throws STeaException {
 
-	int numArgs = args.length;
+        int numArgs = args.length;
 
-	if ( numArgs < 3 ) {
-	    throw new SNumArgException(args,"dir-name regexp [regexp ...]");
-	}
+        if ( numArgs < 3 ) {
+            throw new SNumArgException(args,"dir-name regexp [regexp ...]");
+        }
 
-	String          dirName   = SArgs.getString(args, 1);
-	File            directory = new File(dirName);
-	final Pattern[] patterns  = new Pattern[numArgs-2];
+        String          dirName   = SArgs.getString(args, 1);
+        File            directory = new File(dirName);
+        final Pattern[] patterns  = new Pattern[numArgs-2];
 
-	for ( int i=numArgs; (i--)>2; ) {
-	    patterns[i-2] = getPattern(args,i);
-	}
+        for ( int i=numArgs; (i--)>2; ) {
+            patterns[i-2] = getPattern(args,i);
+        }
 
-	FilenameFilter filter = new FilenameFilter() {
-		public boolean accept(File dir, String name) {
-		    for ( int i=patterns.length; (i--)>0; ) {
-			Matcher matcher = patterns[i].matcher(name);
-			if ( matcher.matches()  ) {
-			    return true;
-			}
-		    }
-		    return false;
-		}
-	    };
-	String[] fileNames = directory.list(filter);
-	SObjPair head      = SObjPair.emptyList();
+        FilenameFilter filter = new FilenameFilter() {
+                public boolean accept(File dir, String name) {
+                    for ( int i=patterns.length; (i--)>0; ) {
+                        Matcher matcher = patterns[i].matcher(name);
+                        if ( matcher.matches()  ) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+            };
+        String[] fileNames = directory.list(filter);
+        SObjPair head      = SObjPair.emptyList();
 
-	if ( fileNames != null ) {
-	    for ( int i=fileNames.length; (i--)>0; ) {
-		head = new SObjPair(fileNames[i], head);
-	    }
-	}
+        if ( fileNames != null ) {
+            for ( int i=fileNames.length; (i--)>0; ) {
+                head = new SObjPair(fileNames[i], head);
+            }
+        }
 
-	return head;
+        return head;
     }
 
 
@@ -344,7 +344,7 @@ public class SModuleRegexp
 
 //* 
 //* <TeaFunction name="regsub"
-//* 		arguments="aRegexp substitution input"
+//*                 arguments="aRegexp substitution input"
 //*             module="tea.regexp">
 //*
 //* <Overview>
@@ -383,21 +383,21 @@ public class SModuleRegexp
  **************************************************************************/
 
     private static Object functionRegsub(SObjFunction func,
-					 SContext     context,
-					 Object[]     args)
-	throws STeaException {
+                                         SContext     context,
+                                         Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 4 ) {
-	    throw new SNumArgException(args, "regex substitution input");
-	}
+        if ( args.length != 4 ) {
+            throw new SNumArgException(args, "regex substitution input");
+        }
 
-	Pattern pattern  = getPattern(args,1);
-	String  subst    = SArgs.getString(args,2);
-	String  input    = SArgs.getString(args,3);
-	Matcher matcher  = pattern.matcher(input);
-	String  result   = matcher.replaceAll(subst);
+        Pattern pattern  = getPattern(args,1);
+        String  subst    = SArgs.getString(args,2);
+        String  input    = SArgs.getString(args,3);
+        Matcher matcher  = pattern.matcher(input);
+        String  result   = matcher.replaceAll(subst);
 
-	return result;
+        return result;
     }
 
 
@@ -406,7 +406,7 @@ public class SModuleRegexp
 
 //* 
 //* <TeaFunction name="matches?"
-//* 		arguments="aRegexp aString"
+//*                 arguments="aRegexp aString"
 //*             module="tea.regexp">
 //*
 //* <Overview>
@@ -443,20 +443,20 @@ public class SModuleRegexp
  **************************************************************************/
 
     private static Object functionMatches(SObjFunction func,
-					  SContext     context,
-					  Object[]     args)
-	throws STeaException {
+                                          SContext     context,
+                                          Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "regex input");
-	}
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "regex input");
+        }
 
-	Pattern pattern  = getPattern(args,1);
-	String  input    = SArgs.getString(args,2);
-	Matcher matcher  = pattern.matcher(input);
-	Boolean result   = matcher.matches() ? Boolean.TRUE : Boolean.FALSE;
+        Pattern pattern  = getPattern(args,1);
+        String  input    = SArgs.getString(args,2);
+        Matcher matcher  = pattern.matcher(input);
+        Boolean result   = matcher.matches() ? Boolean.TRUE : Boolean.FALSE;
 
-	return result;
+        return result;
     }
 
 
@@ -465,7 +465,7 @@ public class SModuleRegexp
 
 //* 
 //* <TeaFunction name="regexp"
-//* 		arguments="aRegexp aString"
+//*                 arguments="aRegexp aString"
 //*             module="tea.regexp">
 //*
 //* <Overview>
@@ -513,39 +513,39 @@ public class SModuleRegexp
  **************************************************************************/
 
     private static Object functionRegexp(SObjFunction func,
-					 SContext     context,
-					 Object[]     args)
-	throws STeaException {
+                                         SContext     context,
+                                         Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "regex string");
-	}
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "regex string");
+        }
 
-	Pattern  pattern  = getPattern(args,1);
-	String   aString  = SArgs.getString(args,2);
-	Matcher  matcher  = pattern.matcher(aString);
-	SObjPair head     = null;
-	SObjPair tail     = null;
+        Pattern  pattern  = getPattern(args,1);
+        String   aString  = SArgs.getString(args,2);
+        Matcher  matcher  = pattern.matcher(aString);
+        SObjPair head     = null;
+        SObjPair tail     = null;
 
-	while ( matcher.find() ) {
-	    MatchResult match = matcher.toMatchResult();
-	    SObjPair    elem  = buildMatch(match);
-	    SObjPair    node  = new SObjPair(elem,null);
+        while ( matcher.find() ) {
+            MatchResult match = matcher.toMatchResult();
+            SObjPair    elem  = buildMatch(match);
+            SObjPair    node  = new SObjPair(elem,null);
 
-	    if ( head == null ) {
-		head = node;
-	    } else {
-		tail._cdr = node;
-	    }
-	    tail = node;
-	}
-	if ( tail != null ) {
-	    tail._cdr = SObjPair.emptyList();
-	} else {
-	    head = SObjPair.emptyList();
-	}
+            if ( head == null ) {
+                head = node;
+            } else {
+                tail._cdr = node;
+            }
+            tail = node;
+        }
+        if ( tail != null ) {
+            tail._cdr = SObjPair.emptyList();
+        } else {
+            head = SObjPair.emptyList();
+        }
 
-	return head;
+        return head;
     }
 
 
@@ -572,15 +572,15 @@ public class SModuleRegexp
       SObjPair tail  = head;
 
       for ( int i=1, count=result.groupCount(); i<=count; ++i ) {
-	 String   subExpr = result.group(i);
-	 SObjPair node    = new SObjPair(subExpr,null);
+         String   subExpr = result.group(i);
+         SObjPair node    = new SObjPair(subExpr,null);
 
-	 if ( head == null ) {
-	    head = node;
-	 } else {
-	    tail._cdr = node;
-	 }
-	 tail = node;
+         if ( head == null ) {
+            head = node;
+         } else {
+            tail._cdr = node;
+         }
+         tail = node;
       }
       tail._cdr = SObjPair.emptyList();
 
@@ -593,7 +593,7 @@ public class SModuleRegexp
 
 //* 
 //* <TeaFunction name="str-split"
-//* 		arguments="aString separator"
+//*                 arguments="aString separator"
 //*             module="tea.string">
 //*
 //* <Overview>
@@ -638,52 +638,52 @@ public class SModuleRegexp
  **************************************************************************/
 
     private static Object functionSplit(SObjFunction func,
-					SContext     context,
-					Object[]     args)
-	throws STeaException {
+                                        SContext     context,
+                                        Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "string split-string");
-	}
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "string split-string");
+        }
 
-	String str = SArgs.getString(args,1);
+        String str = SArgs.getString(args,1);
 
-	if ( str.length() == 0 ) {
-	    return SObjPair.emptyList();
-	}
+        if ( str.length() == 0 ) {
+            return SObjPair.emptyList();
+        }
 
-	Pattern            pattern = getPattern(args,2);
-	int                index   = 0;
-	Matcher            matcher = pattern.matcher(str);
-	SObjPair           head    = null;
-	SObjPair           tail    = null;
+        Pattern            pattern = getPattern(args,2);
+        int                index   = 0;
+        Matcher            matcher = pattern.matcher(str);
+        SObjPair           head    = null;
+        SObjPair           tail    = null;
 
-	while ( matcher.find() ) {
-	    MatchResult  match = matcher.toMatchResult();
-	    String       part  = str.substring(index, match.start());
-	    SObjPair     node  = new SObjPair(part,null);
-	    
-	    if ( head == null ) {
-		head = node;
-	    } else {
-		tail._cdr = node;
-	    }
-	    tail = node;
-	    index = match.end();
-	}
+        while ( matcher.find() ) {
+            MatchResult  match = matcher.toMatchResult();
+            String       part  = str.substring(index, match.start());
+            SObjPair     node  = new SObjPair(part,null);
+            
+            if ( head == null ) {
+                head = node;
+            } else {
+                tail._cdr = node;
+            }
+            tail = node;
+            index = match.end();
+        }
 
-	String   part  = str.substring(index);
-	SObjPair node  = new SObjPair(part,null);
+        String   part  = str.substring(index);
+        SObjPair node  = new SObjPair(part,null);
 
-	if ( head == null ) {
-	    head = node;
-	} else {
-	    tail._cdr = node;
-	}
-	tail = node;
-	tail._cdr = SObjPair.emptyList();
+        if ( head == null ) {
+            head = node;
+        } else {
+            tail._cdr = node;
+        }
+        tail = node;
+        tail._cdr = SObjPair.emptyList();
 
-	return head;
+        return head;
     }
 
 
@@ -709,27 +709,27 @@ public class SModuleRegexp
  **************************************************************************/
 
     private static Pattern getPattern(Object[] args,
-				      int      index)
-	throws STeaException {
+                                      int      index)
+        throws STeaException {
 
-	Object theArg = args[index];
+        Object theArg = args[index];
 
-	if ( theArg instanceof Pattern ) {
-	    return (Pattern)theArg;
-	}
+        if ( theArg instanceof Pattern ) {
+            return (Pattern)theArg;
+        }
 
-	if ( theArg instanceof String ) {
-	    String patternStr = (String)theArg;
-	    try {
-		return Pattern.compile(patternStr);
-	    } catch (PatternSyntaxException e){
-		String   msg     = "malformed pattern ({0})";
-		Object[] fmtArgs = { e.getMessage() };
-		throw new SRuntimeException(args, msg, fmtArgs);
-	    }
-	}
+        if ( theArg instanceof String ) {
+            String patternStr = (String)theArg;
+            try {
+                return Pattern.compile(patternStr);
+            } catch (PatternSyntaxException e){
+                String   msg     = "malformed pattern ({0})";
+                Object[] fmtArgs = { e.getMessage() };
+                throw new SRuntimeException(args, msg, fmtArgs);
+            }
+        }
 
-	throw new STypeException(args, index, "regex");
+        throw new STypeException(args, index, "regex");
     }
 
 

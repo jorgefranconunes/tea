@@ -107,28 +107,28 @@ public class SModuleIO
  **************************************************************************/
 
     public void init(SContext context)
-	throws STeaException {
+        throws STeaException {
 
-	STosClass inClass  = new SJavaClass("com.pdmfc.tea.modules.io.SInput");
-	STosClass outClass = new SJavaClass("com.pdmfc.tea.modules.io.SOutput");
+        STosClass inClass  = new SJavaClass("com.pdmfc.tea.modules.io.SInput");
+        STosClass outClass = new SJavaClass("com.pdmfc.tea.modules.io.SOutput");
 
-	context.newVar(inClass.getName(), inClass);
-	context.newVar(outClass.getName(), outClass);
+        context.newVar(inClass.getName(), inClass);
+        context.newVar(outClass.getName(), outClass);
 
-	_stdin  = SInput.newInstance(context);
-	_stdout = SOutput.newInstance(context);
-	_stderr = SOutput.newInstance(context);
-	
-	_stdin.open(System.in);
-	_stdout.open(System.out);
-	_stdout.setLineBuffering(true);
-	_stderr.open(System.err);
+        _stdin  = SInput.newInstance(context);
+        _stdout = SOutput.newInstance(context);
+        _stderr = SOutput.newInstance(context);
+        
+        _stdin.open(System.in);
+        _stdout.open(System.out);
+        _stdout.setLineBuffering(true);
+        _stderr.open(System.err);
 
-	context.newVar("stdin",  _stdin);
-	context.newVar("stdout", _stdout);
-	context.newVar("stderr", _stderr);
+        context.newVar("stdin",  _stdin);
+        context.newVar("stdout", _stdout);
+        context.newVar("stderr", _stderr);
 
-	context.newVar("file-basename",
+        context.newVar("file-basename",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -138,7 +138,7 @@ public class SModuleIO
                            }
                        });
 
-	context.newVar("file-copy",
+        context.newVar("file-copy",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -148,7 +148,7 @@ public class SModuleIO
                            }
                        });
 
-	context.newVar("file-dirname",
+        context.newVar("file-dirname",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -158,7 +158,7 @@ public class SModuleIO
                            }
                        });
 
-	context.newVar("file-extension",
+        context.newVar("file-extension",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -168,7 +168,7 @@ public class SModuleIO
                            }
                        });
 
-	context.newVar("file-exists?",
+        context.newVar("file-exists?",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -178,7 +178,7 @@ public class SModuleIO
                            }
                        });
 
-	context.newVar("file-is-dir?",
+        context.newVar("file-is-dir?",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -188,7 +188,7 @@ public class SModuleIO
                            }
                        });
 
-	context.newVar("file-is-regular?",
+        context.newVar("file-is-regular?",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -198,7 +198,7 @@ public class SModuleIO
                            }
                        });
 
-	context.newVar("file-join",
+        context.newVar("file-join",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -208,7 +208,7 @@ public class SModuleIO
                            }
                        });
 
-	context.newVar("file-mkdir",
+        context.newVar("file-mkdir",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -218,7 +218,7 @@ public class SModuleIO
                            }
                        });
 
-	context.newVar("file-rename",
+        context.newVar("file-rename",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -228,7 +228,7 @@ public class SModuleIO
                            }
                        });
 
-	context.newVar("file-size",
+        context.newVar("file-size",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -238,7 +238,7 @@ public class SModuleIO
                            }
                        });
 
-	context.newVar("file-split-path-list",
+        context.newVar("file-split-path-list",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -248,7 +248,7 @@ public class SModuleIO
                            }
                        });
 
-	context.newVar("file-unlink",
+        context.newVar("file-unlink",
                        new SObjFunction() {
                            public Object exec(SObjFunction func,
                                               SContext     context,
@@ -302,20 +302,20 @@ public class SModuleIO
 
     public void stop() {
 
-	if ( _stdout != null ) {
-	    try {
-		_stdout.flush();
-	    } catch (IOException e1) {
-	    } catch (STeaException e2) {
-	    }
-	}
-	if ( _stderr != null ) {
-	    try {
-		_stderr.flush();
-	    } catch (IOException e3) {
-	    } catch (STeaException e4) {
-	    }
-	}
+        if ( _stdout != null ) {
+            try {
+                _stdout.flush();
+            } catch (IOException e1) {
+            } catch (STeaException e2) {
+            }
+        }
+        if ( _stderr != null ) {
+            try {
+                _stderr.flush();
+            } catch (IOException e3) {
+            } catch (STeaException e4) {
+            }
+        }
     }
 
 
@@ -324,7 +324,7 @@ public class SModuleIO
 
 //* 
 //* <TeaFunction name="file-basename"
-//* 		arguments="pathName"
+//*                 arguments="pathName"
 //*             module="tea.io">
 //*
 //* <Overview>
@@ -353,15 +353,15 @@ public class SModuleIO
  **************************************************************************/
 
     private static Object functionBasename(SObjFunction func,
-					   SContext     context,
-					   Object[]     args)
-	throws STeaException {
+                                           SContext     context,
+                                           Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 2 ) {
-	    throw new SNumArgException(args, "file-name");
-	}
+        if ( args.length != 2 ) {
+            throw new SNumArgException(args, "file-name");
+        }
 
-	return (new File(SArgs.getString(args,1))).getName();
+        return (new File(SArgs.getString(args,1))).getName();
     }
 
 
@@ -370,7 +370,7 @@ public class SModuleIO
 
 //* 
 //* <TeaFunction name="file-copy"
-//* 		arguments="sourcePath destPath"
+//*                 arguments="sourcePath destPath"
 //*             module="tea.io">
 //*
 //* <Overview>
@@ -403,29 +403,29 @@ public class SModuleIO
  **************************************************************************/
 
     private static Object functionCopy(SObjFunction func,
-				       SContext     context,
-				       Object[]     args)
-	throws STeaException {
+                                       SContext     context,
+                                       Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "src-file dst-file");
-	}
-	File    srcFile = new File(SArgs.getString(args,1));
-	File    dstFile = new File(SArgs.getString(args,2));
-	boolean status  = true;
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "src-file dst-file");
+        }
+        File    srcFile = new File(SArgs.getString(args,1));
+        File    dstFile = new File(SArgs.getString(args,2));
+        boolean status  = true;
 
-	try {
-	    String srcName = srcFile.getCanonicalPath();
-	    String dstName = dstFile.getCanonicalPath();
+        try {
+            String srcName = srcFile.getCanonicalPath();
+            String dstName = dstFile.getCanonicalPath();
 
-	    if ( !srcName.equals(dstName) ) {
-		copyFile(srcFile, dstFile);
-	    }
-	} catch (IOException e) {
-	    status = false;
-	}
+            if ( !srcName.equals(dstName) ) {
+                copyFile(srcFile, dstFile);
+            }
+        } catch (IOException e) {
+            status = false;
+        }
 
-	return status ? Boolean.TRUE : Boolean.FALSE;
+        return status ? Boolean.TRUE : Boolean.FALSE;
     }
 
 
@@ -439,25 +439,25 @@ public class SModuleIO
  **************************************************************************/
 
     private static void copyFile(File src,
-				 File dst)
-	throws IOException {
+                                 File dst)
+        throws IOException {
 
-	byte[]           buffer = new byte[BUFFER_SIZE];
-	FileInputStream  in     = null;
-	FileOutputStream out    = null;
-	int              count;
+        byte[]           buffer = new byte[BUFFER_SIZE];
+        FileInputStream  in     = null;
+        FileOutputStream out    = null;
+        int              count;
 
-	try {
-	    in  = new FileInputStream(src);
-	    out = new FileOutputStream(dst);
-	    while ( (count=in.read(buffer)) != -1 ) {
-		out.write(buffer, 0, count);
-	    }
-	} catch (IOException e) {
-	    throw e;
-	} finally {
-	    if (in != null) try { in.close(); } catch (Exception e2) {}
-	    if (out != null) try { out.close(); } catch (Exception e2) {}
+        try {
+            in  = new FileInputStream(src);
+            out = new FileOutputStream(dst);
+            while ( (count=in.read(buffer)) != -1 ) {
+                out.write(buffer, 0, count);
+            }
+        } catch (IOException e) {
+            throw e;
+        } finally {
+            if (in != null) try { in.close(); } catch (Exception e2) {}
+            if (out != null) try { out.close(); } catch (Exception e2) {}
         }
     }
 
@@ -467,7 +467,7 @@ public class SModuleIO
 
 //* 
 //* <TeaFunction name="file-dirname"
-//* 		arguments="pathName"
+//*                 arguments="pathName"
 //*             module="tea.io">
 //*
 //* <Overview>
@@ -501,23 +501,23 @@ public class SModuleIO
  **************************************************************************/
 
     private static Object functionDirname(SObjFunction func,
-					  SContext     context,
-					  Object[]     args)
-	throws STeaException {
+                                          SContext     context,
+                                          Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 2 ) {
-	    throw new SNumArgException(args, "file-name");
-	}
+        if ( args.length != 2 ) {
+            throw new SNumArgException(args, "file-name");
+        }
 
-	String path    = SArgs.getString(args,1);
-	File   aFile   = new File(path);
-	String dirName = aFile.getParent();
+        String path    = SArgs.getString(args,1);
+        File   aFile   = new File(path);
+        String dirName = aFile.getParent();
 
-	if ( (dirName==null) && !aFile.isAbsolute() ) {
-	    dirName = ".";
-	}
+        if ( (dirName==null) && !aFile.isAbsolute() ) {
+            dirName = ".";
+        }
 
-	return (dirName==null) ? SObjNull.NULL : dirName;
+        return (dirName==null) ? SObjNull.NULL : dirName;
     }
 
 
@@ -526,7 +526,7 @@ public class SModuleIO
 
 //* 
 //* <TeaFunction name="file-extension"
-//* 		arguments="pathName"
+//*                 arguments="pathName"
 //*             module="tea.io">
 //*
 //* <Overview>
@@ -557,21 +557,21 @@ public class SModuleIO
  **************************************************************************/
 
     private static Object functionExtension(SObjFunction func,
-					    SContext     context,
-					    Object[]     args)
-	throws STeaException {
+                                            SContext     context,
+                                            Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 2 ) {
-	    throw new SNumArgException(args, "file-name");
-	}
+        if ( args.length != 2 ) {
+            throw new SNumArgException(args, "file-name");
+        }
 
-	String pathName   = SArgs.getString(args, 1);
-	String baseName   = (new File(pathName)).getName();
-	int    indexOfDot = baseName.lastIndexOf('.');
-	String extension  = (indexOfDot<0) ?
-	    "" : baseName.substring(indexOfDot+1);
+        String pathName   = SArgs.getString(args, 1);
+        String baseName   = (new File(pathName)).getName();
+        int    indexOfDot = baseName.lastIndexOf('.');
+        String extension  = (indexOfDot<0) ?
+            "" : baseName.substring(indexOfDot+1);
 
-	return extension;
+        return extension;
     }
 
 
@@ -580,7 +580,7 @@ public class SModuleIO
 
 //* 
 //* <TeaFunction name="file-exists?"
-//* 		arguments="pathName"
+//*                 arguments="pathName"
 //*             module="tea.io">
 //*
 //* <Overview>
@@ -609,20 +609,20 @@ public class SModuleIO
  **************************************************************************/
 
     private static Object functionFileExists(SObjFunction func,
-					     SContext     context,
-					     Object[]      args)
-	throws STeaException {
+                                             SContext     context,
+                                             Object[]      args)
+        throws STeaException {
 
-	int numArgs = args.length;
+        int numArgs = args.length;
 
-	if ( numArgs != 2 ) {
-	    throw new SNumArgException(args, "file-name");
-	}
+        if ( numArgs != 2 ) {
+            throw new SNumArgException(args, "file-name");
+        }
 
-	String fileName = SArgs.getString(args,1);
-	File   file     = new File(fileName);
+        String fileName = SArgs.getString(args,1);
+        File   file     = new File(fileName);
 
-	return file.exists() ? Boolean.TRUE : Boolean.FALSE;
+        return file.exists() ? Boolean.TRUE : Boolean.FALSE;
     }
 
 
@@ -631,7 +631,7 @@ public class SModuleIO
 
 //* 
 //* <TeaFunction name="file-is-dir?"
-//* 		arguments="pathName"
+//*                 arguments="pathName"
 //*             module="tea.io">
 //*
 //* <Overview>
@@ -660,20 +660,20 @@ public class SModuleIO
  **************************************************************************/
     
     private static Object functionIsDir(SObjFunction func,
-					SContext     context,
-					Object[]     args)
-	throws STeaException {
+                                        SContext     context,
+                                        Object[]     args)
+        throws STeaException {
 
-	int numArgs = args.length;
+        int numArgs = args.length;
 
-	if ( numArgs != 2 ) {
-	    throw new SNumArgException(args, "file-name");
-	}
+        if ( numArgs != 2 ) {
+            throw new SNumArgException(args, "file-name");
+        }
 
-	String fileName = SArgs.getString(args,1);
-	File   file     = new File(fileName);
+        String fileName = SArgs.getString(args,1);
+        File   file     = new File(fileName);
 
-	return file.isDirectory() ? Boolean.TRUE : Boolean.FALSE;
+        return file.isDirectory() ? Boolean.TRUE : Boolean.FALSE;
     }
 
 
@@ -682,7 +682,7 @@ public class SModuleIO
 
 //* 
 //* <TeaFunction name="file-is-regular?"
-//* 		arguments="pathName"
+//*                 arguments="pathName"
 //*             module="tea.io">
 //*
 //* <Overview>
@@ -711,20 +711,20 @@ public class SModuleIO
  **************************************************************************/
 
     private static Object functionIsRegular(SObjFunction func,
-					    SContext     context,
-					    Object[]     args)
-	throws STeaException {
+                                            SContext     context,
+                                            Object[]     args)
+        throws STeaException {
 
-	int numArgs = args.length;
-	
-	if ( numArgs != 2 ) {
-	    throw new SNumArgException(args, "file-name");
-	}
+        int numArgs = args.length;
+        
+        if ( numArgs != 2 ) {
+            throw new SNumArgException(args, "file-name");
+        }
 
-	String fileName = SArgs.getString(args,1);
-	File   file     = new File(fileName);
+        String fileName = SArgs.getString(args,1);
+        File   file     = new File(fileName);
 
-	return file.isFile() ? Boolean.TRUE : Boolean.FALSE;
+        return file.isFile() ? Boolean.TRUE : Boolean.FALSE;
     }
 
 
@@ -733,7 +733,7 @@ public class SModuleIO
 
 //* 
 //* <TeaFunction name="file-join"
-//* 		arguments="component1 [component2 ...]"
+//*                 arguments="component1 [component2 ...]"
 //*             module="tea.io">
 //*
 //* <Overview>
@@ -765,29 +765,29 @@ public class SModuleIO
  **************************************************************************/
 
     private static Object functionJoin(SObjFunction func,
-				       SContext     context,
-				       Object[]     args)
-	throws STeaException {
+                                       SContext     context,
+                                       Object[]     args)
+        throws STeaException {
 
-	int          numArgs       = args.length;
-	StringBuffer result        = new StringBuffer();
-	int          numArgsMinus1 = args.length - 1;
+        int          numArgs       = args.length;
+        StringBuffer result        = new StringBuffer();
+        int          numArgsMinus1 = args.length - 1;
 
-	try {
-	    if ( numArgs > 1 ) {
-		append(result, args[1]);
-	    }
-	    for ( int i=2; i<numArgs; i++ ) {
-		if ( result.length() > 0 ) {
-		    result.append(File.separatorChar);
-		}
-		append(result, args[i]);
-	    }
-	} catch (SRuntimeException e) {
-	    throw new SRuntimeException(args, e.getMessage());
-	}
+        try {
+            if ( numArgs > 1 ) {
+                append(result, args[1]);
+            }
+            for ( int i=2; i<numArgs; i++ ) {
+                if ( result.length() > 0 ) {
+                    result.append(File.separatorChar);
+                }
+                append(result, args[i]);
+            }
+        } catch (SRuntimeException e) {
+            throw new SRuntimeException(args, e.getMessage());
+        }
 
-	return result.toString();
+        return result.toString();
     }
 
 
@@ -801,19 +801,19 @@ public class SModuleIO
  **************************************************************************/
 
     private static void append(StringBuffer result,
-			       Object       component)
-	throws SRuntimeException {
+                               Object       component)
+        throws SRuntimeException {
 
-	if ( component instanceof SObjPair ) {
-	    result.append(join((SObjPair)component));
-	} else {
-	    try {
-		result.append((String)component);
-	    } catch (ClassCastException e) {
+        if ( component instanceof SObjPair ) {
+            result.append(join((SObjPair)component));
+        } else {
+            try {
+                result.append((String)component);
+            } catch (ClassCastException e) {
                 String msg = "components must be strings, not {0}";
-		throw new STypeException(msg, STypes.getTypeName(component));
-	    }
-	}
+                throw new STypeException(msg, STypes.getTypeName(component));
+            }
+        }
     }
 
 
@@ -827,23 +827,23 @@ public class SModuleIO
  **************************************************************************/
 
     private static String join(SObjPair componentList)
-	throws SRuntimeException {
+        throws SRuntimeException {
 
-	Iterator     elems  = componentList.iterator();
-	StringBuffer result = new StringBuffer();
+        Iterator     elems  = componentList.iterator();
+        StringBuffer result = new StringBuffer();
 
-	if ( elems.hasNext() ) {
+        if ( elems.hasNext() ) {
             append(result, elems.next());
-	}
+        }
 
-	while ( elems.hasNext() ) {
-	    if ( result.length() > 0 ) {
-		result.append(File.separatorChar);
-	    }
+        while ( elems.hasNext() ) {
+            if ( result.length() > 0 ) {
+                result.append(File.separatorChar);
+            }
             append(result, elems.next());
-	}
+        }
 
-	return result.toString();
+        return result.toString();
     }
 
 
@@ -852,7 +852,7 @@ public class SModuleIO
 
 //* 
 //* <TeaFunction name="file-mkdir"
-//* 		arguments="dirPath"
+//*                 arguments="dirPath"
 //*             module="tea.io">
 //*
 //* <Overview>
@@ -881,16 +881,16 @@ public class SModuleIO
  **************************************************************************/
 
     private static Object functionMkdir(SObjFunction func,
-					SContext     context,
-					Object[]     args)
-	throws STeaException {
+                                        SContext     context,
+                                        Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 2 ) {
-	    throw new SNumArgException(args, "dirPath");
-	}
-	File dir = new File(SArgs.getString(args,1));
+        if ( args.length != 2 ) {
+            throw new SNumArgException(args, "dirPath");
+        }
+        File dir = new File(SArgs.getString(args,1));
 
-	return dir.mkdir() ? Boolean.TRUE : Boolean.FALSE;
+        return dir.mkdir() ? Boolean.TRUE : Boolean.FALSE;
     }
 
 
@@ -899,7 +899,7 @@ public class SModuleIO
 
 //* 
 //* <TeaFunction name="file-rename"
-//* 		arguments="sourcePath destPath"
+//*                 arguments="sourcePath destPath"
 //*             module="tea.io">
 //*
 //* <Overview>
@@ -933,17 +933,17 @@ public class SModuleIO
  **************************************************************************/
 
     private static Object functionRename(SObjFunction func,
-					 SContext     context,
-					 Object[]     args)
-	throws STeaException {
+                                         SContext     context,
+                                         Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 3 ) {
-	    throw new SNumArgException(args, "old-name new-name");
-	}
-	File oldFile = new File(SArgs.getString(args,1));
-	File newFile = new File(SArgs.getString(args,2));
+        if ( args.length != 3 ) {
+            throw new SNumArgException(args, "old-name new-name");
+        }
+        File oldFile = new File(SArgs.getString(args,1));
+        File newFile = new File(SArgs.getString(args,2));
 
-	return oldFile.renameTo(newFile) ? Boolean.TRUE : Boolean.FALSE;
+        return oldFile.renameTo(newFile) ? Boolean.TRUE : Boolean.FALSE;
     }
 
 
@@ -952,7 +952,7 @@ public class SModuleIO
 
 //* 
 //* <TeaFunction name="file-size"
-//* 		arguments="fileName"
+//*                 arguments="fileName"
 //*             module="tea.io">
 //*
 //* <Overview>
@@ -981,16 +981,16 @@ public class SModuleIO
  **************************************************************************/
 
     private static Object functionSize(SObjFunction func,
-				       SContext     context,
-				       Object[]     args)
-	throws STeaException {
+                                       SContext     context,
+                                       Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 2 ) {
-	    throw new SNumArgException(args, "fileName");
-	}
-	long size = (new  File(SArgs.getString(args,1))).length();
+        if ( args.length != 2 ) {
+            throw new SNumArgException(args, "fileName");
+        }
+        long size = (new  File(SArgs.getString(args,1))).length();
 
-	return new Integer((int)size);
+        return new Integer((int)size);
     }
 
 
@@ -999,7 +999,7 @@ public class SModuleIO
 
 //* 
 //* <TeaFunction name="file-split-path-list"
-//* 		 arguments="pathList"
+//*                  arguments="pathList"
 //*              module="tea.io">
 //*
 //* <Overview>
@@ -1031,20 +1031,20 @@ public class SModuleIO
  **************************************************************************/
 
     private static Object functionSplitPathList(SObjFunction func,
-						SContext     context,
-						Object[]     args)
-	throws STeaException {
+                                                SContext     context,
+                                                Object[]     args)
+        throws STeaException {
 
-	int numArgs = args.length;
+        int numArgs = args.length;
 
-	if ( numArgs != 2 ) {
-	    throw new SNumArgException(args, "string-path-list");
-	}
+        if ( numArgs != 2 ) {
+            throw new SNumArgException(args, "string-path-list");
+        }
 
-	String   pathList = SArgs.getString(args,1);
-	SObjPair result   = SUtils.buildPathList(pathList);
+        String   pathList = SArgs.getString(args,1);
+        SObjPair result   = SUtils.buildPathList(pathList);
 
-	return result;
+        return result;
     }
 
 
@@ -1053,7 +1053,7 @@ public class SModuleIO
 
 //* 
 //* <TeaFunction name="file-unlink"
-//* 		arguments="fileName"
+//*                 arguments="fileName"
 //*             module="tea.io">
 //*
 //* <Overview>
@@ -1089,16 +1089,16 @@ public class SModuleIO
  **************************************************************************/
 
     private static Object functionUnlink(SObjFunction func,
-					 SContext     context,
-					 Object[]     args)
-	throws STeaException {
+                                         SContext     context,
+                                         Object[]     args)
+        throws STeaException {
 
-	if ( args.length != 2 ) {
-	    throw new SNumArgException(args, "file-name");
-	}
+        if ( args.length != 2 ) {
+            throw new SNumArgException(args, "file-name");
+        }
 
-	return (new File(SArgs.getString(args,1))).delete() ?
-	    Boolean.TRUE : Boolean.FALSE;
+        return (new File(SArgs.getString(args,1))).delete() ?
+            Boolean.TRUE : Boolean.FALSE;
     }
 
 

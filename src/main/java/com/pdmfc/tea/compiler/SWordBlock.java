@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -24,7 +24,7 @@ import com.pdmfc.tea.runtime.SRuntimeException;
  *
  **************************************************************************/
 
-class SWordBlock
+final class SWordBlock
     extends Object
     implements SWord {
 
@@ -44,9 +44,9 @@ class SWordBlock
  *
  **************************************************************************/
 
-    SWordBlock(SCode code) {
+    public SWordBlock(final SCode code) {
 
-	_code = code;
+        _code = code;
     }
 
 
@@ -61,23 +61,23 @@ class SWordBlock
 
     public Object get(final SContext context) {
 
-	final SCode code = _code;
+        final SCode code = _code;
 
-	SObjBlock block = new SObjBlock() {
-		public SContext getContext() {
-		    return context;
-		}
-		public Object exec(SContext cntxt)
-		    throws STeaException {
-		    return code.exec(cntxt);
-		}
-		public Object exec()
-		    throws STeaException {
-		    return code.exec(context.newChild());
-		}
-	    };
+        SObjBlock block = new SObjBlock() {
+                public SContext getContext() {
+                    return context;
+                }
+                public Object exec(final SContext cntxt)
+                    throws STeaException {
+                    return code.exec(cntxt);
+                }
+                public Object exec()
+                    throws STeaException {
+                    return code.exec(context.newChild());
+                }
+            };
 
-	return block;
+        return block;
     }
 
 
@@ -90,10 +90,10 @@ class SWordBlock
  *
  **************************************************************************/
 
-    public SObjFunction toFunction(SContext context)
-	throws STeaException {
+    public SObjFunction toFunction(final SContext context)
+        throws STeaException {
 
-	throw new SRuntimeException("a block can not be used as a function");
+        throw new SRuntimeException("a block can not be used as a function");
     }
 
 
@@ -108,16 +108,16 @@ class SWordBlock
  **************************************************************************/
 
 //    public void prettyPrint(PrintStream out,
-//			    int         indent) {
+//                            int         indent) {
 //
-//	out.println("{");
-//	_code.prettyPrint(out, indent+4);
+//        out.println("{");
+//        _code.prettyPrint(out, indent+4);
 //
-//	for ( int i=0; i<indent; i++ ) {
-//	    out.print(' ');
-//	}
+//        for ( int i=0; i<indent; i++ ) {
+//            out.print(' ');
+//        }
 //
-//	out.print("}");
+//        out.print("}");
 //    }
 
 

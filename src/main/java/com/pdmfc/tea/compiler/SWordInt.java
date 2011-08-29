@@ -1,24 +1,10 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2001/05/12
- * Created. (jfn)
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 package com.pdmfc.tea.compiler;
-
-import java.io.PrintStream;
 
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.compiler.SWord;
@@ -36,7 +22,7 @@ import com.pdmfc.tea.runtime.SRuntimeException;
  *
  **************************************************************************/
 
-class SWordInt
+final class SWordInt
     extends Object
     implements SWord {
 
@@ -53,17 +39,17 @@ class SWordInt
 /**************************************************************************
  *
  * Initializes the object internal state. This word will evaluate into
- * an <TT>SObjInt</TT> object storing the value <TT>value</TT>.
+ * an <code>java.kang.Integer</code> object storing the given
+ * <code>value</code>.
  *
- * @param value
- *    The integer value of the <TT>SObjInt</TT> this word will evaluate
- *    to.
+ * @param value The integer value of the
+ * <code>java.lang.Integer</code> this word will evaluate to.
  *
  **************************************************************************/
 
-    SWordInt(int value) {
+    public SWordInt(final int value) {
 
-	_value = new Integer(value);
+        _value = new Integer(value);
     }
 
 
@@ -74,17 +60,16 @@ class SWordInt
  *
  * Evaluates this word.
  *
- * @param context The <TT>SContext</TT> where this word is being
- * evaluated.
+ * @param context The context where this word is being evaluated.
  *
- * @return The <TT>Object</TT> object this word evaluated to. It is an
- * <TT>SObjInt<\TT> object.
+ * @return The object this word evaluated to. It is an
+ * <code>java.lang.Integer</code>.
  *
  **************************************************************************/
 
-    public Object get(SContext context) {
+    public Object get(final SContext context) {
 
-	return _value;
+        return _value;
     }
 
 
@@ -97,10 +82,11 @@ class SWordInt
  *
  **************************************************************************/
 
-    public SObjFunction toFunction(SContext context)
-	throws STeaException {
+    public SObjFunction toFunction(final SContext context)
+        throws STeaException {
 
-	throw new SRuntimeException("an integer can not be used as a function");
+        String msg = "an integer can not be used as a function";
+        throw new SRuntimeException(msg);
     }
 
 
@@ -119,11 +105,11 @@ class SWordInt
  *
  **************************************************************************/
 
-    public void prettyPrint(PrintStream out,
-			    int         indent) {
+    // public void prettyPrint(final PrintStream out,
+    //                         final int         indent) {
 
-	out.print(_value);
-    }
+    //     out.print(_value);
+    // }
 
 
 }

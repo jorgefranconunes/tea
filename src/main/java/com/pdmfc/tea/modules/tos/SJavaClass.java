@@ -56,7 +56,7 @@ public class SJavaClass
     public SJavaClass(String javaClassName)
         throws SRuntimeException {
 
-	this(getJavaClass(javaClassName));
+        this(getJavaClass(javaClassName));
     }
 
 
@@ -72,16 +72,16 @@ public class SJavaClass
     public SJavaClass(Class javaClass)
         throws SRuntimeException {
 
-	_javaClass     = javaClass;
-	_javaClassCtor = getJavaClassConstructor(_javaClass);
+        _javaClass     = javaClass;
+        _javaClassCtor = getJavaClassConstructor(_javaClass);
 
-	if (  !STosObj.class.isAssignableFrom(_javaClass) ) {
-	    throw new SRuntimeException("Java class " + javaClass.getName()
-					+ " must be derived from "
-					+ STosObj.class.getName());
-	}
-	createMethods(_javaClass);
-	setClassName(_javaClass);
+        if (  !STosObj.class.isAssignableFrom(_javaClass) ) {
+            throw new SRuntimeException("Java class " + javaClass.getName()
+                                        + " must be derived from "
+                                        + STosObj.class.getName());
+        }
+        createMethods(_javaClass);
+        setClassName(_javaClass);
     }
 
 
@@ -95,27 +95,27 @@ public class SJavaClass
  **************************************************************************/
 
     private static Class getJavaClass(String javaClassName)
-	throws SRuntimeException {
+        throws SRuntimeException {
 
-	Class javaClass = null;
+        Class javaClass = null;
 
-	try {
-	    javaClass = Class.forName(javaClassName);
-	} catch (ExceptionInInitializerError e1) {
-	    throw new SRuntimeException("failed to initialize Java class "
-					+ javaClassName
-					+ " (" + e1.getMessage() + ")");
-	} catch (LinkageError e2) {
-	    throw new SRuntimeException("failed to link Java class "
-					+ javaClassName
-					+ " (" + e2.getMessage() + ")");
-	} catch (ClassNotFoundException e3) {
-	    throw new SRuntimeException("failed to find Java class "
-					+ javaClassName
-					+ " (" + e3.getMessage() + ")");
-	}
+        try {
+            javaClass = Class.forName(javaClassName);
+        } catch (ExceptionInInitializerError e1) {
+            throw new SRuntimeException("failed to initialize Java class "
+                                        + javaClassName
+                                        + " (" + e1.getMessage() + ")");
+        } catch (LinkageError e2) {
+            throw new SRuntimeException("failed to link Java class "
+                                        + javaClassName
+                                        + " (" + e2.getMessage() + ")");
+        } catch (ClassNotFoundException e3) {
+            throw new SRuntimeException("failed to find Java class "
+                                        + javaClassName
+                                        + " (" + e3.getMessage() + ")");
+        }
 
-	return javaClass;
+        return javaClass;
     }
 
 
@@ -129,21 +129,21 @@ public class SJavaClass
  **************************************************************************/
 
     private static Constructor getJavaClassConstructor(Class<?> javaClass)
-	throws SRuntimeException {
+        throws SRuntimeException {
 
-	Constructor ctor = null;
+        Constructor ctor = null;
 
-	try {
-	    ctor = javaClass.getConstructor(CTOR_TYPES);
-	} catch (NoSuchMethodException e1) {
-	    throw new SRuntimeException("missing constuctor in Java class "
-					+ javaClass.getName());
-	} catch (SecurityException e2) {
-	    throw new SRuntimeException("no access to constuctor for Java class "
-					+ javaClass.getName());
-	}
+        try {
+            ctor = javaClass.getConstructor(CTOR_TYPES);
+        } catch (NoSuchMethodException e1) {
+            throw new SRuntimeException("missing constuctor in Java class "
+                                        + javaClass.getName());
+        } catch (SecurityException e2) {
+            throw new SRuntimeException("no access to constuctor for Java class "
+                                        + javaClass.getName());
+        }
 
-	return ctor;
+        return ctor;
     }
 
 
@@ -157,15 +157,15 @@ public class SJavaClass
  **************************************************************************/
 
     private void createMethods(Class javaClass)
-	throws SRuntimeException {
+        throws SRuntimeException {
 
-	Class superClass = javaClass.getSuperclass();
+        Class superClass = javaClass.getSuperclass();
 
-	if ( superClass != null ) {
-	    createMethods(superClass);
-	}
+        if ( superClass != null ) {
+            createMethods(superClass);
+        }
 
-	createDeclaredMethods(javaClass);
+        createDeclaredMethods(javaClass);
     }
 
 
@@ -179,29 +179,29 @@ public class SJavaClass
  **************************************************************************/
 
     private void createDeclaredMethods(Class javaClass)
-	throws SRuntimeException {
+        throws SRuntimeException {
 
-	Method[] methods = getJavaClassMethods(javaClass);
+        Method[] methods = getJavaClassMethods(javaClass);
 
-	for ( int i=methods.length; (i--)>0; ) {
-	    Method  method     = methods[i];
-	    String  methodName = method.getName();
-	    Class[] argTypes   = method.getParameterTypes();
-	    Class   retType    = method.getReturnType();
+        for ( int i=methods.length; (i--)>0; ) {
+            Method  method     = methods[i];
+            String  methodName = method.getName();
+            Class[] argTypes   = method.getParameterTypes();
+            Class   retType    = method.getReturnType();
 
-	    if ( (argTypes.length==3)
-		 && (argTypes[0]==SObjFunction.class)
-		 && (argTypes[1]==SContext.class)
-		 && (argTypes[2]==Object[].class)
-		 && (retType==Object.class)
-		 && !methodName.equals("exec") ) {
-		if ( methodName.equals(CONSTRUCTOR_NAME) ) {
-		    addConstructor(new SJavaMethod(method));
-		} else {
-		    addMethod(methodName, new SJavaMethod(method));
-		}
-	    }
-	}
+            if ( (argTypes.length==3)
+                 && (argTypes[0]==SObjFunction.class)
+                 && (argTypes[1]==SContext.class)
+                 && (argTypes[2]==Object[].class)
+                 && (retType==Object.class)
+                 && !methodName.equals("exec") ) {
+                if ( methodName.equals(CONSTRUCTOR_NAME) ) {
+                    addConstructor(new SJavaMethod(method));
+                } else {
+                    addMethod(methodName, new SJavaMethod(method));
+                }
+            }
+        }
     }
 
 
@@ -216,21 +216,21 @@ public class SJavaClass
  **************************************************************************/
 
     private static Method[] getJavaClassMethods(Class javaClass)
-	throws SRuntimeException {
+        throws SRuntimeException {
 
-	Method[] methods = null;
+        Method[] methods = null;
 
-	try {
-	    methods = javaClass.getMethods();
-	    // We do not call Class.getDeclaredMethods() because it
-	    // throws SecurityException when running inside
-	    // JavaWebStart.
-	} catch (SecurityException e) {
-	    throw new SRuntimeException("no access to methods of Java class "
-					+ javaClass.getName());
-	}
+        try {
+            methods = javaClass.getMethods();
+            // We do not call Class.getDeclaredMethods() because it
+            // throws SecurityException when running inside
+            // JavaWebStart.
+        } catch (SecurityException e) {
+            throw new SRuntimeException("no access to methods of Java class "
+                                        + javaClass.getName());
+        }
 
-	return methods;
+        return methods;
     }
 
 
@@ -245,33 +245,33 @@ public class SJavaClass
 
     private void setClassName(Class<?> javaClass) {
 
-	Method getNameMethod = null;
-	String tosClassName  = null;
+        Method getNameMethod = null;
+        String tosClassName  = null;
 
-	try {
-	    getNameMethod = javaClass.getMethod(GET_NAME_METHOD,
-						GET_NAME_METHOD_TYPES);
-	} catch (NoSuchMethodException e1) {
-	    // Ignore it.
-	} catch (SecurityException e2) {
-	    // Ignore it.
-	}
+        try {
+            getNameMethod = javaClass.getMethod(GET_NAME_METHOD,
+                                                GET_NAME_METHOD_TYPES);
+        } catch (NoSuchMethodException e1) {
+            // Ignore it.
+        } catch (SecurityException e2) {
+            // Ignore it.
+        }
 
-	if ( getNameMethod != null ) {
-	    try {
-		tosClassName =
-		    (String)getNameMethod.invoke(null, GET_NAME_METHOD_ARGS);
-	    } catch (IllegalAccessException e1) {
-	    } catch (IllegalArgumentException e2) {
-	    } catch (InvocationTargetException e3) {
-	    } catch (NullPointerException e4) {
-	    } catch (ClassCastException e5) {
-	    }
-	}
+        if ( getNameMethod != null ) {
+            try {
+                tosClassName =
+                    (String)getNameMethod.invoke(null, GET_NAME_METHOD_ARGS);
+            } catch (IllegalAccessException e1) {
+            } catch (IllegalArgumentException e2) {
+            } catch (InvocationTargetException e3) {
+            } catch (NullPointerException e4) {
+            } catch (ClassCastException e5) {
+            }
+        }
 
-	if ( tosClassName != null ) {
-	    setName(tosClassName);
-	}
+        if ( tosClassName != null ) {
+            setName(tosClassName);
+        }
     }
 
 
@@ -285,34 +285,34 @@ public class SJavaClass
  **************************************************************************/
 
     public STosObj newInstance()
-	throws STeaException {
+        throws STeaException {
 
-	STosObj obj = null;
+        STosObj obj = null;
 
-	try {
-	    obj = (STosObj)_javaClassCtor.newInstance(new Object[] {this});
-	} catch (InstantiationException e1) {
-	    throw new SRuntimeException("failed to instantiate Java class " 
-					+ _javaClass.getName()
-					+ "(" + e1.getMessage() + ")");
-	} catch (IllegalAccessException e2) {
-	    throw new SRuntimeException("failed to instantiate Java class " 
-					+ _javaClass.getName()
-					+ "(" + e2.getMessage() + ")");
-	} catch (IllegalArgumentException e3) {
-	    throw new SRuntimeException("failed to instantiate Java class " 
-					+ _javaClass.getName()
-					+ "(" + e3.getMessage() + ")");
-	} catch (InvocationTargetException e4) {
-	    Throwable error = e4.getTargetException();
-	    if ( error instanceof STeaException ) {
-		throw (STeaException)error;
-	    } else {
-		internalError(error);
-	    }
-	}
+        try {
+            obj = (STosObj)_javaClassCtor.newInstance(new Object[] {this});
+        } catch (InstantiationException e1) {
+            throw new SRuntimeException("failed to instantiate Java class " 
+                                        + _javaClass.getName()
+                                        + "(" + e1.getMessage() + ")");
+        } catch (IllegalAccessException e2) {
+            throw new SRuntimeException("failed to instantiate Java class " 
+                                        + _javaClass.getName()
+                                        + "(" + e2.getMessage() + ")");
+        } catch (IllegalArgumentException e3) {
+            throw new SRuntimeException("failed to instantiate Java class " 
+                                        + _javaClass.getName()
+                                        + "(" + e3.getMessage() + ")");
+        } catch (InvocationTargetException e4) {
+            Throwable error = e4.getTargetException();
+            if ( error instanceof STeaException ) {
+                throw (STeaException)error;
+            } else {
+                internalError(error);
+            }
+        }
 
-	return obj;
+        return obj;
     }
 
 
@@ -326,11 +326,11 @@ public class SJavaClass
  **************************************************************************/
 
     private static void internalError(Throwable error)
-	throws SRuntimeException {
+        throws SRuntimeException {
 
-	throw new SRuntimeException("internal error - "
-				    + error.getClass().getName()
-				    + " - " + error.getMessage());
+        throw new SRuntimeException("internal error - "
+                                    + error.getClass().getName()
+                                    + " - " + error.getMessage());
     }
 
 

@@ -85,27 +85,27 @@ final class JavaWrapperObject
                        final Object[]     args)
         throws STeaException {
 
-	if ( args.length < 2 ) {
-	    throw new SNumArgException(args, "methodName [arg1 [arg2 ...]]");
-	}
+        if ( args.length < 2 ) {
+            throw new SNumArgException(args, "methodName [arg1 [arg2 ...]]");
+        }
 
-	String   methodName = SReflectUtils.getStringOrSymbol(args,1);
-	Class[]  paramTypes = new Class[args.length - 2];
-	Object[] methodArgs = new Object[args.length - 2];
+        String   methodName = SReflectUtils.getStringOrSymbol(args,1);
+        Class[]  paramTypes = new Class[args.length - 2];
+        Object[] methodArgs = new Object[args.length - 2];
 
-	// Convert value types to java and create methodArgs array
-	for ( int i=2; i<args.length; i++ ) {
+        // Convert value types to java and create methodArgs array
+        for ( int i=2; i<args.length; i++ ) {
             Object javaArg = STeaJavaTypes.tea2Java(args[i]);
-	    paramTypes[i-2] = (javaArg==null) ? null : javaArg.getClass();
-	    methodArgs[i-2] = javaArg;
-	}
+            paramTypes[i-2] = (javaArg==null) ? null : javaArg.getClass();
+            methodArgs[i-2] = javaArg;
+        }
 
-	Method method =
+        Method method =
             SMethodFinder.findMethod(_javaObjectType,
                                      methodName, 
                                      paramTypes,
                                      true);
-	Object result =
+        Object result =
             SReflectUtils.invokeMethod(_javaObject,
                                        method,
                                        context,
