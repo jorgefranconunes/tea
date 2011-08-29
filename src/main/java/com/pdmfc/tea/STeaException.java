@@ -65,8 +65,8 @@ public class STeaException
  *
  **************************************************************************/
 
-    public STeaException(String    msgFmt,
-			 Object... fmtArgs) {
+    public STeaException(final String    msgFmt,
+                         final Object... fmtArgs) {
 
         init(msgFmt, fmtArgs);
     }
@@ -113,8 +113,8 @@ public class STeaException
  *
  **************************************************************************/
 
-    protected void init(final String    msgFmt,
-                        final Object... fmtArgs) {
+    protected final void init(final String    msgFmt,
+                              final Object... fmtArgs) {
 
         assert ( msgFmt != null );
 
@@ -135,23 +135,23 @@ public class STeaException
  *
  **************************************************************************/
 
-    public String getMessage() {
+    public final String getMessage() {
 
-	if ( _msg == null ) {
-	    if ( (_fmtArgs==null) || (_fmtArgs.length==0) ) {
-		_msg = _msgFmt;
-	    } else {
-                //		try {
-		    _msg = MessageFormat.format(_msgFmt, _fmtArgs);
-                    //		} catch (RuntimeException e) {
+        if ( _msg == null ) {
+            if ( (_fmtArgs==null) || (_fmtArgs.length==0) ) {
+                _msg = _msgFmt;
+            } else {
+                try {
+                    _msg = MessageFormat.format(_msgFmt, _fmtArgs);
+                } catch (RuntimeException e) {
                     // Something very bad just happened. Try to
                     // recover to a common sense position...
-                    //		    _msg = _msgFmt;
-                    //		}
-	    }
-	}
+                    _msg = _msgFmt;
+                }
+            }
+        }
 
-	return _msg;
+        return _msg;
     }
 
 

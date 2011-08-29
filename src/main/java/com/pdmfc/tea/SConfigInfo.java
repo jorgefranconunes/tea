@@ -45,7 +45,7 @@ public final class SConfigInfo
  **************************************************************************/
 
     static {
-	InputStream in = SConfigInfo.class.getResourceAsStream(RES_NAME);
+        InputStream in = SConfigInfo.class.getResourceAsStream(RES_NAME);
 
         if ( in != null ) {
             try {
@@ -80,13 +80,16 @@ public final class SConfigInfo
 
 /**************************************************************************
  *
- * 
+ * @param key Name of the configuration parameter to retrieve.
+ *
+ * @return The value of the given configuration parameter. Null if no
+ * configuration paremeter with that name is known.
  *
  **************************************************************************/
 
-    public static String getProperty(String key) {
+    public static String getProperty(final String key) {
 
-	return _props.getProperty(key);
+        return _props.getProperty(key);
     }
 
 
