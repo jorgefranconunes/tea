@@ -5,6 +5,8 @@ Copyright (c) 2010-2011 PDM&FC, All Rights Reserved.
 
 Main Ant build file for the Tea development tree.
 
+For setup instructions, please read the 00README-developers.txt
+
 -->
 
 <project name="Tea" default="all">
