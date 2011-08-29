@@ -186,9 +186,6 @@ public class TeaScriptEngine
         } catch (SCompileException ex) {
             // This can never happen. But we can't go on if it does.
             throw new java.lang.RuntimeException(ex);
-        } catch (IOException ex) {
-            // This can never happen. But we can't go on if it does.
-            throw new java.lang.RuntimeException(ex);
         }
     }
 
