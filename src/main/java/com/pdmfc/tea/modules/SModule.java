@@ -15,8 +15,7 @@ import com.pdmfc.tea.runtime.SContext;
 
 /**************************************************************************
  *
- * Provides basic functionality common to most implementations of
- * modules.
+ * Defines the lifecycle methods that a Tea module must implement. 
  *
  **************************************************************************/
 

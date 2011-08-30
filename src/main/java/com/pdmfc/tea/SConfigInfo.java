@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -57,7 +57,7 @@ public final class SConfigInfo
             }
         } else {
             String msg = "Missing resource \"" + RES_NAME + "\"";
-            throw new RuntimeException(msg);
+            throw new IllegalStateException(msg);
         }
     }
 

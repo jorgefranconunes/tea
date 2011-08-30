@@ -27,7 +27,7 @@ import com.pdmfc.tea.runtime.SModuleUtils;
 
 /**************************************************************************
  *
- * Represents a Tea interpreter.
+ * A Tea interpreter that can be used to execute compiled code.
  *
  **************************************************************************/
 
@@ -326,13 +326,8 @@ public class STeaRuntime
  * so far are signaled with a call to their <code>stop()</code>
  * method.
  *
- * <p>Before calling the packages' <code>stop()</code> method the
- * current thread waits until all necessary calls to
- * <code>releaseStop()</code> are performed. The calls to
- * <code>releaseStop()</code> must be as many as the ones to
- * <code>holdStop</code>. Note that as the current thread sleeps, the
- * calls to <code>releaseStop()</code> must be made from another
- * thread.</p>
+ * <p>If this runtime has not been started then an
+ * <code>java.lang.IllegalStateException</code> will be thrown.
  *
  **************************************************************************/
 
@@ -567,7 +562,7 @@ public class STeaRuntime
 
         if ( !currentStateIsValid ) {
             String msg = "Action not allowed on state " + currentState;
-            throw new IllegalArgumentException(msg);
+            throw new IllegalStateException(msg);
         }
     }
 

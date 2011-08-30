@@ -103,7 +103,7 @@ public class SModuleString
        
        context.newVar("str-printf", fmt);
 
-       // For downward compatibility with previous releases.
+       // For backward compatibility with previous releases.
        context.newVar("str-format", fmt);
 
        context.newVar("str-fmt",
@@ -127,7 +127,7 @@ public class SModuleString
 
        context.newVar("str-cmp", comp);
 
-       // For downward compatibility with Tea 1.x.
+       // For backward compatibility with Tea 1.x.
        context.newVar("str-comp", comp);
 
        context.newVar("str>",
@@ -161,7 +161,7 @@ public class SModuleString
 
        context.newVar("str==", eq);
 
-       // For downward compatibility with Tea 1.x.
+       // For backward compatibility with Tea 1.x.
        context.newVar("str-eq", eq);
        context.newVar("str-eq?", eq);
 
@@ -176,7 +176,7 @@ public class SModuleString
 
        context.newVar("str!=", neq);
 
-       // For downward compatibility with Tea 1.x.
+       // For backward compatibility with Tea 1.x.
        context.newVar("str-not-eq?", neq);
        context.newVar("str-neq", neq);
 
@@ -584,20 +584,20 @@ public class SModuleString
 
 //* 
 //* <TeaFunction name="str-upper"
-//*                 arguments="aString"
+//*                 arguments="str"
 //*             module="tea.string">
 //*
 //* <Overview>
 //* Creates the upper case version of a string.
 //* </Overview>
 //*
-//* <Parameter name="aString">
+//* <Parameter name="str">
 //* A string object.
 //* </Parameter>
 //*
 //* <Returns>
 //* A string object containing the upper case version of
-//* <Arg name="aString"/>.
+//* <Arg name="str"/>.
 //* </Returns>
 //*
 //* <Description>

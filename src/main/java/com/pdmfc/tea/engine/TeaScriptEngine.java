@@ -929,7 +929,7 @@ public class TeaScriptEngine
             // no more Tea code ought to be executed without calling start
             try {
                 teaRuntime.stop();
-            } catch (IllegalArgumentException ex) {
+            } catch (IllegalStateException ex) {
                 // If an error ocurred before initialization of STeaRuntime
                 // we ignore it, but we attempted to stop it anyway.
                 throw new ScriptException(ex);
