@@ -49,7 +49,7 @@ final class SWordInt
 
     public SWordInt(final int value) {
 
-        _value = new Integer(value);
+        _value = Integer.valueOf(value);
     }
 
 

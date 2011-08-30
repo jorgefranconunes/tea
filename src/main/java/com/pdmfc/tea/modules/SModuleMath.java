@@ -18,7 +18,6 @@ import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SObjVar;
 import com.pdmfc.tea.runtime.SNumArgException;
-import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypeException;
 import com.pdmfc.tea.runtime.STypes;
 
@@ -46,7 +45,7 @@ import com.pdmfc.tea.runtime.STypes;
  *
  **************************************************************************/
 
-public class SModuleMath
+public final class SModuleMath
     extends Object
     implements SModule {
 
@@ -57,17 +56,17 @@ public class SModuleMath
     /**
      * The value zero.
      */
-    public static final Integer ZERO = new Integer(0);
+    public static final Integer ZERO = Integer.valueOf(0);
 
     /** 
      * The value one.
      */
-    public static final Integer ONE = new Integer(1);
+    public static final Integer ONE = Integer.valueOf(1);
 
     /**
      * The value minus one.
      */
-    public static final Integer MINUS_ONE = new Integer(-1);
+    public static final Integer MINUS_ONE = Integer.valueOf(-1);
 
     private static final int EQ = 1;
     private static final int NE = 2;
@@ -81,8 +80,8 @@ public class SModuleMath
     private static final int MUL = 3;
     private static final int DIV = 4;
 
-    private static final SComparator _gt = new SGt();
-    private static final SComparator _lt = new SLt();
+    private static final SComparator C_GT = new SGt();
+    private static final SComparator C_LT = new SLt();
 
     // Used by the implementation of the Tea "rand-int" function.
     private Random _generator = new Random();
@@ -99,7 +98,9 @@ public class SModuleMath
  **************************************************************************/
 
     public SModuleMath() {
-   }
+
+        // Nothing to do.
+    }
 
 
 
@@ -107,18 +108,18 @@ public class SModuleMath
 
 /**************************************************************************
  *
- * 
+ * {@inheritDoc}
  *
  **************************************************************************/
 
-    public void init(SContext context)
+    public void init(final SContext context)
         throws STeaException {
 
         context.newVar("==",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionEq(func, context, args);
                            }
@@ -126,9 +127,9 @@ public class SModuleMath
         
         context.newVar("!=",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionNe(func, context, args);
                            }
@@ -136,9 +137,9 @@ public class SModuleMath
         
         context.newVar(">",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionGt(func, context, args);
                            }
@@ -146,9 +147,9 @@ public class SModuleMath
         
         context.newVar(">=",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionGe(func, context, args);
                            }
@@ -156,9 +157,9 @@ public class SModuleMath
         
         context.newVar("<",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionLt(func, context, args);
                            }
@@ -166,9 +167,9 @@ public class SModuleMath
         
         context.newVar("<=",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionLe(func, context, args);
                            }
@@ -176,9 +177,9 @@ public class SModuleMath
         
         context.newVar("+",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionAdd(func, context, args);
                            }
@@ -186,9 +187,9 @@ public class SModuleMath
         
         context.newVar("-",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionSub(func, context, args);
                            }
@@ -196,9 +197,9 @@ public class SModuleMath
         
         context.newVar("*",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionMul(func, context, args);
                            }
@@ -206,9 +207,9 @@ public class SModuleMath
         
         context.newVar("/",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionDiv(func, context, args);
                            }
@@ -216,9 +217,9 @@ public class SModuleMath
         
         context.newVar("%",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionMod(func, context, args);
                            }
@@ -226,9 +227,9 @@ public class SModuleMath
         
         context.newVar("and",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionAnd(func, context, args);
                            }
@@ -236,9 +237,9 @@ public class SModuleMath
         
         context.newVar("or",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionOr(func, context, args);
                            }
@@ -246,9 +247,9 @@ public class SModuleMath
         
         context.newVar("not",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionNot(func, context, args);
                            }
@@ -256,9 +257,9 @@ public class SModuleMath
         
         context.newVar("abs",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionAbs(func, context, args);
                            }
@@ -266,9 +267,9 @@ public class SModuleMath
         
         context.newVar("round",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionRound(func, context, args);
                            }
@@ -276,9 +277,9 @@ public class SModuleMath
         
         context.newVar("floor",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionFloor(func, context, args);
                            }
@@ -286,9 +287,9 @@ public class SModuleMath
         
         context.newVar("ceil",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionCeil(func, context, args);
                            }
@@ -296,9 +297,9 @@ public class SModuleMath
         
         context.newVar("sqrt",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionSqrt(func, context, args);
                            }
@@ -306,9 +307,9 @@ public class SModuleMath
         
         context.newVar("min",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionMin(func, context, args);
                            }
@@ -316,9 +317,9 @@ public class SModuleMath
         
         context.newVar("max",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionMax(func, context, args);
                            }
@@ -326,9 +327,9 @@ public class SModuleMath
         
         context.newVar("rand-int",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionRandInt(func, context, args);
                            }
@@ -336,9 +337,9 @@ public class SModuleMath
         
         context.newVar("int",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionInt(func, context, args);
                            }
@@ -346,9 +347,9 @@ public class SModuleMath
         
         context.newVar("=",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionSetValue(func, context, args);
                            }
@@ -356,9 +357,9 @@ public class SModuleMath
         
         context.newVar("+=",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionIncBy(func, context, args);
                            }
@@ -366,9 +367,9 @@ public class SModuleMath
         
         context.newVar("-=",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionDecBy(func, context, args);
                            }
@@ -376,9 +377,9 @@ public class SModuleMath
         
         context.newVar("*=",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionMulBy(func, context, args);
                            }
@@ -386,9 +387,9 @@ public class SModuleMath
         
         context.newVar("/=",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionDivBy(func, context, args);
                            }
@@ -396,9 +397,9 @@ public class SModuleMath
         
         context.newVar("++",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionInc(func, context, args);
                            }
@@ -406,9 +407,9 @@ public class SModuleMath
         
         context.newVar("--",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionDec(func, context, args);
                            }
@@ -416,9 +417,9 @@ public class SModuleMath
         
         context.newVar("~",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionBinNeg(func, context, args);
                            }
@@ -426,9 +427,9 @@ public class SModuleMath
         
         context.newVar("&",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionBinAnd(func, context, args);
                            }
@@ -436,9 +437,9 @@ public class SModuleMath
         
         context.newVar("|",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionBinOr(func, context, args);
                            }
@@ -446,9 +447,9 @@ public class SModuleMath
         
         context.newVar("^",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionBinXor(func, context, args);
                            }
@@ -456,9 +457,9 @@ public class SModuleMath
         
         context.newVar("<<",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionBinSl(func, context, args);
                            }
@@ -466,9 +467,9 @@ public class SModuleMath
         
         context.newVar(">>",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionBinSr(func, context, args);
                            }
@@ -476,9 +477,9 @@ public class SModuleMath
         
         context.newVar("&=",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionBinAndBy(func,context,args);
                            }
@@ -486,9 +487,9 @@ public class SModuleMath
 
         context.newVar("|=",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionBinOrBy(func,context,args);
                            }
@@ -496,9 +497,9 @@ public class SModuleMath
 
         context.newVar("^=",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionBinXorBy(func,context,args);
                            }
@@ -506,9 +507,9 @@ public class SModuleMath
 
         context.newVar("<<=",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionBinSlBy(func,context,args);
                            }
@@ -516,9 +517,9 @@ public class SModuleMath
 
         context.newVar(">>=",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionBinSrBy(func,context,args);
                            }
@@ -531,7 +532,7 @@ public class SModuleMath
 
 /**************************************************************************
  *
- * 
+ * {@inheritDoc}
  *
  **************************************************************************/
 
@@ -546,7 +547,7 @@ public class SModuleMath
 
 /**************************************************************************
  *
- * 
+ * {@inheritDoc}
  *
  **************************************************************************/
 
@@ -561,7 +562,7 @@ public class SModuleMath
 
 /**************************************************************************
  *
- * 
+ * {@inheritDoc}
  *
  **************************************************************************/
 
@@ -604,9 +605,9 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private static Object functionEq(SObjFunction func,
-                                     SContext     context,
-                                     Object[]     args)
+    private static Object functionEq(final SObjFunction func,
+                                     final SContext     context,
+                                     final Object[]     args)
         throws STeaException {
 
         return compare(EQ, func, context, args);
@@ -650,9 +651,9 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private static Object functionNe(SObjFunction func,
-                                     SContext     context,
-                                     Object[]     args)
+    private static Object functionNe(final SObjFunction func,
+                                     final SContext     context,
+                                     final Object[]     args)
         throws STeaException {
 
         return compare(NE, func, context, args);
@@ -696,9 +697,9 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private static Object functionGt(SObjFunction func,
-                                     SContext     context,
-                                     Object[]     args)
+    private static Object functionGt(final SObjFunction func,
+                                     final SContext     context,
+                                     final Object[]     args)
         throws STeaException {
 
         return compare(GT, func, context, args);
@@ -743,9 +744,9 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private static Object functionGe(SObjFunction func,
-                                     SContext     context,
-                                     Object[]     args)
+    private static Object functionGe(final SObjFunction func,
+                                     final SContext     context,
+                                     final Object[]     args)
         throws STeaException {
 
         return compare(GE, func, context, args);
@@ -789,9 +790,9 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private static Object functionLt(SObjFunction func,
-                                     SContext     context,
-                                     Object[]     args)
+    private static Object functionLt(final SObjFunction func,
+                                     final SContext     context,
+                                     final Object[]     args)
         throws STeaException {
 
         return compare(LT, func, context, args);
@@ -836,9 +837,9 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private static Object functionLe(SObjFunction func,
-                                     SContext     context,
-                                     Object[]     args)
+    private static Object functionLe(final SObjFunction func,
+                                     final SContext     context,
+                                     final Object[]     args)
         throws STeaException {
 
         return compare(LE, func, context, args);
@@ -854,10 +855,10 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private static Object compare(int          compOp,
-                                  SObjFunction func,
-                                  SContext     context,
-                                  Object[]     args)
+    private static Object compare(final int          compOp,
+                                  final SObjFunction func,
+                                  final SContext     context,
+                                  final Object[]     args)
         throws STeaException {
 
         if ( args.length<3 ) {
@@ -904,7 +905,7 @@ public class SModuleMath
             op1         = op2;
             op1IsInt    = op2IsInt;
             op1IntVal   = op2IntVal;
-            op1FloatVal = op1FloatVal;
+            op1FloatVal = op2FloatVal;
         }
 
         return Boolean.TRUE;
@@ -920,9 +921,9 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private static boolean compareI(int compOp,
-                                    int op1,
-                                    int op2) {
+    private static boolean compareI(final int compOp,
+                                    final int op1,
+                                    final int op2) {
 
         switch ( compOp ) {
         case EQ : return op1 == op2;
@@ -945,9 +946,9 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private static boolean compareF(int    compOp,
-                                    double op1,
-                                    double op2) {
+    private static boolean compareF(final int    compOp,
+                                    final double op1,
+                                    final double op2) {
 
         switch ( compOp ) {
         case EQ : return op1 == op2;
@@ -956,8 +957,9 @@ public class SModuleMath
         case GE : return op1 >= op2;
         case LT : return op1 < op2;
         case LE : return op1 <= op2;
+        default :
+            throw new IllegalArgumentException(String.valueOf(compOp));
         }
-        return false;
     }
 
 
@@ -997,9 +999,9 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private static Object functionAdd(SObjFunction func,
-                                      SContext     context,
-                                      Object[]     args)
+    private static Object functionAdd(final SObjFunction func,
+                                      final SContext     context,
+                                      final Object[]     args)
         throws STeaException {
 
         return arithmOp(ADD, func, context, args);
@@ -1043,9 +1045,9 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private static Object functionSub(SObjFunction func,
-                                      SContext     context,
-                                      Object[]     args)
+    private static Object functionSub(final SObjFunction func,
+                                      final SContext     context,
+                                      final Object[]     args)
         throws STeaException {
 
         return arithmOp(SUB, func, context, args);
@@ -1088,9 +1090,9 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private static Object functionMul(SObjFunction func,
-                                      SContext     context,
-                                      Object[]     args)
+    private static Object functionMul(final SObjFunction func,
+                                      final SContext     context,
+                                      final Object[]     args)
         throws STeaException {
 
         return arithmOp(MUL, func, context, args);
@@ -1134,9 +1136,9 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private static Object functionDiv(SObjFunction func,
-                                      SContext     context,
-                                      Object[]     args)
+    private static Object functionDiv(final SObjFunction func,
+                                      final SContext     context,
+                                      final Object[]     args)
         throws STeaException {
 
         return arithmOp(DIV, func, context, args);
@@ -1191,11 +1193,13 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private static Object calcIntOp(int      op,
-                                    int      result,
-                                    Object[] args,
-                                    int      first)
+    private static Object calcIntOp(final int      op,
+                                    final int      input,
+                                    final Object[] args,
+                                    final int      first)
         throws STeaException {
+
+        int result = input;
 
         for ( int i=first; i<args.length; i++ ) {
             Object operand = args[i];
@@ -1216,7 +1220,7 @@ public class SModuleMath
             }
         }
 
-        return new Integer(result);
+        return Integer.valueOf(result);
     }
 
 
@@ -1229,11 +1233,13 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private static Object calcFloatOp(int      op,
-                                      double   result,
-                                      Object[] args,
-                                      int      first)
+    private static Object calcFloatOp(final int      op,
+                                      final double   input,
+                                      final Object[] args,
+                                      final int      first)
         throws STeaException {
+
+        double result = input;
 
         for ( int i=first; i<args.length; i++ ) {
             Object operand = args[i];
@@ -1258,9 +1264,9 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private static int doOp(int op,
-                            int op1,
-                            int op2) {
+    private static int doOp(final int op,
+                            final int op1,
+                            final int op2) {
 
         switch ( op ) {
         case ADD : return op1+op2;
@@ -1281,9 +1287,9 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private static double doOp(int    op,
-                               double op1,
-                               double op2) {
+    private static double doOp(final int    op,
+                               final double op1,
+                               final double op2) {
 
         switch ( op ) {
         case ADD : return op1+op2;
@@ -1307,7 +1313,7 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private static Object opNullValue(int op) {
+    private static Object opNullValue(final int op) {
 
         switch ( op ) {
         case ADD :
@@ -1349,19 +1355,17 @@ public class SModuleMath
 
         if ( operand instanceof Integer ) {
             if ( op == SUB ) {
-                result = new Integer(-((Integer)operand).intValue());
+                result = Integer.valueOf(-((Integer)operand).intValue());
             } else {
                 result = operand;
             }
-        }
-        else if ( operand instanceof Double ) {
+        } else if ( operand instanceof Double ) {
             if ( op == SUB ) {
                 result = new Double(-((Double)operand).doubleValue());
             } else {
                 result = operand;
             }
-        }
-        else {
+        } else {
             throw new STypeException(args, 1, "float or an int");
         }
 
@@ -1406,9 +1410,9 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private static Object functionMod(SObjFunction func,
-                                      SContext     context,
-                                      Object[]     args)
+    private static Object functionMod(final SObjFunction func,
+                                      final SContext     context,
+                                      final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -1419,7 +1423,7 @@ public class SModuleMath
         int divisor  = SArgs.getInt(args,2).intValue();
         int result   = dividend % divisor;
 
-        return new Integer(result);
+        return Integer.valueOf(result);
     }
 
 
@@ -1478,9 +1482,9 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private static Object functionAnd(SObjFunction func,
-                                      SContext     context,
-                                      Object[]     args)
+    private static Object functionAnd(final SObjFunction func,
+                                      final SContext     context,
+                                      final Object[]     args)
         throws STeaException {
 
         for ( int i=1; i<args.length; i++ ) {
@@ -1538,9 +1542,9 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private static Object functionOr(SObjFunction func,
-                                     SContext     context,
-                                     Object[]     args)
+    private static Object functionOr(final SObjFunction func,
+                                     final SContext     context,
+                                     final Object[]     args)
         throws STeaException {
 
         if ( args.length < 2 ) {
@@ -1599,9 +1603,9 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private static Object functionNot(SObjFunction func,
-                                      SContext     context,
-                                      Object[]     args)
+    private static Object functionNot(final SObjFunction func,
+                                      final SContext     context,
+                                      final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -1650,9 +1654,9 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private static Object functionAbs(SObjFunction func,
-                                      SContext     context,
-                                      Object[]     args)
+    private static Object functionAbs(final SObjFunction func,
+                                      final SContext     context,
+                                      final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -1661,14 +1665,13 @@ public class SModuleMath
         Object arg = args[1];
 
         if ( arg instanceof Integer ) {
-            return new Integer(Math.abs(((Integer)arg).intValue()));
+            return Integer.valueOf(Math.abs(((Integer)arg).intValue()));
         }
         if ( arg instanceof Double ) {
             return new Double(Math.abs(((Double)arg).floatValue()));
         }
 
-        throw new STypeException("arg 1 should be either an int or a float, " +
-                                 "not a " + STypes.getTypeName(arg));
+        throw new STypeException(args, 1, "int or a float");
     }
 
 
@@ -1705,9 +1708,9 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private static Object functionRound(SObjFunction func,
-                                        SContext     context,
-                                        Object[]     args)
+    private static Object functionRound(final SObjFunction func,
+                                        final SContext     context,
+                                        final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -1717,7 +1720,7 @@ public class SModuleMath
         double operand = SArgs.getFloat(args, 1).doubleValue();
         int    result  = (int)Math.round(operand);
 
-        return new Integer(result);
+        return Integer.valueOf(result);
     }
 
 
@@ -1754,9 +1757,9 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private static Object functionFloor(SObjFunction func,
-                                        SContext     context,
-                                        Object[]     args)
+    private static Object functionFloor(final SObjFunction func,
+                                        final SContext     context,
+                                        final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -1766,7 +1769,7 @@ public class SModuleMath
         double operand = SArgs.getFloat(args, 1).doubleValue();
         int    result  = (int)Math.floor(operand);
 
-        return new Integer(result);
+        return Integer.valueOf(result);
     }
 
 
@@ -1803,9 +1806,9 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private static Object functionCeil(SObjFunction func,
-                                       SContext     context,
-                                       Object[]     args)
+    private static Object functionCeil(final SObjFunction func,
+                                       final SContext     context,
+                                       final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -1815,7 +1818,7 @@ public class SModuleMath
         double operand = SArgs.getNumber(args, 1).doubleValue();
         int    result  = (int)Math.ceil(operand);
 
-        return new Integer(result);
+        return Integer.valueOf(result);
     }
 
 
@@ -1852,9 +1855,9 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private static Object functionSqrt(SObjFunction func,
-                                       SContext     context,
-                                       Object[]     args)
+    private static Object functionSqrt(final SObjFunction func,
+                                       final SContext     context,
+                                       final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -1882,12 +1885,12 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private static Object functionMin(SObjFunction func,
-                                      SContext     context,
-                                      Object[]     args)
+    private static Object functionMin(final SObjFunction func,
+                                      final SContext     context,
+                                      final Object[]     args)
         throws STeaException {
 
-        return findExtreme(_lt, func, context, args);
+        return findExtreme(C_LT, func, context, args);
     }
 
 
@@ -1900,12 +1903,12 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private static Object functionMax(SObjFunction func,
-                                      SContext     context,
-                                      Object[]     args)
+    private static Object functionMax(final SObjFunction func,
+                                      final SContext     context,
+                                      final Object[]     args)
         throws STeaException {
 
-        return findExtreme(_gt, func, context, args);
+        return findExtreme(C_GT, func, context, args);
     }
 
 
@@ -1918,10 +1921,10 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private static Object findExtreme(SComparator  comparator,
-                                      SObjFunction func,
-                                      SContext     context,
-                                      Object[]     args)
+    private static Object findExtreme(final SComparator  comparator,
+                                      final SObjFunction func,
+                                      final SContext     context,
+                                      final Object[]     args)
         throws STeaException {
 
         if ( args.length < 2 ) {
@@ -1937,8 +1940,7 @@ public class SModuleMath
             double operand1 = ((Double)valueObj).doubleValue();
             return calcExtremeDouble(comparator, operand1, args, 2);
         }
-        throw new STypeException("arg 1 should be an int or a float"+
-                                 ", not a " + STypes.getTypeName(valueObj));
+        throw new STypeException(args, 1, "int or a float");
     }
 
 
@@ -1952,11 +1954,13 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private static Object calcExtremeInt(SComparator comparator,
-                                         int         min,
-                                         Object[]    args,
-                                         int         firstIndex)
+    private static Object calcExtremeInt(final SComparator comparator,
+                                         final int         input,
+                                         final Object[]    args,
+                                         final int         firstIndex)
         throws STypeException{
+
+        int min = input;
 
         for ( int i=args.length; (--i)>=firstIndex; ) {
             Object valueObj = args[i];
@@ -1972,10 +1976,10 @@ public class SModuleMath
             if ( valueObj instanceof Double ) {
                 return calcExtremeDouble(comparator, min, args, i);
             }
-            throw new STypeException("arg " + i + " should be an int or a float"+
-                                     ", not a " + STypes.getTypeName(valueObj));
+            throw new STypeException(args, i, "int or a float");
         }
-        return new Integer(min);
+
+        return Integer.valueOf(min);
     }
 
 
@@ -1989,11 +1993,13 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private static Object calcExtremeDouble(SComparator comparator,
-                                           double      min,
-                                           Object[]    args,
-                                           int         firstIndex)
+    private static Object calcExtremeDouble(final SComparator comparator,
+                                            final double      input,
+                                            final Object[]    args,
+                                            final int         firstIndex)
         throws STypeException{
+
+        double min = input;
 
         for ( int i=args.length; (--i)>=firstIndex; ) {
             Object valueObj = args[i];
@@ -2055,22 +2061,22 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private static Object functionInt(SObjFunction func,
-                                      SContext     context,
-                                      Object[]     args)
+    private static Object functionInt(final SObjFunction func,
+                                      final SContext     context,
+                                      final Object[]     args)
         throws STeaException {
 
         if ( args.length == 3 ) {
             SObjSymbol symbol = SArgs.getSymbol(args, 1);
             int        value  = SArgs.getNumber(args, 2).intValue();
-            Integer    theInt = new Integer(value);
+            Integer    theInt = Integer.valueOf(value);
 
             context.newVar(symbol, theInt);
 
             return theInt;
         }
         if ( args.length == 2 ) {
-            return new Integer(SArgs.getNumber(args, 1).intValue());
+            return Integer.valueOf(SArgs.getNumber(args, 1).intValue());
         }
 
         throw new SNumArgException(args, "[symbol] value");
@@ -2110,12 +2116,12 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private Object functionRandInt(SObjFunction func,
-                                   SContext     context,
-                                   Object[]     args)
+    private Object functionRandInt(final SObjFunction func,
+                                   final SContext     context,
+                                   final Object[]     args)
         throws STeaException {
 
-        return new Integer(_generator.nextInt());
+        return Integer.valueOf(_generator.nextInt());
     }
 
 
@@ -2159,9 +2165,9 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private static Object functionSetValue(SObjFunction func,
-                                           SContext     context,
-                                           Object[]     args)
+    private static Object functionSetValue(final SObjFunction func,
+                                           final SContext     context,
+                                           final Object[]     args)
         throws STeaException {
 
       if ( args.length != 3 ) {
@@ -2227,9 +2233,9 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private static Object functionIncBy(SObjFunction func,
-                                        SContext     context,
-                                        Object[]     args)
+    private static Object functionIncBy(final SObjFunction func,
+                                        final SContext     context,
+                                        final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -2243,7 +2249,7 @@ public class SModuleMath
 
         if ( value instanceof Integer ) {
             int x = ((Integer)value).intValue() + incrVal.intValue();
-            value = new Integer(x);
+            value = Integer.valueOf(x);
         } else if ( value instanceof Double ) {
             double x = ((Double)value).doubleValue() + incrVal.doubleValue();
             value = new Double(x);
@@ -2310,9 +2316,9 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private static Object functionDecBy(SObjFunction func,
-                                        SContext     context,
-                                        Object[]     args)
+    private static Object functionDecBy(final SObjFunction func,
+                                        final SContext     context,
+                                        final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -2326,7 +2332,7 @@ public class SModuleMath
 
         if ( value instanceof Integer ) {
             int x = ((Integer)value).intValue() - incrVal.intValue();
-            value = new Integer(x);
+            value = Integer.valueOf(x);
         } else if ( value instanceof Double ) {
             double x = ((Double)value).doubleValue() - incrVal.doubleValue();
             value = new Double(x);
@@ -2393,9 +2399,9 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private static Object functionMulBy(SObjFunction func,
-                                        SContext     context,
-                                        Object[]     args)
+    private static Object functionMulBy(final SObjFunction func,
+                                        final SContext     context,
+                                        final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -2409,7 +2415,7 @@ public class SModuleMath
 
         if ( value instanceof Integer ) {
             int x = ((Integer)value).intValue() * incrVal.intValue();
-            value = new Integer(x);
+            value = Integer.valueOf(x);
         } else if ( value instanceof Double ) {
             double x = ((Double)value).doubleValue() * incrVal.doubleValue();
             value = new Double(x);
@@ -2476,9 +2482,9 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private static Object functionDivBy(SObjFunction func,
-                                        SContext     context,
-                                        Object[]     args)
+    private static Object functionDivBy(final SObjFunction func,
+                                        final SContext     context,
+                                        final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -2492,7 +2498,7 @@ public class SModuleMath
 
         if ( value instanceof Integer ) {
             int x = ((Integer)value).intValue() / incrVal.intValue();
-            value = new Integer(x);
+            value = Integer.valueOf(x);
         } else if ( value instanceof Double ) {
             double x = ((Double)value).doubleValue() / incrVal.doubleValue();
             value = new Double(x);
@@ -2554,9 +2560,9 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private static Object functionInc(SObjFunction func,
-                                      SContext     context,
-                                      Object[]     args)
+    private static Object functionInc(final SObjFunction func,
+                                      final SContext     context,
+                                      final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -2569,7 +2575,7 @@ public class SModuleMath
         
         if ( value instanceof Integer ) {
             int x = ((Integer)value).intValue() + 1;
-            value = new Integer(x);
+            value = Integer.valueOf(x);
         } else if ( value instanceof Double ) {
             double x = ((Double)value).doubleValue() + 1.0;
             value = new Double(x);
@@ -2631,9 +2637,9 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private static Object functionDec(SObjFunction func,
-                                      SContext     context,
-                                      Object[]     args)
+    private static Object functionDec(final SObjFunction func,
+                                      final SContext     context,
+                                      final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -2646,7 +2652,7 @@ public class SModuleMath
         
         if ( value instanceof Integer ) {
             int x = ((Integer)value).intValue() - 1;
-            value = new Integer(x);
+            value = Integer.valueOf(x);
         } else if ( value instanceof Double ) {
             double x = ((Double)value).doubleValue() - 1;
             value = new Double(x);
@@ -2696,9 +2702,9 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private Object functionBinNeg(SObjFunction func,
-                                  SContext     context,
-                                  Object[]     args)
+    private Object functionBinNeg(final SObjFunction func,
+                                  final SContext     context,
+                                  final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -2708,7 +2714,7 @@ public class SModuleMath
         int value  = SArgs.getInt(args, 1).intValue();
         int result = ~value;
 
-        return new Integer(result);
+        return Integer.valueOf(result);
     }
 
 
@@ -2746,9 +2752,9 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private Object functionBinAnd(SObjFunction func,
-                                  SContext     context,
-                                  Object[]     args)
+    private Object functionBinAnd(final SObjFunction func,
+                                  final SContext     context,
+                                  final Object[]     args)
         throws STeaException {
 
         int lastIndex = args.length;
@@ -2760,7 +2766,7 @@ public class SModuleMath
             result &= operand;
         }
 
-        return new Integer(result);
+        return Integer.valueOf(result);
     }
 
 
@@ -2798,9 +2804,9 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private Object functionBinOr(SObjFunction func,
-                                  SContext     context,
-                                  Object[]     args)
+    private Object functionBinOr(final SObjFunction func,
+                                 final SContext     context,
+                                 final Object[]     args)
         throws STeaException {
 
         int lastIndex = args.length;
@@ -2812,7 +2818,7 @@ public class SModuleMath
             result |= operand;
         }
 
-        return new Integer(result);
+        return Integer.valueOf(result);
     }
 
 
@@ -2850,9 +2856,9 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private Object functionBinXor(SObjFunction func,
-                                  SContext     context,
-                                  Object[]     args)
+    private Object functionBinXor(final SObjFunction func,
+                                  final SContext     context,
+                                  final Object[]     args)
         throws STeaException {
 
         int lastIndex = args.length;
@@ -2864,7 +2870,7 @@ public class SModuleMath
             result ^= operand;
         }
 
-        return new Integer(result);
+        return Integer.valueOf(result);
     }
 
 
@@ -2905,9 +2911,9 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private Object functionBinSl(SObjFunction func,
-                                 SContext     context,
-                                 Object[]     args)
+    private Object functionBinSl(final SObjFunction func,
+                                 final SContext     context,
+                                 final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -2918,7 +2924,7 @@ public class SModuleMath
         int shift = SArgs.getInt(args, 2).intValue();
         int result = value << shift;
 
-        return new Integer(result);
+        return Integer.valueOf(result);
     }
 
 
@@ -2959,9 +2965,9 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private Object functionBinSr(SObjFunction func,
-                                 SContext     context,
-                                 Object[]     args)
+    private Object functionBinSr(final SObjFunction func,
+                                 final SContext     context,
+                                 final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -2972,7 +2978,7 @@ public class SModuleMath
         int shift = SArgs.getInt(args, 2).intValue();
         int result = value >> shift;
 
-        return new Integer(result);
+        return Integer.valueOf(result);
     }
 
 
@@ -3026,9 +3032,9 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private static Object functionBinAndBy(SObjFunction func,
-                                           SContext     context,
-                                           Object[]     args)
+    private static Object functionBinAndBy(final SObjFunction func,
+                                           final SContext     context,
+                                           final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -3050,7 +3056,7 @@ public class SModuleMath
             Object[] fmtArgs = { symbol, STypes.getTypeName(value) };
             throw new STeaException(msg, fmtArgs);
         }
-        resObj = new Integer(result);
+        resObj = Integer.valueOf(result);
 
         var.set(resObj);
 
@@ -3108,9 +3114,9 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private static Object functionBinOrBy(SObjFunction func,
-                                          SContext     context,
-                                          Object[]     args)
+    private static Object functionBinOrBy(final SObjFunction func,
+                                          final SContext     context,
+                                          final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -3132,7 +3138,7 @@ public class SModuleMath
             Object[] fmtArgs = { symbol, STypes.getTypeName(value) };
             throw new STeaException(msg, fmtArgs);
         }
-        resObj = new Integer(result);
+        resObj = Integer.valueOf(result);
 
         var.set(resObj);
 
@@ -3190,9 +3196,9 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private static Object functionBinXorBy(SObjFunction func,
-                                           SContext     context,
-                                           Object[]     args)
+    private static Object functionBinXorBy(final SObjFunction func,
+                                           final SContext     context,
+                                           final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -3214,7 +3220,7 @@ public class SModuleMath
             Object[] fmtArgs = { symbol, STypes.getTypeName(value) };
             throw new STeaException(msg, fmtArgs);
         }
-        resObj = new Integer(result);
+        resObj = Integer.valueOf(result);
 
         var.set(resObj);
 
@@ -3272,9 +3278,9 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private static Object functionBinSlBy(SObjFunction func,
-                                          SContext     context,
-                                          Object[]     args)
+    private static Object functionBinSlBy(final SObjFunction func,
+                                          final SContext     context,
+                                          final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -3296,7 +3302,7 @@ public class SModuleMath
             Object[] fmtArgs = { symbol, STypes.getTypeName(value) };
             throw new STeaException(msg, fmtArgs);
         }
-        resObj = new Integer(result);
+        resObj = Integer.valueOf(result);
 
         var.set(resObj);
 
@@ -3354,9 +3360,9 @@ public class SModuleMath
  *
  **************************************************************************/
 
-    private static Object functionBinSrBy(SObjFunction func,
-                                          SContext     context,
-                                          Object[]     args)
+    private static Object functionBinSrBy(final SObjFunction func,
+                                          final SContext     context,
+                                          final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -3378,7 +3384,7 @@ public class SModuleMath
             Object[] fmtArgs = { symbol, STypes.getTypeName(value) };
             throw new STeaException(msg, fmtArgs);
         }
-        resObj = new Integer(result);
+        resObj = Integer.valueOf(result);
 
         var.set(resObj);
 
@@ -3386,7 +3392,20 @@ public class SModuleMath
     }
 
 
-}
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    private interface SComparator {
+
+        boolean compareInt(int x, int y);
+        boolean compareDouble(double x, double y);
+    }
 
 
 
@@ -3398,11 +3417,20 @@ public class SModuleMath
  *
  **************************************************************************/
 
-interface SComparator {
-
-    boolean compareInt(int x, int y);
-    boolean compareDouble(double x, double y);
-}
+    private static final class SGt
+        extends Object
+        implements SComparator {
+    
+        public boolean compareInt(final int x,
+                                  final int y) {
+            return x > y;
+        }
+    
+        public boolean compareDouble(final double x,
+                                     final double y) {
+            return x > y;
+        }
+    }
 
 
 
@@ -3414,40 +3442,22 @@ interface SComparator {
  *
  **************************************************************************/
 
-class SGt
-    extends Object
-    implements SComparator {
+    private static final class SLt
+        extends Object
+        implements SComparator {
     
-    public boolean compareInt(int x, int y) {
-        return x > y;
-    }
+        public boolean compareInt(final int x,
+                                  final int y) {
+            return x < y;
+        }
     
-    public boolean compareDouble(double x, double y) {
-        return x > y;
+        public boolean compareDouble(final double x,
+                                     final double y) {
+            return x < y;
+        }
     }
-}
 
 
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-class SLt
-    extends Object
-    implements SComparator {
-    
-    public boolean compareInt(int x, int y) {
-        return x < y;
-    }
-    
-    public boolean compareDouble(double x, double y) {
-        return x < y;
-    }
 }
 
 

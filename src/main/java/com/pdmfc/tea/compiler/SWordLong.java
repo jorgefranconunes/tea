@@ -47,7 +47,7 @@ final class SWordLong
 
     public SWordLong(final long value) {
 
-        _value = new Long(value);
+        _value = Long.valueOf(value);
     }
 
 

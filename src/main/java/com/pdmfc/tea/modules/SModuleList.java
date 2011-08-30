@@ -895,7 +895,11 @@ public final class SModuleList
             throw new SNumArgException(args, "list");
         }
 
-        return new Integer(SArgs.getPair(args,1).length());
+        SObjPair head   = SArgs.getPair(args, 1);
+        int      length = head.length();
+        Integer  result = Integer.valueOf(length);
+
+        return result;
     }
 
 
