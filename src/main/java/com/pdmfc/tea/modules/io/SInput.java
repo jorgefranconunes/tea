@@ -108,6 +108,10 @@ public class SInput
  *
  * The implementation for the <code>constructor</code> method.
  *
+ * @throws STeaException Never thrown by this implementation. Only
+ * exists so derived classes may implement this method with throwing
+ * the exception.
+ *
  **************************************************************************/
 
     public Object constructor(SObjFunction obj,

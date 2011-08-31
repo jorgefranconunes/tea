@@ -54,7 +54,7 @@ import com.pdmfc.tea.util.SFormater;
  *
  **************************************************************************/
 
-public class SModuleString
+public final class SModuleString
     extends Object
     implements SModule {
 
@@ -77,6 +77,8 @@ public class SModuleString
  **************************************************************************/
 
    public SModuleString() {
+
+       // Nothing to do.
    }
 
 
@@ -85,17 +87,17 @@ public class SModuleString
 
 /**************************************************************************
  *
- * 
+ * {@inheritDoc}
  *
  **************************************************************************/
 
-   public void init(SContext context)
+   public void init(final SContext context)
        throws STeaException {
 
        SObjFunction fmt = new SObjFunction() {
-               public Object exec(SObjFunction func,
-                                  SContext     context,
-                                  Object[]     args)
+               public Object exec(final SObjFunction func,
+                                  final SContext     context,
+                                  final Object[]     args)
                    throws STeaException {
                    return functionPrintf(func, context, args);
                }
@@ -108,18 +110,18 @@ public class SModuleString
 
        context.newVar("str-fmt",
                       new SObjFunction() {
-                          public Object exec(SObjFunction func,
-                                             SContext     context,
-                                             Object[]     args)
+                          public Object exec(final SObjFunction func,
+                                             final SContext     context,
+                                             final Object[]     args)
                               throws STeaException {
                               return functionFmt(func, context, args);
                           }
                       });
 
        SObjFunction comp = new SObjFunction() {
-               public Object exec(SObjFunction func,
-                                  SContext     context,
-                                  Object[]     args)
+               public Object exec(final SObjFunction func,
+                                  final SContext     context,
+                                  final Object[]     args)
                    throws STeaException {
                    return functionCompare(func, context, args);
                }
@@ -132,9 +134,9 @@ public class SModuleString
 
        context.newVar("str>",
                       new SObjFunction() {
-                          public Object exec(SObjFunction func,
-                                             SContext     context,
-                                             Object[]     args)
+                          public Object exec(final SObjFunction func,
+                                             final SContext     context,
+                                             final Object[]     args)
                               throws STeaException {
                               return functionGt(func, context, args);
                           }
@@ -142,18 +144,18 @@ public class SModuleString
 
        context.newVar("str>=",
                       new SObjFunction() {
-                          public Object exec(SObjFunction func,
-                                             SContext     context,
-                                             Object[]     args)
+                          public Object exec(final SObjFunction func,
+                                             final SContext     context,
+                                             final Object[]     args)
                               throws STeaException {
                               return functionGe(func, context, args);
                           }
                       });
 
        SObjFunction eq = new SObjFunction() {
-               public Object exec(SObjFunction func,
-                                  SContext     context,
-                                  Object[]     args)
+               public Object exec(final SObjFunction func,
+                                  final SContext     context,
+                                  final Object[]     args)
                    throws STeaException {
                    return functionEq(func, context, args);
                }
@@ -166,9 +168,9 @@ public class SModuleString
        context.newVar("str-eq?", eq);
 
        SObjFunction neq = new SObjFunction() {
-               public Object exec(SObjFunction func,
-                                  SContext     context,
-                                  Object[]     args)
+               public Object exec(final SObjFunction func,
+                                  final SContext     context,
+                                  final Object[]     args)
                    throws STeaException {
                    return functionNe(func, context, args);
                }
@@ -182,9 +184,9 @@ public class SModuleString
 
        context.newVar("str<",
                       new SObjFunction() {
-                          public Object exec(SObjFunction func,
-                                             SContext     context,
-                                             Object[]     args)
+                          public Object exec(final SObjFunction func,
+                                             final SContext     context,
+                                             final Object[]     args)
                               throws STeaException {
                               return functionLt(func, context, args);
                           }
@@ -192,9 +194,9 @@ public class SModuleString
 
        context.newVar("str<=",
                       new SObjFunction() {
-                          public Object exec(SObjFunction func,
-                                             SContext     context,
-                                             Object[]     args)
+                          public Object exec(final SObjFunction func,
+                                             final SContext     context,
+                                             final Object[]     args)
                               throws STeaException {
                               return functionLe(func, context, args);
                           }
@@ -202,9 +204,9 @@ public class SModuleString
 
        context.newVar("str-cat",
                       new SObjFunction() {
-                          public Object exec(SObjFunction func,
-                                             SContext     context,
-                                             Object[]     args)
+                          public Object exec(final SObjFunction func,
+                                             final SContext     context,
+                                             final Object[]     args)
                               throws STeaException {
                               return functionCat(func, context, args);
                           }
@@ -212,9 +214,9 @@ public class SModuleString
 
        context.newVar("str-ends-with?",
                       new SObjFunction() {
-                          public Object exec(SObjFunction func,
-                                             SContext     context,
-                                             Object[]     args)
+                          public Object exec(final SObjFunction func,
+                                             final SContext     context,
+                                             final Object[]     args)
                               throws STeaException {
                               return functionEndsWith(func, context, args);
                           }
@@ -222,9 +224,9 @@ public class SModuleString
 
        context.newVar("str-starts-with?",
                       new SObjFunction() {
-                          public Object exec(SObjFunction func,
-                                             SContext     context,
-                                             Object[]     args)
+                          public Object exec(final SObjFunction func,
+                                             final SContext     context,
+                                             final Object[]     args)
                               throws STeaException {
                               return functionStartsWith(func, context, args);
                           }
@@ -232,9 +234,9 @@ public class SModuleString
 
        context.newVar("str-index-of",
                       new SObjFunction() {
-                          public Object exec(SObjFunction func,
-                                             SContext     context,
-                                             Object[]     args)
+                          public Object exec(final SObjFunction func,
+                                             final SContext     context,
+                                             final Object[]     args)
                               throws STeaException {
                               return functionIndexOf(func, context, args);
                           }
@@ -242,9 +244,9 @@ public class SModuleString
 
        context.newVar("str-lower",
                       new SObjFunction() {
-                          public Object exec(SObjFunction func,
-                                             SContext     context,
-                                             Object[]     args)
+                          public Object exec(final SObjFunction func,
+                                             final SContext     context,
+                                             final Object[]     args)
                               throws STeaException {
                               return functionLower(func, context, args);
                           }
@@ -252,9 +254,9 @@ public class SModuleString
 
        context.newVar("str-upper",
                       new SObjFunction() {
-                          public Object exec(SObjFunction func,
-                                             SContext     context,
-                                             Object[]     args)
+                          public Object exec(final SObjFunction func,
+                                             final SContext     context,
+                                             final Object[]     args)
                               throws STeaException {
                               return functionUpper(func, context, args);
                           }
@@ -262,9 +264,9 @@ public class SModuleString
 
        context.newVar("str-len",
                       new SObjFunction() {
-                          public Object exec(SObjFunction func,
-                                             SContext     context,
-                                             Object[]     args)
+                          public Object exec(final SObjFunction func,
+                                             final SContext     context,
+                                             final Object[]     args)
                               throws STeaException {
                               return functionLen(func, context, args);
                           }
@@ -272,9 +274,9 @@ public class SModuleString
 
        context.newVar("str-substring",
                       new SObjFunction() {
-                          public Object exec(SObjFunction func,
-                                             SContext     context,
-                                             Object[]     args)
+                          public Object exec(final SObjFunction func,
+                                             final SContext     context,
+                                             final Object[]     args)
                               throws STeaException {
                               return functionSubString(func, context, args);
                           }
@@ -282,9 +284,9 @@ public class SModuleString
 
        context.newVar("str-trim",
                       new SObjFunction() {
-                          public Object exec(SObjFunction func,
-                                             SContext     context,
-                                             Object[]     args)
+                          public Object exec(final SObjFunction func,
+                                             final SContext     context,
+                                             final Object[]     args)
                               throws STeaException {
                               return functionTrim(func, context, args);
                           }
@@ -292,9 +294,9 @@ public class SModuleString
 
        context.newVar("str-join",
                       new SObjFunction() {
-                          public Object exec(SObjFunction func,
-                                             SContext     context,
-                                             Object[]     args)
+                          public Object exec(final SObjFunction func,
+                                             final SContext     context,
+                                             final Object[]     args)
                               throws STeaException {
                               return functionJoin(func, context, args);
                           }
@@ -302,9 +304,9 @@ public class SModuleString
 
        context.newVar("str-empty?",
                       new SObjFunction() {
-                          public Object exec(SObjFunction func,
-                                             SContext     context,
-                                             Object[]     args)
+                          public Object exec(final SObjFunction func,
+                                             final SContext     context,
+                                             final Object[]     args)
                               throws STeaException {
                               return functionEmpty(func, context, args);
                           }
@@ -312,9 +314,9 @@ public class SModuleString
 
        context.newVar("str-not-empty?",
                       new SObjFunction() {
-                          public Object exec(SObjFunction func,
-                                             SContext     context,
-                                             Object[]     args)
+                          public Object exec(final SObjFunction func,
+                                             final SContext     context,
+                                             final Object[]     args)
                               throws STeaException {
                               return functionNotEmpty(func, context, args);
                           }
@@ -322,19 +324,19 @@ public class SModuleString
 
        context.newVar("symbol->string",
                       new SObjFunction() {
-                          public Object exec(SObjFunction func,
-                                             SContext     context,
-                                             Object[]     args)
+                          public Object exec(final SObjFunction func,
+                                             final SContext     context,
+                                             final Object[]     args)
                               throws STeaException {
-                              return functionSymbolToString(func, context, args);
+                              return functionSymbolToString(func,context,args);
                           }
                       });
 
        context.newVar("string->int",
                       new SObjFunction() {
-                          public Object exec(SObjFunction func,
-                                             SContext     context,
-                                             Object[]     args)
+                          public Object exec(final SObjFunction func,
+                                             final SContext     context,
+                                             final Object[]     args)
                               throws STeaException {
                               return functionStringToInt(func, context, args);
                           }
@@ -342,9 +344,9 @@ public class SModuleString
 
        context.newVar("string->float",
                       new SObjFunction() {
-                          public Object exec(SObjFunction func,
-                                             SContext     context,
-                                             Object[]     args)
+                          public Object exec(final SObjFunction func,
+                                             final SContext     context,
+                                             final Object[]     args)
                               throws STeaException {
                               return functionStringToFloat(func, context, args);
                           }
@@ -352,9 +354,9 @@ public class SModuleString
 
        context.newVar("int->string",
                       new SObjFunction() {
-                          public Object exec(SObjFunction func,
-                                             SContext     context,
-                                             Object[]     args)
+                          public Object exec(final SObjFunction func,
+                                             final SContext     context,
+                                             final Object[]     args)
                               throws STeaException {
                               return functionIntToString(func, context, args);
                           }
@@ -362,9 +364,9 @@ public class SModuleString
 
        context.newVar("float->string",
                       new SObjFunction() {
-                          public Object exec(SObjFunction func,
-                                             SContext     context,
-                                             Object[]     args)
+                          public Object exec(final SObjFunction func,
+                                             final SContext     context,
+                                             final Object[]     args)
                               throws STeaException {
                               return functionFloatToString(func, context, args);
                           }
@@ -372,9 +374,9 @@ public class SModuleString
 
        context.newVar("str-unescape",
                       new SObjFunction() {
-                          public Object exec(SObjFunction func,
-                                             SContext     context,
-                                             Object[]     args)
+                          public Object exec(final SObjFunction func,
+                                             final SContext     context,
+                                             final Object[]     args)
                               throws STeaException {
                               return functionUnescape(func, context, args);
                           }
@@ -387,7 +389,7 @@ public class SModuleString
 
 /**************************************************************************
  *
- * 
+ * {@inheritDoc}
  *
  **************************************************************************/
 
@@ -402,7 +404,7 @@ public class SModuleString
 
 /**************************************************************************
  *
- * 
+ * {@inheritDoc}
  *
  **************************************************************************/
 
@@ -417,7 +419,7 @@ public class SModuleString
 
 /**************************************************************************
  *
- * 
+ * {@inheritDoc}
  *
  **************************************************************************/
 
@@ -465,9 +467,9 @@ public class SModuleString
  *
  **************************************************************************/
 
-    private Object functionPrintf(SObjFunction func,
-                                  SContext context,
-                                  Object[]   args)
+    private Object functionPrintf(final SObjFunction func,
+                                  final SContext context,
+                                  final Object[]   args)
         throws STeaException {
 
         if ( args.length<2 ) {
@@ -526,9 +528,9 @@ public class SModuleString
  *
  **************************************************************************/
 
-    private Object functionFmt(SObjFunction func,
-                               SContext context,
-                               Object[]   args)
+    private Object functionFmt(final SObjFunction func,
+                               final SContext context,
+                               final Object[]   args)
         throws STeaException {
 
         if ( args.length<2 ) {
@@ -564,7 +566,7 @@ public class SModuleString
  *
  **************************************************************************/
 
-    private void convertForFormating(Object[] objs) {
+    private void convertForFormating(final Object[] objs) {
 
         for ( int i=0,count=objs.length; i<count; i++ ) {
             Object obj = objs[i];
@@ -612,9 +614,9 @@ public class SModuleString
  *
  **************************************************************************/
 
-    private static Object functionUpper(SObjFunction func,
-                                        SContext     context,
-                                        Object[]     args)
+    private static Object functionUpper(final SObjFunction func,
+                                        final SContext     context,
+                                        final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -661,9 +663,9 @@ public class SModuleString
  *
  **************************************************************************/
 
-    private static Object functionLower(SObjFunction func,
-                                        SContext     context,
-                                        Object[]     args)
+    private static Object functionLower(final SObjFunction func,
+                                        final SContext     context,
+                                        final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -715,15 +717,17 @@ public class SModuleString
  *
  **************************************************************************/
 
-    private static Object functionCompare(SObjFunction func,
-                                          SContext     context,
-                                          Object[]     args)
+    private static Object functionCompare(final SObjFunction func,
+                                          final SContext     context,
+                                          final Object[]     args)
         throws STeaException {
 
         return compare(SModuleMath.MINUS_ONE,
                        SModuleMath.ZERO,
                        SModuleMath.ONE,
-                       func, context, args);
+                       func,
+                       context,
+                       args);
     }
 
 
@@ -764,13 +768,17 @@ public class SModuleString
  *
  **************************************************************************/
 
-    private static Object functionGt(SObjFunction func,
-                                     SContext     context,
-                                     Object[]     args)
+    private static Object functionGt(final SObjFunction func,
+                                     final SContext     context,
+                                     final Object[]     args)
         throws STeaException {
 
-        return compare(Boolean.FALSE, Boolean.FALSE, Boolean.TRUE,
-                       func, context, args);
+        return compare(Boolean.FALSE,
+                       Boolean.FALSE,
+                       Boolean.TRUE,
+                       func,
+                       context,
+                       args);
     }
 
 
@@ -813,13 +821,17 @@ public class SModuleString
  *
  **************************************************************************/
 
-    private static Object functionGe(SObjFunction func,
-                                     SContext     context,
-                                     Object[]     args)
+    private static Object functionGe(final SObjFunction func,
+                                     final SContext     context,
+                                     final Object[]     args)
         throws STeaException {
 
-        return compare(Boolean.FALSE, Boolean.TRUE, Boolean.TRUE,
-                       func, context, args);
+        return compare(Boolean.FALSE,
+                       Boolean.TRUE,
+                       Boolean.TRUE,
+                       func,
+                       context,
+                       args);
     }
 
 
@@ -860,13 +872,17 @@ public class SModuleString
  *
  **************************************************************************/
 
-    private static Object functionEq(SObjFunction func,
-                                     SContext     context,
-                                     Object[]     args)
+    private static Object functionEq(final SObjFunction func,
+                                     final SContext     context,
+                                     final Object[]     args)
         throws STeaException {
 
-        return compare(Boolean.FALSE, Boolean.TRUE, Boolean.FALSE,
-                       func, context, args);
+        return compare(Boolean.FALSE,
+                       Boolean.TRUE,
+                       Boolean.FALSE,
+                       func,
+                       context,
+                       args);
     }
 
 
@@ -907,13 +923,17 @@ public class SModuleString
  *
  **************************************************************************/
 
-    private static Object functionNe(SObjFunction func,
-                                     SContext     context,
-                                     Object[]     args)
+    private static Object functionNe(final SObjFunction func,
+                                     final SContext     context,
+                                     final Object[]     args)
         throws STeaException {
 
-        return compare(Boolean.TRUE, Boolean.FALSE, Boolean.TRUE,
-                       func, context, args);
+        return compare(Boolean.TRUE,
+                       Boolean.FALSE,
+                       Boolean.TRUE,
+                       func,
+                       context,
+                       args);
     }
 
 
@@ -956,13 +976,17 @@ public class SModuleString
  *
  **************************************************************************/
 
-    private static Object functionLt(SObjFunction func,
-                                     SContext     context,
-                                     Object[]     args)
+    private static Object functionLt(final SObjFunction func,
+                                     final SContext     context,
+                                     final Object[]     args)
         throws STeaException {
 
-        return compare(Boolean.TRUE, Boolean.FALSE, Boolean.FALSE,
-                       func, context, args);
+        return compare(Boolean.TRUE,
+                       Boolean.FALSE,
+                       Boolean.FALSE,
+                       func,
+                       context,
+                       args);
     }
 
 
@@ -1005,13 +1029,17 @@ public class SModuleString
  *
  **************************************************************************/
 
-    private static Object functionLe(SObjFunction func,
-                                     SContext     context,
-                                     Object[]     args)
+    private static Object functionLe(final SObjFunction func,
+                                     final SContext     context,
+                                     final Object[]     args)
         throws STeaException {
 
-        return compare(Boolean.TRUE, Boolean.TRUE, Boolean.FALSE,
-                       func, context, args);
+        return compare(Boolean.TRUE,
+                       Boolean.TRUE,
+                       Boolean.FALSE,
+                       func,
+                       context,
+                       args);
     }
 
 
@@ -1024,12 +1052,12 @@ public class SModuleString
  *
  **************************************************************************/
 
-    private static Object compare(Object lt,
-                                  Object eq,
-                                  Object gt,
-                                  SObjFunction func,
-                                  SContext     context,
-                                  Object[]     args)
+    private static Object compare(final Object       lt,
+                                  final Object       eq,
+                                  final Object       gt,
+                                  final SObjFunction func,
+                                  final SContext     context,
+                                  final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -1084,9 +1112,9 @@ public class SModuleString
  *
  **************************************************************************/
 
-    private static Object functionCat(SObjFunction func,
-                                      SContext     context,
-                                      Object[]     args)
+    private static Object functionCat(final SObjFunction func,
+                                      final SContext     context,
+                                      final Object[]     args)
         throws STeaException {
 
         if ( args.length<2 ) {
@@ -1141,9 +1169,9 @@ public class SModuleString
  *
  **************************************************************************/
 
-    private static  Object functionEndsWith(SObjFunction func,
-                                            SContext     context,
-                                            Object[]     args)
+    private static  Object functionEndsWith(final SObjFunction func,
+                                            final SContext     context,
+                                            final Object[]     args)
         throws STeaException {
         
         if ( args.length!= 3) {
@@ -1196,9 +1224,9 @@ public class SModuleString
  *
  **************************************************************************/
 
-    private static Object functionStartsWith(SObjFunction func,
-                                             SContext     context,
-                                             Object[]     args)
+    private static Object functionStartsWith(final SObjFunction func,
+                                             final SContext     context,
+                                             final Object[]     args)
         throws STeaException {
 
         if ( args.length!= 3) {
@@ -1252,9 +1280,9 @@ public class SModuleString
  *
  **************************************************************************/
 
-    private static Object functionIndexOf(SObjFunction func,
-                                          SContext     context,
-                                          Object[]     args)
+    private static Object functionIndexOf(final SObjFunction func,
+                                          final SContext     context,
+                                          final Object[]     args)
         throws STeaException {
 
         if ( (args.length<3) || (args.length>4)) {
@@ -1263,10 +1291,11 @@ public class SModuleString
 
         String str1       = SArgs.getString(args,1);
         String str2       = SArgs.getString(args,2);
-        int    startIndex = (args.length==4) ? SArgs.getInt(args,3).intValue() : 0;
+        int    startIndex =
+            (args.length==4) ? SArgs.getInt(args,3).intValue() : 0;
         int    result     = str1.indexOf(str2, startIndex);
         
-        return new Integer(result);
+        return Integer.valueOf(result);
     }
 
 
@@ -1302,9 +1331,9 @@ public class SModuleString
  *
  **************************************************************************/
 
-    private static Object functionLen(SObjFunction func,
-                                      SContext context,
-                                      Object[]   args)
+    private static Object functionLen(final SObjFunction func,
+                                      final SContext context,
+                                      final Object[]   args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -1314,7 +1343,7 @@ public class SModuleString
         String arg    = SArgs.getString(args,1);
         int    result = arg.length();
 
-        return new Integer(result);
+        return Integer.valueOf(result);
     }
 
 
@@ -1371,9 +1400,9 @@ public class SModuleString
  *
  **************************************************************************/
 
-    private static Object functionSubString(SObjFunction func,
-                                            SContext     context,
-                                            Object[]     args)
+    private static Object functionSubString(final SObjFunction func,
+                                            final SContext     context,
+                                            final Object[]     args)
         throws STeaException {
 
         if ( (args.length<3) || (args.length>4) ) {
@@ -1383,7 +1412,8 @@ public class SModuleString
         String str    = SArgs.getString(args,1);
         int    start  = SArgs.getInt(args,2).intValue();
         int    size   = str.length();
-        int    end    = (args.length==4) ? SArgs.getInt(args,3).intValue() :size;
+        int    end    =
+            (args.length==4) ? SArgs.getInt(args,3).intValue() : size;
         String result = null;
 
         if ( start < 0 ) {
@@ -1436,9 +1466,9 @@ public class SModuleString
  *
  **************************************************************************/
 
-    private static Object functionTrim(SObjFunction func,
-                                       SContext     context,
-                                       Object[]     args)
+    private static Object functionTrim(final SObjFunction func,
+                                       final SContext     context,
+                                       final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -1492,9 +1522,9 @@ public class SModuleString
  *
  **************************************************************************/
 
-    private static Object functionJoin(SObjFunction func,
-                                       SContext     context,
-                                       Object[]     args)
+    private static Object functionJoin(final SObjFunction func,
+                                       final SContext     context,
+                                       final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -1568,9 +1598,9 @@ public class SModuleString
  *
  **************************************************************************/
 
-    private static Object functionEmpty(SObjFunction func,
-                                        SContext     context,
-                                        Object[]     args)
+    private static Object functionEmpty(final SObjFunction func,
+                                        final SContext     context,
+                                        final Object[]     args)
         throws STeaException {
 
         if ( args.length!= 2) {
@@ -1618,9 +1648,9 @@ public class SModuleString
  *
  **************************************************************************/
 
-    private static Object functionNotEmpty(SObjFunction func,
-                                           SContext     context,
-                                           Object[]     args)
+    private static Object functionNotEmpty(final SObjFunction func,
+                                           final SContext     context,
+                                           final Object[]     args)
         throws STeaException {
 
         if ( args.length!= 2) {
@@ -1668,9 +1698,9 @@ public class SModuleString
  *
  **************************************************************************/
 
-    private static Object functionSymbolToString(SObjFunction func,
-                                                 SContext context,
-                                                 Object[]   args)
+    private static Object functionSymbolToString(final SObjFunction func,
+                                                 final SContext context,
+                                                 final Object[]   args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -1723,9 +1753,9 @@ public class SModuleString
  *
  **************************************************************************/
 
-    private static Object functionStringToInt(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+    private static Object functionStringToInt(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -1735,8 +1765,9 @@ public class SModuleString
         Object result = SObjNull.NULL;
 
         try {
-            result = new Integer(SArgs.getString(args,1));
+            result = Integer.valueOf(SArgs.getString(args,1));
         } catch (NumberFormatException e) {
+            // We will just end up returning null.
         }
 
         return result;
@@ -1778,9 +1809,9 @@ public class SModuleString
  *
  **************************************************************************/
 
-    private static Object functionStringToFloat(SObjFunction func,
-                                                SContext     context,
-                                                Object[]     args)
+    private static Object functionStringToFloat(final SObjFunction func,
+                                                final SContext     context,
+                                                final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -1793,6 +1824,7 @@ public class SModuleString
         try {
             result = new Double(str);
         } catch (NumberFormatException e) {
+            // We will just end up returning null.
         }
 
         return result;
@@ -1834,9 +1866,9 @@ public class SModuleString
  *
  **************************************************************************/
 
-    private static Object functionIntToString(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+    private static Object functionIntToString(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -1881,9 +1913,9 @@ public class SModuleString
  *
  **************************************************************************/
 
-    private static Object functionFloatToString(SObjFunction func,
-                                                SContext     context,
-                                                Object[]     args)
+    private static Object functionFloatToString(final SObjFunction func,
+                                                final SContext     context,
+                                                final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -1930,7 +1962,9 @@ public class SModuleString
 //*     <li><b><code>\'</code></b> - Single quote.</li>
 //*     <li><b><code>\\</code></b> - Backslash.</li>
 //*     <li><b><code>\xxx</code></b> - Character in octal (000-377).</li>
-//*     <li><b><code>\&#117;xxxx</code></b> - Unicode character in hexadecimal (0000-ffff). The hexadecimal letters can be in either upper or lower case.</li>
+//*     <li><b><code>\&#117;xxxx</code></b> - Unicode character
+//*         in hexadecimal (0000-ffff). The hexadecimal letters can be
+//*         in either upper or lower case.</li>
 //* </ul>
 //* </Description>
 //* 
@@ -1943,9 +1977,9 @@ public class SModuleString
  *
  **************************************************************************/
 
-    private static Object functionUnescape(SObjFunction func,
-                                           SContext     context,
-                                           Object[]     args)
+    private static Object functionUnescape(final SObjFunction func,
+                                           final SContext     context,
+                                           final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -1969,7 +2003,7 @@ public class SModuleString
  *
  **************************************************************************/
 
-    private class SFormaterString
+    private static final class SFormaterString
         extends SFormater {
 
 
@@ -1986,7 +2020,7 @@ public class SModuleString
  *
  **************************************************************************/
 
-        public SFormaterString(StringBuffer resultString) {
+        public SFormaterString(final StringBuffer resultString) {
         
             _result = resultString;
         }
@@ -2004,7 +2038,7 @@ public class SModuleString
  *
  **************************************************************************/
 
-        protected void append(String s) {
+        protected void append(final String s) {
 
             _result.append(s);
         }
@@ -2022,7 +2056,7 @@ public class SModuleString
  *
  **************************************************************************/
 
-        protected void append(char c) {
+        protected void append(final char c) {
 
             _result.append(c);
         }

@@ -289,6 +289,7 @@ one described at "00README-developers.txt".
             <reports>
               <report>index</report>
               <report>project-team</report>
+              <report>mailing-list</report>
               <report>scm</report>
               <report>issue-tracking</report>
               <report>cim</report>

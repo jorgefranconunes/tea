@@ -2011,9 +2011,7 @@ public final class SModuleMath
                     min = value;
                 }
             } else {
-                throw new STypeException("arg " + i +
-                                         " should be an int or a float"+
-                                         ", not a " + STypes.getTypeName(valueObj));
+                throw new STypeException(args, i, "int or a float");
             }
         }
         return new Double(min);

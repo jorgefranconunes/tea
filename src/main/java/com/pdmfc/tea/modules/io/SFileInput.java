@@ -8,7 +8,6 @@ package com.pdmfc.tea.modules.io;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.modules.io.SInput;
@@ -49,7 +48,7 @@ import com.pdmfc.tea.runtime.SRuntimeException;
  *
  **************************************************************************/
 
-public class SFileInput
+public final class SFileInput
     extends SInput {
 
 
@@ -57,7 +56,8 @@ public class SFileInput
 
       
     private static final String     CLASS_NAME   = "TFileInput";
-    private static final SObjSymbol CLASS_NAME_S = SObjSymbol.addSymbol(CLASS_NAME);
+    private static final SObjSymbol CLASS_NAME_S =
+        SObjSymbol.addSymbol(CLASS_NAME);
 
 
 
@@ -67,13 +67,12 @@ public class SFileInput
  *
  * The constructor initializes the object internal state.
  *
- * @param myClass
- *    The <TT>STosClass</TT> object for this object.
+ * @param myClass The <TT>STosClass</TT> object for this object.
  *
  **************************************************************************/
 
-   public SFileInput(STosClass myClass)
-       throws STeaException {
+   public SFileInput(final STosClass myClass)
+       throws STeaException  {
 
        super(myClass);
    }
@@ -107,13 +106,13 @@ public class SFileInput
 
 /**************************************************************************
  *
- * 
+ * {@inheritDoc}
  *
  **************************************************************************/
 
-    public Object constructor(SObjFunction obj,
-                              SContext     context,
-                              Object[]     args)
+    public Object constructor(final SObjFunction obj,
+                              final SContext     context,
+                              final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -126,8 +125,8 @@ public class SFileInput
         try {
             aFileInput = new FileInputStream(fileName);
         } catch (FileNotFoundException e1) {
-            throw new SRuntimeException("file '" + fileName +
-                                        "' could not be opened");
+            String msg = "file ''{0}'' could not be opened";
+            throw new SRuntimeException(msg, fileName);
         }
 
         open(aFileInput);
@@ -160,14 +159,15 @@ public class SFileInput
  *
  **************************************************************************/
 
-    public static SFileInput newInstance(SContext context,
-                                         Object[]  args)
+    public static SFileInput newInstance(final SContext context,
+                                         final Object[] args)
         throws STeaException {
 
         STosObj input = STosUtil.newInstance(CLASS_NAME_S, context, args);
 
         if ( !(input instanceof SFileInput) ) {
-            throw new SRuntimeException("invalid " + CLASS_NAME + " class");
+            String msg = "invalid ''{0}'' class";
+            throw new SRuntimeException(msg, CLASS_NAME);
         }
 
         return (SFileInput)input;

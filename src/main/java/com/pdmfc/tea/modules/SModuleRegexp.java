@@ -51,7 +51,7 @@ import com.pdmfc.tea.runtime.STypeException;
  *
  **************************************************************************/
 
-public class SModuleRegexp
+public final class SModuleRegexp
     extends Object
     implements SModule {
 
@@ -66,6 +66,8 @@ public class SModuleRegexp
  **************************************************************************/
 
    public SModuleRegexp() {
+
+       // Nothing to do.
    }
 
 
@@ -74,18 +76,18 @@ public class SModuleRegexp
 
 /**************************************************************************
  *
- * 
+ * {@inheritDoc}
  *
  **************************************************************************/
 
-   public void init(SContext context)
+   public void init(final SContext context)
        throws STeaException {
 
        context.newVar("regexp-pattern",
                       new SObjFunction() {
-                          public Object exec(SObjFunction func,
-                                             SContext     context,
-                                             Object[]     args)
+                          public Object exec(final SObjFunction func,
+                                             final SContext     context,
+                                             final Object[]     args)
                               throws STeaException {
                               return functionPattern(func, context, args);
                           }
@@ -93,9 +95,9 @@ public class SModuleRegexp
 
        context.newVar("glob",
                       new SObjFunction() {
-                          public Object exec(SObjFunction func,
-                                             SContext     context,
-                                             Object[]     args)
+                          public Object exec(final SObjFunction func,
+                                             final SContext     context,
+                                             final Object[]     args)
                               throws STeaException {
                               return functionGlob(func, context, args);
                           }
@@ -103,18 +105,18 @@ public class SModuleRegexp
 
        context.newVar("regsub",
                       new SObjFunction() {
-                          public Object exec(SObjFunction func,
-                                             SContext     context,
-                                             Object[]     args)
+                          public Object exec(final SObjFunction func,
+                                             final SContext     context,
+                                             final Object[]     args)
                               throws STeaException {
                               return functionRegsub(func, context, args);
                           }
                       });
 
        SObjFunction matches = new SObjFunction() {
-               public Object exec(SObjFunction func,
-                                  SContext     context,
-                                  Object[]     args)
+               public Object exec(final SObjFunction func,
+                                  final SContext     context,
+                                  final Object[]     args)
                    throws STeaException {
                    return functionMatches(func, context, args);
                }
@@ -127,9 +129,9 @@ public class SModuleRegexp
 
        context.newVar("regexp",
                       new SObjFunction() {
-                          public Object exec(SObjFunction func,
-                                             SContext     context,
-                                             Object[]     args)
+                          public Object exec(final SObjFunction func,
+                                             final SContext     context,
+                                             final Object[]     args)
                               throws STeaException {
                               return functionRegexp(func, context, args);
                           }
@@ -137,9 +139,9 @@ public class SModuleRegexp
 
        context.newVar("str-split",
                       new SObjFunction() {
-                          public Object exec(SObjFunction func,
-                                             SContext     context,
-                                             Object[]     args)
+                          public Object exec(final SObjFunction func,
+                                             final SContext     context,
+                                             final Object[]     args)
                               throws STeaException {
                               return functionSplit(func, context, args);
                           }
@@ -152,7 +154,7 @@ public class SModuleRegexp
 
 /**************************************************************************
  *
- * 
+ * {@inheritDoc}
  *
  **************************************************************************/
 
@@ -167,7 +169,7 @@ public class SModuleRegexp
 
 /**************************************************************************
  *
- * 
+ * {@inheritDoc}
  *
  **************************************************************************/
 
@@ -182,7 +184,7 @@ public class SModuleRegexp
 
 /**************************************************************************
  *
- * 
+ * {@inheritDoc}
  *
  **************************************************************************/
 
@@ -230,9 +232,9 @@ public class SModuleRegexp
  *
  **************************************************************************/
 
-    private static Object functionPattern(SObjFunction func,
-                                          SContext     context,
-                                          Object[]     args)
+    private static Object functionPattern(final SObjFunction func,
+                                          final SContext     context,
+                                          final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -296,9 +298,9 @@ public class SModuleRegexp
  *
  **************************************************************************/
 
-    private Object functionGlob(SObjFunction func,
-                                SContext     context,
-                                Object[]     args)
+    private Object functionGlob(final SObjFunction func,
+                                final SContext     context,
+                                final Object[]     args)
         throws STeaException {
 
         int numArgs = args.length;
@@ -382,9 +384,9 @@ public class SModuleRegexp
  *
  **************************************************************************/
 
-    private static Object functionRegsub(SObjFunction func,
-                                         SContext     context,
-                                         Object[]     args)
+    private static Object functionRegsub(final SObjFunction func,
+                                         final SContext     context,
+                                         final Object[]     args)
         throws STeaException {
 
         if ( args.length != 4 ) {
@@ -442,9 +444,9 @@ public class SModuleRegexp
  *
  **************************************************************************/
 
-    private static Object functionMatches(SObjFunction func,
-                                          SContext     context,
-                                          Object[]     args)
+    private static Object functionMatches(final SObjFunction func,
+                                          final SContext     context,
+                                          final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -512,9 +514,9 @@ public class SModuleRegexp
  *
  **************************************************************************/
 
-    private static Object functionRegexp(SObjFunction func,
-                                         SContext     context,
-                                         Object[]     args)
+    private static Object functionRegexp(final SObjFunction func,
+                                         final SContext     context,
+                                         final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -566,7 +568,7 @@ public class SModuleRegexp
  *
  **************************************************************************/
 
-   private static SObjPair buildMatch(MatchResult result) {
+   private static SObjPair buildMatch(final MatchResult result) {
 
       SObjPair head  = new SObjPair(result.group(),null);
       SObjPair tail  = head;
@@ -637,9 +639,9 @@ public class SModuleRegexp
  *
  **************************************************************************/
 
-    private static Object functionSplit(SObjFunction func,
-                                        SContext     context,
-                                        Object[]     args)
+    private static Object functionSplit(final SObjFunction func,
+                                        final SContext     context,
+                                        final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -708,8 +710,8 @@ public class SModuleRegexp
  *
  **************************************************************************/
 
-    private static Pattern getPattern(Object[] args,
-                                      int      index)
+    private static Pattern getPattern(final Object[] args,
+                                      final int      index)
         throws STeaException {
 
         Object theArg = args[index];
