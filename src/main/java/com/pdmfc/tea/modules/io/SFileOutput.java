@@ -8,7 +8,6 @@ package com.pdmfc.tea.modules.io;
 
 import java.io.FileOutputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.modules.io.SOutput;
@@ -49,7 +48,7 @@ import com.pdmfc.tea.runtime.SRuntimeException;
  *
  **************************************************************************/
 
-public class SFileOutput
+public final class SFileOutput
     extends SOutput {
 
 
@@ -57,7 +56,8 @@ public class SFileOutput
 
       
     private static final String     CLASS_NAME   = "TFileOutput";
-    private static final SObjSymbol CLASS_NAME_S = SObjSymbol.addSymbol(CLASS_NAME);
+    private static final SObjSymbol CLASS_NAME_S =
+        SObjSymbol.addSymbol(CLASS_NAME);
 
 
 
@@ -72,7 +72,7 @@ public class SFileOutput
  *
  **************************************************************************/
 
-   public SFileOutput(STosClass myClass)
+   public SFileOutput(final STosClass myClass)
        throws STeaException {
 
        super(myClass);
@@ -123,9 +123,9 @@ public class SFileOutput
  *
  **************************************************************************/
 
-    public Object constructor(SObjFunction obj,
-                              SContext     context,
-                              Object[]     args)
+    public Object constructor(final SObjFunction obj,
+                              final SContext     context,
+                              final Object[]     args)
         throws SRuntimeException {
         
         int numArgs = args.length;
@@ -176,14 +176,14 @@ public class SFileOutput
  *
  **************************************************************************/
 
-    public static SFileOutput newInstance(SContext context,
-                                          Object[] args)
+    public static SFileOutput newInstance(final SContext context,
+                                          final Object[] args)
         throws STeaException {
 
         STosObj input = STosUtil.newInstance(CLASS_NAME_S, context, args);
 
         if ( !(input instanceof SFileOutput) ) {
-            throw new SRuntimeException("invalid " + CLASS_NAME + " class");
+            throw new SRuntimeException("invalid ''{0}'' class", CLASS_NAME);
         }
 
         return (SFileOutput)input;

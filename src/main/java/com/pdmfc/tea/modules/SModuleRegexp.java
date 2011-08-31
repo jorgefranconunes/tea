@@ -318,7 +318,7 @@ public final class SModuleRegexp
         }
 
         FilenameFilter filter = new FilenameFilter() {
-                public boolean accept(File dir, String name) {
+                public boolean accept(final File dir, final String name) {
                     for ( int i=patterns.length; (i--)>0; ) {
                         Matcher matcher = patterns[i].matcher(name);
                         if ( matcher.matches()  ) {

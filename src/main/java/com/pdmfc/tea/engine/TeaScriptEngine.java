@@ -270,8 +270,8 @@ public class TeaScriptEngine
      * <p>Non-reserved attribute names are converted into Tea global
      * variables with the same name.  The values of the attributes are
      * converted into Tea using {@link
-     * com.pdmfc.tea.modules.reflect.SModuleReflect#java2Tea(java.lang.Object,
-     * com.pdmfc.tea.runtime.SContext) }.  (The top level Tea context
+     * com.pdmfc.tea.modules.reflect.STeaJavaTypes#java2Tea(java.lang.Object,
+     * com.pdmfc.tea.runtime.SContext)}.  (The top level Tea context
      * associated with the <code>scriptContext</code> is used for
      * fetching TOS classes when converting some specific classes of
      * java objects to TOS objects.  Ex: a <code>java.util.Date</code>
@@ -288,7 +288,7 @@ public class TeaScriptEngine
      * the Tea global variables are fetched from the internal {@link
      * STeaRuntime} context, and converted back to their correspondent
      * attribute bindings using {@link
-     * com.pdmfc.tea.modules.reflect.SModuleReflect#tea2Java(java.lang.Object)
+     * STeaJavaTypes#tea2Java(java.lang.Object)
      * }.  This means that only attributes that have been
      * <code>put</code> before script execution are fetched from the
      * Tea global variable space. (The method

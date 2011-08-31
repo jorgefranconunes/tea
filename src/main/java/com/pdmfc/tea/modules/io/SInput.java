@@ -54,13 +54,17 @@ import com.pdmfc.tea.runtime.STypes;
  *
  * Instances of this class represent input streams.
  * 
- * <p>JSR-223 requires the ability to support a <TT>java.io.Reader</TT> instead of
- * a <TT>java.io.InputStream</TT>. On the other hand, Tea has methods, such as
- * <TT>copyTo</TT> that require the reading of bytes.</p>
- * As such, when the underlying input source is a <TT>java.io.InputStream</TT>
- * methods that read bytes (such as <TT>copyTo</TT>) work. When the
- * undelying input source is a <TT>java.io.Reader</TT>, reading bytes is not
- * supported and calling methods such <TT>copyTo</TT> will fail.</p>
+ * <p>JSR-223 requires the ability to support a
+ * <code>java.io.Reader</code> instead of a
+ * <code>java.io.InputStream</code>. On the other hand, Tea has
+ * methods, such as <code>copyTo</code> that require the reading of
+ * bytes.</p>
+ *
+ * <p>As such, when the underlying input source is a
+ * <code>java.io.InputStream</code> methods that read bytes (such as
+ * <code>copyTo</code>) work. When the undelying input source is a
+ * <code>java.io.Reader</code>, reading bytes is not supported and
+ * calling methods such <code>copyTo</code> will fail.</p>
  *
  **************************************************************************/
 
@@ -72,14 +76,17 @@ public class SInput
 
       
     private static final String     CLASS_NAME   = "TInput";
-    private static final SObjSymbol CLASS_NAME_S = SObjSymbol.addSymbol(CLASS_NAME);
-    private static final SObjSymbol WRITE_METHOD = SObjSymbol.addSymbol("write");
+    private static final SObjSymbol CLASS_NAME_S =
+        SObjSymbol.addSymbol(CLASS_NAME);
+    private static final SObjSymbol WRITE_METHOD =
+        SObjSymbol.addSymbol("write");
     private static final int         BUFFER_SIZE  = 8192;
 
-    private BufferedInputStream _input       = null;
-    // JSR-223 requires support for a java.io.Reader.
-    // If the _inputReader is used, _input is not used, and vice-versa.
-    private Reader              _inputReader = null;
+    private BufferedInputStream _input = null;
+
+    // JSR-223 requires support for a java.io.Reader.  If the
+    // _inputReader is used, _input is not used, and vice-versa.
+    private Reader _inputReader = null;
 
 
 
@@ -90,15 +97,15 @@ public class SInput
  * The constructor initializes the object internal state.
  *
  * @param myClass
- *    The <TT>STosClass</TT> object for this object.
+ *    The <code>STosClass</code> object for this object.
  *
  **************************************************************************/
 
-   public SInput(STosClass myClass)
-         throws STeaException {
+    public SInput(final STosClass myClass)
+        throws STeaException {
 
-      super(myClass);
-   }
+        super(myClass);
+    }
 
 
 
@@ -109,14 +116,14 @@ public class SInput
  * The implementation for the <code>constructor</code> method.
  *
  * @throws STeaException Never thrown by this implementation. Only
- * exists so derived classes may implement this method with throwing
- * the exception.
+ * exists so derived classes may implement this method declaring it
+ * with the exception.
  *
  **************************************************************************/
 
-    public Object constructor(SObjFunction obj,
-                              SContext     context,
-                              Object[]     args)
+    public Object constructor(final SObjFunction obj,
+                              final SContext     context,
+                              final Object[]     args)
         throws STeaException {
 
         return obj;
@@ -128,61 +135,64 @@ public class SInput
 
 /**************************************************************************
  *
- * Sets up the underlying stream. One of the <TT>open()</TT> methods
- * must be called prior to any invocation of the <TT>readln()</TT>,
- * <TT>close()</TT> methods.
- * <p>Opening with a <TT>java.io.InputStream</TT> close the underlying
- * <TT>java.io.Reader</TT>, thus allowing reading of both bytes or characters.</p>
+ * Sets up the underlying stream. One of the <code>open()</code>
+ * methods must be called prior to any invocation of the
+ * <code>readln()</code>, <code>close()</code> methods.  <p>Opening
+ * with a <code>java.io.InputStream</code> close the underlying
+ * <code>java.io.Reader</code>, thus allowing reading of both bytes or
+ * characters.</p>
  *
- * @param in The <TT>InputStream</TT> associated with this object.
+ * @param in The <code>InputStream</code> associated with this object.
  * 
  * @throws SIOException 
  *
  **************************************************************************/
 
-   public void open(InputStream in) throws SIOException {
+    public void open(final InputStream in)
+        throws SIOException {
 
-       _input = new BufferedInputStream(in);
-       if (_inputReader != null) {
+        _input = new BufferedInputStream(in);
+        if (_inputReader != null) {
             try {
                 _inputReader.close();
                 _inputReader = null;
             } catch (IOException e) {
                 throw new SIOException(e);
             }
-       }
+        }
 
-   }
+    }
 
 
 
-   /**************************************************************************
-   *
-   * Sets up the underlying stream. One of the <TT>open()</TT> methods
-   * must be called prior to any invocation of the <TT>readln()</TT>,
-   * <TT>close()</TT> methods.
-   * <p>Opening with a <TT>java.io.Reader</TT> closes the underlying
-   * <TT>java.io.InputStream</TT>, thus only allowing the reading of
-   * characters. Methods that attempt to read bytes will fail.</p>
-   *
-   * @param inReader The <TT>Reader</TT> associated with this object.
-   * 
-   * @throws SIOException 
-   *
-   **************************************************************************/
+/**************************************************************************
+ *
+ * Sets up the underlying stream. One of the <code>open()</code>
+ * methods must be called prior to any invocation of the
+ * <code>readln()</code>, <code>close()</code> methods.  <p>Opening
+ * with a <code>java.io.Reader</code> closes the underlying
+ * <code>java.io.InputStream</code>, thus only allowing the reading of
+ * characters. Methods that attempt to read bytes will fail.</p>
+ *
+ * @param inReader The <code>Reader</code> associated with this object.
+ * 
+ * @throws SIOException 
+ *
+ **************************************************************************/
 
-     public void open(Reader inReader) throws SIOException {
+    public void open(final Reader inReader)
+        throws SIOException {
 
-         _inputReader = inReader;
-         if (_input != null) {
-             try {
-                 _input.close();
-                 _input = null;
-             } catch (IOException e) {
-                 throw new SIOException(e);
-             }
-         }
-     }
+        _inputReader = inReader;
+        if (_input != null) {
+            try {
+                _input.close();
+                _input = null;
+            } catch (IOException e) {
+                throw new SIOException(e);
+            }
+        }
+    }
 
 
 
@@ -232,9 +242,9 @@ public class SInput
  *
  **************************************************************************/
 
-    public Object readln(SObjFunction obj,
-                         SContext     context,
-                         Object[]     args)
+    public Object readln(final SObjFunction obj,
+                         final SContext     context,
+                         final Object[]     args)
         throws SIOException {
 
         String result = null;
@@ -256,17 +266,16 @@ public class SInput
  *
  * Reads a line from the underlying input stream. The trailing
  * end-of-line character is discarded. In case of an end-of-file
- * condition a <TT>null</TT> is returned.
+ * condition a <code>null</code> is returned.
  *
- * @return
- *    A <TT>String</TT> containing a line read from the underlying input
- *    stream. When an end-of-file is reached a <TT>null</TT> is returned.
+ * @return A <code>String</code> containing a line read from the
+ * underlying input stream. When an end-of-file is reached a
+ * <code>null</code> is returned.
  *
- * @exception com.pdmfc.tea.modules.io.SIOException
- *    Thrown if the input stream is not opened.
+ * @exception SIOException Thrown if the input stream is not opened.
  *
- * @exception java.io.IOException
- *    Thrown if there were any problems reading from the stream.
+ * @exception IOException Thrown if there were any problems reading
+ * from the stream.
  *
  **************************************************************************/
 
@@ -291,91 +300,90 @@ public class SInput
 
 /**************************************************************************
  *
- * Reads a line from <TT>in</TT>. The end of a line is signaled by one
- * of three conditions: the '<TT>\n</TT>' character; the
- * "<TT>\r\n</TT>" sequence; end of file on <TT>in</TT>.
+ * Reads a line from <code>in</code>. The end of a line is signaled by
+ * one of three conditions: the '<code>\n</code>' character; the
+ * "<code>\r\n</code>" sequence; end of file on <code>in</code>.
  *
- * @param in The <TT>InputStream</TT> where the line will be read
+ * @param in The <code>InputStream</code> where the line will be read
  * from.
  *
- * @return A <TT>String</TT> representing the line that was read
- * without the trailing new line.  The null object if <TT>in</TT> was
- * at end of file.
+ * @return A <code>String</code> representing the line that was read
+ * without the trailing new line.  The null object if <code>in</code>
+ * was at end of file.
  *
  **************************************************************************/
 
-   private static String readLine(InputStream in)
-         throws IOException {
+    private static String readLine(final InputStream in)
+        throws IOException {
        
-      StringBuffer buffer = null;
-      int          c      = in.read();
+        StringBuffer buffer = null;
+        int          c      = in.read();
 
-      if ( c != -1 ) {
-         buffer = new StringBuffer();
-      }
-
-      while ( (c!='\n') && (c!=-1) ) {
-         if ( c == '\r' ) {
-            c = in.read();
-            if ( c != '\n' ) {
-               buffer.append('\r');
-               buffer.append((char)c);
-               c = in.read();
-            }
-         } else {
-            buffer.append((char)c);
-            c = in.read();
-         }
-      }
-
-      return (buffer==null) ? null : buffer.toString();
-   }
-
-
-
-
-
-
-   /**************************************************************************
-    *
-    * Reads a line from <TT>in</TT>. The end of a line is signaled by one
-    * of three conditions: the '<TT>\n</TT>' character; the
-    * "<TT>\r\n</TT>" sequence; end of file on <TT>in</TT>.
-    *
-    * @param in The <TT>Reader</TT> where the line will be read
-    * from.
-    *
-    * @return A <TT>String</TT> representing the line that was read
-    * without the trailing new line.  The null object if <TT>in</TT> was
-    * at end of file.
-    *
-    **************************************************************************/
-
-      private static String readLine(Reader in)
-            throws IOException {
-
-         StringBuffer buffer = null;
-         int          c      = in.read();
-
-         if ( c != -1 ) {
+        if ( c != -1 ) {
             buffer = new StringBuffer();
-         }
-         while ( (c!='\n') && (c!=-1) ) {
-            if ( c == '\r' ) {
-               c = in.read();
-               if ( c != '\n' ) {
-                  buffer.append('\r');
-                  buffer.append((char)c);
-                  c = in.read();
-               }
-            } else {
-               buffer.append((char)c);
-               c = in.read();
-            }
-         }
+        }
 
-         return (buffer==null) ? null : buffer.toString();
-      }
+        while ( (c!='\n') && (c!=-1) ) {
+            if ( c == '\r' ) {
+                c = in.read();
+                if ( c != '\n' ) {
+                    buffer.append('\r');
+                    buffer.append((char)c);
+                    c = in.read();
+                }
+            } else {
+                buffer.append((char)c);
+                c = in.read();
+            }
+        }
+
+        return (buffer==null) ? null : buffer.toString();
+    }
+
+
+
+
+
+
+/**************************************************************************
+ *
+ * Reads a line from <code>in</code>. The end of a line is signaled by
+ * one of three conditions: the '<code>\n</code>' character; the
+ * "<code>\r\n</code>" sequence; end of file on <code>in</code>.
+ *
+ * @param in The <code>Reader</code> where the line will be read from.
+ *
+ * @return A <code>String</code> representing the line that was read
+ * without the trailing new line.  The null object if <code>in</code>
+ * was at end of file.
+ *
+ **************************************************************************/
+
+    private static String readLine(final Reader in)
+        throws IOException {
+
+        StringBuffer buffer = null;
+        int          c      = in.read();
+
+        if ( c != -1 ) {
+            buffer = new StringBuffer();
+        }
+        while ( (c!='\n') && (c!=-1) ) {
+            if ( c == '\r' ) {
+                c = in.read();
+                if ( c != '\n' ) {
+                    buffer.append('\r');
+                    buffer.append((char)c);
+                    c = in.read();
+                }
+            } else {
+                buffer.append((char)c);
+                c = in.read();
+            }
+        }
+
+        return (buffer==null) ? null : buffer.toString();
+    }
 
 
 
@@ -427,9 +435,9 @@ public class SInput
  *
  **************************************************************************/
 
-    public Object copyTo(SObjFunction obj,
-                         SContext     context,
-                         Object[]     args)
+    public Object copyTo(final SObjFunction obj,
+                         final SContext     context,
+                         final Object[]     args)
         throws STeaException {
 
         if ( (args.length!=3) && (args.length!=4) ) {
@@ -469,12 +477,13 @@ public class SInput
  *
  **************************************************************************/
 
-    public void copyTo(SOutput out)
+    public void copyTo(final SOutput out)
         throws IOException,
                SIOException {
 
         if (_input == null) {
-            throw new SIOException("stream has not been opened for reading bytes");
+            String msg = "stream has not been opened for reading bytes";
+            throw new SIOException(msg);
         }
         
         byte[] buffer = new byte[BUFFER_SIZE];
@@ -495,8 +504,8 @@ public class SInput
  *
  **************************************************************************/
 
-    public void copyTo(SContext context,
-                       STosObj   out)
+    public void copyTo(final SContext context,
+                       final STosObj   out)
         throws IOException,
                STeaException {
 
@@ -512,7 +521,8 @@ public class SInput
         methodArgs[2] = byteArray;
 
         if (_input == null) {
-            throw new SIOException("stream has not been opened for reading bytes");
+            String msg = "stream has not been opened for reading bytes";
+            throw new SIOException(msg);
         }
 
         while ( (count=_input.read(buffer)) > 0 ) {
@@ -527,15 +537,15 @@ public class SInput
 
 /**************************************************************************
  *
- * @param total The maximum number of bytes to copy.
+ * @param totalBytesToCopy The maximum number of bytes to copy.
  *
  * @return The number of bytes that was actually copied.
  *
  **************************************************************************/
 
-    public int copyTo(SContext context,
-                      STosObj   out,
-                      int       total)
+    public int copyTo(final SContext context,
+                      final STosObj  out,
+                      final int      totalBytesToCopy)
         throws IOException,
                STeaException {
 
@@ -545,6 +555,7 @@ public class SInput
         byte[]        buffer      = new byte[BUFFER_SIZE];
         int           totalRead   = 0;
         int           count       = 0;
+        int           total       = totalBytesToCopy;
 
         writeMethod   = out.getTosClass().getMethod(WRITE_METHOD);
         methodArgs[0] = out;
@@ -552,7 +563,8 @@ public class SInput
         methodArgs[2] = byteArray;
 
         if (_input == null) {
-            throw new SIOException("stream has not been opened for reading bytes");
+            String msg = "stream has not been opened for reading bytes";
+            throw new SIOException(msg);
         }
 
         while ( total > 0 ) {
@@ -599,9 +611,9 @@ public class SInput
  *
  **************************************************************************/
 
-    public Object close(SObjFunction obj,
-                        SContext     context,
-                        Object[]     args)
+    public Object close(final SObjFunction obj,
+                        final SContext     context,
+                        final Object[]     args)
         throws SIOException {
 
         try {
@@ -676,13 +688,13 @@ public class SInput
  *
  **************************************************************************/
 
-    public static SInput newInstance(SContext context)
+    public static SInput newInstance(final SContext context)
         throws STeaException {
 
         STosObj input = STosUtil.newInstance(CLASS_NAME_S, context);
 
         if ( !(input instanceof SInput) ) {
-            throw new SRuntimeException("invalid " + CLASS_NAME + " class");
+            throw new SRuntimeException("invalid ''{0}'' class", CLASS_NAME);
         }
 
         return (SInput)input;

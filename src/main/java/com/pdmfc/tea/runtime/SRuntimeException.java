@@ -80,7 +80,10 @@ public class SRuntimeException
  *
  * @param args The arguments the function was called with.
  *
- * @param msg A string with an error message.
+ * @param msgFmt The template string for the actual log message.
+ *
+ * @param fmtArgs The formating used when creating the actual log
+ * message from the template.
  *
  **************************************************************************/
  

@@ -11,7 +11,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.modules.SModule;
@@ -66,7 +65,7 @@ import com.pdmfc.tea.runtime.SUtils;
  *
  **************************************************************************/
 
-public class SModuleIO
+public final class SModuleIO
     extends Object
     implements SModule {
 
@@ -91,6 +90,8 @@ public class SModuleIO
  **************************************************************************/
 
     public SModuleIO() {
+
+        // Nothing to do.
     }
 
 
@@ -99,14 +100,11 @@ public class SModuleIO
 
 /**************************************************************************
  *
- * Creates commands and global variables related with I/O.
- *
- * @param context
- *    The context where the commands and variables will be created.
+ * {@inheritDoc}
  *
  **************************************************************************/
 
-    public void init(SContext context)
+    public void init(final SContext context)
         throws STeaException {
 
         STosClass inClass  = new SJavaClass("com.pdmfc.tea.modules.io.SInput");
@@ -130,9 +128,9 @@ public class SModuleIO
 
         context.newVar("file-basename",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionBasename(func, context, args);
                            }
@@ -140,9 +138,9 @@ public class SModuleIO
 
         context.newVar("file-copy",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionCopy(func, context, args);
                            }
@@ -150,9 +148,9 @@ public class SModuleIO
 
         context.newVar("file-dirname",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionDirname(func, context, args);
                            }
@@ -160,9 +158,9 @@ public class SModuleIO
 
         context.newVar("file-extension",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionExtension(func, context, args);
                            }
@@ -180,9 +178,9 @@ public class SModuleIO
 
         context.newVar("file-is-dir?",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionIsDir(func, context, args);
                            }
@@ -190,9 +188,9 @@ public class SModuleIO
 
         context.newVar("file-is-regular?",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionIsRegular(func, context, args);
                            }
@@ -200,9 +198,9 @@ public class SModuleIO
 
         context.newVar("file-join",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionJoin(func, context, args);
                            }
@@ -210,9 +208,9 @@ public class SModuleIO
 
         context.newVar("file-mkdir",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionMkdir(func, context, args);
                            }
@@ -220,9 +218,9 @@ public class SModuleIO
 
         context.newVar("file-rename",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionRename(func, context, args);
                            }
@@ -230,9 +228,9 @@ public class SModuleIO
 
         context.newVar("file-size",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionSize(func, context, args);
                            }
@@ -240,9 +238,9 @@ public class SModuleIO
 
         context.newVar("file-split-path-list",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionSplitPathList(func, context, args);
                            }
@@ -250,9 +248,9 @@ public class SModuleIO
 
         context.newVar("file-unlink",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionUnlink(func, context, args);
                            }
@@ -265,7 +263,7 @@ public class SModuleIO
 
 /**************************************************************************
  *
- * 
+ * {@inheritDoc}
  *
  **************************************************************************/
 
@@ -306,14 +304,18 @@ public class SModuleIO
             try {
                 _stdout.flush();
             } catch (IOException e1) {
+                // We do not care.
             } catch (STeaException e2) {
+                // We do not care.
             }
         }
         if ( _stderr != null ) {
             try {
                 _stderr.flush();
             } catch (IOException e3) {
+                // We do not care.
             } catch (STeaException e4) {
+                // We do not care.
             }
         }
     }
@@ -352,9 +354,9 @@ public class SModuleIO
  *
  **************************************************************************/
 
-    private static Object functionBasename(SObjFunction func,
-                                           SContext     context,
-                                           Object[]     args)
+    private static Object functionBasename(final SObjFunction func,
+                                           final SContext     context,
+                                           final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -402,9 +404,9 @@ public class SModuleIO
  *
  **************************************************************************/
 
-    private static Object functionCopy(SObjFunction func,
-                                       SContext     context,
-                                       Object[]     args)
+    private static Object functionCopy(final SObjFunction func,
+                                       final SContext     context,
+                                       final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -438,8 +440,8 @@ public class SModuleIO
  *
  **************************************************************************/
 
-    private static void copyFile(File src,
-                                 File dst)
+    private static void copyFile(final File src,
+                                 final File dst)
         throws IOException {
 
         byte[]           buffer = new byte[BUFFER_SIZE];
@@ -500,9 +502,9 @@ public class SModuleIO
  *
  **************************************************************************/
 
-    private static Object functionDirname(SObjFunction func,
-                                          SContext     context,
-                                          Object[]     args)
+    private static Object functionDirname(final SObjFunction func,
+                                          final SContext     context,
+                                          final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -556,9 +558,9 @@ public class SModuleIO
  *
  **************************************************************************/
 
-    private static Object functionExtension(SObjFunction func,
-                                            SContext     context,
-                                            Object[]     args)
+    private static Object functionExtension(final SObjFunction func,
+                                            final SContext     context,
+                                            final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -608,9 +610,9 @@ public class SModuleIO
  *
  **************************************************************************/
 
-    private static Object functionFileExists(SObjFunction func,
-                                             SContext     context,
-                                             Object[]      args)
+    private static Object functionFileExists(final SObjFunction func,
+                                             final SContext     context,
+                                             final Object[]      args)
         throws STeaException {
 
         int numArgs = args.length;
@@ -659,9 +661,9 @@ public class SModuleIO
  *
  **************************************************************************/
     
-    private static Object functionIsDir(SObjFunction func,
-                                        SContext     context,
-                                        Object[]     args)
+    private static Object functionIsDir(final SObjFunction func,
+                                        final SContext     context,
+                                        final Object[]     args)
         throws STeaException {
 
         int numArgs = args.length;
@@ -710,9 +712,9 @@ public class SModuleIO
  *
  **************************************************************************/
 
-    private static Object functionIsRegular(SObjFunction func,
-                                            SContext     context,
-                                            Object[]     args)
+    private static Object functionIsRegular(final SObjFunction func,
+                                            final SContext     context,
+                                            final Object[]     args)
         throws STeaException {
 
         int numArgs = args.length;
@@ -764,9 +766,9 @@ public class SModuleIO
  *
  **************************************************************************/
 
-    private static Object functionJoin(SObjFunction func,
-                                       SContext     context,
-                                       Object[]     args)
+    private static Object functionJoin(final SObjFunction func,
+                                       final SContext     context,
+                                       final Object[]     args)
         throws STeaException {
 
         int          numArgs       = args.length;
@@ -800,8 +802,8 @@ public class SModuleIO
  *
  **************************************************************************/
 
-    private static void append(StringBuffer result,
-                               Object       component)
+    private static void append(final StringBuffer result,
+                               final Object       component)
         throws SRuntimeException {
 
         if ( component instanceof SObjPair ) {
@@ -826,7 +828,7 @@ public class SModuleIO
  *
  **************************************************************************/
 
-    private static String join(SObjPair componentList)
+    private static String join(final SObjPair componentList)
         throws SRuntimeException {
 
         Iterator     elems  = componentList.iterator();
@@ -880,9 +882,9 @@ public class SModuleIO
  *
  **************************************************************************/
 
-    private static Object functionMkdir(SObjFunction func,
-                                        SContext     context,
-                                        Object[]     args)
+    private static Object functionMkdir(final SObjFunction func,
+                                        final SContext     context,
+                                        final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -932,9 +934,9 @@ public class SModuleIO
  *
  **************************************************************************/
 
-    private static Object functionRename(SObjFunction func,
-                                         SContext     context,
-                                         Object[]     args)
+    private static Object functionRename(final SObjFunction func,
+                                         final SContext     context,
+                                         final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -980,9 +982,9 @@ public class SModuleIO
  *
  **************************************************************************/
 
-    private static Object functionSize(SObjFunction func,
-                                       SContext     context,
-                                       Object[]     args)
+    private static Object functionSize(final SObjFunction func,
+                                       final SContext     context,
+                                       final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -1030,9 +1032,9 @@ public class SModuleIO
  *
  **************************************************************************/
 
-    private static Object functionSplitPathList(SObjFunction func,
-                                                SContext     context,
-                                                Object[]     args)
+    private static Object functionSplitPathList(final SObjFunction func,
+                                                final SContext     context,
+                                                final Object[]     args)
         throws STeaException {
 
         int numArgs = args.length;
@@ -1088,9 +1090,9 @@ public class SModuleIO
  *
  **************************************************************************/
 
-    private static Object functionUnlink(SObjFunction func,
-                                         SContext     context,
-                                         Object[]     args)
+    private static Object functionUnlink(final SObjFunction func,
+                                         final SContext     context,
+                                         final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
