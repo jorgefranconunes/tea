@@ -119,10 +119,9 @@ public class SUtils
 
     public static SObjPair buildPathList(List pathList) {
 
-	SObjPair empty    = SObjPair.emptyList();
-	SObjPair head     = empty;
-	SObjPair elem     = null;
-	String   pathSep  = File.pathSeparator;
+	SObjPair empty = SObjPair.emptyList();
+	SObjPair head  = empty;
+	SObjPair elem  = null;
 
 	if ( pathList == null ) {
 	    return empty;

@@ -1384,7 +1384,7 @@ public final class SModuleLang
         }
         System.out.println();
 
-        return new Integer(argCount);
+        return Integer.valueOf(argCount);
     }
 
 
@@ -3279,7 +3279,7 @@ public final class SModuleLang
             System.gc();
         }
 
-        return new Integer(status);
+        return Integer.valueOf(status);
     }
 
 
@@ -3343,7 +3343,7 @@ public final class SModuleLang
         }
         endTime = System. currentTimeMillis();
 
-        return new Integer((int)(endTime-startTime));
+        return Integer.valueOf((int)(endTime-startTime));
     }
 
 

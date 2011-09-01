@@ -757,7 +757,7 @@ public final class SCallableStatement
         public void retrieve(final CallableStatement stat)
             throws SQLException {
 
-            _var.set(new Integer(stat.getInt(_index)));
+            _var.set(Integer.valueOf(stat.getInt(_index)));
         }
 
 

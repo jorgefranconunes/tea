@@ -360,7 +360,7 @@ public final class SModuleTdbc
         throws STeaException {
 
         int     count  = _connClass.getOpenConnectionsCount();
-        Integer result = new Integer(count);
+        Integer result = Integer.valueOf(count);
 
         return result;
     }

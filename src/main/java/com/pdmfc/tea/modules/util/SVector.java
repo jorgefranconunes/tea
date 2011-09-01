@@ -411,7 +411,7 @@ public class SVector
 
         int size = _vector.size();
 
-        return new Integer(size);
+        return Integer.valueOf(size);
     }
 
 

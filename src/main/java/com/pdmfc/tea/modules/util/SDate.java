@@ -377,7 +377,7 @@ public class SDate
 
         int year = _calendar.get(Calendar.YEAR);
 
-        return new Integer(year);
+        return Integer.valueOf(year);
     }
 
 
@@ -426,7 +426,7 @@ public class SDate
 
         int month = _calendar.get(Calendar.MONTH) + 1;
 
-        return new Integer(month);
+        return Integer.valueOf(month);
     }
 
 
@@ -475,7 +475,7 @@ public class SDate
 
         int day = _calendar.get(Calendar.DAY_OF_MONTH);
 
-        return new Integer(day);
+        return Integer.valueOf(day);
     }
 
 
@@ -524,7 +524,7 @@ public class SDate
 
         int hour = _calendar.get(Calendar.HOUR_OF_DAY);
 
-        return new Integer(hour);
+        return Integer.valueOf(hour);
     }
 
 
@@ -573,7 +573,7 @@ public class SDate
 
         int minute = _calendar.get(Calendar.MINUTE);
 
-        return new Integer(minute);
+        return Integer.valueOf(minute);
     }
 
 
@@ -622,7 +622,7 @@ public class SDate
 
         int second = _calendar.get(Calendar.SECOND);
 
-        return new Integer(second);
+        return Integer.valueOf(second);
     }
 
 
@@ -670,7 +670,7 @@ public class SDate
 
         int day = _calendar.get(Calendar.DAY_OF_WEEK) - 1;
 
-        return new Integer(day);
+        return Integer.valueOf(day);
     }
 
 
@@ -977,7 +977,7 @@ public class SDate
         throws STeaException {
 
         if ( args.length != 3 ) {
-            new SNumArgException(args, "TDate");
+            throw new SNumArgException(args, "TDate");
         }
         
         Calendar when   = getDate(args, 2)._calendar;
@@ -991,7 +991,7 @@ public class SDate
             }
         }
 
-        return new Integer(result);
+        return Integer.valueOf(result);
     }
 
 
@@ -1041,7 +1041,7 @@ public class SDate
         throws STeaException {
 
         if ( args.length != 3 ) {
-            new SNumArgException(args, "TDate");
+            throw new SNumArgException(args, "TDate");
         }
         
         Calendar when = getDate(args, 2)._calendar;
@@ -1097,7 +1097,7 @@ public class SDate
         throws STeaException {
 
         if ( args.length != 3 ) {
-            new SNumArgException(args, "TDate");
+            throw new SNumArgException(args, "TDate");
         }
         
         Calendar when = getDate(args, 2)._calendar;
@@ -1153,7 +1153,7 @@ public class SDate
         throws STeaException {
 
         if ( args.length != 3 ) {
-            new SNumArgException(args, "TDate");
+            throw new SNumArgException(args, "TDate");
         }
 
         Calendar cal  = _calendar;
@@ -1218,7 +1218,7 @@ public class SDate
         throws STeaException {
 
         if ( args.length != 3 ) {
-            new SNumArgException(args, "TDate");
+            throw new SNumArgException(args, "TDate");
         }
 
         Calendar cal  = _calendar;

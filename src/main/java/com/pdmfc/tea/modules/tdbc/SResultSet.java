@@ -572,7 +572,7 @@ public final class SResultSet
           throw new SRuntimeException(e);
       }
 
-      return new Integer(value);
+      return Integer.valueOf(value);
     }
 
 
@@ -1119,7 +1119,7 @@ public final class SResultSet
             throw new SRuntimeException(e);
         }
 
-        return new Integer(result);
+        return Integer.valueOf(result);
     }
 
 

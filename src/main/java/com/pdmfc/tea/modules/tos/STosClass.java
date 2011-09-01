@@ -457,7 +457,7 @@ public class STosClass
  *
  **************************************************************************/
 
-    private class SMethodSet
+    private static final class SMethodSet
         extends SContext {
 
 

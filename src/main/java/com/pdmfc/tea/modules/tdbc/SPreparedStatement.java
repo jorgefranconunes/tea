@@ -58,7 +58,7 @@ import com.pdmfc.tea.runtime.STypes;
  *
  **************************************************************************/
 
-public final class SPreparedStatement
+public class SPreparedStatement
     extends SStatement {
 
 
@@ -278,7 +278,7 @@ public final class SPreparedStatement
             throw new SRuntimeException(e);
         }
 
-        return new Integer(result);
+        return Integer.valueOf(result);
     }
 
 

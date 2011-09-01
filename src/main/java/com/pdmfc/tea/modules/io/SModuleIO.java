@@ -775,9 +775,8 @@ public final class SModuleIO
                                        final Object[]     args)
         throws STeaException {
 
-        int          numArgs       = args.length;
-        StringBuffer result        = new StringBuffer();
-        int          numArgsMinus1 = args.length - 1;
+        int          numArgs = args.length;
+        StringBuffer result  = new StringBuffer();
 
         try {
             if ( numArgs > 1 ) {
@@ -996,7 +995,7 @@ public final class SModuleIO
         }
         long size = (new  File(SArgs.getString(args,1))).length();
 
-        return new Integer((int)size);
+        return Integer.valueOf((int)size);
     }
 
 

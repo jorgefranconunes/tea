@@ -224,7 +224,7 @@ public class SList
  *
  **************************************************************************/
 
-    class SListIterator
+    private static final class SListIterator
 	extends Object
 	implements Iterator {
 
@@ -316,7 +316,7 @@ public class SList
  *
  **************************************************************************/
 
-    class SListEnumeration
+    private static final class SListEnumeration
 	extends Object
 	implements Enumeration {
 

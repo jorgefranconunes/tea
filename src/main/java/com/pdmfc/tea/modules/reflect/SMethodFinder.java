@@ -490,7 +490,7 @@ final class SMethodFinder
                     // TBD - maybe the calculation of distance is not the best
                     int aDist=paramClassDistance(aSuper, knownParamType);
                     if (aDist>=0) {
-                        distanceSet.add(new Integer(1+aDist));
+                        distanceSet.add(Integer.valueOf(1+aDist));
                     }
                 }
                 // Check every interfaces of givenParamType that are
@@ -502,7 +502,7 @@ final class SMethodFinder
                         // not the best
                         int aDist=paramClassDistance(anInterf,knownParamType);
                         if (aDist>=0) {
-                            distanceSet.add(new Integer(1+aDist));
+                            distanceSet.add(Integer.valueOf(1+aDist));
                         }
                     }
                 }
@@ -515,7 +515,7 @@ final class SMethodFinder
             }
             // store the distance if it exists
             if ( distance >= 0 ) {
-                _classDistances.put(aPair,new Integer(distance));
+                _classDistances.put(aPair, Integer.valueOf(distance));
             }
         }
         return distance;

@@ -202,7 +202,7 @@ public class SObjPair
  *
  **************************************************************************/
 
-    private class SPairIterator
+    private static final class SPairIterator
 	extends Object
 	implements Iterator {
 
@@ -296,7 +296,7 @@ public class SObjPair
  *
  **************************************************************************/
 
-    private class SPairEnumeration
+    private static final class SPairEnumeration
 	extends Object
 	implements Enumeration {
 

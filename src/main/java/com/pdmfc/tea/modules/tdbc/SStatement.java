@@ -345,7 +345,7 @@ public class SStatement
             throw new SRuntimeException(e);
         }
 
-        return new Integer(result);
+        return Integer.valueOf(result);
     }
 
 
@@ -422,7 +422,7 @@ public class SStatement
             throw new SRuntimeException(e);
         }
 
-        return new Boolean(result);
+        return Boolean.valueOf(result);
     }
 
 
@@ -604,7 +604,7 @@ public class SStatement
             throw new SRuntimeException(e);
         }
 
-        return new Integer(result);
+        return Integer.valueOf(result);
     }
 
 
