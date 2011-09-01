@@ -388,8 +388,10 @@ final class SMethodFinder
             // If the parameter is primitive, check with correct class.
             if ( !paramsMatch && knownParamType.isPrimitive()
                  && (givenParamType!=null) ) {
-                paramsMatch =
-                    (_primitiveToClass.get(knownParamType).isAssignableFrom(givenParamType));
+                Class<?> primitiveClass = _primitiveToClass.get(knownParamType);
+
+                paramsMatch = 
+                    primitiveClass.isAssignableFrom(givenParamType);
             }
         }
         
@@ -463,35 +465,41 @@ final class SMethodFinder
         ClassPair aPair    = new ClassPair(givenParamType,knownParamType);
         int       distance = 0;
 
-        if (_classDistances.containsKey(aPair)) {
+        if ( _classDistances.containsKey(aPair) ) {
             distance=_classDistances.get(aPair).intValue();
         } else {
-            if (givenParamType == null) {
+            if ( givenParamType == null ) {
                 if (knownParamType.isPrimitive()) {
                     // null does not match any primitive type
                     distance = -1;
                 } else {
-                    // null matches any non-primitive argument with a zero distance
+                    // null matches any non-primitive argument with a
+                    // zero distance
                     distance = 0;
                 }
-            } else if (!givenParamType.equals(knownParamType)) {
-                // If classes are diferent, then calculate the distance
+            } else if ( !givenParamType.equals(knownParamType) ) {
+                // If classes are diferent, then calculate the
+                // distance
                 TreeSet<Integer> distanceSet = new TreeSet<Integer>();
-                // check super class of givenParamType that is 
-                // assignable to knownParamType for the lowest distance
+                // check super class of givenParamType that is
+                // assignable to knownParamType for the lowest
+                // distance
                 Class aSuper = givenParamType.getSuperclass();
-                if(null != aSuper && knownParamType.isAssignableFrom(aSuper)) {
+                if ( (null!=aSuper)
+                     && knownParamType.isAssignableFrom(aSuper) ) {
                     // TBD - maybe the calculation of distance is not the best
-                    int aDist=paramClassDistance(aSuper,knownParamType);
+                    int aDist=paramClassDistance(aSuper, knownParamType);
                     if (aDist>=0) {
                         distanceSet.add(new Integer(1+aDist));
                     }
                 }
                 // Check every interfaces of givenParamType that are
-                // assignable to knownParamType for the lowest distance
-                for(Class anInterf : givenParamType.getInterfaces()) {
+                // assignable to knownParamType for the lowest
+                // distance
+                for ( Class anInterf : givenParamType.getInterfaces() ) {
                     if (knownParamType.isAssignableFrom(anInterf)) {
-                        // TBD - maybe the calculation of distance is not the best
+                        // TBD - maybe the calculation of distance is
+                        // not the best
                         int aDist=paramClassDistance(anInterf,knownParamType);
                         if (aDist>=0) {
                             distanceSet.add(new Integer(1+aDist));
@@ -499,14 +507,14 @@ final class SMethodFinder
                     }
                 }
                 // there might not be any method!!!
-                if (distanceSet.isEmpty()) {
+                if ( distanceSet.isEmpty() ) {
                     distance=-1;
                 } else {
                     distance = distanceSet.first().intValue();
                 }
             }
             // store the distance if it exists
-            if (distance>=0) {
+            if ( distance >= 0 ) {
                 _classDistances.put(aPair,new Integer(distance));
             }
         }
@@ -532,12 +540,13 @@ final class SMethodFinder
         public Method _method = null;
         public int    _score  = 0;
 
-        public MethodScore(Method aMethod, int aScore) {
+        public MethodScore(final Method aMethod,
+                           final int aScore) {
             _method = aMethod;
             _score = aScore;
         }
 
-        public int compareTo (Object anObject) {
+        public int compareTo (final Object anObject) {
             MethodScore aMethodScore = (MethodScore) anObject;
             return _score - aMethodScore._score;
         }
@@ -562,12 +571,13 @@ final class SMethodFinder
         public Constructor<?> _constructor = null;
         public int            _score       = 0;
 
-        public ConstructorScore(Constructor<?> aConstructor, int aScore) {
+        public ConstructorScore(final Constructor<?> aConstructor,
+                                final int aScore) {
             _constructor = aConstructor;
             _score       = aScore;
         }
 
-        public int compareTo (Object anObject) {
+        public int compareTo(final Object anObject) {
             ConstructorScore aConstructorScore = (ConstructorScore) anObject;
             return _score - aConstructorScore._score;
         }
@@ -591,7 +601,8 @@ final class SMethodFinder
         private int      _hash  = 0;
 
 
-        public ClassPair(Class<?> aGiven, Class<?> aKnown) {
+        public ClassPair(final Class<?> aGiven,
+                         final Class<?> aKnown) {
             _given = aGiven;
             _known = aKnown;
             String aGivenName = _given == null ? "null" : _given.getName();
@@ -600,13 +611,13 @@ final class SMethodFinder
 
 
         @Override
-        public int hashCode () {
+        public int hashCode() {
             return _hash;
         }
 
         
         @Override
-        public boolean equals (Object anObj) {
+        public boolean equals(final Object anObj) {
 
             if ( this.getClass() != anObj.getClass() ) {
                 return false;
@@ -617,8 +628,9 @@ final class SMethodFinder
             if ( _given == null ) {
                 if ( aPair._given == null ) {
                     return _known.equals(aPair._known);
-                } else
+                } else {
                     return false;
+                }
             } else {
                 return
                     _given.equals(aPair._given)

@@ -17,7 +17,6 @@ import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjNull;
 import com.pdmfc.tea.runtime.SRuntimeException;
-import com.pdmfc.tea.runtime.STypes;
 
 
 
@@ -43,7 +42,7 @@ import com.pdmfc.tea.runtime.STypes;
  *
  **************************************************************************/
 
-public class SModuleTdbc
+public final class SModuleTdbc
     extends Object
     implements SModule {
 
@@ -64,6 +63,8 @@ public class SModuleTdbc
  **************************************************************************/
 
    public SModuleTdbc() {
+
+       // Nothing to do.
    }
 
 
@@ -72,11 +73,11 @@ public class SModuleTdbc
 
 /**************************************************************************
  *
- * 
+ * {@inheritDoc}
  *
  **************************************************************************/
 
-    public void init(SContext context)
+    public void init(final SContext context)
         throws STeaException {
 
         STosClass rSetClass =
@@ -98,9 +99,9 @@ public class SModuleTdbc
 
         context.newVar("tdbc-register-driver",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionRegisterDriver(func,
                                                              context,
@@ -110,9 +111,9 @@ public class SModuleTdbc
 
         context.newVar("sql-encode",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionSqlEncode(func,
                                                         context,
@@ -122,9 +123,9 @@ public class SModuleTdbc
 
         context.newVar("tdbc-get-open-connections-count",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionGetOpenConnCount(func,
                                                                context,
@@ -134,9 +135,9 @@ public class SModuleTdbc
 
         context.newVar("tdbc-close-all-connections",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionCloseAllConn(func,
                                                            context,
@@ -151,7 +152,7 @@ public class SModuleTdbc
 
 /**************************************************************************
  *
- * 
+ * {@inheritDoc}
  *
  **************************************************************************/
 
@@ -166,7 +167,7 @@ public class SModuleTdbc
 
 /**************************************************************************
  *
- * 
+ * {@inheritDoc}
  *
  **************************************************************************/
 
@@ -181,7 +182,7 @@ public class SModuleTdbc
 
 /**************************************************************************
  *
- * 
+ * {@inheritDoc}
  *
  **************************************************************************/
 
@@ -222,9 +223,9 @@ public class SModuleTdbc
  *
  **************************************************************************/
 
-    private static Object functionRegisterDriver(SObjFunction func,
-                                                 SContext     context,
-                                                 Object[]     args)
+    private static Object functionRegisterDriver(final SObjFunction func,
+                                                 final SContext     context,
+                                                 final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -277,9 +278,9 @@ public class SModuleTdbc
  *
  **************************************************************************/
 
-    private static Object functionSqlEncode(SObjFunction func,
-                                            SContext     context,
-                                            Object[]     args)
+    private static Object functionSqlEncode(final SObjFunction func,
+                                            final SContext     context,
+                                            final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -302,7 +303,7 @@ public class SModuleTdbc
  *
  **************************************************************************/
 
-    private static String sqlEncode(String s) {
+    private static String sqlEncode(final String s) {
 
         StringBuffer buf = new StringBuffer();
 
@@ -353,9 +354,9 @@ public class SModuleTdbc
  *
  **************************************************************************/
 
-    private Object functionGetOpenConnCount(SObjFunction func,
-                                            SContext     context,
-                                            Object[]     args)
+    private Object functionGetOpenConnCount(final SObjFunction func,
+                                            final SContext     context,
+                                            final Object[]     args)
         throws STeaException {
 
         int     count  = _connClass.getOpenConnectionsCount();
@@ -394,9 +395,9 @@ public class SModuleTdbc
  *
  **************************************************************************/
 
-    private Object functionCloseAllConn(SObjFunction func,
-                                        SContext     context,
-                                        Object[]     args)
+    private Object functionCloseAllConn(final SObjFunction func,
+                                        final SContext     context,
+                                        final Object[]     args)
         throws STeaException {
 
         _connClass.closeAll();

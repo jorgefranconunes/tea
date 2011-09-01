@@ -9,8 +9,6 @@ package com.pdmfc.tea.modules.reflect;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Date;
-import java.util.List;
 
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.modules.SModule;
@@ -18,11 +16,6 @@ import com.pdmfc.tea.modules.reflect.SFunctionNewProxy;
 import com.pdmfc.tea.modules.reflect.SMethodFinder;
 import com.pdmfc.tea.modules.reflect.SReflectUtils;
 import com.pdmfc.tea.modules.reflect.STeaJavaTypes;
-import com.pdmfc.tea.modules.tos.STosClass;
-import com.pdmfc.tea.modules.tos.STosObj;
-import com.pdmfc.tea.modules.util.SDate;
-import com.pdmfc.tea.modules.util.SHashtable;
-import com.pdmfc.tea.modules.util.SVector;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SObjFunction;
@@ -84,7 +77,9 @@ import com.pdmfc.tea.runtime.SRuntimeException;
 //* <EnumLabel>Tea numbers (java.lang.Integer, java.lang.Long,
 //* and java.lang.Double) </EnumLabel>
 //* <EnumDescription>
-//* No convertion is needed.  Unboxing convertion is performed on method invocation arguments when needed. Examples of Tea value literal/expressions and corresponding Java type:
+//* No convertion is needed.  Unboxing convertion is performed on
+//* method invocation arguments when needed. Examples of Tea value
+//* literal/expressions and corresponding Java type:
 //*    <Enumeration>
 //*    <EnumLabel>1</EnumLabel>
 //*    <EnumDescription>
@@ -104,7 +99,8 @@ import com.pdmfc.tea.runtime.SRuntimeException;
 //*
 //* <EnumLabel>Tea strings(java.lang.String)</EnumLabel>
 //* <EnumDescription>
-//* Are assignable to java.lang.String.  Examples of Tea value literal/expressions and corresponding Java type:
+//* Are assignable to java.lang.String.  Examples of Tea value
+//* literal/expressions and corresponding Java type:
 //*    <Enumeration>
 //*    <EnumLabel>"1"</EnumLabel>
 //*    <EnumDescription>
@@ -115,7 +111,8 @@ import com.pdmfc.tea.runtime.SRuntimeException;
 //*
 //* <EnumLabel>Tea symbols (com.pdmfc.tea.runtime.SObjSymbol)</EnumLabel>
 //* <EnumDescription>
-//* Are converted to java.lang.String.  Examples of Tea value literal/expressions and corresponding Java type:
+//* Are converted to java.lang.String.  Examples of Tea value
+//* literal/expressions and corresponding Java type:
 //*    <Enumeration>
 //*    <EnumLabel>myFunction</EnumLabel>
 //*    <EnumDescription>
@@ -126,7 +123,9 @@ import com.pdmfc.tea.runtime.SRuntimeException;
 //*
 //* <EnumLabel>Tea booleans (java.lang.Boolean)</EnumLabel>
 //* <EnumDescription>
-//* Are assignable to java.lang.Boolean. Unboxing convertion is performed on method invocation arguments when needed. Examples of Tea value literal/expressions and corresponding Java type:
+//* Are assignable to java.lang.Boolean. Unboxing convertion is
+//* performed on method invocation arguments when needed. Examples
+//* of Tea value literal/expressions and corresponding Java type:
 //*    <Enumeration>
 //*    <EnumLabel>$true</EnumLabel>
 //*    <EnumDescription>
@@ -141,7 +140,9 @@ import com.pdmfc.tea.runtime.SRuntimeException;
 //*
 //* <EnumLabel>Tea lists (com.pdmfc.tea.runtime.SObjPair)</EnumLabel>
 //* <EnumDescription>
-//* Are converted to java.util.ArrayList. Each element in the list is recursively converted according to these rules. Examples of Tea value literal/expressions and corresponding Java type:
+//* Are converted to java.util.ArrayList. Each element in the list is
+//* recursively converted according to these rules. Examples of Tea
+//* value literal/expressions and corresponding Java type:
 //*    <Enumeration>
 //*    <EnumLabel>( 1 2 "hello" $true 5.0 )</EnumLabel>
 //*    <EnumDescription>
@@ -157,17 +158,20 @@ import com.pdmfc.tea.runtime.SRuntimeException;
 //*
 //* <EnumLabel>THashtable (com.pdmfc.tea.runtime.STosObj)</EnumLabel>
 //* <EnumDescription>
-//* Are converted to java.util.HashMap. Each element in the hashtable is recursively converted according to these rules.
+//* Are converted to java.util.HashMap. Each element in the hashtable
+//* is recursively converted according to these rules.
 //* </EnumDescription>
 //*
 //* <EnumLabel>TVector (com.pdmfc.tea.runtime.STosObj)</EnumLabel>
 //* <EnumDescription>
-//* Are assignable to java.util.ArrayList. Each element in the vector IS NOT recursively converted according to these rules.
+//* Are assignable to java.util.ArrayList. Each element in the vector
+//* IS NOT recursively converted according to these rules.
 //* </EnumDescription>
 //*
 //* <EnumLabel>TConnection, TStatement, TResultSet (com.pdmfc.tea.runtime.STosObj)</EnumLabel>
 //* <EnumDescription>
-//* Are assignable to java.sql.Connection, java.sql.Statement, java.sql.ResultSet.
+//* Are assignable to java.sql.Connection, java.sql.Statement,
+//* java.sql.ResultSet.
 //* </EnumDescription>
 //*
 //* </Enumeration>
@@ -194,7 +198,7 @@ import com.pdmfc.tea.runtime.SRuntimeException;
  *
  **************************************************************************/
 
-public class SModuleReflect
+public final class SModuleReflect
     extends Object
     implements SModule {
 
@@ -209,6 +213,8 @@ public class SModuleReflect
  **************************************************************************/
 
    public SModuleReflect() {
+
+       // Nothing to do.
    }
 
 
@@ -227,9 +233,9 @@ public class SModuleReflect
 
         context.newVar("java-get-value",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionGetValue(func,
                                                        context,
@@ -239,9 +245,9 @@ public class SModuleReflect
 
         context.newVar("java-set-value",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionSetValue(func,
                                                        context,
@@ -251,9 +257,9 @@ public class SModuleReflect
 
         context.newVar("java-get-method",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionGetMethod(func,
                                                         context,
@@ -263,9 +269,9 @@ public class SModuleReflect
 
         context.newVar("java-exec-method",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionExecMethod(func,
                                                          context,
@@ -275,9 +281,9 @@ public class SModuleReflect
 
         context.newVar("java-new-instance",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionNewInstance(func,
                                                           context,
@@ -455,8 +461,8 @@ public class SModuleReflect
         throws STeaException {
 
         if ( args.length != 4 ) {
-            throw new SNumArgException(args,
-                                       "[className|wrapperObj] memberName value");
+            String usage = "[className|wrapperObj] memberName value";
+            throw new SNumArgException(args, usage);
         }
 
         Object            firstArg   = args[1];
@@ -539,8 +545,8 @@ public class SModuleReflect
         throws STeaException {
 
         if ( args.length < 3 ) {
-            throw new SNumArgException(args,
-                                       "className methodName [argType1 [argType2 ...]]");
+            String usage = "className methodName [argType1 [argType2 ...]]";
+            throw new SNumArgException(args, usage);
         }
 
         Class<?>   klass      = SReflectUtils.getClassForName(args, 1);
@@ -558,9 +564,9 @@ public class SModuleReflect
 
         Object result =
             new SObjFunction() {
-                public Object exec(SObjFunction func,
-                                   SContext     context,
-                                   Object[]     args)
+                public Object exec(final SObjFunction func,
+                                   final SContext     context,
+                                   final Object[]     args)
                     throws STeaException {
 
                     if ( args.length != functionArgCount ) {
@@ -597,10 +603,10 @@ public class SModuleReflect
         StringBuilder builder = new StringBuilder();
 
         for ( int i=0, count=paramTypes.length; i<count; i++) {
-                if ( i > 0 ) {
-                    builder.append(" ");
-                }
-                builder.append(paramTypes[i].getName());
+            if ( i > 0 ) {
+                builder.append(" ");
+            }
+            builder.append(paramTypes[i].getName());
         }
 
         String usageMessage = builder.toString();
@@ -744,8 +750,8 @@ public class SModuleReflect
         throws STeaException {
 
         if ( args.length < 3 ) {
-            throw new SNumArgException(args,
-                                       "className methodName [arg1 [arg2 ...]]");
+            String usage = "className methodName [arg1 [arg2 ...]]";
+            throw new SNumArgException(args, usage);
         }
 
         Class<?>   klass      = SReflectUtils.getClassForName(args, 1);

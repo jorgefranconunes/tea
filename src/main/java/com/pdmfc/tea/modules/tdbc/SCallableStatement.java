@@ -11,11 +11,9 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import com.pdmfc.tea.STeaException;
-import com.pdmfc.tea.modules.tdbc.SResultSet;
 import com.pdmfc.tea.modules.tdbc.SPreparedStatement;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
@@ -29,7 +27,6 @@ import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SObjVar;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SRuntimeException;
-import com.pdmfc.tea.runtime.STypes;
 
 
 
@@ -58,7 +55,7 @@ import com.pdmfc.tea.runtime.STypes;
  *
  **************************************************************************/
 
-public class SCallableStatement
+public final class SCallableStatement
     extends SPreparedStatement {
 
 
@@ -83,7 +80,7 @@ public class SCallableStatement
  *
  **************************************************************************/
 
-    public SCallableStatement(STosClass myClass)
+    public SCallableStatement(final STosClass myClass)
         throws STeaException {
         
         super(myClass);
@@ -99,7 +96,7 @@ public class SCallableStatement
  *
  **************************************************************************/
 
-    public void setCallableStatement(CallableStatement stat) {
+    public void setCallableStatement(final CallableStatement stat) {
 
         _callStat = stat;
         setPreparedStatement(_callStat);
@@ -130,7 +127,7 @@ public class SCallableStatement
  *
  **************************************************************************/
 
-    public static SStatement newInstance(SContext context)
+    public static SStatement newInstance(final SContext context)
         throws STeaException {
 
         STosObj callStat = STosUtil.newInstance(CLASS_NAME_S, context);
@@ -159,9 +156,9 @@ public class SCallableStatement
  *
  **************************************************************************/
 
-    public Object constructor(SObjFunction obj,
-                              SContext     context,
-                              Object[]     args)
+    public Object constructor(final SObjFunction obj,
+                              final SContext     context,
+                              final Object[]     args)
         throws STeaException {
 
         return obj;
@@ -217,9 +214,9 @@ public class SCallableStatement
  *
  **************************************************************************/
 
-    public Object registerString(SObjFunction obj,
-                                 SContext     context,
-                                 Object[]     args)
+    public Object registerString(final SObjFunction obj,
+                                 final SContext     context,
+                                 final Object[]     args)
         throws SRuntimeException {
 
         if ( args.length != 4 ) {
@@ -257,8 +254,8 @@ public class SCallableStatement
  *
  **************************************************************************/
 
-    private void registerOutString(int     index,
-                                   SObjVar var)
+    private void registerOutString(final int     index,
+                                   final SObjVar var)
         throws SQLException {
 
         _callStat.registerOutParameter(index, Types.VARCHAR);
@@ -316,9 +313,9 @@ public class SCallableStatement
  *
  **************************************************************************/
 
-    public Object registerInt(SObjFunction obj,
-                              SContext     context,
-                              Object[]     args)
+    public Object registerInt(final SObjFunction obj,
+                              final SContext     context,
+                              final Object[]     args)
         throws SRuntimeException {
 
         if ( args.length != 4 ) {
@@ -356,8 +353,8 @@ public class SCallableStatement
  *
  **************************************************************************/
 
-    private void registerOutInt(int     index,
-                                SObjVar var)
+    private void registerOutInt(final int     index,
+                                final SObjVar var)
         throws SQLException {
 
         _callStat.registerOutParameter(index, Types.INTEGER);
@@ -415,9 +412,9 @@ public class SCallableStatement
  *
  **************************************************************************/
 
-    public Object registerFloat(SObjFunction obj,
-                                SContext     context,
-                                Object[]     args)
+    public Object registerFloat(final SObjFunction obj,
+                                final SContext     context,
+                                final Object[]     args)
         throws SRuntimeException {
 
         if ( args.length != 4 ) {
@@ -455,8 +452,8 @@ public class SCallableStatement
  *
  **************************************************************************/
 
-    private void registerOutFloat(int     index,
-                                SObjVar var)
+    private void registerOutFloat(final int     index,
+                                  final SObjVar var)
         throws SQLException {
 
         _callStat.registerOutParameter(index, Types.DOUBLE);
@@ -514,9 +511,9 @@ public class SCallableStatement
  *
  **************************************************************************/
 
-    public Object registerDate(SObjFunction obj,
-                               SContext     context,
-                               Object[]     args)
+    public Object registerDate(final SObjFunction obj,
+                               final SContext     context,
+                               final Object[]     args)
         throws SRuntimeException {
 
         if ( args.length != 4 ) {
@@ -555,9 +552,9 @@ public class SCallableStatement
  *
  **************************************************************************/
 
-    private void registerOutDate(int      index,
-                                SObjVar   var,
-                                 SContext context)
+    private void registerOutDate(final int      index,
+                                 final SObjVar   var,
+                                 final SContext context)
         throws SQLException {
 
         _callStat.registerOutParameter(index, Types.TIMESTAMP);
@@ -600,9 +597,9 @@ public class SCallableStatement
  *
  **************************************************************************/
 
-    public Object fetchOutParameters(SObjFunction obj,
-                                     SContext     context,
-                                     Object[]     args)
+    public Object fetchOutParameters(final SObjFunction obj,
+                                     final SContext     context,
+                                     final Object[]     args)
         throws STeaException {
 
          try {
@@ -617,11 +614,24 @@ public class SCallableStatement
     }
 
 
-}
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    private static abstract class SOutParameter
+        extends Object {
 
 
 
 
+
+        protected int     _index = 0;
+        protected SObjVar _var   = null;
 
 
 
@@ -633,261 +643,244 @@ public class SCallableStatement
  *
  **************************************************************************/
 
-abstract class SOutParameter
-    extends Object {
-
-
-
-
-
-    protected int     _index = 0;
-    protected SObjVar _var   = null;
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    SOutParameter(int     index,
-                  SObjVar var) {
-
-        _index = index;
-        _var   = var;
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    public abstract void retrieve(CallableStatement stat)
-        throws STeaException,
-               SQLException;
-
-
-}
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-class SOutParameterString
-    extends SOutParameter {
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    public SOutParameterString(int     index,
-                               SObjVar var) {
-
-        super(index, var);
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    public void retrieve(CallableStatement stat)
-        throws SQLException {
-
-        _var.set(stat.getString(_index));
-    }
-
-
-}
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-class SOutParameterInt
-    extends SOutParameter {
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    public SOutParameterInt(int     index,
-                            SObjVar var) {
-
-        super(index, var);
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    public void retrieve(CallableStatement stat)
-        throws SQLException {
-
-        _var.set(new Integer(stat.getInt(_index)));
-    }
-
-
-}
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-class SOutParameterFloat
-    extends SOutParameter {
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    public SOutParameterFloat(int     index,
-                              SObjVar var) {
-
-        super(index, var);
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    public void retrieve(CallableStatement stat)
-        throws SQLException {
-
-        _var.set(new Double(stat.getDouble(_index)));
-   }
-
-
-}
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-class SOutParameterDate
-    extends SOutParameter {
-
-
-
-
-
-    private SContext _context = null;
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    public SOutParameterDate(int      index,
-                             SObjVar  var,
-                             SContext context) {
-
-        super(index, var);
-
-        _context = context;
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    public void retrieve(CallableStatement stat)
-        throws STeaException,
-               SQLException {
-
-        Date  date   = stat.getTimestamp(_index);
-        SDate result = null;
-
-        if ( date != null ) {
-            result = SDate.newInstance(_context);
-            date   = new Date(date.getTime());
-            result.initFromDate(date);
+        SOutParameter(final int     index,
+                      final SObjVar var) {
+
+            _index = index;
+            _var   = var;
         }
 
-        if ( result != null ) {
-            _var.set(result);
-        } else {
-            _var.set(SObjNull.NULL);
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+        public abstract void retrieve(CallableStatement stat)
+            throws STeaException,
+                   SQLException;
+
+
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    private static final class SOutParameterString
+        extends SOutParameter {
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+        public SOutParameterString(final int     index,
+                                   final SObjVar var) {
+
+            super(index, var);
         }
-   }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+        public void retrieve(final CallableStatement stat)
+            throws SQLException {
+
+            _var.set(stat.getString(_index));
+        }
+
+
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    private static final class SOutParameterInt
+        extends SOutParameter {
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+        public SOutParameterInt(final int     index,
+                                final SObjVar var) {
+
+            super(index, var);
+        }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+        public void retrieve(final CallableStatement stat)
+            throws SQLException {
+
+            _var.set(new Integer(stat.getInt(_index)));
+        }
+
+
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    private static final class SOutParameterFloat
+        extends SOutParameter {
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+        public SOutParameterFloat(final int     index,
+                                  final SObjVar var) {
+
+            super(index, var);
+        }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+        public void retrieve(final CallableStatement stat)
+            throws SQLException {
+
+            _var.set(new Double(stat.getDouble(_index)));
+        }
+
+
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    private static final class SOutParameterDate
+        extends SOutParameter {
+
+
+
+
+
+        private SContext _context = null;
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+        public SOutParameterDate(final int      index,
+                                 final SObjVar  var,
+                                 final SContext context) {
+
+            super(index, var);
+
+            _context = context;
+        }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+        public void retrieve(final CallableStatement stat)
+            throws STeaException,
+                   SQLException {
+
+            Date  date   = stat.getTimestamp(_index);
+            SDate result = null;
+
+            if ( date != null ) {
+                result = SDate.newInstance(_context);
+                date   = new Date(date.getTime());
+                result.initFromDate(date);
+            }
+
+            if ( result != null ) {
+                _var.set(result);
+            } else {
+                _var.set(SObjNull.NULL);
+            }
+        }
+
+
+    }
 
 
 }

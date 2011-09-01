@@ -1,17 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2001/05/12 Created. (jfn)
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -68,7 +57,7 @@ import com.pdmfc.tea.modules.tos.STosObj;
  *
  **************************************************************************/
 
-class SConnectionClass
+final class SConnectionClass
     extends STosClass {
 
 
@@ -137,7 +126,7 @@ class SConnectionClass
 
         _connections.add(connection);
         connection.addClosedListener(new SClosedEventListener() {
-                public void closedEvent(Object closedObject) {
+                public void closedEvent(final Object closedObject) {
                     myClosedEvent((SConnection)closedObject);
                 }
             });
@@ -198,7 +187,7 @@ class SConnectionClass
  *
  **************************************************************************/
 
-    private void myClosedEvent(SConnection closedObject) {
+    private void myClosedEvent(final SConnection closedObject) {
 
         _connections.remove(closedObject);
     }

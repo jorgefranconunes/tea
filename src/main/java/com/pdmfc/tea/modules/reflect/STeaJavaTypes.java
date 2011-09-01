@@ -26,7 +26,6 @@ import com.pdmfc.tea.modules.tdbc.SConnection;
 import com.pdmfc.tea.modules.tdbc.SPreparedStatement;
 import com.pdmfc.tea.modules.tdbc.SResultSet;
 import com.pdmfc.tea.modules.tdbc.SStatement;
-import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.util.SDate;
 import com.pdmfc.tea.modules.util.SHashtable;
@@ -111,12 +110,14 @@ public final class STeaJavaTypes
             return SConnection.newInstance(context, (Connection)obj);
         }
         if ( obj instanceof CallableStatement ) {
-            SCallableStatement teaObj = (SCallableStatement)SCallableStatement.newInstance(context);
+            SCallableStatement teaObj =
+                (SCallableStatement)SCallableStatement.newInstance(context);
             teaObj.setCallableStatement((CallableStatement) obj);
             return teaObj;
         }
         if ( obj instanceof PreparedStatement ) {
-            SPreparedStatement teaObj = (SPreparedStatement)SPreparedStatement.newInstance(context);
+            SPreparedStatement teaObj =
+                (SPreparedStatement)SPreparedStatement.newInstance(context);
             teaObj.setPreparedStatement((PreparedStatement) obj);
             return teaObj;
         }

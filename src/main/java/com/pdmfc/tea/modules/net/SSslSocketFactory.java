@@ -1,18 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- * 
- * $Id$
- *
- *
- * Revisions:
- *
- * 2002/10/19
- * Created. (jfn)
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -20,6 +8,7 @@ package com.pdmfc.tea.modules.net;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.security.Security;
 import javax.net.ssl.SSLSocketFactory;
 
 import com.pdmfc.tea.modules.net.SSocketFactory;
@@ -63,7 +52,8 @@ class SSslSocketFactory
 
 
     static {
-        java.security.Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
+        // TBD - Is this really necessary on Java 6?...
+        Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
     }
 
 
@@ -102,8 +92,8 @@ class SSslSocketFactory
  *
  ***************************************************************************/
 
-    public Socket createSocket(String host,
-                               int    port)
+    public Socket createSocket(final String host,
+                               final int    port)
         throws IOException {
 
         Socket result = SSLSocketFactory.getDefault().createSocket(host, port);

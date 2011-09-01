@@ -42,7 +42,7 @@ public interface SClosedEventListener {
  *
  **************************************************************************/
 
-    public void closedEvent(Object closedObject);
+    void closedEvent(Object closedObject);
 
 
 }

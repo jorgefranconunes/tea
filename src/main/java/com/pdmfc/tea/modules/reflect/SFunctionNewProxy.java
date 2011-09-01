@@ -14,10 +14,8 @@ import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.modules.reflect.JavaWrapperObject;
 import com.pdmfc.tea.modules.reflect.SReflectUtils;
 import com.pdmfc.tea.modules.reflect.STeaJavaTypes;
-import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.runtime.SArgs;
 import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SRuntimeException;
 
@@ -71,7 +69,7 @@ import com.pdmfc.tea.runtime.SRuntimeException;
  *
  **************************************************************************/
 
-public class SFunctionNewProxy
+public final class SFunctionNewProxy
     extends Object
     implements SObjFunction {
 
@@ -96,7 +94,7 @@ public class SFunctionNewProxy
 
 /**************************************************************************
  *
- * 
+ * {@inheritDoc}
  *
  **************************************************************************/
 

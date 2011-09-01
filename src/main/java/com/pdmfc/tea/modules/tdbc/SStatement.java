@@ -59,7 +59,8 @@ public class SStatement
 
 
     private static final String     CLASS_NAME   = "TStatement";
-    private static final SObjSymbol CLASS_NAME_S = SObjSymbol.addSymbol(CLASS_NAME);
+    private static final SObjSymbol CLASS_NAME_S =
+        SObjSymbol.addSymbol(CLASS_NAME);
 
     private   Statement        _statement   = null;
     protected List<SResultSet> _resultSets  = new ArrayList<SResultSet>();
@@ -77,7 +78,7 @@ public class SStatement
  *
  **************************************************************************/
 
-    public SStatement(STosClass myClass)
+    public SStatement(final STosClass myClass)
         throws STeaException {
 
         super(myClass);
@@ -94,7 +95,7 @@ public class SStatement
  *
  **************************************************************************/
 
-    public void setStatement(Statement stat) {
+    public void setStatement(final Statement stat) {
 
         _statement = stat;
     }
@@ -142,7 +143,7 @@ public class SStatement
  *
  **************************************************************************/
 
-    public static SStatement newInstance(SContext context)
+    public static SStatement newInstance(final SContext context)
         throws STeaException {
 
         STosObj stat = STosUtil.newInstance(CLASS_NAME_S, context);
@@ -164,7 +165,7 @@ public class SStatement
  *
  **************************************************************************/
 
-    public void addClosedListener(SClosedEventListener listener) {
+    public void addClosedListener(final SClosedEventListener listener) {
 
         _listeners.add(listener);
     }
@@ -186,9 +187,9 @@ public class SStatement
  *
  **************************************************************************/
 
-    public Object constructor(SObjFunction obj,
-                              SContext     context,
-                              Object[]     args)
+    public Object constructor(final SObjFunction obj,
+                              final SContext     context,
+                              final Object[]     args)
         throws STeaException {
 
         return obj;
@@ -246,9 +247,9 @@ public class SStatement
  *
  **************************************************************************/
 
-    public Object query(SObjFunction obj,
-                        SContext     context,
-                        Object[]     args)
+    public Object query(final SObjFunction obj,
+                        final SContext     context,
+                        final Object[]     args)
         throws STeaException {
 
         checkStatement();
@@ -324,9 +325,9 @@ public class SStatement
  *
  **************************************************************************/
 
-    public Object update(SObjFunction obj,
-                         SContext     context,
-                         Object[]     args)
+    public Object update(final SObjFunction obj,
+                         final SContext     context,
+                         final Object[]     args)
         throws STeaException {
 
         checkStatement();
@@ -401,9 +402,9 @@ public class SStatement
  *
  **************************************************************************/
 
-    public Object execute(SObjFunction obj,
-                          SContext     context,
-                          Object[]     args)
+    public Object execute(final SObjFunction obj,
+                          final SContext     context,
+                          final Object[]     args)
         throws STeaException {
 
         checkStatement();
@@ -464,9 +465,9 @@ public class SStatement
  *
  **************************************************************************/
 
-    public Object getResultSet(SObjFunction obj,
-                               SContext     context,
-                               Object[]     args)
+    public Object getResultSet(final SObjFunction obj,
+                               final SContext     context,
+                               final Object[]     args)
         throws STeaException {
 
         checkStatement();
@@ -527,9 +528,9 @@ public class SStatement
  *
  **************************************************************************/
 
-    public Object getMoreResults(SObjFunction obj,
-                                 SContext     context,
-                                 Object[]     args)
+    public Object getMoreResults(final SObjFunction obj,
+                                 final SContext     context,
+                                 final Object[]     args)
         throws STeaException {
 
         checkStatement();
@@ -588,9 +589,9 @@ public class SStatement
  *
  **************************************************************************/
 
-    public Object getFetchSize(SObjFunction obj,
-                               SContext     context,
-                               Object[]     args)
+    public Object getFetchSize(final SObjFunction obj,
+                               final SContext     context,
+                               final Object[]     args)
         throws STeaException {
 
         checkStatement();
@@ -652,9 +653,9 @@ public class SStatement
  *
  **************************************************************************/
 
-    public Object setFetchSize(SObjFunction obj,
-                               SContext     context,
-                               Object[]     args)
+    public Object setFetchSize(final SObjFunction obj,
+                               final SContext     context,
+                               final Object[]     args)
         throws STeaException {
 
         checkStatement();
@@ -711,9 +712,9 @@ public class SStatement
  *
  **************************************************************************/
 
-    public Object close(SObjFunction obj,
-                        SContext     context,
-                        Object[]     args)
+    public Object close(final SObjFunction obj,
+                        final SContext     context,
+                        final Object[]     args)
         throws STeaException {
 
         try {
@@ -794,7 +795,7 @@ public class SStatement
  *
  **************************************************************************/
 
-    public void closedEvent(Object closedObject) {
+    public void closedEvent(final Object closedObject) {
 
         if ( !(closedObject instanceof SResultSet) ) {
             String msg =

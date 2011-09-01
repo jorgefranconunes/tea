@@ -1,41 +1,16 @@
 /**************************************************************************
  *
- * Copyright (c) 2002 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2002/10/19
- * Created. (jfn)
+ * Copyright (c) 2002-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 package com.pdmfc.tea.modules.net;
 
-import java.io.IOException;
-import java.net.Socket;
-import java.net.UnknownHostException;
-
 import com.pdmfc.tea.STeaException;
-import com.pdmfc.tea.modules.io.SIOException;
-import com.pdmfc.tea.modules.io.SInput;
-import com.pdmfc.tea.modules.io.SOutput;
-import com.pdmfc.tea.modules.net.SPlainSocketFactory;
-import com.pdmfc.tea.modules.net.SSocketFactory;
 import com.pdmfc.tea.modules.tos.STosClass;
-import com.pdmfc.tea.modules.tos.STosObj;
-import com.pdmfc.tea.modules.tos.STosUtil;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjSymbol;
-import com.pdmfc.tea.runtime.SNumArgException;
-import com.pdmfc.tea.runtime.STypes;
 
 
 
@@ -90,7 +65,7 @@ public class SSslSocketBase
  *
  **************************************************************************/
 
-    public SSslSocketBase(STosClass myClass)
+    public SSslSocketBase(final STosClass myClass)
         throws STeaException {
 
         super(myClass);
@@ -106,9 +81,9 @@ public class SSslSocketBase
  *
  **************************************************************************/
 
-    public Object constructor(SObjFunction obj,
-                              SContext     context,
-                              Object[]     args)
+    public Object constructor(final SObjFunction obj,
+                              final SContext     context,
+                              final Object[]     args)
         throws STeaException {
 
         initialize(context);

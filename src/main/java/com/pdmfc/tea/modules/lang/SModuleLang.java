@@ -6,20 +6,15 @@
 
 package com.pdmfc.tea.modules.lang;
 
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.Reader;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Properties;
-import java.util.StringTokenizer;
 
 import com.pdmfc.tea.SConfigInfo;
 import com.pdmfc.tea.STeaException;
@@ -76,7 +71,7 @@ import com.pdmfc.tea.runtime.STypes;
 
 /**************************************************************************
  *
- * Module of core Tea functions
+ * Module of core Tea functions.
  *
  **************************************************************************/
 

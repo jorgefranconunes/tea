@@ -50,14 +50,15 @@ import com.pdmfc.tea.runtime.STypes;
 /**************************************************************************
  *
  * Implements an TOS object that acts like a java
- * <code>PreparedStatement</code>. It needs to be derived from <code>
- * because <code>SConnection</code> stores references to all the open
- * <code>SStatement</code>, <code>SPreparedStatement</code>,
- * <code>SCallableStatement</code> with no distinction.
+ * <code>PreparedStatement</code>. It needs to be derived from
+ * <code>SStatement</code> because <code>SConnection</code> stores
+ * references to all the open <code>SStatement</code>,
+ * <code>SPreparedStatement</code>, <code>SCallableStatement</code>
+ * with no distinction.
  *
  **************************************************************************/
 
-public class SPreparedStatement
+public final class SPreparedStatement
     extends SStatement {
 
 
@@ -80,7 +81,7 @@ public class SPreparedStatement
  *
  **************************************************************************/
 
-    public SPreparedStatement(STosClass myClass)
+    public SPreparedStatement(final STosClass myClass)
         throws STeaException {
 
         super(myClass);
@@ -100,7 +101,7 @@ public class SPreparedStatement
  *
  **************************************************************************/
 
-    public void setPreparedStatement(PreparedStatement stat) {
+    public void setPreparedStatement(final PreparedStatement stat) {
 
         _prepStat = stat;
         setStatement(stat);
@@ -133,7 +134,7 @@ public class SPreparedStatement
  *
  **************************************************************************/
 
-    public static SStatement newInstance(SContext context)
+    public static SStatement newInstance(final SContext context)
         throws STeaException {
 
         STosObj prepStat = STosUtil.newInstance(CLASS_NAME_S, context);
@@ -162,9 +163,9 @@ public class SPreparedStatement
  *
  **************************************************************************/
 
-    public Object constructor(SObjFunction obj,
-                              SContext     context,
-                              Object[]     args)
+    public Object constructor(final SObjFunction obj,
+                              final SContext     context,
+                              final Object[]     args)
         throws STeaException {
 
         return obj;
@@ -206,9 +207,9 @@ public class SPreparedStatement
  *
  **************************************************************************/
 
-    public Object query(SObjFunction obj,
-                        SContext     context,
-                        Object[]     args)
+    public Object query(final SObjFunction obj,
+                        final SContext     context,
+                        final Object[]     args)
         throws STeaException {
 
         ResultSet  rSet    = null;
@@ -264,9 +265,9 @@ public class SPreparedStatement
  *
  **************************************************************************/
 
-    public Object update(SObjFunction obj,
-                         SContext     context,
-                         Object[]     args)
+    public Object update(final SObjFunction obj,
+                         final SContext     context,
+                         final Object[]     args)
         throws STeaException {
 
         int result = 0;
@@ -311,9 +312,9 @@ public class SPreparedStatement
  *
  **************************************************************************/
 
-    public Object execute(SObjFunction obj,
-                          SContext     context,
-                          Object[]     args)
+    public Object execute(final SObjFunction obj,
+                          final SContext     context,
+                          final Object[]     args)
         throws STeaException {
 
         boolean result = false;
@@ -377,9 +378,9 @@ public class SPreparedStatement
  *
  **************************************************************************/
 
-    public Object setInt(SObjFunction obj,
-                         SContext     context,
-                         Object[]     args)
+    public Object setInt(final SObjFunction obj,
+                         final SContext     context,
+                         final Object[]     args)
         throws SRuntimeException {
 
         if ( args.length != 4 ) {
@@ -412,8 +413,8 @@ public class SPreparedStatement
  *
  **************************************************************************/
 
-    private void setInt(int index,
-                       int value)
+    private void setInt(final int index,
+                        final int value)
         throws SQLException {
 
         _prepStat.setInt(index, value);
@@ -429,7 +430,7 @@ public class SPreparedStatement
  *
  **************************************************************************/
 
-    private void setIntNull(int index)
+    private void setIntNull(final int index)
         throws SQLException {
        
         _prepStat.setNull(index, java.sql.Types.INTEGER);
@@ -485,9 +486,9 @@ public class SPreparedStatement
  *
  **************************************************************************/
 
-    public Object setFloat(SObjFunction obj,
-                           SContext     context,
-                           Object[]     args)
+    public Object setFloat(final SObjFunction obj,
+                           final SContext     context,
+                           final Object[]     args)
         throws SRuntimeException {
 
         if ( args.length != 4 ) {
@@ -520,8 +521,8 @@ public class SPreparedStatement
  *
  **************************************************************************/
 
-    private void setDouble(int    index,
-                           double value)
+    private void setDouble(final int    index,
+                           final double value)
         throws SQLException {
 
         _prepStat.setDouble(index, value);
@@ -537,7 +538,7 @@ public class SPreparedStatement
  *
  **************************************************************************/
 
-    private void setDoubleNull(int index)
+    private void setDoubleNull(final int index)
         throws SQLException {
 
         _prepStat.setNull(index, java.sql.Types.DOUBLE);
@@ -592,9 +593,9 @@ public class SPreparedStatement
  *
  **************************************************************************/
 
-    public Object setString(SObjFunction obj,
-                            SContext     context,
-                            Object[]     args)
+    public Object setString(final SObjFunction obj,
+                            final SContext     context,
+                            final Object[]     args)
         throws STeaException {
 
         if ( args.length != 4 ) {
@@ -627,8 +628,8 @@ public class SPreparedStatement
  *
  **************************************************************************/
 
-    private void setString(int    index,
-                           String value)
+    private void setString(final int    index,
+                           final String value)
         throws SQLException {
 
         _prepStat.setString(index, value);
@@ -644,7 +645,7 @@ public class SPreparedStatement
  *
  **************************************************************************/
 
-    private void setStringNull(int index)
+    private void setStringNull(final int index)
         throws SQLException {
 
         _prepStat.setNull(index, java.sql.Types.VARCHAR);
@@ -701,9 +702,9 @@ public class SPreparedStatement
  *
  **************************************************************************/
 
-    public Object setDate(SObjFunction obj,
-                          SContext     context,
-                          Object[]     args)
+    public Object setDate(final SObjFunction obj,
+                          final SContext     context,
+                          final Object[]     args)
         throws STeaException {
 
         if ( args.length != 4 ) {
@@ -736,8 +737,8 @@ public class SPreparedStatement
  *
  **************************************************************************/
 
-    private void setTimestamp(int   index,
-                              SDate value)
+    private void setTimestamp(final int   index,
+                              final SDate value)
         throws SQLException {
 
         Date      date      = value.getDate();
@@ -756,7 +757,7 @@ public class SPreparedStatement
  *
  **************************************************************************/
 
-    private void setTimestampNull(int index)
+    private void setTimestampNull(final int index)
         throws SQLException {
 
         _prepStat.setNull(index, java.sql.Types.TIMESTAMP);

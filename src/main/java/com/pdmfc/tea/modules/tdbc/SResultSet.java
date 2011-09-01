@@ -70,7 +70,7 @@ import com.pdmfc.tea.runtime.STypes;
  *
  **************************************************************************/
 
-public class SResultSet
+public final class SResultSet
     extends STosObj {
 
 
@@ -101,7 +101,7 @@ public class SResultSet
  *
  **************************************************************************/
 
-    public SResultSet(STosClass myClass)
+    public SResultSet(final STosClass myClass)
         throws STeaException {
 
         super(myClass);
@@ -124,7 +124,7 @@ public class SResultSet
  *
  **************************************************************************/
 
-    public void setResultSet(ResultSet rSet)
+    public void setResultSet(final ResultSet rSet)
         throws SQLException {
 
         _resultSet  = rSet;
@@ -178,7 +178,7 @@ public class SResultSet
  *
  **************************************************************************/
 
-    public static SResultSet newInstance(SContext context)
+    public static SResultSet newInstance(final SContext context)
         throws STeaException {
 
         STosObj rSet = STosUtil.newInstance(CLASS_NAME_S, context);
@@ -204,7 +204,7 @@ public class SResultSet
  *
  **************************************************************************/
 
-    public void addClosedListener(SClosedEventListener listener) {
+    public void addClosedListener(final SClosedEventListener listener) {
 
         _listeners.add(listener);
     }
@@ -219,9 +219,9 @@ public class SResultSet
  *
  **************************************************************************/
 
-    public Object constructor(SObjFunction obj,
-                              SContext     context,
-                              Object[]     args)
+    public Object constructor(final SObjFunction obj,
+                              final SContext     context,
+                              final Object[]     args)
         throws STeaException {
 
         return obj;
@@ -260,9 +260,9 @@ public class SResultSet
  *
  **************************************************************************/
 
-    public Object hasRows(SObjFunction obj,
-                          SContext     context,
-                          Object[]     args)
+    public Object hasRows(final SObjFunction obj,
+                          final SContext     context,
+                          final Object[]     args)
         throws SRuntimeException {
 
         checkResultSet();
@@ -308,9 +308,9 @@ public class SResultSet
  *
  **************************************************************************/
 
-    public Object next(SObjFunction obj,
-                       SContext     context,
-                       Object[]     args)
+    public Object next(final SObjFunction obj,
+                       final SContext     context,
+                       final Object[]     args)
         throws SRuntimeException {
 
         checkResultSet();
@@ -379,9 +379,9 @@ public class SResultSet
  *
  **************************************************************************/
 
-    public Object hasMoreRows(SObjFunction obj,
-                              SContext     context,
-                              Object[]     args)
+    public Object hasMoreRows(final SObjFunction obj,
+                              final SContext     context,
+                              final Object[]     args)
         throws SRuntimeException {
 
         checkResultSet();
@@ -438,9 +438,9 @@ public class SResultSet
  *
  **************************************************************************/
 
-    public Object skip(SObjFunction obj,
-                       SContext     context,
-                       Object[]     args)
+    public Object skip(final SObjFunction obj,
+                       final SContext     context,
+                       final Object[]     args)
         throws SRuntimeException {
 
         if ( args.length != 3 ) {
@@ -467,11 +467,11 @@ public class SResultSet
  * Skips over the next <TT>n</TT> rows in the result set, ignoring
  * them.
  *
- * @param n The number of rows to skip.
+ * @param rowsToSkip The number of rows to skip.
  *
  **************************************************************************/
 
-    private void skip(int n)
+    private void skip(final int rowsToSkip)
         throws SRuntimeException,
                SQLException {
 
@@ -480,6 +480,8 @@ public class SResultSet
         if ( _atEnd ) {
             return;
         }
+
+        int n = rowsToSkip;
 
         if ( n > 0 ) {
             if ( _rowWasRead ) {
@@ -552,9 +554,9 @@ public class SResultSet
  *
  **************************************************************************/
 
-    public Object getInt(SObjFunction obj,
-                         SContext     context,
-                         Object[]     args)
+    public Object getInt(final SObjFunction obj,
+                         final SContext     context,
+                         final Object[]     args)
         throws SRuntimeException {
 
       if ( args.length != 3 ) {
@@ -592,7 +594,7 @@ public class SResultSet
  *
  **************************************************************************/
 
-    private int getInt(Object indexObj)
+    private int getInt(final Object indexObj)
         throws SRuntimeException,
                SQLException  {
 
@@ -672,9 +674,9 @@ public class SResultSet
  *
  **************************************************************************/
 
-    public Object getFloat(SObjFunction obj,
-                           SContext     context,
-                           Object[]     args)
+    public Object getFloat(final SObjFunction obj,
+                           final SContext     context,
+                           final Object[]     args)
         throws SRuntimeException {
 
       if ( args.length != 3 ) {
@@ -712,7 +714,7 @@ public class SResultSet
  *
  **************************************************************************/
 
-    private double getFloat(Object indexObj)
+    private double getFloat(final Object indexObj)
         throws SRuntimeException,
                SQLException {
 
@@ -791,9 +793,9 @@ public class SResultSet
  *
  **************************************************************************/
 
-    public Object getString(SObjFunction obj,
-                            SContext     context,
-                            Object[]     args)
+    public Object getString(final SObjFunction obj,
+                            final SContext     context,
+                            final Object[]     args)
         throws SRuntimeException {
 
         if ( args.length != 3 ) {
@@ -831,7 +833,7 @@ public class SResultSet
  *
  **************************************************************************/
 
-    private String getString(Object indexObj)
+    private String getString(final Object indexObj)
         throws SRuntimeException,
                SQLException {
 
@@ -912,9 +914,9 @@ public class SResultSet
  *
  **************************************************************************/
 
-    public Object getDate(SObjFunction obj,
-                          SContext   context,
-                          Object[]   args)
+    public Object getDate(final SObjFunction obj,
+                          final SContext   context,
+                          final Object[]   args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -957,7 +959,7 @@ public class SResultSet
  *
  **************************************************************************/
 
-    private Date getDate(Object indexObj)
+    private Date getDate(final Object indexObj)
         throws SRuntimeException,
                SQLException {
 
@@ -1007,9 +1009,9 @@ public class SResultSet
  *
  **************************************************************************/
 
-    public Object close(SObjFunction obj,
-                        SContext     context,
-                        Object[]     args)
+    public Object close(final SObjFunction obj,
+                        final SContext     context,
+                        final Object[]     args)
         throws STeaException {
 
         try {
@@ -1099,9 +1101,9 @@ public class SResultSet
  *
  **************************************************************************/
 
-    public Object getColumnCount(SObjFunction obj,
-                                 SContext     context,
-                                 Object[]     args)
+    public Object getColumnCount(final SObjFunction obj,
+                                 final SContext     context,
+                                 final Object[]     args)
         throws STeaException {
 
         checkResultSet();
@@ -1157,9 +1159,9 @@ public class SResultSet
  *
  **************************************************************************/
 
-    public Object getColumnName(SObjFunction obj,
-                                SContext     context,
-                                Object[]     args)
+    public Object getColumnName(final SObjFunction obj,
+                                final SContext     context,
+                                final Object[]     args)
         throws SRuntimeException {
 
       if ( args.length != 3 ) {
@@ -1197,7 +1199,7 @@ public class SResultSet
  *
  **************************************************************************/
 
-    String getColumnName(int index)
+    String getColumnName(final int index)
         throws SRuntimeException,
                SQLException {
 

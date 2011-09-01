@@ -41,7 +41,7 @@ import com.pdmfc.tea.runtime.SRuntimeException;
  *
  **************************************************************************/
 
-public class SConnection
+public final class SConnection
     extends STosObj {
 
 
@@ -78,7 +78,7 @@ public class SConnection
  *
  **************************************************************************/
 
-    SConnection(STosClass myClass)
+    public SConnection(final STosClass myClass)
         throws STeaException {
 
         super(myClass);
@@ -132,7 +132,7 @@ public class SConnection
  *
  **************************************************************************/
 
-    public void addClosedListener(SClosedEventListener listener) {
+    public void addClosedListener(final SClosedEventListener listener) {
 
         _listeners.add(listener);
     }
@@ -194,9 +194,9 @@ public class SConnection
  *
  **************************************************************************/
 
-    public Object constructor(SObjFunction obj,
-                              SContext     context,
-                              Object[]     args)
+    public Object constructor(final SObjFunction obj,
+                              final SContext     context,
+                              final Object[]     args)
         throws STeaException {
 
         switch ( args.length ) {
@@ -265,9 +265,9 @@ public class SConnection
  *
  **************************************************************************/
 
-    public Object connect(SObjFunction obj,
-                          SContext     context,
-                          Object[]     args)
+    public Object connect(final SObjFunction obj,
+                          final SContext     context,
+                          final Object[]     args)
         throws STeaException {
 
         if ( (args.length!=3) && (args.length!=5) ) {
@@ -311,9 +311,9 @@ public class SConnection
  *
  **************************************************************************/
 
-    private void connect(String url,
-                         String username,
-                         String password)
+    private void connect(final String url,
+                         final String username,
+                         final String password)
         throws SQLException {
         
         try {
@@ -353,7 +353,7 @@ public class SConnection
  *
  **************************************************************************/
 
-    private void connect(Connection conn) {
+    private void connect(final Connection conn) {
 
         _connection     = conn;
         _ownsConnection = false;
@@ -395,9 +395,9 @@ public class SConnection
  *
  **************************************************************************/
 
-    public Object statement(SObjFunction obj,
-                            SContext     context,
-                            Object[]     args)
+    public Object statement(final SObjFunction obj,
+                            final SContext     context,
+                            final Object[]     args)
         throws STeaException {
 
         checkConnection();
@@ -472,9 +472,9 @@ public class SConnection
  *
  **************************************************************************/
 
-    public Object prepare(SObjFunction obj,
-                          SContext     context,
-                          Object[]     args)
+    public Object prepare(final SObjFunction obj,
+                          final SContext     context,
+                          final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -508,8 +508,8 @@ public class SConnection
  *
  **************************************************************************/
 
-    private SPreparedStatement prepareStatement(SContext context,
-                                                String   sql)
+    private SPreparedStatement prepareStatement(final SContext context,
+                                                final String   sql)
         throws STeaException,
                SQLException {
 
@@ -574,9 +574,9 @@ public class SConnection
  *
  **************************************************************************/
 
-    public Object prepareCall(SObjFunction obj,
-                              SContext     context,
-                              Object[]     args)
+    public Object prepareCall(final SObjFunction obj,
+                              final SContext     context,
+                              final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -605,8 +605,8 @@ public class SConnection
  *
  **************************************************************************/
 
-    private SCallableStatement prepareCall(SContext context,
-                                           String   sql)
+    private SCallableStatement prepareCall(final SContext context,
+                                           final String   sql)
         throws STeaException {
 
         checkConnection();
@@ -676,9 +676,9 @@ public class SConnection
  *
  **************************************************************************/
 
-    public Object commit(SObjFunction obj,
-                         SContext     context,
-                         Object[]     args)
+    public Object commit(final SObjFunction obj,
+                         final SContext     context,
+                         final Object[]     args)
         throws STeaException {
 
         checkConnection();
@@ -745,9 +745,9 @@ public class SConnection
  *
  **************************************************************************/
 
-    public Object autocommit(SObjFunction obj,
-                             SContext     context,
-                             Object[]     args)
+    public Object autocommit(final SObjFunction obj,
+                             final SContext     context,
+                             final Object[]     args)
         throws SRuntimeException {
 
         if ( args.length != 3 ) {
@@ -780,7 +780,7 @@ public class SConnection
  *
  **************************************************************************/
 
-    private void autocommit(boolean flag)
+    private void autocommit(final boolean flag)
         throws SRuntimeException,
                SQLException {
 
@@ -833,9 +833,9 @@ public class SConnection
  *
  **************************************************************************/
 
-    public Object rollback(SObjFunction obj,
-                           SContext     context,
-                           Object[]     args)
+    public Object rollback(final SObjFunction obj,
+                           final SContext     context,
+                           final Object[]     args)
         throws SRuntimeException {
 
         checkConnection();
@@ -888,9 +888,9 @@ public class SConnection
  *
  **************************************************************************/
 
-    public Object close(SObjFunction obj,
-                        SContext     context,
-                        Object[]     args)
+    public Object close(final SObjFunction obj,
+                        final SContext     context,
+                        final Object[]     args)
         throws STeaException {
 
         try {
@@ -982,7 +982,7 @@ public class SConnection
  *
  **************************************************************************/
 
-    private void myClosedEvent(SStatement closedObject) {
+    private void myClosedEvent(final SStatement closedObject) {
 
         _statements.remove(closedObject);
     }
@@ -1042,8 +1042,8 @@ public class SConnection
  *
  **************************************************************************/
 
-    public static SConnection newInstance(SContext   context,
-                                          Connection connection)
+    public static SConnection newInstance(final SContext   context,
+                                          final Connection connection)
         throws STeaException {
 
         Object[] ctorArgs = { null, null };

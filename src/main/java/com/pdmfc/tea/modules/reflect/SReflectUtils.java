@@ -18,11 +18,9 @@ import java.util.Map;
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.modules.reflect.STeaJavaTypes;
 import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypeException;
-import com.pdmfc.tea.runtime.STypes;
 
 
 
@@ -104,14 +102,13 @@ final class SReflectUtils
         try {
             result = doGetFieldValue(klass, obj, memberName);
         } catch (NoSuchFieldException e) {
-            throw new SRuntimeException("could not find member '" + 
-                                        memberName + "'");
+            throw new SRuntimeException("could not find member ''{0}''",
+                                        memberName);
         } catch (IllegalAccessException e) {
-            throw new SRuntimeException("cannot access member '" + 
-                                        memberName + "'");
+            throw new SRuntimeException("cannot access member ''{0}''",
+                                        memberName);
         } catch (NullPointerException e) {
-            throw new SRuntimeException("member '" + 
-                                        memberName + "' is not static");
+            throw new SRuntimeException("member ''{0}''",memberName);
         }
         
         return result;
@@ -290,7 +287,7 @@ final class SReflectUtils
  *
  * <p>The argument is supposed to be a Tea symbol or a string. It is
  * also expected to represent the name of an accessible Java
- * class.</code>.
+ * class.</p>.
  *
  * @param args The arguments passed to the Tea function.
  *
