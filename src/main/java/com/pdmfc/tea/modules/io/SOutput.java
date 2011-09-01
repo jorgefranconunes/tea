@@ -70,17 +70,17 @@ public class SOutput
     private static final SObjSymbol CLASS_NAME_S =
         SObjSymbol.addSymbol(CLASS_NAME);
 
-    /** The output stream of this object. */
+    /* The output stream of this object. */
     private OutputStream _outputStream = null; // can be null under JSR-223
     private PrintWriter  _outputWriter = null;
 
     private boolean _streamNeedsFlush = false;
     private boolean _writerNeedsFlush = false;
 
-    /** Used to output string built from "printf" like formats. */
+    /* Used to output string built from "printf" like formats. */
     private SFormaterOutput _formater = null;
 
-    /** Signals if line buffering should be used. */
+    /* Signals if line buffering should be used. */
     private boolean _lineBuffering = false;
 
 
@@ -95,7 +95,7 @@ public class SOutput
  *
  **************************************************************************/
 
-    public SOutput(STosClass myClass)
+    public SOutput(final STosClass myClass)
         throws STeaException {
 
         super(myClass);
@@ -111,9 +111,9 @@ public class SOutput
  *
  **************************************************************************/
 
-    public Object constructor(SObjFunction obj,
-                              SContext     context,
-                              Object[]     args)
+    public Object constructor(final SObjFunction obj,
+                              final SContext     context,
+                              final Object[]     args)
         throws STeaException {
 
         return obj;
@@ -133,7 +133,7 @@ public class SOutput
  *
  **************************************************************************/
 
-    public void open(OutputStream out) {
+    public void open(final OutputStream out) {
 
         try {
             close();
@@ -154,16 +154,14 @@ public class SOutput
  * called prior to any invocation of the <TT>write()</TT>,
  * <TT>writeln()</TT>, <TT>flush()</TT>, <TT>close()</TT> methods.
  * 
- * @param out
- *            The <TT>java.io.Writer</TT> associated with this object,
- *            required by JSR-223 SCR.4.3.1.
- *            When using a <TT>java.io.Writer</TT> instead of a
- *            <TT>java.io.OutputStream</TT>, binary content output
- *            methods will fail.
+ * @param out The <TT>java.io.Writer</TT> associated with this object,
+ * required by JSR-223 SCR.4.3.1.  When using a
+ * <TT>java.io.Writer</TT> instead of a <TT>java.io.OutputStream</TT>,
+ * binary content output methods will fail.
  * 
  **************************************************************************/
 
-    public void open(Writer out) {
+    public void open(final Writer out) {
 
         try {
             close();
@@ -214,9 +212,9 @@ public class SOutput
  *
  **************************************************************************/
 
-    public Object setLineBuffering(SObjFunction obj,
-                                   SContext     context,
-                                   Object[]     args)
+    public Object setLineBuffering(final SObjFunction obj,
+                                   final SContext     context,
+                                   final Object[]     args)
         throws SRuntimeException {
 
         if ( args.length != 3 ) {
@@ -246,7 +244,7 @@ public class SOutput
  *
  **************************************************************************/
 
-    public void setLineBuffering(boolean flag) {
+    public void setLineBuffering(final boolean flag) {
 
         _lineBuffering = flag;
     }
@@ -288,9 +286,9 @@ public class SOutput
  *
  **************************************************************************/
 
-    public Object write(SObjFunction obj,
-                        SContext     context,
-                        Object[]     args)
+    public Object write(final SObjFunction obj,
+                        final SContext     context,
+                        final Object[]     args)
         throws SRuntimeException {
 
         int numArgs = args.length;
@@ -340,7 +338,9 @@ public class SOutput
  *
  **************************************************************************/
 
-    public void write(byte[] buffer, int off, int len)
+    public void write(final byte[] buffer,
+                      final int    off,
+                      final int    len)
         throws IOException {
 
         flushWriter();
@@ -359,7 +359,7 @@ public class SOutput
  *
  **************************************************************************/
 
-    public void write(SObjByteArray bytes)
+    public void write(final SObjByteArray bytes)
         throws IOException {
 
         write(bytes.getBytes(), bytes.getOffset(), bytes.getCount());
@@ -380,7 +380,7 @@ public class SOutput
  *
  **************************************************************************/
 
-    public void write(String aString)
+    public void write(final String aString)
         throws IOException,
                SIOException {
 
@@ -409,7 +409,7 @@ public class SOutput
  *
  **************************************************************************/
 
-    public void write(int value)
+    public void write(final int value)
         throws IOException,
                SIOException {
 
@@ -438,7 +438,7 @@ public class SOutput
  *
  **************************************************************************/
 
-    public void write(double value)
+    public void write(final double value)
         throws IOException,
                SIOException {
 
@@ -490,9 +490,9 @@ public class SOutput
  *
  **************************************************************************/
 
-    public Object writeln(SObjFunction obj,
-                          SContext     context,
-                          Object[]     args)
+    public Object writeln(final SObjFunction obj,
+                          final SContext     context,
+                          final Object[]     args)
         throws SRuntimeException {
 
         write(obj, context, args);
@@ -549,7 +549,7 @@ public class SOutput
  *
  **************************************************************************/
 
-    public void writeln(String aString)
+    public void writeln(final String aString)
         throws IOException,
                SIOException {
 
@@ -581,7 +581,7 @@ public class SOutput
  *
  **************************************************************************/
 
-    public void writeln(int value)
+    public void writeln(final int value)
         throws IOException,
                SIOException {
 
@@ -613,7 +613,7 @@ public class SOutput
  *
  **************************************************************************/
     
-    public void writeln(double value)
+    public void writeln(final double value)
         throws IOException,
                SIOException {
 
@@ -665,9 +665,9 @@ public class SOutput
  *
  **************************************************************************/
 
-    public Object printf(SObjFunction obj,
-                         SContext     context,
-                         Object[]     args)
+    public Object printf(final SObjFunction obj,
+                         final SContext     context,
+                         final Object[]     args)
         throws STeaException {
 
         if ( args.length < 3 ) {
@@ -703,9 +703,9 @@ public class SOutput
  *
  **************************************************************************/
 
-    public void printf(String   formatString,
-                       Object[] args,
-                       int      firstArg)
+    public void printf(final String   formatString,
+                       final Object[] args,
+                       final int      firstArg)
         throws IOException,
                STeaException {
 
@@ -751,9 +751,9 @@ public class SOutput
  *
  **************************************************************************/
 
-    public Object flush(SObjFunction obj,
-                        SContext     context,
-                        Object []    args)
+    public Object flush(final SObjFunction obj,
+                        final SContext     context,
+                        final Object []    args)
         throws SIOException {
 
         try {
@@ -858,9 +858,9 @@ public class SOutput
  *
  **************************************************************************/
 
-    public Object close(SObjFunction obj,
-                        SContext     context,
-                        Object[]     args)
+    public Object close(final SObjFunction obj,
+                        final SContext     context,
+                        final Object[]     args)
         throws SIOException{
 
         try {
@@ -930,7 +930,7 @@ public class SOutput
  *
  **************************************************************************/
 
-    public static SOutput newInstance(SContext context)
+    public static SOutput newInstance(final SContext context)
         throws STeaException {
 
         STosObj output = STosUtil.newInstance(CLASS_NAME_S, context);
@@ -943,9 +943,6 @@ public class SOutput
     }
 
 
-}
-
-
 
 
 
@@ -956,29 +953,14 @@ public class SOutput
  *
  **************************************************************************/
 
-class SFormaterOutput
-    extends SFormater {
+    private static final class SFormaterOutput
+        extends SFormater {
 
 
 
 
 
-    private PrintWriter _out = null;
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    public void setOutput(PrintWriter out) {
-
-        _out = out;
-    }
+        private PrintWriter _out = null;
 
 
 
@@ -990,10 +972,10 @@ class SFormaterOutput
  *
  **************************************************************************/
 
-    public void append(String s) {
+        public void setOutput(final PrintWriter out) {
 
-        _out.print(s);
-    }
+            _out = out;
+        }
 
 
 
@@ -1005,9 +987,27 @@ class SFormaterOutput
  *
  **************************************************************************/
 
-    public void append(char c) {
+        public void append(final String s) {
 
-        _out.print(c);
+            _out.print(s);
+        }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+        public void append(final char c) {
+
+            _out.print(c);
+        }
+
+
     }
 
 

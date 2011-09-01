@@ -50,7 +50,7 @@ import com.pdmfc.tea.util.SInputSourceFactory;
  *
  **************************************************************************/
 
-public class SUrlInput
+public final class SUrlInput
     extends SInput {
 
 
@@ -58,7 +58,8 @@ public class SUrlInput
 
       
     private static final String     CLASS_NAME   = "TUrlInput";
-    private static final SObjSymbol CLASS_NAME_S = SObjSymbol.addSymbol(CLASS_NAME);
+    private static final SObjSymbol CLASS_NAME_S =
+        SObjSymbol.addSymbol(CLASS_NAME);
 
 
 
@@ -72,7 +73,7 @@ public class SUrlInput
  *
  **************************************************************************/
 
-   public SUrlInput(STosClass myClass)
+   public SUrlInput(final STosClass myClass)
        throws STeaException {
 
        super(myClass);
@@ -110,9 +111,9 @@ public class SUrlInput
  *
  **************************************************************************/
 
-    public Object constructor(SObjFunction obj,
-                              SContext     context,
-                              Object[]     args)
+    public Object constructor(final SObjFunction obj,
+                              final SContext     context,
+                              final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -163,14 +164,14 @@ public class SUrlInput
  *
  **************************************************************************/
 
-    public static SUrlInput newInstance(SContext context,
-                                         Object[]  args)
+    public static SUrlInput newInstance(final SContext context,
+                                        final Object[] args)
         throws STeaException {
 
         STosObj input = STosUtil.newInstance(CLASS_NAME_S, context, args);
 
         if ( !(input instanceof SUrlInput) ) {
-            throw new SRuntimeException("invalid " + CLASS_NAME + " class");
+            throw new SRuntimeException("invalid ''{0}'' class", CLASS_NAME);
         }
 
         return (SUrlInput)input;

@@ -360,7 +360,10 @@ one described at "00README-developers.txt".
         </configuration>
       </plugin>
 
-      <!-- See http://mojo.codehaus.org/cobertura-maven-plugin/ for
+      <!-- Make sure the the maven-surefire-plugin runs the tests in a
+           distinct JVM, otherwise Cobertura will not use the
+           instrumented classes. See
+           http://mojo.codehaus.org/cobertura-maven-plugin/ for
            documentation. -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>

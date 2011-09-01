@@ -168,9 +168,9 @@ public final class SModuleIO
 
         context.newVar("file-exists?",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionFileExists(func, context, args);
                            }
@@ -242,7 +242,7 @@ public final class SModuleIO
                                               final SContext     context,
                                               final Object[]     args)
                                throws STeaException {
-                               return functionSplitPathList(func, context, args);
+                               return functionSplitPathList(func,context,args);
                            }
                        });
 
@@ -458,8 +458,12 @@ public final class SModuleIO
         } catch (IOException e) {
             throw e;
         } finally {
-            if (in != null) try { in.close(); } catch (Exception e2) {}
-            if (out != null) try { out.close(); } catch (Exception e2) {}
+            if (in != null) {
+                try { in.close(); } catch (Exception e2) {/* */}
+            }
+            if (out != null) {
+                try { out.close(); } catch (Exception e2) {/* */}
+            }
         }
     }
 
@@ -570,8 +574,8 @@ public final class SModuleIO
         String pathName   = SArgs.getString(args, 1);
         String baseName   = (new File(pathName)).getName();
         int    indexOfDot = baseName.lastIndexOf('.');
-        String extension  = (indexOfDot<0) ?
-            "" : baseName.substring(indexOfDot+1);
+        String extension  =
+            (indexOfDot<0) ? "" : baseName.substring(indexOfDot+1);
 
         return extension;
     }
@@ -1099,8 +1103,10 @@ public final class SModuleIO
             throw new SNumArgException(args, "file-name");
         }
 
-        return (new File(SArgs.getString(args,1))).delete() ?
-            Boolean.TRUE : Boolean.FALSE;
+        return
+            (new File(SArgs.getString(args,1))).delete()
+            ? Boolean.TRUE
+            : Boolean.FALSE;
     }
 
 

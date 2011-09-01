@@ -98,7 +98,7 @@ import com.pdmfc.tea.runtime.SRuntimeException;
  *
  **************************************************************************/
 
-class SFunctionImport
+final class SFunctionImport
     extends Object
     implements SObjFunction {
 
@@ -129,9 +129,6 @@ class SFunctionImport
     private HashMap<String,ImportItem> _itemsByFullPath =
         new HashMap<String,ImportItem>();
 
-    // Used to compile the code in the imported files.
-    private SCompiler _compiler = new SCompiler();
-
 
 
 
@@ -142,7 +139,7 @@ class SFunctionImport
  *
  **************************************************************************/
 
-    public SFunctionImport(SContext rootContext) {
+    public SFunctionImport(final SContext rootContext) {
 
         _rootContext = rootContext;
     }
@@ -162,9 +159,9 @@ class SFunctionImport
  *
  **************************************************************************/
 
-    public Object exec(SObjFunction func,
-                       SContext     context,
-                       Object[]     args)
+    public Object exec(final SObjFunction func,
+                       final SContext     context,
+                       final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -200,8 +197,8 @@ class SFunctionImport
  *
  **************************************************************************/
 
-    private Object searchAndImport(SContext context,
-                                   String   fileName)
+    private Object searchAndImport(final SContext context,
+                                   final String   fileName)
         throws STeaException {
 
         Object   result  = null;
@@ -231,7 +228,8 @@ class SFunctionImport
                 continue;
             }
 
-            ImportItem item     = new ImportItem(baseDir, fileName);
+            ImportItem item     =
+                new ImportItem(_rootContext, baseDir, fileName);
             String     fullPath = item.getFullPath();
             ImportItem prevItem = _itemsByFullPath.get(fullPath);
 
@@ -244,12 +242,10 @@ class SFunctionImport
                 // distinct names.  Ex: filename may be
                 // "html/HtmlP.tea" or just "HtmlP.tea" but the full
                 // path is the same.
-                //System.out.println("import preItem!=null "+fileName+" fullpath="+fullPath+" prevItemFp="+prevItem.getFullPath());
                 _itemsByPath.put(fileName, prevItem);
                 result = prevItem.performImport();
                 break;
             } else {
-                //System.out.println("import preItem==null "+fileName+" fullpath="+fullPath);
                 // Add the item to both hashtables right now to
                 // prevent an eventual import infinite recursion.
                 _itemsByPath.put(fileName, item);
@@ -281,18 +277,22 @@ class SFunctionImport
  *
  **************************************************************************/
 
-    private class ImportItem
+    private static final class ImportItem
         extends Object {
 
 
 
 
 
+        private SContext _rootContext = null;
         private String  _importPath     = null;
         private String  _fullPath       = null;
         private long    _lastImportTime = 0;
         private boolean _isFile         = false;
         private File    _file           = null;
+
+        // Used to compile the code in the imported files.
+        private SCompiler _compiler = new SCompiler();
 
 
 
@@ -303,15 +303,18 @@ class SFunctionImport
  *
  **************************************************************************/
 
-        public ImportItem(String baseDir,
-                          String importPath) {
+        public ImportItem(final SContext rootContext,
+                          final String   baseDir,
+                          final String   importPath) {
 
-            _importPath = importPath;
-            _fullPath   = baseDir + "/" + importPath;
-            _isFile     = 
-                baseDir.startsWith("/") ||
-                baseDir.startsWith(".") ||
-                ( (baseDir.length()>1) && (baseDir.charAt(1)==':') );
+            _rootContext = rootContext;
+            _importPath  = importPath;
+            _fullPath    = baseDir + "/" + importPath;
+            _isFile      = 
+                baseDir.startsWith("/")
+                || baseDir.startsWith(".")
+                || ( (baseDir.length()>1) && (baseDir.charAt(1)==':') );
+
             if ( _isFile ) {
                 _file = new File(_fullPath);
             }
@@ -364,9 +367,9 @@ class SFunctionImport
                 // eventual infinite recursion (if this file is
                 // imported again while executing).
                 _lastImportTime = 
-                    _isFile ? 
-                    _file.lastModified() :
-                    System.currentTimeMillis();
+                    _isFile
+                    ? _file.lastModified()
+                    : System.currentTimeMillis();
 
                 SContext execContext = _rootContext.newChild();
                 
