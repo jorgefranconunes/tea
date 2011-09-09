@@ -1527,8 +1527,8 @@ public final class SModuleLang
             throw new SNumArgException(args, "[exit-code]");
         }
 
-        Integer retVal = (args.length==1) ?
-            SModuleMath.ZERO : SArgs.getInt(args,1);
+        Integer retVal =
+            (args.length==1) ? SModuleMath.ZERO : SArgs.getInt(args,1);
         
         throw new SExitException(retVal);
     }
@@ -1822,9 +1822,9 @@ public final class SModuleLang
         }
 
         return
-            type.isAssignableFrom(args[1].getClass()) ?
-            Boolean.TRUE :
-            Boolean.FALSE;
+            type.isAssignableFrom(args[1].getClass())
+            ? Boolean.TRUE
+            : Boolean.FALSE;
     }
 
 
@@ -3337,11 +3337,11 @@ public final class SModuleLang
         long      startTime;
         long      endTime;
 
-        startTime = System. currentTimeMillis();
+        startTime = System.currentTimeMillis();
         for ( int i=0; i<count; i++ ) {
             block.exec(childContext);
         }
-        endTime = System. currentTimeMillis();
+        endTime = System.currentTimeMillis();
 
         return Integer.valueOf((int)(endTime-startTime));
     }

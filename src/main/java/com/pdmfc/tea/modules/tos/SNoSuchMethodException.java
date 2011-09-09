@@ -1,18 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2001/05/12
- * Created. (jfn)
+ * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -32,7 +20,7 @@ import com.pdmfc.tea.runtime.SRuntimeException;
  *
  **************************************************************************/
 
-public class SNoSuchMethodException
+public final class SNoSuchMethodException
     extends SRuntimeException {
 
 
@@ -46,8 +34,8 @@ public class SNoSuchMethodException
  *
  **************************************************************************/
 
-   public SNoSuchMethodException(SObjSymbol symbol,
-                                 String     className) {
+   public SNoSuchMethodException(final SObjSymbol symbol,
+                                 final String     className) {
 
       super("class "
             + ((className==null) ? "" : ("'" + className + "' "))

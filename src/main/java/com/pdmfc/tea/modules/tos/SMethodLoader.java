@@ -22,13 +22,13 @@ import com.pdmfc.tea.runtime.SRuntimeException;
  * This class implements a TOS method that when invoked for the first
  * time loads and creates an instance of another class. That instance
  * will then replace the TOS method that had just been invoked. The
- * loaded class must be derived from <TT>SObjFunction</TT> and it must
- * represent a TOS method for the same TOS class the
- * <TT>SMethodLoader</TT> had been a method of.
+ * loaded class must be derived from <code>SObjFunction</code> and it
+ * must represent a TOS method for the same TOS class the
+ * <code>SMethodLoader</code> had been a method of.
  *
  **************************************************************************/
 
-public class SMethodLoader
+public final class SMethodLoader
     extends Object
     implements SObjFunction {
 
@@ -45,13 +45,12 @@ public class SMethodLoader
 
 /**************************************************************************
  *
- * @param className
- *    The name of the class to load the first time the <TT>exec()</TT>
- *    method is invoked.
+ * @param className The name of the class to load the first time the
+ *    <code>exec()</code> method is invoked.
  *
  **************************************************************************/
 
-   public SMethodLoader(String className) {
+   public SMethodLoader(final String className) {
 
       _className = className;
       _method    = null;
@@ -63,35 +62,33 @@ public class SMethodLoader
 
 /**************************************************************************
  *
- * This method is supposed to be called with <TT>args</TT> having at
- * least one element.
+ * This method is supposed to be called with <code>args</code> having
+ * at least one element.
  *
- * <P>Argument <TT>obj</TT> is supposed to be an
- * <TT>STosObj</TT>. Argument <TT>args[1]</TT> is supposed to be a
- * symbol naming the called method. The method named after
- * <TT>args[1]</TT> of the class of the <TT>obj</TT> TOS object is
- * replaced by an instance of the classe whose name was passed to the
- * constructor.
+ * <P>Argument <code>obj</code> is supposed to be an
+ * <code>STosObj</code>. Argument <code>args[1]</code> is supposed to
+ * be a symbol naming the called method. The method named after
+ * <code>args[1]</code> of the class of the <code>obj</code> TOS
+ * object is replaced by an instance of the classe whose name was
+ * passed to the constructor.
  *
- * @param obj
- *    The <TT>SObjProc</TT> that led to execute this method.
+ * @param obj The <code>SObjProc</code> that led to execute this
+ * method.
  *
- * @param context
- *    The intepreter context where the Tea function was called.
+ * @param context The intepreter context where the Tea function was
+ * called.
  *
- * @param args
- *    The arguments the function was called with.
+ * @param args The arguments the function was called with.
  *
- * @exception STeaException
- *   Thrown if there were problems instantianting the new
- *   <TT>SObjProc</TT> or while invoking the <TT>exec()</TT> method
- *   for that object.
+ * @exception STeaException Thrown if there were problems
+ * instantianting the new <code>SObjProc</code> or while invoking the
+ * <code>exec()</code> method for that object.
  *
  **************************************************************************/
 
-   public Object exec(SObjFunction obj,
-                      SContext     context,
-                      Object[]     args)
+   public Object exec(final SObjFunction obj,
+                      final SContext     context,
+                      final Object[]     args)
       throws STeaException {
 
       if ( _method != null ) {
@@ -115,18 +112,19 @@ public class SMethodLoader
 /**************************************************************************
  *
  * Instantiates an object of the class whose name is given as
- * argument. That class must be derived from the <TT>SObjFunction</TT>
- * class. The constructor with no arguments is invoked.
+ * argument. That class must be derived from the
+ * <code>SObjFunction</code> class. The constructor with no arguments
+ * is invoked.
  *
- * @param className
- *    The name of the class of the object to be instantiated.
+ * @param className The name of the class of the object to be
+ * instantiated.
  *
- * @return
- *    A newly created object of the class named <TT>className</TT>.
+ * @return A newly created object of the class named
+ * <code>className</code>.
  *
  **************************************************************************/
 
-   private static SObjFunction instantiateProc(String className)
+   private static SObjFunction instantiateProc(final String className)
       throws SRuntimeException {
 
       SObjFunction proc = null;
@@ -139,7 +137,8 @@ public class SMethodLoader
       } catch (InstantiationException e2) {
          msg = "failed instantiation for object of class '" + className + "'";
       } catch (IllegalAccessException e3) {
-         msg = "class '" + className + "' or its initializer are not accessible";
+         msg = "class '" + className
+             + "' or its initializer are not accessible";
       } catch (ClassCastException e4) {
          msg = "class '" + className + "' does not implement SObjFunction";
       } catch (NoSuchMethodError e5) {

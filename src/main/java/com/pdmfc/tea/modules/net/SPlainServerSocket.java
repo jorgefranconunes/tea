@@ -34,7 +34,7 @@ import com.pdmfc.tea.runtime.SRuntimeException;
  *
  **************************************************************************/
 
-public class SPlainServerSocket
+public final class SPlainServerSocket
     extends STosObj {
 
 
@@ -45,7 +45,8 @@ public class SPlainServerSocket
     private ServerSocket      _serverSocket = null;
 
     private static final String     CLASS_NAME   = "TServerSocketPlain";
-    private static final SObjSymbol CLASS_NAME_S = SObjSymbol.addSymbol(CLASS_NAME);
+    private static final SObjSymbol CLASS_NAME_S =
+        SObjSymbol.addSymbol(CLASS_NAME);
 
 
 
@@ -77,7 +78,7 @@ public class SPlainServerSocket
  *
  **************************************************************************/
 
-    public SPlainServerSocket(STosClass myClass)
+    public SPlainServerSocket(final STosClass myClass)
         throws STeaException {
 
         super(myClass);
@@ -113,9 +114,9 @@ public class SPlainServerSocket
  *
  **************************************************************************/
 
-    public Object constructor(SObjFunction obj,
-                              SContext     context,
-                              Object[]     args)
+    public Object constructor(final SObjFunction obj,
+                              final SContext     context,
+                              final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -157,9 +158,9 @@ public class SPlainServerSocket
  *
  **************************************************************************/
 
-    public Object accept(SObjFunction obj,
-                         SContext     context,
-                         Object[]     args)
+    public Object accept(final SObjFunction obj,
+                         final SContext     context,
+                         final Object[]     args)
         throws STeaException {
 
         if ( _serverSocket == null ) {
@@ -214,9 +215,9 @@ public class SPlainServerSocket
  *
  **************************************************************************/
 
-    public Object close(SObjFunction obj,
-                        SContext     context,
-                        Object[]     args)
+    public Object close(final SObjFunction obj,
+                        final SContext     context,
+                        final Object[]     args)
         throws STeaException {
 
         try {
@@ -258,14 +259,14 @@ public class SPlainServerSocket
  *
  **************************************************************************/
 
-    public static Object newInstance(SContext context,
-                                     Object[] args)
+    public static Object newInstance(final SContext context,
+                                     final Object[] args)
         throws STeaException {
 
         STosObj servSock = STosUtil.newInstance(CLASS_NAME_S, context, args);
 
         if ( !(servSock instanceof SPlainServerSocket) ) {
-            throw new SRuntimeException("invalid " + CLASS_NAME + " class");
+            throw new SRuntimeException("invalid {0} class", CLASS_NAME);
         }
 
         return servSock;

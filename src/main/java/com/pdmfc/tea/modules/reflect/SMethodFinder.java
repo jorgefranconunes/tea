@@ -546,7 +546,7 @@ final class SMethodFinder
             _score = aScore;
         }
 
-        public int compareTo (final Object anObject) {
+        public int compareTo(final Object anObject) {
             MethodScore aMethodScore = (MethodScore) anObject;
             return _score - aMethodScore._score;
         }
@@ -589,15 +589,15 @@ final class SMethodFinder
 
 /***************************************************************************
  *
- * Used to store the keys for the Class distance cache
+ * Used to store the keys for the Class distance cache.
  *
  ***************************************************************************/
 
     private static final class ClassPair
         extends Object {
 
-        public  Class<?> _given = null;
-        public  Class<?> _known = null;
+        private  Class<?> _given = null;
+        private  Class<?> _known = null;
         private int      _hash  = 0;
 
 

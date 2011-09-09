@@ -1,18 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2001/05/12
- * Created. (jfn)
+ * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -33,7 +21,7 @@ import com.pdmfc.tea.runtime.SObjNull;
  *
  **************************************************************************/
 
-class SEmptyMethod
+final class SEmptyMethod
     extends Object
     implements SObjFunction {
 
@@ -53,9 +41,9 @@ class SEmptyMethod
  *
  **************************************************************************/
 
-      public Object exec(SObjFunction obj,
-                         SContext     context,
-                         Object[]     args)
+      public Object exec(final SObjFunction obj,
+                         final SContext     context,
+                         final Object[]     args)
          throws STeaException {
 
          return SObjNull.NULL;
@@ -67,8 +55,8 @@ class SEmptyMethod
 
 /**************************************************************************
  *
- * @return
- *        Always returns the same instance of <TT>SEmptyMethod</TT>.
+ * @return Always returns the same instance of
+ * <code>SEmptyMethod</code>.
  *
  **************************************************************************/
 

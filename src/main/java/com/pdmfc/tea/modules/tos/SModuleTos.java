@@ -53,7 +53,7 @@ import com.pdmfc.tea.util.SList;
  *
  **************************************************************************/
 
-public class SModuleTos
+public final class SModuleTos
     extends Object
     implements SModule {
 
@@ -79,6 +79,8 @@ public class SModuleTos
  **************************************************************************/
 
    public SModuleTos() {
+
+       // Nothing to do.
    }
 
 
@@ -87,20 +89,20 @@ public class SModuleTos
 
 /**************************************************************************
  *
- * 
+ * {@inheritDoc}
  *
  **************************************************************************/
 
-    public void init(SContext context)
+    public void init(final SContext context)
         throws STeaException {
 
         _globalContext = context;
 
         context.newVar("class",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionClass(func, context, args);
                            }
@@ -108,9 +110,9 @@ public class SModuleTos
 
         context.newVar("new-class",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionNewClass(func, context, args);
                            }
@@ -118,9 +120,9 @@ public class SModuleTos
 
         context.newVar("new",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionNew(func, context, args);
                            }
@@ -128,9 +130,9 @@ public class SModuleTos
 
         context.newVar("method",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionMethod(func, context, args);
                            }
@@ -138,9 +140,9 @@ public class SModuleTos
 
         context.newVar("load-class",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionLoadClass(func, context, args);
                            }
@@ -148,9 +150,9 @@ public class SModuleTos
 
         context.newVar("class-base-of",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionBaseOf(func, context, args);
                            }
@@ -158,9 +160,9 @@ public class SModuleTos
 
         context.newVar("class-of",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionClassOf(func, context, args);
                            }
@@ -168,9 +170,9 @@ public class SModuleTos
 
         context.newVar("class-is-a",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionIsA(func,
                                                   context,
@@ -180,9 +182,9 @@ public class SModuleTos
 
         context.newVar("class-get-name",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionGetName(func,
                                                       context,
@@ -192,9 +194,9 @@ public class SModuleTos
 
         context.newVar("tos-obj?",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionIsTosObj(func,
                                                        context,
@@ -209,7 +211,7 @@ public class SModuleTos
 
 /**************************************************************************
  *
- * 
+ * {@inheritDoc}
  *
  **************************************************************************/
 
@@ -224,7 +226,7 @@ public class SModuleTos
 
 /**************************************************************************
  *
- * 
+ * {@inheritDoc}
  *
  **************************************************************************/
 
@@ -239,7 +241,7 @@ public class SModuleTos
 
 /**************************************************************************
  *
- * 
+ * {@inheritDoc}
  *
  **************************************************************************/
 
@@ -300,9 +302,9 @@ public class SModuleTos
  *
  **************************************************************************/
 
-    private Object functionClass(SObjFunction func,
-                                 SContext     context,
-                                 Object[]     args)
+    private Object functionClass(final SObjFunction func,
+                                 final SContext     context,
+                                 final Object[]     args)
         throws STeaException {
 
         if ( (args.length<3) || (args.length>4) ) {
@@ -375,9 +377,9 @@ public class SModuleTos
  *
  **************************************************************************/
 
-    private Object functionNewClass(SObjFunction func,
-                                    SContext     context,
-                                    Object[]     args)
+    private Object functionNewClass(final SObjFunction func,
+                                    final SContext     context,
+                                    final Object[]     args)
         throws STeaException {
 
         if ( (args.length<2) || (args.length>3) ) {
@@ -456,9 +458,9 @@ public class SModuleTos
  *
  **************************************************************************/
 
-    private static Object functionNew(SObjFunction func,
-                                      SContext     context,
-                                      Object[]     args)
+    private static Object functionNew(final SObjFunction func,
+                                      final SContext     context,
+                                      final Object[]     args)
         throws STeaException {
 
         if ( args.length < 2 ) {
@@ -515,9 +517,9 @@ public class SModuleTos
  * 
  **************************************************************************/
 
-    private static Object functionMethod(SObjFunction func,
-                                         SContext     context,
-                                         Object[]     args)
+    private static Object functionMethod(final SObjFunction func,
+                                         final SContext     context,
+                                         final Object[]     args)
         throws STeaException {
 
         if ( args.length != 5 ) {
@@ -563,8 +565,8 @@ public class SModuleTos
  *
  **************************************************************************/
 
-    private static void fixedArgsMethod(SContext context,
-                                        Object[] args)
+    private static void fixedArgsMethod(final SContext context,
+                                        final Object[] args)
         throws STeaException {
         
         STosClass    methodClass = STosUtil.getClass(context, args, 1);
@@ -587,7 +589,7 @@ public class SModuleTos
         STosMethod method =
             new STosMethod(methodClass, methodName, parameters, body);
 
-        if ( methodName != STosClass._constructName ) {
+        if ( methodName != STosClass.CONSTRUCTOR_NAME ) {
             methodClass.addMethod(methodName, method);
         } else {
             methodClass.addConstructor(method);
@@ -613,8 +615,8 @@ public class SModuleTos
  *
  **************************************************************************/
 
-    private static void varArgsMethod(SContext context,
-                                      Object[] args)
+    private static void varArgsMethod(final SContext context,
+                                      final Object[] args)
         throws STeaException {
 
         STosClass    methodClass = STosUtil.getClass(context, args, 1);
@@ -626,7 +628,7 @@ public class SModuleTos
                                                         symbol,
                                                         body);
 
-        if ( methodName != STosClass._constructName ) {
+        if ( methodName != STosClass.CONSTRUCTOR_NAME ) {
             methodClass.addMethod(methodName, method);
         } else {
             methodClass.addConstructor(method);
@@ -666,9 +668,9 @@ public class SModuleTos
  *
  **************************************************************************/
 
-    private Object functionLoadClass(SObjFunction func,
-                                     SContext     context,
-                                     Object[]     args)
+    private Object functionLoadClass(final SObjFunction func,
+                                     final SContext     context,
+                                     final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -749,9 +751,9 @@ public class SModuleTos
  *
  **************************************************************************/
 
-    private static Object functionBaseOf(SObjFunction func,
-                                         SContext     context,
-                                         Object[]     args)
+    private static Object functionBaseOf(final SObjFunction func,
+                                         final SContext     context,
+                                         final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -797,9 +799,9 @@ public class SModuleTos
  *
  **************************************************************************/
 
-    private static Object functionClassOf(SObjFunction func,
-                                          SContext     context,
-                                          Object[]     args)
+    private static Object functionClassOf(final SObjFunction func,
+                                          final SContext     context,
+                                          final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -860,9 +862,9 @@ public class SModuleTos
  *
  **************************************************************************/
 
-    private static Object functionIsA(SObjFunction func,
-                                      SContext     context,
-                                      Object[]     args)
+    private static Object functionIsA(final SObjFunction func,
+                                      final SContext     context,
+                                      final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -917,9 +919,9 @@ public class SModuleTos
  *
  **************************************************************************/
 
-    private static Object functionGetName(SObjFunction func,
-                                          SContext     context,
-                                          Object[]     args)
+    private static Object functionGetName(final SObjFunction func,
+                                          final SContext     context,
+                                          final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -964,9 +966,9 @@ public class SModuleTos
  *
  **************************************************************************/
 
-    private static Object functionIsTosObj(SObjFunction func,
-                                           SContext     context,
-                                           Object[]     args)
+    private static Object functionIsTosObj(final SObjFunction func,
+                                           final SContext     context,
+                                           final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {

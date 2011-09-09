@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -27,7 +27,7 @@ import com.pdmfc.tea.runtime.SRuntimeException;
  *
  **************************************************************************/
 
-public class SJavaClass
+public final class SJavaClass
     extends STosClass {
 
 
@@ -53,7 +53,7 @@ public class SJavaClass
  *
  **************************************************************************/
 
-    public SJavaClass(String javaClassName)
+    public SJavaClass(final String javaClassName)
         throws SRuntimeException {
 
         this(getJavaClass(javaClassName));
@@ -69,7 +69,7 @@ public class SJavaClass
  *
  **************************************************************************/
 
-    public SJavaClass(Class javaClass)
+    public SJavaClass(final Class javaClass)
         throws SRuntimeException {
 
         _javaClass     = javaClass;
@@ -94,7 +94,7 @@ public class SJavaClass
  *
  **************************************************************************/
 
-    private static Class getJavaClass(String javaClassName)
+    private static Class getJavaClass(final String javaClassName)
         throws SRuntimeException {
 
         Class javaClass = null;
@@ -128,7 +128,7 @@ public class SJavaClass
  *
  **************************************************************************/
 
-    private static Constructor getJavaClassConstructor(Class<?> javaClass)
+    private static Constructor getJavaClassConstructor(final Class<?> javaClass)
         throws SRuntimeException {
 
         Constructor ctor = null;
@@ -136,11 +136,11 @@ public class SJavaClass
         try {
             ctor = javaClass.getConstructor(CTOR_TYPES);
         } catch (NoSuchMethodException e1) {
-            throw new SRuntimeException("missing constuctor in Java class "
-                                        + javaClass.getName());
+            String msg = "missing constuctor in class ''{0}''";
+            throw new SRuntimeException(msg, javaClass.getName());
         } catch (SecurityException e2) {
-            throw new SRuntimeException("no access to constuctor for Java class "
-                                        + javaClass.getName());
+            String msg = "no access to constuctor of class ''{0}''";
+            throw new SRuntimeException(msg, javaClass.getName());
         }
 
         return ctor;
@@ -156,7 +156,7 @@ public class SJavaClass
  *
  **************************************************************************/
 
-    private void createMethods(Class javaClass)
+    private void createMethods(final Class javaClass)
         throws SRuntimeException {
 
         Class superClass = javaClass.getSuperclass();
@@ -178,7 +178,7 @@ public class SJavaClass
  *
  **************************************************************************/
 
-    private void createDeclaredMethods(Class javaClass)
+    private void createDeclaredMethods(final Class javaClass)
         throws SRuntimeException {
 
         Method[] methods = getJavaClassMethods(javaClass);
@@ -215,7 +215,7 @@ public class SJavaClass
  *
  **************************************************************************/
 
-    private static Method[] getJavaClassMethods(Class javaClass)
+    private static Method[] getJavaClassMethods(final Class javaClass)
         throws SRuntimeException {
 
         Method[] methods = null;
@@ -243,7 +243,7 @@ public class SJavaClass
  *
  **************************************************************************/
 
-    private void setClassName(Class<?> javaClass) {
+    private void setClassName(final Class<?> javaClass) {
 
         Method getNameMethod = null;
         String tosClassName  = null;
@@ -262,10 +262,15 @@ public class SJavaClass
                 tosClassName =
                     (String)getNameMethod.invoke(null, GET_NAME_METHOD_ARGS);
             } catch (IllegalAccessException e1) {
+                // The same as not existing the named method.
             } catch (IllegalArgumentException e2) {
+                // The same as not existing the named method.
             } catch (InvocationTargetException e3) {
+                // The same as not existing the named method.
             } catch (NullPointerException e4) {
+                // The same as not existing the named method.
             } catch (ClassCastException e5) {
+                // The same as not existing the named method.
             }
         }
 
@@ -325,7 +330,7 @@ public class SJavaClass
  *
  **************************************************************************/
 
-    private static void internalError(Throwable error)
+    private static void internalError(final Throwable error)
         throws SRuntimeException {
 
         throw new SRuntimeException("internal error - "

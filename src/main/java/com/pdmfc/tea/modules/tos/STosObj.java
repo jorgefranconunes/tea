@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -69,18 +69,18 @@ public class STosObj
  *
  **************************************************************************/
 
-   public STosObj(STosClass theClass)
-         throws STeaException {
+    public STosObj(final STosClass theClass)
+        throws STeaException {
 
-      _selfObj = this;
-      _myClass = theClass;
-      _members = null;
-      _level   = theClass.level();
+        _selfObj = this;
+        _myClass = theClass;
+        _members = null;
+        _level   = theClass.level();
 
-      STosClass base = _myClass.getSuperClass();
+        STosClass base = _myClass.getSuperClass();
 
-      _superObj = (base==null) ? null : base.newInstance();
-   }
+        _superObj = (base==null) ? null : base.newInstance();
+    }
 
 
 
@@ -97,27 +97,27 @@ public class STosObj
  *
  **************************************************************************/
 
-   public void init(SContext context,
-                    Object   args[])
-         throws STeaException {
+    public void init(final SContext context,
+                     final Object   args[])
+        throws STeaException {
 
-      SObjFunction constructor = _myClass.getConstructor();
+        SObjFunction constructor = _myClass.getConstructor();
 
-      _members         = new SMemberSet[_level+1];
-      _members[_level] = instanciateMembers();
-      _parts           = new STosObj[_level+1];
-      _parts[_level]   = this;
+        _members         = new SMemberSet[_level+1];
+        _members[_level] = instanciateMembers();
+        _parts           = new STosObj[_level+1];
+        _parts[_level]   = this;
 
-      if ( _superObj != null ) {
-         _superObj.init(_selfObj, _members, _parts);
-      }
-      // WARNING: No checking should be needed for "context" and "args".
-      // CHECK THE CLIENT CODE!!!
-      if ( (context!=null) && (args!=null) && (constructor!=null) ) {
-         args[0] = this;
-         constructor.exec(_selfObj, context, args);
-      }
-   }
+        if ( _superObj != null ) {
+            _superObj.init(_selfObj, _members, _parts);
+        }
+        // WARNING: No checking should be needed for "context" and
+        // "args".  CHECK THE CLIENT CODE!!!
+        if ( (context!=null) && (args!=null) && (constructor!=null) ) {
+            args[0] = this;
+            constructor.exec(_selfObj, context, args);
+        }
+    }
 
 
 
@@ -136,20 +136,20 @@ public class STosObj
  *
  **************************************************************************/
 
-   private void init(STosObj      selfObj,
-                     SMemberSet[] members,
-                     STosObj[]    parts) {
+    private void init(final STosObj      selfObj,
+                      final SMemberSet[] members,
+                      final STosObj[]    parts) {
 
-      _selfObj = selfObj;
-      _members = members;
-      _members[_level] = instanciateMembers();
-      _parts = parts;
-      _parts[_level] = this;
+        _selfObj = selfObj;
+        _members = members;
+        _members[_level] = instanciateMembers();
+        _parts = parts;
+        _parts[_level] = this;
 
-      if ( _superObj != null ) {
-         _superObj.init(selfObj, members, parts);
-      }
-   }
+        if ( _superObj != null ) {
+            _superObj.init(selfObj, members, parts);
+        }
+    }
 
 
 
@@ -164,18 +164,18 @@ public class STosObj
  *
  **************************************************************************/
 
-   private SMemberSet instanciateMembers() {
+    private SMemberSet instanciateMembers() {
 
-      SMemberSet members = new SMemberSet();
-      SListNode node = _myClass.memberNames().head(); 
+        SMemberSet members = new SMemberSet();
+        SListNode  node    = _myClass.memberNames().head(); 
 
-      while ( node != null ) {
-                members.newVar((SObjSymbol)node._element, SObjNull.NULL);
-          node = node._next;
-      }
+        while ( node != null ) {
+            members.newVar((SObjSymbol)node._element, SObjNull.NULL);
+            node = node._next;
+        }
 
-      return members;
-   }
+        return members;
+    }
 
 
 
@@ -189,10 +189,10 @@ public class STosObj
  *
  **************************************************************************/
 
-   public STosObj selfObj() {
+    public STosObj selfObj() {
 
-      return _selfObj;
-   }
+        return _selfObj;
+    }
 
 
 
@@ -206,10 +206,10 @@ public class STosObj
  *
  **************************************************************************/
 
-   SContext members(int level) {
+    SContext members(final int level) {
 
-      return _members[level];
-   }
+        return _members[level];
+    }
 
 
 
@@ -225,10 +225,10 @@ public class STosObj
  *
  **************************************************************************/
 
-   public STosObj part(int level) {
+    public STosObj part(final int level) {
 
-      return _parts[level];
-   }
+        return _parts[level];
+    }
 
 
 
@@ -243,10 +243,10 @@ public class STosObj
  *
  **************************************************************************/
 
-      public STosClass getTosClass() {
+    public STosClass getTosClass() {
 
-         return _myClass;
-      }
+        return _myClass;
+    }
 
 
 
@@ -269,25 +269,26 @@ public class STosObj
  *
  * @return The object returned by the execution of the method.
  *
- * @exception STException Only thrown by the execution of the method.
+ * @exception STeaException Only thrown by the execution of the
+ * method.
  *
  **************************************************************************/
 
-   public Object exec(SObjFunction obj,
-                      SContext     context,
-                      Object[]     args)
-      throws STeaException {
+    public Object exec(final SObjFunction obj,
+                       final SContext     context,
+                       final Object[]     args)
+        throws STeaException {
 
-      if ( args.length < 2 ) {
-         return SObjNull.NULL;
-      }
+        if ( args.length < 2 ) {
+            return SObjNull.NULL;
+        }
 
-      SObjSymbol   methodName = SArgs.getSymbol(args, 1);
-      SObjFunction method     = _myClass.getMethod(methodName);
-      Object       result     = method.exec(obj, context, args);
-
-      return result;
-   }
+        SObjSymbol   methodName = SArgs.getSymbol(args, 1);
+        SObjFunction method     = _myClass.getMethod(methodName);
+        Object       result     = method.exec(obj, context, args);
+        
+        return result;
+    }
 
 
 
@@ -299,7 +300,7 @@ public class STosObj
  *
  **************************************************************************/
 
-    class SMemberSet
+    private static final class SMemberSet
         extends SContext {
 
 

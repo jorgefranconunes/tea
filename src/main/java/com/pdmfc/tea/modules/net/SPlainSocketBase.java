@@ -1,38 +1,19 @@
 /**************************************************************************
  *
- * Copyright (c) 2002 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2002/10/19
- * Created. (jfn)
+ * Copyright (c) 2002-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 package com.pdmfc.tea.modules.net;
 
-import java.io.IOException;
-import java.net.Socket;
-import java.net.UnknownHostException;
-
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.modules.net.SPlainSocketFactory;
-import com.pdmfc.tea.modules.net.SSocketFactory;
 import com.pdmfc.tea.modules.tos.STosClass;
-import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.tos.STosUtil;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SRuntimeException;
-import com.pdmfc.tea.runtime.STypes;
 
 
 
@@ -63,7 +44,7 @@ import com.pdmfc.tea.runtime.STypes;
  *
  **************************************************************************/
 
-public class SPlainSocketBase
+public final class SPlainSocketBase
     extends SSocketBase {
 
 
@@ -100,9 +81,9 @@ public class SPlainSocketBase
  *
  **************************************************************************/
 
-    public Object constructor(SObjFunction obj,
-                              SContext     context,
-                              Object[]     args)
+    public Object constructor(final SObjFunction obj,
+                              final SContext     context,
+                              final Object[]     args)
         throws STeaException {
 
         initialize(context);
@@ -234,13 +215,14 @@ public class SPlainSocketBase
  *
  **************************************************************************/
 
-    public static SPlainSocketBase newInstance(SContext context)
+    public static SPlainSocketBase newInstance(final SContext context)
         throws STeaException {
 
         SPlainSocketBase socket = null;
 
         try {
-            socket = (SPlainSocketBase)STosUtil.newInstance(CLASS_NAME_S, context);
+            socket =
+                (SPlainSocketBase)STosUtil.newInstance(CLASS_NAME_S, context);
         } catch (ClassCastException e) {
             String   msg     = "invalid \"{0}\" class";
             Object[] fmtArgs = { CLASS_NAME };

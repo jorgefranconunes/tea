@@ -574,7 +574,7 @@ public final class SModuleReflect
                     }
 
                     Object[] methodArgs = new Object[args.length - 1];
-                    for( int i=1, count=args.length; i<count; i++ ) {
+                    for ( int i=1, count=args.length; i<count; i++ ) {
                         methodArgs[i-1] = STeaJavaTypes.tea2Java(args[i]);
                     }
 

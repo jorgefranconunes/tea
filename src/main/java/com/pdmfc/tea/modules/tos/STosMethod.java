@@ -1,24 +1,10 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2001/05/12
- * Created. (jfn)
+ * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
 package com.pdmfc.tea.modules.tos;
-
-import java.util.Enumeration;
 
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.runtime.SContext;
@@ -41,7 +27,7 @@ import com.pdmfc.tea.runtime.SReturnException;
  *
  **************************************************************************/
 
-public class STosMethod
+public final class STosMethod
     extends Object
     implements SObjFunction {
 
@@ -56,8 +42,8 @@ public class STosMethod
 
     private int       _level;
 
-    private static final SObjSymbol _thisSymbol =SObjSymbol.addSymbol("this");
-    private static final SObjSymbol _superSymbol=SObjSymbol.addSymbol("super");
+    private static final SObjSymbol SYMBOL_THIS =SObjSymbol.addSymbol("this");
+    private static final SObjSymbol SYMBOL_SUPER=SObjSymbol.addSymbol("super");
 
 
 
@@ -79,10 +65,10 @@ public class STosMethod
  *
  **************************************************************************/
 
-   public STosMethod(STosClass    theClass,
-                     SObjSymbol   methodName,
-                     SObjSymbol[] argNames,
-                     SObjBlock    body) {
+   public STosMethod(final STosClass    theClass,
+                     final SObjSymbol   methodName,
+                     final SObjSymbol[] argNames,
+                     final SObjBlock    body) {
 
       _argNames = argNames;
       _body     = body;
@@ -114,9 +100,9 @@ public class STosMethod
  *
  **************************************************************************/
 
-    public Object exec(SObjFunction func,
-                       SContext     context,
-                       Object[]     args)
+    public Object exec(final SObjFunction func,
+                       final SContext     context,
+                       final Object[]     args)
         throws STeaException {
 
         if ( args.length != (_argNames.length+2) ) {
@@ -130,9 +116,9 @@ public class STosMethod
 
         // Initializes the "this" and "super", if aplicable, local
         // variables:
-        procContext.newVar(_thisSymbol, obj.selfObj());
+        procContext.newVar(SYMBOL_THIS, obj.selfObj());
         if ( _level > 0 ) {
-            procContext.newVar(_superSymbol, obj.part(_level-1));
+            procContext.newVar(SYMBOL_SUPER, obj.part(_level-1));
         }
 
         // Initializes the formal parameters with the actual values.

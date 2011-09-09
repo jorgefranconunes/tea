@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -27,7 +27,7 @@ import com.pdmfc.tea.runtime.SRuntimeException;
  *
  **************************************************************************/
 
-public class SJavaMethod
+public final class SJavaMethod
     extends Object
     implements SObjFunction {
 
@@ -55,17 +55,17 @@ public class SJavaMethod
  *
  **************************************************************************/
 
-    public SJavaMethod(Class<?> javaClass,
-                       String   javaMethodName) {
+    public SJavaMethod(final Class<?> javaClass,
+                       final String   javaMethodName) {
 
         try {
             _javaMethod = javaClass.getMethod(javaMethodName, PARAM_TYPES);
         } catch (NoSuchMethodException e1) {
-            _errorMsg = "Java class " + javaClass.getName() + 
-                " has no " + javaMethodName + " method";
+            _errorMsg = "Java class " + javaClass.getName()
+                + " has no " + javaMethodName + " method";
         } catch (SecurityException e2) {
-            _errorMsg = "Java class " + javaClass.getName() + 
-                " has no accessible " + javaMethodName + " method";
+            _errorMsg = "Java class " + javaClass.getName()
+                + " has no accessible " + javaMethodName + " method";
         }
     }
 
@@ -79,7 +79,7 @@ public class SJavaMethod
  *
  **************************************************************************/
 
-    public SJavaMethod(Method javaMethod) {
+    public SJavaMethod(final Method javaMethod) {
 
         _javaMethod = javaMethod;
     }
@@ -94,9 +94,9 @@ public class SJavaMethod
  *
  **************************************************************************/
 
-    public Object exec(SObjFunction obj,
-                       SContext     context,
-                       Object[]     args)
+    public Object exec(final SObjFunction obj,
+                       final SContext     context,
+                       final Object[]     args)
         throws STeaException {
 
         if ( _javaMethod == null ) {
@@ -135,7 +135,7 @@ public class SJavaMethod
  *
  **************************************************************************/
 
-    private void internalError(Throwable error)
+    private void internalError(final Throwable error)
         throws SRuntimeException {
 
         SRuntimeException rtError  =

@@ -1,18 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2001/05/12
- * Created. (jfn)
+ * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -35,19 +23,37 @@ import com.pdmfc.tea.runtime.STypes;
 
 /**************************************************************************
  *
- * This class implements some utility methods to be used by derived classes.
+ * This class implements some utility methods.
  *
  **************************************************************************/
 
-public class STosUtil
+public final class STosUtil
     extends Object {
 
 
 
 
 
-    /** The name of variable with the missing function callback action. */
-    public static final SObjSymbol CALLBACK_NAME = SObjSymbol.addSymbol("TEA_NOCLASS_CALLBACK");
+    /**
+     * The name of variable with the missing function callback action.
+     */
+    public static final SObjSymbol CALLBACK_NAME =
+        SObjSymbol.addSymbol("TEA_NOCLASS_CALLBACK");
+
+
+
+
+
+/**************************************************************************
+ *
+ * No instances of this class are to be created.
+ *
+ **************************************************************************/
+
+    private STosUtil() {
+
+        // Nothing to do.
+    }
 
 
 
@@ -67,14 +73,14 @@ public class STosUtil
  * @return The element at the <code>index</code> position of the
  *<code>args</code> array.
  *
- * @exception com.pdmfc.tea.runtime.STTypeException Throw if the
+ * @exception com.pdmfc.tea.runtime.STypeException Throw if the
  *element at the <code>index</code> position of the <code>args</code>
  *array is not an <code>STosObj</code>.
  *
  **************************************************************************/
 
-    public static STosObj getTosObj(Object[] args,
-                                    int      index)
+    public static STosObj getTosObj(final Object[] args,
+                                    final int      index)
         throws STypeException {
 
         try {
@@ -108,9 +114,9 @@ public class STosUtil
  *
  **************************************************************************/
 
-    public static STosClass getClass(SContext context,
-                                     Object[] args,
-                                     int      index)
+    public static STosClass getClass(final SContext context,
+                                     final Object[] args,
+                                     final int      index)
         throws STeaException {
 
         Object ref = args[index];
@@ -148,8 +154,8 @@ public class STosUtil
  *
  **************************************************************************/
 
-    public static STosClass getClass(SContext   context,
-                                     SObjSymbol className)
+    public static STosClass getClass(final SContext   context,
+                                     final SObjSymbol className)
         throws STeaException  {
 
         Object classObject;
@@ -182,8 +188,8 @@ public class STosUtil
  *
  **************************************************************************/
 
-    private static Object getClassWithEffort(SContext context,
-                                             SObjSymbol name)
+    private static Object getClassWithEffort(final SContext   context,
+                                             final SObjSymbol name)
         throws STeaException {
 
         SObjFunction callbackFunc   = null;
@@ -217,9 +223,9 @@ public class STosUtil
  *
  **************************************************************************/
 
-    public static STosObj newInstance(SObjSymbol className,
-                                      SContext   context,
-                                      Object[]   constructorArgs)
+    public static STosObj newInstance(final SObjSymbol className,
+                                      final SContext   context,
+                                      final Object[]   constructorArgs)
         throws STeaException {
 
         STosClass tosClass = getClass(context, className);
@@ -238,8 +244,8 @@ public class STosUtil
  *
  **************************************************************************/
 
-    public static STosObj newInstance(SObjSymbol className,
-                                      SContext   context) 
+    public static STosObj newInstance(final SObjSymbol className,
+                                      final SContext   context) 
         throws STeaException {
 
         Object[] constructorArgs = new Object[2];

@@ -14,18 +14,14 @@ import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.modules.io.SIOException;
 import com.pdmfc.tea.modules.io.SInput;
 import com.pdmfc.tea.modules.io.SOutput;
-import com.pdmfc.tea.modules.net.SPlainSocketFactory;
 import com.pdmfc.tea.modules.net.SSocketFactory;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
-import com.pdmfc.tea.modules.tos.STosUtil;
 import com.pdmfc.tea.runtime.SArgs;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SRuntimeException;
-import com.pdmfc.tea.runtime.STypes;
 
 
 
@@ -59,7 +55,7 @@ public class SSocketBase
  *
  **************************************************************************/
 
-    public SSocketBase(STosClass myClass)
+    public SSocketBase(final STosClass myClass)
         throws STeaException {
 
         super(myClass);
@@ -75,7 +71,7 @@ public class SSocketBase
  *
  **************************************************************************/
 
-    void initialize(SContext     context)
+    void initialize(final SContext context)
         throws STeaException {
 
         _input  = SInput.newInstance(context);
@@ -92,9 +88,9 @@ public class SSocketBase
  *
  **************************************************************************/
 
-    public Object connect(SObjFunction obj,
-                          SContext     context,
-                          Object[]     args)
+    public Object connect(final SObjFunction obj,
+                          final SContext     context,
+                          final Object[]     args)
         throws STeaException {
 
         if ( args.length != 4 ) {
@@ -138,7 +134,7 @@ public class SSocketBase
  *
  **************************************************************************/
 
-    public void connect(Socket sock)
+    public void connect(final Socket sock)
         throws SIOException {
 
         try {
@@ -169,9 +165,9 @@ public class SSocketBase
  *
  **************************************************************************/
 
-    public Object close(SObjFunction obj,
-                        SContext     context,
-                        Object[]     args)
+    public Object close(final SObjFunction obj,
+                        final SContext     context,
+                        final Object[]     args)
         throws STeaException {
 
         close();
@@ -234,9 +230,9 @@ public class SSocketBase
  *
  **************************************************************************/
 
-    public Object getInput(SObjFunction obj,
-                           SContext     context,
-                           Object[]     args)
+    public Object getInput(final SObjFunction obj,
+                           final SContext     context,
+                           final Object[]     args)
         throws STeaException {
 
         return _input;
@@ -252,9 +248,9 @@ public class SSocketBase
  *
  **************************************************************************/
 
-    public Object getOutput(SObjFunction obj,
-                            SContext     context,
-                            Object[]     args)
+    public Object getOutput(final SObjFunction obj,
+                            final SContext     context,
+                            final Object[]     args)
         throws STeaException {
 
         return _output;
@@ -270,8 +266,8 @@ public class SSocketBase
  *
  **************************************************************************/
 
-    private Socket createSocket(String host,
-                                int    port)
+    private Socket createSocket(final String host,
+                                final int    port)
         throws STeaException {
 
         if ( _sockFactory == null ) {
@@ -301,7 +297,7 @@ public class SSocketBase
  *
  **************************************************************************/
 
-    void setSocketFactory(SSocketFactory factory) {
+    void setSocketFactory(final SSocketFactory factory) {
 
         _sockFactory = factory;
     }

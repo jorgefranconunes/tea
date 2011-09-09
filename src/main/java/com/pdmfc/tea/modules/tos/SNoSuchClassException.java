@@ -1,18 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2001/05/12
- * Created. (jfn)
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -31,7 +19,7 @@ import com.pdmfc.tea.runtime.SRuntimeException;
  *
  **************************************************************************/
 
-public class SNoSuchClassException
+public final class SNoSuchClassException
     extends SRuntimeException {
 
 
@@ -43,7 +31,7 @@ public class SNoSuchClassException
  *
  **************************************************************************/
 
-   public SNoSuchClassException(SObjSymbol symbol) {
+   public SNoSuchClassException(final SObjSymbol symbol) {
 
        String msg = "class \"{0}\" has not been defined";
 
@@ -59,8 +47,8 @@ public class SNoSuchClassException
  *
  **************************************************************************/
 
-   public SNoSuchClassException(Object[]   args,
-                                SObjSymbol symbol) {
+   public SNoSuchClassException(final Object[]   args,
+                                final SObjSymbol symbol) {
 
        String msg = "class \"{0}\" has not been defined";
 

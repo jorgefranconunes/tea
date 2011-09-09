@@ -799,8 +799,8 @@ public class SStatement
 
         if ( !(closedObject instanceof SResultSet) ) {
             String msg =
-                "Expected a " + SResultSet.class +
-                " and got a " + closedObject.getClass();
+                "Expected a " + SResultSet.class
+                + " and got a " + closedObject.getClass();
             throw new IllegalArgumentException(msg);
         }
 

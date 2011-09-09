@@ -160,14 +160,14 @@ final class SReflectUtils
         try {
             result = doSetFieldValue(klass, obj, memberName, value);
         } catch (NoSuchFieldException e) {
-            throw new SRuntimeException("could not find member '" + 
-                                        memberName + "'");
+            throw new SRuntimeException("could not find member ''{0}''",
+                                        memberName);
         } catch (IllegalAccessException e) {
-            throw new SRuntimeException("cannot access member '" + 
-                                        memberName + "'");
+            throw new SRuntimeException("cannot access member ''{0}''",
+                                        memberName);
         } catch (NullPointerException e) {
-            throw new SRuntimeException("member '" + 
-                                        memberName + "' is not static");
+            throw new SRuntimeException("member ''{0}'' is not static",
+                                        memberName);
         }
 
         return result;

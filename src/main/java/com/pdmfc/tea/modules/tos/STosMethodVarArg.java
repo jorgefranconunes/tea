@@ -1,18 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2001/05/12
- * Created. (jfn)
+ * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -45,7 +33,7 @@ import com.pdmfc.tea.util.SListNode;
  *
  **************************************************************************/
 
-public class STosMethodVarArg
+public final class STosMethodVarArg
     extends Object
     implements SObjFunction {
 
@@ -61,8 +49,8 @@ public class STosMethodVarArg
     private int       _level;
     private SListNode _memberNames;
 
-    private static final SObjSymbol _thisSymbol =SObjSymbol.addSymbol("this");
-    private static final SObjSymbol _superSymbol=SObjSymbol.addSymbol("super");
+    private static final SObjSymbol SYMBOL_THIS =SObjSymbol.addSymbol("this");
+    private static final SObjSymbol SYMBOL_SUPER=SObjSymbol.addSymbol("super");
     
 
 
@@ -84,10 +72,10 @@ public class STosMethodVarArg
  *
  **************************************************************************/
 
-    public STosMethodVarArg(STosClass  theClass,
-                            SObjSymbol methodName,
-                            SObjSymbol argName,
-                            SObjBlock  body) {
+    public STosMethodVarArg(final STosClass  theClass,
+                            final SObjSymbol methodName,
+                            final SObjSymbol argName,
+                            final SObjBlock  body) {
 
         _argName    = argName;
         _body       = body;
@@ -119,9 +107,9 @@ public class STosMethodVarArg
  *
  **************************************************************************/
 
-    public Object exec(SObjFunction func,
-                       SContext     context,
-                       Object[]     args)
+    public Object exec(final SObjFunction func,
+                       final SContext     context,
+                       final Object[]     args)
         throws STeaException {
 
         STosObj   obj          = (STosObj)func;
@@ -130,9 +118,9 @@ public class STosMethodVarArg
         Object   result        = SObjNull.NULL;
 
         // Initializes the "this" and "super", if aplicable, local variables:
-        procContext.newVar(_thisSymbol, obj.selfObj());
+        procContext.newVar(SYMBOL_THIS, obj.selfObj());
         if ( _level > 0 ) {
-            procContext.newVar(_superSymbol, obj.part(_level-1));
+            procContext.newVar(SYMBOL_SUPER, obj.part(_level-1));
         }
 
         // Initializes the formal parameters with the actual values.

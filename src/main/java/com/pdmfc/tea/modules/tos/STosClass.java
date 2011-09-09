@@ -1,18 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2001/05/12
- * Created. (jfn)
+ * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -67,8 +55,10 @@ public class STosClass
 
     private static final String NAME_PREFIX = "Class";
 
-    // The constructor method name.
-    public static final SObjSymbol _constructName =
+    /**
+     * The constructor method name.
+     */
+    public static final SObjSymbol CONSTRUCTOR_NAME =
         SObjSymbol.addSymbol("constructor");
 
 
@@ -89,8 +79,8 @@ public class STosClass
  *
  **************************************************************************/
 
-    public STosClass(STosClass superClass,
-                     SList     members) {
+    public STosClass(final STosClass superClass,
+                     final SList     members) {
 
         _name        = null;
         _superClass  = superClass;
@@ -113,12 +103,12 @@ public class STosClass
  *    Array with the member names. It must be a <TT>Vector</TT> of
  *    <TT>SObjSymbol</TT> objects.
  *
- * @exception com.pdmfc.tea.modules.tos.STosNoSuchClassException
- *    Never thrown.
+ * @exception com.pdmfc.tea.modules.tos.SNoSuchClassException Never
+ * thrown.
  *
  **************************************************************************/
 
-   public STosClass(SList members) {
+   public STosClass(final SList members) {
 
       this(null, members);
    }
@@ -137,7 +127,7 @@ public class STosClass
  *
  **************************************************************************/
 
-   public STosClass(STosClass superClass) {
+   public STosClass(final STosClass superClass) {
 
       this(superClass, new SList());
    }
@@ -256,8 +246,8 @@ public class STosClass
  *
  **************************************************************************/
 
-   public STosObj newInstance(SContext context,
-                              Object[] args)
+   public STosObj newInstance(final SContext context,
+                              final Object[] args)
          throws STeaException {
 
       STosObj obj = newInstance();
@@ -286,8 +276,8 @@ public class STosClass
  *
  **************************************************************************/
 
-   public void addMethod(SObjSymbol   methodName,
-                         SObjFunction method) {
+   public void addMethod(final SObjSymbol   methodName,
+                         final SObjFunction method) {
 
       _methods.newVar(methodName, method);
    }
@@ -312,8 +302,8 @@ public class STosClass
  *
  **************************************************************************/
 
-   public void addMethod(String       methodName,
-                         SObjFunction method) {
+   public void addMethod(final String       methodName,
+                         final SObjFunction method) {
 
       addMethod(SObjSymbol.addSymbol(methodName), method);
    }
@@ -331,9 +321,9 @@ public class STosClass
  *
  **************************************************************************/
 
-   public void addConstructor(SObjFunction method) {
+   public void addConstructor(final SObjFunction method) {
 
-      addMethod(_constructName, method);
+      addMethod(CONSTRUCTOR_NAME, method);
       _constructor = method;
    }
 
@@ -355,7 +345,7 @@ public class STosClass
  *
  **************************************************************************/
 
-   public SObjFunction getMethod(SObjSymbol methodName)
+   public SObjFunction getMethod(final SObjSymbol methodName)
          throws SNoSuchMethodException {
 
       try {
@@ -404,7 +394,7 @@ public class STosClass
  *
  **************************************************************************/
 
-    public void setName(String name) {
+    public void setName(final String name) {
 
         _name = name;
     }
@@ -470,7 +460,7 @@ public class STosClass
  *
  **************************************************************************/
 
-        public SMethodSet(SMethodSet superClassMethods) {
+        public SMethodSet(final SMethodSet superClassMethods) {
 
             super(superClassMethods);
         }
