@@ -1,17 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2002/03/16 Created. (jfn)
+ * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -23,7 +12,6 @@ import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.STypeException;
-import com.pdmfc.tea.runtime.STypes;
 
 
 
@@ -49,7 +37,7 @@ import com.pdmfc.tea.runtime.STypes;
  *
  **************************************************************************/
 
-public class SModuleXml
+public final class SModuleXml
     extends Object
     implements SModule {
 
@@ -64,6 +52,8 @@ public class SModuleXml
  **************************************************************************/
 
     public SModuleXml() {
+
+        // Nothing to do.
     }
 
 
@@ -72,18 +62,18 @@ public class SModuleXml
 
 /**************************************************************************
  *
- * 
+ * {@inheritDoc}
  *
  **************************************************************************/
 
-    public void init(SContext context)
+    public void init(final SContext context)
         throws STeaException {
 
         context.newVar("xml-encode",
                        new SObjFunction() {
-                           public Object exec(SObjFunction func,
-                                              SContext     context,
-                                              Object[]     args)
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
                                throws STeaException {
                                return functionXmlEncode(func,
                                                         context,
@@ -98,7 +88,7 @@ public class SModuleXml
 
 /**************************************************************************
  *
- * 
+ * {@inheritDoc}
  *
  **************************************************************************/
 
@@ -113,7 +103,7 @@ public class SModuleXml
 
 /**************************************************************************
  *
- * 
+ * {@inheritDoc}
  *
  **************************************************************************/
 
@@ -128,7 +118,7 @@ public class SModuleXml
 
 /**************************************************************************
  *
- * 
+ * {@inheritDoc}
  *
  **************************************************************************/
 
@@ -171,9 +161,9 @@ public class SModuleXml
  *
  **************************************************************************/
 
-    private static Object functionXmlEncode(SObjFunction func,
-                                            SContext     context,
-                                            Object[]     args)
+    private static Object functionXmlEncode(final SObjFunction func,
+                                            final SContext     context,
+                                            final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -205,7 +195,7 @@ public class SModuleXml
  *
  **************************************************************************/
 
-    private static String xmlEncode(String s) {
+    private static String xmlEncode(final String s) {
 
         StringBuffer buf  = new StringBuffer();
         int          size = s.length();

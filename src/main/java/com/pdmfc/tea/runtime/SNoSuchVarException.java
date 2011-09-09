@@ -1,18 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2001/05/12
- * Created. (jfn)
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -27,12 +15,12 @@ import com.pdmfc.tea.runtime.SRuntimeException;
 
 /**************************************************************************
  *
- * These exceptions are thrown whenever there is an attempt to reference
- * a variable not defined in the current context.
+ * These exceptions are thrown whenever there is an attempt to
+ * reference a variable not defined in the current context.
  *
  **************************************************************************/
 
-public class SNoSuchVarException
+public final class SNoSuchVarException
     extends SRuntimeException {
 
 
@@ -43,16 +31,16 @@ public class SNoSuchVarException
  *
  * Initializes the message from the name of the given symbol.
  *
- * @param symbol
- *    An <TT>SObjSymbol</TT> for whom there was no variable defined in
- *    the current context.
+ * @param symbol An <TT>SObjSymbol</TT> for whom there was no variable
+ * defined in the current context.
  *
  **************************************************************************/
 
-   public SNoSuchVarException(SObjSymbol symbol) {
+   public SNoSuchVarException(final SObjSymbol symbol) {
 
-      super("Variable '" + symbol.getName() +
-            "' not defined on current context");
+      super("Variable '"
+            + symbol.getName()
+            + "' not defined on current context");
    }
 
 

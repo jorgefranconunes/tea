@@ -74,8 +74,8 @@ public class STosClass
  *    it means the class being defined has no base class.
  *
  * @param members
- *    Array with the member names. It must be a <TT>Vector</TT> of
- *    <TT>SObjSymbol</TT> objects.
+ *    Array with the member names. It must be a <code>Vector</code> of
+ *    <code>SObjSymbol</code> objects.
  *
  **************************************************************************/
 
@@ -99,19 +99,18 @@ public class STosClass
  *
  * Defines a new TOS class with no base class.
  *
- * @param members
- *    Array with the member names. It must be a <TT>Vector</TT> of
- *    <TT>SObjSymbol</TT> objects.
+ * @param members Array with the member names. It must be a
+ * <code>Vector</code> of <code>SObjSymbol</code> objects.
  *
  * @exception com.pdmfc.tea.modules.tos.SNoSuchClassException Never
  * thrown.
  *
  **************************************************************************/
 
-   public STosClass(final SList members) {
+    public STosClass(final SList members) {
 
-      this(null, members);
-   }
+        this(null, members);
+    }
 
 
 
@@ -121,16 +120,15 @@ public class STosClass
  *
  * Defines a new TOS class with no members.
  *
- * @param superClass
- *    The base class of the class being defined. If it is null
- *    it means the class being defined has no base class.
+ * @param superClass The base class of the class being defined. If it
+ * is null it means the class being defined has no base class.
  *
  **************************************************************************/
 
-   public STosClass(final STosClass superClass) {
+    public STosClass(final STosClass superClass) {
 
-      this(superClass, new SList());
-   }
+        this(superClass, new SList());
+    }
 
 
 
@@ -142,10 +140,10 @@ public class STosClass
  *
  **************************************************************************/
 
-   public STosClass() {
+    public STosClass() {
 
-      this(null, new SList());
-   }
+        this(null, new SList());
+    }
 
 
 
@@ -155,16 +153,16 @@ public class STosClass
  *
  * Retrieves the TOS base class of this TOS class.
  *
- * @return
- *    An <TT>STosClass</TT> object representing the TOS base class of this
- *    TOS class. If it is <TT>null</TT> it means it has no base class.
+ * @return An <code>STosClass</code> object representing the TOS base
+ * class of this TOS class. If it is <code>null</code> it means it has
+ * no base class.
  *
  **************************************************************************/
 
-   public STosClass getSuperClass() {
+    public STosClass getSuperClass() {
 
-      return _superClass;
-   }
+        return _superClass;
+    }
 
 
 
@@ -174,17 +172,16 @@ public class STosClass
  *
  * Retrieves the member names of this TOS class.
  *
- * @return
- *    An <TT>Enumeration</TT> that will iterate over all the member names.
- *    The <TT>Enumeration</TT> will always iterate over the members the
- *    same way.
+ * @return An <code>Enumeration</code> that will iterate over all the
+ * member names.  The <code>Enumeration</code> will always iterate
+ * over the members the same way.
  *
  **************************************************************************/
 
-   public SList memberNames() {
+    public SList memberNames() {
 
-      return _members;
-   }
+        return _members;
+    }
 
 
 
@@ -199,10 +196,10 @@ public class STosClass
  *
  **************************************************************************/
 
-   public int level() {
+    public int level() {
 
-      return _level;
-   }
+        return _level;
+    }
 
 
 
@@ -213,7 +210,7 @@ public class STosClass
  * Creates a new instance of an object of this TOS class, but does not
  * initialize the object.
  *
- * @return A new <TT>STosObj</TT> object, representing a new instance
+ * @return A new <code>STosObj</code> object, representing a new instance
  * of this class. The object will have to be initialized.
  *
  * @exception STeaException Not throws by this method. Only declared
@@ -221,11 +218,11 @@ public class STosClass
  *
  **************************************************************************/
 
-   public STosObj newInstance()
-         throws STeaException {
+    public STosObj newInstance()
+        throws STeaException {
 
-      return new STosObj(this);
-   }
+        return new STosObj(this);
+    }
 
 
 
@@ -235,27 +232,25 @@ public class STosClass
  *
  * Creates a new instance of an object of this TOS class.
  *
- * @param args
- *    Array of argumens to be passed to the constructor. The first element
- *    in the array is not used. The second element should be a symbol
- *    with the class name of the object being instantiated.
+ * @param args Array of argumens to be passed to the constructor. The
+ * first element in the array is not used. The second element should
+ * be a symbol with the class name of the object being instantiated.
  *
- * @return
- *    A new <TT>STosObj</TT> object, representing a new instance of this
- *    TOS class.
+ * @return A new <code>STosObj</code> object, representing a new
+ * instance of this TOS class.
  *
  **************************************************************************/
 
-   public STosObj newInstance(final SContext context,
-                              final Object[] args)
-         throws STeaException {
+    public STosObj newInstance(final SContext context,
+                               final Object[] args)
+        throws STeaException {
 
-      STosObj obj = newInstance();
+        STosObj obj = newInstance();
 
-      obj.init(context, args);
+        obj.init(context, args);
 
-      return obj;
-   }
+        return obj;
+    }
 
 
 
@@ -267,20 +262,19 @@ public class STosClass
  * the same name already existed then it is superceded by this new
  * method.
  *
- * @param methodName
- *    A symbol standing for the name of the method being defined.
+ * @param methodName A symbol standing for the name of the method
+ * being defined.
  *
- * @param method
- *    A reference to the <TT>SObjFunction</TT> object that implements the
- *    TOS method.
+ * @param method A reference to the <code>SObjFunction</code> object
+ * that implements the TOS method.
  *
  **************************************************************************/
 
-   public void addMethod(final SObjSymbol   methodName,
-                         final SObjFunction method) {
+    public void addMethod(final SObjSymbol   methodName,
+                          final SObjFunction method) {
 
-      _methods.newVar(methodName, method);
-   }
+        _methods.newVar(methodName, method);
+    }
 
 
 
@@ -290,23 +284,22 @@ public class STosClass
  *
  * Associates a new TOS method with this TOS class.
  *
- * <P>The constructor for the object is a method with the same name as the
- * class.
+ * <p>The constructor for the object is a method with the same name as
+ * the class.</p>
  *
- * @param methodName
- *    A symbol standing for the name of the method being defined.
+ * @param methodName A symbol standing for the name of the method
+ * being defined.
  *
- * @param method
- *    A reference to the <TT>SObjFunction</TT> object that implements the
- *    TOS method.
+ * @param method A reference to the <code>SObjFunction</code> object
+ * that implements the TOS method.
  *
  **************************************************************************/
 
-   public void addMethod(final String       methodName,
-                         final SObjFunction method) {
+    public void addMethod(final String       methodName,
+                          final SObjFunction method) {
 
-      addMethod(SObjSymbol.addSymbol(methodName), method);
-   }
+        addMethod(SObjSymbol.addSymbol(methodName), method);
+    }
 
 
 
@@ -321,39 +314,11 @@ public class STosClass
  *
  **************************************************************************/
 
-   public void addConstructor(final SObjFunction method) {
+    public void addConstructor(final SObjFunction method) {
 
-      addMethod(CONSTRUCTOR_NAME, method);
-      _constructor = method;
-   }
-
-
-
-
-
-/**************************************************************************
- *
- * Retrieves the <TT>SObjFunction</TT> object that implements the
- * method referenced by the symbol <TT>methodName</TT>. An exception
- * is thrown if that method has not been defined for this class.
- *
- * @return
- *    The <TT>SObjFunction</TT> object that implements the specified method.
- *
- * @exception com.pdmfc.tea.modules.tos.STosNoSuchMethodException
- *    Thrown if the method had not been defined for this class.
- *
- **************************************************************************/
-
-   public SObjFunction getMethod(final SObjSymbol methodName)
-         throws SNoSuchMethodException {
-
-      try {
-         return (SObjFunction)_methods.getVar(methodName);
-      } catch (SNoSuchVarException e) {
-         throw new SNoSuchMethodException(methodName, _name);
-      }
-   }
+        addMethod(CONSTRUCTOR_NAME, method);
+        _constructor = method;
+    }
 
 
 
@@ -361,21 +326,50 @@ public class STosClass
 
 /**************************************************************************
  *
- * Retrieves the <TT>STObjProc</TT> object that implements the constructor
- * for this TOS class.
+ * Retrieves the <code>SObjFunction</code> object that implements the
+ * method referenced by the symbol <code>methodName</code>. An
+ * exception is thrown if that method has not been defined for this
+ * class.
  *
- * <P>The constructor is just a method with the same name as the TOS class.
+ * @return The <code>SObjFunction</code> object that implements the
+ * specified method.
  *
- * @return
- *    The <TT>STObjProc</TT> object that implements the TOS constructor.
- *    <TT>null</TT> if a constructor was not defined.
+ * @exception com.pdmfc.tea.modules.tos.SNoSuchMethodException Thrown
+ * if the method had not been defined for this class.
  *
  **************************************************************************/
 
-   public SObjFunction getConstructor() {
+    public SObjFunction getMethod(final SObjSymbol methodName)
+        throws SNoSuchMethodException {
 
-      return _constructor;
-   }
+        try {
+            return (SObjFunction)_methods.getVar(methodName);
+        } catch (SNoSuchVarException e) {
+            throw new SNoSuchMethodException(methodName, _name);
+        }
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * Retrieves the <code>STObjProc</code> object that implements the
+ * constructor for this TOS class.
+ *
+ * <p>The constructor is just a method with the same name as the TOS
+ * class.</p>
+ *
+ * @return The <code>STObjProc</code> object that implements the TOS
+ * constructor.  <code>null</code> if a constructor was not defined.
+ *
+ **************************************************************************/
+
+    public SObjFunction getConstructor() {
+
+        return _constructor;
+    }
 
 
 
@@ -389,8 +383,7 @@ public class STosClass
  * object. Note that there is no restriction on the contents of the
  * name. There may even be more than one class with the same name.
  *
- * @param name
- *        The name that will be associated with the class.
+ * @param name The name that will be associated with the class.
  *
  **************************************************************************/
 
@@ -406,10 +399,9 @@ public class STosClass
 /**************************************************************************
  *
  * Fetches the name associated with the class. This is the string
- * passed to last call to the <code>setName<(String)</code> method.
+ * passed to last call to the <code>setName(String)</code> method.
  *
- * @return
- *        The name associated with the class.
+ * @return The name associated with the class.
  *
  **************************************************************************/
 

@@ -1,18 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2001/05/12
- * Created. (jfn)
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -31,14 +19,14 @@ import com.pdmfc.tea.runtime.SFlowControlException;
  *
  **************************************************************************/
 
-public class SExitException
+public final class SExitException
     extends SFlowControlException {
 
 
 
 
 
-   public Integer _value;
+    private Integer _value;
 
 
 
@@ -49,10 +37,26 @@ public class SExitException
  *
  **************************************************************************/
 
-   public SExitException(Integer value) {
+    public SExitException(Integer value) {
 
-      _value = value;
-   }
+        _value = value;
+    }
+
+
+
+
+
+
+/**************************************************************************
+ *
+ * @return The integer value passed to the exit statement.
+ *
+ **************************************************************************/
+
+    public Integer getExitValue() {
+
+        return _value;
+    }
 
 
 }
@@ -67,6 +71,4 @@ public class SExitException
  * 
  *
  **************************************************************************/
-
-
 

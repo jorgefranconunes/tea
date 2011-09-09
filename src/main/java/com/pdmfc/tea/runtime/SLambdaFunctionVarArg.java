@@ -1,22 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001, 2002 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2002/07/15
- * Some code cleanups led to the removal of the protected
- * constructor. (jfn)
- *
- * 2001/05/12
- * Created. (jfn)
+ * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -53,7 +37,8 @@ import com.pdmfc.tea.runtime.SReturnException;
  *
  **************************************************************************/
 
-public class SLambdaFunctionVarArg
+public final class SLambdaFunctionVarArg
+    extends Object
     implements SObjFunction {
 
 
@@ -79,8 +64,8 @@ public class SLambdaFunctionVarArg
  *
  **************************************************************************/
 
-    public SLambdaFunctionVarArg(SObjSymbol argName,
-                                 SObjBlock  body) {
+    public SLambdaFunctionVarArg(final SObjSymbol argName,
+                                 final SObjBlock  body) {
 
         _argName = argName;
         _body    = body;
@@ -109,9 +94,9 @@ public class SLambdaFunctionVarArg
  *
  **************************************************************************/
 
-    public Object exec(SObjFunction obj,
-                       SContext     context,
-                       Object[]     args)
+    public Object exec(final SObjFunction obj,
+                       final SContext     context,
+                       final Object[]     args)
         throws STeaException {
 
         SContext funcContext = new SContext(_body.getContext());
@@ -139,10 +124,11 @@ public class SLambdaFunctionVarArg
         try {
             result = _body.exec(funcContext);
         } catch (SReturnException e1) {
-            result = e1._value;
+            result = e1.getReturnValue();
         } catch (SBreakException e2) {
-            result = e2._object;
+            result = e2.getBreakValue();
         } catch (SContinueException e3) {
+            // We will treat this as a return with a a null.
         }
 
         return result;

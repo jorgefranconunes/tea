@@ -1,17 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2005 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2001/05/12 Created. (jfn)
+ * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -28,15 +17,17 @@ package com.pdmfc.tea.runtime;
  *
  **************************************************************************/
 
-public class SObjNull
+public final class SObjNull
     extends Object {
 
 
 
 
 
-   /** The null object. */
-   public static final Object NULL = new SObjNull();
+    /**
+     * The Tea null object.
+     */
+    public static final Object NULL = new SObjNull();
 
 
 
@@ -49,8 +40,10 @@ public class SObjNull
  *
  **************************************************************************/
 
-   private SObjNull() {
-   }
+    private SObjNull() {
+
+        // Nothing to do.
+    }
 
 
 }

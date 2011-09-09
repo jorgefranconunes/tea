@@ -1,18 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2001/05/12
- * Created. (jfn)
+ * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -28,7 +16,7 @@ package com.pdmfc.tea.runtime;
  *
  **************************************************************************/
 
-public class SObjByteArray
+public final class SObjByteArray
     extends Object {
 
 
@@ -67,7 +55,7 @@ public class SObjByteArray
  *
  **************************************************************************/
 
-   public SObjByteArray(byte[] bytes) {
+   public SObjByteArray(final byte[] bytes) {
 
        setContents(bytes, 0, bytes.length);
    }
@@ -82,9 +70,9 @@ public class SObjByteArray
  *
  **************************************************************************/
 
-   public SObjByteArray(byte[] bytes,
-                        int    offset,
-                        int    count) {
+   public SObjByteArray(final byte[] bytes,
+                        final int    offset,
+                        final int    count) {
 
        setContents(bytes, offset, count);
    }
@@ -99,9 +87,9 @@ public class SObjByteArray
  *
  **************************************************************************/
 
-    public void setContents(byte[] bytes,
-                            int    offset,
-                            int    count) {
+    public void setContents(final byte[] bytes,
+                            final int    offset,
+                            final int    count) {
 
        _bytes  = bytes;
        _offset = offset;

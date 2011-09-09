@@ -1,18 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2001/05/12
- * Created.
+ * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -41,28 +29,25 @@ public interface SObjFunction  {
  *
  * Executes the command.
  *
- * @param func
- *    The <TT>SObjFunction</TT> that led to call this function. Most of the
- *    time is the same as the <TT>this</TT> object.
+ * @param func The <code>SObjFunction</code> that led to call this
+ * function. Most of the time is the same as the <code>this</code>
+ * object.
  *
- * @param context
- *    The context where the command should be executed.
+ * @param context The context where the command should be executed.
  *
- * @param args
- *    Array with the arguments passed to the command.
+ * @param args Array with the arguments passed to the command.
  *
- * @return
- *    An <TT>Object</TT> object.
+ * @return An <code>Object</code> object.
  *
- * @exception com.pdmfc.tea.STeaException
- *    Thrown if there were problems executing the command.
+ * @exception com.pdmfc.tea.STeaException Thrown if there were
+ * problems executing the command.
  *
  **************************************************************************/
 
-    public Object exec(SObjFunction func,
-		       SContext     context,
-		       Object[]     args)
-    throws STeaException;
+    Object exec(SObjFunction func,
+                SContext     context,
+                Object[]     args)
+        throws STeaException;
 
 
 }

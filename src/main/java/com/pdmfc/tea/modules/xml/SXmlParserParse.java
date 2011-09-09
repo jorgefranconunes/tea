@@ -1,24 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2010/02/07 Refactored to use "org.xml.sax.XMLReader" instead of
- * "org.xml.sax.Parser". (TSK-PDMFC-TEA-0042) (jfn)
- *
- * 2002/07/30 Corrected a typo in the name of the
- * "processingInstruction" TOS method. Previously a method named
- * "processingInstructon" was being called. (jfn)
- *
- * 2001/05/12 Created. (jfn)
+ * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -47,7 +29,6 @@ import com.pdmfc.tea.runtime.SObjNull;
 import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SRuntimeException;
-import com.pdmfc.tea.runtime.STypeException;
 import com.pdmfc.tea.runtime.STypes;
 import com.pdmfc.tea.modules.util.SHashtable;
 
@@ -62,7 +43,7 @@ import com.pdmfc.tea.modules.util.SHashtable;
  *
  **************************************************************************/
 
-class SXmlParserParse
+final class SXmlParserParse
     extends Object {
 
 
@@ -70,12 +51,18 @@ class SXmlParserParse
 
 
     // The symbols for the TOS methods that may be called.
-    private static SObjSymbol START_DOC  = SObjSymbol.addSymbol("startDocument");
-    private static SObjSymbol END_DOC    = SObjSymbol.addSymbol("endDocument");
-    private static SObjSymbol START_ELEM = SObjSymbol.addSymbol("startElement");
-    private static SObjSymbol END_ELEM   = SObjSymbol.addSymbol("endElement");
-    private static SObjSymbol CHARS      = SObjSymbol.addSymbol("characters");
-    private static SObjSymbol PROC_INST  = SObjSymbol.addSymbol("processingInstruction");
+    private static final SObjSymbol START_DOC  =
+        SObjSymbol.addSymbol("startDocument");
+    private static final SObjSymbol END_DOC    =
+        SObjSymbol.addSymbol("endDocument");
+    private static final SObjSymbol START_ELEM =
+        SObjSymbol.addSymbol("startElement");
+    private static final SObjSymbol END_ELEM   =
+        SObjSymbol.addSymbol("endElement");
+    private static final SObjSymbol CHARS      =
+        SObjSymbol.addSymbol("characters");
+    private static final SObjSymbol PROC_INST  =
+        SObjSymbol.addSymbol("processingInstruction");
     
     // The TOS methods that may be called.
     private SObjFunction _startDocumentMethod = null;
@@ -95,70 +82,96 @@ class SXmlParserParse
     private SContext          _context        = null;
     private SAXParseException _parseException = null;
 
+
     private ContentHandler _myContentHandler =
         new ContentHandler() {
-            public void characters(char[] ch, int start, int length)
+
+            public void characters(final char[] ch,
+                                   final int    start,
+                                   final int    length)
                 throws SAXException {
                 myCharacters(ch, start, length);
             }
+
             public void endDocument()
                 throws SAXException {
                 myEndDocument();
             }
-            public void endElement(String uri, String localName, String qName)
+
+            public void endElement(final String uri,
+                                   final String localName,
+                                   final String qName)
                 throws SAXException {
                 myEndElement(uri, localName, qName);
             }
-            public void endPrefixMapping(String prefix)
+
+            public void endPrefixMapping(final String prefix)
                 throws SAXException {
                 myEndPrefixMapping(prefix);
             }
-            public void ignorableWhitespace(char[] ch, int start, int length)
+
+            public void ignorableWhitespace(final char[] ch,
+                                            final int    start,
+                                            final int length)
                 throws SAXException {
                 myIgnorableWhitespace(ch, start, length);
             }
-            public void processingInstruction(String target, String data)
+
+            public void processingInstruction(final String target,
+                                              final String data)
                 throws SAXException {
                 myProcessingInstruction(target, data);
             }
-            public void setDocumentLocator(Locator locator) {
+
+            public void setDocumentLocator(final Locator locator) {
                 mySetDocumentLocator(locator);
             }
-            public void skippedEntity(String name)
+
+            public void skippedEntity(final String name)
                 throws SAXException {
                 mySkippedEntity(name);
             }
+
             public void startDocument()
                 throws SAXException {
                 myStartDocument();
             }
-            public void startElement(String uri, 
-                                     String localName,
-                                     String qName,
-                                     Attributes atts)
+
+            public void startElement(final String uri, 
+                                     final String localName,
+                                     final String qName,
+                                     final Attributes atts)
                 throws SAXException {
                 myStartElement(uri, localName, qName, atts);
             }
-            public void startPrefixMapping(String prefix, String uri)
+
+            public void startPrefixMapping(final String prefix,
+                                           final String uri)
                 throws SAXException {
                 myStartPrefixMapping(prefix, uri);
             }
+
         };
+
 
     private ErrorHandler _myErrorHandler =
         new ErrorHandler() {
-            public void error(SAXParseException exception)
+
+            public void error(final SAXParseException exception)
                 throws SAXException {
                 myError(exception);
             }
-            public void fatalError(SAXParseException exception)
+
+            public void fatalError(final SAXParseException exception)
                 throws SAXException {
                 myFatalError(exception);
             }
-            public void warning(SAXParseException exception)
+
+            public void warning(final SAXParseException exception)
                 throws SAXException {
                 myWarning(exception);
             }
+
         };
 
 
@@ -172,6 +185,8 @@ class SXmlParserParse
  **************************************************************************/
 
       public SXmlParserParse() {
+
+          // Nothing to do.
       }
 
 
@@ -184,7 +199,7 @@ class SXmlParserParse
  *
  **************************************************************************/
 
-    public void setHandler(STosObj handler) {
+    public void setHandler(final STosObj handler) {
 
         _handler = handler;
     }
@@ -199,9 +214,9 @@ class SXmlParserParse
  *
  **************************************************************************/
 
-      public Object exec(SObjFunction obj,
-                         SContext     context,
-                         Object[]     args)
+      public Object exec(final SObjFunction obj,
+                         final SContext     context,
+                         final Object[]     args)
          throws STeaException {
 
          if ( args.length != 3 ) {
@@ -255,9 +270,9 @@ class SXmlParserParse
  *
  **************************************************************************/
 
-    private void parse(SContext    context,
-                       XMLReader   parser,
-                       InputSource input)
+    private void parse(final SContext    context,
+                       final XMLReader   parser,
+                       final InputSource input)
         throws STeaException {
 
          STeaException error = null;
@@ -392,10 +407,10 @@ class SXmlParserParse
  *
  **************************************************************************/
 
-    private void myStartElement(String     uri,
-                                String     name,
-                                String     qName,
-                                Attributes attribs)
+    private void myStartElement(final String     uri,
+                                final String     name,
+                                final String     qName,
+                                final Attributes attribs)
         throws SAXException {
 
         SHashtable         attribsTable = null;
@@ -448,9 +463,9 @@ class SXmlParserParse
  *
  **************************************************************************/
 
-    private void myEndElement(String uri,
-                              String name,
-                              String qName)
+    private void myEndElement(final String uri,
+                              final String name,
+                              final String qName)
         throws SAXException {
 
         try {
@@ -491,9 +506,9 @@ class SXmlParserParse
  *
  **************************************************************************/
 
-    private void myCharacters(char[] ch,
-                              int start,
-                              int length)
+    private void myCharacters(final char[] ch,
+                              final int start,
+                              final int length)
         throws SAXException {
 
         try {
@@ -519,9 +534,9 @@ class SXmlParserParse
  *
  **************************************************************************/
 
-    private void myIgnorableWhitespace(char[] ch,
-                                       int start,
-                                       int length)
+    private void myIgnorableWhitespace(final char[] ch,
+                                       final int start,
+                                       final int length)
         throws SAXException {
 
         // We do nothing.
@@ -537,8 +552,8 @@ class SXmlParserParse
  *
  **************************************************************************/
 
-    private void myProcessingInstruction(String target,
-                                         String data)
+    private void myProcessingInstruction(final String target,
+                                         final String data)
         throws SAXException {
 
         try {
@@ -565,7 +580,7 @@ class SXmlParserParse
  *
  **************************************************************************/
 
-    private void mySetDocumentLocator(Locator locator) {
+    private void mySetDocumentLocator(final Locator locator) {
 
         // We do nothing.
     }
@@ -580,7 +595,7 @@ class SXmlParserParse
  *
  **************************************************************************/
 
-    private void myEndPrefixMapping(String prefix)
+    private void myEndPrefixMapping(final String prefix)
         throws SAXException {
 
         // We do nothing.
@@ -596,7 +611,7 @@ class SXmlParserParse
  *
  **************************************************************************/
 
-    private void mySkippedEntity(String name)
+    private void mySkippedEntity(final String name)
         throws SAXException {
 
         // We do nothing.
@@ -612,8 +627,8 @@ class SXmlParserParse
  *
  **************************************************************************/
 
-    private void myStartPrefixMapping(String prefix,
-                                      String uri)
+    private void myStartPrefixMapping(final String prefix,
+                                      final String uri)
         throws SAXException {
 
         // We do nothing.
@@ -629,7 +644,7 @@ class SXmlParserParse
  *
  **************************************************************************/
 
-    private void myWarning(SAXParseException e)
+    private void myWarning(final SAXParseException e)
         throws SAXException {
 
         _parseException = e;
@@ -645,7 +660,7 @@ class SXmlParserParse
  *
  **************************************************************************/
 
-    private void myError(SAXParseException e)
+    private void myError(final SAXParseException e)
         throws SAXException {
 
         _parseException = e;
@@ -661,7 +676,7 @@ class SXmlParserParse
  *
  **************************************************************************/
 
-    private void myFatalError(SAXParseException e)
+    private void myFatalError(final SAXParseException e)
         throws SAXException {
 
         _parseException = e;
@@ -687,12 +702,13 @@ class SXmlParserParse
  *
  **************************************************************************/
 
-      private String createUrl(String fileName)
+      private String createUrl(final String fileName)
          throws SRuntimeException {
 
          try {
             return (new URL(fileName)).toString();
          } catch (MalformedURLException e) {
+             // Just continue bellow...
          }
          try {
             return (new URL("file:"

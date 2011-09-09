@@ -1,18 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2001/05/12
- * Created. (jfn)
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -38,12 +26,11 @@ public interface SObjVar {
  *
  * Fetches the contents of the variable.
  *
- * @return
- *    A reference to the object contained in this variable.
+ * @return A reference to the object contained in this variable.
  *
  **************************************************************************/
 
-   public Object get();
+   Object get();
 
 
 
@@ -53,12 +40,11 @@ public interface SObjVar {
  *
  * Sets the contents of the variable.
  *
- * @param value
- *    The new contents of the variable.
+ * @param value The new contents of the variable.
  *
  **************************************************************************/
 
-   public void set(Object value);
+   void set(Object value);
 
 
 }

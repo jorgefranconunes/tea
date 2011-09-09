@@ -129,10 +129,11 @@ public final class STosMethod
         try {
             result = _body.exec(procContext);
         } catch (SReturnException e1) {
-            result = e1._value;
+            result = e1.getReturnValue();
         } catch (SBreakException e2) {
-            result = e2._object;
+            result = e2.getBreakValue();
         } catch (SContinueException e3) {
+            // We will treat this as a return with a null.
         }
 
         return result;

@@ -161,7 +161,7 @@ public final class STeaLauncher
         try {
             context.execute(code);
         } catch (SExitException e2) {
-            retVal = e2._value.intValue();
+            retVal = e2.getExitValue().intValue();
         } catch (SFlowControlException e3) {
             // Just ignore it. Somebody did a "return", "break" or
             // "continue" outside of a function or loop.

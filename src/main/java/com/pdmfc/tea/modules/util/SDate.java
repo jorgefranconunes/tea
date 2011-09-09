@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -51,7 +51,7 @@ import com.pdmfc.tea.runtime.STypeException;
  *
  **************************************************************************/
 
-public class SDate
+public final class SDate
     extends STosObj {
 
 
@@ -74,7 +74,7 @@ public class SDate
  *
  **************************************************************************/
 
-   public SDate(STosClass myClass)
+   public SDate(final STosClass myClass)
        throws STeaException {
 
       super(myClass);
@@ -93,7 +93,7 @@ public class SDate
  *
  **************************************************************************/
 
-    public void initFromDate(SDate aDate) {
+    public void initFromDate(final SDate aDate) {
 
         Calendar source = aDate._calendar;
 
@@ -122,7 +122,7 @@ public class SDate
  **************************************************************************/
 
     @SuppressWarnings("fallthrough")
-    public void initFromString(String str)
+    public void initFromString(final String str)
         throws SRuntimeException {
 
         boolean ok    = true;
@@ -183,7 +183,7 @@ public class SDate
  *
  **************************************************************************/
 
-    public void initFromDate(Date date) {
+    public void initFromDate(final Date date) {
 
         _calendar.setTime(date);
     }
@@ -287,9 +287,9 @@ public class SDate
  *
  **************************************************************************/
 
-    public Object constructor(SObjFunction obj,
-                              SContext     context,
-                              Object[]     args)
+    public Object constructor(final SObjFunction obj,
+                              final SContext     context,
+                              final Object[]     args)
         throws SRuntimeException {
 
         int      numArgs = args.length;
@@ -371,9 +371,9 @@ public class SDate
  *
  **************************************************************************/
 
-    public Object getYear(SObjFunction obj,
-                          SContext     context,
-                          Object[]     args) {
+    public Object getYear(final SObjFunction obj,
+                          final SContext     context,
+                          final Object[]     args) {
 
         int year = _calendar.get(Calendar.YEAR);
 
@@ -420,9 +420,9 @@ public class SDate
  *
  **************************************************************************/
 
-    public Object getMonth(SObjFunction obj,
-                           SContext     context,
-                           Object[]     args) {
+    public Object getMonth(final SObjFunction obj,
+                           final SContext     context,
+                           final Object[]     args) {
 
         int month = _calendar.get(Calendar.MONTH) + 1;
 
@@ -469,9 +469,9 @@ public class SDate
  *
  **************************************************************************/
 
-    public Object getDay(SObjFunction obj,
-                         SContext     context,
-                         Object[]     args) {
+    public Object getDay(final SObjFunction obj,
+                         final SContext     context,
+                         final Object[]     args) {
 
         int day = _calendar.get(Calendar.DAY_OF_MONTH);
 
@@ -518,9 +518,9 @@ public class SDate
  *
  **************************************************************************/
 
-    public Object getHour(SObjFunction obj,
-                          SContext     context,
-                          Object[]     args) {
+    public Object getHour(final SObjFunction obj,
+                          final SContext     context,
+                          final Object[]     args) {
 
         int hour = _calendar.get(Calendar.HOUR_OF_DAY);
 
@@ -567,9 +567,9 @@ public class SDate
  *
  **************************************************************************/
 
-    public Object getMinute(SObjFunction obj,
-                            SContext     context,
-                            Object[]     args) {
+    public Object getMinute(final SObjFunction obj,
+                            final SContext     context,
+                            final Object[]     args) {
 
         int minute = _calendar.get(Calendar.MINUTE);
 
@@ -616,9 +616,9 @@ public class SDate
  *
  **************************************************************************/
 
-    public Object getSecond(SObjFunction obj,
-                            SContext     context,
-                            Object[]     args) {
+    public Object getSecond(final SObjFunction obj,
+                            final SContext     context,
+                            final Object[]     args) {
 
         int second = _calendar.get(Calendar.SECOND);
 
@@ -664,9 +664,9 @@ public class SDate
  *
  **************************************************************************/
 
-    public Object getDayOfWeek(SObjFunction obj,
-                               SContext     context,
-                               Object[]     args) {
+    public Object getDayOfWeek(final SObjFunction obj,
+                               final SContext     context,
+                               final Object[]     args) {
 
         int day = _calendar.get(Calendar.DAY_OF_WEEK) - 1;
 
@@ -754,9 +754,9 @@ public class SDate
  *
  **************************************************************************/
 
-    public Object setDate(SObjFunction obj,
-                          SContext     context,
-                          Object[]     args)
+    public Object setDate(final SObjFunction obj,
+                          final SContext     context,
+                          final Object[]     args)
         throws SRuntimeException {
 
         int numArgs = args.length;
@@ -844,9 +844,9 @@ public class SDate
  *
  **************************************************************************/
 
-    public Object setTime(SObjFunction obj,
-                          SContext     context,
-                          Object[]     args)
+    public Object setTime(final SObjFunction obj,
+                          final SContext     context,
+                          final Object[]     args)
         throws SRuntimeException {
 
         if ( args.length != 5 ) {
@@ -904,9 +904,9 @@ public class SDate
  *
  **************************************************************************/
 
-    public Object format(SObjFunction obj,
-                         SContext     context,
-                         Object[]     args)
+    public Object format(final SObjFunction obj,
+                         final SContext     context,
+                         final Object[]     args)
         throws SRuntimeException {
 
         if ( args.length != 3 ) {
@@ -971,9 +971,9 @@ public class SDate
  *
  **************************************************************************/
 
-    public Object compare(SObjFunction obj,
-                         SContext     context,
-                         Object[]     args)
+    public Object compare(final SObjFunction obj,
+                          final SContext     context,
+                          final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -1035,9 +1035,9 @@ public class SDate
  *
  **************************************************************************/
 
-    public Object before(SObjFunction obj,
-                         SContext     context,
-                         Object[]     args)
+    public Object before(final SObjFunction obj,
+                         final SContext     context,
+                         final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -1091,9 +1091,9 @@ public class SDate
  *
  **************************************************************************/
 
-    public Object after(SObjFunction obj,
-                        SContext     context,
-                        Object[]     args)
+    public Object after(final SObjFunction obj,
+                        final SContext     context,
+                        final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -1147,9 +1147,9 @@ public class SDate
  *
  **************************************************************************/
 
-    public Object same(SObjFunction obj,
-                       SContext     context,
-                       Object[]     args)
+    public Object same(final SObjFunction obj,
+                       final SContext     context,
+                       final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -1212,9 +1212,9 @@ public class SDate
  *
  **************************************************************************/
 
-    public Object notSame(SObjFunction obj,
-                          SContext     context,
-                          Object[]     args)
+    public Object notSame(final SObjFunction obj,
+                          final SContext     context,
+                          final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -1254,8 +1254,8 @@ public class SDate
  *
  **************************************************************************/
 
-    public static SDate getDate(Object[] args,
-                                int      index)
+    public static SDate getDate(final Object[] args,
+                                final int      index)
         throws STypeException {
 
         Object tosDate = args[index];
@@ -1292,13 +1292,13 @@ public class SDate
  *
  **************************************************************************/
 
-    public static SDate newInstance(SContext context)
+    public static SDate newInstance(final SContext context)
         throws STeaException {
 
         STosObj date = STosUtil.newInstance(CLASS_NAME_S, context);
 
         if ( !(date instanceof SDate) ) {
-            throw new SRuntimeException("invalid " + CLASS_NAME + " class");
+            throw new SRuntimeException("invalid {0} class", CLASS_NAME);
         }
 
         return (SDate)date;

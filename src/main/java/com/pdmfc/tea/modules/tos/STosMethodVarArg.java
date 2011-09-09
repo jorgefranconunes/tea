@@ -6,19 +6,15 @@
 
 package com.pdmfc.tea.modules.tos;
 
-import java.util.Enumeration;
-
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SBreakException;
 import com.pdmfc.tea.runtime.SContinueException;
-import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SObjBlock;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjNull;
 import com.pdmfc.tea.runtime.SObjPair;
 import com.pdmfc.tea.runtime.SObjSymbol;
-import com.pdmfc.tea.runtime.SObjVar;
 import com.pdmfc.tea.runtime.SReturnException;
 import com.pdmfc.tea.util.SListNode;
 
@@ -144,10 +140,11 @@ public final class STosMethodVarArg
         try {
             result = _body.exec(procContext);
         } catch (SReturnException e1) {
-            result = e1._value;
+            result = e1.getReturnValue();
         } catch (SBreakException e2) {
-            result = e2._object;
+            result = e2.getBreakValue();
         } catch (SContinueException e3) {
+            // We will treat this as a return with a null.
         }
 
         return result;

@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -16,7 +16,6 @@ import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SBreakException;
 import com.pdmfc.tea.runtime.SContinueException;
 import com.pdmfc.tea.runtime.SReturnException;
-import com.pdmfc.tea.runtime.STypeException;
 
 
 
@@ -39,7 +38,8 @@ import com.pdmfc.tea.runtime.STypeException;
  *
  **************************************************************************/
 
-public class SLambdaFunction
+public final class SLambdaFunction
+    extends Object
     implements SObjFunction {
 
 
@@ -71,8 +71,8 @@ public class SLambdaFunction
  *
  **************************************************************************/
 
-   public SLambdaFunction(SObjSymbol[] argNames,
-                          SObjBlock    body) {
+   public SLambdaFunction(final SObjSymbol[] argNames,
+                          final SObjBlock    body) {
 
       _argNames        = argNames;
       _argCountPlusOne = argNames.length + 1;
@@ -91,8 +91,8 @@ public class SLambdaFunction
  * named after the formal command parameters are initialized with the
  * values received as arguments.
  *
- * This method is supposed to be called with <TT>args</TT> having at
- * least one element.
+ * <p>This method is supposed to be called with <code>args</code>
+ * having at least one element.</p>
  *
  * @param context The context where this command is being invoked.
  *
@@ -103,9 +103,9 @@ public class SLambdaFunction
  *
  **************************************************************************/
 
-    public Object exec(SObjFunction func,
-                       SContext     context,
-                       Object[]     args)
+    public Object exec(final SObjFunction func,
+                       final SContext     context,
+                       final Object[]     args)
         throws STeaException {
 
         if ( args.length != _argCountPlusOne ) {
@@ -117,7 +117,7 @@ public class SLambdaFunction
 
         // Initializes the actual arguments.
         int i = _argCountPlusOne;
-        int j = i - 1 ;
+        int j = i - 1;
         while ( j > 0 ) {
             --i;
             --j;
@@ -127,10 +127,11 @@ public class SLambdaFunction
         try {
             result = _body.exec(funcContext);
         } catch (SReturnException e1) {
-            result = e1._value;
+            result = e1.getReturnValue();
         } catch (SBreakException e2) {
-            result = e2._object;
+            result = e2.getBreakValue();
         } catch (SContinueException e3) {
+            // We will treat this as a return with a null.
         }
 
         return result;

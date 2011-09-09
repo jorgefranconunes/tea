@@ -1,24 +1,12 @@
 /**************************************************************************
  *
- * Copyright (c) 2010 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2010/03/14 Created. (jfn)
+ * Copyright (c) 2010-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
 package com.pdmfc.tea.runtime;
 
 import java.nio.charset.Charset;
-import java.nio.charset.UnsupportedCharsetException;
 
 import com.pdmfc.tea.SConfigInfo;
 import com.pdmfc.tea.STeaException;
@@ -36,7 +24,7 @@ import com.pdmfc.tea.runtime.SObjSymbol;
  *
  **************************************************************************/
 
-public class SEncodingUtils
+public final class SEncodingUtils
     extends Object {
 
 
@@ -62,6 +50,8 @@ public class SEncodingUtils
  **************************************************************************/
 
     private SEncodingUtils() {
+
+        // Nothing to do.
     }
 
 
@@ -75,10 +65,17 @@ public class SEncodingUtils
  * <p>The encoding is stored as a string in the Tea variable
  * <code>TEA_ENCODING_SOURCE</code> created in the given context.</p>
  *
+ * @param context
+ *
+ * @param requestedEncoding The encoding to be assumed for the Tea
+ * source files.
+ *
  **************************************************************************/
 
-    public static void setSourceEncoding(SContext context,
-                                         String   encoding) {
+    public static void setSourceEncoding(final SContext context,
+                                         final String   requestedEncoding) {
+
+        String encoding = requestedEncoding;
 
         if ( encoding == null ) {
             encoding = Charset.defaultCharset().name();
@@ -103,7 +100,7 @@ public class SEncodingUtils
  *
  **************************************************************************/
 
-    public static String getSourceEncoding(SContext context)
+    public static String getSourceEncoding(final SContext context)
         throws STeaException {
 
         String encoding = null;

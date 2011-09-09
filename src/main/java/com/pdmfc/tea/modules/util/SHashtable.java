@@ -1,19 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2010/01/28 Minor refactorings to properly use generics. (jfn)
- *
- * 2001/05/12 Created. (jfn)
+ * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -33,7 +20,6 @@ import com.pdmfc.tea.runtime.SObjNull;
 import com.pdmfc.tea.runtime.SObjPair;
 import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SNumArgException;
-import com.pdmfc.tea.runtime.SRuntimeException;
 
 
 
@@ -59,11 +45,11 @@ import com.pdmfc.tea.runtime.SRuntimeException;
 
 /**************************************************************************
  *
- * Implements an TOS object that acts like a java <TT>Hashtable</TT>.
+ * Implements an TOS object that acts like a java <code>Map</code>.
  *
  **************************************************************************/
 
-public class SHashtable
+public final class SHashtable
     extends STosObj {
 
 
@@ -90,7 +76,7 @@ public class SHashtable
  *
  **************************************************************************/
 
-    public SHashtable(STosClass myClass)
+    public SHashtable(final STosClass myClass)
         throws STeaException {
 
         super(myClass);
@@ -115,8 +101,8 @@ public class SHashtable
  *
  **************************************************************************/
 
-    private SHashtable(STosClass          myClass,
-                       Map<Object,Object> contents)
+    private SHashtable(final STosClass          myClass,
+                       final Map<Object,Object> contents)
         throws STeaException {
 
         super(myClass);
@@ -176,9 +162,9 @@ public class SHashtable
  *
  **************************************************************************/
 
-    public Object constructor(SObjFunction obj,
-                              SContext     context,
-                              Object[]     args)
+    public Object constructor(final SObjFunction obj,
+                              final SContext     context,
+                              final Object[]     args)
         throws STeaException {
 
         return obj;
@@ -233,9 +219,9 @@ public class SHashtable
  *
  **************************************************************************/
 
-    public Object put(SObjFunction obj,
-                      SContext     context,
-                      Object[]     args)
+    public Object put(final SObjFunction obj,
+                      final SContext     context,
+                      final Object[]     args)
         throws STeaException {
 
         if ( args.length != 4 ) {
@@ -292,9 +278,9 @@ public class SHashtable
  *
  **************************************************************************/
 
-    public Object get(SObjFunction obj,
-                      SContext     context,
-                      Object[]     args)
+    public Object get(final SObjFunction obj,
+                      final SContext     context,
+                      final Object[]     args)
         throws STeaException {
         
         if ( args.length != 3 ) {
@@ -345,9 +331,9 @@ public class SHashtable
  *
  **************************************************************************/
 
-    public Object getKeys(SObjFunction obj,
-                          SContext     context,
-                          Object[]     args)
+    public Object getKeys(final SObjFunction obj,
+                          final SContext     context,
+                          final Object[]     args)
         throws STeaException {
 
         SObjPair    empty   = SObjPair.emptyList();
@@ -408,9 +394,9 @@ public class SHashtable
  *
  **************************************************************************/
 
-    public Object getElements(SObjFunction obj,
-                              SContext     context,
-                              Object[]     args)
+    public Object getElements(final SObjFunction obj,
+                              final SContext     context,
+                              final Object[]     args)
         throws STeaException {
 
         SObjPair   empty     = SObjPair.emptyList();
@@ -471,9 +457,9 @@ public class SHashtable
  *
  **************************************************************************/
 
-    public Object isKey(SObjFunction obj,
-                        SContext     context,
-                        Object[]     args)
+    public Object isKey(final SObjFunction obj,
+                        final SContext     context,
+                        final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -521,9 +507,9 @@ public class SHashtable
  *
  **************************************************************************/
 
-    public Object clear(SObjFunction obj,
-                        SContext     context,
-                        Object[]     args)
+    public Object clear(final SObjFunction obj,
+                        final SContext     context,
+                        final Object[]     args)
         throws STeaException {
 
         _hashtable.clear();
@@ -577,9 +563,9 @@ public class SHashtable
  *
  **************************************************************************/
 
-    public Object remove(SObjFunction obj,
-                         SContext     context,
-                         Object[]     args)
+    public Object remove(final SObjFunction obj,
+                         final SContext     context,
+                         final Object[]     args)
         throws STeaException {
 
         int keyCount = args.length - 2;
@@ -630,7 +616,7 @@ public class SHashtable
  *
  **************************************************************************/
 
-    public static SHashtable newInstance(SContext context)
+    public static SHashtable newInstance(final SContext context)
         throws STeaException {
 
         STosClass  theClass = STosUtil.getClass(context, CLASS_NAME_S);
@@ -661,8 +647,8 @@ public class SHashtable
  *
  **************************************************************************/
 
-    public static SHashtable newInstance(SContext           context,
-                                         Map<Object,Object> contents)
+    public static SHashtable newInstance(final SContext           context,
+                                         final Map<Object,Object> contents)
         throws STeaException {
 
         STosClass  theClass = STosUtil.getClass(context, CLASS_NAME_S);

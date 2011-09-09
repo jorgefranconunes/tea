@@ -1,18 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2001/05/12
- * Created. (jfn)
+ * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -47,7 +35,7 @@ public interface SObjBlock {
  *
  **************************************************************************/
 
-    public SContext getContext();
+    SContext getContext();
 
 
 
@@ -67,7 +55,7 @@ public interface SObjBlock {
  *
  **************************************************************************/
 
-    public Object exec(SContext aContext)
+    Object exec(SContext aContext)
         throws STeaException;
 
 
@@ -87,7 +75,7 @@ public interface SObjBlock {
  *
  **************************************************************************/
 
-    public Object exec()
+    Object exec()
         throws STeaException;
 
 

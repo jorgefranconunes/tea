@@ -1,22 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2002/03/26 The constructors are no longer public.
- *
- * 2001/06/14 Minimized the number of method calls to access a Tea
- * variable. (jfn)
- *
- * 2001/05/12 Created. (jfn)
+ * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -49,9 +33,9 @@ public class SContext
     private SContext _parent;
 
     // Members related to the internal hashtable:
-    private SVarSet _varTable[];
-    private int     _varCount;
-    private int     _hashThreshold;
+    private SVarSet[] _varTable;
+    private int       _varCount;
+    private int       _hashThreshold;
 
     // The load factor should always be positive.
     private static final float HASH_LOAD_FACTOR = 0.75f;
@@ -90,7 +74,7 @@ public class SContext
  *
  **************************************************************************/
 
-    protected SContext(SContext parent) {
+    protected SContext(final SContext parent) {
 
         _parent = parent;
     }
@@ -124,7 +108,7 @@ public class SContext
  *
  **************************************************************************/
 
-    public SContext clone(SContext parent) {
+    public SContext clone(final SContext parent) {
 
         SContext result = new SContext(parent);
 
@@ -203,7 +187,7 @@ public class SContext
  *
  **************************************************************************/
 
-    public final boolean isDefined(SObjSymbol name) {
+    public final boolean isDefined(final SObjSymbol name) {
 
         if ( _varTable == null ) {
             if (_parent != null) {
@@ -241,19 +225,19 @@ public class SContext
 /**************************************************************************
  *
  * Creates a new variable inside this context. The variable will be
- * associated with a symbol named <TT>name</TT> and it will have has contents
- * the object referenced by <TT>value</TT>.
+ * associated with a symbol named <code>name</code> and it will have
+ * has contents the object referenced by <code>value</code>.
  *
- * @param name
- *    The name of the symbol to be associated to the variable being created.
+ * @param name The name of the symbol to be associated to the variable
+ * being created.
  *
- * @param value
- *    Reference to the object to be stored inside the variable.
+ * @param value Reference to the object to be stored inside the
+ * variable.
  *
  **************************************************************************/
 
-    public final SObjVar newVar(String name,
-                                Object value) {
+    public final SObjVar newVar(final String name,
+                                final Object value) {
 
         return newVar(SObjSymbol.addSymbol(name), value);
     }
@@ -265,16 +249,15 @@ public class SContext
 /**************************************************************************
  *
  * Creates a new variable inside this context. The variable will be
- * associated with symbol <TT>name</TT> and it will have has contents
- * the object referenced by <TT>value</TT>.
+ * associated with symbol <code>name</code> and it will have has
+ * contents the object referenced by <code>value</code>.
  *
- * @param name
- *    Symbol to be associated to the variable being created.
+ * @param name Symbol to be associated to the variable being created.
  *
  **************************************************************************/
 
-    public final SObjVar newVar(SObjSymbol name,
-                                Object     value) {
+    public final SObjVar newVar(final SObjSymbol name,
+                                final Object     value) {
 
         if ( _varTable == null ) {
             initHashtable();
@@ -349,23 +332,21 @@ public class SContext
 
 /**************************************************************************
  *
- * Sets the contents of a variable previously created. After this method
- * returns variable <TT>name</TT> will have as contents a reference to
- * object <TT>value</TT>.
+ * Sets the contents of a variable previously created. After this
+ * method returns variable <code>name</code> will have as contents a
+ * reference to object <code>value</code>.
  *
- * @param name
- *     Symbol associated with the variable to be set.
+ * @param name Symbol associated with the variable to be set.
  *
- * @param value
- *     Object to store in the variable.
+ * @param value Object to store in the variable.
  *
- * @exception com.pdmfc.tea.runtime.SNoSuchVarException
- *     Throw if no variable </TT>name</TT> was previously created.
+ * @exception com.pdmfc.tea.runtime.SNoSuchVarException Throw if no
+ * variable </code>name</code> was previously created.
  *
  **************************************************************************/
 
-    public final void setVar(SObjSymbol name,
-                             Object     value) 
+    public final void setVar(final SObjSymbol name,
+                             final Object     value) 
         throws SNoSuchVarException {
 
         if ( _varTable == null ) {
@@ -406,14 +387,14 @@ public class SContext
 /**************************************************************************
  *
  * Obtains the contents of the variable associated with symbol
- * <TT>name</TT>.  If such a variable does not exist in this context
- * then it is searched in its parent.
+ * <code>name</code>.  If such a variable does not exist in this
+ * context then it is searched in its parent.
  *
  * @param name Symbol associated with the variable whose contents are
  * to be retrieved.
  *
  * @return The object in the variable associated with symbol
- * <TT>name</TT>.
+ * <code>name</code>.
  *
  * @exception SNoSuchVarException Thrown if the variable does not
  * exist neither in this context nor in any of the contexts up the
@@ -421,7 +402,7 @@ public class SContext
  *
  **************************************************************************/
 
-   public final Object getVar(SObjSymbol name) 
+   public final Object getVar(final SObjSymbol name) 
          throws SNoSuchVarException {
 
         if ( _varTable == null ) {
@@ -460,14 +441,14 @@ public class SContext
 /**************************************************************************
  *
  * Obtains the contents of the variable associated with symbol
- * <TT>name</TT>.  If such a variable does not exist in this context
- * then it is searched in its parent.
+ * <code>name</code>.  If such a variable does not exist in this
+ * context then it is searched in its parent.
  *
  * @param name Symbol associated with the variable whose contents are
  * to be retrieved.
  *
  * @return The object in the variable associated with symbol
- * <TT>name</TT>.
+ * <code>name</code>.
  *
  * @exception SNoSuchVarException Thrown if the variable does not
  * exist neither in this context nor in any of the contexts up the
@@ -475,7 +456,7 @@ public class SContext
  *
  **************************************************************************/
 
-    public final SObjVar getVarObject(SObjSymbol name) 
+    public final SObjVar getVarObject(final SObjSymbol name) 
         throws SNoSuchVarException {
 
         SObjVar result = getVarObjectIfPossible(name);
@@ -493,18 +474,19 @@ public class SContext
 
 /**************************************************************************
  *
- * Fetches the container of a variable. If such a variable does not exist in this context
- * then it is searched in its parent.
+ * Fetches the container of a variable. If such a variable does not
+ * exist in this context then it is searched in its parent.
  *
  * @param name Symbol associated with the variable whose contents are
  * to be retrieved.
  *
- * @return The variable container associated with symbol <TT>name</TT>
- * or null if no Tea variable with that name is defined.
+ * @return The variable container associated with symbol
+ * <code>name</code> or null if no Tea variable with that name is
+ * defined.
  *
  **************************************************************************/
 
-    public final SObjVar getVarObjectIfPossible(SObjSymbol name)  {
+    public final SObjVar getVarObjectIfPossible(final SObjSymbol name)  {
 
         SObjVar result = null;
 
@@ -548,7 +530,7 @@ public class SContext
  *
  **************************************************************************/
 
-    private static class SVarSet
+    private static final class SVarSet
         extends Object
         implements SObjVar {
 
@@ -571,7 +553,7 @@ public class SContext
  *
  **************************************************************************/
 
-        public void set(Object newValue) {
+        public void set(final Object newValue) {
 
             _value = newValue;
         }

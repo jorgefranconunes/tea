@@ -1,23 +1,10 @@
 /**************************************************************************
  *
- * Copyright (c) 2010 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2010/03/04 Created. (jfn)
+ * Copyright (c) 2010-2011 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
 package com.pdmfc.tea.runtime;
-
-import java.util.List;
 
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.modules.SModule;
@@ -37,7 +24,7 @@ import com.pdmfc.tea.runtime.SRuntimeException;
  *
  **************************************************************************/
 
-public class SModuleUtils
+public final class SModuleUtils
     extends Object {
 
 
@@ -68,6 +55,8 @@ public class SModuleUtils
  **************************************************************************/
 
     private SModuleUtils() {
+
+        // Nothing to do.
     }
 
 
@@ -80,8 +69,8 @@ public class SModuleUtils
  *
  **************************************************************************/
 
-    public static SModule addModule(SContext context,
-                                    String   className)
+    public static SModule addModule(final SContext context,
+                                    final String   className)
         throws STeaException {
 
         SModule module = null;
@@ -110,8 +99,8 @@ public class SModuleUtils
  *
  **************************************************************************/
 
-    public static SModule addModule(SContext context,
-                                    SModule  module)
+    public static SModule addModule(final SContext context,
+                                    final SModule  module)
         throws STeaException {
 
         module.init(context);
@@ -135,8 +124,8 @@ public class SModuleUtils
  *
  **************************************************************************/
 
-    public static void addAndStartModule(SContext context,
-                                         String   className)
+    public static void addAndStartModule(final SContext context,
+                                         final String   className)
         throws STeaException {
 
         SModule module = addModule(context, className);
@@ -159,8 +148,8 @@ public class SModuleUtils
  *
  **************************************************************************/
 
-    public static void addAndStartModule(SContext context,
-                                         SModule  module)
+    public static void addAndStartModule(final SContext context,
+                                         final SModule  module)
         throws STeaException {
 
         addModule(context, module);
@@ -183,8 +172,8 @@ public class SModuleUtils
  *
  **************************************************************************/
 
-    private static SObjPair getHead(SContext   context,
-                                    SObjSymbol var)
+    private static SObjPair getHead(final SContext   context,
+                                    final SObjSymbol var)
         throws STeaException {
 
         SObjPair result = null;
@@ -216,7 +205,7 @@ public class SModuleUtils
  *
  **************************************************************************/
 
-    public static void startModules(SContext context)
+    public static void startModules(final SContext context)
         throws STeaException {
 
         SObjPair modulesHead = getHead(context, SYMBOL_MODULES);
@@ -234,9 +223,9 @@ public class SModuleUtils
  *
  **************************************************************************/
 
-    private static void startModules(int      index,
-                                     SContext context,
-                                     SObjPair modulesHead)
+    private static void startModules(final int      index,
+                                     final SContext context,
+                                     final SObjPair modulesHead)
         throws STeaException {
 
         Object car = modulesHead._car;
@@ -275,7 +264,7 @@ public class SModuleUtils
  *
  **************************************************************************/
 
-    public static void stopModules(SContext context)
+    public static void stopModules(final SContext context)
         throws STeaException {
 
         SObjPair modulesHead = getHead(context, SYMBOL_MODULES_STARTED);
@@ -295,9 +284,9 @@ public class SModuleUtils
  *
  **************************************************************************/
 
-    private static void stopModules(int      index,
-                                     SContext context,
-                                     SObjPair modulesHead)
+    private static void stopModules(final int      index,
+                                    final SContext context,
+                                    final SObjPair modulesHead)
         throws STeaException {
 
         Object car = modulesHead._car;
@@ -309,9 +298,10 @@ public class SModuleUtils
 
         if ( !(car instanceof SModule) ) {
             String msg = "Element {0} of {1} should be an SModule, not a {2}";
-            Object[] fmtArgs =
-                { String.valueOf(index), VAR_MODULES_STARTED, STypes.getTypeName(car) };
-            throw new SRuntimeException(msg, fmtArgs);
+            throw new SRuntimeException(msg,
+                                        String.valueOf(index),
+                                        VAR_MODULES_STARTED,
+                                        STypes.getTypeName(car));
         }
 
         SModule module = (SModule)car;
@@ -331,7 +321,7 @@ public class SModuleUtils
  *
  **************************************************************************/
 
-    public static void endModules(SContext context)
+    public static void endModules(final SContext context)
         throws STeaException {
 
         SObjPair modulesHead = getHead(context, SYMBOL_MODULES);
@@ -351,9 +341,9 @@ public class SModuleUtils
  *
  **************************************************************************/
 
-    private static void endModules(int      index,
-                                   SContext context,
-                                   SObjPair modulesHead)
+    private static void endModules(final int      index,
+                                   final SContext context,
+                                   final SObjPair modulesHead)
         throws STeaException {
 
         Object car = modulesHead._car;

@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2010-2011 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2010-2011 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -226,7 +226,7 @@ public final class SArgs
  *
  **************************************************************************/
 
-    static public Number getNumber(final Object[] args,
+    public static Number getNumber(final Object[] args,
                                    final int      index)
         throws STypeException {
 

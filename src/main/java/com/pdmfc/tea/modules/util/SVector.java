@@ -53,7 +53,7 @@ import com.pdmfc.tea.runtime.STypes;
  *
  **************************************************************************/
 
-public class SVector
+public final class SVector
     extends STosObj {
 
 
@@ -82,7 +82,7 @@ public class SVector
  *
  **************************************************************************/
 
-    public SVector(STosClass myClass)
+    public SVector(final STosClass myClass)
         throws STeaException {
 
         super(myClass);
@@ -107,8 +107,8 @@ public class SVector
  *
  **************************************************************************/
 
-    private SVector(STosClass    myClass,
-                    List<Object> contents)
+    private SVector(final STosClass    myClass,
+                    final List<Object> contents)
         throws STeaException {
 
         super(myClass);
@@ -177,9 +177,9 @@ public class SVector
  *
  **************************************************************************/
 
-    public Object constructor(SObjFunction obj,
-                              SContext     context,
-                              Object[]     args)
+    public Object constructor(final SObjFunction obj,
+                              final SContext     context,
+                              final Object[]     args)
         throws SRuntimeException {
 
         if ( (args.length!=2) && (args.length!=3) ) {
@@ -241,9 +241,9 @@ public class SVector
  *
  **************************************************************************/
 
-    public Object push(SObjFunction obj,
-                       SContext     context,
-                       Object[]     args)
+    public Object push(final SObjFunction obj,
+                       final SContext     context,
+                       final Object[]     args)
         throws SRuntimeException {
 
         return append(obj, context, args);
@@ -293,9 +293,9 @@ public class SVector
  *
  **************************************************************************/
 
-    public Object append(SObjFunction obj,
-                         SContext     context,
-                         Object[]     args)
+    public Object append(final SObjFunction obj,
+                         final SContext     context,
+                         final Object[]     args)
         throws SRuntimeException {
 
         if ( args.length < 3 ) {
@@ -354,9 +354,9 @@ public class SVector
  *
  **************************************************************************/
 
-    public Object init(SObjFunction obj,
-                       SContext     context,
-                       Object[]     args) {
+    public Object init(final SObjFunction obj,
+                       final SContext     context,
+                       final Object[]     args) {
 
         int newSize = args.length - 2;
 
@@ -405,9 +405,9 @@ public class SVector
  *
  **************************************************************************/
 
-    public Object getSize(SObjFunction obj,
-                          SContext     context,
-                          Object[]     args) {
+    public Object getSize(final SObjFunction obj,
+                          final SContext     context,
+                          final Object[]     args) {
 
         int size = _vector.size();
 
@@ -460,9 +460,9 @@ public class SVector
  *
  **************************************************************************/
 
-    public Object resize(SObjFunction obj,
-                         SContext     context,
-                         Object[]     args)
+    public Object resize(final SObjFunction obj,
+                         final SContext     context,
+                         final Object[]     args)
         throws SRuntimeException {
 
         if ( args.length != 3 ) {
@@ -472,7 +472,8 @@ public class SVector
         int newSize = SArgs.getInt(args,2).intValue();
 
         if ( newSize < 0 ) {
-            throw new SRuntimeException("TVector size must be an integer equal or greater than zero");
+            String msg = "size must be an integer equal or greater than zero";
+            throw new SRuntimeException(msg);
         }
 
         int oldSize = _vector.size();
@@ -533,9 +534,9 @@ public class SVector
  *
  **************************************************************************/
 
-    public Object getAt(SObjFunction obj,
-                        SContext     context,
-                        Object[]     args)
+    public Object getAt(final SObjFunction obj,
+                        final SContext     context,
+                        final Object[]     args)
         throws SRuntimeException {
 
         if ( args.length != 3 ) {
@@ -604,9 +605,9 @@ public class SVector
  *
  **************************************************************************/
 
-    public Object setAt(SObjFunction obj,
-                        SContext     context,
-                        Object[]     args)
+    public Object setAt(final SObjFunction obj,
+                        final SContext     context,
+                        final Object[]     args)
         throws SRuntimeException {
 
         if ( args.length != 4 ) {
@@ -665,9 +666,9 @@ public class SVector
  *
  **************************************************************************/
 
-    public Object getElements(SObjFunction obj,
-                              SContext     context,
-                              Object[]     args) {
+    public Object getElements(final SObjFunction obj,
+                              final SContext     context,
+                              final Object[]     args) {
 
         SObjPair    empty  = SObjPair.emptyList();
         SObjPair    head   = empty;
@@ -725,9 +726,9 @@ public class SVector
  *
  **************************************************************************/
 
-    public Object pop(SObjFunction obj,
-                      SContext     context,
-                      Object[]     args)
+    public Object pop(final SObjFunction obj,
+                      final SContext     context,
+                      final Object[]     args)
         throws SRuntimeException {
 
         int    lastIndex = _vector.size() - 1;
@@ -778,9 +779,9 @@ public class SVector
  *
  **************************************************************************/
 
-    public Object clear(SObjFunction obj,
-                        SContext     context,
-                        Object[]     args) {
+    public Object clear(final SObjFunction obj,
+                        final SContext     context,
+                        final Object[]     args) {
 
         _vector.clear();
 
@@ -833,9 +834,9 @@ public class SVector
  *
  **************************************************************************/
 
-    public Object sort(SObjFunction obj,
-                       SContext     context,
-                       Object[]     args)
+    public Object sort(final SObjFunction obj,
+                       final SContext     context,
+                       final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -865,9 +866,9 @@ public class SVector
  *
  **************************************************************************/
 
-    private void qs(List<Object> v,
-                    int          left,
-                    int          right)
+    private void qs(final List<Object> v,
+                    final int          left,
+                    final int          right)
         throws STeaException {
 
         int    i = left;
@@ -909,8 +910,8 @@ public class SVector
  *
  **************************************************************************/
 
-    private int compare(Object x,
-                        Object y)
+    private int compare(final Object x,
+                        final Object y)
         throws STeaException {
 
         Object[] args   = new Object[3];
@@ -971,7 +972,7 @@ public class SVector
  *
  **************************************************************************/
 
-    public static SVector newInstance(SContext context)
+    public static SVector newInstance(final SContext context)
         throws STeaException {
 
         STosClass theClass = STosUtil.getClass(context, CLASS_NAME_S);
@@ -1002,8 +1003,8 @@ public class SVector
  *
  **************************************************************************/
 
-    public static SVector newInstance(SContext     context,
-                                      List<Object> contents)
+    public static SVector newInstance(final SContext     context,
+                                      final List<Object> contents)
         throws STeaException {
 
         STosClass theClass = STosUtil.getClass(context, CLASS_NAME_S);

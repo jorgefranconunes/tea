@@ -65,17 +65,17 @@ public final class STosUtil
  * into an <code>STosObj</code>.
  *
  * @param args Array of <code>STObj</code> that is tipically the array
- *of arguments passed to a Tea function.
+ * of arguments passed to a Tea function.
  *
  * @param index Index into the <code>args</code> array of the element
  *to fetch.
  *
  * @return The element at the <code>index</code> position of the
- *<code>args</code> array.
+ * <code>args</code> array.
  *
  * @exception com.pdmfc.tea.runtime.STypeException Throw if the
- *element at the <code>index</code> position of the <code>args</code>
- *array is not an <code>STosObj</code>.
+ * element at the <code>index</code> position of the <code>args</code>
+ * array is not an <code>STosObj</code>.
  *
  **************************************************************************/
 
@@ -96,11 +96,11 @@ public final class STosUtil
 
 /**************************************************************************
  *
- * Retrieves an <TT>STosClass</TT> object. This is referenced by
- * <TT>args[index]</TT>, which is either the <TT>STosClass</TT> object
- * we are looking for or a symbol. In this later case there should be
- * a variable referenced by that symbol containing the
- * <TT>STosClass</TT>.
+ * Retrieves an <code>STosClass</code> object. This is referenced by
+ * <code>args[index]</code>, which is either the
+ * <code>STosClass</code> object we are looking for or a symbol. In
+ * this later case there should be a variable referenced by that
+ * symbol containing the <code>STosClass</code>.
  *
  * @param context The context where we will look for a variable, if
  * necessary.
@@ -109,8 +109,8 @@ public final class STosUtil
  *
  * @param index An index into the <code>args</code> array.
  *
- * @exception com.pdmfc.tea.modules.tos.STosNoSuchClassException
- * Thrown if the <TT>STosClass</TT> object could not be retrieved.
+ * @exception com.pdmfc.tea.modules.tos.SNoSuchClassException Thrown
+ * if the <code>STosClass</code> object could not be retrieved.
  *
  **************************************************************************/
 
@@ -148,7 +148,7 @@ public final class STosUtil
  * Fetches a class object.
  *
  * @param context Context where the class will be searched and its
- *constructor invoked.
+ * constructor invoked.
  *
  * @param className Symbol identifying the class.
  *

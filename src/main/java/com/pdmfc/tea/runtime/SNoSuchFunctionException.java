@@ -1,18 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- * 
- * $Id$
- *
- *
- * Revisions:
- *
- * 2001/05/12
- * Created. (jfn)
+ * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -31,7 +19,7 @@ import com.pdmfc.tea.runtime.SRuntimeException;
  *
  **************************************************************************/
 
-public class SNoSuchFunctionException
+public final class SNoSuchFunctionException
     extends SRuntimeException {
 
 
@@ -45,8 +33,9 @@ public class SNoSuchFunctionException
 
    public SNoSuchFunctionException(SObjSymbol symbol) {
 
-      super("Function '" + symbol.getName() +
-            "' not defined on current context");
+      super("Function '"
+            + symbol.getName()
+            + "' not defined on current context");
    }
 
 

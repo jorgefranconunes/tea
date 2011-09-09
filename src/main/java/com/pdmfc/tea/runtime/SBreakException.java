@@ -1,18 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- * 
- * $Id$
- *
- *
- * Revisions:
- *
- * 2001/05/12
- * Created. (jfn)
+ * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -32,15 +20,15 @@ import com.pdmfc.tea.runtime.SObjNull;
  *
  **************************************************************************/
 
-public class SBreakException
+public final class SBreakException
     extends SFlowControlException {
 
 
 
 
 
-  /** The value to return to the inner loop. */
-   public Object _object;
+    // The value to return to the inner loop.
+    private Object _object;
 
 
 
@@ -49,15 +37,15 @@ public class SBreakException
  *
  * Initializes the objects internal state.
  *
- * @param obj
- *     The value to return by the command that was performing the loop.
+ * @param obj The value to return by the command that was performing
+ * the loop.
  *
  **************************************************************************/
 
-   public SBreakException(Object obj) {
+    public SBreakException(final Object obj) {
 
-      _object = obj;
-   }
+        _object = obj;
+    }
 
 
 
@@ -69,10 +57,26 @@ public class SBreakException
  *
  **************************************************************************/
 
-   public SBreakException() {
+    public SBreakException() {
 
-      this(SObjNull.NULL);
-   }
+        this(SObjNull.NULL);
+    }
+
+
+
+
+
+
+/**************************************************************************
+ *
+ * @return The value passed to the break statement.
+ *
+ **************************************************************************/
+
+    public Object getBreakValue() {
+
+        return _object;
+    }
 
 
 }
@@ -87,6 +91,4 @@ public class SBreakException
  * 
  *
  **************************************************************************/
-
-
 

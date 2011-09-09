@@ -1614,7 +1614,7 @@ public final class SModuleLang
             try {
                 result = block.exec(newContext);
             } catch (SBreakException e1) {
-                result  = e1._object;
+                result  = e1.getBreakValue();
                 break;
             } catch (SContinueException e2) {
             }
@@ -3434,40 +3434,40 @@ public final class SModuleLang
 
     private static Object normalLoop(final SContext context,
                                      final Object[] args)
-      throws STeaException {
+        throws STeaException {
 
-      SObjBlock condBlock   = SArgs.getBlock(args, 1);
-      SObjBlock block       = SArgs.getBlock(args, 2);
-      Object    result      = SObjNull.NULL;
-      SContext  condContext = condBlock.getContext().newChild();
-      SContext  bodyContext = block.getContext().newChild();
+        SObjBlock condBlock   = SArgs.getBlock(args, 1);
+        SObjBlock block       = SArgs.getBlock(args, 2);
+        Object    result      = SObjNull.NULL;
+        SContext  condContext = condBlock.getContext().newChild();
+        SContext  bodyContext = block.getContext().newChild();
 
-      while ( true ) {
-         Object condition = condBlock.exec(condContext);
-         boolean condValue;
+        while ( true ) {
+            Object condition = condBlock.exec(condContext);
+            boolean condValue;
 
-         try {
-            condValue = ((Boolean)condition).booleanValue();
-         } catch (ClassCastException e) {
-             throw new STypeException(args, 1, "block returning a bool");
-         }
-         if ( condValue ) {
             try {
-               result = block.exec(bodyContext);
-            } catch (SContinueException e1) {
-               // Continue from the beggining of the block.
-            } catch (SBreakException e2) {
-               // Stop looping.
-               result  = e2._object;
-               break;
+                condValue = ((Boolean)condition).booleanValue();
+            } catch (ClassCastException e) {
+                throw new STypeException(args, 1, "block returning a bool");
             }
-         } else {
-            break;
-         }
-      }
+            if ( condValue ) {
+                try {
+                    result = block.exec(bodyContext);
+                } catch (SContinueException e1) {
+                    // Continue from the beggining of the block.
+                } catch (SBreakException e2) {
+                    // Stop looping.
+                    result  = e2.getBreakValue();
+                    break;
+                }
+            } else {
+                break;
+            }
+        }
 
-      return result;
-   }
+        return result;
+    }
 
 
 
@@ -3480,28 +3480,28 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-   private static Object infiniteLoop(final SContext context,
-                                      final Object[] args)
-      throws STeaException {
+    private static Object infiniteLoop(final SContext context,
+                                       final Object[] args)
+        throws STeaException {
 
-      SObjBlock block      = SArgs.getBlock(args, 2);
-      SContext  newContext = block.getContext().newChild();
-      Object    result     = SObjNull.NULL;
+        SObjBlock block      = SArgs.getBlock(args, 2);
+        SContext  newContext = block.getContext().newChild();
+        Object    result     = SObjNull.NULL;
 
-      while ( true ) {
-         try {
-            result = block.exec(newContext);
-         } catch (SContinueException e1) {
-            // Continue from the beggining of the block.
-         } catch (SBreakException e2) {
-            // Stop looping.
-            result  = e2._object;
-            break;
-         }
-      }
+        while ( true ) {
+            try {
+                result = block.exec(newContext);
+            } catch (SContinueException e1) {
+                // Continue from the beggining of the block.
+            } catch (SBreakException e2) {
+                // Stop looping.
+                result  = e2.getBreakValue();
+                break;
+            }
+        }
 
-      return result;
-   }
+        return result;
+    }
 
 
 

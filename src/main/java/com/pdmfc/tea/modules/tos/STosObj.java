@@ -13,7 +13,6 @@ import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjNull;
 import com.pdmfc.tea.runtime.SObjSymbol;
-import com.pdmfc.tea.util.SList;
 import com.pdmfc.tea.util.SListNode;
 
 
@@ -98,7 +97,7 @@ public class STosObj
  **************************************************************************/
 
     public void init(final SContext context,
-                     final Object   args[])
+                     final Object[] args)
         throws STeaException {
 
         SObjFunction constructor = _myClass.getConstructor();

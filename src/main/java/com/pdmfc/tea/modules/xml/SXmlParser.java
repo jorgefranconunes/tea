@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -20,7 +20,6 @@ import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SNumArgException;
-import com.pdmfc.tea.runtime.STypes;
 
 
 
@@ -48,14 +47,15 @@ import com.pdmfc.tea.runtime.STypes;
  *
  **************************************************************************/
 
-public class SXmlParser
+public final class SXmlParser
     extends STosObj {
 
 
 
     
     private static final String     CLASS_NAME   = "TXmlParser";
-    private static final SObjSymbol CLASS_NAME_S = SObjSymbol.addSymbol(CLASS_NAME);
+    private static final SObjSymbol CLASS_NAME_S =
+        SObjSymbol.addSymbol(CLASS_NAME);
 
     // The XML parser.
     private XMLReader _parser = null;
@@ -73,7 +73,7 @@ public class SXmlParser
  *
  **************************************************************************/
 
-      public SXmlParser(STosClass myClass)
+      public SXmlParser(final STosClass myClass)
          throws STeaException {
 
          super(myClass);
@@ -94,7 +94,7 @@ public class SXmlParser
  *
  **************************************************************************/
 
-    public void setNativeParser(String parserClassName)
+    public void setNativeParser(final String parserClassName)
         throws SRuntimeException {
 
         try {
@@ -141,9 +141,9 @@ public class SXmlParser
  *
  **************************************************************************/
 
-    public Object constructor(SObjFunction obj,
-                              SContext     context,
-                              Object[]     args)
+    public Object constructor(final SObjFunction obj,
+                              final SContext     context,
+                              final Object[]     args)
         throws STeaException {
 
         switch ( args.length ) {
@@ -211,9 +211,9 @@ public class SXmlParser
  *
  **************************************************************************/
 
-    public Object setNativeParser(SObjFunction obj,
-                                  SContext     context,
-                                  Object[]     args)
+    public Object setNativeParser(final SObjFunction obj,
+                                  final SContext     context,
+                                  final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -264,9 +264,9 @@ public class SXmlParser
  *
  **************************************************************************/
 
-    public Object parse(SObjFunction obj,
-                        SContext     context,
-                        Object[]     args)
+    public Object parse(final SObjFunction obj,
+                        final SContext     context,
+                        final Object[]     args)
         throws STeaException {
 
         SXmlParserParse parseMethod = new SXmlParserParse();
@@ -300,9 +300,9 @@ public class SXmlParser
  *
  **************************************************************************/
 
-    public Object startDocument(SObjFunction obj,
-                                SContext     context,
-                                Object[]     args)
+    public Object startDocument(final SObjFunction obj,
+                                final SContext     context,
+                                final Object[]     args)
         throws STeaException {
 
         return obj;
@@ -332,9 +332,9 @@ public class SXmlParser
  *
  **************************************************************************/
 
-    public Object endDocument(SObjFunction obj,
-                              SContext     context,
-                              Object[]     args)
+    public Object endDocument(final SObjFunction obj,
+                              final SContext     context,
+                              final Object[]     args)
         throws STeaException {
 
         return obj;
@@ -377,9 +377,9 @@ public class SXmlParser
  *
  **************************************************************************/
 
-    public Object startElement(SObjFunction obj,
-                               SContext     context,
-                               Object[]     args)
+    public Object startElement(final SObjFunction obj,
+                               final SContext     context,
+                               final Object[]     args)
         throws STeaException {
 
         return obj;
@@ -414,9 +414,9 @@ public class SXmlParser
  *
  **************************************************************************/
 
-    public Object endElement(SObjFunction obj,
-                             SContext     context,
-                             Object[]     args)
+    public Object endElement(final SObjFunction obj,
+                             final SContext     context,
+                             final Object[]     args)
         throws STeaException {
 
         return obj;
@@ -451,9 +451,9 @@ public class SXmlParser
  *
  **************************************************************************/
 
-    public Object characters(SObjFunction obj,
-                             SContext     context,
-                             Object[]     args)
+    public Object characters(final SObjFunction obj,
+                             final SContext     context,
+                             final Object[]     args)
         throws STeaException {
 
         return obj;
@@ -495,9 +495,9 @@ public class SXmlParser
  *
  **************************************************************************/
 
-    public Object processingInstruction(SObjFunction obj,
-                                        SContext     context,
-                                        Object[]     args)
+    public Object processingInstruction(final SObjFunction obj,
+                                        final SContext     context,
+                                        final Object[]     args)
         throws STeaException {
 
         return obj;
@@ -539,9 +539,9 @@ public class SXmlParser
  *
  **************************************************************************/
 
-    public Object setHandler(SObjFunction obj,
-                             SContext     context,
-                             Object[]     args)
+    public Object setHandler(final SObjFunction obj,
+                             final SContext     context,
+                             final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -578,14 +578,14 @@ public class SXmlParser
  *
  **************************************************************************/
 
-    public static SXmlParser newInstance(SContext context,
-                                         Object[] args)
+    public static SXmlParser newInstance(final SContext context,
+                                         final Object[] args)
         throws STeaException {
 
         STosObj parser = STosUtil.newInstance(CLASS_NAME_S, context);
 
         if ( !(parser instanceof SXmlParser) ) {
-            throw new SRuntimeException("invalid " + CLASS_NAME + " class");
+            throw new SRuntimeException("invalid {0} class", CLASS_NAME);
         }
 
         return (SXmlParser)parser;

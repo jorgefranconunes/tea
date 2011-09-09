@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -51,14 +51,14 @@ import com.pdmfc.tea.runtime.STypes;
  *
  **************************************************************************/
 
-public class SZipFile
+public final class SZipFile
     extends STosObj {
 
 
 
 
 
-    ZipFile _zipFile = null;
+    private ZipFile _zipFile = null;
 
 
 
@@ -70,7 +70,7 @@ public class SZipFile
  *
  **************************************************************************/
 
-    public SZipFile(STosClass myClass)
+    public SZipFile(final STosClass myClass)
         throws STeaException {
 
         super(myClass);
@@ -109,9 +109,9 @@ public class SZipFile
  *
  **************************************************************************/
 
-    public Object constructor(SObjFunction obj,
-                              SContext     context,
-                              Object[]     args)
+    public Object constructor(final SObjFunction obj,
+                              final SContext     context,
+                              final Object[]     args)
         throws STeaException {
 
         switch ( args.length ) {
@@ -162,9 +162,9 @@ public class SZipFile
  *
  **************************************************************************/
 
-    public Object open(SObjFunction obj,
-                       SContext     context,
-                       Object[]     args)
+    public Object open(final SObjFunction obj,
+                       final SContext     context,
+                       final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -221,9 +221,9 @@ public class SZipFile
  *
  **************************************************************************/
 
-    public Object close(SObjFunction obj,
-                        SContext     context,
-                        Object[]     args)
+    public Object close(final SObjFunction obj,
+                        final SContext     context,
+                        final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -270,9 +270,9 @@ public class SZipFile
  *
  **************************************************************************/
 
-    public Object getEntryNames(SObjFunction obj,
-                                SContext     context,
-                                Object[]     args)
+    public Object getEntryNames(final SObjFunction obj,
+                                final SContext     context,
+                                final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -331,9 +331,9 @@ public class SZipFile
  *
  **************************************************************************/
 
-    public Object getInput(SObjFunction obj,
-                           SContext     context,
-                           Object[]     args)
+    public Object getInput(final SObjFunction obj,
+                           final SContext     context,
+                           final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -399,9 +399,9 @@ public class SZipFile
  *
  **************************************************************************/
 
-    public Object isDirectory(SObjFunction obj,
-                              SContext     context,
-                              Object[]     args)
+    public Object isDirectory(final SObjFunction obj,
+                              final SContext     context,
+                              final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {

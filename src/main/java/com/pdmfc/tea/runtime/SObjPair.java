@@ -23,7 +23,7 @@ import com.pdmfc.tea.runtime.SRuntimeException;
  *
  **************************************************************************/
 
-public class SObjPair
+public final class SObjPair
     extends Object
     implements Iterable {
 
@@ -63,8 +63,8 @@ public class SObjPair
  *
  **************************************************************************/
 
-    public SObjPair(Object car,
-		    Object cdr) {
+    public SObjPair(final Object car,
+		    final Object cdr) {
 
 	_car = car;
 	_cdr = cdr;
@@ -219,7 +219,7 @@ public class SObjPair
  *
  **************************************************************************/
 
-	public SPairIterator(SObjPair node) {
+	public SPairIterator(final SObjPair node) {
 
 	    _node = node;
 	    if ( (_node!=null) && (_node._car==null) ) {
@@ -313,7 +313,7 @@ public class SObjPair
  *
  **************************************************************************/
 
-	public SPairEnumeration(SObjPair node) {
+	public SPairEnumeration(final SObjPair node) {
 
 	    _node = node;
 	    if ( (_node!=null) && (_node._car==null) ) {
