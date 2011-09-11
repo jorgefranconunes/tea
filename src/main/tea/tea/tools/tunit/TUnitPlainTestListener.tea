@@ -1,0 +1,101 @@
+###########################################################################
+#
+# Copyright (c) 2011 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+class TUnitPlainTestListener (
+)
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method TUnitPlainTestListener startTestSuit ( name ) {
+    
+    echo "Testsuit: " $name
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method TUnitPlainTestListener endTestSuit ( name testsCount failedCount totalTime ) {
+    
+    define totalTimeMillis [/ $totalTime 1000.0]
+    define msgFmt \
+            "Tests run: {0}, Failures: {1}, Time elapsed: {2,Number,0.###} sec"
+    
+    echo [str-fmt $msgFmt $testsCount $failedCount $totalTimeMillis]
+    echo
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method TUnitPlainTestListener testFailure ( name time msg ) {
+    
+    define timeMillis [/ $time 1000.0]
+    define msgFmt \
+            "Test case: {0} took {1,Number,0.###} sec\n\tCaused an error : {2}"
+    
+    echo [str-fmt $msgFmt $name $timeMillis $msg]
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method TUnitPlainTestListener testSuccess ( name time ) {
+    
+    define timeMillis [/ $time 1000.0]
+    define msgFmt "Test case: {0} took {1,Number,0.###} sec"
+    
+    echo [str-fmt $msgFmt $name $timeMillis]
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+

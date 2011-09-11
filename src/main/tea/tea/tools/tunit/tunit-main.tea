@@ -1,0 +1,241 @@
+###########################################################################
+#
+# Copyright (c) 2011 PDM&FC, All Rights Reserved.
+#
+#
+# Tool for running Tea unit tests from the command line.
+#
+###########################################################################
+
+import "tea/tools/tunit/TUnitPlainTestListener.tea"
+import "tea/tunit/tunit.tea"
+
+
+
+
+
+define MSG_USAGE "
+Tool for running Tea unit tests.
+Available commands:
+"
+
+
+#
+#
+#
+define CMD_RUN_ALL_TESTS_NAME     "runAllTests"
+define CMD_RUN_ALL_TESTS_FUNCTION cmd-run-all-tests
+define CMD_RUN_ALL_TESTS_USAGE    "file-path [file-path ...]"
+
+
+#
+# Available commands that may be executed from the command line.
+#
+define CMD_DATA (
+    ( $CMD_RUN_ALL_TESTS_NAME (
+        $CMD_RUN_ALL_TESTS_FUNCTION
+        $CMD_RUN_ALL_TESTS_USAGE
+    ) )
+)
+
+
+#
+# Map of functions implementing the commands specified in the command
+# line arguments. Keys are command names (strings). Values are functions.
+#
+define _commandMap [[new THashtable] addElements $CMD_DATA]
+
+
+
+
+
+
+
+###########################################################################
+#
+# The program main function.
+#
+###########################################################################
+
+define main args {
+    
+    define ok          $true
+    define cmdFunction $null
+    
+    if $ok {
+        define argc [length $args]
+        if { == $argc 0 } {
+            show-usage
+            set! ok $false
+        }
+    }
+    if $ok {
+        define command [car $args]
+        set! cmdFunction [get-command-function $command]
+        if { null? $cmdFunction } {
+            echo "*** Unknown command \"" $command "\""
+            set! ok $false
+        }
+    }
+    if $ok {
+        apply $cmdFunction [cdr $args]
+    }
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define show-usage () {
+    
+    echo $MSG_USAGE
+    
+    foreach cmdName [get-command-name-list] {
+        echo $cmdName " " [get-command-usage $cmdName]
+    }
+    
+    echo
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define show-command-usage ( cmdName ) {
+    
+    echo "Usage: " $cmdName " " [get-command-usage $cmdName]
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define get-command-name-list () {
+    
+    define cmdNames [apply [new TVector] append [_commandMap getKeys]]
+    
+    $cmdNames sort $str-cmp
+    
+    $cmdNames getElements
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define get-command-function ( cmdName ) {
+    
+    get-command-field $cmdName 0
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define get-command-usage ( cmdName ) {
+    
+    get-command-field $cmdName 1
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define get-command-field ( cmdName fieldIndex ) {
+    
+    define fieldValue $null
+    define cmdData    [$_commandMap get $cmdName]
+    
+    if { not-null? $cmdData } {
+        set! fieldValue [nth $cmdData $fieldIndex]
+    }
+    
+    is $fieldValue
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define cmd-run-all-tests args {
+    
+    define argc [length $args]
+    
+    if { < $argc 1 } {
+        show-command-usage $CMD_RUN_ALL_TESTS_NAME
+        exit 1
+    }
+    
+    foreach testSourceFile $args {
+        source $testSourceFile
+    }
+    
+    define testListener [new TUnitPlainTestListener]
+    
+    tunit-run-all-tests $testListener
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+apply main $argv
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+

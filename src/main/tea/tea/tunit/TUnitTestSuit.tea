@@ -1,0 +1,210 @@
+###########################################################################
+#
+# Copyright (c) 2011 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+import "tea/tunit/TUnitTestCase.tea"
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+class TUnitTestSuit (
+
+    _name
+    _testsuitBlock
+    _setupFunction
+    _teardownFunction
+    _testcaseList
+
+    _testsRunCount
+    _testsFailedCount
+    _testsTime
+
+    _testListener
+)
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method TUnitTestSuit constructor ( name testsuitBlock ) {
+    
+    set! _name          $name
+    set! _testsuitBlock $testsuitBlock
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method TUnitTestSuit prepareToRunTests () {
+    
+    define testsuitBlock $_testsuitBlock
+    define setupBlock    $null
+    define teardownBlock $null
+    define testcaseList  ()
+    
+    define tunit-setup ( block ) {
+        set! setupBlock $block
+    }
+    
+    define tunit-teardown ( block ) {
+        set! teardownBlock $block
+    }
+    
+    define tunit-test ( name block ) {
+        define testcaseName [symbol->string $name]
+        define testcase     [TUnitTestCase::regularTest $testcaseName $block]
+        append $testcase $testcaseList
+    }
+    
+    define tunit-test-error ( name block ) {
+        define testcaseName [symbol->string $name]
+        define testcase     [TUnitTestCase::errorTest $testcaseName $block]
+        append $testcase $testcaseList
+    }
+    
+    define functionNames (
+        tunit-setup
+        tunit-teardown
+        tunit-test
+        tunit-test-error
+    )
+    define functions [map get $functionNames]
+    
+    apply [lambda $functionNames $testsuitBlock] $functions
+    
+    set! _setupFunction    [build-function-from-block $setupBlock]
+    set! _teardownFunction [build-function-from-block $teardownBlock]
+    set! _testcaseList     $testcaseList
+    
+    set! _testsRunCount    0
+    set! _testsFailedCount 0
+    set! _testsTime        0
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method TUnitTestSuit runAllTests ( testListener ) {
+    
+    $this prepareToRunTests
+    
+    set! _testListener $testListener
+    
+    $testListener startTestSuit $_name
+    
+    foreach testcase $_testcaseList {
+        $testcase runTest $this $_setupFunction $_teardownFunction
+    }
+    
+    $testListener endTestSuit \
+            $_name $_testsRunCount $_testsFailedCount $_testsTime
+    
+    set! _testListener $null
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method TUnitTestSuit testFailure ( testcaseName runTime errorMessage ) {
+    
+    ++ _testsRunCount
+    ++ _testsFailedCount
+    += _testsTime $runTime
+    
+    $_testListener testFailure $testcaseName $runTime $errorMessage
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method TUnitTestSuit testSuccess ( testcaseName runTime ) {
+    
+    ++ _testsRunCount
+    += _testsTime $runTime
+    
+    $_testListener testSuccess $testcaseName $runTime
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define build-function-from-block ( block ) {
+    
+    if { null? $block } $do-nothing {lambda () { exec $block }}
+}
+
+
+
+
+
+###########################################################################
+#
+# Used for missing for setup or teardown blocks.
+#
+###########################################################################
+
+define do-nothing () {
+    
+    # Nothing to do.
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+

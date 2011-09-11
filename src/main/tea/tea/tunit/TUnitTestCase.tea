@@ -1,0 +1,219 @@
+###########################################################################
+#
+# Copyright (c) 2011 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+
+
+
+
+###########################################################################
+#
+# Creates a new test case where the test is not expected to generate
+# an exception.
+#
+###########################################################################
+
+global TUnitTestCase::regularTest ( name block ) {
+    
+    new TUnitTestCase $name $block runRegularTest
+}
+
+
+
+
+
+###########################################################################
+#
+# Creates a new test case where the test is expected to generate an
+# exception. If the test generates no exception then it will fail.
+#
+###########################################################################
+
+global TUnitTestCase::errorTest ( name block ) {
+    
+    new TUnitTestCase $name $block runErrorTest
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+class TUnitTestCase (
+
+    _name
+    _testBlock
+    _testRunMethod
+)
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method TUnitTestCase constructor ( name block testRunMethod ) {
+    
+    set! _name          $name
+    set! _testBlock     $block
+    set! _testRunMethod $testRunMethod
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method TUnitTestCase runTest ( testListener setup teardown ) {
+    
+    $this $_testRunMethod $testListener $setup $teardown
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method TUnitTestCase runRegularTest ( testListener setup teardown ) {
+    
+    define runTestBlock  [$this buildRunTestFunction $setup $teardown]
+    define isErrorThrown $false
+    define errorMsg      $null
+    define runTime       [time {
+        set! isErrorThrown [catch {$runTestBlock} errorMsg]
+    }]
+    
+    if $isErrorThrown {
+        $testListener testFailure $_name $runTime $errorMsg
+    } {
+        $testListener testSuccess $_name $runTime
+    }
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method TUnitTestCase runErrorTest ( testListener setup teardown ) {
+    
+    define runTestBlock  [$this buildRunTestFunction $setup $teardown]
+    define isErrorThrown $false
+    define errorMsg      $null
+    define stackTrace    $null
+    define runTime       [time {
+        set! isErrorThrown [catch {$runTestBlock} errorMsg stackTrace]
+    }]
+    
+    if $isErrorThrown {
+        $testListener testSuccess $_name $runTime
+    } {
+        define msg "Expected error but none was thrown"
+        $testListener testFailure $_name $runTime $msg
+    }
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method TUnitTestCase buildRunTestFunction ( setup teardown ) {
+    
+    define tunit-assert        $TUnitTestCase::assert
+    define tunit-assert-equals $TUnitTestCase::assertEquals
+
+    define functionNames (
+        tunit-assert
+        tunit-assert-equals
+    )
+    define functions [map get $functionNames]
+    
+    lambda () {
+        $setup
+        apply [lambda $functionNames $_testBlock] $functions
+        $teardown
+    }
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define TUnitTestCase::assert ( isTrue message ) {
+    
+    if $isTrue {
+        # All is ok.
+    } {
+        error $message
+    }
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define TUnitTestCase::assertEquals ( expectedValue actualValue ) {
+    
+    if { same? $expectedValue $actualValue } {
+        # All ok.
+    } {
+        define fmtMsg "Expected \"{0}\" but got \"{1}\""
+        define msg    [str-fmt $fmtMsg $expectedValue $actualValue]
+        error $msg
+    }
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+

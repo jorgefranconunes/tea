@@ -1455,11 +1455,11 @@ public final class SModuleLang
 //* the context where the code block was defined.
 //* <P>
 //* The <Func name="exec"/> function could be defined like this:
-//* <Code>
+//* <pre>
 //* define exec ( block ) {
 //*     [lambda () $block]
 //* }
-//* </Code>
+//* </pre>
 //* </P>
 //* </Description>
 //* 
@@ -3166,7 +3166,7 @@ public final class SModuleLang
                 throw new SRuntimeException(msg, fmtArgs);
             }
         } else if ( arg instanceof SInput ) {
-            InputStream    input     = ((SInput)arg).getInputStream();
+            InputStream    input = ((SInput)arg).getInputStream();
             if ( input == null ) {
                 throw new SRuntimeException("input stream is closed");
             }
@@ -3178,7 +3178,7 @@ public final class SModuleLang
                 Object[] fmtArgs = { e.getMessage() };
                 throw new SRuntimeException(msg, fmtArgs);
             } finally {
-                try { ((SInput)arg).close(); } catch (IOException e) {}
+                try { ((SInput)arg).close(); } catch (IOException e) {/* */}
             }
         } else {
             String msg = "argument 1 must be string or input stream, not {0}";

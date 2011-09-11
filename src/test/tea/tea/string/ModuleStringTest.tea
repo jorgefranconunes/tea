@@ -1,0 +1,49 @@
+###########################################################################
+#
+# Copyright (c) 2011 PDM&FC, All Rights Reserved.
+#
+#
+# TUnit tests for functions in the tea.lang module.
+#
+###########################################################################
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuit str-upper-test {
+
+    tunit-test UpperOk {
+        tunit-assert-equals [str-upper "hello"] "HELLO"
+    }
+
+    tunit-test-error TooFewArgs {
+        str-upper
+    }
+
+    tunit-test-error TooManyArgs {
+        str-upper "too" "many" "args"
+    }
+
+    tunit-test-error InvalidArgType {
+        str-upper 1
+    }
+
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+

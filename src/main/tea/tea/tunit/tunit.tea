@@ -1,0 +1,65 @@
+###########################################################################
+#
+# Copyright (c) 2011 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+import "tea/tunit/TUnitTestSuit.tea"
+
+
+
+
+
+# Keys are test suit names. Values are TUnitTestSuit instances.
+define _testsuitsByName [new THashtable]
+
+# All registered TUnitTestSuit instances, ordered by the same order
+# they were registered.
+define _testsuitList ()
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+global tunit-testsuit ( name block ) {
+    
+    define testsuitName [symbol->string $name]
+    define testsuit     [new TUnitTestSuit $testsuitName $block]
+    
+    $_testsuitsByName put $testsuitName $testsuit
+    append $testsuit $_testsuitList
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+global tunit-run-all-tests ( testListener ) {
+    
+    foreach testsuit $_testsuitList {
+        $testsuit runAllTests $testListener
+    }
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
