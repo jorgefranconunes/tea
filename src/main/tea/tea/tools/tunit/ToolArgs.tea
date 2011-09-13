@@ -1,0 +1,149 @@
+###########################################################################
+#
+# Copyright (c) 2011 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+
+
+
+
+###########################################################################
+#
+# Used for parsing command line args to the "tunit" tool.
+#
+###########################################################################
+
+class ToolArgs (
+
+    # Map where keys are option names and values the corresponding
+    # list of values for that option.
+    _optionsMap
+
+    # List with the command line arguments following the options.
+    _restOfArgs
+)
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method ToolArgs constructor ( argv ) {
+    
+    set! _optionsMap [new THashtable]
+    
+    define restOfArgs $argv
+    
+    foreach arg $argv {
+        if { str-starts-with? $arg "--" } {
+            if { str== $arg "--" } {
+                set! restOfArgs [cdr $restOfArgs]
+                break
+            } {
+                parse-option $arg $_optionsMap
+            }
+        } {
+            break
+        }
+        
+        set! restOfArgs [cdr $restOfArgs]
+    }
+    
+    set! _restOfArgs $restOfArgs
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define parse-option ( option map ) {
+    
+    define optionParts [str-split $option "="]
+    define optionName  [nth $optionParts 0]
+    define valueParts  [cdr $optionParts]
+    define optionValue \
+            [if {not-empty? $valueParts} {str-join $valueParts "="} ""]
+    
+    define valueList [$map get $optionName]
+    
+    if { null? $valueList } {
+        $map put $optionName ( $optionValue )
+    } {
+        append $optionValue $valueList
+    }
+}
+
+
+
+
+
+###########################################################################
+#
+# Retrieves the value of the given option. The value of the last
+# occurence of the option with the given name will be returned.
+#
+###########################################################################
+
+method ToolArgs getOption ( optionName ) {
+    
+    define valueList [$_optionsMap get $optionName]
+    
+    if { not-null? $valueList } {
+        nth $valueList [- [length $valueList] 1]
+    } {
+        is $null
+    }
+}
+
+
+
+
+
+###########################################################################
+#
+# Retrieves the list of values for the given option.
+#
+###########################################################################
+
+method ToolArgs getOptionList ( optionName ) {
+    
+    $_optionsMap get $optionName
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method ToolArgs getRestOfArgs () {
+    
+    is $_restOfArgs
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+

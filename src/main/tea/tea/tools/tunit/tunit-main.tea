@@ -7,8 +7,8 @@
 #
 ###########################################################################
 
-import "tea/tools/tunit/TUnitPlainTestListener.tea"
-import "tea/tunit/tunit.tea"
+import "tea/tools/tunit/ToolArgs.tea"
+import "tea/tunit/TUnitFileRunner.tea"
 
 
 
@@ -44,6 +44,15 @@ define CMD_DATA (
 # line arguments. Keys are command names (strings). Values are functions.
 #
 define _commandMap [[new THashtable] addElements $CMD_DATA]
+
+
+
+
+
+#
+# The options accepted by the commands.
+#
+define OPTION_DIR "--dir"
 
 
 
@@ -208,13 +217,14 @@ define cmd-run-all-tests args {
         exit 1
     }
     
-    foreach testSourceFile $args {
-        source $testSourceFile
-    }
+    define parsedArgs     [new ToolArgs $args]
+    define sourceFileList [$parsedArgs getRestOfArgs]
+    define sourceDirList  [$parsedArgs getOptionList $OPTION_DIR]
+    define testRunner     [new TUnitFileRunner]
     
-    define testListener [new TUnitPlainTestListener]
-    
-    tunit-run-all-tests $testListener
+    $testRunner addSourceFileList $sourceFileList
+    $testRunner addSourceDirList $sourceDirList
+    $testRunner runAllTests
 }
 
 

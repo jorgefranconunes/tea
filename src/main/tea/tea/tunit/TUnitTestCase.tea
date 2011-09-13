@@ -177,7 +177,17 @@ method TUnitTestCase buildRunTestFunction ( setup teardown ) {
 #
 ###########################################################################
 
-define TUnitTestCase::assert ( isTrue message ) {
+define TUnitTestCase::assert args {
+    
+    define argc [length $args]
+    
+    if { > $argc 2 } {
+        error "Args: isTrue message"
+    }
+    
+    define isTrue  [nth $args 0]
+    define message [if {== $argc 2} {nth $args 1} "Assertion failed"]
+    
     
     if $isTrue {
         # All is ok.

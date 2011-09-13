@@ -15,6 +15,12 @@
 ###########################################################################
 
 class TUnitPlainTestListener (
+
+    _totalFiles
+    _totalTestSuits
+    _totalTests
+    _totalFailures
+    _totalTime
 )
 
 
@@ -27,9 +33,13 @@ class TUnitPlainTestListener (
 #
 ###########################################################################
 
-method TUnitPlainTestListener startTestSuit ( name ) {
+method TUnitPlainTestListener constructor () {
     
-    echo "Testsuit: " $name
+    set! _totalFiles     0
+    set! _totalTestSuits 0
+    set! _totalTests     0
+    set! _totalFailures  0
+    set! _totalTime      0
 }
 
 
@@ -42,7 +52,41 @@ method TUnitPlainTestListener startTestSuit ( name ) {
 #
 ###########################################################################
 
-method TUnitPlainTestListener endTestSuit ( name testsCount failedCount totalTime ) {
+method TUnitPlainTestListener processingSourceFile ( path ) {
+    
+    echo "Test source: " $path
+    
+    ++ _totalFiles
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method TUnitPlainTestListener startingTestSuit ( name ) {
+    
+    echo "Testsuit: " $name
+    
+    ++ _totalTestSuits
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method TUnitPlainTestListener endingTestSuit ( name testsCount failedCount totalTime ) {
     
     define totalTimeMillis [/ $totalTime 1000.0]
     define msgFmt \
@@ -69,6 +113,10 @@ method TUnitPlainTestListener testFailure ( name time msg ) {
             "Test case: {0} took {1,Number,0.###} sec\n\tCaused an error : {2}"
     
     echo [str-fmt $msgFmt $name $timeMillis $msg]
+    
+    ++ _totalTests
+    ++ _totalFailures
+    += _totalTime $time
 }
 
 
@@ -87,7 +135,26 @@ method TUnitPlainTestListener testSuccess ( name time ) {
     define msgFmt "Test case: {0} took {1,Number,0.###} sec"
     
     echo [str-fmt $msgFmt $name $timeMillis]
+    
+    ++ _totalTests
+    += _totalTime $time
 }
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method TUnitPlainTestListener getTotalFiles () { is $_totalFiles }
+method TUnitPlainTestListener getTotalTestSuits () { is $_totalTestSuits }
+method TUnitPlainTestListener getTotalTests () { is $_totalTests }
+method TUnitPlainTestListener getTotalFailures () { is $_totalFailures }
+method TUnitPlainTestListener getTotalTime () { is $_totalTime }
 
 
 

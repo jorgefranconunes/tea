@@ -20,7 +20,7 @@
 tunit-testsuit str-upper-test {
 
     tunit-test UpperOk {
-        tunit-assert-equals [str-upper "hello"] "HELLO"
+        tunit-assert-equals "HELLO" [str-upper "hello"] 
     }
 
     tunit-test-error TooFewArgs {
@@ -33,6 +33,36 @@ tunit-testsuit str-upper-test {
 
     tunit-test-error InvalidArgType {
         str-upper 1
+    }
+
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuit str-lower-test {
+
+    tunit-test LowerOk {
+        tunit-assert-equals "hello" [str-lower "HELLO"]
+    }
+
+    tunit-test-error TooFewArgs {
+        str-lower
+    }
+
+    tunit-test-error TooManyArgs {
+        str-lower "too" "many" "args"
+    }
+
+    tunit-test-error InvalidArgType {
+        str-lower 1
     }
 
 }

@@ -119,13 +119,13 @@ method TUnitTestSuit runAllTests ( testListener ) {
     
     set! _testListener $testListener
     
-    $testListener startTestSuit $_name
+    $testListener startingTestSuit $_name
     
     foreach testcase $_testcaseList {
         $testcase runTest $this $_setupFunction $_teardownFunction
     }
     
-    $testListener endTestSuit \
+    $testListener endingTestSuit \
             $_name $_testsRunCount $_testsFailedCount $_testsTime
     
     set! _testListener $null

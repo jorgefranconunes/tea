@@ -1,0 +1,182 @@
+###########################################################################
+#
+# Copyright (c) 2011 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuit ToolArgsTest {
+    
+    import "tea/tools/tunit/ToolArgs.tea"
+
+
+    
+    
+    
+    tunit-test NoArgs {
+        define argList ()
+        define args    [new ToolArgs $argList]
+        
+        tunit-assert-equals 0 [length [$args getRestOfArgs]]
+    }
+
+    
+    
+    
+    
+    tunit-test OneArg {
+        define argList ( "Hello" )
+        define args    [new ToolArgs $argList]
+        
+        tunit-assert-equals 1 [length [$args getRestOfArgs]]
+    }
+
+    
+    
+    
+    
+    tunit-test TwoArgs {
+        define argList ( "Hello" "World!" )
+        define args    [new ToolArgs $argList]
+        
+        tunit-assert-equals 2 [length [$args getRestOfArgs]]
+    }
+
+    
+    
+    
+    
+    tunit-test OneOption {
+        define argList ( "--my-option=whatever" )
+        define args    [new ToolArgs $argList]
+        
+        tunit-assert-equals 0 [length [$args getRestOfArgs]]
+        tunit-assert-equals "whatever" [$args getOption "--my-option"]
+    }
+
+    
+    
+    
+    
+    tunit-test TwoOptions {
+        define argList ( "--my-option=whatever" "--another-option=cool")
+        define args    [new ToolArgs $argList]
+        
+        tunit-assert-equals 0 [length [$args getRestOfArgs]]
+        tunit-assert-equals "whatever" [$args getOption "--my-option"]
+        tunit-assert-equals "cool"     [$args getOption "--another-option"]
+    }
+
+    
+    
+    
+    
+    tunit-test OneOptionOneArg {
+        define argList ( "--my-option=whatever" "stuff" )
+        define args    [new ToolArgs $argList]
+        
+        tunit-assert-equals 1 [length [$args getRestOfArgs]]
+        tunit-assert-equals "whatever" [$args getOption "--my-option"]
+        tunit-assert-equals "stuff" [nth [$args getRestOfArgs] 0]
+    }
+
+    
+    
+    
+    
+    tunit-test EmptyOption {
+        define argList ( "--my-option" )
+        define args    [new ToolArgs $argList]
+        
+        tunit-assert-equals 0 [length [$args getRestOfArgs]]
+        tunit-assert-equals "" [$args getOption "--my-option"]
+    }
+
+    
+    
+    
+    
+    tunit-test EndOfOptionsNothingMore {
+        define argList ( "--" )
+        define args    [new ToolArgs $argList]
+        
+        tunit-assert-equals 0 [length [$args getRestOfArgs]]
+    }
+
+    
+    
+    
+    
+    tunit-test EndOfOptionsOneOption {
+        define argList ( "--my-option=whatever" "--" )
+        define args    [new ToolArgs $argList]
+        
+        tunit-assert-equals 0 [length [$args getRestOfArgs]]
+        tunit-assert-equals "whatever" [$args getOption "--my-option"]
+    }
+
+    
+    
+    
+    
+    tunit-test EndOfOptionsOneOptionOneArg {
+        define argList ( "--my-option=whatever" "--" "stuff" )
+        define args    [new ToolArgs $argList]
+        
+        tunit-assert-equals 1 [length [$args getRestOfArgs]]
+        tunit-assert-equals "whatever" [$args getOption "--my-option"]
+        tunit-assert-equals "stuff" [nth [$args getRestOfArgs] 0]
+    }
+
+    
+    
+    
+    
+    tunit-test EndOfOptionsOneOptionOneArgVariant {
+        define argList ( "--my-option=whatever" "--" "--stuff" )
+        define args    [new ToolArgs $argList]
+        
+        tunit-assert-equals 1 [length [$args getRestOfArgs]]
+        tunit-assert-equals "whatever" [$args getOption "--my-option"]
+        tunit-assert-equals "--stuff" [nth [$args getRestOfArgs] 0]
+    }
+    
+    
+    
+    
+    
+    tunit-test TwoOptionsSame {
+        define argsList ( "--my-option=first" "--my-option=second" )
+        define args     [new ToolArgs $argsList]
+        
+        tunit-assert-equals 0 [length [$args getRestOfArgs]]
+        tunit-assert-equals "second" [$args getOption "--my-option"]
+        
+        define values [$args getOptionList "--my-option"]
+        
+        tunit-assert-equals 2 [length $values]
+        tunit-assert-equals "first" [nth $values 0]
+        tunit-assert-equals "second" [nth $values 1]
+    }
+
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+

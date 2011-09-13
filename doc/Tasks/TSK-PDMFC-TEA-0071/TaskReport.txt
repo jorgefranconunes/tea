@@ -1,0 +1,120 @@
+TSK-PDMFC-TEA-0071 Tea unit tests API (#3901)
+
+The goal of this task is to define a Tea API to add in the writing of
+unit tests in Tea. This API will be called TUnit. It should follow the
+spirit of the JUnit API.
+
+This task will specifically address the topics enumerated bellow.
+
+* Functions of the TUnit API available for writing unit tests.
+* Command line tool for running Tea unit tests from the command line.
+* Integration with Ant, Maven, Jenkins.
+
+The actual implementation of the API may be left for a future task.
+
+
+
+Example of a Tea unit test suit.
+
+
+tunit-testsuit MyTestSuit {
+
+    tunit-setup {
+        # Run before each test.
+        # Nothing to do here in this example.
+    }
+
+    tunit-teardown {
+        # Run after each test.
+        # Nothing to do here in the example.
+    }
+
+    tunit-test UpperOk {
+        tunit-assert-equals [str-upper "hello"] "HELLO"
+    }
+
+    tunit-test-error TooFewArgs {
+        str-upper
+    }
+
+    tunit-test-error TooManyArgs {
+        str-upper "too" "many" "args"
+    }
+
+    tunit-test-error InvalidArgType {
+        str-upper 1
+    }
+
+}
+
+
+
+
+
+Analysis
+
+
+Concepts and entities
+
+TestSuit
+
+Attributes:
+
+* Name.
+* Test set up function.
+* Test tear down function.
+* List of unit tests.
+
+Actions:
+
+* Set test set up block.
+* Set test tear down block.
+* Add test case.
+* Run all test cases.
+* Run one test case.
+
+
+TestCase
+
+Attributes:
+
+* Name
+* Test case block.
+
+Actions:
+
+* Run test case.
+
+
+
+
+
+Command line tool for running unit tests.
+
+tunit [file-path ...]
+
+Runs all the test suits in the files given as arguments. Writes to
+stdout information on the test suits and tests as they are run.
+
+
+tunit runAllTests [option ...] [file-path ...]
+
+tunit runTestSuit [option ...] test-suit-name [file-path ...]
+
+tunit runOneTest [option ...] test-suit-name test-name [file-path ...]
+
+
+Common options:
+
+--dir=PATH
+
+Path of directory where Tea source files with tests will be searched
+for. The names of the Tea source files that get executed are defined
+by the "--pattern" option.
+
+
+--pattern=REGEXP
+
+Regexp specifying the files that will be executed for tests. This
+option is relevant only when the "--dir" option is also specified. Be
+default it will assume the value ".*Test.tea".

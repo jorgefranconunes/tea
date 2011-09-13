@@ -1,0 +1,231 @@
+###########################################################################
+#
+# Copyright (c) 2011 PDMFC, All Rights Reserved.
+#
+###########################################################################
+
+import "tea/tunit/tunit.tea"
+import "tea/tunit/TUnitPlainTestListener.tea"
+
+
+
+
+
+define DEFAULT_NAME_REGEXP [regexp-pattern ".*Test.tea$"]
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+class TUnitFileRunner (
+
+    # List of paths of Tea source files to execute.
+    _sourceFileList
+
+    _sourceDirList
+
+    _sourceNameRegexp
+)
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method TUnitFileRunner constructor () {
+    
+    set! _sourceFileList   ()
+    set! _sourceDirList    ()
+    set! _sourceNameRegexp $DEFAULT_NAME_REGEXP
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method TUnitFileRunner addSourceFile ( path ) {
+    
+    append $path $_sourceFileList
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method TUnitFileRunner addSourceFileList ( pathList ) {
+    
+    set! _sourceFileList [list-cat $_sourceFileList $pathList]
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method TUnitFileRunner addSourceDir ( path ) {
+    
+    append $path $_sourceDirList
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method TUnitFileRunner addSourceDirList ( pathList ) {
+    
+    set! _sourceDirList [list-cat $_sourceDirList $pathList]
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method TUnitFileRunner setNameRegexp ( regexpString ) {
+    
+    set! _sourceNameRegexp [regexp-pattern $regexpString]
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method TUnitFileRunner runAllTests () {
+    
+    define testListener       [new TUnitPlainTestListener]
+    define moreSourceFileList [$this getSourceFileListFromDirs]
+    define allSourceFileList  [list-cat $_sourceFileList $moreSourceFileList]
+    
+    foreach sourceFile $allSourceFileList {
+        $testListener processingSourceFile $sourceFile
+        
+        tunit-reset
+        source $sourceFile
+        tunit-run-all-tests $testListener
+    }
+    
+    define msgFmt \
+            "Files: {0}, Test suits: {1}, Tests run: {2}, Failures: {3}, Time elapsed: {4,Number,0.###} sec"
+    
+    echo [str-fmt $msgFmt \
+            [$testListener getTotalFiles] \
+            [$testListener getTotalTestSuits] \
+            [$testListener getTotalTests] \
+            [$testListener getTotalFailures] \
+            [/ [$testListener getTotalTime] 1000.0]]
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method TUnitFileRunner getSourceFileListFromDirs () {
+    
+    define pathList ()
+    
+    foreach sourceDir $_sourceDirList {
+        define dirPathList [list-dir-recursive $sourceDir $_sourceNameRegexp]
+        
+        set! pathList [list-cat $pathList $dirPathList]
+    }
+    
+    is $pathList
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define list-dir-recursive ( dir nameRegexp ) {
+    
+    define fileList ()
+    define dirList  ()
+    define nameList [glob $dir ".*"]
+    
+    foreach name $nameList {
+        define path [file-join $dir $name]
+        
+        if { file-is-regular? $path } {
+            if { matches? $nameRegexp $name } {
+                set! fileList [prepend $path $fileList]
+            }
+        } {
+            set! dirList [prepend $path $dirList]
+        }
+    }
+    
+    foreach innerDir $dirList {
+        set! fileList \
+                [list-cat $fileList [list-dir-recursive $innerDir $nameRegexp]]
+    }
+    
+    is $fileList
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+

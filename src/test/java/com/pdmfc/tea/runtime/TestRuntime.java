@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2011 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2011 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -21,7 +21,8 @@ import com.pdmfc.tea.runtime.STeaRuntime;
 
 /**************************************************************************
  *
- * Utility class that encapsulates funcionlity used in multiple tests.
+ * Utility class that encapsulates functionlity used in multiple
+ * tests.
  *
  **************************************************************************/
 
