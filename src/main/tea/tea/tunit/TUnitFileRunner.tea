@@ -141,23 +141,18 @@ method TUnitFileRunner runAllTests () {
     define moreSourceFileList [$this getSourceFileListFromDirs]
     define allSourceFileList  [list-cat $_sourceFileList $moreSourceFileList]
     
-    foreach sourceFile $allSourceFileList {
-        $testListener processingSourceFile $sourceFile
-        
+    $testListener startingAllTests
+    
+    foreach sourceFile $allSourceFileList {        
         tunit-reset
+        
+        $testListener startingTestFile $sourceFile
         source $sourceFile
         tunit-run-all-tests $testListener
+        $testListener endingTestFile $sourceFile
     }
     
-    define msgFmt \
-            "Files: {0}, Test suits: {1}, Tests run: {2}, Failures: {3}, Time elapsed: {4,Number,0.###} sec"
-    
-    echo [str-fmt $msgFmt \
-            [$testListener getTotalFiles] \
-            [$testListener getTotalTestSuits] \
-            [$testListener getTotalTests] \
-            [$testListener getTotalFailures] \
-            [/ [$testListener getTotalTime] 1000.0]]
+    $testListener endingAllTests
 }
 
 

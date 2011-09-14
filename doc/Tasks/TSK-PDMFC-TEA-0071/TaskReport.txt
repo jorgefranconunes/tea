@@ -118,3 +118,43 @@ by the "--pattern" option.
 Regexp specifying the files that will be executed for tests. This
 option is relevant only when the "--dir" option is also specified. Be
 default it will assume the value ".*Test.tea".
+
+
+
+
+
+Integrating TUnit tests with JUnit
+
+Usefull for running TUnit tests under Ant and Maven. And the TUnit
+tests will be counted as unit tests and for code coverage.
+
+
+JUnit framework API: http://www.junit.org/apidocs/index.html
+
+
+Suggestions:
+
+Represent all the TUnit tests to run as a junit.framework.TestSuit
+
+
+Each TUnitTestSuit will have a corresponding junit.framework.TestSuit
+
+
+The execution if the tests has to be launched from Java code. We will
+provide a utility class to create a junit.framework.TestSuit instance
+that when run will execute all the TUnit tests.
+
+
+The above is not practical.
+
+Other options:
+
+* On an Ant build, just run the "tunit" tool.
+
+* Generate Surefire reports, for use with Maven. Run the "tunit" tool
+  in the "test" phase.
+
+* Run the "tunit" tool with Java classs instrumented by Cobertura. The
+  challenge here is to merge the results of running the JUnit tests
+  and with the results of running the "tunit" tool.
+

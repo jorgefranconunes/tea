@@ -52,11 +52,64 @@ method TUnitPlainTestListener constructor () {
 #
 ###########################################################################
 
-method TUnitPlainTestListener processingSourceFile ( path ) {
+method TUnitPlainTestListener startingAllTests () {
+    
+    # We do nothing...
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method TUnitPlainTestListener endingAllTests () {
+    
+    define msgFmt \
+            "Files: {0}, Test suits: {1}, Tests run: {2}, Failures: {3}, Time elapsed: {4,Number,0.###} sec"
+    
+    echo [str-fmt $msgFmt \
+            $_totalFiles \
+            $_totalTestSuits \
+            $_totalTests \
+            $_totalFailures \
+            [/ $_totalTime 1000.0]]
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method TUnitPlainTestListener startingTestFile ( path ) {
     
     echo "Test source: " $path
     
     ++ _totalFiles
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method TUnitPlainTestListener endingTestFile ( path ) {
+    
+    # We do nothing...
 }
 
 

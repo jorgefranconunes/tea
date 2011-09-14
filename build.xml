@@ -147,6 +147,18 @@ For setup instructions, please read the 00README-developers.txt
 
   <target
      name="test.build"
+     depends="junit.build, tunit.build" />
+
+  <target name="test.clean" depends="junit.clean, tunit.clean" />
+
+
+
+
+
+  <!-- Run JUnit tests. -->
+
+  <target
+     name="junit.build"
      depends="jar.build, java-test.build, resources-test.build">
     <junit haltonerror="yes" haltonfailure="yes" showoutput="yes">
       <classpath>
@@ -163,7 +175,7 @@ For setup instructions, please read the 00README-developers.txt
     </junit>
   </target>
 
-  <target name="test.clean" depends="java-test.clean, resources-test.clean" />
+  <target name="junit.clean" depends="java-test.clean, resources-test.clean" />
 
 
 
@@ -267,6 +279,32 @@ If you remove the build.conf file, ant will setup one for you using the JUnit li
 
 
 
+  <!-- Run TUnit tests. -->
+
+  <property
+     name="tunit.script"
+     value="resource:/lib/tea-${BUILD_VERSION}/tea/tools/tunit/tunit-main.tea" />
+  <property
+     name="tunit.source.dir"
+     location="src/test/tea" />
+
+  <target name="tunit.build" depends="jar.build">
+    <java jar="${jar.file}" fork="true" failonerror="yes">
+      <arg value="--script=${tunit.script}" />
+      <arg value="--" />
+      <arg value="runAllTests" />
+      <arg value="--dir=${tunit.source.dir}" />
+    </java>
+  </target>
+
+  <target name="tunit.clean">
+    <!-- Nothing to do... -->
+  </target>
+
+
+
+
+
   <!-- Javadoc related targets. -->
 
   <property name="javadoc.source.dir" value="${java.source.dir}" />
@@ -345,7 +383,7 @@ If you remove the build.conf file, ant will setup one for you using the JUnit li
 
 
 
-  <!-- release related targets. -->
+  <!-- Release related targets. -->
 
   <property name="release.dir" location="target" />
   <property name="release.basename" value="tea-${BUILD_VERSION}" />
