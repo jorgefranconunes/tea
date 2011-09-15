@@ -5,7 +5,6 @@
 ###########################################################################
 
 import "tea/tunit/tunit.tea"
-import "tea/tunit/TUnitPlainTestListener.tea"
 
 
 
@@ -135,9 +134,8 @@ method TUnitFileRunner setNameRegexp ( regexpString ) {
 #
 ###########################################################################
 
-method TUnitFileRunner runAllTests () {
+method TUnitFileRunner runAllTests ( testListener ) {
     
-    define testListener       [new TUnitPlainTestListener]
     define moreSourceFileList [$this getSourceFileListFromDirs]
     define allSourceFileList  [list-cat $_sourceFileList $moreSourceFileList]
     

@@ -158,3 +158,6 @@ Other options:
   challenge here is to merge the results of running the JUnit tests
   and with the results of running the "tunit" tool.
 
+
+Maven plugin for running Java code:
+http://mojo.codehaus.org/exec-maven-plugin/index.html

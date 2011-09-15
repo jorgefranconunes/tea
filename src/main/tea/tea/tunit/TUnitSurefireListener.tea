@@ -1,0 +1,379 @@
+###########################################################################
+#
+# Copyright (c) 2011 PDM&FC, All Rights Reserved.
+#
+###########################################################################
+
+
+
+
+
+###########################################################################
+#
+# Generates Surefire XML reports from the TUnit test results.
+#
+###########################################################################
+
+class TUnitSurefireListener (
+
+    _reportsDir
+    _testFilePrefix
+
+    _surefireTestClassName
+    _testsuitName
+
+    _reportItemList
+
+    _totalTests
+    _totalFailures
+    _totalTime
+)
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method TUnitSurefireListener constructor ( reportsDir testFilePrefix ) {
+    
+    set! _reportsDir     $reportsDir
+    set! _testFilePrefix $testFilePrefix
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method TUnitSurefireListener startingAllTests () {
+    
+    # We do nothing...
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method TUnitSurefireListener endingAllTests () {
+    
+    # We do nothing...
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method TUnitSurefireListener startingTestFile ( path ) {
+    
+    set! _reportItemList ()
+    set! _surefireTestClassName \
+            [build-surefire-classname $path $_testFilePrefix]
+    
+    set! _totalTests     0
+    set! _totalFailures  0
+    set! _totalTime      0
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method TUnitSurefireListener endingTestFile ( path ) {
+    
+    $this generateXmlReport
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method TUnitSurefireListener startingTestSuit ( name ) {
+    
+    set! _testsuitName $name
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method TUnitSurefireListener endingTestSuit ( name testsCount failedCount totalTime ) {
+    
+    # We do nothing...
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method TUnitSurefireListener testFailure ( name time msg ) {
+    
+    define className    $_surefireTestClassName
+    define testcaseName [build-testcase-name $_testsuitName $name]
+    
+    define reportItem [lambda ( output ) {
+        report-failure $output $className $testcaseName $time $msg
+    }]
+    
+    append $reportItem $_reportItemList
+    
+    ++ _totalTests
+    ++ _totalFailures
+    += _totalTime $time
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method TUnitSurefireListener testSuccess ( name time ) {
+    
+    define className    $_surefireTestClassName
+    define testcaseName [build-testcase-name $_testsuitName $name]
+    
+    define reportItem [lambda ( output ) {
+        report-success $output $className $testcaseName $time
+    }]
+    
+    append $reportItem $_reportItemList
+    
+    ++ _totalTests
+    += _totalTime $time
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define build-testcase-name ( testsuitName testcaseName ) {
+    
+    str-cat $testsuitName "." $testcaseName
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define build-surefire-classname ( path prefix ) {
+    
+    define buffer $path
+    
+    # Remove prefix from path.
+    if { str-starts-with? $buffer $prefix } {
+        set! buffer [str-substring $buffer [str-len $prefix]]
+    }
+    
+    # More cleanups.
+    if { str-starts-with? $buffer "/" } {
+        set! buffer [str-substring $buffer 1]
+    }
+    
+    # Remove extension from path.
+    if { str-ends-with? $buffer ".tea" } {
+        set! buffer [str-substring $buffer 0 [- [str-len $buffer] 4]]
+    }
+    
+    # Replace file separator with "."
+    regsub "/" "." $buffer
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+method TUnitSurefireListener generateXmlReport () {
+    
+    define outputPath [build-report-path $_reportsDir $_surefireTestClassName]
+    define output     [new TFileOutput $outputPath]
+    
+    report-start $output $_surefireTestClassName $_totalTests $_totalFailures $_totalTime
+    foreach reportItem $_reportItemList {
+        $reportItem $output
+    }
+    report-end $output
+    
+    $output close
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define build-report-path ( reportsDir className ) {
+    
+    define fileName [str-cat "TEST-" $className ".xml"]
+    
+    file-join $reportsDir $fileName
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define report-start ( output className totalTests totalFailures totalTime ) {
+    
+    define timeSeconds   [/ $totalTime 1000.0]
+    define testsField    [java-exec-method java.lang.String valueOf $totalTests]
+    define failuresField [java-exec-method java.lang.String valueOf $totalFailures]
+    define timeField     [java-exec-method java.lang.String valueOf $timeSeconds]
+    
+    define testsuitElement "<testsuite failures=\"{2}\" time=\"{3}\" errors=\"0\" skipped=\"0\" tests=\"{1}\" name=\"{0}\">"
+    
+    $output writeln "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>"
+    $output writeln [str-fmt $testsuitElement $className $testsField $failuresField $timeField]
+    $output writeln "<properties>"
+    $output writeln "</properties>"
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define report-end ( output ) {
+    
+    $output writeln "</testsuite>"
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define report-failure ( output className name time msg ) {
+    
+    define timeSeconds   [/ $time 1000.0]
+    define timeField     [java-exec-method java.lang.String valueOf $timeSeconds]
+
+    define testcaseElementStart "<testcase time=\"{2}\" classname=\"{0}\" name=\"{1}\">"
+    define testcaseElementEnd "</testcase>"
+    
+    define failureElement "<failure message=\"{0}\" type=\"tunit.failure\">{0}</failure>"
+    define msgXml [xml-encode $msg]
+    
+    $output writeln [str-fmt $testcaseElementStart $className $name $timeField]
+    $output writeln [str-fmt $failureElement $msg]
+    $output writeln $testcaseElemenEnd
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define report-success ( output className name time ) {
+    
+    define timeSeconds   [/ $time 1000.0]
+    define timeField     [java-exec-method java.lang.String valueOf $timeSeconds]
+
+    define testcaseElement "<testcase time=\"{2}\" classname=\"{0}\" name=\"{1}\" />"
+    
+    $output writeln [str-fmt $testcaseElement $className $name $timeField]
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+

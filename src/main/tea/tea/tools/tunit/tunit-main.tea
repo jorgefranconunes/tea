@@ -7,9 +7,6 @@
 #
 ###########################################################################
 
-import "tea/tools/tunit/ToolArgs.tea"
-import "tea/tunit/TUnitFileRunner.tea"
-
 
 
 
@@ -25,7 +22,11 @@ Available commands:
 #
 define CMD_RUN_ALL_TESTS_NAME     "runAllTests"
 define CMD_RUN_ALL_TESTS_FUNCTION cmd-run-all-tests
-define CMD_RUN_ALL_TESTS_USAGE    "file-path [file-path ...]"
+define CMD_RUN_ALL_TESTS_USAGE    "- Use --help for details."
+
+define CMD_SUREFIRE_NAME     "surefireReport"
+define CMD_SUREFIRE_FUNCTION cmd-surefire
+define CMD_SUREFIRE_USAGE    "- Use --help for details."
 
 
 #
@@ -36,6 +37,10 @@ define CMD_DATA (
         $CMD_RUN_ALL_TESTS_FUNCTION
         $CMD_RUN_ALL_TESTS_USAGE
     ) )
+    ( $CMD_SUREFIRE_NAME (
+        $CMD_SUREFIRE_FUNCTION
+        $CMD_SUREFIRE_USAGE
+    ) )
 )
 
 
@@ -44,17 +49,6 @@ define CMD_DATA (
 # line arguments. Keys are command names (strings). Values are functions.
 #
 define _commandMap [[new THashtable] addElements $CMD_DATA]
-
-
-
-
-
-#
-# The options accepted by the commands.
-#
-define OPTION_DIR "--dir"
-
-
 
 
 
@@ -210,21 +204,26 @@ define get-command-field ( cmdName fieldIndex ) {
 
 define cmd-run-all-tests args {
     
-    define argc [length $args]
+    import "tea/tools/tunit/tunit-tool-run-all-tests.tea"
     
-    if { < $argc 1 } {
-        show-command-usage $CMD_RUN_ALL_TESTS_NAME
-        exit 1
-    }
+    tunit-tool-run-all-tests $CMD_RUN_ALL_TESTS_NAME $args
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+define cmd-surefire args {
     
-    define parsedArgs     [new ToolArgs $args]
-    define sourceFileList [$parsedArgs getRestOfArgs]
-    define sourceDirList  [$parsedArgs getOptionList $OPTION_DIR]
-    define testRunner     [new TUnitFileRunner]
+    import "tea/tools/tunit/tunit-tool-surefire.tea"
     
-    $testRunner addSourceFileList $sourceFileList
-    $testRunner addSourceDirList $sourceDirList
-    $testRunner runAllTests
+    tunit-tool-surefire $CMD_SUREFIRE_NAME $args
 }
 
 

@@ -242,6 +242,16 @@ public final class SModuleString
                           }
                       });
 
+       context.newVar("str-last-index-of",
+                      new SObjFunction() {
+                          public Object exec(final SObjFunction func,
+                                             final SContext     context,
+                                             final Object[]     args)
+                              throws STeaException {
+                              return functionLastIndexOf(func, context, args);
+                          }
+                      });
+
        context.newVar("str-lower",
                       new SObjFunction() {
                           public Object exec(final SObjFunction func,
@@ -1294,6 +1304,64 @@ public final class SModuleString
         int    startIndex =
             (args.length==4) ? SArgs.getInt(args,3).intValue() : 0;
         int    result     = str1.indexOf(str2, startIndex);
+        
+        return Integer.valueOf(result);
+    }
+
+
+
+
+
+//* 
+//* <TeaFunction name="str-last-index-of"
+//*                 arguments="aString1 aString2"
+//*             module="tea.string">
+//*
+//* <Overview>
+//* Finds the index of the last occurence of a string inside another string.
+//* </Overview>
+//*
+//* <Parameter name="aString1">
+//* The string where the search for the <Arg name="aString2"/> will be
+//* performed.
+//* </Parameter>
+//*
+//* <Parameter name="aString2">
+//* The string to be searched inside <Arg name="aString1"/>.
+//* </Parameter>
+//*
+//* <Returns>
+//* An integer representing the index of the last occurence of
+//* <Arg name="aString2"/> inside <Arg name="aString1"/>, or -1
+//* if <Arg name="aString1"/> does not contain <Arg name="aString2"/>.
+//* </Returns>
+//*
+//* <Description>
+//* </Description>
+//* 
+//* </TeaFunction>
+//* 
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    private static Object functionLastIndexOf(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
+        throws STeaException {
+
+        if ( (args.length<3) || (args.length>4)) {
+            throw new SNumArgException(args, "string sub-string [start-index]");
+        }
+
+        String str1       = SArgs.getString(args,1);
+        String str2       = SArgs.getString(args,2);
+        int    startIndex =
+            (args.length==4) ? SArgs.getInt(args,3).intValue() : 0;
+        int    result     = str1.lastIndexOf(str2, startIndex);
         
         return Integer.valueOf(result);
     }

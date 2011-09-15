@@ -1,0 +1,62 @@
+###########################################################################
+#
+# Copyright (c) 2011 PDM&FC, All Rights Reserved.
+#
+#
+# Implementation of the "runAllTests" command of the "tunit" tool.
+#
+###########################################################################
+
+import "tea/tools/tunit/ToolArgs.tea"
+import "tea/tunit/TUnitFileRunner.tea"
+import "tea/tunit/TUnitPlainTestListener.tea"
+
+
+
+
+
+#
+# The options accepted by this command.
+#
+define OPTION_DIR "--dir"
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+global tunit-tool-run-all-tests ( cmdName args ) {
+    
+    define argc [length $args]
+    
+    if { < $argc 1 } {
+        echo "Usage : " $cmdName " [option ...] [file-path ...]"
+        exit 1
+    }
+    
+    define parsedArgs     [new ToolArgs $args]
+    define sourceFileList [$parsedArgs getRestOfArgs]
+    define sourceDirList  [$parsedArgs getOptionList $OPTION_DIR]
+    define testRunner     [new TUnitFileRunner]
+    define testListener   [new TUnitPlainTestListener]
+    
+    $testRunner addSourceFileList $sourceFileList
+    $testRunner addSourceDirList $sourceDirList
+    $testRunner runAllTests $testListener
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
