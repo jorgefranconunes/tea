@@ -1,17 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2010 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2010/03/04 Created. (jfn)
+ * Copyright (c) 2010-2011 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -37,7 +26,7 @@ import com.pdmfc.tea.runtime.STypes;
  *
  **************************************************************************/
 
-public class SListUtils
+public final class SListUtils
     extends Object {
 
 
@@ -51,6 +40,8 @@ public class SListUtils
  **************************************************************************/
 
     private SListUtils() {
+
+        // Nothing to do.
     }
 
 
@@ -67,8 +58,8 @@ public class SListUtils
  *
  **************************************************************************/
 
-    public static SObjPair getListHead(SContext   context,
-                                       SObjSymbol varName)
+    public static SObjPair getListHead(final SContext   context,
+                                       final SObjSymbol varName)
         throws SRuntimeException {
 
         SObjPair result = null;
@@ -103,9 +94,9 @@ public class SListUtils
  *
  **************************************************************************/
 
-    public static void prepend(SContext   context,
-                               SObjSymbol varName,
-                               Object     element)
+    public static void prepend(final SContext   context,
+                               final SObjSymbol varName,
+                               final Object     element)
         throws SRuntimeException {
 
         SObjVar var = context.getVarObjectIfPossible(varName);
@@ -126,7 +117,7 @@ public class SListUtils
 
             var.set(newHead);
         } else {
-	    throw new SNoSuchVarException(varName);
+            throw new SNoSuchVarException(varName);
         }
     }
 
@@ -140,24 +131,24 @@ public class SListUtils
  *
  **************************************************************************/
 
-    public static SObjPair buildTeaList(List<? extends Object> list) {
+    public static SObjPair buildTeaList(final List<? extends Object> list) {
 
-	SObjPair empty = SObjPair.emptyList();
-	SObjPair head  = empty;
-	SObjPair elem  = null;
+        SObjPair empty = SObjPair.emptyList();
+        SObjPair head  = empty;
+        SObjPair elem  = null;
 
-	for ( Object item : list ) {
-	    SObjPair node = new SObjPair(item, empty);
+        for ( Object item : list ) {
+            SObjPair node = new SObjPair(item, empty);
  
-	    if ( elem == null ) {
-		head = node;
-	    } else {
-		elem._cdr = node;
-	    }
-	    elem = node;
-	}
+            if ( elem == null ) {
+                head = node;
+            } else {
+                elem._cdr = node;
+            }
+            elem = node;
+        }
 
-	return head;
+        return head;
     }
 
 

@@ -29,29 +29,29 @@ public abstract class SFormater
     extends Object {
 
 
-   // The format string suplied by the caller.
-   private String _fmtString;
+    // The format string suplied by the caller.
+    private String _fmtString;
 
-   // Array with the object to format acording to the format string.
-   private Object[] _args;
+    // Array with the object to format acording to the format string.
+    private Object[] _args;
+    
+    // The index of the next argument to fetch.
+    private int    _argIndex;
 
-   // The index of the next argument to fetch.
-   private int    _argIndex;
-
-   // One greater than the index of the last char in the format string.
-   private int    _endP;
+    // One greater than the index of the last char in the format string.
+    private int    _endP;
  
-   // The index in the format string of the next char to fetch.
-   private int    _p;
+    // The index in the format string of the next char to fetch.
+    private int    _p;
 
-   // Flags signaling the format type of the next argument.
-   private int    _flags;
+    // Flags signaling the format type of the next argument.
+    private int    _flags;
 
-   // The width field in the modifier for the next argument.
-   private int    _width;
+    // The width field in the modifier for the next argument.
+    private int    _width;
 
-   // The number of decimal places for the next argument
-   private int    _sigFigs;
+    // The number of decimal places for the next argument
+    private int    _sigFigs;
 
     // Flags.
     /// Zero-fill.
@@ -71,14 +71,14 @@ public abstract class SFormater
  *
  * Appends a string to the formated result so far.
  *
- * <P>This is an abstract method and must be implemented in a derived class.
+ * <p>This is an abstract method and must be implemented in a derived
+ * class.</p>
  *
- * @param s
- *    The string to be appended.
+ * @param s The string to be appended.
  *
  **************************************************************************/
 
-   protected abstract void append(String s);
+    protected abstract void append(String s);
 
 
 
@@ -88,14 +88,14 @@ public abstract class SFormater
  *
  * Appends a char to the formated result so far.
  *
- * <P>This is an abstract method and must be implemented in a derived class.
+ * <p>This is an abstract method and must be implemented in a derived
+ * class.</p>
  *
- * @param c
- *    The char to be appended.
+ * @param c The char to be appended.
  *
  **************************************************************************/
 
-   protected abstract void append(char c);
+    protected abstract void append(char c);
 
 
 
@@ -107,10 +107,10 @@ public abstract class SFormater
  *
  **************************************************************************/
 
-   public SFormater() {
+    public SFormater() {
 
-      init(null, null, 0);
-   }
+        init(null, null, 0);
+    }
 
 
 
@@ -120,24 +120,23 @@ public abstract class SFormater
  *
  * Initializes the members to start a formting operation.
  *
- * @param fmt
- *    The format string.
+ * @param fmt The format string.
  *
  **************************************************************************/
 
-   private final void init(String   fmt,
-			   Object[] args,
-			   int      firstArg) {
+    private void init(final String   fmt,
+                      final Object[] args,
+                      final int      firstArg) {
 
-      _fmtString = fmt;
-      _args      = args;
-      _argIndex  = firstArg;
-      _endP      = (fmt==null) ? 0 : fmt.length();
-      _p         = 0;
-      _flags     = 0;
-      _width     = -1;
-      _sigFigs   = -1;
-   }
+        _fmtString = fmt;
+        _args      = args;
+        _argIndex  = firstArg;
+        _endP      = (fmt==null) ? 0 : fmt.length();
+        _p         = 0;
+        _flags     = 0;
+        _width     = -1;
+        _sigFigs   = -1;
+    }
 
 
 
@@ -155,17 +154,15 @@ public abstract class SFormater
  * @param firstArg Index into the <TT>args</TT> array pointing to the
  * first of the objects to be formated.
  *
- * @exception SNumArgException Thrown if there were not enough
- * arguments acording to the format string.
- *
- * @exception STypeException Thrown if some of the arguments was of a
+ * @exception STeaException Thrown if there were not enough arguments
+ * acording to the format string or if some of the arguments was of a
  * type not expected by the format string.
  *
  **************************************************************************/
 
-    public final void format(String   fmtString,
-			     Object[] args,
-			     int      firstArg)
+    public final void format(final String   fmtString,
+			     final Object[] args,
+			     final int      firstArg)
 	throws STeaException {
 
 	init(fmtString, args, firstArg);
@@ -191,28 +188,31 @@ public abstract class SFormater
  *
  **************************************************************************/
 
-   private final void processArg()
-      throws STeaException {
+    private final void processArg()
+        throws STeaException {
 
-      if ( atEnd() ) {
-	 return;
-      }
+        if ( atEnd() ) {
+            return;
+        }
 
-      _flags   = 0;
-      _width   = 0;
-      _sigFigs = 0;
+        _flags   = 0;
+        _width   = 0;
+        _sigFigs = 0;
 
-      char c = nextChar();
+        char c = nextChar();
 
-      switch ( c ) {
-	 case '-' : _flags |= LJ;
-		    processFieldWidth();
-		    break;
-	 case '%' : append('%');
-		    break;
-	 default  : processFieldWidth(c);
-		    break;
-      }
+        switch ( c ) {
+        case '-' :
+            _flags |= LJ;
+            processFieldWidth();
+            break;
+        case '%' :
+            append('%');
+            break;
+        default  :
+            processFieldWidth(c);
+            break;
+        }
    }
 
 
@@ -225,47 +225,13 @@ public abstract class SFormater
  *
  **************************************************************************/
 
-   private final void processFieldWidth()
-      throws STeaException {
+    private void processFieldWidth()
+       throws STeaException {
 
-      if ( !atEnd() ) {
-	 processFieldWidth(nextChar());
-      }
-   }
-
-
-
-
-
-/**************************************************************************
- *
- * @param c
- *    The char after the '<TT>%</TT>' and a possible '<TT>-</TT>'.
- *
- **************************************************************************/
-
-   private final void processFieldWidth(char c)
-      throws STeaException {
-
-      if ( !Character.isDigit(c) ) {
-	 processTypeField(c);
-      } else {
-	 if ( c == '0' ) {
-	    _flags |= ZF;
-	    _width = 0;
-	 } else {
-	    _width = c - '0';
-	 }
-	 while ( !atEnd() && Character.isDigit(c=nextChar()) ) {
-	    _width = _width*10 + (c-'0');
-	 }
-	 if ( c == '.' ) {
-	    processSigFigs();
-	 } else {
-	    processTypeField(c);
-	 }
-      }
-   }
+        if ( !atEnd() ) {
+            processFieldWidth(nextChar());
+        }
+    }
 
 
 
@@ -273,27 +239,35 @@ public abstract class SFormater
 
 /**************************************************************************
  *
- * 
+ * @param firstFormatChar The char after the '<TT>%</TT>' and a
+ * possible '<TT>-</TT>'.
  *
  **************************************************************************/
 
-   private final void processSigFigs()
-      throws STeaException {
+    private void processFieldWidth(final char firstFormatChar)
+        throws STeaException {
 
-      if ( atEnd() ) {
-	 return;
-      }
+        char c = firstFormatChar;
 
-      char c = 0;
-
-      _sigFigs = 0;
-
-      while ( !atEnd() && Character.isDigit(c=nextChar()) ) {
- 	 _sigFigs = _sigFigs*10 + (c-'0');
-      }
-
-      processTypeField(c);
-   }
+        if ( !Character.isDigit(c) ) {
+            processTypeField(c);
+        } else {
+            if ( c == '0' ) {
+                _flags |= ZF;
+                _width = 0;
+            } else {
+                _width = c - '0';
+            }
+            while ( !atEnd() && Character.isDigit(c=nextChar()) ) {
+                _width = _width*10 + (c-'0');
+            }
+            if ( c == '.' ) {
+                processSigFigs();
+            } else {
+                processTypeField(c);
+            }
+        }
+    }
 
 
 
@@ -305,10 +279,38 @@ public abstract class SFormater
  *
  **************************************************************************/
 
-    private final void processTypeField(char type)
+    private void processSigFigs()
+        throws STeaException {
+
+        if ( atEnd() ) {
+            return;
+        }
+
+        char c = 0;
+
+        _sigFigs = 0;
+
+        while ( !atEnd() && Character.isDigit(c=nextChar()) ) {
+            _sigFigs = _sigFigs*10 + (c-'0');
+        }
+
+        processTypeField(c);
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    private void processTypeField(final char type)
 	throws STeaException {
 
-	Object arg = nextArg();  
+	Object arg = nextArg();
 
 	try {
 	    switch ( type ) {
@@ -343,16 +345,15 @@ public abstract class SFormater
 
 /**************************************************************************
  *
- * @return
- *    <TT>true</TT> if there ar no more chars to fetch in the format
- *    string. <TT>false</TT> otherwise.
+ * @return <TT>true</TT> if there ar no more chars to fetch in the
+ * format string. <TT>false</TT> otherwise.
  *
  **************************************************************************/
 
-   private final boolean atEnd() {
+    private boolean atEnd() {
 
-      return _p >= _endP;
-   }
+        return _p >= _endP;
+    }
 
 
 
@@ -365,10 +366,10 @@ public abstract class SFormater
  *
  **************************************************************************/
 
-   private final char nextChar() {
+    private char nextChar() {
 
-      return _fmtString.charAt(_p++);
-   }
+        return _fmtString.charAt(_p++);
+    }
 
 
 
@@ -381,37 +382,16 @@ public abstract class SFormater
  *
  **************************************************************************/
 
-   private final Object nextArg()
-      throws STeaException {
+    private Object nextArg()
+        throws STeaException {
 
-      try {
-	 return _args[_argIndex++];
-      } catch (ArrayIndexOutOfBoundsException e) {
-	 throw new SRuntimeException("missing arguments requested by format string");
-      }
-   }
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-   private final void fmt(int i, int minWidth, int flags ) {
-
-      boolean hexadecimal = ( ( flags & HX ) != 0 );
-      boolean octal       = ( ( flags & OC ) != 0 );
-
-      if ( hexadecimal )
-	 fmt(Integer.toString(i & 0xffffffff, 16), minWidth, flags);
-      else if ( octal )
-	 fmt(Integer.toString(i & 0xffffffff, 8), minWidth, flags);
-      else fmt(Integer.toString(i), minWidth, flags);
-   }
+        try {
+            return _args[_argIndex++];
+        } catch (ArrayIndexOutOfBoundsException e) {
+            String msg = "missing arguments requested by format string";
+            throw new SRuntimeException(msg);
+        }
+    }
 
 
 
@@ -423,57 +403,19 @@ public abstract class SFormater
  *
  **************************************************************************/
 
-   private final void fmt(double f, int minWidth, int sigFigs, int flags) {
+    private void fmt(final int i,
+                     final int minWidth,
+                     final int flags ) {
 
-      if ( sigFigs != 0 ) {
-	 fmt(sigFigFix(Double.toString(f), sigFigs), minWidth, flags);
-      } else {
-         fmt(Double.toString(f), minWidth, flags);
-      }
-   }
+        boolean hexadecimal = ( ( flags & HX ) != 0 );
+        boolean octal       = ( ( flags & OC ) != 0 );
 
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-   private final void fmt(String s, int minWidth, int flags) {
-
-      if ( s == null ) {
-	 s = "(null)";
-      }
-
-      int     len         = s.length();
-      boolean zeroFill    = ( ( flags & ZF ) != 0 );
-      boolean leftJustify = ( ( flags & LJ ) != 0 );
-
-      if ( len >= minWidth ) {
-	 append(s);
-	 return;
-      }
-
-      int  fillWidth = minWidth - len;
-      char fillChar  = zeroFill ? '0' : ' ';
-
-      if ( leftJustify ) {
-	 append(s);
-	 fill(fillWidth, fillChar);
-      } else {
-	 if ( zeroFill && s.charAt(0)=='-' ) {
-	    append('-');
-	    fill(fillWidth, fillChar);
-	    append(s.substring(1));
-	 } else {
-	    fill(fillWidth, fillChar);
-	    append(s);
-	 }
-      }
-   }
+        if ( hexadecimal )
+            fmt(Integer.toString(i & 0xffffffff, 16), minWidth, flags);
+        else if ( octal )
+            fmt(Integer.toString(i & 0xffffffff, 8), minWidth, flags);
+        else fmt(Integer.toString(i), minWidth, flags);
+    }
 
 
 
@@ -485,12 +427,84 @@ public abstract class SFormater
  *
  **************************************************************************/
 
-   private final void fill(int n, char c) {
+    private void fmt(final double f,
+                     final int    minWidth,
+                     final int    sigFigs,
+                     final int    flags) {
 
-      while ( n-- > 0 ) {
-	 append(c);
-      }
-   }
+        if ( sigFigs != 0 ) {
+            fmt(sigFigFix(Double.toString(f), sigFigs), minWidth, flags);
+        } else {
+            fmt(Double.toString(f), minWidth, flags);
+        }
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    private void fmt(final String input,
+                     final int    minWidth,
+                     final int    flags) {
+
+        String s = input;
+
+        if ( s == null ) {
+            s = "(null)";
+        }
+
+        int     len         = s.length();
+        boolean zeroFill    = ( ( flags & ZF ) != 0 );
+        boolean leftJustify = ( ( flags & LJ ) != 0 );
+
+        if ( len >= minWidth ) {
+            append(s);
+            return;
+        }
+
+        int  fillWidth = minWidth - len;
+        char fillChar  = zeroFill ? '0' : ' ';
+
+        if ( leftJustify ) {
+            append(s);
+            fill(fillWidth, fillChar);
+        } else {
+            if ( zeroFill && s.charAt(0)=='-' ) {
+                append('-');
+                fill(fillWidth, fillChar);
+                append(s.substring(1));
+            } else {
+                fill(fillWidth, fillChar);
+                append(s);
+            }
+        }
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    private void fill(final int  fillWidth,
+                      final char c) {
+
+        int n = fillWidth;
+
+        while ( n-- > 0 ) {
+            append(c);
+        }
+    }
 
 
 
@@ -502,92 +516,99 @@ public abstract class SFormater
  *
  **************************************************************************/
 
-   private static String sigFigFix( String s, int sigFigs ) {
+    private static String sigFigFix(final String s,
+                                    final int    sigFigs ) {
 
-      // First dissect the floating-point number string into sign,
-      // integer part, fraction part, and exponent.
-      String sign      = "";
-      String unsigned  = s;
-      char   firstChar = s.charAt(0);
+        // First dissect the floating-point number string into sign,
+        // integer part, fraction part, and exponent.
+        String sign      = "";
+        String unsigned  = s;
+        char   firstChar = s.charAt(0);
 
-      switch ( firstChar ) {
-	 case '-' : sign     = "-";
-		    unsigned = s.substring(1);
+        switch ( firstChar ) {
+        case '-' :
+            sign     = "-";
+            unsigned = s.substring(1);
+            break;
+        case '+' :
+            sign     = "+";
+            unsigned = s.substring(1);
+            break;
+        }
+
+        String mantissa;
+        String exponent;
+        int    eInd = unsigned.indexOf('E');
+
+        if ( eInd == -1 ) {
+            mantissa = unsigned;
+            exponent = "";
+        } else {
+            mantissa = unsigned.substring( 0, eInd );
+            exponent = unsigned.substring( eInd );
+        }
+
+        StringBuffer number;
+        StringBuffer fraction;
+        int          dotInd = mantissa.indexOf('.');
+
+        if ( dotInd == -1 ) {
+            number   = new StringBuffer(mantissa);
+            fraction = new StringBuffer("");
+        } else {
+            number   = new StringBuffer(mantissa.substring(0, dotInd));
+            fraction = new StringBuffer(mantissa.substring(dotInd + 1));
+        }
+
+        int numFigs  = number.length();
+        int fracFigs = fraction.length();
+
+        if ( (numFigs==0 || number.equals("0")) && fracFigs>0 ) {
+            // Don't count leading zeros in the fraction.
+            numFigs = 0;
+            for ( int i=0; i<fraction.length(); ++i ) {
+                if ( fraction.charAt( i ) != '0' ) {
 		    break;
-	 case '+' : sign     = "+";
-		    unsigned = s.substring(1);
-		    break;
-      }
+                }
+                --fracFigs;
+            }
+        }
 
-      String mantissa;
-      String exponent;
-      int    eInd = unsigned.indexOf('E');
+        int mantFigs = numFigs + fracFigs;
 
-      if ( eInd == -1 ) {
-         mantissa = unsigned;
-         exponent = "";
-      } else {
-         mantissa = unsigned.substring( 0, eInd );
-         exponent = unsigned.substring( eInd );
-      }
-
-      StringBuffer number;
-      StringBuffer fraction;
-      int          dotInd = mantissa.indexOf('.');
-
-      if ( dotInd == -1 ) {
-         number   = new StringBuffer(mantissa);
-         fraction = new StringBuffer("");
-      } else {
-         number   = new StringBuffer(mantissa.substring(0, dotInd));
-         fraction = new StringBuffer(mantissa.substring(dotInd + 1));
-      }
-
-      int numFigs  = number.length();
-      int fracFigs = fraction.length();
-
-      if ( (numFigs==0 || number.equals("0")) && fracFigs>0 ) {
-         // Don't count leading zeros in the fraction.
-         numFigs = 0;
-         for ( int i=0; i<fraction.length(); ++i ) {
-            if ( fraction.charAt( i ) != '0' ) {
-		    break;
-	    }
-	    --fracFigs;
-	 }
-      }
-
-      int mantFigs = numFigs + fracFigs;
-
-      if ( sigFigs > mantFigs ) {
-         // We want more figures; just append zeros to the fraction.
-         for ( int i = mantFigs; i < sigFigs; ++i ) {
+        if ( sigFigs > mantFigs ) {
+            // We want more figures; just append zeros to the fraction.
+            for ( int i = mantFigs; i < sigFigs; ++i ) {
 		fraction.append( '0' );
 	    }
-      } else {
-	 if ( sigFigs < mantFigs && sigFigs >= numFigs ) {
-	    // Want fewer figures in the fraction; chop.
-	    fraction.setLength(fraction.length() - (fracFigs - (sigFigs - numFigs)));
-	    // Round?
-         } else {
-	    if ( sigFigs < numFigs ) {
-	       // Want fewer figures in the number; turn them to zeros.
-	       fraction.setLength( 0 );	// should already be zero, but make sure
-	       for ( int i = sigFigs; i < numFigs; ++i ) {
-		  number.setCharAt( i, '0' );
-               }
-	        // Round?
-	    }
-	 }
-	// Else sigFigs == mantFigs, which is fine.
-      }
+        } else {
+            if ( sigFigs < mantFigs && sigFigs >= numFigs ) {
+                // Want fewer figures in the fraction; chop.
+                int length =
+                    fraction.length() - (fracFigs - (sigFigs - numFigs));
+                fraction.setLength(length);
+                // Round?
+            } else {
+                if ( sigFigs < numFigs ) {
+                    // Want fewer figures in the number; turn them to
+                    // zeros.
+                    fraction.setLength( 0 ); // Should already be
+                                             // zero, but make sure.
+                    for ( int i = sigFigs; i < numFigs; ++i ) {
+                        number.setCharAt( i, '0' );
+                    }
+                    // Round?
+                }
+            }
+            // Else sigFigs == mantFigs, which is fine.
+        }
 
-      if ( fraction.length() == 0 ) {
-	 return sign + number + exponent;
-      } else {
-	 return sign + number + "." + fraction + exponent;
-      }
-   }
+        if ( fraction.length() == 0 ) {
+            return sign + number + exponent;
+        } else {
+            return sign + number + "." + fraction + exponent;
+        }
+    }
 
 
 

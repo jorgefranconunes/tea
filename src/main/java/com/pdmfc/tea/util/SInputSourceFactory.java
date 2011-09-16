@@ -1,17 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2007-2010 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2007/06/24 Created. (jfn)
+ * Copyright (c) 2007-2011 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -40,7 +29,7 @@ import com.pdmfc.tea.util.SInputSource;
  *
  **************************************************************************/
 
-public class SInputSourceFactory
+public final class SInputSourceFactory
     extends Object {
 
 
@@ -65,7 +54,7 @@ public class SInputSourceFactory
  *
  **************************************************************************/
 
-    public static SInputSource createInputSource(String source)
+    public static SInputSource createInputSource(final String source)
         throws IOException {
 
         SInputSource result  = null;
@@ -99,8 +88,8 @@ public class SInputSourceFactory
  *
  **************************************************************************/
 
-    public static SInputSource createInputSource(String sourceBase,
-                                                 String source)
+    public static SInputSource createInputSource(final String sourceBase,
+                                                 final String source)
         throws IOException {
 
         SInputSource result  = null;
@@ -127,7 +116,7 @@ public class SInputSourceFactory
  *
  **************************************************************************/
 
-    private static String getProtocol(String source) {
+    private static String getProtocol(final String source) {
 
         int    colonIndex = source.indexOf(':');
         String protocol   =
@@ -150,9 +139,11 @@ public class SInputSourceFactory
  *
  **************************************************************************/
 
-    public static Reader openReader(String  source,
-                                    Charset charset)
+    public static Reader openReader(final String  source,
+                                    final Charset requestedCharset)
         throws IOException {
+
+        Charset charset = requestedCharset;
 
         if ( charset == null ) {
             charset = Charset.defaultCharset();
@@ -176,10 +167,12 @@ public class SInputSourceFactory
  *
  **************************************************************************/
 
-    public static Reader openReader(String  sourceBase,
-                                    String  source,
-                                    Charset charset)
+    public static Reader openReader(final String  sourceBase,
+                                    final String  source,
+                                    final Charset requestedCharset)
         throws IOException {
+
+        Charset charset = requestedCharset;
 
         if ( charset == null ) {
             charset = Charset.defaultCharset();
@@ -223,7 +216,7 @@ public class SInputSourceFactory
  *
  **************************************************************************/
 
-        public SFileInputSource(String path) {
+        public SFileInputSource(final String path) {
 
             _path = new File(path);
         }
@@ -238,7 +231,7 @@ public class SInputSourceFactory
  *
  **************************************************************************/
 
-        public SFileInputSource(String baseDir,
+        public SFileInputSource(final String baseDir,
                                 String path) {
 
             _path = new File(baseDir, path);
@@ -297,7 +290,7 @@ public class SInputSourceFactory
  *
  **************************************************************************/
 
-        public SUrlInputSource(String url)
+        public SUrlInputSource(final String url)
             throws IOException {
 
             _url = new URL(url);
@@ -314,14 +307,14 @@ public class SInputSourceFactory
  *
  **************************************************************************/
 
-        public SUrlInputSource(String baseUrl,
-                               String relativeUrl)
+        public SUrlInputSource(final String baseUrl,
+                               final String relativeUrl)
             throws IOException {
 
             String url = 
-                baseUrl.endsWith("/") ? 
-                (baseUrl + relativeUrl) :
-                (baseUrl + "/" + relativeUrl);
+                baseUrl.endsWith("/")
+                ? (baseUrl + relativeUrl)
+                : (baseUrl + "/" + relativeUrl);
 
             _url = new URL(url);
         }
@@ -376,14 +369,14 @@ public class SInputSourceFactory
  *
  **************************************************************************/
 
-        public SResourceInputSource(String resourceUri) {
+        public SResourceInputSource(final String resourceUri) {
 
             int colonIndex = resourceUri.indexOf(":");
 
             _resource = 
-                (colonIndex<0) ?
-                resourceUri :
-                resourceUri.substring(1+colonIndex);
+                (colonIndex<0)
+                ? resourceUri
+                : resourceUri.substring(1+colonIndex);
         }
 
 
@@ -396,14 +389,14 @@ public class SInputSourceFactory
  *
  **************************************************************************/
 
-        public SResourceInputSource(String baseDirUri,
-                                    String resource) {
+        public SResourceInputSource(final String baseDirUri,
+                                    final String resource) {
 
             int    colonIndex = baseDirUri.indexOf(":");
             String baseDir    = 
-                (colonIndex<0) ?
-                baseDirUri :
-                baseDirUri.substring(1+colonIndex);
+                (colonIndex<0)
+                ? baseDirUri
+                : baseDirUri.substring(1+colonIndex);
 
             _resource = baseDir + "/" + resource;
         }

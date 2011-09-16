@@ -1,20 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 1998/09/13 Added the constructor SListNode(Object obj, SListNode
- * next).
- *
- * 1998/07/19 Creation. (jfn)
+ * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -33,12 +19,21 @@ package com.pdmfc.tea.util;
  *
  **************************************************************************/
 
-public class SListNode extends Object {
+public final class SListNode
+    extends Object {
 
-    /** The object this node stores. */
+
+
+
+
+    /**
+     * The object this node stores.
+     */
     public Object    _element;
 
-    /** A reference to the next node on the list this node belongs to. */
+    /**
+     * A reference to the next node on the list this node belongs to.
+     */
     public SListNode _next;
 
 
@@ -54,11 +49,11 @@ public class SListNode extends Object {
  *
  **************************************************************************/
 
-   public SListNode(Object obj) {
+    public SListNode(final Object obj) {
 
-      _element = obj;
-      _next    = null;
-   }
+        _element = obj;
+        _next    = null;
+    }
 
 
 
@@ -68,19 +63,19 @@ public class SListNode extends Object {
  *
  * Initializes the object internal state.
  *
- * @param obj
- *    The object this node will store.
+ * @param obj The object this node will store.
  *
- * @param next
- *    The next node this node will point to.
+ * @param next The next node this node will point to.
  *
  **************************************************************************/
 
-   public SListNode(Object obj, SListNode next) {
+    public SListNode(final Object obj,
+                     final SListNode next) {
 
-      _element = obj;
-      _next    = next;
-   }
+        _element = obj;
+        _next    = next;
+    }
+
 
 }
 
