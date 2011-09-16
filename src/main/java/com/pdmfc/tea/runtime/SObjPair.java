@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -46,7 +46,7 @@ public final class SObjPair
 
     public SObjPair() {
 
-	this(null, null);
+        this(null, null);
     }
 
 
@@ -64,10 +64,10 @@ public final class SObjPair
  **************************************************************************/
 
     public SObjPair(final Object car,
-		    final Object cdr) {
+                    final Object cdr) {
 
-	_car = car;
-	_cdr = cdr;
+        _car = car;
+        _cdr = cdr;
     }
 
 
@@ -85,7 +85,7 @@ public final class SObjPair
 
     public static SObjPair emptyList() {
 
-	return new SObjPair();
+        return new SObjPair();
     }
 
 
@@ -132,21 +132,21 @@ public final class SObjPair
  **************************************************************************/
 
     public int length()
-	throws SRuntimeException {
+        throws SRuntimeException {
 
-	int      numNodes = 0;
-	SObjPair node     = this;
+        int      numNodes = 0;
+        SObjPair node     = this;
 
-	while ( node._car != null ) {
-	    numNodes++;
-	    try {
-		node = (SObjPair)node._cdr;
-	    } catch (ClassCastException e) {
-		throw new SRuntimeException("Improperly formed list");
-	    }
-	}
-	
-	return numNodes;
+        while ( node._car != null ) {
+            numNodes++;
+            try {
+                node = (SObjPair)node._cdr;
+            } catch (ClassCastException e) {
+                throw new SRuntimeException("Improperly formed list");
+            }
+        }
+        
+        return numNodes;
     }
 
 
@@ -169,7 +169,7 @@ public final class SObjPair
     @Deprecated
     public Enumeration elements() {
 
-	return new SPairEnumeration(this);
+        return new SPairEnumeration(this);
     }
 
 
@@ -189,7 +189,7 @@ public final class SObjPair
 
     public Iterator iterator() {
 
-	return new SPairIterator(this);
+        return new SPairIterator(this);
     }
 
 
@@ -203,29 +203,11 @@ public final class SObjPair
  **************************************************************************/
 
     private static final class SPairIterator
-	extends Object
-	implements Iterator {
+        extends Object
+        implements Iterator {
 
 
-	private SObjPair _node = null;
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-	public SPairIterator(final SObjPair node) {
-
-	    _node = node;
-	    if ( (_node!=null) && (_node._car==null) ) {
-		_node = null;
-	    }
-	}
+        private SObjPair _node = null;
 
 
 
@@ -237,36 +219,13 @@ public final class SObjPair
  *
  **************************************************************************/
 
-	public boolean hasNext() {
+        public SPairIterator(final SObjPair node) {
 
-	    return (_node!=null) && (_node._car!=null);
-	}
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-	public Object next() {
-
-	    if ( (_node==null) || (_node._car==null) ) {
-		throw new NoSuchElementException("SObjPairIterator");
-	    }
-	    Object element = _node._car;
-
-	    try {
-		_node = (SObjPair)_node._cdr;
-	    } catch (ClassCastException e) {
-		throw new NoSuchElementException("Improperly formed list");
-	    }
-
-	    return element;
-	}
+            _node = node;
+            if ( (_node!=null) && (_node._car==null) ) {
+                _node = null;
+            }
+        }
 
 
 
@@ -278,10 +237,51 @@ public final class SObjPair
  *
  **************************************************************************/
 
-	public void remove() {
+        public boolean hasNext() {
 
-	    throw new UnsupportedOperationException();
-	}
+            return (_node!=null) && (_node._car!=null);
+        }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+        public Object next() {
+
+            if ( (_node==null) || (_node._car==null) ) {
+                throw new NoSuchElementException("SObjPairIterator");
+            }
+            Object element = _node._car;
+
+            try {
+                _node = (SObjPair)_node._cdr;
+            } catch (ClassCastException e) {
+                throw new NoSuchElementException("Improperly formed list");
+            }
+
+            return element;
+        }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+        public void remove() {
+
+            throw new UnsupportedOperationException();
+        }
 
 
     }
@@ -297,29 +297,11 @@ public final class SObjPair
  **************************************************************************/
 
     private static final class SPairEnumeration
-	extends Object
-	implements Enumeration {
+        extends Object
+        implements Enumeration {
 
 
-	private SObjPair _node = null;
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-	public SPairEnumeration(final SObjPair node) {
-
-	    _node = node;
-	    if ( (_node!=null) && (_node._car==null) ) {
-		_node = null;
-	    }
-	}
+        private SObjPair _node = null;
 
 
 
@@ -331,10 +313,13 @@ public final class SObjPair
  *
  **************************************************************************/
 
-	public boolean hasMoreElements() {
+        public SPairEnumeration(final SObjPair node) {
 
-	    return (_node!=null) && (_node._car!=null);
-	}
+            _node = node;
+            if ( (_node!=null) && (_node._car==null) ) {
+                _node = null;
+            }
+        }
 
 
 
@@ -346,21 +331,36 @@ public final class SObjPair
  *
  **************************************************************************/
 
-	public Object nextElement() {
+        public boolean hasMoreElements() {
 
-	    if ( (_node==null) || (_node._car==null) ) {
-		throw new NoSuchElementException("SObjPairEnumeration");
-	    }
-	    Object element = _node._car;
+            return (_node!=null) && (_node._car!=null);
+        }
 
-	    try {
-		_node = (SObjPair)_node._cdr;
-	    } catch (ClassCastException e) {
-		throw new NoSuchElementException("Improperly formed list");
-	    }
 
-	    return element;
-	}
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+        public Object nextElement() {
+
+            if ( (_node==null) || (_node._car==null) ) {
+                throw new NoSuchElementException("SObjPairEnumeration");
+            }
+            Object element = _node._car;
+
+            try {
+                _node = (SObjPair)_node._cdr;
+            } catch (ClassCastException e) {
+                throw new NoSuchElementException("Improperly formed list");
+            }
+
+            return element;
+        }
 
 
     }

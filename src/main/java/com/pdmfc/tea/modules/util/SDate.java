@@ -62,7 +62,7 @@ public final class SDate
     private static final SObjSymbol CLASS_NAME_S =
         SObjSymbol.addSymbol(CLASS_NAME);
 
-    public final Calendar _calendar = new GregorianCalendar();
+    private Calendar _calendar = new GregorianCalendar();
 
 
 

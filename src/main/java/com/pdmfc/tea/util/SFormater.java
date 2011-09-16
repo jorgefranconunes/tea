@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -161,21 +161,21 @@ public abstract class SFormater
  **************************************************************************/
 
     public final void format(final String   fmtString,
-			     final Object[] args,
-			     final int      firstArg)
-	throws STeaException {
+                             final Object[] args,
+                             final int      firstArg)
+        throws STeaException {
 
-	init(fmtString, args, firstArg);
+        init(fmtString, args, firstArg);
 
-	while ( !atEnd() ) {
-	    char c = nextChar();
-	    
-	    if ( c == '%' ) {
-		processArg();
-	    } else {
-		append(c);
-	    }
-	}
+        while ( !atEnd() ) {
+            char c = nextChar();
+            
+            if ( c == '%' ) {
+                processArg();
+            } else {
+                append(c);
+            }
+        }
     }
 
 
@@ -188,7 +188,7 @@ public abstract class SFormater
  *
  **************************************************************************/
 
-    private final void processArg()
+    private void processArg()
         throws STeaException {
 
         if ( atEnd() ) {
@@ -308,35 +308,35 @@ public abstract class SFormater
  **************************************************************************/
 
     private void processTypeField(final char type)
-	throws STeaException {
+        throws STeaException {
 
-	Object arg = nextArg();
+        Object arg = nextArg();
 
-	try {
-	    switch ( type ) {
-	    case 'd' : 
-		fmt(((Number)arg).intValue(), _width,_flags);
-		break;
-	    case 'x' :
-		_flags |= HX;
-		fmt(((Number)arg).intValue(), _width,_flags);
-		break;
-	    case 'o' :
-		_flags |= OC;
-		fmt(((Number)arg).intValue(), _width,_flags);
-		break;
-	    case 'f' :
-		fmt(((Double)arg).doubleValue(), _width, _sigFigs, _flags);
-		break;
-	    case 's' :
-		fmt((String)arg, _width, _flags);
-		break;
-	    }
-	} catch (ClassCastException e) {
-	    String   fmt     = "wrong argument type - {0}";
-	    Object[] fmtArgs = { STypes.getTypeName(arg) };
-	    throw new STypeException(fmt, fmtArgs);
-	}
+        try {
+            switch ( type ) {
+            case 'd' : 
+                fmt(((Number)arg).intValue(), _width,_flags);
+                break;
+            case 'x' :
+                _flags |= HX;
+                fmt(((Number)arg).intValue(), _width,_flags);
+                break;
+            case 'o' :
+                _flags |= OC;
+                fmt(((Number)arg).intValue(), _width,_flags);
+                break;
+            case 'f' :
+                fmt(((Double)arg).doubleValue(), _width, _sigFigs, _flags);
+                break;
+            case 's' :
+                fmt((String)arg, _width, _flags);
+                break;
+            }
+        } catch (ClassCastException e) {
+            String   fmt     = "wrong argument type - {0}";
+            Object[] fmtArgs = { STypes.getTypeName(arg) };
+            throw new STypeException(fmt, fmtArgs);
+        }
     }
 
 
@@ -410,11 +410,13 @@ public abstract class SFormater
         boolean hexadecimal = ( ( flags & HX ) != 0 );
         boolean octal       = ( ( flags & OC ) != 0 );
 
-        if ( hexadecimal )
+        if ( hexadecimal ) {
             fmt(Integer.toString(i & 0xffffffff, 16), minWidth, flags);
-        else if ( octal )
+        } else if ( octal ) {
             fmt(Integer.toString(i & 0xffffffff, 8), minWidth, flags);
-        else fmt(Integer.toString(i), minWidth, flags);
+        } else {
+            fmt(Integer.toString(i), minWidth, flags);
+        }
     }
 
 
@@ -544,8 +546,8 @@ public abstract class SFormater
             mantissa = unsigned;
             exponent = "";
         } else {
-            mantissa = unsigned.substring( 0, eInd );
-            exponent = unsigned.substring( eInd );
+            mantissa = unsigned.substring(0, eInd);
+            exponent = unsigned.substring(eInd);
         }
 
         StringBuffer number;
@@ -563,12 +565,12 @@ public abstract class SFormater
         int numFigs  = number.length();
         int fracFigs = fraction.length();
 
-        if ( (numFigs==0 || number.equals("0")) && fracFigs>0 ) {
+        if ( ((numFigs==0) || number.equals("0")) && (fracFigs>0) ) {
             // Don't count leading zeros in the fraction.
             numFigs = 0;
             for ( int i=0; i<fraction.length(); ++i ) {
-                if ( fraction.charAt( i ) != '0' ) {
-		    break;
+                if ( fraction.charAt(i) != '0' ) {
+                    break;
                 }
                 --fracFigs;
             }
@@ -579,8 +581,8 @@ public abstract class SFormater
         if ( sigFigs > mantFigs ) {
             // We want more figures; just append zeros to the fraction.
             for ( int i = mantFigs; i < sigFigs; ++i ) {
-		fraction.append( '0' );
-	    }
+                fraction.append('0');
+            }
         } else {
             if ( sigFigs < mantFigs && sigFigs >= numFigs ) {
                 // Want fewer figures in the fraction; chop.
@@ -592,10 +594,10 @@ public abstract class SFormater
                 if ( sigFigs < numFigs ) {
                     // Want fewer figures in the number; turn them to
                     // zeros.
-                    fraction.setLength( 0 ); // Should already be
+                    fraction.setLength(0); // Should already be
                                              // zero, but make sure.
                     for ( int i = sigFigs; i < numFigs; ++i ) {
-                        number.setCharAt( i, '0' );
+                        number.setCharAt(i, '0');
                     }
                     // Round?
                 }

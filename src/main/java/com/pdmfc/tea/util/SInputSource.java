@@ -28,7 +28,13 @@ public interface SInputSource {
 /**************************************************************************
  *
  * Opens and retrieves the input stream associated with this input
- * resource.
+ * source.
+ *
+ * <p>It is the responsability of the caller to close the returned
+ * <code>InputStream</code>.
+ *
+ * @return A newly open <code>InputStream</code> associated with this
+ * input source.
  *
  * @exception IOException Thrown if there were problems opening the
  * input stream.

@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -22,7 +22,7 @@ import com.pdmfc.tea.runtime.SNoSuchVarException;
  *
  **************************************************************************/
 
-public class STypes
+public final class STypes
     extends Object {
 
 
@@ -31,7 +31,7 @@ public class STypes
 
     // The name of variable with the missing function callback action.
     private static final SObjSymbol CALLBACK_NAME =
-	SObjSymbol.addSymbol("TEA_NOFUNC_CALLBACK");
+        SObjSymbol.addSymbol("TEA_NOFUNC_CALLBACK");
 
     private static final String TYPE_BLOCK    = "Block";
     private static final String TYPE_BOOL     = "Boolean";
@@ -58,6 +58,8 @@ public class STypes
  **************************************************************************/
 
     private STypes() {
+
+        // Nothing to do.
     }
 
 
@@ -76,18 +78,18 @@ public class STypes
  *
  **************************************************************************/
 
-    public static String getTypeName(Object obj) {
+    public static String getTypeName(final Object obj) {
 
-	String typeName = getTypeName(obj.getClass());
+        String typeName = getTypeName(obj.getClass());
 
-	if ( obj instanceof STosObj ) {
-	    return typeName + " (" +((STosObj)obj).getTosClass().getName()+")";
-	}
-	if ( obj instanceof STosClass ) {
-	    return typeName + " (" + ((STosClass)obj).getName() + ")";
-	}
+        if ( obj instanceof STosObj ) {
+            return typeName + " (" +((STosObj)obj).getTosClass().getName()+")";
+        }
+        if ( obj instanceof STosClass ) {
+            return typeName + " (" + ((STosClass)obj).getName() + ")";
+        }
 
-	return typeName;
+        return typeName;
     }
 
 
@@ -107,42 +109,42 @@ public class STypes
  *
  **************************************************************************/
 
-    public static String getTypeName(Class aClass) {
+    public static String getTypeName(final Class aClass) {
 
-	if ( SObjBlock.class.isAssignableFrom(aClass) ) {
-	    return TYPE_BLOCK;
-	}
-	if ( Boolean.class.isAssignableFrom(aClass) ) {
-	    return TYPE_BOOL;
-	}
-	if ( Double.class.isAssignableFrom(aClass) ) {
-	    return TYPE_FLOAT;
-	}
-	if ( Integer.class.isAssignableFrom(aClass) ) {
-	    return TYPE_INT;
-	}
-	if ( STosObj.class.isAssignableFrom(aClass) ) {
-	    return TYPE_TOSOBJ;
-	}
-	if ( SObjFunction.class.isAssignableFrom(aClass) ) {
-	    return TYPE_FUNC;
-	}
-	if ( SObjPair.class.isAssignableFrom(aClass) ) {
-	    return TYPE_PAIR;
-	}
-	if ( String.class.isAssignableFrom(aClass) ) {
-	    return TYPE_STRING;
-	}
-	if ( SObjSymbol.class.isAssignableFrom(aClass) ) {
-	    return TYPE_SYMBOL;
-	}
-	if ( SObjNull.class.isAssignableFrom(aClass) ) {
-	    return TYPE_NULL;
-	}
-	if ( STosClass.class.isAssignableFrom(aClass) ) {
-	    return TYPE_TOSCLASS;
-	}
-	return aClass.getName();
+        if ( SObjBlock.class.isAssignableFrom(aClass) ) {
+            return TYPE_BLOCK;
+        }
+        if ( Boolean.class.isAssignableFrom(aClass) ) {
+            return TYPE_BOOL;
+        }
+        if ( Double.class.isAssignableFrom(aClass) ) {
+            return TYPE_FLOAT;
+        }
+        if ( Integer.class.isAssignableFrom(aClass) ) {
+            return TYPE_INT;
+        }
+        if ( STosObj.class.isAssignableFrom(aClass) ) {
+            return TYPE_TOSOBJ;
+        }
+        if ( SObjFunction.class.isAssignableFrom(aClass) ) {
+            return TYPE_FUNC;
+        }
+        if ( SObjPair.class.isAssignableFrom(aClass) ) {
+            return TYPE_PAIR;
+        }
+        if ( String.class.isAssignableFrom(aClass) ) {
+            return TYPE_STRING;
+        }
+        if ( SObjSymbol.class.isAssignableFrom(aClass) ) {
+            return TYPE_SYMBOL;
+        }
+        if ( SObjNull.class.isAssignableFrom(aClass) ) {
+            return TYPE_NULL;
+        }
+        if ( STosClass.class.isAssignableFrom(aClass) ) {
+            return TYPE_TOSCLASS;
+        }
+        return aClass.getName();
     }
 
 
@@ -161,34 +163,34 @@ public class STypes
  *
  * @return The object stored in the variable.
  *
- * @exception com.pdmfc.tea.runtime.SNoSuchVarException Throw if the
- * variable does not exit before and after the Tea function is run.
+ * @exception STeaException Throw if the variable does not exit before
+ * and after the Tea function is run.
  *
  **************************************************************************/
 
-    public static Object getVarWithEffort(SContext   context,
-					  SObjSymbol name)
-	throws STeaException {
+    public static Object getVarWithEffort(final SContext   context,
+                                          final SObjSymbol name)
+        throws STeaException {
 
-	SObjFunction callbackFunc   = null;
-	Object        callbackArgs[] = new Object[2];
+        SObjFunction callbackFunc = null;
+        Object[]     callbackArgs = new Object[2];
 
-	callbackArgs[0] = CALLBACK_NAME;
-	callbackArgs[1] = name;
+        callbackArgs[0] = CALLBACK_NAME;
+        callbackArgs[1] = name;
     
-	try {
-	    callbackFunc = (SObjFunction)context.getVar(CALLBACK_NAME);
-	} catch (ClassCastException e1) {
-	    // Variable TEA_NOFUNC_CALLBACK does not contain a Tea function.
-	    throw new SNoSuchVarException(name);
-	} catch (SNoSuchVarException e2) {
-	    // Variable TEA_NOFUNC_CALLBACK is not defined.
-	    throw new SNoSuchVarException(name);
-	}
+        try {
+            callbackFunc = (SObjFunction)context.getVar(CALLBACK_NAME);
+        } catch (ClassCastException e1) {
+            // Variable TEA_NOFUNC_CALLBACK does not contain a Tea function.
+            throw new SNoSuchVarException(name);
+        } catch (SNoSuchVarException e2) {
+            // Variable TEA_NOFUNC_CALLBACK is not defined.
+            throw new SNoSuchVarException(name);
+        }
 
-	callbackFunc.exec(callbackFunc, context, callbackArgs);
+        callbackFunc.exec(callbackFunc, context, callbackArgs);
 
-	return context.getVar(name);
+        return context.getVar(name);
     }
 
 

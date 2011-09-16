@@ -1,12 +1,11 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2011 PDM1FC, All Rights Reserved.
  *
  **************************************************************************/
 
 package com.pdmfc.tea.runtime;
 
-import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SRuntimeException;
 
 
@@ -21,7 +20,7 @@ import com.pdmfc.tea.runtime.SRuntimeException;
  *
  **************************************************************************/
 
-public class SMalformedListException
+public final class SMalformedListException
     extends SRuntimeException {
 
 
@@ -47,24 +46,10 @@ public class SMalformedListException
  *
  **************************************************************************/
 
-   public SMalformedListException(Object[] args,
-                                  String   msg) {
+   public SMalformedListException(final Object[] args,
+                                  final String   msg) {
 
       initForFunction(args, msg);
-   }
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-   public SMalformedListException(Exception e) {
-
-      super(e);
    }
 
 

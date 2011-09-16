@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -95,7 +95,7 @@ public class SStatement
  *
  **************************************************************************/
 
-    public void setStatement(final Statement stat) {
+    public final void setStatement(final Statement stat) {
 
         _statement = stat;
     }
@@ -113,7 +113,7 @@ public class SStatement
  *
  **************************************************************************/
 
-    public Statement getInternalStatement() {
+    public final Statement getInternalStatement() {
 
         return _statement;
     }
@@ -165,7 +165,7 @@ public class SStatement
  *
  **************************************************************************/
 
-    public void addClosedListener(final SClosedEventListener listener) {
+    public final void addClosedListener(final SClosedEventListener listener) {
 
         _listeners.add(listener);
     }
@@ -465,9 +465,9 @@ public class SStatement
  *
  **************************************************************************/
 
-    public Object getResultSet(final SObjFunction obj,
-                               final SContext     context,
-                               final Object[]     args)
+    public final Object getResultSet(final SObjFunction obj,
+                                     final SContext     context,
+                                     final Object[]     args)
         throws STeaException {
 
         checkStatement();
@@ -528,9 +528,9 @@ public class SStatement
  *
  **************************************************************************/
 
-    public Object getMoreResults(final SObjFunction obj,
-                                 final SContext     context,
-                                 final Object[]     args)
+    public final Object getMoreResults(final SObjFunction obj,
+                                       final SContext     context,
+                                       final Object[]     args)
         throws STeaException {
 
         checkStatement();
@@ -589,9 +589,9 @@ public class SStatement
  *
  **************************************************************************/
 
-    public Object getFetchSize(final SObjFunction obj,
-                               final SContext     context,
-                               final Object[]     args)
+    public final Object getFetchSize(final SObjFunction obj,
+                                     final SContext     context,
+                                     final Object[]     args)
         throws STeaException {
 
         checkStatement();
@@ -653,9 +653,9 @@ public class SStatement
  *
  **************************************************************************/
 
-    public Object setFetchSize(final SObjFunction obj,
-                               final SContext     context,
-                               final Object[]     args)
+    public final Object setFetchSize(final SObjFunction obj,
+                                     final SContext     context,
+                                     final Object[]     args)
         throws STeaException {
 
         checkStatement();
@@ -712,9 +712,9 @@ public class SStatement
  *
  **************************************************************************/
 
-    public Object close(final SObjFunction obj,
-                        final SContext     context,
-                        final Object[]     args)
+    public final Object close(final SObjFunction obj,
+                              final SContext     context,
+                              final Object[]     args)
         throws STeaException {
 
         try {
@@ -737,7 +737,7 @@ public class SStatement
  *
  **************************************************************************/
 
-    void close()
+    final void close()
         throws SQLException {
         
         if ( _statement == null ) {
@@ -795,7 +795,7 @@ public class SStatement
  *
  **************************************************************************/
 
-    public void closedEvent(final Object closedObject) {
+    public final void closedEvent(final Object closedObject) {
 
         if ( !(closedObject instanceof SResultSet) ) {
             String msg =

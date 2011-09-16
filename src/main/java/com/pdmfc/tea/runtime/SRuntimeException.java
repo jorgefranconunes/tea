@@ -64,9 +64,9 @@ public class SRuntimeException
  **************************************************************************/
 
     public SRuntimeException(final String    msgFmt,
-			     final Object... fmtArgs) {
+                             final Object... fmtArgs) {
 
-	init(msgFmt, fmtArgs);
+        init(msgFmt, fmtArgs);
     }
 
 
@@ -128,9 +128,9 @@ public class SRuntimeException
  *
  **************************************************************************/
 
-    protected void initForFunction(final Object[]  args,
-                                   final String    msgFmt,
-                                   final Object... fmtArgs) {
+    protected final void initForFunction(final Object[]  args,
+                                         final String    msgFmt,
+                                         final Object... fmtArgs) {
 
         Object arg0 = args[0];
         String fmt  = null;
@@ -159,10 +159,10 @@ public class SRuntimeException
  *
  **************************************************************************/
  
-    public void addMessage(final String    msgFmt,
-			   final Object... fmtArgs) {
+    public final void addMessage(final String    msgFmt,
+                                 final Object... fmtArgs) {
 
-	String msg = null;
+        String msg = null;
 
         if ( (fmtArgs!=null) && (fmtArgs.length>0) ) {
             msg = MessageFormat.format(msgFmt, fmtArgs);
@@ -170,7 +170,7 @@ public class SRuntimeException
             msg = msgFmt;
         }
 
-	_msgList.add(msg);
+        _msgList.add(msg);
     }
 
 
@@ -186,7 +186,7 @@ public class SRuntimeException
  *
  **************************************************************************/
 
-    public String getFullMessage() {
+    public final String getFullMessage() {
 
         StringBuilder builder    = new StringBuilder();
         String        topMessage = super.getMessage();

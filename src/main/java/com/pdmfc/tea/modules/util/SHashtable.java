@@ -91,7 +91,7 @@ public final class SHashtable
 /**************************************************************************
  *
  * Initializes the object internal state and specifies the
- * <code>java.util.Map<code> to be used for storing the hashtable
+ * <code>java.util.Map</code> to be used for storing the hashtable
  * elements. The <code>contents</code> <code>java.util.Map</code> may
  * already contain some elements.
  *

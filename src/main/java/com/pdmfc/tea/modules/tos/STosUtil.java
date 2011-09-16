@@ -13,9 +13,7 @@ import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SNoSuchVarException;
-import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypeException;
-import com.pdmfc.tea.runtime.STypes;
 
 
 
@@ -109,8 +107,8 @@ public final class STosUtil
  *
  * @param index An index into the <code>args</code> array.
  *
- * @exception com.pdmfc.tea.modules.tos.SNoSuchClassException Thrown
- * if the <code>STosClass</code> object could not be retrieved.
+ * @exception STeaException Thrown if the <code>STosClass</code>
+ * object could not be retrieved.
  *
  **************************************************************************/
 
@@ -192,8 +190,8 @@ public final class STosUtil
                                              final SObjSymbol name)
         throws STeaException {
 
-        SObjFunction callbackFunc   = null;
-        Object       callbackArgs[] = new Object[2];
+        SObjFunction callbackFunc = null;
+        Object[]     callbackArgs = new Object[2];
      
         callbackArgs[0] = CALLBACK_NAME;
         callbackArgs[1] = name;

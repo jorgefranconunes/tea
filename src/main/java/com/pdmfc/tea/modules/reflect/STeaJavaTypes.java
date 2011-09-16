@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2005-2011 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2005-2011 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -306,7 +306,7 @@ public final class STeaJavaTypes
         }
         if ( (obj instanceof STosObj)
              && (((STosObj)obj).part(0) instanceof SDate) ) {
-            return ((SDate)((STosObj)obj).part(0))._calendar.getTime();
+            return ((SDate)((STosObj)obj).part(0)).getDate();
         }
         if ( (obj instanceof STosObj)
              && (((STosObj)obj).part(0) instanceof SConnection) ) {

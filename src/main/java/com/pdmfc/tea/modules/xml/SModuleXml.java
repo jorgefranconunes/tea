@@ -221,7 +221,8 @@ public final class SModuleXml
                   buf.append("&#").append((int)c).append(';');
                 } else {
                   buf.append(c);
-                } break;
+                }
+                break;
             }
         }
         return buf.toString();

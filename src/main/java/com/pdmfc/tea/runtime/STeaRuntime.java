@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -31,7 +31,7 @@ import com.pdmfc.tea.runtime.SModuleUtils;
  *
  **************************************************************************/
 
-public class STeaRuntime
+public final class STeaRuntime
     extends Object {
 
 
@@ -41,26 +41,26 @@ public class STeaRuntime
     // Name of the file to read from each directory in the TEA_LIBRARY
     // list.
     private static final String INIT_FILE = 
-	SConfigInfo.getProperty("com.pdmfc.tea.initFile");
+        SConfigInfo.getProperty("com.pdmfc.tea.initFile");
 
     // The path of a Java resource to use as import directory. This
     // path will be added to the end of list of import directories.
     private static final String CORE_IMPORT_DIR =
-	SConfigInfo.getProperty("com.pdmfc.tea.coreImportDir");
+        SConfigInfo.getProperty("com.pdmfc.tea.coreImportDir");
 
     private static final String[] CORE_MODULES = {
         "com.pdmfc.tea.modules.io.SModuleIO",
-	"com.pdmfc.tea.modules.lang.SModuleLang",
-	"com.pdmfc.tea.modules.SModuleList",
-	"com.pdmfc.tea.modules.SModuleMath",
-	"com.pdmfc.tea.modules.SModuleString"
+        "com.pdmfc.tea.modules.lang.SModuleLang",
+        "com.pdmfc.tea.modules.SModuleList",
+        "com.pdmfc.tea.modules.SModuleMath",
+        "com.pdmfc.tea.modules.SModuleString"
     };
 
 
 
 
     private enum State {
-	INITED, STARTED, RUNNING, ENDED
+        INITED, STARTED, RUNNING, ENDED
     };
 
 
@@ -121,7 +121,7 @@ public class STeaRuntime
  *
  **************************************************************************/
 
-    public void setImportLocations(List<String> dirList) {
+    public void setImportLocations(final List<String> dirList) {
 
         _importLocations.clear();
         _importLocations.addAll(dirList);
@@ -137,9 +137,9 @@ public class STeaRuntime
  *
  **************************************************************************/
 
-    public void prependImportLocation(String location) {
+    public void prependImportLocation(final String location) {
 
-	_importLocations.add(0, location);
+        _importLocations.add(0, location);
     }
 
 
@@ -152,9 +152,9 @@ public class STeaRuntime
  *
  **************************************************************************/
 
-    public void prependImportLocations(List<String> locations) {
+    public void prependImportLocations(final List<String> locations) {
 
-	_importLocations.addAll(0, locations);
+        _importLocations.addAll(0, locations);
     }
 
 
@@ -167,9 +167,9 @@ public class STeaRuntime
  *
  **************************************************************************/
 
-    public void appendImportLocation(String location) {
+    public void appendImportLocation(final String location) {
 
-	_importLocations.add(location);
+        _importLocations.add(location);
     }
 
 
@@ -182,9 +182,9 @@ public class STeaRuntime
  *
  **************************************************************************/
 
-    public void appendImportLocations(List<String> locations) {
+    public void appendImportLocations(final List<String> locations) {
 
-	_importLocations.addAll(locations);
+        _importLocations.addAll(locations);
     }
 
 
@@ -197,7 +197,7 @@ public class STeaRuntime
  *
  **************************************************************************/
 
-    public void setArgv0(String argv0) {
+    public void setArgv0(final String argv0) {
 
         _argv0 = argv0;
     }
@@ -212,7 +212,7 @@ public class STeaRuntime
  *
  **************************************************************************/
 
-    public void setArgv(String[] argv) {
+    public void setArgv(final String[] argv) {
 
         _argv = argv;
     }
@@ -230,7 +230,7 @@ public class STeaRuntime
  *
  **************************************************************************/
 
-    public void setSourceEncoding(String sourceEncoding) {
+    public void setSourceEncoding(final String sourceEncoding) {
 
         _sourceEncoding = sourceEncoding;
     }
@@ -245,7 +245,7 @@ public class STeaRuntime
  *
  **************************************************************************/
 
-    public void addModule(String className)
+    public void addModule(final String className)
         throws STeaException {
 
         checkState(State.INITED, State.STARTED, State.RUNNING);
@@ -269,7 +269,7 @@ public class STeaRuntime
  *
  **************************************************************************/
 
-    public void addModule(SModule module)
+    public void addModule(final SModule module)
         throws STeaException {
 
         checkState(State.INITED, State.STARTED, State.RUNNING);
@@ -389,8 +389,8 @@ public class STeaRuntime
  *
  **************************************************************************/
 
-    public Object execute(SCode code)
-	throws STeaException {
+    public Object execute(final SCode code)
+        throws STeaException {
 
         checkState(State.STARTED);
 
@@ -398,18 +398,18 @@ public class STeaRuntime
 
         Object result = null;
 
-	try {
+        try {
             if ( _isFirstExec ) {
                 _isFirstExec = false;
                 doStart();
             }
 
-	    result = code.exec(_toplevelContext);
-	} finally {
-	    _state = State.STARTED;
-	}
+            result = code.exec(_toplevelContext);
+        } finally {
+            _state = State.STARTED;
+        }
 
-	return result;
+        return result;
     }
 
 
@@ -423,21 +423,21 @@ public class STeaRuntime
  **************************************************************************/
 
     private void doStart()
-	throws STeaException {
+        throws STeaException {
 
-	boolean wasFirstStart = _isFirstStart;
+        boolean wasFirstStart = _isFirstStart;
 
-	_isFirstStart = false;
+        _isFirstStart = false;
 
-	if ( wasFirstStart ) {
-	    doFirstStartInitializations();
-	}
+        if ( wasFirstStart ) {
+            doFirstStartInitializations();
+        }
 
         SModuleUtils.startModules(_toplevelContext);
 
-	if ( wasFirstStart ) {
-	    runInitScripts();
-	}
+        if ( wasFirstStart ) {
+            runInitScripts();
+        }
     }
 
 
@@ -469,12 +469,12 @@ public class STeaRuntime
  *
  **************************************************************************/
 
-    private void setupLibVar(List<String> locations) {
+    private void setupLibVar(final List<String> locations) {
 
-	_allImportLocations = new ArrayList<String>();
+        _allImportLocations = new ArrayList<String>();
 
-	_allImportLocations.addAll(locations);
-	_allImportLocations.add(CORE_IMPORT_DIR);
+        _allImportLocations.addAll(locations);
+        _allImportLocations.add(CORE_IMPORT_DIR);
 
         SLibVarUtils.setupLibVar(_toplevelContext, _allImportLocations);
     }
@@ -489,7 +489,7 @@ public class STeaRuntime
  *
  **************************************************************************/
 
-    private void setupModules(List<Object> modules)
+    private void setupModules(final List<Object> modules)
         throws STeaException {
 
         for ( Object moduleOrClassName : modules ) {
@@ -519,12 +519,12 @@ public class STeaRuntime
  **************************************************************************/
 
     private void runInitScripts()
-	throws STeaException {
+        throws STeaException {
 
         List<String> dirList  = _allImportLocations;
         SCompiler    compiler = new SCompiler();
 
-	for ( String dirPath : dirList ) {
+        for ( String dirPath : dirList ) {
             String path = INIT_FILE;
             SCode  code = null;
             
@@ -535,7 +535,7 @@ public class STeaRuntime
                 // The given path does not exist or is not
                 // readable. Go ahead and just ignore it.
             }
-	}
+        }
     }
 
 
@@ -548,7 +548,7 @@ public class STeaRuntime
  *
  **************************************************************************/
 
-    private void checkState(State... states) {
+    private void checkState(final State... states) {
 
         boolean currentStateIsValid = false;
         State   currentState        = _state;

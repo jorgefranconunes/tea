@@ -1,17 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2010 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2010/03/04 Created. (jfn)
+ * Copyright (c) 2010-2011 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -33,11 +22,12 @@ import com.pdmfc.tea.util.SListUtils;
 
 /**************************************************************************
  *
- * 
+ * Utility methods for managing the <code>TEA_LIBRARY</code> Tea
+ * variable.
  *
  **************************************************************************/
 
-public class SLibVarUtils
+public final class SLibVarUtils
     extends Object {
 
 
@@ -76,8 +66,8 @@ public class SLibVarUtils
  *
  **************************************************************************/
 
-    public static void setupLibVar(SContext     context,
-                                   List<String> locations) {
+    public static void setupLibVar(final SContext     context,
+                                   final List<String> locations) {
 
         // Remove empty strings from the received list.
         List<String> myLocations = new ArrayList<String>();
@@ -103,8 +93,8 @@ public class SLibVarUtils
  *
  **************************************************************************/
 
-    public static void prependImportLocation(SContext context,
-                                             String   location) {
+    public static void prependImportLocation(final SContext context,
+                                             final String   location) {
 
         try {
             SListUtils.prepend(context, SYMBOL_LIBRARY, location);

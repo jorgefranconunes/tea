@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -33,11 +33,11 @@ public final class SReturnException
 
 /**************************************************************************
  *
- * 
+ * @param value The value being returned by the function.
  *
  **************************************************************************/
 
-    public SReturnException(Object value) {
+    public SReturnException(final Object value) {
 
         _value = value;
     }

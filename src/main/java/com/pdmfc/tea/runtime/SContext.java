@@ -91,7 +91,7 @@ public class SContext
  *
  **************************************************************************/
 
-    public SContext newChild() {
+    public final SContext newChild() {
 
         SContext result = new SContext(this);
 
@@ -108,7 +108,7 @@ public class SContext
  *
  **************************************************************************/
 
-    public SContext clone(final SContext parent) {
+    public final SContext clone(final SContext parent) {
 
         SContext result = new SContext(parent);
 
@@ -133,7 +133,7 @@ public class SContext
  *
  **************************************************************************/
 
-    public SContext getParent() {
+    public final SContext getParent() {
 
         return _parent;
     }
@@ -164,7 +164,7 @@ public class SContext
  *
  **************************************************************************/
 
-    protected void clearAll() {
+    protected final void clearAll() {
 
         _varTable           = null;
         _hashThreshold      = 0;

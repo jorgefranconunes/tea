@@ -42,6 +42,8 @@ Adaped from the "sun_checks.xml" from the Checkstyle 5.3 distribution.
 
     <module name="TreeWalker">
 
+        <property name="cacheFile" value="$\{cachefile\}"/>
+
         <!-- Checks for Javadoc comments.                     -->
         <!-- See http://checkstyle.sf.net/config_javadoc.html -->
         <module name="JavadocMethod">

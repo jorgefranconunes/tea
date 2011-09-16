@@ -96,8 +96,8 @@ public class STosObj
  *
  **************************************************************************/
 
-    public void init(final SContext context,
-                     final Object[] args)
+    public final void init(final SContext context,
+                           final Object[] args)
         throws STeaException {
 
         SObjFunction constructor = _myClass.getConstructor();
@@ -188,7 +188,7 @@ public class STosObj
  *
  **************************************************************************/
 
-    public STosObj selfObj() {
+    public final STosObj selfObj() {
 
         return _selfObj;
     }
@@ -205,7 +205,7 @@ public class STosObj
  *
  **************************************************************************/
 
-    SContext members(final int level) {
+    final SContext members(final int level) {
 
         return _members[level];
     }
@@ -224,7 +224,7 @@ public class STosObj
  *
  **************************************************************************/
 
-    public STosObj part(final int level) {
+    public final STosObj part(final int level) {
 
         return _parts[level];
     }
@@ -242,7 +242,7 @@ public class STosObj
  *
  **************************************************************************/
 
-    public STosClass getTosClass() {
+    public final STosClass getTosClass() {
 
         return _myClass;
     }
@@ -273,9 +273,9 @@ public class STosObj
  *
  **************************************************************************/
 
-    public Object exec(final SObjFunction obj,
-                       final SContext     context,
-                       final Object[]     args)
+    public final Object exec(final SObjFunction obj,
+                             final SContext     context,
+                             final Object[]     args)
         throws STeaException {
 
         if ( args.length < 2 ) {

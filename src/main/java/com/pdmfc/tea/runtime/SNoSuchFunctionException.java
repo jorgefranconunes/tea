@@ -31,7 +31,7 @@ public final class SNoSuchFunctionException
  *
  **************************************************************************/
 
-   public SNoSuchFunctionException(SObjSymbol symbol) {
+   public SNoSuchFunctionException(final SObjSymbol symbol) {
 
       super("Function '"
             + symbol.getName()

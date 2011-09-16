@@ -1,19 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2002, 2003, 2004 PDM&FC, All Rights Reserved.
- *
- **************************************************************************/
-
-/**************************************************************************
- *
- * $Id$
- *
- *
- * Revisions:
- *
- * 2004/04/03 Added the method "buildPathList(List)". (jfn)
- *
- * 2002/07/24 Created. (jfn)
+ * Copyright (c) 2002-2011 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -36,7 +23,7 @@ import com.pdmfc.tea.runtime.SObjPair;
  *
  **************************************************************************/
 
-public class SUtils
+public final class SUtils
     extends Object {
 
 
@@ -45,11 +32,13 @@ public class SUtils
 
 /**************************************************************************
  *
- * 
+ * No instances of this class are to be created.
  *
  **************************************************************************/
 
     private SUtils() {
+
+        // Nothing to do...
     }
 
 
@@ -68,38 +57,38 @@ public class SUtils
  *
  **************************************************************************/
 
-    public static SObjPair buildPathList(String pathList) {
+    public static SObjPair buildPathList(final String pathList) {
 
-	SObjPair empty    = SObjPair.emptyList();
-	SObjPair head     = empty;
-	SObjPair elem     = null;
-	String   pathSep  = File.pathSeparator;
+        SObjPair empty    = SObjPair.emptyList();
+        SObjPair head     = empty;
+        SObjPair elem     = null;
+        String   pathSep  = File.pathSeparator;
 
-	if ( pathList == null ) {
-	    return empty;
-	}
+        if ( pathList == null ) {
+            return empty;
+        }
 
-	StringTokenizer st = new StringTokenizer(pathList, pathSep);
+        StringTokenizer st = new StringTokenizer(pathList, pathSep);
 
-	while ( st.hasMoreTokens() ) {
-	    String   path = st.nextToken();
-	    SObjPair node = null;
+        while ( st.hasMoreTokens() ) {
+            String   path = st.nextToken();
+            SObjPair node = null;
 
-	    if ( path.length() == 0 ) {
-		continue;
-	    }
-	    path = path.replace('|', ':');
-	    node = new SObjPair(path, empty);
+            if ( path.length() == 0 ) {
+                continue;
+            }
+            path = path.replace('|', ':');
+            node = new SObjPair(path, empty);
  
-	    if ( elem == null ) {
-		head = node;
-	    } else {
-		elem._cdr = node;
-	    }
-	    elem = node;
-	}
+            if ( elem == null ) {
+                head = node;
+            } else {
+                elem._cdr = node;
+            }
+            elem = node;
+        }
 
-	return head;
+        return head;
     }
 
 
@@ -117,35 +106,35 @@ public class SUtils
  *
  **************************************************************************/
 
-    public static SObjPair buildPathList(List pathList) {
+    public static SObjPair buildPathList(final List pathList) {
 
-	SObjPair empty = SObjPair.emptyList();
-	SObjPair head  = empty;
-	SObjPair elem  = null;
+        SObjPair empty = SObjPair.emptyList();
+        SObjPair head  = empty;
+        SObjPair elem  = null;
 
-	if ( pathList == null ) {
-	    return empty;
-	}
+        if ( pathList == null ) {
+            return empty;
+        }
 
-	for ( Iterator i=pathList.iterator(); i.hasNext(); ) {
-	    String   path = (String)i.next();
-	    SObjPair node = null;
+        for ( Iterator i=pathList.iterator(); i.hasNext(); ) {
+            String   path = (String)i.next();
+            SObjPair node = null;
 
-	    if ( path.length() == 0 ) {
-		continue;
-	    }
-	    path = path.replace('|', ':');
-	    node = new SObjPair(path, empty);
+            if ( path.length() == 0 ) {
+                continue;
+            }
+            path = path.replace('|', ':');
+            node = new SObjPair(path, empty);
  
-	    if ( elem == null ) {
-		head = node;
-	    } else {
-		elem._cdr = node;
-	    }
-	    elem = node;
-	}
+            if ( elem == null ) {
+                head = node;
+            } else {
+                elem._cdr = node;
+            }
+            elem = node;
+        }
 
-	return head;
+        return head;
     }
 
 

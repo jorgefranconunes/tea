@@ -102,9 +102,6 @@ public class STosClass
  * @param members Array with the member names. It must be a
  * <code>Vector</code> of <code>SObjSymbol</code> objects.
  *
- * @exception com.pdmfc.tea.modules.tos.SNoSuchClassException Never
- * thrown.
- *
  **************************************************************************/
 
     public STosClass(final SList members) {
@@ -159,7 +156,7 @@ public class STosClass
  *
  **************************************************************************/
 
-    public STosClass getSuperClass() {
+    public final STosClass getSuperClass() {
 
         return _superClass;
     }
@@ -178,7 +175,7 @@ public class STosClass
  *
  **************************************************************************/
 
-    public SList memberNames() {
+    public final SList memberNames() {
 
         return _members;
     }
@@ -196,7 +193,7 @@ public class STosClass
  *
  **************************************************************************/
 
-    public int level() {
+    public final int level() {
 
         return _level;
     }
@@ -241,8 +238,8 @@ public class STosClass
  *
  **************************************************************************/
 
-    public STosObj newInstance(final SContext context,
-                               final Object[] args)
+    public final STosObj newInstance(final SContext context,
+                                     final Object[] args)
         throws STeaException {
 
         STosObj obj = newInstance();
@@ -270,8 +267,8 @@ public class STosClass
  *
  **************************************************************************/
 
-    public void addMethod(final SObjSymbol   methodName,
-                          final SObjFunction method) {
+    public final void addMethod(final SObjSymbol   methodName,
+                                final SObjFunction method) {
 
         _methods.newVar(methodName, method);
     }
@@ -295,8 +292,8 @@ public class STosClass
  *
  **************************************************************************/
 
-    public void addMethod(final String       methodName,
-                          final SObjFunction method) {
+    public final void addMethod(final String       methodName,
+                                final SObjFunction method) {
 
         addMethod(SObjSymbol.addSymbol(methodName), method);
     }
@@ -314,7 +311,7 @@ public class STosClass
  *
  **************************************************************************/
 
-    public void addConstructor(final SObjFunction method) {
+    public final void addConstructor(final SObjFunction method) {
 
         addMethod(CONSTRUCTOR_NAME, method);
         _constructor = method;
@@ -339,7 +336,7 @@ public class STosClass
  *
  **************************************************************************/
 
-    public SObjFunction getMethod(final SObjSymbol methodName)
+    public final SObjFunction getMethod(final SObjSymbol methodName)
         throws SNoSuchMethodException {
 
         try {
@@ -366,7 +363,7 @@ public class STosClass
  *
  **************************************************************************/
 
-    public SObjFunction getConstructor() {
+    public final SObjFunction getConstructor() {
 
         return _constructor;
     }
@@ -387,7 +384,7 @@ public class STosClass
  *
  **************************************************************************/
 
-    public void setName(final String name) {
+    public final void setName(final String name) {
 
         _name = name;
     }
@@ -405,7 +402,7 @@ public class STosClass
  *
  **************************************************************************/
 
-    public String getName() {
+    public final String getName() {
 
         if ( _name == null ) {
             _name = createName();
