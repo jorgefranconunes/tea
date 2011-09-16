@@ -4,16 +4,16 @@
 #
 ###########################################################################
 
-import "tea/tunit/TUnitTestSuit.tea"
+import "tea/tunit/TUnitTestSuite.tea"
 
 
 
 
 
-# Keys are test suit names. Values are TUnitTestSuit instances.
+# Keys are test suit names. Values are TUnitTestSuite instances.
 define _testsuitsByName [new THashtable]
 
-# All registered TUnitTestSuit instances, ordered by the same order
+# All registered TUnitTestSuite instances, ordered by the same order
 # they were registered.
 define _testsuitList ()
 
@@ -30,7 +30,7 @@ define _testsuitList ()
 global tunit-testsuit ( name block ) {
     
     define testsuitName [symbol->string $name]
-    define testsuit     [new TUnitTestSuit $testsuitName $block]
+    define testsuit     [new TUnitTestSuite $testsuitName $block]
     
     $_testsuitsByName put $testsuitName $testsuit
     append $testsuit $_testsuitList

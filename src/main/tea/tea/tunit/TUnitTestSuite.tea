@@ -16,7 +16,7 @@ import "tea/tunit/TUnitTestCase.tea"
 #
 ###########################################################################
 
-class TUnitTestSuit (
+class TUnitTestSuite (
 
     _name
     _testsuitBlock
@@ -41,7 +41,7 @@ class TUnitTestSuit (
 #
 ###########################################################################
 
-method TUnitTestSuit constructor ( name testsuitBlock ) {
+method TUnitTestSuite constructor ( name testsuitBlock ) {
     
     set! _name          $name
     set! _testsuitBlock $testsuitBlock
@@ -57,7 +57,7 @@ method TUnitTestSuit constructor ( name testsuitBlock ) {
 #
 ###########################################################################
 
-method TUnitTestSuit prepareToRunTests () {
+method TUnitTestSuite prepareToRunTests () {
     
     define testsuitBlock $_testsuitBlock
     define setupBlock    $null
@@ -113,7 +113,7 @@ method TUnitTestSuit prepareToRunTests () {
 #
 ###########################################################################
 
-method TUnitTestSuit runAllTests ( testListener ) {
+method TUnitTestSuite runAllTests ( testListener ) {
     
     $this prepareToRunTests
     
@@ -141,7 +141,7 @@ method TUnitTestSuit runAllTests ( testListener ) {
 #
 ###########################################################################
 
-method TUnitTestSuit testFailure ( testcaseName runTime errorMessage ) {
+method TUnitTestSuite testFailure ( testcaseName runTime errorMessage ) {
     
     ++ _testsRunCount
     ++ _testsFailedCount
@@ -160,7 +160,7 @@ method TUnitTestSuit testFailure ( testcaseName runTime errorMessage ) {
 #
 ###########################################################################
 
-method TUnitTestSuit testSuccess ( testcaseName runTime ) {
+method TUnitTestSuite testSuccess ( testcaseName runTime ) {
     
     ++ _testsRunCount
     += _testsTime $runTime

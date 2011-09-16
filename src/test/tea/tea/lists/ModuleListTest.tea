@@ -1,0 +1,127 @@
+###########################################################################
+#
+# Copyright (c) 2011 PDM&FC, All Rights Reserved.
+#
+#
+# TUnit tests for functions in the tea.lists module.
+#
+###########################################################################
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuit list-sort-test {
+
+    tunit-test SortOk1 {
+        define myList ()
+    }
+
+    tunit-test-error tooFewArgs0 {
+        list-sort
+    }
+
+    tunit-test-error tooFewArgs1 {
+        list-sort ()
+    }
+
+    tunit-test-error tooManyArgs {
+        list-sort () $str-cmp "Hello"
+    }
+
+    tunit-test-error invalidArgType1 {
+        list-sort "Hello" $str-cmp
+    }
+
+    tunit-test-error invalidArgType2 {
+        list-sort ( 0 1 ) "Hello"
+    }
+    
+    # Check the test utility functions are working as expected.
+    tunit-test checkUtilFunction1 {
+        assert-lists-equal () ()
+        assert-lists-equal ( 0 ) ( 0 )
+        assert-lists-equal ( 0 1 ) ( 0 1 )
+    }
+    tunit-test-error checkUtilFunction2 {
+        assert-lists-equal () ( 0 )
+    }
+    tunit-test-error checkUtilFunction3 {
+        assert-lists-equal ( 0 ) ( 1 )
+    }
+    
+    tunit-test sort {
+        test-sorted-list () () $str-cmp
+        test-sorted-list ("A") ("A") $str-cmp
+        test-sorted-list ("A" "B") ("A" "B") $str-cmp
+        test-sorted-list ("A" "B") ("B" "A") $str-cmp
+        test-sorted-list (0 1 2) (1 0 2) $-
+    }
+    
+    tunit-test-error sortError {
+        test-sorted-list (1 0) (1 0) $-
+    }
+
+}
+
+
+
+
+
+###########################################################################
+#
+# Checks that two lists are "equal".
+#
+###########################################################################
+    
+define test-sorted-list ( sortedList unsortedList sortFunction ) {
+    
+    assert-lists-equal $sortedList [list-sort $unsortedList $sortFunction]
+}
+
+
+
+
+
+###########################################################################
+#
+# Checks that two lists are "equal".
+#
+###########################################################################
+    
+define assert-lists-equal ( expectedList actualList ) {
+        
+    #
+    # First check they both have the same size.
+    #
+    define expectedLength [length $expectedList]
+    define actualLength   [length $actualList]
+    
+    if { != $expectedLength $actualLength } {
+        define msg "Lists are different. Expected size {0} but got size {1}."
+        tunit-fail [str-fmt $msg $expectedLength $actualLength]
+    }
+
+    #
+    # And now check each corresponding elements are "equal".
+    #
+    define index 0
+    
+    while { < $index $expectedLength } {
+        define expectedValue [nth $expectedList $index]
+        define actualValue   [nth $actualList $index]
+        
+        if { not-same? $expectedValue $actualValue } {
+            define msg "Element {0} differs. Expected \"{1}\" but got \"{2}\"."
+            tunit-fail [str-fmt $msg $index $expectedValue $actualValue]
+        }
+        
+        ++ index
+    }
+}

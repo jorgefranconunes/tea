@@ -151,18 +151,9 @@ method TUnitTestCase runErrorTest ( testListener setup teardown ) {
 
 method TUnitTestCase buildRunTestFunction ( setup teardown ) {
     
-    define tunit-assert        $TUnitTestCase::assert
-    define tunit-assert-equals $TUnitTestCase::assertEquals
-
-    define functionNames (
-        tunit-assert
-        tunit-assert-equals
-    )
-    define functions [map get $functionNames]
-    
     lambda () {
         $setup
-        apply [lambda $functionNames $_testBlock] $functions
+        exec $_testBlock
         $teardown
     }
 }
@@ -177,11 +168,11 @@ method TUnitTestCase buildRunTestFunction ( setup teardown ) {
 #
 ###########################################################################
 
-define TUnitTestCase::assert args {
+global tunit-assert args {
     
     define argc [length $args]
     
-    if { > $argc 2 } {
+    if { or {< $argc 1} {> $argc 2} } {
         error "Args: isTrue message"
     }
     
@@ -206,15 +197,30 @@ define TUnitTestCase::assert args {
 #
 ###########################################################################
 
-define TUnitTestCase::assertEquals ( expectedValue actualValue ) {
+global tunit-assert-equals ( expectedValue actualValue ) {
     
     if { same? $expectedValue $actualValue } {
         # All ok.
     } {
-        define fmtMsg "Expected \"{0}\" but got \"{1}\""
+        define fmtMsg "Expected \"{0}\" but got \"{1}\"."
         define msg    [str-fmt $fmtMsg $expectedValue $actualValue]
         error $msg
     }
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+global tunit-fail ( msg ) {
+    
+    error $msg
 }
 
 

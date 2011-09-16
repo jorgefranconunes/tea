@@ -3,10 +3,7 @@
 # Copyright (c) 2011 PDM&FC, All Rights Reserved.
 #
 #
-# TUnit tests for functions in the tea.lang module.
-#
-###########################################################################
-
+# TUnit tests for functions in the tea.string
 
 
 
@@ -19,19 +16,19 @@
 
 tunit-testsuit str-upper-test {
 
-    tunit-test UpperOk {
+    tunit-test upperOk {
         tunit-assert-equals "HELLO" [str-upper "hello"] 
     }
 
-    tunit-test-error TooFewArgs {
+    tunit-test-error tooFewArgs {
         str-upper
     }
 
-    tunit-test-error TooManyArgs {
+    tunit-test-error tooManyArgs {
         str-upper "too" "many" "args"
     }
 
-    tunit-test-error InvalidArgType {
+    tunit-test-error invalidArgType {
         str-upper 1
     }
 
@@ -49,19 +46,19 @@ tunit-testsuit str-upper-test {
 
 tunit-testsuit str-lower-test {
 
-    tunit-test LowerOk {
+    tunit-test lowerOk {
         tunit-assert-equals "hello" [str-lower "HELLO"]
     }
 
-    tunit-test-error TooFewArgs {
+    tunit-test-error tooFewArgs {
         str-lower
     }
 
-    tunit-test-error TooManyArgs {
+    tunit-test-error tooManyArgs {
         str-lower "too" "many" "args"
     }
 
-    tunit-test-error InvalidArgType {
+    tunit-test-error invalidArgType {
         str-lower 1
     }
 
