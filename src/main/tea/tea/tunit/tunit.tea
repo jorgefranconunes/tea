@@ -11,29 +11,70 @@ import "tea/tunit/TUnitTestSuite.tea"
 
 
 # Keys are test suit names. Values are TUnitTestSuite instances.
-define _testsuitsByName [new THashtable]
+define _testsuitesByName [new THashtable]
 
 # All registered TUnitTestSuite instances, ordered by the same order
 # they were registered.
-define _testsuitList ()
+define _testsuiteList ()
 
 
 
 
 
-###########################################################################
-#
-# 
-#
-###########################################################################
+#########################################################################
+##
+## <TeaFunction name="tunit-testsuite"
+##              arguments="name block"
+##              module="tea.tunit">
+## 
+## <Overview>
+## Declares a test suite of TUnit tests.
+## </Overview>
+## 
+## <Parameter name="name">
+## A symbol used as identifier for the test suite being declared.
+## </Parameter>
+## 
+## <Parameter name="block">
+## Block of code where the test cases for this test suite are defined.
+## </Parameter>
+## 
+## <Description>
+##
+## A test suite is a set of test cases.
+##
+## <p>Each test case is defined with a call to one of the <FuncRef
+## name="tunit-test" />, <FuncRef name="tunit-test-error" />
+## functions.</p>
+##
+## <p>The regular Tea block scope rules apply here. This means
+## variables defined inside the test suite block will be accessible
+## only to the blocks of the test cases.</p>
+##
+## <p>You can use test fixtures by using the <FuncRef
+## name="tunit-setup" /> and <FuncRef name="tunit-teardown" />
+## functions. These functions are used for initializing and cleaning
+## up the fixtures. You just define the variables for the fixture
+## objects in the test case block and then fill them with the
+## apropriate objects in the initializations.</p>
+## 
+## <p>See also: <FuncRef name="tunit-setup" />, <FuncRef
+## name="tunit-teardown" />, <FuncRef name="tunit-test" />, <FuncRef
+## name="tunit-test-error" /></p>
+## 
+## </Description>
+##
+## </TeaFunction>
+##
+#########################################################################
 
-global tunit-testsuit ( name block ) {
+global tunit-testsuite ( name block ) {
     
-    define testsuitName [symbol->string $name]
-    define testsuit     [new TUnitTestSuite $testsuitName $block]
+    define testsuiteName [symbol->string $name]
+    define testsuite     [new TUnitTestSuite $testsuiteName $block]
     
-    $_testsuitsByName put $testsuitName $testsuit
-    append $testsuit $_testsuitList
+    $_testsuitesByName put $testsuiteName $testsuite
+    append $testsuite $_testsuiteList
 }
 
 
@@ -48,8 +89,8 @@ global tunit-testsuit ( name block ) {
 
 global tunit-run-all-tests ( testListener ) {
     
-    foreach testsuit $_testsuitList {
-        $testsuit runAllTests $testListener
+    foreach testsuite $_testsuiteList {
+        $testsuite runAllTests $testListener
     }
 }
 
@@ -65,8 +106,8 @@ global tunit-run-all-tests ( testListener ) {
 
 global tunit-reset () {
     
-    $_testsuitsByName clear
-    set! _testsuitList ()
+    $_testsuitesByName clear
+    set! _testsuiteList ()
 }
 
 

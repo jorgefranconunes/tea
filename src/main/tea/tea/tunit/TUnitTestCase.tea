@@ -8,6 +8,35 @@
 
 
 
+#########################################################################
+##
+## <TeaFunction name="tunit-test"
+##              arguments="name block"
+##              module="tea.tunit">
+## 
+## <Overview>
+## Declares a TUnit test case.
+## </Overview>
+## 
+## <Parameter name="name">
+## A symbol used as identifier for the test case being declared.
+## </Parameter>
+## 
+## <Parameter name="block">
+## Block of code to run when the test case is run.
+## </Parameter>
+## 
+## <Description>
+##
+## <p>This function is only available inside the code block of a test
+## suite (cf. <FuncRef name="tunit-testsuite" />.</p>
+## 
+## </Description>
+##
+## </TeaFunction>
+##
+#########################################################################
+
 ###########################################################################
 #
 # Creates a new test case where the test is not expected to generate
@@ -23,6 +52,39 @@ global TUnitTestCase::regularTest ( name block ) {
 
 
 
+
+#########################################################################
+##
+## <TeaFunction name="tunit-test-error"
+##              arguments="name block"
+##              module="tea.tunit">
+## 
+## <Overview>
+## Declares a TUnit test case that is supposed to throw an error.
+## </Overview>
+## 
+## <Parameter name="name">
+## A symbol used as identifier for the test case being declared.
+## </Parameter>
+## 
+## <Parameter name="block">
+## Block of code to run when the test case is run.
+## </Parameter>
+## 
+## <Description>
+##
+## <p>Test cases defined with this function are expected to throw an
+## error when the block of code is run. If no error is thrown then the
+## test will be considered to have failed.</p>
+##
+## <p>This function is only available inside the code block of a test
+## suite (cf. <FuncRef name="tunit-testsuite" />).</p>
+## 
+## </Description>
+##
+## </TeaFunction>
+##
+#########################################################################
 
 ###########################################################################
 #
@@ -162,11 +224,33 @@ method TUnitTestCase buildRunTestFunction ( setup teardown ) {
 
 
 
-###########################################################################
-#
-# 
-#
-###########################################################################
+#########################################################################
+##
+## <TeaFunction name="tunit-assert"
+##              arguments="flag [message]"
+##              module="tea.tunit">
+## 
+## <Overview>
+## Asserts that the given flag is true.
+## </Overview>
+## 
+## <Parameter name="flag">
+## If false the assertion will fail and an error is thrown.
+## </Parameter>
+## 
+## <Parameter name="message">
+## The message to associate with the error, if an error is thrown.
+## </Parameter>
+## 
+## <Description>
+##
+## This function is intended to be used inside TUnit tests.
+## 
+## </Description>
+##
+## </TeaFunction>
+##
+#########################################################################
 
 global tunit-assert args {
     
@@ -191,11 +275,36 @@ global tunit-assert args {
 
 
 
-###########################################################################
-#
-# 
-#
-###########################################################################
+#########################################################################
+##
+## <TeaFunction name="tunit-assert-equals"
+##              arguments="expectedValue actualValue"
+##              module="tea.tunit">
+## 
+## <Overview>
+## Asserts that the two given objects are equal.
+## </Overview>
+## 
+## <Parameter name="expectedValue">
+## One of the objects to compare.
+## </Parameter>
+## 
+## <Parameter name="actualValue">
+## The other object to compare.
+## </Parameter>
+## 
+## <Description>
+##
+## This function is intended to be used inside TUnit tests.
+##
+## <p>The two received objects are compared using the <FuncRef
+## name="same?" /> function.</p>
+## 
+## </Description>
+##
+## </TeaFunction>
+##
+#########################################################################
 
 global tunit-assert-equals ( expectedValue actualValue ) {
     
@@ -211,6 +320,30 @@ global tunit-assert-equals ( expectedValue actualValue ) {
 
 
 
+
+#########################################################################
+##
+## <TeaFunction name="tunit-fail"
+##              arguments="message"
+##              module="tea.tunit">
+## 
+## <Overview>
+## Makes a TUnit test case fail.
+## </Overview>
+## 
+## <Parameter name="message">
+## The message to associate with the error.
+## </Parameter>
+## 
+## <Description>
+##
+## This function is intended to be used inside TUnit tests.
+## 
+## </Description>
+##
+## </TeaFunction>
+##
+#########################################################################
 
 ###########################################################################
 #

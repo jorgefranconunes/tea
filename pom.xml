@@ -393,9 +393,6 @@ one described at "00README-developers.txt".
         <version>2.7</version>
         <configuration>
           <configLocation>src/main/config/checkstyle/checkstyle.xml</configLocation>
-          <propertyExpansion> 
-            cacheFile=${project.build.directory}/checkstyle-cachefile 
-          </propertyExpansion> 
         </configuration>
       </plugin>
 
