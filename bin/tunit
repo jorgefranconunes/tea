@@ -1,7 +1,7 @@
 #!/bin/bash
 ###########################################################################
 #
-# Copyright (c) 2011 PDM&FC, All Rights Reserved.
+# Copyright (c) 2011 PDMFC, All Rights Reserved.
 #
 #
 # Tool for running Tea unit tests from the command line.
@@ -33,7 +33,10 @@ teaReadCoreConfig $_teaBaseDir
 
 _teaScript=resource:/lib/tea-${TEA_VERSION}/tea/tools/tunit/tunit-main.tea
 
-exec ${_teaBaseDir}/bin/tsh ${_teaScript} "$@"
+exec ${_teaBaseDir}/bin/tsh \
+    --script=${_teaScript} \
+    --no-help \
+    "$@"
 
 
 

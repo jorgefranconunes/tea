@@ -1,10 +1,10 @@
 /**************************************************************************
  *
- * Copyright (c) 2007-2011 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2007-2011 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
-package com.pdmfc.tea.apps;
+package com.pdmfc.tea.tools.runner;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ import com.pdmfc.tea.STeaException;
  *
  **************************************************************************/
 
-final class STeaLauncherArgs
+final class STeaRunnerArgs
     extends Object {
 
 
@@ -53,11 +53,111 @@ final class STeaLauncherArgs
 
 /**************************************************************************
  *
- * 
+ * Instances for external user are only created by the factory method
+ * "parse(...)".
  *
  **************************************************************************/
 
-    public STeaLauncherArgs() {
+    private STeaRunnerArgs() {
+
+        // Nothing to do.
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * Parses the given command line arguments and returns a new instance
+ * dutifully initialized.
+ *
+ * @param cliArgs The command line arguments to be passed to the Tea
+ * runner.
+ *
+ * @exception STeaException Thrown in the case of an unknown option.
+ *
+ **************************************************************************/
+
+    public static STeaRunnerArgs parse(final String[] cliArgs)
+        throws STeaException {
+
+        STeaRunnerArgs result = new STeaRunnerArgs();
+
+        result.doParse(cliArgs);
+
+        return result;
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * Retrieves the list of paths to be used for importing files.
+ *
+ **************************************************************************/
+
+    public List<String> getLibraryList() {
+
+        List<String> result = new ArrayList<String>(_libraryList);
+
+        return result;
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * Retrieves the path of the Tea script to execute. This could be
+ * either a path name in the file system or an URL.
+ *
+ * @return The value of the "<code>--script</code>" option. Null if
+ * that option was not present or if it was an empty string or "-".
+ *
+ **************************************************************************/
+
+    public String getScriptPath() {
+
+        return _scriptPath;
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * @return The value of the "<code>--encoding</code>" option. Null if
+ * the option was not present or if it was en empty string.
+ *
+ **************************************************************************/
+
+    public String getEncoding() {
+
+        return _encoding;
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * Retrieves the command line arguments that are to be passed to the
+ * Tea script. These are the arguments passed to <code>{@link
+ * #parse(String[])}</code> after the "<code>--</code>" option.
+ *
+ * @return The CLI arguments the Tea script is to be executed with.
+ *
+ **************************************************************************/
+
+    public String[] getScriptCliArgs() {
+
+        return _scriptCliArgs;
     }
 
 
@@ -75,7 +175,7 @@ final class STeaLauncherArgs
  *
  **************************************************************************/
 
-    public void parse(final String[] cliArgs)
+    private void doParse(final String[] cliArgs)
         throws STeaException {
 
         _isParsingOptions = true;
@@ -83,8 +183,8 @@ final class STeaLauncherArgs
         _libraryList.clear();
         _scriptCliArgsList.clear();
 
-        for ( int i=0, count=cliArgs.length; i<count; ++i ) {
-            parseArg(cliArgs[i]);
+        for ( String arg : cliArgs ) {
+            parseArg(arg);
         }
 
         _scriptCliArgs = _scriptCliArgsList.toArray(new String[0]);
@@ -159,14 +259,8 @@ final class STeaLauncherArgs
         String pathSep = File.pathSeparator;
 
         if ( libraryStr != null ) {
-            StringTokenizer i=new StringTokenizer(libraryStr, pathSep);
-
-            while ( i.hasMoreTokens() ) {
-                String path = i.nextToken();
-                
-                path = path.replace('|', ':');
-
-                _libraryList.add(path);
+            for ( String path : libraryStr.split(pathSep) ) {
+                optionAddLibItem(path);
             }
         }
     }
@@ -229,79 +323,6 @@ final class STeaLauncherArgs
         }
 
         _encoding = encoding;
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * Retrieves the list of paths to be used for importing files.
- *
- **************************************************************************/
-
-    public List<String> getLibraryList() {
-
-        List<String> result = new ArrayList<String>(_libraryList);
-
-        return result;
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * Retrieves the path of the Tea script to execute. This could be
- * either a path name in the file system or an URL.
- *
- * <p>It returns the value of the "<code>--script</code>" option.
- *
- * @return 
- *
- **************************************************************************/
-
-    public String getScriptPath() {
-
-        return _scriptPath;
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * Returns the value of the "<code>--encoding</code>" option.
- *
- * @return 
- *
- **************************************************************************/
-
-    public String getEncoding() {
-
-        return _encoding;
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * Retrieves the command line arguments that are to be passed to the
- * Tea script. These are the arguments passed to <code>{@link
- * #parse(String[])}</code> after the "<code>--</code>" option.
- *
- * @return The CLI arguments the Tea script is to be executed with.
- *
- **************************************************************************/
-
-    public String[] getScriptCliArgs() {
-
-        return _scriptCliArgs;
     }
 
 

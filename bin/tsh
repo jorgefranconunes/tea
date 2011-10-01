@@ -1,40 +1,11 @@
 #!/bin/bash
 ###########################################################################
 #
-# Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
+# Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
 #
-###########################################################################
-
-###########################################################################
-#
-# $Id$
 #
 # Executes a Tea script read from a file or from stdin. Run with
 # the --help option for more details.
-#
-#
-# Revisions:
-#
-# 2009/10/13 Backported to the 3.2.x branch. (TSK-PDMFC-TEA-0044) (jfn)
-#
-# 2008/04/18 Slight refactoring to acomodate the new arguments expected
-# by the com.pdmfc.tea.apps.STeaShell program. (TSK-PDMFC-TEA-0044) (jfn)
-#
-# 2006/06/01 Corrected syntax error (missing "'" that was only aparent
-# under bash 3.1. (jfn)
-#
-# 2005/01/18 Solved issues with detecting Cygwin. (jfn)
-#
-# 2003/05/23 Added the "--version" option. (jfn)
-#
-# 2003/02/12 The current directory is no longer added to the classpath
-# of the JVM running the Tea interpreter. (jfn)
-#
-# 2003/02/10 Adapted to use the new configuration files. (jfn)
-#
-# 2002/03/04 Minor changes to work under the Solaris 8 Bourne shell. (jfn)
-#
-# 2001/05/12 Created. (jfn)
 #
 ###########################################################################
 
@@ -55,9 +26,9 @@ while [ -h $SCRIPT ] ; do
     dirname=$(dirname $SCRIPT)
     link=$(ls -ld $SCRIPT | awk '{print $11}')
     if [ $(expr "$link" : '\(.\).*') = "/" ] ; then
-	SCRIPT=$link
+        SCRIPT=$link
     else
-	SCRIPT=$dirname/$link
+        SCRIPT=$dirname/$link
     fi
 done
 
@@ -83,22 +54,22 @@ source ${_teaBaseDir}/bin/tea-utils
 
 case $(teaOsType) in
     *CYGWIN* )
-	_teaBaseDir=$(cygpath --windows "$_teaBaseDir" | sed 's/\\\/\\//g')
-	;;
+        _teaBaseDir=$(cygpath --windows "${_teaBaseDir}" | sed 's/\\\/\\//g')
+        ;;
 esac
 
-teaReadInstallConfig $_teaBaseDir
+teaReadInstallConfig ${_teaBaseDir}
 
-_teaCoreLibrary=${TEA_CORE_LIBRARY}
-_teaLibrary=
-_teaCoreClasspath=${TEA_CORE_CLASSPATH}
-_teaClasspath=
+_teaLibrary=${TEA_CORE_LIBRARY}
+_teaClasspath=${TEA_CORE_CLASSPATH}
 _teaJre=${TEA_JRE}
 _teaJreOptions=${TEA_JRE_OPTIONS}
-_teaScriptPath="-"
+_teaScript=""
 _encoding=""
 _encodingOptions=""
+_helpEnabled=true
 _pathSep=$(teaPathSeparator)
+_argCountToSkip=0
 
 
 
@@ -110,11 +81,11 @@ _pathSep=$(teaPathSeparator)
 #
 ###########################################################################
 
-displayHeader() {
+function displayHeader() {
 
     cat <<EOF
-Tea $TEA_VERSION
-Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
+Tea ${TEA_VERSION}
+Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
 
 EOF
 }
@@ -129,7 +100,7 @@ EOF
 #
 ###########################################################################
 
-displayHelp() {
+function displayHelp() {
 
     displayHeader
 
@@ -137,38 +108,41 @@ displayHelp() {
 Runs a Tea script either from a file or from standard input. The
 command line arguments are as follows:
 
-tsh [option ...] script-file [arg ...]
-tsh [option ...]
+tsh [option ...] [script-file] [arg ...]
 
 Available options:
 --library=DIRLIST
-	Colon separated list of directory pathnames or URLs. These are
-	the locations where the Tea 'import' function will look for
-	files. In the case of an URL all the colons must be replaced
-	by the '|' character. This option is not mandatory.
+        Colon separated list of directory pathnames or URLs. These are
+        the locations where the Tea 'import' function will look for
+        files. In the case of an URL all the colons must be replaced
+        by the '|' character. This option is not mandatory.
 --classpath=DIRLIST
-	Colon separated list of directories or JAR files pathnames. These
-	will be added to the CLASSPATH of the JVM running the Tea script.
-	This option is needed when using external Java libraries (e.g. for
-	a JDBC driver). This option is not mandatory.
+        Colon separated list of directories or JAR files pathnames. These
+        will be added to the CLASSPATH of the JVM running the Tea script.
+        This option is needed when using external Java libraries (e.g. for
+        a JDBC driver). This option is not mandatory.
 --jre=PATH
-	Path to your Java runtime environment executable. It must accept
-	the "-classpath" and "-D" options. This option is not mandatory.
-	When not specified it will default to the value specified at
+        Path to your Java runtime environment executable. It must accept
+        the "-classpath" and "-D" options. This option is not mandatory.
+        When not specified it will default to the value specified at
         instalation time.
 --jre-options=STRING
-	Set of options passed as argument to the JRE. This option is
-	not mandatory. It defaults to an empty string, that is, the JRE
-	is invoked with no aditional options.
+        Set of options passed as argument to the JRE. This option is
+        not mandatory. It defaults to an empty string, that is, the JRE
+        is invoked with no aditional options.
 --encoding=ENC
-	Specifies the encoding of the Tea source files (e.g. UTF-8,
-	ISO-8859-15).  If this option is not specified then the
-	platform default encoding is assumed.
+        Specifies the encoding of the Tea source files (e.g. UTF-8,
+        ISO-8859-15).  If this option is not specified then the
+        platform default encoding is assumed.
+--script=PATH
+        The file system path of the Tea script to execute. This option
+        is not mandatory. If not specified then the path will be taken
+        as the first argument following the known options.
 --version
-	Print version information and exits.
+        Print version information and exits.
 --help
-	Prints this help text and exits.
-		  
+        Prints this help text and exits.
+                  
 EOF
 }
 
@@ -182,87 +156,125 @@ EOF
 #
 ###########################################################################
 
-for option in "$@" ; do
-    case $option in
-	--library=* )
-	    _teaLibrary=$(expr "$option" : '--library=\(.*\)')
-	    ;;
-	--classpath=* )
-	    _teaClasspath=$(expr "$option" : '--classpath=\(.*\)')
-	    ;;
-	--jre=* )
-	    _teaJre=$(expr "$option" : '--jre=\(.*\)')
-	    ;;
-	--jre-options=* )
-	    _teaJreOptions=$(expr "$option" : '--jre-options=\(.*\)')
-	    ;;
-	--encoding=* )
-	    _encoding=$(expr "$option" : '--encoding=\(.*\)')
-	    ;;
-	--version )
-	    displayHeader
-	    exit 0
-	    ;;
-	--help )
-	    displayHelp
-	    exit 0
-	    ;;
-	--*=* )
-	    theOption=$(expr "$option" : '\(--.*\)=.*')
-	    echo "$theOption : unrecognized option. Use --help to see options."
-	    exit 1
-	    ;;
-	* )
-	    # End of options.
-	    break
-	;;
-    esac
+function parseCliOptions () {
+
+    for option in "$@" ; do
+        case "${option}" in
+            --script=* )
+                _teaScript=$(expr "${option}" : '--script=\(.*\)')
+                ;;
+            --library=* )
+                local item=$(expr "${option}" : '--library=\(.*\)')
+                if   [ -z "${_teaLibrary}" ] ; then
+                    _teaLibrary=${item}
+                else
+                    _teaLibrary=${item}${_pathSep}${_teaLibrary}
+                fi
+                ;;
+            --classpath=* )
+                local item=$(expr "${option}" : '--classpath=\(.*\)')
+                if [ -z "${_teaClasspath}" ] ; then
+                    _teaClasspath=${item}
+                else
+                    _teaClasspath=${item}${_pathSep}${_teaClasspath}
+                fi
+                ;;
+            --jre=* )
+                _teaJre=$(expr "${option}" : '--jre=\(.*\)')
+                ;;
+            --jre-options=* )
+                local item=$(expr "${option}" : '--jre-options=\(.*\)')
+                if [ -z "${_jreOptions}" ] ; then
+                    _teaJreOptions=${_jreOptions}
+                else
+                    _teaJreOptions="${item} ${_jreOptions}"
+                fi
+                ;;
+            --encoding=* )
+                _encoding=$(expr "${option}" : '--encoding=\(.*\)')
+                ;;
+            --version )
+                if [ ${_helpEnabled} == true ] ; then
+                    displayHeader
+                    exit 0
+                else
+                    # End of options.
+                    break
+                fi
+                ;;
+            --help )
+                if [ ${_helpEnabled} == true ] ; then
+                    displayHelp
+                    exit 0
+                else
+                    # End of options.
+                    break
+                fi
+                ;;
+            --no-help )
+                _helpEnabled=false
+                ;;
+            -- )
+                # End of options.
+                _argCountToSkip=$(expr ${_argCountToSkip} + 1)
+                break
+                ;;
+            * )
+                # End of options.
+                break
+                ;;
+            esac
+        
+        shift
+        _argCountToSkip=$(expr ${_argCountToSkip} + 1)
+    done
+
+    if [ -z "${_teaScript}" ] ; then
+        # As no script was explicitly specified, the first argument
+        # after the options is the path of the Tea script to be run.
+        _teaScript=$1
+
+        shift
+        _argCountToSkip=$(expr ${_argCountToSkip} + 1)
+    fi
+
+    if [ ! -z "${_encoding}" ] ; then
+        _encodingOptions="--encoding=${_encoding}"
+    fi
+}
+
+
+
+
+
+###########################################################################
+#
+# The main script.
+#
+###########################################################################
+
+parseCliOptions "$@"
+
+#
+# Skip the original CLI arguments that were processed by
+# parseCliOptions.
+#
+while [ ${_argCountToSkip} -gt 0 ] ; do
     shift
+    _argCountToSkip=$(expr ${_argCountToSkip} - 1)
 done
 
-# The first argument after the options is the path of the Tea script to
-# be run.
-_teaScriptPath=$1
-
-# And all remaining arguments will be passed as command line arguments
-# to the Tea script.
-shift
-
-
-if [ -z "$_teaLibrary" ] ; then
-    _teaLibrary=${_teaCoreLibrary}
-else
-    _teaLibrary="${_teaLibrary}${_pathSep}${_teaCoreLibrary}"
-fi
-
-if [ -z "$_teaClasspath" ] ; then
-    _teaClasspath=${_teaCoreClasspath}
-else
-    _teaClasspath="${_teaClasspath}${_pathSep}${_teaCoreClasspath}"
-fi
-
-if [ ! -z "$_encoding" ] ; then
-    _encodingOptions="--encoding=$_encoding"
-fi
-
-
-
-
-
-###########################################################################
 #
-# 
+# And execute the Java tool for running a Tea script from a file.
 #
-###########################################################################
-
-exec "$_teaJre" 			\
-    $_teaJreOptions			\
-    -classpath "$_teaClasspath"		\
-    com.pdmfc.tea.apps.STeaLauncher	\
-    --library="$_teaLibrary"		\
-    --script="$_teaScriptPath"		\
-    $_encodingOptions			\
-    --					\
+exec "$_teaJre" \
+    $_teaJreOptions \
+    -classpath "$_teaClasspath" \
+    com.pdmfc.tea.tools.runner.STeaRunner \
+    --library="$_teaLibrary" \
+    --script="$_teaScript" \
+    $_encodingOptions \
+    -- \
     "$@"
 
 

@@ -242,7 +242,7 @@ one described at "00README-developers.txt".
 
 
       <!-- Remove the final JAR also from where it was copied to
-      during assembly. -->
+           during assembly. -->
       <plugin>
         <artifactId>maven-clean-plugin</artifactId>
         <configuration>
@@ -274,7 +274,7 @@ one described at "00README-developers.txt".
                 <arguments>
                   <argument>-classpath</argument>
                   <classpath />
-                  <argument>com.pdmfc.tea.apps.STeaLauncher</argument>
+                  <argument>com.pdmfc.tea.tools.runner.STeaRunner</argument>
                   <argument>--script=resource:/lib/tea-${project.version}/tea/tools/tunit/tunit-main.tea</argument>
                   <argument>--</argument>
                   <argument>surefireReport</argument>

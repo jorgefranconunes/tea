@@ -1,23 +1,23 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
-package com.pdmfc.tea.apps;
+package com.pdmfc.tea.tools.runner;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.pdmfc.tea.STeaException;
-import com.pdmfc.tea.apps.STeaLauncherArgs;
 import com.pdmfc.tea.compiler.SCode;
 import com.pdmfc.tea.compiler.SCompiler;
 import com.pdmfc.tea.runtime.SExitException;
 import com.pdmfc.tea.runtime.SFlowControlException;
 import com.pdmfc.tea.runtime.STeaRuntime;
 import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.tools.runner.STeaRunnerArgs;
 
 
 
@@ -29,7 +29,7 @@ import com.pdmfc.tea.runtime.SRuntimeException;
  *
  **************************************************************************/
 
-public final class STeaLauncher
+public final class STeaRunner
     extends Object {
 
 
@@ -50,7 +50,7 @@ public final class STeaLauncher
  *
  **************************************************************************/
 
-    public STeaLauncher() {
+    public STeaRunner() {
 
         // Nothing to do.
     }
@@ -244,15 +244,15 @@ public final class STeaLauncher
 
     public static void main(final String[] args) {
 
-        int              retVal    = 0;
-        boolean          isOk      = true;
-        String           errorMsg  = null;
-        STeaLauncher     shell     = new STeaLauncher();
-        STeaLauncherArgs shellArgs = new STeaLauncherArgs();
+        int            retVal    = 0;
+        boolean        isOk      = true;
+        String         errorMsg  = null;
+        STeaRunner     shell     = new STeaRunner();
+        STeaRunnerArgs shellArgs = null;
 
         if ( isOk ) {
             try {
-                shellArgs.parse(args);
+                shellArgs = STeaRunnerArgs.parse(args);
             } catch (STeaException e) {
                 isOk     = false;
                 errorMsg = e.getMessage();

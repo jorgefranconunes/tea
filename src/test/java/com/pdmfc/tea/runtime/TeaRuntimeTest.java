@@ -23,7 +23,7 @@ import com.pdmfc.tea.runtime.STeaRuntime;
  *
  **************************************************************************/
 
-public class TeaRuntimeTest
+public final class TeaRuntimeTest
     extends Object {
 
 

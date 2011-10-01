@@ -6,8 +6,8 @@
 
 /**
  *
- * Standalone applications that make use of the Tea runtime.
+ * Tool for running Tea scripts from files or other input sources.
  *
  */
-package com.pdmfc.tea.apps;
+package com.pdmfc.tea.tools.runner;
 

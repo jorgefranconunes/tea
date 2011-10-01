@@ -1,86 +1,25 @@
 #!/bin/bash
 ###########################################################################
 #
-# Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
+# Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
 #
-###########################################################################
-
-###########################################################################
-#
-# $Id$
 #
 # Tool to generate Tea documentation from Tea and Java source files.
 #
-#
-# Revisions:
-#
-# 2005/01/18 Solved issues with detecting Cygwin. (jfn)
-#
-# 2003/02/10 Adapted to use the new configuration files. (jfn)
-#
-# 2002/10/28 The "tsh" configuration file is now named "tsh.conf",
-# instead of "tsh.config". (jfn)
-#
-# 2002/03/04 Minor changes to work under the Solaris 8 Bourne
-# shell. (jfn)
-#
-# 2001/05/12 Created. (jfn)
-#
 ###########################################################################
 
+_scriptDir=$(dirname $0)
+_scriptName=$(basename $0)
 
-
-
-
-##########################################################################
-#
-# Follow symlinks so this script may be called from a symlink somewhere.
-#
-##########################################################################
-
-SCRIPT=$0
-
-while [ -h $SCRIPT ]
-do
-    dirname=$(dirname $SCRIPT)
-    link=$(ls -ld $SCRIPT | awk '{print $11}')
-    if [ $(expr "$link" : '\(.\).*') = "/" ]
-    then
-	SCRIPT=$link
-    else
-	SCRIPT=$dirname/$link
-    fi
-done
-
-SCRIPT_DIR=$(dirname $SCRIPT)
-SCRIPT_NAME=$(basename $SCRIPT)
-
-teaBaseDir=$(cd ${SCRIPT_DIR}/..; pwd)
-pathSep=":"
+_teaBaseDir=$(cd $_scriptDir/..; pwd)
 
 
 
 
 
-##########################################################################
-#
-# 
-#
-##########################################################################
+source ${_teaBaseDir}/bin/tea-utils
 
-#
-# Makes utility functions available.
-#
-source ${teaBaseDir}/bin/tea-utils
-
-case $(teaOsType) in
-    *CYGWIN* )
-	pathSep=";"
-	teaBaseDir=$(cygpath --windows "$teaBaseDir" | sed 's/\\\/\\//g')
-    ;;
-esac
-
-teaReadInstallConfig $teaBaseDir
+teaReadCoreConfig $_teaBaseDir
 
 
 
@@ -88,18 +27,18 @@ teaReadInstallConfig $teaBaseDir
 
 ###########################################################################
 #
-# And executes the apropriate Tea program.
+# The main script.
 #
 ###########################################################################
 
-teadocBaseDir=${teaBaseDir}/apps/teadoc
+_teadocBaseDir=${_teaBaseDir}/apps/teadoc
+_teaScript=${_teadocBaseDir}/lib/tea/doc-html.tea
+_teaLibrary=${_teadocBaseDir}/lib/tea
 
-teaScript=${teadocBaseDir}/lib/tea/doc-html.tea
-teaLibrary=${teadocBaseDir}/lib/tea
-
-exec ${teaBaseDir}/bin/tsh \
-    --library="${teaLibrary}" \
-    $teaScript \
+exec ${_teaBaseDir}/bin/tsh \
+    --library="${_teaLibrary}" \
+    --script=${_teaScript} \
+    --no-help \
     "$@"
 
 
