@@ -162,12 +162,13 @@ method TUnitTestCase runRegularTest ( testListener setup teardown ) {
     define runTestBlock  [$this buildRunTestFunction $setup $teardown]
     define isErrorThrown $false
     define errorMsg      $null
+    define stackTrace    $null
     define runTime       [time {
-        set! isErrorThrown [catch {$runTestBlock} errorMsg]
+        set! isErrorThrown [catch {$runTestBlock} errorMsg stackTrace]
     }]
     
     if $isErrorThrown {
-        $testListener testFailure $_name $runTime $errorMsg
+        $testListener testFailure $_name $runTime $errorMsg $stackTrace
     } {
         $testListener testSuccess $_name $runTime
     }

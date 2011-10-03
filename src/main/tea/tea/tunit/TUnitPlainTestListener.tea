@@ -159,17 +159,31 @@ method TUnitPlainTestListener endingTestSuit ( name testsCount failedCount total
 #
 ###########################################################################
 
-method TUnitPlainTestListener testFailure ( name time msg ) {
+method TUnitPlainTestListener testFailure ( name time msg stackTrace ) {
     
     define timeMillis [/ $time 1000.0]
     define msgFmt \
             "Test case: {0} took {1,Number,0.###} sec\n\tCaused an error : {2}"
     
     echo [str-fmt $msgFmt $name $timeMillis $msg]
+    show-stack-trace $stackTrace
     
     ++ _totalTests
     ++ _totalFailures
     += _totalTime $time
+}
+
+
+define show-stack-trace ( stackTrace ) {
+    
+    define lines [str-split $stackTrace "\n"]
+    map show-indented-line $lines
+}
+
+
+define show-indented-line ( s ) {
+    
+    echo "\t" $s
 }
 
 

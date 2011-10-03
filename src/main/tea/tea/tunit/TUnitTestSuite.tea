@@ -141,13 +141,13 @@ method TUnitTestSuite runAllTests ( testListener ) {
 #
 ###########################################################################
 
-method TUnitTestSuite testFailure ( testcaseName runTime errorMessage ) {
+method TUnitTestSuite testFailure ( testcaseName runTime errorMessage stackTrace) {
     
     ++ _testsRunCount
     ++ _testsFailedCount
     += _testsTime $runTime
     
-    $_testListener testFailure $testcaseName $runTime $errorMessage
+    $_testListener testFailure $testcaseName $runTime $errorMessage $stackTrace
 }
 
 

@@ -151,13 +151,13 @@ method TUnitSurefireListener endingTestSuit ( name testsCount failedCount totalT
 #
 ###########################################################################
 
-method TUnitSurefireListener testFailure ( name time msg ) {
+method TUnitSurefireListener testFailure ( name time msg stackTrace) {
     
     define className    $_surefireTestClassName
     define testcaseName [build-testcase-name $_testsuitName $name]
     
     define reportItem [lambda ( output ) {
-        report-failure $output $className $testcaseName $time $msg
+        report-failure $output $className $testcaseName $time $msg $stackTrace
     }]
     
     append $reportItem $_reportItemList
@@ -331,7 +331,7 @@ define report-end ( output ) {
 #
 ###########################################################################
 
-define report-failure ( output className name time msg ) {
+define report-failure ( output className name time msg stackTrace ) {
     
     define timeSeconds   [/ $time 1000.0]
     define timeField     [java-exec-method java.lang.String valueOf $timeSeconds]
@@ -339,12 +339,13 @@ define report-failure ( output className name time msg ) {
     define testcaseElementStart "<testcase time=\"{2}\" classname=\"{0}\" name=\"{1}\">"
     define testcaseElementEnd "</testcase>"
     
-    define failureElement "<failure message=\"{0}\" type=\"tunit.failure\">{0}</failure>"
-    define msgXml [xml-encode $msg]
+    define failureElement "<failure message=\"{0}\" type=\"tunit.failure\">{0}\n{1}</failure>"
+    define msgXml        [xml-encode $msg]
+    define stackTraceXml [xml-encode $stackTrace]
     
     $output writeln [str-fmt $testcaseElementStart $className $name $timeField]
-    $output writeln [str-fmt $failureElement $msg]
-    $output writeln $testcaseElemenEnd
+    $output writeln [str-fmt $failureElement $msgXml $stackTraceXml]
+    $output writeln $testcaseElementEnd
 }
 
 
