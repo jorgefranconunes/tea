@@ -292,7 +292,7 @@ If you remove the build.conf file, ant will setup one for you using the JUnit li
     <java jar="${jar.file}" fork="true" failonerror="yes">
       <arg value="--script=${tunit.script}" />
       <arg value="--" />
-      <arg value="runAllTests" />
+      <arg value="runTests" />
       <arg value="--dir=${tunit.source.dir}" />
     </java>
   </target>

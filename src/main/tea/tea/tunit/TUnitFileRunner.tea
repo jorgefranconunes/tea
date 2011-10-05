@@ -76,7 +76,9 @@ method TUnitFileRunner addSourceFile ( path ) {
 
 method TUnitFileRunner addSourceFileList ( pathList ) {
     
-    set! _sourceFileList [list-cat $_sourceFileList $pathList]
+    if { not-null? $pathList } {
+        set! _sourceFileList [list-cat $_sourceFileList $pathList]
+    }
 }
 
 
@@ -106,7 +108,9 @@ method TUnitFileRunner addSourceDir ( path ) {
 
 method TUnitFileRunner addSourceDirList ( pathList ) {
     
-    set! _sourceDirList [list-cat $_sourceDirList $pathList]
+    if { not-null? $pathList } {
+        set! _sourceDirList [list-cat $_sourceDirList $pathList]
+    }
 }
 
 
