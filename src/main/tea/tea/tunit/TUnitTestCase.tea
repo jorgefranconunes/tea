@@ -278,6 +278,110 @@ global tunit-assert args {
 
 #########################################################################
 ##
+## <TeaFunction name="tunit-assert-null"
+##              arguments="object [message]"
+##              module="tea.tunit">
+## 
+## <Overview>
+## Asserts that the given object is null.
+## </Overview>
+## 
+## <Parameter name="object">
+## If not null the assertion will fail and an error is thrown.
+## </Parameter>
+## 
+## <Parameter name="message">
+## The message to associate with the error, if an error is thrown.
+## </Parameter>
+## 
+## <Description>
+##
+## This function is intended to be used inside TUnit tests.
+##
+## <p>This function is just a shortcut to the following</p>
+##
+## <pre>
+## tunit-assert [null? $object] $message
+## </pre>
+## 
+## </Description>
+##
+## </TeaFunction>
+##
+#########################################################################
+
+global tunit-assert-null args {
+    
+    define argc [length $args]
+    
+    if { or {< $argc 1} {> $argc 2} } {
+        error "Args: object message"
+    }
+    
+    define object  [nth $args 0]
+    define message [if {== $argc 2} {nth $args 1} "Object is not null"]
+    
+    tunit-assert [null? $object] $message
+}
+
+
+
+
+
+#########################################################################
+##
+## <TeaFunction name="tunit-assert-not-null"
+##              arguments="object [message]"
+##              module="tea.tunit">
+## 
+## <Overview>
+## Asserts that the given object is not null.
+## </Overview>
+## 
+## <Parameter name="object">
+## If null the assertion will fail and an error is thrown.
+## </Parameter>
+## 
+## <Parameter name="message">
+## The message to associate with the error, if an error is thrown.
+## </Parameter>
+## 
+## <Description>
+##
+## This function is intended to be used inside TUnit tests.
+##
+## <p>This function is just a shortcut to the following</p>
+##
+## <pre>
+## tunit-assert [not-null? $object] $message
+## </pre>
+## 
+## </Description>
+##
+## </TeaFunction>
+##
+#########################################################################
+
+global tunit-assert-not-null args {
+    
+    define argc [length $args]
+    
+    if { or {< $argc 1} {> $argc 2} } {
+        error "Args: object message"
+    }
+    
+    define object  [nth $args 0]
+    define message [if {== $argc 2} {nth $args 1} "Object is not null"]
+    
+    tunit-assert [not-null? $object] $message
+}
+
+
+
+
+
+#########################################################################
+##
 ## <TeaFunction name="tunit-assert-equals"
 ##              arguments="expectedValue actualValue"
 ##              module="tea.tunit">
