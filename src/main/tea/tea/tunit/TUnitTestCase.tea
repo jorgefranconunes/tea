@@ -371,7 +371,7 @@ global tunit-assert-not-null args {
     }
     
     define object  [nth $args 0]
-    define message [if {== $argc 2} {nth $args 1} "Object is not null"]
+    define message [if {== $argc 2} {nth $args 1} "Object is null"]
     
     tunit-assert [not-null? $object] $message
 }
