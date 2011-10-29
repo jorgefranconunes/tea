@@ -2097,8 +2097,12 @@ public final class SModuleMath
 //* </Returns>
 //*
 //* <Description>
-//* The sequence of values returned by this function is always differente
+//* The sequence of values returned by this function is always different
 //* for each execution of the process that uses this function.
+//* 
+//* <p>All 2^32 possible int values are produced with (approximately)
+//* equal probability. This means negative values may also be
+//* generated.</p>
 //* </Description>
 //* 
 //* </TeaFunction>
