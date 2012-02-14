@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2007-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2007-2012 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -9,7 +9,6 @@ package com.pdmfc.tea.tools.runner;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import com.pdmfc.tea.STeaException;
 
