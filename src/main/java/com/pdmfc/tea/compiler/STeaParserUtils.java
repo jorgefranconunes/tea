@@ -81,29 +81,25 @@ public final class STeaParserUtils
                     result.append('\t'); break;
                 case 'u' :
                     if ( i == lastIndex ) {
-                        result.append('\\');
-                        result.append('u');
+                        result.append("\\u");
                         break;
                     }
                     d3 = s.charAt(++i);
                     if ( i == lastIndex ) {
-                        result.append('\\');
-                        result.append('u');
+                        result.append("\\u");
                         result.append(d3);
                         break;
                     }
                     d2 = s.charAt(++i);
                     if ( i == lastIndex ) {
-                        result.append('\\');
-                        result.append('u');
+                        result.append("\\u");
                         result.append(d3);
                         result.append(d2);
                         break;
                     }
                     d1 = s.charAt(++i);
                     if ( i == lastIndex ) {
-                        result.append('\\');
-                        result.append('u');
+                        result.append("\\u");
                         result.append(d3);
                         result.append(d2);
                         result.append(d1);
@@ -115,8 +111,7 @@ public final class STeaParserUtils
                     d1i = Character.digit(d1, 16);
                     d0i = Character.digit(d0, 16);
                     if ( (d0i==-1) || (d1i==-1) || (d2i==-1) || (d3i==-1) ) {
-                        result.append('\\');
-                        result.append('u');
+                        result.append("\\u");
                         result.append(d3);
                         result.append(d2);
                         result.append(d1);

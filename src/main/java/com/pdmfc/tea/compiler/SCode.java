@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2012 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -32,7 +32,6 @@ public final class SCode
 
     private SCodeNode _statsHead = null;
     private SCodeNode _statsTail = null;
-    private int       _statCount = 0;
     private String    _fileName  = null;
 
     private static final String ERR_STAT =
@@ -131,7 +130,6 @@ public final class SCode
             _statsTail._next = newStat;
         }
         _statsTail = newStat;
-        _statCount++;
     }
 
 

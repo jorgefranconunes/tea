@@ -984,13 +984,11 @@ public final class SCompiler
         while ( !isAtEnd() ) {
             char c = peek();
 
-            switch ( c ) {
-            case '\\' :
+            if ( c == '\\' ) {
                 skip();
                 if ( peek() == '\r' ) { skip(); }
                 if ( peek() == '\n' ) { skip(); }
-                break;
-            default :
+            } else {
                 if ( isWhiteSpace(c) ) {
                     skip();
                 } else {
