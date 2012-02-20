@@ -114,10 +114,6 @@ one described at "00README-developers.txt".
           <artifactId>maven-surefire-plugin</artifactId>
           <version>2.8</version>
           <configuration>
-            <!-- Run the tests in the same JVM running Maven. -->
-            <!-- <forkMode>never</forkMode> -->
-            <!-- Get rid of annoying warning when forkMode==never. -->
-            <useSystemClassLoader>false</useSystemClassLoader>
             <!-- Show exception stack traces of tests in stdout. -->
             <useFile>false</useFile>
           </configuration>
@@ -198,7 +194,7 @@ one described at "00README-developers.txt".
       </plugin>
 
 
-      <!-- Include the appropriate manifest in the final JAR.-->
+      <!-- Include the appropriate manifest in the final JAR. -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>

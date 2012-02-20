@@ -1,6 +1,6 @@
 <!--
 
-Copyright (c) 2010-2011 PDM&FC, All Rights Reserved.
+Copyright (c) 2010-2012 PDM&FC, All Rights Reserved.
 
 
 Main Ant build file for the Tea development tree.
@@ -23,10 +23,6 @@ For setup instructions, please read the 00README-developers.txt
 
   <property file="config/tea-core.conf" />
   <property name="BUILD_VERSION" value="${TEA_VERSION}" />
-
-
-
-
 
 
 
