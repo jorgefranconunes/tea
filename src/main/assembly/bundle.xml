@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Copyright (c) 2012 PDMFC, All Rights Reserved. -->
+
+<assembly
+   xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2
+                       http://maven.apache.org/xsd/assembly-1.1.2.xsd">
+
+  <id>tea-bundle</id>
+
+  <formats>
+    <format>tar.bz2</format>
+  </formats>
+
+  <includeBaseDirectory>true</includeBaseDirectory>
+
+
+  <fileSets>
+
+    <!-- Command line tools. -->
+    <fileSet>
+      <directory>bin</directory>
+      <includes>
+        <include>tsh</include>
+        <include>setup</include>
+        <include>teadoc</include>
+        <include>tunit</include>
+        <include>tea-utils</include>
+      </includes>
+    </fileSet>
+
+    <!-- Config files. -->
+    <fileSet>
+      <directory>config</directory>
+      <includes>
+        <include>tea-core.conf</include>
+        <include>tea-install.conf.template</include>
+      </includes>
+    </fileSet>
+    
+    <!-- Documentation. -->
+    <fileSet>
+      <directory>.</directory>
+      <includes>
+        <include>00README.txt</include>
+        <include>COPYING.txt</include>
+        <include>LICENSE.txt</include>
+        <include>doc/release-notes.txt</include>
+        <include>doc/javadoc</include>
+        <include>doc/teadoc</include>
+      </includes>
+    </fileSet>
+
+    <!-- Will disappear soon... -->
+    <fileSet>
+      <directory>apps</directory>
+      <includes>
+        <include>teadoc</include>
+      </includes>
+    </fileSet>
+
+  </fileSets>
+
+      
+  <dependencySets>
+    <dependencySet>
+      <outputDirectory>lib/jars</outputDirectory>
+    </dependencySet>
+  </dependencySets>
+
+</assembly>

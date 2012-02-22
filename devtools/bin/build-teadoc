@@ -1,0 +1,106 @@
+#!/bin/bash
+###########################################################################
+#
+# Copyright (c) 2012 PDMFC, All Rights Reserved.
+#
+#
+# Generates the Teadoc documentation of the Tea software itself.
+#
+# This tool just invokes the "teadoc" utility with the same command
+# line arguments it has received. But before that it creates the
+# directory that will receive the HTML documentation.
+#
+# Why is not all this done by Maven? Because inside the pom.xml it is
+# extremely difficult to do something as simple as invoking two
+# command line tools in a row...
+#
+###########################################################################
+
+_scriptDir=$(dirname $0)
+_scriptName=$(basename $0)
+_teaBaseDir=$(cd $_scriptDir/../..; pwd)
+
+#
+# Makes utility functions available.
+#
+source ${_teaBaseDir}/bin/tea-utils
+
+
+
+
+
+_outputDir=
+
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+function parseCliOptions () {
+
+    for option in "$@" ; do
+	case $option in
+	    --output-dir=* )
+		_outputDir=$(expr "$option" : '--output-dir=\(.*\)')
+		;;
+	esac
+    done
+}
+
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+function doPreparations () {
+
+    if [ -z "${_outputDir}" ] ; then
+        : The --output-dir option was not specified. We do nothing...
+    else
+        # Create the directory that will receive the teadoc generated
+        # HTML documentation.
+        mkdir -p ${_outputDir}
+
+        # Copy the logo image referenced from the HTML documentation.
+        cp ${_teaBaseDir}/doc/images/LogoSmallPdmfc.png ${_outputDir}
+    fi
+}
+
+
+
+
+
+###########################################################################
+#
+# The main script.
+#
+###########################################################################
+
+parseCliOptions "$@"
+doPreparations
+
+exec ${_teaBaseDir}/bin/teadoc "$@"
+
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+

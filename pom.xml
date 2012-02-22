@@ -5,7 +5,7 @@
 Copyright (c) 2011-2012 PDMFC, All Rights Reserved.
 
 
-Main Maven POM file.
+Tea project main Maven POM file.
 
 NOTE: Use of Maven to perform Tea builds is currently only intended as
 a proof-of-concept. The official build procedure will always be the
@@ -22,13 +22,45 @@ one described at "00README-developers.txt".
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.pdmfc.tea</groupId>
+
   <artifactId>tea</artifactId>
-  <version>4.0.0-SNAPSHOT</version>
+
+  <!-- This must be kept sinchronyzed with
+       "config/tea-core.conf". (For now...) -->
+  <version>4.0.0-beta07</version>
+
   <packaging>jar</packaging>
 
+
+
+
+
   <properties>
+
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+    <!-- By default unit tests (JUnit+TUnit) are not run. -->
+    <skipTests>true</skipTests>
+
+    <!-- Used bellow and also within some properties files that get
+         filtered. -->
     <BUILD_VERSION>${project.version}</BUILD_VERSION>
+
+    <!-- The following are used when generating Teadoc
+         documentation. -->
+    <tea.teadoc.header><![CDATA[Tea ${BUILD_VERSION} Reference Documentation<b>&copy; 2012 <a href="http://www.pdmfc.com">PDM&amp;FC</a>]]></tea.teadoc.header>
+    <tea.teadoc.footer>${tea.teadoc.header}</tea.teadoc.footer>
+    <tea.teadoc.bottom><![CDATA[<font size="-1"><a href="mailto:info@pdmfc.com">Report a bug or request new features</a></font><br /><font size="-1">&copy; 2012</font> <a href="http://www.pdmfc.com"><img align="absmiddle" border="0" src="LogoSmallPdmfc.png"></a>]]></tea.teadoc.bottom>
+  <tea.teadoc.doctitle>Tea ${BUILD_VERSION} Reference Documentation</tea.teadoc.doctitle>
+  <tea.teadoc.windowtitle>${tea.teadoc.doctitle}</tea.teadoc.windowtitle>
+
+  <!-- The following are used when generating Javadoc
+       documentation. -->
+  <tea.javadoc.header><![CDATA[<b>Tea Java Runtime API</b><br /><b>Version ${project.version}</b>]]></tea.javadoc.header>
+  <tea.javadoc.bottom><![CDATA[<font size="-1">&copy; 2012 <a href="http://www.pdmfc.com" target="_blank">PDMFC</a>, All Rights Reserved.</font>]]></tea.javadoc.bottom>
+  <tea.javadoc.doctitle>${project.name} ${project.version}</tea.javadoc.doctitle>
+  <tea.javadoc.windowtitle>${tea.javadoc.doctitle}</tea.javadoc.windowtitle>
+
   </properties>
 
 
@@ -46,7 +78,13 @@ one described at "00README-developers.txt".
       <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
-        <version>4.8.2</version>
+        <version>4.9</version>
+      </dependency>
+
+      <dependency>
+        <groupId>net.sourceforge.cobertura</groupId>
+        <artifactId>cobertura</artifactId>
+        <version>1.9.4.1</version>
       </dependency>
 
     </dependencies>
@@ -63,6 +101,16 @@ one described at "00README-developers.txt".
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- Required for running Cobertura instrumented classes with
+         exec-maven-plugin. This Cobertura version must match the
+         Cobertura version used by the cobertura-maven-plugin. This is
+         an horrendous hack, I know... -->
+    <dependency>
+      <groupId>net.sourceforge.cobertura</groupId>
+      <artifactId>cobertura</artifactId>
       <scope>test</scope>
     </dependency>
 
@@ -112,10 +160,11 @@ one described at "00README-developers.txt".
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.8</version>
+          <version>2.12</version>
           <configuration>
             <!-- Show exception stack traces of tests in stdout. -->
             <useFile>false</useFile>
+            <skipTests>${skipTests}</skipTests>
           </configuration>
         </plugin>
 
@@ -123,14 +172,14 @@ one described at "00README-developers.txt".
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-jar-plugin</artifactId>
-          <version>2.3.2</version>
+          <version>2.4</version>
         </plugin>
 
 
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-antrun-plugin</artifactId>
-          <version>1.6</version>
+          <version>1.7</version>
         </plugin>
 
 
@@ -143,8 +192,22 @@ one described at "00README-developers.txt".
 
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>2.8.1</version>
+        </plugin>
+
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
           <version>3.0</version>
+        </plugin>
+
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <version>2.3</version>
         </plugin>
 
 
@@ -152,7 +215,7 @@ one described at "00README-developers.txt".
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>exec-maven-plugin</artifactId>
-          <version>1.1</version>
+          <version>1.2.1</version>
         </plugin>
       
   
@@ -216,7 +279,6 @@ one described at "00README-developers.txt".
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-antrun-plugin</artifactId>
-        <version>1.6</version>
         <executions>
           <execution>
             <id>copy-final-jar</id>
@@ -249,38 +311,16 @@ one described at "00README-developers.txt".
                 <include>**/*.jar</include>
               </includes>
             </fileset>
+            <fileset>
+              <directory>doc/teadoc</directory>
+            </fileset>
+            <fileset>
+              <directory>doc/javadoc</directory>
+            </fileset>
           </filesets>
         </configuration>
       </plugin>
 
-
-      <!-- Run the TUnit tests. -->
-      <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>exec-maven-plugin</artifactId>
-          <executions>
-            <execution>
-              <id>run-tunit-tests</id>
-              <phase>test</phase>
-              <goals>
-                <goal>exec</goal>
-              </goals>
-              <configuration>
-                <executable>${java.home}/bin/java</executable>
-                <arguments>
-                  <argument>-classpath</argument>
-                  <classpath />
-                  <argument>com.pdmfc.tea.tools.runner.STeaRunner</argument>
-                  <argument>--script=resource:/lib/tea-${project.version}/tea/tools/tunit/tunit-main.tea</argument>
-                  <argument>--</argument>
-                  <argument>surefireReport</argument>
-                  <argument>--dir=${basedir}/src/test/tea</argument>
-                  <argument>--report-dir=${basedir}/target/surefire-reports</argument>
-                </arguments>
-              </configuration>
-            </execution>
-          </executions>
-      </plugin>
 
     </plugins>
 
@@ -297,6 +337,240 @@ one described at "00README-developers.txt".
 
 
   </build>
+
+
+
+
+
+  <profiles>
+
+
+    <!-- Profile used to setup the working area as an
+         installation. This is required for running the "teadoc" tool.
+         tests. This profile is activated when the "teaSetup" system
+         property has value "true". This is tipically only used when
+         the build is run in a CI environment. -->
+    <profile>
+      <id>tea-perform-setup</id>
+      <activation>
+        <property>
+          <name>teaSetup</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+
+          <!--  Set up the working area as an installation. -->
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>tea-setup</id>
+                <phase>initialize</phase>
+                <goals>
+                  <goal>exec</goal>
+                </goals>
+                <configuration>
+                  <executable>${basedir}/bin/setup</executable>
+                  <arguments>
+                    <argument>--java-home=${java.home}</argument>
+                  </arguments>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+
+        </plugins>
+      </build>
+    </profile>
+
+
+    <!-- Profile used to run TUnit tests. This profile is activated
+         when the "skipTests" system property has value "false". The
+         same system property (skipTests) is also used by the
+         maven-surefire-plugin for the same purpose. -->
+    <profile>
+      <id>tea-run-tunit-tests</id>
+      <activation>
+        <property>
+          <name>skipTests</name>
+          <value>false</value>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+
+          <!-- Run the TUnit tests. -->
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>run-tunit-tests</id>
+                <phase>test</phase>
+                <goals>
+                  <goal>exec</goal>
+                </goals>
+                <configuration>
+                  <classpathScope>test</classpathScope>
+                  <executable>${java.home}/bin/java</executable>
+                  <arguments>
+                    <argument>-classpath</argument>
+                    <classpath />
+                    <argument>com.pdmfc.tea.tools.runner.STeaRunner</argument>
+                    <argument>--script=resource:/lib/tea-${project.version}/tea/tools/tunit/tunit-main.tea</argument>
+                    <argument>--</argument>
+                    <argument>surefireReport</argument>
+                    <argument>--dir=${basedir}/src/test/tea</argument>
+                    <argument>--report-dir=${basedir}/target/surefire-reports</argument>
+                  </arguments>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+
+        </plugins>
+      </build>
+    </profile>
+
+
+    <!-- Profile used to create Teadoc documentation. This profile is
+         activated when the "teaTeadoc" system property has value
+         "true". This is tipically used when building a release. -->
+    <profile>
+      <id>tea-run-teadoc</id>
+      <activation>
+        <property>
+          <name>teaTeadoc</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+
+          <!-- Generate Teadoc documentation. -->
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>run-teadoc</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>exec</goal>
+                </goals>
+                <configuration>
+                  <classpathScope>test</classpathScope>
+                  <executable>${basedir}/devtools/bin/build-teadoc</executable>
+                  <arguments>
+                    <argument>--header=${tea.teadoc.header}</argument>
+                    <argument>--footer=${tea.teadoc.footer}</argument>
+                    <argument>--bottom=${tea.teadoc.bottom}</argument>
+                    <argument>--doc-title=${tea.teadoc.doctitle}</argument>
+                    <argument>--window-title=${tea.teadoc.windowtitle}</argument>
+                    <argument>--path-list=${basedir}/src/main</argument>
+                    <argument>--output-dir=${basedir}/doc/teadoc</argument>
+                  </arguments>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+
+        </plugins>
+      </build>
+    </profile>
+
+
+    <!-- Profile used to create Javadoc documentation. This profile is
+         activated when the "teaJavadoc" system property has value
+         "true". This is tipically used when building a release. -->
+    <profile>
+      <id>tea-run-javadoc</id>
+      <activation>
+        <property>
+          <name>teaJavadoc</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+
+          <!-- Generate Javadoc documentation. -->
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>run-javadoc</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>javadoc</goal>
+                </goals>
+                <configuration>
+                  <reportOutputDirectory>${basedir}/doc</reportOutputDirectory>
+                  <destDir>javadoc</destDir>
+                  <doctitle>${tea.javadoc.doctitle}</doctitle>
+                  <windowtitle>${tea.javadoc.windowtitle}</windowtitle>
+                  <header>${tea.javadoc.header}</header>
+                  <bottom>${tea.javadoc.bottom}</bottom>
+                  <author>true</author>
+                  <splitindex>true</splitindex>
+                  <version>true</version>
+                  <use>true</use>
+                  <quiet>true</quiet>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+
+        </plugins>
+      </build>
+    </profile>
+
+
+    <!-- Profile used to create a Tea release bundle. This profile is
+         activated when the "teaRelease" system property has value
+         "true". This is tipically used when building a release. -->
+    <profile>
+      <id>tea-create-release-bundle</id>
+      <activation>
+        <property>
+          <name>teaRelease</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+
+          <!-- Create an assembly for the Tea release bundle.. -->
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>create-release-bundle</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>single</goal>
+                </goals>
+                <configuration>
+                  <appendAssemblyId>false</appendAssemblyId>
+                  <descriptors>
+                    <descriptor>src/main/assembly/bundle.xml</descriptor>
+                  </descriptors>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+
+        </plugins>
+      </build>
+    </profile>
+
+
+  </profiles>
 
 
 
@@ -335,17 +609,17 @@ one described at "00README-developers.txt".
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.8</version>
+        <version>2.8.1</version>
         <configuration>
-          <quiet>true</quiet>
-          <doctitle>${project.name} ${project.version}</doctitle>
-          <windowtitle>${project.name} ${project.version}</windowtitle>
+          <doctitle>${tea.javadoc.doctitle}</doctitle>
+          <windowtitle>${tea.javadoc.windowtitle}</windowtitle>
+          <header>${tea.javadoc.header}</header>
+          <bottom>${tea.javadoc.bottom}</bottom>
           <author>true</author>
           <splitindex>true</splitindex>
           <version>true</version>
           <use>true</use>
-          <header><![CDATA[<b>Tea Java Runtime API</b><br /><b>Version ${project.version}</b>]]></header>
-          <bottom><![CDATA[<font size="-1">&copy; 2011 <a href="http://www.pdmfc.com" target="_blank">PDMFC</a>, All Rights Reserved.</font>]]></bottom>
+          <quiet>true</quiet>
         </configuration>
         <reportSets>
           <reportSet>
@@ -367,13 +641,13 @@ one described at "00README-developers.txt".
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-report-plugin</artifactId>
-        <version>2.9</version>
+        <version>2.12</version>
       </plugin>
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-pmd-plugin</artifactId>
-        <version>2.5</version>
+        <version>2.7.1</version>
         <configuration>
           <targetJdk>1.6</targetJdk>
           <verbose>true</verbose>
@@ -386,10 +660,17 @@ one described at "00README-developers.txt".
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>2.7</version>
+        <version>2.9</version>
         <configuration>
           <configLocation>src/main/config/checkstyle/checkstyle.xml</configLocation>
         </configuration>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>checkstyle</report>
+            </reports>
+          </reportSet>
+        </reportSets>
       </plugin>
 
       <!-- Make sure the the maven-surefire-plugin runs the tests in a
@@ -414,7 +695,7 @@ one described at "00README-developers.txt".
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>findbugs-maven-plugin</artifactId>
-        <version>2.3.2</version>
+        <version>2.4.0</version>
         <configuration>
           <effort>Max</effort>
           <xmlOutput>true</xmlOutput>

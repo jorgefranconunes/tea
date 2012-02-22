@@ -131,7 +131,7 @@ public final class SListUtils
  *
  **************************************************************************/
 
-    public static SObjPair buildTeaList(final List<? extends Object> list) {
+    public static SObjPair buildTeaList(final List<?> list) {
 
         SObjPair empty = SObjPair.emptyList();
         SObjPair head  = empty;
