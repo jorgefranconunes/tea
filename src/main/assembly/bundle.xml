@@ -48,8 +48,8 @@
         <include>COPYING.txt</include>
         <include>LICENSE.txt</include>
         <include>doc/release-notes.txt</include>
-        <include>doc/javadoc</include>
-        <include>doc/teadoc</include>
+        <include>doc/javadoc/**</include>
+        <include>doc/teadoc/**</include>
       </includes>
     </fileSet>
 
@@ -57,7 +57,7 @@
     <fileSet>
       <directory>apps</directory>
       <includes>
-        <include>teadoc</include>
+        <include>teadoc/**</include>
       </includes>
     </fileSet>
 

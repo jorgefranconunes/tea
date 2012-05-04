@@ -264,7 +264,7 @@ one described at "00README-developers.txt".
         <configuration>
           <archive>
             <manifest>
-              <mainClass>com.pdmfc.tea.apps.STeaLauncher</mainClass>
+              <mainClass>com.pdmfc.tea.tools.runner.STeaRunner</mainClass>
               <addClasspath>true</addClasspath>
             </manifest>
           </archive>
