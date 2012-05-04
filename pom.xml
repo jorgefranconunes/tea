@@ -5,11 +5,8 @@
 Copyright (c) 2011-2012 PDMFC, All Rights Reserved.
 
 
-Tea project main Maven POM file.
-
-NOTE: Use of Maven to perform Tea builds is currently only intended as
-a proof-of-concept. The official build procedure will always be the
-one described at "00README-developers.txt".
+Tea project main Maven POM file. See "00README-developers.txt" for
+details on performing a build.
 
 -->
 
@@ -178,8 +175,8 @@ one described at "00README-developers.txt".
 
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-antrun-plugin</artifactId>
-          <version>1.7</version>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <version>2.4</version>
         </plugin>
 
 
@@ -273,28 +270,44 @@ one described at "00README-developers.txt".
 
 
       <!-- Copy the final JAR to the location expected by the Tea
-           command line tools. (How low can you go?... All this just
-           to copy a file... Many kittens have died to bring us this
-           information...) -->
+           command line tools. -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-antrun-plugin</artifactId>
+        <artifactId>maven-dependency-plugin</artifactId>
         <executions>
+
           <execution>
-            <id>copy-final-jar</id>
+            <id>copy-dependencies</id>
             <phase>package</phase>
             <goals>
-              <goal>run</goal>
+              <goal>copy-dependencies</goal>
             </goals>
             <configuration>
-              <target>
-                <copy
-                   file="target/${project.build.finalName}.jar"
-                   todir="lib/jars"
-                   verbose="true" />
-              </target>
+              <includeScope>runtime</includeScope>
+              <overWriteReleases>true</overWriteReleases>
+              <overWriteSnapshots>true</overWriteSnapshots>
+              <overWriteIfNewer>true</overWriteIfNewer>
             </configuration>
           </execution>
+
+          <execution>
+            <id>copy-goal</id>
+            <phase>package</phase>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>${project.groupId}</groupId>
+                  <artifactId>${project.artifactId}</artifactId>
+                  <version>${project.version}</version>
+                </artifactItem>
+              </artifactItems>
+              <outputDirectory>./lib/jars</outputDirectory>
+            </configuration>
+          </execution>
+
         </executions>
       </plugin>
 
@@ -327,7 +340,7 @@ one described at "00README-developers.txt".
 
 
 
-    
+    <!-- -->
     <resources>
       <resource>
         <directory>src/main/resources</directory>
@@ -342,6 +355,7 @@ one described at "00README-developers.txt".
 
 
 
+  <!-- -->
   <profiles>
 
 
@@ -354,7 +368,7 @@ one described at "00README-developers.txt".
       <id>tea-perform-setup</id>
       <activation>
         <property>
-          <name>teaSetup</name>
+          <name>teaRelease</name>
           <value>true</value>
         </property>
       </activation>
@@ -443,7 +457,7 @@ one described at "00README-developers.txt".
       <id>tea-run-teadoc</id>
       <activation>
         <property>
-          <name>teaTeadoc</name>
+          <name>teaRelease</name>
           <value>true</value>
         </property>
       </activation>
@@ -490,7 +504,7 @@ one described at "00README-developers.txt".
       <id>tea-run-javadoc</id>
       <activation>
         <property>
-          <name>teaJavadoc</name>
+          <name>teaRelease</name>
           <value>true</value>
         </property>
       </activation>
@@ -530,9 +544,12 @@ one described at "00README-developers.txt".
     </profile>
 
 
-    <!-- Profile used to create a Tea release bundle. This profile is
-         activated when the "teaRelease" system property has value
-         "true". This is tipically used when building a release. -->
+    <!-- Profile used to create the tarball of a Tea release. This
+         profile is activated when the "teaRelease" system property
+         has value "true". This is tipically used when building a
+         release. Note when actually creating a Tea release the
+         following profiles must also be active: tea-perform-setup,
+         tea-run-teadoc, tea-run-javadoc. -->
     <profile>
       <id>tea-create-release-bundle</id>
       <activation>

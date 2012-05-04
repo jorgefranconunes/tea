@@ -76,7 +76,7 @@ perform specific tasks.
    "doc/javadoc". This is tipically used when building a release.
 
 * -P tea-create-release-bundle : Creates the tarball of a Tea
-   release. TBD - More details...
+   release.
 
 
 
@@ -87,15 +87,16 @@ Making a New Release (for admins)
 
 1. Check the release version number.
 
-Ensure that the version number is coherent in all files
-("config/tea-core.conf" and "pom.xml").
+Ensure that the version number is coherent in "config/tea-core.conf"
+and "pom.xml".
 
 
-2. Build the release bundle.
+2. Build the release bundle by invoking Maven like this:
 
-TBD
+mvn -DteaRelease
 
-3. ???
+
+3. The release tarbal is created as "./target/tea-4.x.y.tar.bz2".
 
 
 
