@@ -809,9 +809,18 @@ public class SModuleReflect
 	    e.printStackTrace();
  	    throw new SRuntimeException("cannot access method '" +
   					mtd.getName() + "'");
-	} catch (NullPointerException e) {
- 	    throw new SRuntimeException("method '" +
-  					mtd.getName() + "' is not static");
+	} catch ( IllegalArgumentException e ) {
+            String msg = "method {0}#{1} invoked with illegal arguments - {2}";
+            Object[] fmtArgs = {
+                mtd.getDeclaringClass().getName(), mtd.getName(), e.getMessage()
+            };
+            throw new SRuntimeException(msg, fmtArgs);
+        }catch (NullPointerException e) {
+            String   msg     = "method {0}#{1} is not static";
+            Object[] fmtArgs = {
+                mtd.getDeclaringClass().getName(), mtd.getName()
+            };
+ 	    throw new SRuntimeException(msg, fmtArgs);
 	} catch (InvocationTargetException e) {
  	    throw new SRuntimeException(e.getCause());
  	}
