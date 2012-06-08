@@ -115,6 +115,15 @@ public class SRuntimeException
         String msgFmt    = (errorText!=null) ? "{0} - {1}" : "{0}";
 
         init(msgFmt, errorType, errorText);
+
+        java.io.StringWriter sw = new java.io.StringWriter();
+        java.io.PrintWriter pw = new java.io.PrintWriter(sw);
+        e.printStackTrace(pw);
+        pw.close();
+
+        String stackTrace = sw.toString();
+
+        addMessage(stackTrace);
     }
 
 

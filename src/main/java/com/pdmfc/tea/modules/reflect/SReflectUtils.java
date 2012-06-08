@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2005-2011 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2005-2012 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -224,17 +224,24 @@ final class SReflectUtils
 
         try {
             javaResult = method.invoke(javaObj, methodArgs);
-        } catch (IllegalAccessException e) {
+        } catch ( IllegalAccessException e ) {
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
             e.printStackTrace(pw);
             pw.close();
             String msg = "cannot access method \"{0}\" - stack trace: {1}";
              throw new SRuntimeException(msg, method.getName(), sw.toString());
-        } catch (NullPointerException e) {
-            String msg = "method \"{0}\" is not static";
-             throw new SRuntimeException(msg, method.getName());
-        } catch (InvocationTargetException e) {
+        } catch ( NullPointerException e ) {
+            String msg = "method {0}#{1} is not static";
+            throw new SRuntimeException(msg,
+                                        method.getDeclaringClass().getName(),
+                                        method.getName());
+        } catch ( IllegalArgumentException e ) {
+            String msg = "method {0}#{1} invoked with illegal arguments - {2}";
+            throw new SRuntimeException(msg,
+                                        method.getDeclaringClass().getName(),
+                                        method.getName());
+        } catch ( InvocationTargetException e ) {
             Throwable cause = e.getCause();
             // Slight hack to accomodate Java code that executed Tea code.
             if ( cause instanceof UndeclaredThrowableException ) {

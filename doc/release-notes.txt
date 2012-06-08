@@ -2,6 +2,17 @@ Release Notes for Tea
 
 
 
+
+
+2012/06/08 Fixed an internal Java error when invoking a method
+obtained from "java-get-method" with illegal
+arguments. (TSK-PDMFC-TEA-0073)
+
+
+2012/06/04 Tea runtime errors caused by Java exceptions now contain as
+first message the Java stack trace of the Java exception.
+
+
 2010/09/25 teaEngine-0.7.0 merged into trunk of tea-4.0.0beta2.
 Tea now has mainstream support for the javax.script standard API.
 

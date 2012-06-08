@@ -24,7 +24,7 @@ details on performing a build.
 
   <!-- This must be kept sinchronyzed with
        "config/tea-core.conf". (For now...) -->
-  <version>4.0.0-beta07</version>
+  <version>4.0.0-beta08</version>
 
   <packaging>jar</packaging>
 

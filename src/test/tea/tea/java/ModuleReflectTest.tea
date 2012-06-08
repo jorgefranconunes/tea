@@ -1,0 +1,73 @@
+###########################################################################
+#
+# Copyright (c) 2012 PDM&FC, All Rights Reserved.
+#
+#
+# TUnit tests for functions in the tea.java module.
+#
+###########################################################################
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite java-get-method-test {
+
+    
+    
+    
+    
+    tunit-test allOk {
+        
+        define f [java-get-method java.lang.String valueOf int]
+        define s [$f 4]
+        
+        tunit-assert-equals "4" $s
+    }
+
+    
+    
+    
+    
+    tunit-test-error instanceMethod {
+        
+        define f [java-get-method java.lang.String length]
+        define s [$f]
+        
+        # We should not get here...
+        
+        tunit-fail "Illegal argument validation failure"
+    }
+
+    
+    
+    
+    
+    tunit-test-error illegalArguments {
+        
+        define f [java-get-method java.lang.String valueOf int]
+        define s [$f "4"]
+        
+        # We should not get here...
+        
+        tunit-fail "Illegal argument validation failure"
+    }
+
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
