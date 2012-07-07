@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2012 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -8,6 +8,7 @@ package com.pdmfc.tea;
 
 import java.io.InputStream;
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.Properties;
 
 
@@ -45,18 +46,25 @@ public final class SConfigInfo
  **************************************************************************/
 
     static {
-        InputStream in = SConfigInfo.class.getResourceAsStream(RES_NAME);
+        String      resourcePath = RES_NAME;
+        InputStream in           =
+            SConfigInfo.class.getResourceAsStream(resourcePath);
 
         if ( in != null ) {
             try {
                 _props.load(in);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            } catch ( IOException e ) {
+                String msg =
+                    MessageFormat.format("Failed to read resource \"{0}\"",
+                                         resourcePath);
+                throw new IllegalStateException(msg, e);
             } finally {
-                try { in.close(); } catch (IOException e) {/**/}
+                try { in.close(); } catch ( IOException e ) {/* */}
             }
         } else {
-            String msg = "Missing resource \"" + RES_NAME + "\"";
+            String msg = 
+                MessageFormat.format("Missing resource \"{0}\"",
+                                     resourcePath);
             throw new IllegalStateException(msg);
         }
     }
@@ -72,6 +80,8 @@ public final class SConfigInfo
  **************************************************************************/
 
     private SConfigInfo() {
+
+        // Nothing to do.
     }
 
 
