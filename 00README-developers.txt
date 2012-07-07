@@ -34,13 +34,12 @@ develop under windows you should have Cygwin (http://www.cygwin.com/)
 installed on your system.
 
 
+Fetch the source tree from the Git repository hosted at GitHub
 
-1. Fetch the source tree from the Subversion repository.
+git clone git@github.com:jorgefranconunes/tea.git
 
-svn+ssh://ssh.pdmfc.com/opt/svnroot/tea/trunk
-
-For more insight on the file layout, read the section "Guide to the
-Source Tree" below.
+For more insight on the layout of the development tree read the
+section "Guide to the Source Tree" below.
 
 
 
