@@ -1235,13 +1235,11 @@ public final class SModuleString
                                              final Object[]     args)
         throws STeaException {
 
-        if ( args.length!= 3) {
-            throw new SNumArgException(args, "string1 string2");
-        }
+        SArgs.checkArgCount(args, 3, "string1 string2");
 
         String  str1   = SArgs.getString(args,1);
         String  str2   = SArgs.getString(args,2);
-        Boolean result = str1.startsWith(str2) ? Boolean.TRUE : Boolean.FALSE;
+        Boolean result = Boolean.valueOf(str1.startsWith(str2));
 
         return result;
     }
@@ -1299,9 +1297,10 @@ public final class SModuleString
         String str2       = SArgs.getString(args,2);
         int    startIndex =
             (args.length==4) ? SArgs.getInt(args,3).intValue() : 0;
-        int    result     = str1.indexOf(str2, startIndex);
-        
-        return Integer.valueOf(result);
+        int    indexOf    = str1.indexOf(str2, startIndex);
+        Integer result    = Integer.valueOf(indexOf);
+
+        return result;
     }
 
 
