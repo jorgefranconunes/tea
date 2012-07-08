@@ -1,10 +1,10 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2012 PDM&FC, All Rights Reserved.
  *
  **************************************************************************/
 
-package com.pdmfc.tea.modules;
+package com.pdmfc.tea.modules.string;
 
 import java.text.MessageFormat;
 import java.util.Iterator;
@@ -50,7 +50,7 @@ import com.pdmfc.tea.util.SFormater;
 
 /**************************************************************************
  *
- * String manipulation set of functions.
+ * Tea module that provides functions for manipulating strings.
  *
  **************************************************************************/
 
@@ -91,96 +91,79 @@ public final class SModuleString
  *
  **************************************************************************/
 
-   public void init(final SContext context)
-       throws STeaException {
-
-       SObjFunction fmt = new SObjFunction() {
-               public Object exec(final SObjFunction func,
-                                  final SContext     context,
-                                  final Object[]     args)
-                   throws STeaException {
-                   return functionPrintf(func, context, args);
-               }
-           };
+    @Override
+    public void init(final SContext context)
+        throws STeaException {
        
-       context.newVar("str-printf", fmt);
+        context.newVar("str-printf",
+                       new SObjFunction() {
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
+                               throws STeaException {
+                               return functionPrintf(func, context, args);
+                           }
+                       });
 
-       // For backward compatibility with previous releases.
-       context.newVar("str-format", fmt);
+        context.newVar("str-fmt",
+                       new SObjFunction() {
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
+                               throws STeaException {
+                               return functionFmt(func, context, args);
+                           }
+                       });
 
-       context.newVar("str-fmt",
+        context.newVar("str-cmp",
+                       new SObjFunction() {
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
+                               throws STeaException {
+                               return functionCompare(func, context, args);
+                           }
+                       });
+
+        context.newVar("str>",
+                       new SObjFunction() {
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
+                               throws STeaException {
+                               return functionGt(func, context, args);
+                           }
+                       });
+
+        context.newVar("str>=",
+                       new SObjFunction() {
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
+                               throws STeaException {
+                               return functionGe(func, context, args);
+                           }
+                       });
+
+       context.newVar("str==",
                       new SObjFunction() {
                           public Object exec(final SObjFunction func,
                                              final SContext     context,
                                              final Object[]     args)
                               throws STeaException {
-                              return functionFmt(func, context, args);
+                              return functionEq(func, context, args);
                           }
                       });
-
-       SObjFunction comp = new SObjFunction() {
-               public Object exec(final SObjFunction func,
-                                  final SContext     context,
-                                  final Object[]     args)
-                   throws STeaException {
-                   return functionCompare(func, context, args);
-               }
-           };
-
-       context.newVar("str-cmp", comp);
-
-       // For backward compatibility with Tea 1.x.
-       context.newVar("str-comp", comp);
-
-       context.newVar("str>",
+       
+       context.newVar("str!=",
                       new SObjFunction() {
                           public Object exec(final SObjFunction func,
                                              final SContext     context,
                                              final Object[]     args)
                               throws STeaException {
-                              return functionGt(func, context, args);
+                              return functionNe(func, context, args);
                           }
                       });
-
-       context.newVar("str>=",
-                      new SObjFunction() {
-                          public Object exec(final SObjFunction func,
-                                             final SContext     context,
-                                             final Object[]     args)
-                              throws STeaException {
-                              return functionGe(func, context, args);
-                          }
-                      });
-
-       SObjFunction eq = new SObjFunction() {
-               public Object exec(final SObjFunction func,
-                                  final SContext     context,
-                                  final Object[]     args)
-                   throws STeaException {
-                   return functionEq(func, context, args);
-               }
-           };
-
-       context.newVar("str==", eq);
-
-       // For backward compatibility with Tea 1.x.
-       context.newVar("str-eq", eq);
-       context.newVar("str-eq?", eq);
-
-       SObjFunction neq = new SObjFunction() {
-               public Object exec(final SObjFunction func,
-                                  final SContext     context,
-                                  final Object[]     args)
-                   throws STeaException {
-                   return functionNe(func, context, args);
-               }
-           };
-
-       context.newVar("str!=", neq);
-
-       // For backward compatibility with Tea 1.x.
-       context.newVar("str-not-eq?", neq);
-       context.newVar("str-neq", neq);
 
        context.newVar("str<",
                       new SObjFunction() {
@@ -403,6 +386,7 @@ public final class SModuleString
  *
  **************************************************************************/
 
+    @Override
     public void end() {
 
         // Nothing to do.
@@ -433,6 +417,7 @@ public final class SModuleString
  *
  **************************************************************************/
 
+    @Override
     public void stop() {
 
         // Nothing to do.
@@ -478,13 +463,11 @@ public final class SModuleString
  **************************************************************************/
 
     private Object functionPrintf(final SObjFunction func,
-                                  final SContext context,
-                                  final Object[]   args)
+                                  final SContext     context,
+                                  final Object[]     args)
         throws STeaException {
 
-        if ( args.length<2 ) {
-            throw new SNumArgException(args, "string [object ...]");
-        }
+        SArgs.checkArgCountAtLeast(args, 2, "string [object ...]");
 
         _formatResult.setLength(0);
 
@@ -543,9 +526,7 @@ public final class SModuleString
                                final Object[]   args)
         throws STeaException {
 
-        if ( args.length<2 ) {
-            throw new SNumArgException(args, "string [object ...]");
-        }
+        SArgs.checkArgCountAtLeast(args, 2, "string [object ...]");
 
         String   fmt         = SArgs.getString(args, 1);
         int      fmtArgCount = args.length - 2;
@@ -557,7 +538,7 @@ public final class SModuleString
 
         try {
             result = MessageFormat.format(fmt, fmtArgs);
-        } catch (Throwable e) {
+        } catch ( Throwable e ) {
             throw new SRuntimeException(args,
                                         "failed to format string ({0})",
                                         e.getMessage());
@@ -578,7 +559,7 @@ public final class SModuleString
 
     private void convertForFormating(final Object[] objs) {
 
-        for ( int i=0,count=objs.length; i<count; i++ ) {
+        for ( int i=0, count=objs.length; i<count; i++ ) {
             Object obj = objs[i];
 
             if ( obj instanceof STosObj ) {

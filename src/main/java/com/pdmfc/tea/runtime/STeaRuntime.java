@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2012 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -53,7 +53,7 @@ public final class STeaRuntime
         "com.pdmfc.tea.modules.lang.SModuleLang",
         "com.pdmfc.tea.modules.SModuleList",
         "com.pdmfc.tea.modules.SModuleMath",
-        "com.pdmfc.tea.modules.SModuleString"
+        "com.pdmfc.tea.modules.string.SModuleString"
     };
 
 

@@ -1,11 +1,64 @@
 ###########################################################################
 #
-# Copyright (c) 2011 PDM&FC, All Rights Reserved.
+# Copyright (c) 2011-2012 PDMFC, All Rights Reserved.
 #
 #
-# TUnit tests for functions in the tea.string
+# TUnit tests for functions in the tea.string module.
 #
 ###########################################################################
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite str-printf-test {
+
+    tunit-test printfOk {
+        tunit-assert-equals "Hello" [str-printf "Hello"]
+    }
+
+    tunit-test-error tooFewArgs {
+        str-printf
+    }
+
+    tunit-test-error invalidArgType {
+        str-printf 1
+    }
+
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite str-fmt-test {
+
+    tunit-test fmtOk {
+        tunit-assert-equals "Hello" [str-fmt "Hello"]
+    }
+
+    tunit-test-error tooFewArgs {
+        str-fmt
+    }
+
+    tunit-test-error invalidArgType {
+        str-fmt 1
+    }
+
+}
+
 
 
 

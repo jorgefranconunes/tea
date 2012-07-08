@@ -339,12 +339,21 @@ define report-failure ( output className name time msg stackTrace ) {
     define testcaseElementStart "<testcase time=\"{2}\" classname=\"{0}\" name=\"{1}\">"
     define testcaseElementEnd "</testcase>"
     
-    define failureElement "<failure message=\"{0}\" type=\"tunit.failure\">{0}\n{1}</failure>"
-    define msgXml        [xml-encode $msg]
-    define stackTraceXml [xml-encode $stackTrace]
+    define failureDetail $null
+    
+    if { not-null? $stackTrace } {
+        define failureElement "<failure message=\"{0}\" type=\"tunit.failure\">{0}\n{1}</failure>"
+        define msgXml        [xml-encode $msg]
+        define stackTraceXml [xml-encode $stackTrace]
+        set! failureDetail [str-fmt $failureElement $msgXml $stackTraceXml]
+    } {
+        define failureElement "<failure message=\"{0}\" type=\"tunit.failure\">{0}</failure>"
+        define msgXml        [xml-encode $msg]
+        set! failureDetail [str-fmt $failureElement $msgXml]
+    }
     
     $output writeln [str-fmt $testcaseElementStart $className $name $timeField]
-    $output writeln [str-fmt $failureElement $msgXml $stackTraceXml]
+    $output writeln $failureDetail
     $output writeln $testcaseElementEnd
 }
 
