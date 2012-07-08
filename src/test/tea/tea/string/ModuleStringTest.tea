@@ -329,3 +329,45 @@ tunit-testsuite str-cat-test {
 #
 ###########################################################################
 
+tunit-testsuite str-ends-with?-test {
+
+    tunit-test endWithTrue {
+        tunit-assert-equals $true [str-end-with? "HelloWorld" "World"]
+    }
+
+    tunit-test endWithFalse {
+        tunit-assert-equals $false [str-end-with? "HelloWorld" "Hello"]
+    }
+
+    tunit-test-error tooFewArgs0 {
+        str-ends-with?
+    }
+
+    tunit-test-error tooFewArgs1 {
+        str-ends-with? "Hello"
+    }
+
+    tunit-test-error tooManyArgs {
+        str-ends-with? "too" "many" "args"
+    }
+
+    tunit-test-error invalidArgType1 {
+        str-ends-with? 1 "World"
+    }
+
+    tunit-test-error invalidArgType2 {
+        str-ends-with? "Hello" 2
+    }
+
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+

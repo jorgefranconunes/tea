@@ -1181,14 +1181,12 @@ public final class SModuleString
                                             final SContext     context,
                                             final Object[]     args)
         throws STeaException {
-        
-        if ( args.length!= 3) {
-            throw new SNumArgException(args, "string1 string2");
-        }
+
+        SArgs.checkArgCount(args, 3, "string1 string2");
 
         String str1    = SArgs.getString(args,1);
         String str2    = SArgs.getString(args,2);
-        Boolean result = str1.endsWith(str2) ? Boolean.TRUE : Boolean.FALSE;
+        Boolean result = Boolean.valueOf(str1.endsWith(str2));
 
         return result;
     }
