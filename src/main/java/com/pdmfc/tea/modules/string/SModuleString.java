@@ -1123,17 +1123,19 @@ public final class SModuleString
                                       final Object[]     args)
         throws STeaException {
 
-        if ( args.length<2 ) {
-            throw new SNumArgException(args, "string1 string2 ...");
-        }
+        SArgs.checkArgCountAtLeast(args, 2, "string ...");
 
-        StringBuffer buf = new StringBuffer(SArgs.getString(args,1));
+        String       arg1   = SArgs.getString(args,1);
+        StringBuffer buffer = new StringBuffer(arg1);
 
         for ( int i=2; i<args.length; i++ ) {
-            buf.append(SArgs.getString(args,i));
+            String arg = SArgs.getString(args, i);
+            buffer.append(arg);
         }
 
-        return buf.toString();
+        String result = buffer.toString();
+
+        return result;
     }
 
 

@@ -295,3 +295,37 @@ build-string-comparison-testsuit \
 #
 ###########################################################################
 
+tunit-testsuite str-cat-test {
+
+    tunit-test catOk1 {
+        tunit-assert-equals "Hello" [str-cat "Hello"]
+    }
+
+    tunit-test catOk2 {
+        tunit-assert-equals "HelloWorld" [str-cat "Hello" "World"]
+    }
+
+    tunit-test-error tooFewArgs {
+        str-cat
+    }
+
+    tunit-test-error invalidArgType1 {
+        str-cat 1
+    }
+
+    tunit-test-error invalidArgType2 {
+        str-cat "Hello" 2
+    }
+
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+

@@ -301,7 +301,12 @@ define report-start ( output className totalTests totalFailures totalTime ) {
     define testsuitElement "<testsuite failures=\"{2}\" time=\"{3}\" errors=\"0\" skipped=\"0\" tests=\"{1}\" name=\"{0}\">"
     
     $output writeln "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>"
-    $output writeln [str-fmt $testsuitElement $className $testsField $failuresField $timeField]
+    $output writeln [str-fmt \
+            $testsuitElement \
+            [xml-encode $className] \
+            $testsField \
+            $failuresField \
+            $timeField]
     $output writeln "<properties>"
     $output writeln "</properties>"
 }
@@ -352,7 +357,11 @@ define report-failure ( output className name time msg stackTrace ) {
         set! failureDetail [str-fmt $failureElement $msgXml]
     }
     
-    $output writeln [str-fmt $testcaseElementStart $className $name $timeField]
+    $output writeln [str-fmt \
+            $testcaseElementStart \
+            [xml-encode $className] \
+            [xml-encode $name] \
+            [xml-encode $timeField] ]
     $output writeln $failureDetail
     $output writeln $testcaseElementEnd
 }
@@ -374,7 +383,11 @@ define report-success ( output className name time ) {
 
     define testcaseElement "<testcase time=\"{2}\" classname=\"{0}\" name=\"{1}\" />"
     
-    $output writeln [str-fmt $testcaseElement $className $name $timeField]
+    $output writeln [str-fmt \
+            $testcaseElement \
+            [xml-encode $className] \
+            [xml-encode $name] \
+            [xml-encode $timeField] ]
 }
 
 
