@@ -1250,26 +1250,34 @@ public final class SModuleString
 
 //* 
 //* <TeaFunction name="str-index-of"
-//*                 arguments="aString1 aString2"
-//*             module="tea.string">
+//*              arguments="string sub-string"
+//*              module="tea.string">
+//* 
+//* <Prototype arguments="string sub-string start-index"/>
 //*
 //* <Overview>
 //* Finds the index of the first occurence of a string inside another string.
 //* </Overview>
 //*
-//* <Parameter name="aString1">
-//* The string where the search for the <Arg name="aString2"/> will be
+//* <Parameter name="string">
+//* The string where the search for the <Arg name="sub-string"/> will be
 //* performed.
 //* </Parameter>
 //*
-//* <Parameter name="aString2">
-//* The string to be searched inside <Arg name="aString1"/>.
+//* <Parameter name="sub-string">
+//* The string to be searched inside <Arg name="string"/>.
+//* </Parameter>
+//*
+//* <Parameter name="start-index">
+//* Optional argument that gives the starting position in <Arg name="string"/>
+//* to search for the <Arg name="sub-string"/>. If not given it will default
+//* to zero.
 //* </Parameter>
 //*
 //* <Returns>
 //* An integer representing the index of the first occurence of
-//* <Arg name="aString2"/> inside <Arg name="aString1"/>, or -1
-//* if <Arg name="aString1"/> does not contain <Arg name="aString2"/>.
+//* <Arg name="sub-string"/> inside <Arg name="string"/>, or -1
+//* if <Arg name="string"/> does not contain <Arg name="sub-string"/>.
 //* </Returns>
 //*
 //* <Description>
@@ -1289,9 +1297,7 @@ public final class SModuleString
                                           final Object[]     args)
         throws STeaException {
 
-        if ( (args.length<3) || (args.length>4)) {
-            throw new SNumArgException(args, "string sub-string [start-index]");
-        }
+        SArgs.checkArgCountBetween(args,3,4, "string sub-string [start-index]");
 
         String str1       = SArgs.getString(args,1);
         String str2       = SArgs.getString(args,2);

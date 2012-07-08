@@ -331,11 +331,11 @@ tunit-testsuite str-cat-test {
 
 tunit-testsuite str-ends-with?-test {
 
-    tunit-test endWithTrue {
+    tunit-test endsWithTrue {
         tunit-assert-equals $true [str-ends-with? "HelloWorld" "World"]
     }
 
-    tunit-test endWithFalse {
+    tunit-test endsWithFalse {
         tunit-assert-equals $false [str-ends-with? "HelloWorld" "Hello"]
     }
 
@@ -373,11 +373,11 @@ tunit-testsuite str-ends-with?-test {
 
 tunit-testsuite str-starts-with?-test {
 
-    tunit-test endWithTrue {
+    tunit-test startsWithTrue {
         tunit-assert-equals $true [str-starts-with? "HelloWorld" "Hello"]
     }
 
-    tunit-test endWithFalse {
+    tunit-test startsWithFalse {
         tunit-assert-equals $false [str-starts-with? "HelloWorld" "World"]
     }
 
@@ -399,6 +399,56 @@ tunit-testsuite str-starts-with?-test {
 
     tunit-test-error invalidArgType2 {
         str-starts-with? "Hello" 2
+    }
+
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite str-index-of-test {
+
+    tunit-test indexOf1 {
+        tunit-assert-equals 5 [str-index-of "HelloWorld" "World"]
+    }
+
+    tunit-test indexOf2 {
+        tunit-assert-equals -1 [str-index-of "HelloWorld" "What?"]
+    }
+
+    tunit-test indexOf3 {
+        tunit-assert-equals 10 [str-index-of "HelloWorldHello" "Hello" 6]
+    }
+
+    tunit-test-error tooFewArgs0 {
+        str-index-of
+    }
+
+    tunit-test-error tooFewArgs1 {
+        str-index-of "Hello"
+    }
+
+    tunit-test-error tooManyArgs {
+        str-index-of "too" "many" "args" "for" "sure"
+    }
+
+    tunit-test-error invalidArgType1 {
+        str-index-of 1 "World"
+    }
+
+    tunit-test-error invalidArgType2 {
+        str-index-of "Hello" 2
+    }
+
+    tunit-test-error invalidArgType3 {
+        str-index-of "Hello" "World" "What?!"
     }
 
 }

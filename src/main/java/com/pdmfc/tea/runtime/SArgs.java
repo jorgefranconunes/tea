@@ -116,6 +116,46 @@ public final class SArgs
 
 /**************************************************************************
  *
+ * Checks that argument count in a function call is in a given range.
+ *
+ * <p>If the argument count is less than the given number then a
+ * <code>{@link SNumArgException}</code> will be thrown.</p>
+ *
+ * @param args The arguments passed to a function call.
+ *
+ * @param minArgCount The minimum number of arguments the function
+ * accepts.
+ *
+ * @param minArgCount The maximum number of arguments the function
+ * accepts.
+ *
+ * @param usageMessage The usage message given to the <code>{@link
+ * SNumArgException}</code> if one is thrown.
+ *
+ * @exception SNumArgException Thrown if <code>args.length</code> is
+ * not in the appropriate range.
+ *
+ **************************************************************************/
+
+    public static void checkArgCountBetween(final Object[] args,
+                                            final int      minArgCount,
+                                            final int      maxCount,
+                                            final String   usageMessage)
+        throws SNumArgException {
+
+        int argCount = args.length;
+
+        if ( (argCount<minArgCount) || (argCount>maxCount) ) {
+            throw new SNumArgException(args, usageMessage);
+        }
+    }
+
+
+
+
+
+/**************************************************************************
+ *
  * Tries to convert argument <TT>index</TT> into a SObjBlock. If that
  * argument is not a block, an exception is thrown.
  *
