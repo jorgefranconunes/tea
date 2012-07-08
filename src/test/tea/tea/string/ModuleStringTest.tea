@@ -125,6 +125,172 @@ tunit-testsuite str-lower-test {
 
 ###########################################################################
 #
+# Utility function for creating testsuits for string comparison
+# functions.
+#
+###########################################################################
+
+define build-string-comparison-testsuit \
+        ( testSuitName teaFunction ltValue eqValue gtValue ) {
+
+    tunit-testsuite $testSuitName {
+
+        tunit-test cmpLt {
+            tunit-assert-equals $ltValue [$teaFunction "a" "b"]
+        }
+
+        tunit-test cmpEq {
+            tunit-assert-equals $eqValue [$teaFunction "a" "a"]
+        }
+
+        tunit-test cmpGt {
+            tunit-assert-equals $gtValue [$teaFunction "b" "a"]
+        }
+
+        tunit-test-error tooFewArgs0 {
+            $teaFunction
+        }
+
+        tunit-test-error tooFewArgs1 {
+            $teaFunction "a"
+        }
+
+        tunit-test-error tooManyArgs {
+            $teaFunction "too" "many" "args"
+        }
+
+        tunit-test-error invalidArgType {
+            $teaFunction "a" 1
+        }
+
+    }
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+build-string-comparison-testsuit \
+        str-cmp-test \
+        $str-cmp \
+        -1 \
+        0 \
+        1
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+build-string-comparison-testsuit \
+        str>-test \
+        $str> \
+        $false \
+        $false \
+        $true
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+build-string-comparison-testsuit \
+        str>=-test \
+        $str>= \
+        $false \
+        $true \
+        $true
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+build-string-comparison-testsuit \
+        str==-test \
+        $str== \
+        $false \
+        $true \
+        $false
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+build-string-comparison-testsuit \
+        str!=-test \
+        $str!= \
+        $true \
+        $false \
+        $true
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+build-string-comparison-testsuit \
+        str<-test \
+        $str< \
+        $true \
+        $false \
+        $false
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+build-string-comparison-testsuit \
+        str<=-test \
+        $str<= \
+        $true \
+        $true \
+        $false
+
+
+
+
+
+###########################################################################
+#
 # 
 #
 ###########################################################################

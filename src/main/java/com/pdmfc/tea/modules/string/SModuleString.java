@@ -610,11 +610,9 @@ public final class SModuleString
                                         final Object[]     args)
         throws STeaException {
 
-        if ( args.length != 2 ) {
-            throw new SNumArgException(args, "string");
-        }
+        SArgs.checkArgCount(args, 2, "string");
 
-        String str    = SArgs.getString(args,1);
+        String str    = SArgs.getString(args, 1);
         String result = str.toUpperCase();
 
         return result;
@@ -659,9 +657,7 @@ public final class SModuleString
                                         final Object[]     args)
         throws STeaException {
 
-        if ( args.length != 2 ) {
-            throw new SNumArgException(args, "string");
-        }
+        SArgs.checkArgCount(args, 2, "string");
 
         String str    = SArgs.getString(args,1);
         String result = str.toLowerCase();
@@ -1039,7 +1035,26 @@ public final class SModuleString
 
 /**************************************************************************
  *
- * 
+ * Utility method that performs most of the work for functions
+ * comparing strings.
+ *
+ * @param lt The object returned if first string is less than the
+ * second.
+ *
+ * @param eq The object returned if the first string is equal to the
+ * second.
+ *
+ * @param gt The object returned if the first string is greater than
+ * the second.
+ *
+ * @param context The scope where the original Tea function is being
+ * called.
+ *
+ * @param args The arguments received by the original Tea function
+ * being called.
+ *
+ * @return One of the <code>lt</code>, <code>eq</code>,
+ * <code>gt</code> arguments.
  *
  **************************************************************************/
 
@@ -1051,22 +1066,22 @@ public final class SModuleString
                                   final Object[]     args)
         throws STeaException {
 
-        if ( args.length != 3 ) {
-            throw new SNumArgException(args, "string1 string2");
+        SArgs.checkArgCount(args, 3, "string1 string2");
+
+        String  op1        = SArgs.getString(args,1);
+        String  op2        = SArgs.getString(args,2);
+        int     comparison = op1.compareTo(op2);
+        Object  result     = null;
+
+        if ( comparison < 0 ) {
+            result = lt;
+        } else if ( comparison > 0 ) {
+            result = gt;
+        } else {
+            result = eq;
         }
 
-        String  op1    = SArgs.getString(args,1);
-        String  op2    = SArgs.getString(args,2);
-        int     result = op1.compareTo(op2);
-
-        if ( result < 0 ) {
-            return lt;
-        }
-        if ( result > 0 ) {
-            return gt;
-        }
-
-        return eq;
+        return result;
     }
 
 
