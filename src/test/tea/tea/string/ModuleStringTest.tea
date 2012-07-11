@@ -781,7 +781,7 @@ tunit-testsuite symbol->string-test {
 #
 ###########################################################################
 
-tunit-testsuite string->int test {
+tunit-testsuite string->int-test {
     
     tunit-test allOk1 {
         tunit-assert-equals 42 [string->int "42"]
@@ -801,6 +801,40 @@ tunit-testsuite string->int test {
 
     tunit-test-error invalidArgType {
         string->int 42
+    }
+
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite string->float-test {
+    
+    tunit-test allOk1 {
+        tunit-assert-equals 42.0 [string->float "42"]
+    }
+    
+    tunit-test allOk2 {
+        tunit-assert-equals $null [string->float "Fourty Two"]
+    }
+
+    tunit-test-error tooFewArgs {
+        string->float
+    }
+
+    tunit-test-error tooManyArgs {
+        string->float "42" "12"
+    }
+
+    tunit-test-error invalidArgType {
+        string->float 42
     }
 
 }
