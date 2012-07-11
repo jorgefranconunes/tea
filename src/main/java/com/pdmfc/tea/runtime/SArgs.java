@@ -126,7 +126,7 @@ public final class SArgs
  * @param minArgCount The minimum number of arguments the function
  * accepts.
  *
- * @param minArgCount The maximum number of arguments the function
+ * @param maxArgCount The maximum number of arguments the function
  * accepts.
  *
  * @param usageMessage The usage message given to the <code>{@link
@@ -139,13 +139,13 @@ public final class SArgs
 
     public static void checkCountBetween(final Object[] args,
                                          final int      minArgCount,
-                                         final int      maxCount,
+                                         final int      maxArgCount,
                                          final String   usageMessage)
         throws SNumArgException {
 
         int argCount = args.length;
 
-        if ( (argCount<minArgCount) || (argCount>maxCount) ) {
+        if ( (argCount<minArgCount) || (argCount>maxArgCount) ) {
             throw new SNumArgException(args, usageMessage);
         }
     }

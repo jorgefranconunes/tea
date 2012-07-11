@@ -430,8 +430,8 @@ public final class SModuleString
 
 //* 
 //* <TeaFunction name="str-printf"
-//*                 arguments="formatString [arg1 ...]"
-//*             module="tea.string">
+//*              arguments="formatString [arg1 ...]"
+//*              module="tea.string">
 //*
 //* <Overview>
 //* Builds a string from a template string, in the same way as the C printf
@@ -489,8 +489,8 @@ public final class SModuleString
 
 //* 
 //* <TeaFunction name="str-fmt"
-//*                 arguments="formatString [arg1 ...]"
-//*             module="tea.string">
+//*              arguments="formatString [arg1 ...]"
+//*              module="tea.string">
 //*
 //* <Overview>
 //* Builds a string from a template string, in the same way as the
@@ -578,8 +578,8 @@ public final class SModuleString
 
 //* 
 //* <TeaFunction name="str-upper"
-//*                 arguments="str"
-//*             module="tea.string">
+//*              arguments="str"
+//*              module="tea.string">
 //*
 //* <Overview>
 //* Creates the upper case version of a string.
@@ -625,8 +625,8 @@ public final class SModuleString
 
 //* 
 //* <TeaFunction name="str-lower"
-//*                 arguments="aString"
-//*             module="tea.string">
+//*              arguments="aString"
+//*              module="tea.string">
 //*
 //* <Overview>
 //* Creates the lower case version of a string.
@@ -672,8 +672,8 @@ public final class SModuleString
 
 //* 
 //* <TeaFunction name="str-cmp"
-//*                 arguments="aString1 aString2"
-//*             module="tea.string">
+//*              arguments="aString1 aString2"
+//*              module="tea.string">
 //*
 //* <Overview>
 //* Compares two strings lexicographically.
@@ -724,8 +724,8 @@ public final class SModuleString
 
 //* 
 //* <TeaFunction name="str&gt;"
-//*                 arguments="aString1 aString2"
-//*             module="tea.string">
+//*              arguments="aString1 aString2"
+//*              module="tea.string">
 //*
 //* <Overview>
 //* Checks if a string is greater than another in the lexicographic sense.
@@ -775,8 +775,8 @@ public final class SModuleString
 
 //* 
 //* <TeaFunction name="str&gt;="
-//*                 arguments="aString1 aString2"
-//*             module="tea.string">
+//*              arguments="aString1 aString2"
+//*              module="tea.string">
 //*
 //* <Overview>
 //* Checks if a string is greater than or equal to another in the
@@ -828,8 +828,8 @@ public final class SModuleString
 
 //* 
 //* <TeaFunction name="str=="
-//*                 arguments="aString1 aString2"
-//*             module="tea.string">
+//*              arguments="aString1 aString2"
+//*              module="tea.string">
 //*
 //* <Overview>
 //* Checks if two strings are lexicographically the same.
@@ -879,8 +879,8 @@ public final class SModuleString
 
 //* 
 //* <TeaFunction name="str!="
-//*                 arguments="aString1 aString2"
-//*             module="tea.string">
+//*              arguments="aString1 aString2"
+//*              module="tea.string">
 //*
 //* <Overview>
 //* Checks if two strings are lexicographically different.
@@ -930,8 +930,8 @@ public final class SModuleString
 
 //* 
 //* <TeaFunction name="str&lt;"
-//*                 arguments="aString1 aString2"
-//*             module="tea.string">
+//*              arguments="aString1 aString2"
+//*              module="tea.string">
 //*
 //* <Overview>
 //* Checks if a string is less than another in the
@@ -983,8 +983,8 @@ public final class SModuleString
 
 //* 
 //* <TeaFunction name="str&lt;="
-//*                 arguments="aString1 aString2"
-//*             module="tea.string">
+//*              arguments="aString1 aString2"
+//*              module="tea.string">
 //*
 //* <Overview>
 //* Checks if a string is less than or equal to another in the
@@ -1091,8 +1091,8 @@ public final class SModuleString
 
 //* 
 //* <TeaFunction name="str-cat"
-//*                 arguments="aString1 [aString2 ...]"
-//*             module="tea.string">
+//*              arguments="aString1 [aString2 ...]"
+//*              module="tea.string">
 //*
 //* <Overview>
 //* Concatenates a set of strings.
@@ -1145,8 +1145,8 @@ public final class SModuleString
 
 //* 
 //* <TeaFunction name="str-ends-with?"
-//*                 arguments="aString1 aString2"
-//*             module="tea.string">
+//*              arguments="aString1 aString2"
+//*              module="tea.string">
 //*
 //* <Overview>
 //* Checks if a string has another string as suffix.
