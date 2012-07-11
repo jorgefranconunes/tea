@@ -1904,8 +1904,8 @@ public final class SModuleString
 
 //* 
 //* <TeaFunction name="int->string"
-//*                 arguments="aValue"
-//*             module="tea.string">
+//*              arguments="aValue"
+//*              module="tea.string">
 //*
 //* <Overview>
 //* Generates a string with the integer decimal representation of a
@@ -1939,11 +1939,12 @@ public final class SModuleString
                                               final Object[]     args)
         throws STeaException {
 
-        if ( args.length != 2 ) {
-            throw new SNumArgException(args, "integer");
-        }
+        SArgs.checkCount(args, 2, "integer");
 
-        return String.valueOf(SArgs.getNumber(args,1).intValue());
+        Number value  = SArgs.getNumber(args, 1);
+        String result = String.valueOf(value.intValue());
+
+        return result;
     }
 
 
