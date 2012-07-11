@@ -1787,8 +1787,8 @@ public final class SModuleString
 
 //* 
 //* <TeaFunction name="string->int"
-//*                 arguments="aString"
-//*             module="tea.string">
+//*              arguments="aString"
+//*              module="tea.string">
 //*
 //* <Overview>
 //* Converts a string into an integer object.
@@ -1829,16 +1829,15 @@ public final class SModuleString
                                               final Object[]     args)
         throws STeaException {
 
-        if ( args.length != 2 ) {
-            throw new SNumArgException(args, "string");
-        }
+        SArgs.checkCount(args, 2, "string");
 
-        Object result = SObjNull.NULL;
+        Object result = null;
+        String str    = SArgs.getString(args, 1);
 
         try {
-            result = Integer.valueOf(SArgs.getString(args,1));
-        } catch (NumberFormatException e) {
-            // We will just end up returning null.
+            result = Integer.valueOf(str);
+        } catch ( NumberFormatException e ) {
+            result = SObjNull.NULL
         }
 
         return result;
