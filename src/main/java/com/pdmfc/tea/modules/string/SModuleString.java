@@ -1643,11 +1643,11 @@ public final class SModuleString
 
 //* 
 //* <TeaFunction name="str-empty?"
-//*                 arguments="aString"
-//*             module="tea.string">
+//*              arguments="aString"
+//*              module="tea.string">
 //*
 //* <Overview>
-//* Checks if a string as zero length.
+//* Checks if a string has zero length.
 //* </Overview>
 //*
 //* <Parameter name="aString1">
@@ -1676,13 +1676,11 @@ public final class SModuleString
                                         final Object[]     args)
         throws STeaException {
 
-        if ( args.length!= 2) {
-            throw new SNumArgException(args, "string");
-        }
+        SArgs.checkCount(args, 2, "string");
 
-        String  str    = SArgs.getString(args,1);
-        int     length = str.length();
-        Boolean result = (length==0) ? Boolean.TRUE : Boolean.FALSE;
+        String  str     = SArgs.getString(args,1);
+        boolean isEmpty = str.isEmpty();
+        Boolean result  = Boolean.valueOf(isEmpty);
 
         return result;
     }
@@ -1693,8 +1691,8 @@ public final class SModuleString
 
 //* 
 //* <TeaFunction name="str-not-empty?"
-//*                 arguments="aString"
-//*             module="tea.string">
+//*              arguments="aString"
+//*              module="tea.string">
 //*
 //* <Overview>
 //* Checks if a string is not empty.
@@ -1726,13 +1724,11 @@ public final class SModuleString
                                            final Object[]     args)
         throws STeaException {
 
-        if ( args.length!= 2) {
-            throw new SNumArgException(args, "string");
-        }
+        SArgs.checkCount(args, 2, "string");
 
-        String  str    = SArgs.getString(args,1);
-        int     length = str.length();
-        Boolean result = (length==0) ? Boolean.FALSE : Boolean.TRUE;
+        String  str        = SArgs.getString(args,1);
+        boolean isNotEmpty = !str.isEmpty();
+        Boolean result     = Boolean.valueOf(isNotEmpty);
 
         return result;
     }

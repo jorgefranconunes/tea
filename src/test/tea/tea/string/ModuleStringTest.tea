@@ -683,3 +683,71 @@ tunit-testsuite str-join-test {
 #
 ###########################################################################
 
+tunit-testsuite str-empty?-test {
+    
+    tunit-test allOk1 {
+        tunit-assert-equals $true [str-empty? ""]
+    }
+    
+    tunit-test allOk2 {
+        tunit-assert-equals $false [str-empty? "Hello, World!"]
+    }
+
+    tunit-test-error tooFewArgs {
+        str-empty?
+    }
+
+    tunit-test-error tooManyArgs {
+        str-empty? "too" "many" "args"
+    }
+
+    tunit-test-error invalidArgType {
+        str-empty? 1
+    }
+
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite str-not-empty?-test {
+    
+    tunit-test allOk1 {
+        tunit-assert-equals $false [str-not-empty? ""]
+    }
+    
+    tunit-test allOk2 {
+        tunit-assert-equals $true [str-not-empty? "Hello, World!"]
+    }
+
+    tunit-test-error tooFewArgs {
+        str-not-empty?
+    }
+
+    tunit-test-error tooManyArgs {
+        str-not-empty? "too" "many" "args"
+    }
+
+    tunit-test-error invalidArgType {
+        str-not-empty? 1
+    }
+
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
