@@ -2001,8 +2001,8 @@ public final class SModuleString
 
 //* 
 //* <TeaFunction name="str-unescape"
-//*                 arguments="aString"
-//*             module="tea.string">
+//*              arguments="aString"
+//*              module="tea.string">
 //*
 //* <Overview>
 //* Replaces Tea escape sequences by its corresponding characters.
@@ -2052,11 +2052,9 @@ public final class SModuleString
                                            final Object[]     args)
         throws STeaException {
 
-        if ( args.length != 2 ) {
-            throw new SNumArgException(args, "string");
-        }
+        SArgs.checkCount(args, 2, "string");
 
-        String str    = SArgs.getString(args,1);
+        String str    = SArgs.getString(args, 1);
         String result = STeaParserUtils.parseStringLiteral(str);
 
         return result;

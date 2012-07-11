@@ -870,6 +870,8 @@ tunit-testsuite int->string-test {
     tunit-test-error invalidArgType {
         int->string "42"
     }
+    
+}
 
 
 
@@ -881,26 +883,56 @@ tunit-testsuite int->string-test {
 #
 ###########################################################################
 
-tunit-testsuite double->string-test {
+tunit-testsuite float->string-test {
     
     tunit-test allOk1 {
-        tunit-assert-equals "42" [double->string 42]
+        tunit-assert-equals "42.0" [float->string 42]
     }
     
     tunit-test allOk2 {
-        tunit-assert-equals "42.324" [double->string 42.324]
+        tunit-assert-equals "42.324" [float->string 42.324]
     }
 
     tunit-test-error tooFewArgs {
-        double->string
+        float->string
     }
 
     tunit-test-error tooManyArgs {
-        double->string 42.3 43.4
+        float->string 42.3 43.4
     }
 
     tunit-test-error invalidArgType {
-        double->string "42.3"
+        float->string "42.3"
+    }
+
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite str-unescape-test {
+    
+    tunit-test allOk {
+        tunit-assert-equals "Hello" [str-unescape "Hello"]
+    }
+
+    tunit-test-error tooFewArgs {
+        str-unescape
+    }
+
+    tunit-test-error tooManyArgs {
+        str-unescape "Hello" "World"
+    }
+
+    tunit-test-error invalidArgType {
+        str-unescape 10
     }
 
 }
