@@ -751,3 +751,33 @@ tunit-testsuite str-not-empty?-test {
 #
 ###########################################################################
 
+tunit-testsuite symbol->string-test {
+    
+    tunit-test allOk {
+        tunit-assert-equals "Hello" [symbol->string Hello]
+    }
+
+    tunit-test-error tooFewArgs {
+        symbol->string
+    }
+
+    tunit-test-error tooManyArgs {
+        symbol->string Hello World
+    }
+
+    tunit-test-error invalidArgType {
+        symbol->string "Hello"
+    }
+
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+

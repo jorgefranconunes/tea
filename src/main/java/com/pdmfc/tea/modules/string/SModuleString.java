@@ -21,6 +21,7 @@ import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjNull;
 import com.pdmfc.tea.runtime.SObjPair;
+import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypeException;
 import com.pdmfc.tea.runtime.STypes;
@@ -1739,8 +1740,8 @@ public final class SModuleString
 
 //* 
 //* <TeaFunction name="symbol->string"
-//*                 arguments="aSymbol"
-//*             module="tea.string">
+//*              arguments="aSymbol"
+//*              module="tea.string">
 //*
 //* <Overview>
 //* Generates a string with the name of a symbol
@@ -1772,11 +1773,12 @@ public final class SModuleString
                                                  final Object[]   args)
         throws STeaException {
 
-        if ( args.length != 2 ) {
-            throw new SNumArgException(args, "symbol");
-        }
+        SArgs.checkCount(args, 2, "symbol");
 
-        return SArgs.getSymbol(args,1).getName();
+        SObjSymbol symbol = SArgs.getSymbol(args, 1);
+        String     result = symbol.getName();
+
+        return result;
     }
 
 
