@@ -1953,8 +1953,8 @@ public final class SModuleString
 
 //* 
 //* <TeaFunction name="float->string"
-//*                 arguments="aValue"
-//*             module="tea.string">
+//*              arguments="aValue"
+//*              module="tea.string">
 //*
 //* <Overview>
 //* Generates a string with the decimal representation of a
@@ -1987,11 +1987,12 @@ public final class SModuleString
                                                 final Object[]     args)
         throws STeaException {
 
-        if ( args.length != 2 ) {
-            throw new SNumArgException(args, "float");
-        }
+        SArgs.checkCount(args, 2, "float");
 
-        return String.valueOf(SArgs.getNumber(args,1).doubleValue());
+        Number value  = SArgs.getNumber(args, 1);
+        String result = String.valueOf(value.doubleValue());
+
+        return result;
     }
 
 

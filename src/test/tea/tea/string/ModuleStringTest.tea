@@ -871,6 +871,38 @@ tunit-testsuite int->string-test {
         int->string "42"
     }
 
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite double->string-test {
+    
+    tunit-test allOk1 {
+        tunit-assert-equals "42" [double->string 42]
+    }
+    
+    tunit-test allOk2 {
+        tunit-assert-equals "42.324" [double->string 42.324]
+    }
+
+    tunit-test-error tooFewArgs {
+        double->string
+    }
+
+    tunit-test-error tooManyArgs {
+        double->string 42.3 43.4
+    }
+
+    tunit-test-error invalidArgType {
+        double->string "42.3"
+    }
+
 }
 
 
