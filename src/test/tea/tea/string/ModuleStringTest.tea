@@ -543,7 +543,7 @@ tunit-testsuite str-len-test {
 #
 ###########################################################################
 
-tunit-testsuite str-substring {
+tunit-testsuite str-substring-test {
     
     tunit-test allOk1 {
         tunit-assert-equals "world!" [str-substring "Hello, world!" 7]
@@ -583,6 +583,92 @@ tunit-testsuite str-substring {
 
     tunit-test-error invalidArgType2 {
         str-substring "1" 2 "3"
+    }
+
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite str-trim-test {
+    
+    tunit-test allOk {
+        tunit-assert-equals "Hello, World!" [str-trim " Hello, World! "]
+    }
+
+    tunit-test-error tooFewArgs {
+        str-trim
+    }
+
+    tunit-test-error tooManyArgs {
+        str-trim "too" "many" "args"
+    }
+
+    tunit-test-error invalidArgType {
+        str-trim 1
+    }
+
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite str-join-test {
+    
+    tunit-test allOk1 {
+        tunit-assert-equals \
+                "" \
+                [str-join () ", "]
+    }
+    
+    tunit-test allOk2 {
+        tunit-assert-equals \
+                "Hello" \
+                [str-join ( "Hello" ) ", "]
+    }
+    
+    tunit-test allOk3 {
+        tunit-assert-equals \
+                "Hello, World!" \
+                [str-join ( "Hello" "World!" ) ", "]
+    }
+
+    tunit-test-error tooFewArgs1 {
+        str-join
+    }
+
+    tunit-test-error tooFewArgs2 {
+        str-join ()
+    }
+
+    tunit-test-error tooManyArgs {
+        str-join () "too" "many" "args"
+    }
+
+    tunit-test-error invalidArgType1 {
+        str-join 1 ", "
+    }
+
+    tunit-test-error invalidArgType2 {
+        str-join () 1
+    }
+
+    tunit-test-error invalidElemType {
+        str-join ( "Hello" 4 ) ", "
     }
 
 }

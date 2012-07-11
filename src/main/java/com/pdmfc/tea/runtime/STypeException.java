@@ -66,6 +66,24 @@ public final class STypeException
  *
  **************************************************************************/
 
+    public STypeException(final Object[]  args,
+                          final String    msgFmt,
+                          final Object... fmtArgs) {
+
+        initForFunction(args, msgFmt, fmtArgs);
+    }
+
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
     public STypeException(final Object[] args,
                           final int      argIndex,
                           final String   expectedTypeDescription) {

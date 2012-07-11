@@ -473,9 +473,9 @@ public final class SModuleString
 
         try {
             _formater.format(SArgs.getString(args,1), args, 2);
-        } catch (SNumArgException e1) {
+        } catch ( SNumArgException e1 ) {
             throw new SRuntimeException(args, e1.getMessage());
-        } catch (STypeException e2) {
+        } catch ( STypeException e2 ) {
             throw new SRuntimeException(args, e2.getMessage());
         }
 
@@ -1546,9 +1546,7 @@ public final class SModuleString
                                        final Object[]     args)
         throws STeaException {
 
-        if ( args.length != 2 ) {
-            throw new SNumArgException(args, "string");
-        }
+        SArgs.checkCount(args, 2, "string");
 
         String arg    = SArgs.getString(args,1);
         String result = arg.trim();
@@ -1562,8 +1560,8 @@ public final class SModuleString
 
 //* 
 //* <TeaFunction name="str-join"
-//*                 arguments="stringList separator"
-//*             module="tea.string">
+//*              arguments="stringList separator"
+//*              module="tea.string">
 //*
 //* <Overview>
 //* Builds a new string by concatenating strings from a list.
@@ -1602,9 +1600,7 @@ public final class SModuleString
                                        final Object[]     args)
         throws STeaException {
 
-        if ( args.length != 3 ) {
-            throw new SNumArgException(args, "string-list string");
-        }
+        SArgs.checkCount(args, 3, "string-list string");
 
         SObjPair list      = SArgs.getPair(args,1);
         String   separator = SArgs.getString(args,2);
@@ -1614,29 +1610,31 @@ public final class SModuleString
             return "";
         }
 
-        StringBuilder buf = new StringBuilder(256);
+        StringBuilder buffer = new StringBuilder(256);
 
         for ( int index=0; i.hasNext(); ++index ) {
             if ( index > 0 ) {
-                buf.append(separator);
+                buffer.append(separator);
             }
             Object element = i.next();
             String str     = null;
 
             try {
                 str = (String)element;
-            } catch (ClassCastException e) {
+            } catch ( ClassCastException e ) {
                 String msg = "list element {0} should be a string, not a {1}";
-                throw new SRuntimeException(args,
-                                            msg,
-                                            String.valueOf(index),
-                                            STypes.getTypeName(element));
+                throw new STypeException(args,
+                                         msg,
+                                         String.valueOf(index),
+                                         STypes.getTypeName(element));
             }
 
-            buf.append(str);
+            buffer.append(str);
         }
 
-        return buf.toString();
+        String result = buffer.toString();
+
+        return result;
     }
 
 
