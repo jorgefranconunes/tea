@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2010-2011 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2010-2012 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -52,9 +52,9 @@ public final class STeaParserUtils
 
     public static String parseStringLiteral(final String s) {
 
-        StringBuffer result    = new StringBuffer();
-        int          size      = s.length();
-        int          lastIndex = size - 1;
+        StringBuilder result    = new StringBuilder();
+        int           size      = s.length();
+        int           lastIndex = size - 1;
 
         for ( int i=0; i<size; i++ ) {
             char c = s.charAt(i);

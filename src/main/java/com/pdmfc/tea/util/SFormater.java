@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2012 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -550,16 +550,16 @@ public abstract class SFormater
             exponent = unsigned.substring(eInd);
         }
 
-        StringBuffer number;
-        StringBuffer fraction;
+        StringBuilder number;
+        StringBuilder fraction;
         int          dotInd = mantissa.indexOf('.');
 
         if ( dotInd == -1 ) {
-            number   = new StringBuffer(mantissa);
-            fraction = new StringBuffer("");
+            number   = new StringBuilder(mantissa);
+            fraction = new StringBuilder();
         } else {
-            number   = new StringBuffer(mantissa.substring(0, dotInd));
-            fraction = new StringBuffer(mantissa.substring(dotInd + 1));
+            number   = new StringBuilder(mantissa.substring(0, dotInd));
+            fraction = new StringBuilder(mantissa.substring(dotInd + 1));
         }
 
         int numFigs  = number.length();

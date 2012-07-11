@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2012 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -315,11 +315,11 @@ public class SInput
     private static String readLine(final InputStream in)
         throws IOException {
        
-        StringBuffer buffer = null;
-        int          c      = in.read();
+        StringBuilder buffer = null;
+        int           c      = in.read();
 
         if ( c != -1 ) {
-            buffer = new StringBuffer();
+            buffer = new StringBuilder();
         }
 
         while ( (c!='\n') && (c!=-1) ) {
@@ -361,11 +361,11 @@ public class SInput
     private static String readLine(final Reader in)
         throws IOException {
 
-        StringBuffer buffer = null;
-        int          c      = in.read();
+        StringBuilder buffer = null;
+        int           c      = in.read();
 
         if ( c != -1 ) {
-            buffer = new StringBuffer();
+            buffer = new StringBuilder();
         }
         while ( (c!='\n') && (c!=-1) ) {
             if ( c == '\r' ) {

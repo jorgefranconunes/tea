@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2007-2011 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2007-2011 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 package com.pdmfc.tea.engine;

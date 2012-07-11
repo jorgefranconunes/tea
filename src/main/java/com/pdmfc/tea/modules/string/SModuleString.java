@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2012 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2012 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -63,7 +63,7 @@ public final class SModuleString
 
 
     // Used by the functionFormat(...) method.
-    private StringBuffer    _formatResult = new StringBuffer();
+    private StringBuilder   _formatResult = new StringBuilder();
     private SFormaterString _formater     = new SFormaterString(_formatResult);
 
 
@@ -467,7 +467,7 @@ public final class SModuleString
                                   final Object[]     args)
         throws STeaException {
 
-        SArgs.checkArgCountAtLeast(args, 2, "string [object ...]");
+        SArgs.checkCountAtLeast(args, 2, "string [object ...]");
 
         _formatResult.setLength(0);
 
@@ -526,7 +526,7 @@ public final class SModuleString
                                final Object[]   args)
         throws STeaException {
 
-        SArgs.checkArgCountAtLeast(args, 2, "string [object ...]");
+        SArgs.checkCountAtLeast(args, 2, "string [object ...]");
 
         String   fmt         = SArgs.getString(args, 1);
         int      fmtArgCount = args.length - 2;
@@ -610,7 +610,7 @@ public final class SModuleString
                                         final Object[]     args)
         throws STeaException {
 
-        SArgs.checkArgCount(args, 2, "string");
+        SArgs.checkCount(args, 2, "string");
 
         String str    = SArgs.getString(args, 1);
         String result = str.toUpperCase();
@@ -657,7 +657,7 @@ public final class SModuleString
                                         final Object[]     args)
         throws STeaException {
 
-        SArgs.checkArgCount(args, 2, "string");
+        SArgs.checkCount(args, 2, "string");
 
         String str    = SArgs.getString(args,1);
         String result = str.toLowerCase();
@@ -1066,7 +1066,7 @@ public final class SModuleString
                                   final Object[]     args)
         throws STeaException {
 
-        SArgs.checkArgCount(args, 3, "string1 string2");
+        SArgs.checkCount(args, 3, "string1 string2");
 
         String  op1        = SArgs.getString(args,1);
         String  op2        = SArgs.getString(args,2);
@@ -1123,10 +1123,10 @@ public final class SModuleString
                                       final Object[]     args)
         throws STeaException {
 
-        SArgs.checkArgCountAtLeast(args, 2, "string ...");
+        SArgs.checkCountAtLeast(args, 2, "string ...");
 
-        String       arg1   = SArgs.getString(args,1);
-        StringBuffer buffer = new StringBuffer(arg1);
+        String        arg1   = SArgs.getString(args,1);
+        StringBuilder buffer = new StringBuilder(arg1);
 
         for ( int i=2; i<args.length; i++ ) {
             String arg = SArgs.getString(args, i);
@@ -1182,7 +1182,7 @@ public final class SModuleString
                                             final Object[]     args)
         throws STeaException {
 
-        SArgs.checkArgCount(args, 3, "string1 string2");
+        SArgs.checkCount(args, 3, "string1 string2");
 
         String str1    = SArgs.getString(args,1);
         String str2    = SArgs.getString(args,2);
@@ -1235,7 +1235,7 @@ public final class SModuleString
                                              final Object[]     args)
         throws STeaException {
 
-        SArgs.checkArgCount(args, 3, "string1 string2");
+        SArgs.checkCount(args, 3, "string1 string2");
 
         String  str1   = SArgs.getString(args,1);
         String  str2   = SArgs.getString(args,2);
@@ -1297,7 +1297,7 @@ public final class SModuleString
                                           final Object[]     args)
         throws STeaException {
 
-        SArgs.checkArgCountBetween(args,3,4, "string sub-string [start-index]");
+        SArgs.checkCountBetween(args,3,4, "string sub-string [start-index]");
 
         String str1       = SArgs.getString(args,1);
         String str2       = SArgs.getString(args,2);
@@ -1362,7 +1362,7 @@ public final class SModuleString
                                               final Object[]     args)
         throws STeaException {
 
-        SArgs.checkArgCountBetween(args,3,4, "string sub-string [start-index]");
+        SArgs.checkCountBetween(args,3,4, "string sub-string [start-index]");
 
         String str1       = SArgs.getString(args,1);
         String str2       = SArgs.getString(args,2);
@@ -1412,7 +1412,7 @@ public final class SModuleString
                                       final Object[]   args)
         throws STeaException {
 
-        SArgs.checkArgCount(args, 2, "string");
+        SArgs.checkCount(args, 2, "string");
 
         String  str    = SArgs.getString(args,1);
         int     strLen = str.length();
@@ -1482,7 +1482,7 @@ public final class SModuleString
                                             final Object[]     args)
         throws STeaException {
 
-        SArgs.checkArgCountBetween(args, 3, 4, "string start-index [end-index]");
+        SArgs.checkCountBetween(args, 3, 4, "string start-index [end-index]");
 
         String str    = SArgs.getString(args,1);
         int    start  = SArgs.getInt(args,2).intValue();
@@ -1512,8 +1512,8 @@ public final class SModuleString
 
 //* 
 //* <TeaFunction name="str-trim"
-//*                 arguments="aString"
-//*             module="tea.string">
+//*              arguments="aString"
+//*              module="tea.string">
 //*
 //* <Overview>
 //* Trims whitespace off both ends of a string.
@@ -1614,7 +1614,7 @@ public final class SModuleString
             return "";
         }
 
-        StringBuffer buf = new StringBuffer(256);
+        StringBuilder buf = new StringBuilder(256);
 
         for ( int index=0; i.hasNext(); ++index ) {
             if ( index > 0 ) {
@@ -2074,7 +2074,7 @@ public final class SModuleString
 /**************************************************************************
  *
  * This class implements a formatter that stores the result in a
- * <TT>StringBuffer</TT>.
+ * <code>StringBuilder</code>.
  *
  **************************************************************************/
 
@@ -2082,7 +2082,7 @@ public final class SModuleString
         extends SFormater {
 
 
-        private StringBuffer _result;
+        private StringBuilder _result = null;
 
 
 
@@ -2091,11 +2091,11 @@ public final class SModuleString
 /**************************************************************************
  *
  * @param resultString
- *     The <TT>StringBuffer</TT> whre the result is stored.
+ *     The <TT>StringBuilder</TT> whre the result is stored.
  *
  **************************************************************************/
 
-        public SFormaterString(final StringBuffer resultString) {
+        public SFormaterString(final StringBuilder resultString) {
         
             _result = resultString;
         }

@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2012 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -197,8 +197,8 @@ public final class SModuleXml
 
     private static String xmlEncode(final String s) {
 
-        StringBuffer buf  = new StringBuffer();
-        int          size = s.length();
+        StringBuilder buf  = new StringBuilder();
+        int           size = s.length();
 
         for ( int i=0; i<size; i++ ) {
             char c = s.charAt(i);

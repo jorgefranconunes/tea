@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2012 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -205,8 +205,8 @@ public final class SModuleHtml
 
     private static String htmlEncode(final String s) {
 
-        StringBuffer buf  = new StringBuffer();
-        int          size = s.length();
+        StringBuilder buf  = new StringBuilder();
+        int           size = s.length();
 
         for ( int i=0; i<size; i++ ) {
             char c = s.charAt(i);
@@ -301,8 +301,8 @@ public final class SModuleHtml
 
     private static String urlEncode(final String s) {
 
-        StringBuffer buf  = new StringBuffer();
-        int          size = s.length();
+        StringBuilder buf  = new StringBuilder();
+        int           size = s.length();
 
         for ( int i=0; i<size; i++ ) {
             char c = s.charAt(i);

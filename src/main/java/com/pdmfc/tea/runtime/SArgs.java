@@ -46,8 +46,8 @@ public final class SArgs
 
 /**************************************************************************
  *
- * Checks that argument count in a function call exactly match a given
- * number.
+ * Checks that argument count in a function call exactly matches a
+ * given number.
  *
  * <p>If the argument count is different than the given number then a
  * <code>{@link SNumArgException}</code> will be thrown.</p>
@@ -65,9 +65,9 @@ public final class SArgs
  *
  **************************************************************************/
 
-    public static void checkArgCount(final Object[] args,
-                                     final int      argCount,
-                                     final String   usageMessage)
+    public static void checkCount(final Object[] args,
+                                  final int      argCount,
+                                  final String   usageMessage)
         throws SNumArgException {
 
         if ( args.length != argCount ) {
@@ -100,9 +100,9 @@ public final class SArgs
  *
  **************************************************************************/
 
-    public static void checkArgCountAtLeast(final Object[] args,
-                                            final int      minArgCount,
-                                            final String   usageMessage)
+    public static void checkCountAtLeast(final Object[] args,
+                                         final int      minArgCount,
+                                         final String   usageMessage)
         throws SNumArgException {
 
         if ( args.length < minArgCount ) {
@@ -137,10 +137,10 @@ public final class SArgs
  *
  **************************************************************************/
 
-    public static void checkArgCountBetween(final Object[] args,
-                                            final int      minArgCount,
-                                            final int      maxCount,
-                                            final String   usageMessage)
+    public static void checkCountBetween(final Object[] args,
+                                         final int      minArgCount,
+                                         final int      maxCount,
+                                         final String   usageMessage)
         throws SNumArgException {
 
         int argCount = args.length;

@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDM&FC, All Rights Reserved.
+ * Copyright (c) 2001-2012 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -775,8 +775,8 @@ public final class SModuleIO
                                        final Object[]     args)
         throws STeaException {
 
-        int          numArgs = args.length;
-        StringBuffer result  = new StringBuffer();
+        int           numArgs = args.length;
+        StringBuilder result  = new StringBuilder();
 
         try {
             if ( numArgs > 1 ) {
@@ -805,8 +805,8 @@ public final class SModuleIO
  *
  **************************************************************************/
 
-    private static void append(final StringBuffer result,
-                               final Object       component)
+    private static void append(final StringBuilder result,
+                               final Object        component)
         throws SRuntimeException {
 
         if ( component instanceof SObjPair ) {
@@ -834,8 +834,8 @@ public final class SModuleIO
     private static String join(final SObjPair componentList)
         throws SRuntimeException {
 
-        Iterator     elems  = componentList.iterator();
-        StringBuffer result = new StringBuffer();
+        Iterator      elems  = componentList.iterator();
+        StringBuilder result = new StringBuilder();
 
         if ( elems.hasNext() ) {
             append(result, elems.next());

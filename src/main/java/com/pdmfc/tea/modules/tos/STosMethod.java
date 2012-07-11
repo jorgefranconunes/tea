@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2012 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -155,7 +155,7 @@ public final class STosMethod
             return "this function takes no arguments";
         }
 
-        StringBuffer text = new StringBuffer(_argNames[0].getName());
+        StringBuilder text = new StringBuilder(_argNames[0].getName());
 
         for ( int i=1; i<_argNames.length; i++ ) {
             text.append(' ').append(_argNames[i].getName());
