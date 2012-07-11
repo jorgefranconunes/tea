@@ -513,3 +513,87 @@ tunit-testsuite str-last-index-of-test {
 #
 ###########################################################################
 
+tunit-testsuite str-len-test {
+    
+    tunit-test allOk {
+        tunit-assert-equals 5 [str-len "Hello"]
+    }
+
+    tunit-test-error tooFewArgs {
+        str-len
+    }
+
+    tunit-test-error tooManyArgs {
+        str-len "too" "many" "args" "for" "sure"
+    }
+
+    tunit-test-error invalidArgType {
+        str-len 1
+    }
+
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite str-substring {
+    
+    tunit-test allOk1 {
+        tunit-assert-equals "world!" [str-substring "Hello, world!" 7]
+    }
+    
+    tunit-test allOk2 {
+        tunit-assert-equals "world" [str-substring "Hello, world!" 7 12]
+    }
+    
+    tunit-test startNegative {
+        tunit-assert-equals "Hello" [str-substring "Hello, world!" -3 5]
+    }
+    
+    tunit-test endTooLarge {
+        tunit-assert-equals "world!" [str-substring "Hello, world!" 7 512]
+    }
+    
+    tunit-test startAfterEnd {
+        tunit-assert-equals "" [str-substring "Hello, world!" 3 2]
+    }
+
+    tunit-test-error tooFewArgs {
+        str-substring
+    }
+
+    tunit-test-error tooManyArgs {
+        str-substring "too" 4 5 "stuff"
+    }
+
+    tunit-test-error invalidArgType1 {
+        str-substring 1 2 3
+    }
+
+    tunit-test-error invalidArgType2 {
+        str-substring "1" "2" 3
+    }
+
+    tunit-test-error invalidArgType2 {
+        str-substring "1" 2 "3"
+    }
+
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+

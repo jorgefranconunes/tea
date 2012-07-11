@@ -1412,14 +1412,13 @@ public final class SModuleString
                                       final Object[]   args)
         throws STeaException {
 
-        if ( args.length != 2 ) {
-            throw new SNumArgException(args, "string");
-        }
+        SArgs.checkArgCount(args, 2, "string");
 
-        String arg    = SArgs.getString(args,1);
-        int    result = arg.length();
+        String  str    = SArgs.getString(args,1);
+        int     strLen = str.length();
+        Integer result = Integer.valueOf(strLen);
 
-        return Integer.valueOf(result);
+        return result;
     }
 
 
@@ -1428,8 +1427,10 @@ public final class SModuleString
 
 //* 
 //* <TeaFunction name="str-substring"
-//*                 arguments="aString startIndex [endIndex]"
-//*             module="tea.string">
+//*              arguments="aString startIndex"
+//*              module="tea.string">
+//* 
+//* <Prototype arguments="endIndex"/>
 //*
 //* <Overview>
 //* Extracts a substring from a string.
@@ -1481,9 +1482,7 @@ public final class SModuleString
                                             final Object[]     args)
         throws STeaException {
 
-        if ( (args.length<3) || (args.length>4) ) {
-            throw new SNumArgException(args, "string start-index [end-index]");
-        }
+        SArgs.checkArgCountBetween(args, 3, 4, "string start-index [end-index]");
 
         String str    = SArgs.getString(args,1);
         int    start  = SArgs.getInt(args,2).intValue();
