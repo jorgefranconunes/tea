@@ -463,3 +463,53 @@ tunit-testsuite str-index-of-test {
 #
 ###########################################################################
 
+tunit-testsuite str-last-index-of-test {
+
+    tunit-test indexOf1 {
+        tunit-assert-equals 5 [str-last-index-of "HelloWorld" "World"]
+    }
+
+    tunit-test indexOf2 {
+        tunit-assert-equals -1 [str-last-index-of "HelloWorld" "What?"]
+    }
+
+    tunit-test indexOf3 {
+        tunit-assert-equals 0 [str-last-index-of "HelloWorldHello" "Hello" 3]
+    }
+
+    tunit-test-error tooFewArgs0 {
+        str-last-index-of
+    }
+
+    tunit-test-error tooFewArgs1 {
+        str-last-index-of "Hello"
+    }
+
+    tunit-test-error tooManyArgs {
+        str-last-index-of "too" "many" "args" "for" "sure"
+    }
+
+    tunit-test-error invalidArgType1 {
+        str-last-index-of 1 "World"
+    }
+
+    tunit-test-error invalidArgType2 {
+        str-last-index-of "Hello" 2
+    }
+
+    tunit-test-error invalidArgType3 {
+        str-last-index-of "Hello" "World" "What?!"
+    }
+
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+

@@ -1197,8 +1197,8 @@ public final class SModuleString
 
 //* 
 //* <TeaFunction name="str-starts-with?"
-//*                 arguments="aString1 aString2"
-//*             module="tea.string">
+//*              arguments="aString1 aString2"
+//*              module="tea.string">
 //*
 //* <Overview>
 //* Checks if a string has another string as prefix.
@@ -1303,7 +1303,7 @@ public final class SModuleString
         String str2       = SArgs.getString(args,2);
         int    startIndex =
             (args.length==4) ? SArgs.getInt(args,3).intValue() : 0;
-        int    indexOf    = str1.indexOf(str2, startIndex);
+        int     indexOf   = str1.indexOf(str2, startIndex);
         Integer result    = Integer.valueOf(indexOf);
 
         return result;
@@ -1315,26 +1315,34 @@ public final class SModuleString
 
 //* 
 //* <TeaFunction name="str-last-index-of"
-//*                 arguments="aString1 aString2"
-//*             module="tea.string">
+//*              arguments="string sub-string"
+//*              module="tea.string">
+//* 
+//* <Prototype arguments="string sub-string end-index"/>
 //*
 //* <Overview>
 //* Finds the index of the last occurence of a string inside another string.
 //* </Overview>
 //*
-//* <Parameter name="aString1">
-//* The string where the search for the <Arg name="aString2"/> will be
+//* <Parameter name="string">
+//* The string where the search for the <Arg name="sub-string"/> will be
 //* performed.
 //* </Parameter>
 //*
-//* <Parameter name="aString2">
-//* The string to be searched inside <Arg name="aString1"/>.
+//* <Parameter name="sub-string">
+//* The string to be searched inside <Arg name="string"/>.
+//* </Parameter>
+//*
+//* <Parameter name="end-index">
+//* Optional argument that gives the last position in <Arg name="string"/>
+//* to search for the <Arg name="sub-string"/>. If not given it will default
+//* to the length of <Arg name="string"/>.
 //* </Parameter>
 //*
 //* <Returns>
 //* An integer representing the index of the last occurence of
-//* <Arg name="aString2"/> inside <Arg name="aString1"/>, or -1
-//* if <Arg name="aString1"/> does not contain <Arg name="aString2"/>.
+//* <Arg name="sub-string"/> inside <Arg name="string"/>, or -1
+//* if <Arg name="string"/> does not contain <Arg name="sub-string"/>.
 //* </Returns>
 //*
 //* <Description>
@@ -1354,17 +1362,16 @@ public final class SModuleString
                                               final Object[]     args)
         throws STeaException {
 
-        if ( (args.length<3) || (args.length>4)) {
-            throw new SNumArgException(args, "string sub-string [start-index]");
-        }
+        SArgs.checkArgCountBetween(args,3,4, "string sub-string [start-index]");
 
         String str1       = SArgs.getString(args,1);
         String str2       = SArgs.getString(args,2);
         int    startIndex =
-            (args.length==4) ? SArgs.getInt(args,3).intValue() : 0;
-        int    result     = str1.lastIndexOf(str2, startIndex);
+            (args.length==4) ? SArgs.getInt(args,3).intValue() : str1.length();
+        int    indexOf    = str1.lastIndexOf(str2, startIndex);
+        int    result     = Integer.valueOf(indexOf);
         
-        return Integer.valueOf(result);
+        return result;
     }
 
 
@@ -1373,19 +1380,19 @@ public final class SModuleString
 
 //* 
 //* <TeaFunction name="str-len"
-//*                 arguments="aString"
-//*             module="tea.string">
+//*              arguments="str"
+//*              module="tea.string">
 //*
 //* <Overview>
 //* Determines the number of characters in a string.
 //* </Overview>
 //*
-//* <Parameter name="aString">
+//* <Parameter name="str">
 //* A string object.
 //* </Parameter>
 //*
 //* <Returns>
-//* An integer representing the length of <Arg name="aString"/>.
+//* An integer representing the length of <Arg name="str"/>.
 //* </Returns>
 //*
 //* <Description>
