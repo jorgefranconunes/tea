@@ -12,7 +12,7 @@ import java.util.Iterator;
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.compiler.STeaParserUtils;
 import com.pdmfc.tea.modules.SModule;
-import com.pdmfc.tea.modules.SModuleMath;
+import com.pdmfc.tea.modules.math.SModuleMath;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.util.SDate;
 import com.pdmfc.tea.runtime.SArgs;

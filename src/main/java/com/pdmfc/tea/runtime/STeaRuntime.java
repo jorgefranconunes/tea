@@ -51,8 +51,8 @@ public final class STeaRuntime
     private static final String[] CORE_MODULES = {
         "com.pdmfc.tea.modules.io.SModuleIO",
         "com.pdmfc.tea.modules.lang.SModuleLang",
-        "com.pdmfc.tea.modules.SModuleList",
-        "com.pdmfc.tea.modules.SModuleMath",
+        "com.pdmfc.tea.modules.list.SModuleList",
+        "com.pdmfc.tea.modules.math.SModuleMath",
         "com.pdmfc.tea.modules.string.SModuleString"
     };
 

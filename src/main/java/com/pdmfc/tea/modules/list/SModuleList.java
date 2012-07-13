@@ -1,10 +1,10 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2012 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
-package com.pdmfc.tea.modules;
+package com.pdmfc.tea.modules.list;
 
 import java.util.Iterator;
 

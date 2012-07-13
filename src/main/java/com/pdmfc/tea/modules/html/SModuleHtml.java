@@ -4,7 +4,7 @@
  *
  **************************************************************************/
 
-package com.pdmfc.tea.modules;
+package com.pdmfc.tea.modules.html;
 
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.modules.SModule;

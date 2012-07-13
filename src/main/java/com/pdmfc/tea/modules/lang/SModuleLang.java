@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2012 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -21,8 +21,8 @@ import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.compiler.SCode;
 import com.pdmfc.tea.compiler.SCompiler;
 import com.pdmfc.tea.modules.SModule;
-import com.pdmfc.tea.modules.SModuleMath;
 import com.pdmfc.tea.modules.io.SInput;
+import com.pdmfc.tea.modules.math.SModuleMath;
 import com.pdmfc.tea.modules.util.SHashtable;
 import com.pdmfc.tea.runtime.SArgs;
 import com.pdmfc.tea.runtime.SBreakException;
