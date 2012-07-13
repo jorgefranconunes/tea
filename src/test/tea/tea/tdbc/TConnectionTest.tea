@@ -1,0 +1,53 @@
+###########################################################################
+#
+# Copyright (c) 2011-2012 PDMFC, All Rights Reserved.
+#
+#
+# TUnit tests for the TConnection class
+#
+###########################################################################
+
+
+
+
+
+define JDBC_DRIVER "org.apache.derby.jdbc.EmbeddedDriver"
+define JDBC_URL    "jdbc:derby:memory:TeaUnitTests;create=true"
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite TConnection-constructor-test {
+
+    tunit-test constructorOk1 {
+        new TConnection
+    }
+
+    tunit-test constructorOk2 {
+        new TConnection $JDBC_URL
+    }
+
+    tunit-test constructorOk3 {
+        new TConnection $JDBC_URL "username" "password"
+    }
+
+    tunit-test-error invalidConnectionUrl {
+        new TConnection $JDBC_URL "username"
+    }
+
+    tunit-test-error wrongArgCount {
+        new TConnection "whatever"
+    }
+
+    tunit-test-error tooManyArgs {
+        new TConnection $JDBC_URL "username" "password" "hohoho"
+    }
+
+}

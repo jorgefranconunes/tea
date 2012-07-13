@@ -75,14 +75,23 @@ details on performing a build.
       <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
-        <version>4.9</version>
+        <version>4.10</version>
       </dependency>
 
+      <!-- The version of this dependency MUST match the Cobertura
+           version used by the cobertura-maven-plugin. -->
       <dependency>
         <groupId>net.sourceforge.cobertura</groupId>
         <artifactId>cobertura</artifactId>
         <version>1.9.4.1</version>
       </dependency>
+
+    <!-- Derby DB engine. Used only in unit tests. -->
+    <dependency>
+      <groupId>org.apache.derby</groupId>
+      <artifactId>derby</artifactId>
+        <version>10.9.1.0</version>
+    </dependency>
 
     </dependencies>
   </dependencyManagement>
@@ -108,6 +117,13 @@ details on performing a build.
     <dependency>
       <groupId>net.sourceforge.cobertura</groupId>
       <artifactId>cobertura</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- Derby DB engine. Used only in unit tests. -->
+    <dependency>
+      <groupId>org.apache.derby</groupId>
+      <artifactId>derby</artifactId>
       <scope>test</scope>
     </dependency>
 
@@ -183,7 +199,7 @@ details on performing a build.
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-clean-plugin</artifactId>
-          <version>2.4.1</version>
+          <version>2.5</version>
         </plugin>
 
 
@@ -197,7 +213,7 @@ details on performing a build.
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
-          <version>3.0</version>
+          <version>3.1</version>
         </plugin>
 
 
@@ -677,7 +693,7 @@ details on performing a build.
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>2.9</version>
+        <version>2.9.1</version>
         <configuration>
           <configLocation>src/main/config/checkstyle/checkstyle.xml</configLocation>
         </configuration>
@@ -712,7 +728,7 @@ details on performing a build.
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>findbugs-maven-plugin</artifactId>
-        <version>2.4.0</version>
+        <version>2.5.1</version>
         <configuration>
           <effort>Max</effort>
           <xmlOutput>true</xmlOutput>

@@ -240,7 +240,7 @@ public final class SConnection
 //* closed before atempting to establish the new connection.
 //* <P>
 //* When a connection to the database is successfully established
-//* a database transaction transaction is also implicitly initiated.
+//* a database transaction is also implicitly initiated.
 //* </P>
 //* <P>
 //* The <Arg name="url"/> identifying the database is dependent on the
@@ -274,9 +274,9 @@ public final class SConnection
             throw new SNumArgException(args, "url [username password]");
         }
 
-        String url     = SArgs.getString(args,2);
-        String name    = (args.length==3) ? null : SArgs.getString(args,3);
-        String  passwd = (args.length==3) ? null : SArgs.getString(args,4);
+        String url    = SArgs.getString(args,2);
+        String name   = (args.length==3) ? null : SArgs.getString(args,3);
+        String passwd = (args.length==3) ? null : SArgs.getString(args,4);
 
         try {
             connect(url, name, passwd);
