@@ -683,15 +683,6 @@ public class TeaScriptEngineTest {
         teaEngine.setContext(sc1);
         teaEngine.eval("$stdout write [$stdin readln]");
         assertEquals("A 1st lineEOFA 1st line",swOut1.toString());
-
-        // Just check that $stdin copyTo gives an error when used under
-        // this implementation of JSR-223.
-        try {
-            teaEngine.eval("$stdin copyTo $stdout");
-            fail("$stdin copyTo ... should fail under this JSR-223 implementation");
-        } catch (ScriptException e) {
-            assertEquals(e.getCause().getClass(), com.pdmfc.tea.modules.io.SIOException.class);
-        }
     }
 
 }

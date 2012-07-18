@@ -241,7 +241,7 @@ final class SXmlParserParse
                  Object[] fmtArgs = { STypes.getTypeName(input) };
                  throw new SRuntimeException(args, msg, fmtArgs);
              }
-             inputSource = new InputSource(tosInput.getInputStream());
+             inputSource = new InputSource(tosInput.getReader());
          } else {
              String   msg     = "expected String or TInput, not a {0}";
              Object[] fmtArgs = { STypes.getTypeName(input) };

@@ -284,7 +284,7 @@ public final class SCompiler
  *
  **************************************************************************/
 
-    private SCode compile(final Reader reader,
+    public SCode compile(final Reader reader,
                           final String fileName)
         throws IOException,
                SCompileException {

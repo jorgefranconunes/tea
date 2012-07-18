@@ -9,6 +9,7 @@ package com.pdmfc.tea.modules.lang;
 import java.io.InputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Reader;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -111,11 +112,6 @@ public final class SModuleLang
     // released resources (file descriptors) after invoking
     // "Runtime.exec(...)", requiring a GC work around that problem.
     private static boolean _requiresGc = false;
-
-    // Used by the "tea-lock-acquire", "tea-lock-release"
-    // implementations.
-    private static final String MSG_NUM_ARGS    = "lockName";
-    private static final String MSG_INTERRUPTED = "waiting interrupted";
 
 
 
@@ -3166,13 +3162,13 @@ public final class SModuleLang
                 throw new SRuntimeException(msg, fmtArgs);
             }
         } else if ( arg instanceof SInput ) {
-            InputStream    input = ((SInput)arg).getInputStream();
+            Reader input = ((SInput)arg).getReader();
             if ( input == null ) {
                 throw new SRuntimeException("input stream is closed");
             }
 
             try {
-                program = _compiler.compile(input, encoding, null);
+                program = _compiler.compile(input, null);
             } catch (IOException e) {
                 String   msg     = "Failed to read input stream - {0}";
                 Object[] fmtArgs = { e.getMessage() };

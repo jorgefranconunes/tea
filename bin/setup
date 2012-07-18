@@ -60,7 +60,7 @@ displayHeader () {
     cat <<EOF
 
 Setup Tool for the Tea $TEA_VERSION Instalation
-Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
+Copyright (c) 2001-2012 PDMFC, All Rights Reserved.
 
 EOF
 }

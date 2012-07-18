@@ -6,8 +6,9 @@
 
 package com.pdmfc.tea.modules.io;
 
-import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.Reader;
 
@@ -81,10 +82,10 @@ public class SInput
         SObjSymbol.addSymbol("write");
     private static final int         BUFFER_SIZE  = 8192;
 
-    private BufferedInputStream _input = null;
 
-    // JSR-223 requires support for a java.io.Reader.  If the
-    // _inputReader is used, _input is not used, and vice-versa.
+
+
+
     private Reader _inputReader = null;
 
 
@@ -136,10 +137,7 @@ public class SInput
  *
  * Sets up the underlying stream. One of the <code>open()</code>
  * methods must be called prior to any invocation of the
- * <code>readln()</code>, <code>close()</code> methods.  <p>Opening
- * with a <code>java.io.InputStream</code> close the underlying
- * <code>java.io.Reader</code>, thus allowing reading of both bytes or
- * characters.</p>
+ * <code>readln()</code>, <code>close()</code> methods.
  *
  * @param in The <code>InputStream</code> associated with this object.
  * 
@@ -150,16 +148,9 @@ public class SInput
     public void open(final InputStream in)
         throws SIOException {
 
-        _input = new BufferedInputStream(in);
-        if (_inputReader != null) {
-            try {
-                _inputReader.close();
-                _inputReader = null;
-            } catch (IOException e) {
-                throw new SIOException(e);
-            }
-        }
+        Reader reader = new InputStreamReader(in);
 
+        _inputReader = new BufferedReader(reader);
     }
 
 
@@ -183,14 +174,6 @@ public class SInput
         throws SIOException {
 
         _inputReader = inReader;
-        if (_input != null) {
-            try {
-                _input.close();
-                _input = null;
-            } catch (IOException e) {
-                throw new SIOException(e);
-            }
-        }
     }
 
 
@@ -199,17 +182,17 @@ public class SInput
 
 /**************************************************************************
  *
- * Fetches the underlying <code>java.io.InputStream</code> associated
+ * Fetches the underlying <code>java.io.Reader</code> associated
  * with this <code>TInput</code>.
  *
- * @return The <code>java.io.InputStream</code> specified in the last
- * call to <code>{@link #open(InputStream)}</code>
+ * @return The <code>java.io.Reader</code> specified in the last call
+ * to <code>{@link #open(Reader)}</code>
  *
  **************************************************************************/
 
-    public InputStream getInputStream() {
+    public Reader getReader() {
 
-        return _input;
+        return _inputReader;
     }
 
 
@@ -282,61 +265,13 @@ public class SInput
         throws IOException,
                SIOException {
 
-        if (_input == null && _inputReader == null) {
+        if ( _inputReader == null ) {
             throw new SIOException("stream has not been opened for reading");
         }
 
-        if ( _input != null ) {
-            return readLine(_input);
-        } else {
-            return readLine(_inputReader);            
-        }
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * Reads a line from <code>in</code>. The end of a line is signaled by
- * one of three conditions: the '<code>\n</code>' character; the
- * "<code>\r\n</code>" sequence; end of file on <code>in</code>.
- *
- * @param in The <code>InputStream</code> where the line will be read
- * from.
- *
- * @return A <code>String</code> representing the line that was read
- * without the trailing new line.  The null object if <code>in</code>
- * was at end of file.
- *
- **************************************************************************/
-
-    private static String readLine(final InputStream in)
-        throws IOException {
-       
-        StringBuilder buffer = null;
-        int           c      = in.read();
-
-        if ( c != -1 ) {
-            buffer = new StringBuilder();
-        }
-
-        while ( (c!='\n') && (c!=-1) ) {
-            if ( c == '\r' ) {
-                c = in.read();
-                if ( c != '\n' ) {
-                    buffer.append('\r');
-                    buffer.append((char)c);
-                    c = in.read();
-                }
-            } else {
-                buffer.append((char)c);
-                c = in.read();
-            }
-        }
-
-        return (buffer==null) ? null : buffer.toString();
+        String result = readLine(_inputReader);            
+        
+        return result;
     }
 
 
@@ -382,202 +317,6 @@ public class SInput
         }
 
         return (buffer==null) ? null : buffer.toString();
-    }
-
-
-
-
-
-//* 
-//* <TeaMethod name="copyTo"
-//*            arguments="output [byteCount]"
-//*                className="TInput">
-//* 
-//* <Overview>
-//* Copies the contents of the stream into an output stream.
-//* </Overview>
-//* 
-//* <Parameter name="output">
-//* An object that must responde to a <Func name="write"/> method.
-//* </Parameter>
-//* 
-//* <Parameter name="byteCount">
-//* Integer representing the maximum number of bytes to copy into the
-//* the output stream.
-//* </Parameter>
-//*
-//* <Returns>
-//* A reference to the object it was called for.
-//* </Returns>
-//* 
-//* <Description>
-//* The <Var name="output"/> object received as argument is expected
-//* to respond to a <Func name="write"/> method that receives a byte
-//* array for argument.
-//* <P>
-//* This method works by reading a block from the underlying input stream
-//* and passing it to <Var name="output"/> by calling its
-//* <Func name="write"/> method. It repeats this two steps until an end
-//* of file condition is reached in the input stream or until
-//* <Arg name="byteCount"/> bytes are read from the input stream. If
-//* there is no <Arg name="byteCount"/> argument then the copy proceeds
-//* until the end of file on the input stream.
-//* </P>
-//* </Description>
-//* 
-//* </TeaMethod>
-//* 
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    public Object copyTo(final SObjFunction obj,
-                         final SContext     context,
-                         final Object[]     args)
-        throws STeaException {
-
-        if ( (args.length!=3) && (args.length!=4) ) {
-            throw new SNumArgException(args, "outputStream [byteCount]");
-        }
-        
-        Integer byteCount = (args.length==3) ? null : SArgs.getInt(args, 3);
-        STosObj output    = null;
-
-        try {
-            output = (STosObj)args[2];
-        } catch (ClassCastException e) {
-            throw new STypeException(args, 2, "TOutput");
-        }
-        
-        try {
-            if ( byteCount == null) {
-                copyTo(context, output);
-            } else {
-                copyTo(context, output, byteCount.intValue());
-            }
-        } catch (IOException e) {
-            throw new SIOException(e);
-        }
-
-        return obj;
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * Copies the remaining contents of the underlying input stream into
- * the output stream received as argument.
- *
- **************************************************************************/
-
-    public void copyTo(final SOutput out)
-        throws IOException,
-               SIOException {
-
-        if (_input == null) {
-            String msg = "stream has not been opened for reading bytes";
-            throw new SIOException(msg);
-        }
-        
-        byte[] buffer = new byte[BUFFER_SIZE];
-        int    count  = 0;
-
-        while ( (count=_input.read(buffer)) > 0 ) {
-            out.write(buffer, 0, count);
-        }
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    public void copyTo(final SContext context,
-                       final STosObj   out)
-        throws IOException,
-               STeaException {
-
-        SObjFunction  writeMethod = null;
-        SObjByteArray byteArray   = new SObjByteArray();
-        Object[]      methodArgs  = new Object[3];
-        byte[]        buffer      = new byte[BUFFER_SIZE];
-        int           count       = 0;
-
-        writeMethod   = out.getTosClass().getMethod(WRITE_METHOD);
-        methodArgs[0] = out;
-        methodArgs[1] = WRITE_METHOD;
-        methodArgs[2] = byteArray;
-
-        if (_input == null) {
-            String msg = "stream has not been opened for reading bytes";
-            throw new SIOException(msg);
-        }
-
-        while ( (count=_input.read(buffer)) > 0 ) {
-            byteArray.setContents(buffer, 0, count);
-            writeMethod.exec(out, context, methodArgs);
-        }
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * @param totalBytesToCopy The maximum number of bytes to copy.
- *
- * @return The number of bytes that was actually copied.
- *
- **************************************************************************/
-
-    public int copyTo(final SContext context,
-                      final STosObj  out,
-                      final int      totalBytesToCopy)
-        throws IOException,
-               STeaException {
-
-        SObjFunction  writeMethod = null;
-        SObjByteArray byteArray   = new SObjByteArray();
-        Object[]      methodArgs  = new Object[3];
-        byte[]        buffer      = new byte[BUFFER_SIZE];
-        int           totalRead   = 0;
-        int           count       = 0;
-        int           total       = totalBytesToCopy;
-
-        writeMethod   = out.getTosClass().getMethod(WRITE_METHOD);
-        methodArgs[0] = out;
-        methodArgs[1] = WRITE_METHOD;
-        methodArgs[2] = byteArray;
-
-        if (_input == null) {
-            String msg = "stream has not been opened for reading bytes";
-            throw new SIOException(msg);
-        }
-
-        while ( total > 0 ) {
-            int bytesToRead = (total>BUFFER_SIZE) ? BUFFER_SIZE : total;
-            if ( (count=_input.read(buffer, 0, bytesToRead)) < 0 ) {
-                break;
-            }
-            byteArray.setContents(buffer, 0, count);
-            writeMethod.exec(out, context, methodArgs);
-            total     -= count;
-            totalRead += count;
-        }
-
-        return totalRead;
     }
 
 
@@ -640,16 +379,6 @@ public class SInput
 
     public void close()
         throws IOException {
-
-        if ( _input != null ) {
-            try {
-                _input.close();
-            } catch (IOException e) {
-                _input = null;
-                throw e;
-            }
-            _input = null;
-        }
 
         if ( _inputReader != null ) {
             try {
