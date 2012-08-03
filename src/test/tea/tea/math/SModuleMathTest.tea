@@ -1,0 +1,187 @@
+###########################################################################
+#
+# Copyright (c) 2011-2012 PDMFC, All Rights Reserved.
+#
+#
+# TUnit tests for functions in the tea.string module.
+#
+###########################################################################
+
+
+
+
+
+###########################################################################
+#
+# Utility function for creating testsuits for numeric comparison
+# functions.
+#
+###########################################################################
+
+define build-numeric-comparison-testsuit \
+        ( testSuitName teaFunction ltValue eqValue gtValue ) {
+
+    tunit-testsuite $testSuitName {
+
+        tunit-test cmpLt1 {
+            tunit-assert-equals $ltValue [$teaFunction 1 2]
+        }
+        tunit-test cmpLt2 {
+            tunit-assert-equals $ltValue [$teaFunction 1.0 2]
+        }
+        tunit-test cmpLt3 {
+            tunit-assert-equals $ltValue [$teaFunction 1 2.0]
+        }
+        tunit-test cmpLt4 {
+            tunit-assert-equals $ltValue [$teaFunction 1.0 2.0]
+        }
+        tunit-test cmpLt5 {
+            tunit-assert-equals $ltValue [$teaFunction 1 2 3 4]
+        }
+
+        tunit-test cmpEq1 {
+            tunit-assert-equals $eqValue [$teaFunction 1 1]
+        }
+        tunit-test cmpEq2 {
+            tunit-assert-equals $eqValue [$teaFunction 1.0 1]
+        }
+        tunit-test cmpEq3 {
+            tunit-assert-equals $eqValue [$teaFunction 1 1.0]
+        }
+        tunit-test cmpEq4 {
+            tunit-assert-equals $eqValue [$teaFunction 1.0 1.0]
+        }
+        tunit-test cmpEq5 {
+            tunit-assert-equals $eqValue [$teaFunction 1 1 1 1]
+        }
+
+        tunit-test cmpGt1 {
+            tunit-assert-equals $gtValue [$teaFunction 2 1]
+        }
+        tunit-test cmpGt2 {
+            tunit-assert-equals $gtValue [$teaFunction 2.0 1]
+        }
+        tunit-test cmpGt3 {
+            tunit-assert-equals $gtValue [$teaFunction 2 1.0]
+        }
+        tunit-test cmpGt4 {
+            tunit-assert-equals $gtValue [$teaFunction 2.0 1.0]
+        }
+        tunit-test cmpGt5 {
+            tunit-assert-equals $gtValue [$teaFunction 2 1 0 -1]
+        }
+
+        tunit-test-error tooFewArgs0 {
+            $teaFunction
+        }
+
+        tunit-test-error tooFewArgs1 {
+            $teaFunction 1
+        }
+
+        tunit-test-error invalidArgType1 {
+            $teaFunction "a" 1
+        }
+
+        tunit-test-error invalidArgType2 {
+            $teaFunction 1 "a"
+        }
+
+    }
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+build-numeric-comparison-testsuit \
+        ==-test \
+        $== \
+        $false \
+        $true \
+        $false
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+build-numeric-comparison-testsuit \
+        !=-test \
+        $!= \
+        $true \
+        $false \
+        $true
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+build-numeric-comparison-testsuit \
+        >=-test \
+        $>= \
+        $false \
+        $true \
+        $true
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+build-numeric-comparison-testsuit \
+        <-test \
+        $< \
+        $true \
+        $false \
+        $false
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+build-numeric-comparison-testsuit \
+        <=-test \
+        $<= \
+        $false \
+        $true \
+        $true
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
