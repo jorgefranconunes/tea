@@ -68,17 +68,21 @@ public final class SModuleMath
      */
     public static final Integer MINUS_ONE = Integer.valueOf(-1);
 
-    private static final int EQ = 1;
-    private static final int NE = 2;
-    private static final int LT = 3;
-    private static final int LE = 4;
-    private static final int GT = 5;
-    private static final int GE = 6;
+    private enum Comparison {
+        EQ,
+        NE,
+        LT,
+        LE,
+        GT,
+        GE
+    };
 
-    private static final int ADD = 1;
-    private static final int SUB = 2;
-    private static final int MUL = 3;
-    private static final int DIV = 4;
+    private enum ArithOp {
+        ADD,
+        SUB,
+        MUL,
+        DIV
+    };
 
     private static final SComparator C_GT = new SGt();
     private static final SComparator C_LT = new SLt();
@@ -610,7 +614,7 @@ public final class SModuleMath
                                      final Object[]     args)
         throws STeaException {
 
-        return compare(EQ, func, context, args);
+        return compare(Comparison.EQ, func, context, args);
     }
 
 
@@ -656,7 +660,7 @@ public final class SModuleMath
                                      final Object[]     args)
         throws STeaException {
 
-        return compare(NE, func, context, args);
+        return compare(Comparison.NE, func, context, args);
     }
 
 
@@ -702,7 +706,7 @@ public final class SModuleMath
                                      final Object[]     args)
         throws STeaException {
 
-        return compare(GT, func, context, args);
+        return compare(Comparison.GT, func, context, args);
     }
 
 
@@ -749,7 +753,7 @@ public final class SModuleMath
                                      final Object[]     args)
         throws STeaException {
 
-        return compare(GE, func, context, args);
+        return compare(Comparison.GE, func, context, args);
     }
 
 
@@ -795,7 +799,7 @@ public final class SModuleMath
                                      final Object[]     args)
         throws STeaException {
 
-        return compare(LT, func, context, args);
+        return compare(Comparison.LT, func, context, args);
     }
 
 
@@ -842,7 +846,7 @@ public final class SModuleMath
                                      final Object[]     args)
         throws STeaException {
 
-        return compare(LE, func, context, args);
+        return compare(Comparison.LE, func, context, args);
     }
 
 
@@ -855,15 +859,13 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    private static Object compare(final int          compOp,
+    private static Object compare(final Comparison   compOp,
                                   final SObjFunction func,
                                   final SContext     context,
                                   final Object[]     args)
         throws STeaException {
 
-        if ( args.length<3 ) {
-            throw new SNumArgException(args, "num1 num2 ...");
-        }
+        SArgs.checkCountAtLeast(args, 3, "num1 num2 ...");
 
         Object  op1         = args[1];
         boolean op1IsInt    = op1 instanceof Integer;
@@ -921,9 +923,9 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    private static boolean compareI(final int compOp,
-                                    final int op1,
-                                    final int op2) {
+    private static boolean compareI(final Comparison compOp,
+                                    final int        op1,
+                                    final int        op2) {
 
         switch ( compOp ) {
         case EQ : return op1 == op2;
@@ -933,6 +935,7 @@ public final class SModuleMath
         case LT : return op1 < op2;
         case LE : return op1 <= op2;
         }
+
         return false;
     }
 
@@ -946,9 +949,9 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    private static boolean compareF(final int    compOp,
-                                    final double op1,
-                                    final double op2) {
+    private static boolean compareF(final Comparison compOp,
+                                    final double     op1,
+                                    final double     op2) {
 
         switch ( compOp ) {
         case EQ : return op1 == op2;
@@ -957,9 +960,9 @@ public final class SModuleMath
         case GE : return op1 >= op2;
         case LT : return op1 < op2;
         case LE : return op1 <= op2;
-        default :
-            throw new IllegalArgumentException(String.valueOf(compOp));
         }
+
+        return false;
     }
 
 
@@ -1004,7 +1007,7 @@ public final class SModuleMath
                                       final Object[]     args)
         throws STeaException {
 
-        return arithmOp(ADD, func, context, args);
+        return arithmOp(ArithOp.ADD, func, context, args);
     }
 
 
@@ -1050,7 +1053,7 @@ public final class SModuleMath
                                       final Object[]     args)
         throws STeaException {
 
-        return arithmOp(SUB, func, context, args);
+        return arithmOp(ArithOp.SUB, func, context, args);
     }
 
 
@@ -1095,7 +1098,7 @@ public final class SModuleMath
                                       final Object[]     args)
         throws STeaException {
 
-        return arithmOp(MUL, func, context, args);
+        return arithmOp(ArithOp.MUL, func, context, args);
     }
 
 
@@ -1141,7 +1144,7 @@ public final class SModuleMath
                                       final Object[]     args)
         throws STeaException {
 
-        return arithmOp(DIV, func, context, args);
+        return arithmOp(ArithOp.DIV, func, context, args);
     }
 
 
@@ -1154,7 +1157,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    private static Object arithmOp(final int          op,
+    private static Object arithmOp(final ArithOp      op,
                                    final SObjFunction func,
                                    final SContext     context,
                                    final Object[]     args)
@@ -1180,7 +1183,7 @@ public final class SModuleMath
             SArithmeticException.raise(args, e);
         }
         
-        throw new STypeException(args, 1, "int or a float");
+        throw new STypeException(args, 1, "numeric");
     }
 
 
@@ -1193,7 +1196,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    private static Object calcIntOp(final int      op,
+    private static Object calcIntOp(final ArithOp  op,
                                     final int      input,
                                     final Object[] args,
                                     final int      first)
@@ -1215,7 +1218,7 @@ public final class SModuleMath
                                        args,
                                        i+1);
                 } else {
-                    throw new STypeException(args, i, "float or an int");
+                    throw new STypeException(args, i, "numeric");
                 }
             }
         }
@@ -1233,7 +1236,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    private static Object calcFloatOp(final int      op,
+    private static Object calcFloatOp(final ArithOp  op,
                                       final double   input,
                                       final Object[] args,
                                       final int      first)
@@ -1247,7 +1250,7 @@ public final class SModuleMath
             if ( operand instanceof Number ) {
                 result = doOp(op, result, ((Number)operand).doubleValue());
             } else {
-                throw new STypeException(args, i, "float or an int");
+                throw new STypeException(args, i, "numeric");
             }
         }
 
@@ -1264,15 +1267,15 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    private static int doOp(final int op,
-                            final int op1,
-                            final int op2) {
+    private static int doOp(final ArithOp operator,
+                            final int     operand1,
+                            final int     operand2) {
 
-        switch ( op ) {
-        case ADD : return op1+op2;
-        case SUB : return op1-op2;
-        case MUL : return op1*op2;
-        case DIV : return op1/op2;
+        switch ( operator ) {
+        case ADD : return operand1 + operand2;
+        case SUB : return operand1 - operand2;
+        case MUL : return operand1 * operand2;
+        case DIV : return operand1 / operand2;
         }
         return 0;
     }
@@ -1287,15 +1290,15 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    private static double doOp(final int    op,
-                               final double op1,
-                               final double op2) {
+    private static double doOp(final ArithOp operator,
+                               final double  operand1,
+                               final double  operand2) {
 
-        switch ( op ) {
-        case ADD : return op1+op2;
-        case SUB : return op1-op2;
-        case MUL : return op1*op2;
-        case DIV : return op1/op2;
+        switch ( operator ) {
+        case ADD : return operand1 + operand2;
+        case SUB : return operand1 - operand2;
+        case MUL : return operand1 * operand2;
+        case DIV : return operand1 / operand2;
         }
         return 0.0;
     }
@@ -1313,9 +1316,9 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    private static Object opNullValue(final int op) {
+    private static Object opNullValue(final ArithOp operator) {
 
-        switch ( op ) {
+        switch ( operator ) {
         case ADD :
         case SUB : return ZERO;
         case MUL :
@@ -1346,7 +1349,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    private static Object unaryOp(final int      op,
+    private static Object unaryOp(final ArithOp  operator,
                                   final Object[] args)
         throws STeaException {
 
@@ -1354,13 +1357,13 @@ public final class SModuleMath
         Object operand = args[1];
 
         if ( operand instanceof Integer ) {
-            if ( op == SUB ) {
+            if ( operator == ArithOp.SUB ) {
                 result = Integer.valueOf(-((Integer)operand).intValue());
             } else {
                 result = operand;
             }
         } else if ( operand instanceof Double ) {
-            if ( op == SUB ) {
+            if ( operator == ArithOp.SUB ) {
                 result = new Double(-((Double)operand).doubleValue());
             } else {
                 result = operand;
@@ -1463,7 +1466,7 @@ public final class SModuleMath
 //*     do-whatever
 //* }
 //* </Code>
-//* the second condition may only be evaluated if the first condition is
+//* the second condition will only be evaluated if the first condition is
 //* true. The use of code blocks as arguments insures that the <Func
 //* name="and"/> function behaves the intended way.
 //* 

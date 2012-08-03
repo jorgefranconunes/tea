@@ -152,6 +152,23 @@ build-numeric-comparison-testsuit \
 ###########################################################################
 
 build-numeric-comparison-testsuit \
+        >-test \
+        $> \
+        $false \
+        $false \
+        $true
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+build-numeric-comparison-testsuit \
         <-test \
         $< \
         $true \
@@ -171,9 +188,183 @@ build-numeric-comparison-testsuit \
 build-numeric-comparison-testsuit \
         <=-test \
         $<= \
-        $false \
         $true \
-        $true
+        $true \
+        $false
+
+
+
+
+
+###########################################################################
+#
+# Utility function for creating testsuits for functions implementing
+# arithmetic operations.
+#
+###########################################################################
+
+define build-arith-op-testsuit \
+        ( testSuitName teaFunction testValuesList ) {
+
+    tunit-testsuite $testSuitName {
+        
+        tunit-test arithOp {
+            
+            foreach testValues $testValuesList {
+                map define ( expectedResult operandList ) $testValues
+                define actualResult [apply $teaFunction $operandList]
+                
+                tunit-assert-equals $expectedResult $actualResult
+            }
+        }
+
+        tunit-test-error invalidArgType1 {
+            $teaFunction "a"
+        }
+
+        tunit-test-error invalidArgType2 {
+            $teaFunction 1 "a"
+        }
+
+        tunit-test-error invalidArgType2 {
+            $teaFunction 1.0 "a"
+        }
+
+    }
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+build-arith-op-testsuit \
+        +-test \
+        $+ \
+        (
+            ( 0   () )
+            ( 1   ( 1 ) )
+            ( 1.0 ( 1.0 ) )
+            ( 3   ( 1   2 ) )
+            ( 6   ( 1   2   3) )
+            ( 1.2 ( 1   0.2 ) )
+            ( 1.5 ( 1   0.2 0.3 ) )
+            ( 1.2 ( 0.2 1 ) )
+            ( 1.2 ( 1.0 0.2 ) )
+            ( 1.5 ( 1.0 0.2 0.3 ) )
+)
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+build-arith-op-testsuit \
+        --test \
+        $- \
+        (
+            ( 0    () )
+            ( 1    ( -1 ) )
+            ( 1.0  ( -1.0 ) )
+            ( -1   ( 1   2 ) )
+            ( -4   ( 1   2   3) )
+            ( 0.8  ( 1   0.2 ) )
+            ( 0.5  ( 1   0.2 0.3 ) )
+            ( -0.8 ( 0.2 1 ) )
+            ( 0.8  ( 1.0 0.2 ) )
+            ( 0.5  ( 1.0 0.2 0.3 ) )
+)
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+build-arith-op-testsuit \
+        *-test \
+        $* \
+        (
+            ( 1    () )
+            ( 1    ( 1 ) )
+            ( 1.0  ( 1.0 ) )
+            ( 2    ( 1   2 ) )
+            ( 6    ( 1   2   3) )
+            ( 0.2  ( 1   0.2 ) )
+            ( 0.06 ( 1   0.2 0.3 ) )
+            ( 0.2  ( 0.2 1 ) )
+            ( 0.2  ( 1.0 0.2 ) )
+            ( 0.06 ( 1.0 0.2 0.3 ) )
+)
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+build-arith-op-testsuit \
+        /-test \
+        $/ \
+        (
+            ( 1    () )
+            ( 1    ( 1 ) )
+            ( 1.0  ( 1.0 ) )
+            ( 0    ( 1   2 ) )
+            ( 2    ( 2   1 ) )
+            ( 1    ( 2 1 2 ) )
+            ( 2.0  ( 4 2.0 ) )
+            ( 2.0  ( 4 2 1.0 ) )
+            ( 0.2  ( 0.2 1 ) )
+            ( 2.0  ( 0.2 0.1 ) )
+            ( 10.0 ( 1.0 0.2 0.5 ) )
+)
+
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite div-by-zero-test {
+
+    tunit-test-error divByZero1 {
+        / 1 0
+    }
+
+    tunit-test-error divByZero5 {
+        / 4 2 0
+    }
+
+    tunit-test-error divByZero6 {
+        / 4 0 2
+    }
+
+}
+
 
 
 
