@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2011-2012 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -15,7 +15,7 @@ import com.pdmfc.tea.runtime.SRuntimeException;
 
 /**************************************************************************
  *
- * 
+ * Signals an arithmetic error has occurred.
  *
  **************************************************************************/
 
@@ -27,7 +27,7 @@ public final class SArithmeticException
 
 /**************************************************************************
  *
- * 
+ * Instances of this object are only created by us.
  *
  **************************************************************************/
 
@@ -41,7 +41,12 @@ public final class SArithmeticException
 
 /**************************************************************************
  *
- * 
+ * Throws an exception properly initialized.
+ *
+ * @param args The arguments passed to the function that is raising
+ * the arithmetic exception.
+ *
+ * @param exception The underlying Java runtime arithmetic exception.
  *
  **************************************************************************/
 

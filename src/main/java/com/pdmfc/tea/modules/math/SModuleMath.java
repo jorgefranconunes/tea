@@ -581,8 +581,8 @@ public final class SModuleMath
 
 //* 
 //* <TeaFunction name="=="
-//*                 arguments="[value1 ...]"
-//*             module="tea.math">
+//*              arguments="[value1 ...]"
+//*              module="tea.math">
 //*
 //* <Overview>
 //* Compares two numeric values for equality.
@@ -623,8 +623,8 @@ public final class SModuleMath
 
 //* 
 //* <TeaFunction name="!="
-//*                 arguments="value1 value2"
-//*             module="tea.math">
+//*              arguments="value1 value2"
+//*              module="tea.math">
 //*
 //* <Overview>
 //* Compares two numeric values for non-equality.
@@ -669,8 +669,8 @@ public final class SModuleMath
 
 //* 
 //* <TeaFunction name="&gt;"
-//*                 arguments="value1 value2"
-//*             module="tea.math">
+//*              arguments="value1 value2"
+//*              module="tea.math">
 //*
 //* <Overview>
 //* Compares two numeric values.
@@ -715,8 +715,8 @@ public final class SModuleMath
 
 //* 
 //* <TeaFunction name="&gt;="
-//*                 arguments="value1 value2"
-//*             module="tea.math">
+//*              arguments="value1 value2"
+//*              module="tea.math">
 //*
 //* <Overview>
 //* Compares two numeric values.
@@ -762,8 +762,8 @@ public final class SModuleMath
 
 //* 
 //* <TeaFunction name="&lt;"
-//*                 arguments="value1 value2"
-//*             module="tea.math">
+//*              arguments="value1 value2"
+//*              module="tea.math">
 //*
 //* <Overview>
 //* Compares two numeric values.
@@ -808,8 +808,8 @@ public final class SModuleMath
 
 //* 
 //* <TeaFunction name="&lt;="
-//*                 arguments="value1 value2"
-//*             module="tea.math">
+//*              arguments="value1 value2"
+//*              module="tea.math">
 //*
 //* <Overview>
 //* Compares two numeric values.
@@ -971,8 +971,8 @@ public final class SModuleMath
 
 //* 
 //* <TeaFunction name="+"
-//*                 arguments="[value ...]"
-//*             module="tea.math">
+//*              arguments="[value ...]"
+//*              module="tea.math">
 //*
 //* <Overview>
 //* Calculates the sum of its arguments.
@@ -1016,8 +1016,8 @@ public final class SModuleMath
 
 //* 
 //* <TeaFunction name="-"
-//*                 arguments="[value ...]"
-//*             module="tea.math">
+//*              arguments="[value ...]"
+//*              module="tea.math">
 //*
 //* <Overview>
 //* Calculates the difference between two values.
@@ -1062,8 +1062,8 @@ public final class SModuleMath
 
 //* 
 //* <TeaFunction name="*"
-//*                 arguments="[value ...]"
-//*             module="tea.math">
+//*              arguments="[value ...]"
+//*              module="tea.math">
 //*
 //* <Overview>
 //* Calculates the product of a set of values.
@@ -1107,8 +1107,8 @@ public final class SModuleMath
 
 //* 
 //* <TeaFunction name="/"
-//*                 arguments="[value ...]"
-//*             module="tea.math">
+//*              arguments="[value ...]"
+//*              module="tea.math">
 //*
 //* <Overview>
 //* Calculates the quocient of two values.
@@ -1381,8 +1381,8 @@ public final class SModuleMath
 
 //* 
 //* <TeaFunction name="%"
-//*                 arguments="dividend divisor"
-//*             module="tea.math">
+//*              arguments="dividend divisor"
+//*              module="tea.math">
 //*
 //* <Overview>
 //* Calculates the remainder of an integer division.
@@ -1439,15 +1439,15 @@ public final class SModuleMath
 
 //* 
 //* <TeaFunction name="and"
-//*                 arguments="[obj1 ...]"
-//*             module="tea.math">
+//*              arguments="[arg ...]"
+//*              module="tea.math">
 //*
 //* <Overview>
 //* Calculates the logical conjunction of a set of boolean values.
 //* </Overview>
 //*
-//* <Parameter name="obj1">
-//* A boolean object or a block that evaluates to a boolean value.
+//* <Parameter name="arg">
+//* A boolean value or a block that evaluates to a boolean value.
 //* </Parameter>
 //*
 //* <Returns>
@@ -1456,12 +1456,12 @@ public final class SModuleMath
 //* </Returns>
 //*
 //* <Description>
-//* The <Func name="and"/> can receive code blocks as arguments. The
+//* The <Func name="and"/> function can receive code blocks as arguments. The
 //* arguments are inspected from left to right. If one argument is a code
-//* block then it is evalueted and the result must be a boolean object. If
+//* block then it is evaluated and the result must be a boolean object. If
 //* that code bock evaluated to false then no more arguements are
 //* checked. That means that if there are more arguments that are code
-//* blocks then tey will not be evaluated. This is usefull if you have a
+//* blocks then they will not be evaluated. This is usefull if you have a
 //* condition that may only be evaluated if a previous condition is
 //* true. For example:
 //* 
@@ -1494,7 +1494,7 @@ public final class SModuleMath
                                       final Object[]     args)
         throws STeaException {
 
-        for ( int i=1; i<args.length; i++ ) {
+        for ( int i=1, count=args.length; i<count; i++ ) {
             Object obj = args[i];
 
             if ( obj instanceof SObjBlock ) {
@@ -1502,6 +1502,9 @@ public final class SModuleMath
             }
             if ( obj instanceof Boolean ) {
                 if ( !((Boolean)obj).booleanValue() ) {
+                    // One of the arguments evaluated to false. We
+                    // will return from this function and will not
+                    // evaluate the remaining arguments.
                     return obj;
                 }
             } else {
@@ -1554,10 +1557,6 @@ public final class SModuleMath
                                      final Object[]     args)
         throws STeaException {
 
-        if ( args.length < 2 ) {
-            throw new SNumArgException(args, "exp1 ...");
-        }
-
         for ( int i=1; i<args.length; i++ ) {
             Object obj = args[i];
 
@@ -1566,6 +1565,9 @@ public final class SModuleMath
             }
             if ( obj instanceof Boolean ) {
                 if ( ((Boolean)obj).booleanValue() ) {
+                    // One of the arguments evaluated to true. We
+                    // will return from this function and will not
+                    // evaluate the remaining arguments.
                     return Boolean.TRUE;
                 }
             } else {

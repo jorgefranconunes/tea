@@ -414,3 +414,71 @@ tunit-testsuite %-test {
 #
 ###########################################################################
 
+tunit-testsuite and-test {
+    
+    tunit-test andOk0 {
+        tunit-assert-equals $true [and]
+    }
+    
+    tunit-test andOk1 {
+        tunit-assert-equals $true [and $true]
+    }
+    
+    tunit-test andOk2 {
+        tunit-assert-equals $true [and $true $true]
+    }
+    
+    tunit-test andOk3 {
+        tunit-assert-equals $false [and $true $false]
+    }
+    
+    tunit-test andOk4 {
+        tunit-assert-equals $false [and $false $true]
+    }
+    
+    tunit-test andWithBlock1 {
+        tunit-assert-equals $true [and {is $true}]
+    }
+    
+    tunit-test andWithBlock2 {
+        tunit-assert-equals $false [and $true {is $false}]
+    }
+    
+    tunit-test andWithBlock3 {
+        define myVar 10
+        
+        tunit-assert-equals $false [and $false {set! myVar 20; is $true}]
+        tunit-assert-equals 10 $myVar
+    }
+    
+    tunit-test andWithBlock4 {
+        define myVar 10
+        
+        tunit-assert-equals $true [and $true {set! myVar 20; is $true}]
+        tunit-assert-equals 20 $myVar
+    }
+    
+    tunit-test andWithBlock5 {
+        define myVar1 10
+        define myVar2 15
+        
+        tunit-assert-equals \
+                $false \
+                [and {set! myVar1 20; is $false} {set! myVar2 25; is $true}]
+        tunit-assert-equals 20 $myVar1
+        tunit-assert-equals 15 $myVar2
+    }
+    
+}
+
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
