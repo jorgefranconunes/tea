@@ -68,6 +68,12 @@ public final class SModuleMath
      */
     public static final Integer MINUS_ONE = Integer.valueOf(-1);
 
+    
+    /**
+     *
+     * Types of numeric comparisons.
+     *
+     */
     private enum Comparison {
         EQ,
         NE,
@@ -77,6 +83,12 @@ public final class SModuleMath
         GE
     };
 
+
+    /**
+     *
+     * Types of arithmetic operations.
+     *
+     */
     private enum ArithOp {
         ADD,
         SUB,
@@ -928,15 +940,21 @@ public final class SModuleMath
                                     final int        op2) {
 
         switch ( compOp ) {
-        case EQ : return op1 == op2;
-        case NE : return op1 != op2;
-        case GT : return op1 > op2;
-        case GE : return op1 >= op2;
-        case LT : return op1 < op2;
-        case LE : return op1 <= op2;
+        case EQ :
+            return op1 == op2;
+        case NE :
+            return op1 != op2;
+        case GT :
+            return op1 > op2;
+        case GE :
+            return op1 >= op2;
+        case LT :
+            return op1 < op2;
+        case LE :
+            return op1 <= op2;
+        default :
+            throw new IllegalArgumentException(compOp.toString());
         }
-
-        return false;
     }
 
 
@@ -954,15 +972,21 @@ public final class SModuleMath
                                     final double     op2) {
 
         switch ( compOp ) {
-        case EQ : return op1 == op2;
-        case NE : return op1 != op2;
-        case GT : return op1 > op2;
-        case GE : return op1 >= op2;
-        case LT : return op1 < op2;
-        case LE : return op1 <= op2;
+        case EQ :
+            return op1 == op2;
+        case NE :
+            return op1 != op2;
+        case GT :
+            return op1 > op2;
+        case GE :
+            return op1 >= op2;
+        case LT :
+            return op1 < op2;
+        case LE :
+            return op1 <= op2;
+        default :
+            throw new IllegalArgumentException(compOp.toString());
         }
-
-        return false;
     }
 
 
@@ -1272,12 +1296,17 @@ public final class SModuleMath
                             final int     operand2) {
 
         switch ( operator ) {
-        case ADD : return operand1 + operand2;
-        case SUB : return operand1 - operand2;
-        case MUL : return operand1 * operand2;
-        case DIV : return operand1 / operand2;
+        case ADD :
+            return operand1 + operand2;
+        case SUB :
+            return operand1 - operand2;
+        case MUL :
+            return operand1 * operand2;
+        case DIV :
+            return operand1 / operand2;
+        default :
+            throw new IllegalArgumentException(operator.toString());
         }
-        return 0;
     }
 
 
@@ -1295,12 +1324,17 @@ public final class SModuleMath
                                final double  operand2) {
 
         switch ( operator ) {
-        case ADD : return operand1 + operand2;
-        case SUB : return operand1 - operand2;
-        case MUL : return operand1 * operand2;
-        case DIV : return operand1 / operand2;
+        case ADD :
+            return operand1 + operand2;
+        case SUB :
+            return operand1 - operand2;
+        case MUL :
+            return operand1 * operand2;
+        case DIV :
+            return operand1 / operand2;
+        default :
+            throw new IllegalArgumentException(operator.toString());
         }
-        return 0.0;
     }
 
 
@@ -1320,11 +1354,16 @@ public final class SModuleMath
 
         switch ( operator ) {
         case ADD :
-        case SUB : return ZERO;
+            return ZERO;
+        case SUB :
+            return ZERO;
         case MUL :
-        case DIV : return ONE;
+            return ONE;
+        case DIV :
+            return ONE;
+        default :
+            throw new IllegalArgumentException(operator.toString());
         }
-        return  ZERO;
     }
 
 
@@ -1521,14 +1560,14 @@ public final class SModuleMath
 
 //* 
 //* <TeaFunction name="or"
-//*                 arguments="[obj1 ...]"
-//*             module="tea.math">
+//*              arguments="[arg ...]"
+//*              module="tea.math">
 //*
 //* <Overview>
 //* Calculates the logical disjunction of a set of boolean values.
 //* </Overview>
 //*
-//* <Parameter name="obj1">
+//* <Parameter name="arg">
 //* A boolean object or a block that evaluates to a boolean value.
 //* </Parameter>
 //*
@@ -1557,7 +1596,7 @@ public final class SModuleMath
                                      final Object[]     args)
         throws STeaException {
 
-        for ( int i=1; i<args.length; i++ ) {
+        for ( int i=1, count=args.length; i<count; i++ ) {
             Object obj = args[i];
 
             if ( obj instanceof SObjBlock ) {
