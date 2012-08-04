@@ -1179,7 +1179,7 @@ public final class SModuleMath
             if ( operand instanceof Double ) {
                 return calcFloatOp(op, ((Double)operand).doubleValue(),args,2);
             }
-        } catch (ArithmeticException e) {
+        } catch ( ArithmeticException e ) {
             SArithmeticException.raise(args, e);
         }
         
@@ -1418,13 +1418,17 @@ public final class SModuleMath
                                       final Object[]     args)
         throws STeaException {
 
-        if ( args.length != 3 ) {
-            throw new SNumArgException(args, "dividend divisor");
-        }
+        SArgs.checkCount(args, 3, "dividend divisor");
 
         int dividend = SArgs.getInt(args,1).intValue();
         int divisor  = SArgs.getInt(args,2).intValue();
-        int result   = dividend % divisor;
+        int result   = 0;
+
+        try {
+            result = dividend % divisor;
+        } catch ( ArithmeticException e ) {
+            SArithmeticException.raise(args, e);
+        }
 
         return Integer.valueOf(result);
     }

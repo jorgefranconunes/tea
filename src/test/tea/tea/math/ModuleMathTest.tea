@@ -376,3 +376,41 @@ tunit-testsuite div-by-zero-test {
 #
 ###########################################################################
 
+tunit-testsuite %-test {
+    
+    tunit-test modOk {
+        tunit-assert-equals 3 [% 7 4]
+    }
+
+    tunit-test-error tooFewArgs1 {
+        %
+    }
+
+    tunit-test-error tooFewArgs2 {
+        % 7
+    }
+
+    tunit-test-error invalidArgType1 {
+        % "7" 4
+    }
+
+    tunit-test-error invalidArgType2 {
+        % 7 "4"
+    }
+    
+    tunit-test-error divByZero {
+        % 7 0
+    }
+}
+
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
