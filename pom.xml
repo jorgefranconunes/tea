@@ -48,11 +48,11 @@ details on performing a build.
     <tea.teadoc.header><![CDATA[Tea ${BUILD_VERSION} Reference Documentation<b>&copy; 2012 <a href="http://www.pdmfc.com">PDM&amp;FC</a>]]></tea.teadoc.header>
     <tea.teadoc.footer>${tea.teadoc.header}</tea.teadoc.footer>
     <tea.teadoc.bottom><![CDATA[<font size="-1"><a href="mailto:info@pdmfc.com">Report a bug or request new features</a></font><br /><font size="-1">&copy; 2012</font> <a href="http://www.pdmfc.com"><img align="absmiddle" border="0" src="LogoSmallPdmfc.png"></a>]]></tea.teadoc.bottom>
-  <tea.teadoc.doctitle>Tea ${BUILD_VERSION} Reference Documentation</tea.teadoc.doctitle>
-  <tea.teadoc.windowtitle>${tea.teadoc.doctitle}</tea.teadoc.windowtitle>
+    <tea.teadoc.doctitle>Tea ${BUILD_VERSION} Reference Documentation</tea.teadoc.doctitle>
+    <tea.teadoc.windowtitle>${tea.teadoc.doctitle}</tea.teadoc.windowtitle>
 
-  <!-- The following are used when generating Javadoc
-       documentation. -->
+    <!-- The following are used when generating Javadoc
+         documentation. -->
   <tea.javadoc.header><![CDATA[<b>Tea Java Runtime API</b><br /><b>Version ${project.version}</b>]]></tea.javadoc.header>
   <tea.javadoc.bottom><![CDATA[<font size="-1">&copy; 2012 <a href="http://www.pdmfc.com" target="_blank">PDMFC</a>, All Rights Reserved.</font>]]></tea.javadoc.bottom>
   <tea.javadoc.doctitle>${project.name} ${project.version}</tea.javadoc.doctitle>
@@ -86,12 +86,12 @@ details on performing a build.
         <version>1.9.4.1</version>
       </dependency>
 
-    <!-- Derby DB engine. Used only in unit tests. -->
-    <dependency>
-      <groupId>org.apache.derby</groupId>
-      <artifactId>derby</artifactId>
+      <!-- Derby DB engine. Used only in unit tests. -->
+      <dependency>
+        <groupId>org.apache.derby</groupId>
+        <artifactId>derby</artifactId>
         <version>10.9.1.0</version>
-    </dependency>
+      </dependency>
 
     </dependencies>
   </dependencyManagement>
@@ -242,6 +242,26 @@ details on performing a build.
 
     <!--  -->
     <plugins>
+
+
+      <!--  -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <systemProperties>
+
+            <!-- This ensures that if the embeded Derby DB is used in
+                 JUnit tests it will create its log file under the
+                 "target" folder. -->
+            <property>
+              <name>derby.stream.error.file</name>
+              <value>${project.build.directory}/derby.log</value>
+            </property>
+
+          </systemProperties>
+        </configuration>
+      </plugin>
 
 
       <!-- Add the Tea library source files to the resources included
@@ -447,6 +467,7 @@ details on performing a build.
                   <classpathScope>test</classpathScope>
                   <executable>${java.home}/bin/java</executable>
                   <arguments>
+                    <argument>-Dderby.stream.error.file=${project.build.directory}/derby.log</argument>
                     <argument>-classpath</argument>
                     <classpath />
                     <argument>com.pdmfc.tea.tools.runner.STeaRunner</argument>
@@ -758,7 +779,7 @@ details on performing a build.
 
   <description>The Tea scripting language.</description>
 
-  <url>https://redmine.pdmfc.com/projects/tea/wiki</url>
+  <url>https://github.com/jorgefranconunes/tea</url>
 
   <inceptionYear>1997</inceptionYear>
 
@@ -768,19 +789,14 @@ details on performing a build.
   </organization>
 
   <issueManagement>
-    <system>Redmine</system>
-    <url>https://redmine.pdmfc.com/projects/tea/issues</url>
+    <system>Github</system>
+    <url>https://github.com/jorgefranconunes/tea/issues</url>
   </issueManagement>
 
-  <ciManagement>
-    <system>jenkins</system>
-    <url>https://ci.pdmfc.com/jenkins/job/Tea/</url>
-  </ciManagement>
-
   <scm>
-    <developerConnection>scm:svn:svn+ssh://ssh.pdmfc.com/opt/svnroot/tea/trunk</developerConnection>
+    <developerConnection>scm:git:git://github.com/jorgefranconunes/tea.git</developerConnection>
     <tag>HEAD</tag>
-    <url>https://redmine.pdmfc.com/projects/tea/repository/show/trunk</url>
+    <url>https://github.com/jorgefranconunes/tea</url>
   </scm>
 
   <mailingLists>

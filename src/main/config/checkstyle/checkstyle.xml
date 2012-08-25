@@ -5,7 +5,7 @@
 
 <!--
 
-Checkstyle configuration for the DTrader project.
+Checkstyle configuration for the Tea project.
 
 Adaped from the "sun_checks.xml" from the Checkstyle 5.3 distribution.
 
@@ -20,7 +20,7 @@ Adaped from the "sun_checks.xml" from the Checkstyle 5.3 distribution.
         <property name="basedir" value="${basedir}"/>
     -->
 
-    <!-- Checks that a package-info.java file exists for each package.     -->
+    <!-- Checks that a package-info.java file exists for each package.   -->
     <!-- See http://checkstyle.sf.net/config_javadoc.html#JavadocPackage -->
     <module name="JavadocPackage"/>
 

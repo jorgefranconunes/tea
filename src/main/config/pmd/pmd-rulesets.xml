@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <!--
-PMD rulesets for the DTrader project.
+PMD rulesets for the Tea project.
 
 For information on configuring PMD rule sets see
 http://pmd.sourceforge.net/howtomakearuleset.html
@@ -22,8 +22,9 @@ PMD rule set for Java code in the DTrader project.
 
 
   <!-- See http://pmd.sourceforge.net/rules/basic.html for a
-  descriptions of all rules in this ruleset. We explicitly enumerate
-  all "basic" rules because we have to configure some of them. -->
+       descriptions of all rules in this ruleset. We explicitly
+       enumerate all "basic" rules because we have to configure some
+       of them. -->
 
   <rule ref="rulesets/basic.xml">
     <exclude name="EmptyCatchBlock" /> <!-- Needs config. -->
@@ -39,7 +40,7 @@ PMD rule set for Java code in the DTrader project.
 
 
   <!-- And some of our own, to ensure Java coding conventions are
-  followed. -->
+       followed. -->
 
   <rule name="ShouldExtendObject"
   	language="java"
@@ -69,7 +70,7 @@ public class Foo { 	// Should be declared with "extends Object".
 
 
   <!-- See http://pmd.sourceforge.net/rules/braces.html for a
-  description of all rules in this ruleset. -->
+       description of all rules in this ruleset. -->
   <rule ref="rulesets/braces.xml" />
 
 
@@ -77,7 +78,7 @@ public class Foo { 	// Should be declared with "extends Object".
 
 
   <!-- See http://pmd.sourceforge.net/rules/coupling.html for a
-  description of all rules in this ruleset. -->
+       description of all rules in this ruleset. -->
   <rule ref="rulesets/coupling.xml" />
 
 
@@ -85,7 +86,7 @@ public class Foo { 	// Should be declared with "extends Object".
 
 
   <!-- See http://pmd.sourceforge.net/rules/design.html for a
-  description of all rules in this ruleset. -->
+       description of all rules in this ruleset. -->
   <rule ref="rulesets/design.xml">
     <exclude name="ConfusingTernary" /> <!-- Me not like it. -->
     <exclude name="ImmutableField" /> <!-- Me not like it. -->
@@ -96,7 +97,7 @@ public class Foo { 	// Should be declared with "extends Object".
 
 
   <!-- See http://pmd.sourceforge.net/rules/imports.html for a
-  description of all rules in this ruleset. -->
+       description of all rules in this ruleset. -->
   <rule ref="rulesets/imports.xml">
     <exclude name="ImportFromSamePackage" /> <!-- Me not like it. -->
   </rule>
@@ -106,8 +107,9 @@ public class Foo { 	// Should be declared with "extends Object".
 
 
   <!-- See http://pmd.sourceforge.net/rules/naming.html for a
-  description of all rules in this ruleset.  We explicitly enumerate
-  all "naming" rules because we have to configure some of them. -->
+       description of all rules in this ruleset.  We explicitly
+       enumerate all "naming" rules because we have to configure some
+       of them. -->
 
   <rule ref="rulesets/naming.xml">
     <exclude name="ShortVariable" /> <!-- Me not like it. -->
@@ -116,7 +118,7 @@ public class Foo { 	// Should be declared with "extends Object".
   </rule>
 
   <!-- WARNING: This rule does not check if the members actually start
-  with the given preffix. Meaning it is useless... -->
+       with the given preffix. Meaning it is useless... -->
   <rule ref="rulesets/naming.xml/VariableNamingConventions">
     <properties>
       <property name="memberPrefix" value="_" />
@@ -129,7 +131,7 @@ public class Foo { 	// Should be declared with "extends Object".
 
 
   <!-- See http://pmd.sourceforge.net/rules/strictexception.html for a
-  description of all rules in this ruleset. -->
+       description of all rules in this ruleset. -->
   <rule ref="rulesets/strictexception.xml" />
 
 
@@ -137,7 +139,7 @@ public class Foo { 	// Should be declared with "extends Object".
 
 
   <!-- See http://pmd.sourceforge.net/rules/strings.html for a
-  description of all rules in this ruleset. -->
+       description of all rules in this ruleset. -->
   <rule ref="rulesets/strings.xml" />
 
 
@@ -145,7 +147,7 @@ public class Foo { 	// Should be declared with "extends Object".
 
 
   <!-- See http://pmd.sourceforge.net/rules/unusedcode.html for a
-  description of all rules in this ruleset. -->
+       description of all rules in this ruleset. -->
   <rule ref="rulesets/unusedcode.xml" />
 
 </ruleset>
