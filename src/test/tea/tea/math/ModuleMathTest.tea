@@ -1,0 +1,484 @@
+###########################################################################
+#
+# Copyright (c) 2011-2012 PDMFC, All Rights Reserved.
+#
+#
+# TUnit tests for functions in the tea.string module.
+#
+###########################################################################
+
+
+
+
+
+###########################################################################
+#
+# Utility function for creating testsuits for numeric comparison
+# functions.
+#
+###########################################################################
+
+define build-numeric-comparison-testsuit \
+        ( testSuitName teaFunction ltValue eqValue gtValue ) {
+
+    tunit-testsuite $testSuitName {
+
+        tunit-test cmpLt1 {
+            tunit-assert-equals $ltValue [$teaFunction 1 2]
+        }
+        tunit-test cmpLt2 {
+            tunit-assert-equals $ltValue [$teaFunction 1.0 2]
+        }
+        tunit-test cmpLt3 {
+            tunit-assert-equals $ltValue [$teaFunction 1 2.0]
+        }
+        tunit-test cmpLt4 {
+            tunit-assert-equals $ltValue [$teaFunction 1.0 2.0]
+        }
+        tunit-test cmpLt5 {
+            tunit-assert-equals $ltValue [$teaFunction 1 2 3 4]
+        }
+
+        tunit-test cmpEq1 {
+            tunit-assert-equals $eqValue [$teaFunction 1 1]
+        }
+        tunit-test cmpEq2 {
+            tunit-assert-equals $eqValue [$teaFunction 1.0 1]
+        }
+        tunit-test cmpEq3 {
+            tunit-assert-equals $eqValue [$teaFunction 1 1.0]
+        }
+        tunit-test cmpEq4 {
+            tunit-assert-equals $eqValue [$teaFunction 1.0 1.0]
+        }
+        tunit-test cmpEq5 {
+            tunit-assert-equals $eqValue [$teaFunction 1 1 1 1]
+        }
+
+        tunit-test cmpGt1 {
+            tunit-assert-equals $gtValue [$teaFunction 2 1]
+        }
+        tunit-test cmpGt2 {
+            tunit-assert-equals $gtValue [$teaFunction 2.0 1]
+        }
+        tunit-test cmpGt3 {
+            tunit-assert-equals $gtValue [$teaFunction 2 1.0]
+        }
+        tunit-test cmpGt4 {
+            tunit-assert-equals $gtValue [$teaFunction 2.0 1.0]
+        }
+        tunit-test cmpGt5 {
+            tunit-assert-equals $gtValue [$teaFunction 2 1 0 -1]
+        }
+
+        tunit-test-error tooFewArgs0 {
+            $teaFunction
+        }
+
+        tunit-test-error tooFewArgs1 {
+            $teaFunction 1
+        }
+
+        tunit-test-error invalidArgType1 {
+            $teaFunction "a" 1
+        }
+
+        tunit-test-error invalidArgType2 {
+            $teaFunction 1 "a"
+        }
+
+    }
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+build-numeric-comparison-testsuit \
+        ==-test \
+        $== \
+        $false \
+        $true \
+        $false
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+build-numeric-comparison-testsuit \
+        !=-test \
+        $!= \
+        $true \
+        $false \
+        $true
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+build-numeric-comparison-testsuit \
+        >=-test \
+        $>= \
+        $false \
+        $true \
+        $true
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+build-numeric-comparison-testsuit \
+        >-test \
+        $> \
+        $false \
+        $false \
+        $true
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+build-numeric-comparison-testsuit \
+        <-test \
+        $< \
+        $true \
+        $false \
+        $false
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+build-numeric-comparison-testsuit \
+        <=-test \
+        $<= \
+        $true \
+        $true \
+        $false
+
+
+
+
+
+###########################################################################
+#
+# Utility function for creating testsuits for functions implementing
+# arithmetic operations.
+#
+###########################################################################
+
+define build-arith-op-testsuit \
+        ( testSuitName teaFunction testValuesList ) {
+
+    tunit-testsuite $testSuitName {
+        
+        tunit-test arithOp {
+            
+            foreach testValues $testValuesList {
+                map define ( expectedResult operandList ) $testValues
+                define actualResult [apply $teaFunction $operandList]
+                
+                tunit-assert-equals $expectedResult $actualResult
+            }
+        }
+
+        tunit-test-error invalidArgType1 {
+            $teaFunction "a"
+        }
+
+        tunit-test-error invalidArgType2 {
+            $teaFunction 1 "a"
+        }
+
+        tunit-test-error invalidArgType2 {
+            $teaFunction 1.0 "a"
+        }
+
+    }
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+build-arith-op-testsuit \
+        +-test \
+        $+ \
+        (
+            ( 0   () )
+            ( 1   ( 1 ) )
+            ( 1.0 ( 1.0 ) )
+            ( 3   ( 1   2 ) )
+            ( 6   ( 1   2   3) )
+            ( 1.2 ( 1   0.2 ) )
+            ( 1.5 ( 1   0.2 0.3 ) )
+            ( 1.2 ( 0.2 1 ) )
+            ( 1.2 ( 1.0 0.2 ) )
+            ( 1.5 ( 1.0 0.2 0.3 ) )
+)
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+build-arith-op-testsuit \
+        --test \
+        $- \
+        (
+            ( 0    () )
+            ( 1    ( -1 ) )
+            ( 1.0  ( -1.0 ) )
+            ( -1   ( 1   2 ) )
+            ( -4   ( 1   2   3) )
+            ( 0.8  ( 1   0.2 ) )
+            ( 0.5  ( 1   0.2 0.3 ) )
+            ( -0.8 ( 0.2 1 ) )
+            ( 0.8  ( 1.0 0.2 ) )
+            ( 0.5  ( 1.0 0.2 0.3 ) )
+)
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+build-arith-op-testsuit \
+        *-test \
+        $* \
+        (
+            ( 1    () )
+            ( 1    ( 1 ) )
+            ( 1.0  ( 1.0 ) )
+            ( 2    ( 1   2 ) )
+            ( 6    ( 1   2   3) )
+            ( 0.2  ( 1   0.2 ) )
+            ( 0.06 ( 1   0.2 0.3 ) )
+            ( 0.2  ( 0.2 1 ) )
+            ( 0.2  ( 1.0 0.2 ) )
+            ( 0.06 ( 1.0 0.2 0.3 ) )
+)
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+build-arith-op-testsuit \
+        /-test \
+        $/ \
+        (
+            ( 1    () )
+            ( 1    ( 1 ) )
+            ( 1.0  ( 1.0 ) )
+            ( 0    ( 1   2 ) )
+            ( 2    ( 2   1 ) )
+            ( 1    ( 2 1 2 ) )
+            ( 2.0  ( 4 2.0 ) )
+            ( 2.0  ( 4 2 1.0 ) )
+            ( 0.2  ( 0.2 1 ) )
+            ( 2.0  ( 0.2 0.1 ) )
+            ( 10.0 ( 1.0 0.2 0.5 ) )
+)
+
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite div-by-zero-test {
+
+    tunit-test-error divByZero1 {
+        / 1 0
+    }
+
+    tunit-test-error divByZero5 {
+        / 4 2 0
+    }
+
+    tunit-test-error divByZero6 {
+        / 4 0 2
+    }
+
+}
+
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite %-test {
+    
+    tunit-test modOk {
+        tunit-assert-equals 3 [% 7 4]
+    }
+
+    tunit-test-error tooFewArgs1 {
+        %
+    }
+
+    tunit-test-error tooFewArgs2 {
+        % 7
+    }
+
+    tunit-test-error invalidArgType1 {
+        % "7" 4
+    }
+
+    tunit-test-error invalidArgType2 {
+        % 7 "4"
+    }
+    
+    tunit-test-error divByZero {
+        % 7 0
+    }
+}
+
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite and-test {
+    
+    tunit-test andOk0 {
+        tunit-assert-equals $true [and]
+    }
+    
+    tunit-test andOk1 {
+        tunit-assert-equals $true [and $true]
+    }
+    
+    tunit-test andOk2 {
+        tunit-assert-equals $true [and $true $true]
+    }
+    
+    tunit-test andOk3 {
+        tunit-assert-equals $false [and $true $false]
+    }
+    
+    tunit-test andOk4 {
+        tunit-assert-equals $false [and $false $true]
+    }
+    
+    tunit-test andWithBlock1 {
+        tunit-assert-equals $true [and {is $true}]
+    }
+    
+    tunit-test andWithBlock2 {
+        tunit-assert-equals $false [and $true {is $false}]
+    }
+    
+    tunit-test andWithBlock3 {
+        define myVar 10
+        
+        tunit-assert-equals $false [and $false {set! myVar 20; is $true}]
+        tunit-assert-equals 10 $myVar
+    }
+    
+    tunit-test andWithBlock4 {
+        define myVar 10
+        
+        tunit-assert-equals $true [and $true {set! myVar 20; is $true}]
+        tunit-assert-equals 20 $myVar
+    }
+    
+    tunit-test andWithBlock5 {
+        define myVar1 10
+        define myVar2 15
+        
+        tunit-assert-equals \
+                $false \
+                [and {set! myVar1 20; is $false} {set! myVar2 25; is $true}]
+        tunit-assert-equals 20 $myVar1
+        tunit-assert-equals 15 $myVar2
+    }
+    
+}
+
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+

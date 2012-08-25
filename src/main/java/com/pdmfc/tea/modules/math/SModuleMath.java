@@ -68,17 +68,33 @@ public final class SModuleMath
      */
     public static final Integer MINUS_ONE = Integer.valueOf(-1);
 
-    private static final int EQ = 1;
-    private static final int NE = 2;
-    private static final int LT = 3;
-    private static final int LE = 4;
-    private static final int GT = 5;
-    private static final int GE = 6;
+    
+    /**
+     *
+     * Types of numeric comparisons.
+     *
+     */
+    private enum Comparison {
+        EQ,
+        NE,
+        LT,
+        LE,
+        GT,
+        GE
+    };
 
-    private static final int ADD = 1;
-    private static final int SUB = 2;
-    private static final int MUL = 3;
-    private static final int DIV = 4;
+
+    /**
+     *
+     * Types of arithmetic operations.
+     *
+     */
+    private enum ArithOp {
+        ADD,
+        SUB,
+        MUL,
+        DIV
+    };
 
     private static final SComparator C_GT = new SGt();
     private static final SComparator C_LT = new SLt();
@@ -577,8 +593,8 @@ public final class SModuleMath
 
 //* 
 //* <TeaFunction name="=="
-//*                 arguments="[value1 ...]"
-//*             module="tea.math">
+//*              arguments="[value1 ...]"
+//*              module="tea.math">
 //*
 //* <Overview>
 //* Compares two numeric values for equality.
@@ -610,7 +626,7 @@ public final class SModuleMath
                                      final Object[]     args)
         throws STeaException {
 
-        return compare(EQ, func, context, args);
+        return compare(Comparison.EQ, func, context, args);
     }
 
 
@@ -619,8 +635,8 @@ public final class SModuleMath
 
 //* 
 //* <TeaFunction name="!="
-//*                 arguments="value1 value2"
-//*             module="tea.math">
+//*              arguments="value1 value2"
+//*              module="tea.math">
 //*
 //* <Overview>
 //* Compares two numeric values for non-equality.
@@ -656,7 +672,7 @@ public final class SModuleMath
                                      final Object[]     args)
         throws STeaException {
 
-        return compare(NE, func, context, args);
+        return compare(Comparison.NE, func, context, args);
     }
 
 
@@ -665,8 +681,8 @@ public final class SModuleMath
 
 //* 
 //* <TeaFunction name="&gt;"
-//*                 arguments="value1 value2"
-//*             module="tea.math">
+//*              arguments="value1 value2"
+//*              module="tea.math">
 //*
 //* <Overview>
 //* Compares two numeric values.
@@ -702,7 +718,7 @@ public final class SModuleMath
                                      final Object[]     args)
         throws STeaException {
 
-        return compare(GT, func, context, args);
+        return compare(Comparison.GT, func, context, args);
     }
 
 
@@ -711,8 +727,8 @@ public final class SModuleMath
 
 //* 
 //* <TeaFunction name="&gt;="
-//*                 arguments="value1 value2"
-//*             module="tea.math">
+//*              arguments="value1 value2"
+//*              module="tea.math">
 //*
 //* <Overview>
 //* Compares two numeric values.
@@ -749,7 +765,7 @@ public final class SModuleMath
                                      final Object[]     args)
         throws STeaException {
 
-        return compare(GE, func, context, args);
+        return compare(Comparison.GE, func, context, args);
     }
 
 
@@ -758,8 +774,8 @@ public final class SModuleMath
 
 //* 
 //* <TeaFunction name="&lt;"
-//*                 arguments="value1 value2"
-//*             module="tea.math">
+//*              arguments="value1 value2"
+//*              module="tea.math">
 //*
 //* <Overview>
 //* Compares two numeric values.
@@ -795,7 +811,7 @@ public final class SModuleMath
                                      final Object[]     args)
         throws STeaException {
 
-        return compare(LT, func, context, args);
+        return compare(Comparison.LT, func, context, args);
     }
 
 
@@ -804,8 +820,8 @@ public final class SModuleMath
 
 //* 
 //* <TeaFunction name="&lt;="
-//*                 arguments="value1 value2"
-//*             module="tea.math">
+//*              arguments="value1 value2"
+//*              module="tea.math">
 //*
 //* <Overview>
 //* Compares two numeric values.
@@ -842,7 +858,7 @@ public final class SModuleMath
                                      final Object[]     args)
         throws STeaException {
 
-        return compare(LE, func, context, args);
+        return compare(Comparison.LE, func, context, args);
     }
 
 
@@ -855,15 +871,13 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    private static Object compare(final int          compOp,
+    private static Object compare(final Comparison   compOp,
                                   final SObjFunction func,
                                   final SContext     context,
                                   final Object[]     args)
         throws STeaException {
 
-        if ( args.length<3 ) {
-            throw new SNumArgException(args, "num1 num2 ...");
-        }
+        SArgs.checkCountAtLeast(args, 3, "num1 num2 ...");
 
         Object  op1         = args[1];
         boolean op1IsInt    = op1 instanceof Integer;
@@ -921,19 +935,26 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    private static boolean compareI(final int compOp,
-                                    final int op1,
-                                    final int op2) {
+    private static boolean compareI(final Comparison compOp,
+                                    final int        op1,
+                                    final int        op2) {
 
         switch ( compOp ) {
-        case EQ : return op1 == op2;
-        case NE : return op1 != op2;
-        case GT : return op1 > op2;
-        case GE : return op1 >= op2;
-        case LT : return op1 < op2;
-        case LE : return op1 <= op2;
+        case EQ :
+            return op1 == op2;
+        case NE :
+            return op1 != op2;
+        case GT :
+            return op1 > op2;
+        case GE :
+            return op1 >= op2;
+        case LT :
+            return op1 < op2;
+        case LE :
+            return op1 <= op2;
+        default :
+            throw new IllegalArgumentException(compOp.toString());
         }
-        return false;
     }
 
 
@@ -946,19 +967,25 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    private static boolean compareF(final int    compOp,
-                                    final double op1,
-                                    final double op2) {
+    private static boolean compareF(final Comparison compOp,
+                                    final double     op1,
+                                    final double     op2) {
 
         switch ( compOp ) {
-        case EQ : return op1 == op2;
-        case NE : return op1 != op2;
-        case GT : return op1 > op2;
-        case GE : return op1 >= op2;
-        case LT : return op1 < op2;
-        case LE : return op1 <= op2;
+        case EQ :
+            return op1 == op2;
+        case NE :
+            return op1 != op2;
+        case GT :
+            return op1 > op2;
+        case GE :
+            return op1 >= op2;
+        case LT :
+            return op1 < op2;
+        case LE :
+            return op1 <= op2;
         default :
-            throw new IllegalArgumentException(String.valueOf(compOp));
+            throw new IllegalArgumentException(compOp.toString());
         }
     }
 
@@ -968,8 +995,8 @@ public final class SModuleMath
 
 //* 
 //* <TeaFunction name="+"
-//*                 arguments="[value ...]"
-//*             module="tea.math">
+//*              arguments="[value ...]"
+//*              module="tea.math">
 //*
 //* <Overview>
 //* Calculates the sum of its arguments.
@@ -1004,7 +1031,7 @@ public final class SModuleMath
                                       final Object[]     args)
         throws STeaException {
 
-        return arithmOp(ADD, func, context, args);
+        return arithmOp(ArithOp.ADD, func, context, args);
     }
 
 
@@ -1013,8 +1040,8 @@ public final class SModuleMath
 
 //* 
 //* <TeaFunction name="-"
-//*                 arguments="[value ...]"
-//*             module="tea.math">
+//*              arguments="[value ...]"
+//*              module="tea.math">
 //*
 //* <Overview>
 //* Calculates the difference between two values.
@@ -1050,7 +1077,7 @@ public final class SModuleMath
                                       final Object[]     args)
         throws STeaException {
 
-        return arithmOp(SUB, func, context, args);
+        return arithmOp(ArithOp.SUB, func, context, args);
     }
 
 
@@ -1059,8 +1086,8 @@ public final class SModuleMath
 
 //* 
 //* <TeaFunction name="*"
-//*                 arguments="[value ...]"
-//*             module="tea.math">
+//*              arguments="[value ...]"
+//*              module="tea.math">
 //*
 //* <Overview>
 //* Calculates the product of a set of values.
@@ -1095,7 +1122,7 @@ public final class SModuleMath
                                       final Object[]     args)
         throws STeaException {
 
-        return arithmOp(MUL, func, context, args);
+        return arithmOp(ArithOp.MUL, func, context, args);
     }
 
 
@@ -1104,8 +1131,8 @@ public final class SModuleMath
 
 //* 
 //* <TeaFunction name="/"
-//*                 arguments="[value ...]"
-//*             module="tea.math">
+//*              arguments="[value ...]"
+//*              module="tea.math">
 //*
 //* <Overview>
 //* Calculates the quocient of two values.
@@ -1141,7 +1168,7 @@ public final class SModuleMath
                                       final Object[]     args)
         throws STeaException {
 
-        return arithmOp(DIV, func, context, args);
+        return arithmOp(ArithOp.DIV, func, context, args);
     }
 
 
@@ -1154,7 +1181,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    private static Object arithmOp(final int          op,
+    private static Object arithmOp(final ArithOp      op,
                                    final SObjFunction func,
                                    final SContext     context,
                                    final Object[]     args)
@@ -1176,11 +1203,11 @@ public final class SModuleMath
             if ( operand instanceof Double ) {
                 return calcFloatOp(op, ((Double)operand).doubleValue(),args,2);
             }
-        } catch (ArithmeticException e) {
+        } catch ( ArithmeticException e ) {
             SArithmeticException.raise(args, e);
         }
         
-        throw new STypeException(args, 1, "int or a float");
+        throw new STypeException(args, 1, "numeric");
     }
 
 
@@ -1193,7 +1220,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    private static Object calcIntOp(final int      op,
+    private static Object calcIntOp(final ArithOp  op,
                                     final int      input,
                                     final Object[] args,
                                     final int      first)
@@ -1215,7 +1242,7 @@ public final class SModuleMath
                                        args,
                                        i+1);
                 } else {
-                    throw new STypeException(args, i, "float or an int");
+                    throw new STypeException(args, i, "numeric");
                 }
             }
         }
@@ -1233,7 +1260,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    private static Object calcFloatOp(final int      op,
+    private static Object calcFloatOp(final ArithOp  op,
                                       final double   input,
                                       final Object[] args,
                                       final int      first)
@@ -1247,7 +1274,7 @@ public final class SModuleMath
             if ( operand instanceof Number ) {
                 result = doOp(op, result, ((Number)operand).doubleValue());
             } else {
-                throw new STypeException(args, i, "float or an int");
+                throw new STypeException(args, i, "numeric");
             }
         }
 
@@ -1264,17 +1291,22 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    private static int doOp(final int op,
-                            final int op1,
-                            final int op2) {
+    private static int doOp(final ArithOp operator,
+                            final int     operand1,
+                            final int     operand2) {
 
-        switch ( op ) {
-        case ADD : return op1+op2;
-        case SUB : return op1-op2;
-        case MUL : return op1*op2;
-        case DIV : return op1/op2;
+        switch ( operator ) {
+        case ADD :
+            return operand1 + operand2;
+        case SUB :
+            return operand1 - operand2;
+        case MUL :
+            return operand1 * operand2;
+        case DIV :
+            return operand1 / operand2;
+        default :
+            throw new IllegalArgumentException(operator.toString());
         }
-        return 0;
     }
 
 
@@ -1287,17 +1319,22 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    private static double doOp(final int    op,
-                               final double op1,
-                               final double op2) {
+    private static double doOp(final ArithOp operator,
+                               final double  operand1,
+                               final double  operand2) {
 
-        switch ( op ) {
-        case ADD : return op1+op2;
-        case SUB : return op1-op2;
-        case MUL : return op1*op2;
-        case DIV : return op1/op2;
+        switch ( operator ) {
+        case ADD :
+            return operand1 + operand2;
+        case SUB :
+            return operand1 - operand2;
+        case MUL :
+            return operand1 * operand2;
+        case DIV :
+            return operand1 / operand2;
+        default :
+            throw new IllegalArgumentException(operator.toString());
         }
-        return 0.0;
     }
 
 
@@ -1313,15 +1350,20 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    private static Object opNullValue(final int op) {
+    private static Object opNullValue(final ArithOp operator) {
 
-        switch ( op ) {
+        switch ( operator ) {
         case ADD :
-        case SUB : return ZERO;
+            return ZERO;
+        case SUB :
+            return ZERO;
         case MUL :
-        case DIV : return ONE;
+            return ONE;
+        case DIV :
+            return ONE;
+        default :
+            throw new IllegalArgumentException(operator.toString());
         }
-        return  ZERO;
     }
 
 
@@ -1346,7 +1388,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    private static Object unaryOp(final int      op,
+    private static Object unaryOp(final ArithOp  operator,
                                   final Object[] args)
         throws STeaException {
 
@@ -1354,13 +1396,13 @@ public final class SModuleMath
         Object operand = args[1];
 
         if ( operand instanceof Integer ) {
-            if ( op == SUB ) {
+            if ( operator == ArithOp.SUB ) {
                 result = Integer.valueOf(-((Integer)operand).intValue());
             } else {
                 result = operand;
             }
         } else if ( operand instanceof Double ) {
-            if ( op == SUB ) {
+            if ( operator == ArithOp.SUB ) {
                 result = new Double(-((Double)operand).doubleValue());
             } else {
                 result = operand;
@@ -1378,8 +1420,8 @@ public final class SModuleMath
 
 //* 
 //* <TeaFunction name="%"
-//*                 arguments="dividend divisor"
-//*             module="tea.math">
+//*              arguments="dividend divisor"
+//*              module="tea.math">
 //*
 //* <Overview>
 //* Calculates the remainder of an integer division.
@@ -1415,13 +1457,17 @@ public final class SModuleMath
                                       final Object[]     args)
         throws STeaException {
 
-        if ( args.length != 3 ) {
-            throw new SNumArgException(args, "dividend divisor");
-        }
+        SArgs.checkCount(args, 3, "dividend divisor");
 
         int dividend = SArgs.getInt(args,1).intValue();
         int divisor  = SArgs.getInt(args,2).intValue();
-        int result   = dividend % divisor;
+        int result   = 0;
+
+        try {
+            result = dividend % divisor;
+        } catch ( ArithmeticException e ) {
+            SArithmeticException.raise(args, e);
+        }
 
         return Integer.valueOf(result);
     }
@@ -1432,15 +1478,15 @@ public final class SModuleMath
 
 //* 
 //* <TeaFunction name="and"
-//*                 arguments="[obj1 ...]"
-//*             module="tea.math">
+//*              arguments="[arg ...]"
+//*              module="tea.math">
 //*
 //* <Overview>
 //* Calculates the logical conjunction of a set of boolean values.
 //* </Overview>
 //*
-//* <Parameter name="obj1">
-//* A boolean object or a block that evaluates to a boolean value.
+//* <Parameter name="arg">
+//* A boolean value or a block that evaluates to a boolean value.
 //* </Parameter>
 //*
 //* <Returns>
@@ -1449,12 +1495,12 @@ public final class SModuleMath
 //* </Returns>
 //*
 //* <Description>
-//* The <Func name="and"/> can receive code blocks as arguments. The
+//* The <Func name="and"/> function can receive code blocks as arguments. The
 //* arguments are inspected from left to right. If one argument is a code
-//* block then it is evalueted and the result must be a boolean object. If
+//* block then it is evaluated and the result must be a boolean object. If
 //* that code bock evaluated to false then no more arguements are
 //* checked. That means that if there are more arguments that are code
-//* blocks then tey will not be evaluated. This is usefull if you have a
+//* blocks then they will not be evaluated. This is usefull if you have a
 //* condition that may only be evaluated if a previous condition is
 //* true. For example:
 //* 
@@ -1463,7 +1509,7 @@ public final class SModuleMath
 //*     do-whatever
 //* }
 //* </Code>
-//* the second condition may only be evaluated if the first condition is
+//* the second condition will only be evaluated if the first condition is
 //* true. The use of code blocks as arguments insures that the <Func
 //* name="and"/> function behaves the intended way.
 //* 
@@ -1487,7 +1533,7 @@ public final class SModuleMath
                                       final Object[]     args)
         throws STeaException {
 
-        for ( int i=1; i<args.length; i++ ) {
+        for ( int i=1, count=args.length; i<count; i++ ) {
             Object obj = args[i];
 
             if ( obj instanceof SObjBlock ) {
@@ -1495,6 +1541,9 @@ public final class SModuleMath
             }
             if ( obj instanceof Boolean ) {
                 if ( !((Boolean)obj).booleanValue() ) {
+                    // One of the arguments evaluated to false. We
+                    // will return from this function and will not
+                    // evaluate the remaining arguments.
                     return obj;
                 }
             } else {
@@ -1511,14 +1560,14 @@ public final class SModuleMath
 
 //* 
 //* <TeaFunction name="or"
-//*                 arguments="[obj1 ...]"
-//*             module="tea.math">
+//*              arguments="[arg ...]"
+//*              module="tea.math">
 //*
 //* <Overview>
 //* Calculates the logical disjunction of a set of boolean values.
 //* </Overview>
 //*
-//* <Parameter name="obj1">
+//* <Parameter name="arg">
 //* A boolean object or a block that evaluates to a boolean value.
 //* </Parameter>
 //*
@@ -1547,11 +1596,7 @@ public final class SModuleMath
                                      final Object[]     args)
         throws STeaException {
 
-        if ( args.length < 2 ) {
-            throw new SNumArgException(args, "exp1 ...");
-        }
-
-        for ( int i=1; i<args.length; i++ ) {
+        for ( int i=1, count=args.length; i<count; i++ ) {
             Object obj = args[i];
 
             if ( obj instanceof SObjBlock ) {
@@ -1559,6 +1604,9 @@ public final class SModuleMath
             }
             if ( obj instanceof Boolean ) {
                 if ( ((Boolean)obj).booleanValue() ) {
+                    // One of the arguments evaluated to true. We
+                    // will return from this function and will not
+                    // evaluate the remaining arguments.
                     return Boolean.TRUE;
                 }
             } else {
