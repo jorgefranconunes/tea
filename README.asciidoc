@@ -84,7 +84,11 @@ perform specific tasks.
 . Check the release version number. Ensure that the version number is
 coherent in `config/tea-core.conf` and `pom.xml`.
 
-. Build the release bundle by invoking Maven like this: `mvn -DteaRelease`
+. Build the release bundle by invoking Maven like this:
++
+----
+mvn -DteaRelease
+----
 
 . The release tarbal is created as './target/tea-4.x.y.tar.bz2'.
 
