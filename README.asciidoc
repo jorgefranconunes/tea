@@ -1,0 +1,123 @@
+== The Tea Scripting Language
+
+Tea is a scripting language for the Java environment.
+
+This document contains instructions on how to setup the development
+environment for working on Tea itself. It is intended for the Tea
+development team.
+
+This development tree is for the 4.y.z main development trunk.
+
+
+
+
+
+== Pre-Requisites
+
+* JDK 1.6
+* Maven 3.0.x
+
+
+
+
+
+== Preparing the Development Environment
+
+These instructions apply to unix-like environments. If you really want to
+develop under windows you should have Cygwin (http://www.cygwin.com/)
+installed on your system.
+
+
+Fetch the source tree from the Git repository hosted at GitHub
+
+git clone git@github.com:jorgefranconunes/tea.git
+
+For more insight on the layout of the development tree read the
+section "Guide to the Source Tree" below.
+
+
+
+
+
+== Building
+
+To perform a full build just run "mvn" at the working copy root.
+
+By default unit tests are not run. To run the unit tests as part of
+the build define the system property "skipTests=false", like this:
+
+----
+mvn -DskipTests=false
+----
+
+
+In addition there are some Maven profiles that can be activated to
+perform specific tasks.
+
+* -P tea-perform-setup : Sets up the working area as a Tea
+   installation. This is required for running the "teadoc" tool
+   (e.g. when the "tea-run-teadoc" Maven profile is active).
+
+* -P tea-run-tunit-tests : Runs TUnit tests, even when
+   "skipTests=true" (which is, by default).
+
+* -P tea-run-teadoc : Creates Teadoc documentation from the project
+   source files. The Teadoc documentation is created under
+   "doc/teadoc". This is tipically used when building a release.
+
+* -P tea-run-javadoc : Creates Javadoc documentation from the project
+   source files. The Javadoc documentation is created under
+   "doc/javadoc". This is tipically used when building a release.
+
+* -P tea-create-release-bundle : Creates the tarball of a Tea
+   release.
+
+
+
+
+
+== Making a New Release
+
+. Check the release version number. Ensure that the version number is
+coherent in "config/tea-core.conf" and "pom.xml".
+
+. Build the release bundle by invoking Maven like this: `mvn -DteaRelease`
+
+. The release tarbal is created as './target/tea-4.x.y.tar.bz2'.
+
+
+
+
+
+== Guide to the Source Tree
+
+This section is intended to give a hint on the purpose of the layout
+of the files and folders in the Tea source distribution.
+
+   tea
+      00README.txt              # This is the main README file in the binary
+                                #   distribution.
+      00README-developers.txt   # This file. (Not included in the binary
+                                #   distribution.)
+      bin                       # shell script executable files
+      apps                      # libraries used by some executables
+      config                    # Tea release information
+      devtools                  # software tools and scripts to help build Tea
+                                #   from the command line. You don't need them
+                                #   to build Tea under an IDE.
+      lib                       # Jars used by the application, and that will
+                                #   be included in the binary distribution.
+      src                       # tea and java source files, and resources
+      target                    # output directory - created on 1st build
+                                #   The distribution archives created by the
+                                #   "release" target also appear here.
+      tests                     # old test scripts
+
+
+
+
+== Bug reports
+
+Send your bug reports and requests for new features to
+tea.dev@pdmfc.com
+
