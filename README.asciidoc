@@ -30,7 +30,9 @@ installed on your system.
 
 Fetch the source tree from the Git repository hosted at GitHub
 
+----
 git clone git@github.com:jorgefranconunes/tea.git
+----
 
 For more insight on the layout of the development tree read the
 section "Guide to the Source Tree" below.
@@ -41,10 +43,11 @@ section "Guide to the Source Tree" below.
 
 == Building
 
-To perform a full build just run "mvn" at the working copy root.
+To perform a full build just run `mvn` at the root of the working
+copy.
 
 By default unit tests are not run. To run the unit tests as part of
-the build define the system property "skipTests=false", like this:
+the build define the system property `skipTests=false`, like this:
 
 ----
 mvn -DskipTests=false
@@ -54,22 +57,22 @@ mvn -DskipTests=false
 In addition there are some Maven profiles that can be activated to
 perform specific tasks.
 
-* -P tea-perform-setup : Sets up the working area as a Tea
-   installation. This is required for running the "teadoc" tool
-   (e.g. when the "tea-run-teadoc" Maven profile is active).
+* `-P tea-perform-setup` : Sets up the working area as a Tea
+   installation. This is required for running the `teadoc` tool
+   (e.g. when the `tea-run-teadoc` Maven profile is active).
 
-* -P tea-run-tunit-tests : Runs TUnit tests, even when
-   "skipTests=true" (which is, by default).
+* `-P tea-run-tunit-tests` : Runs TUnit tests, even when
+   `skipTests=true` (which is, by default).
 
-* -P tea-run-teadoc : Creates Teadoc documentation from the project
+* `-P tea-run-teadoc` : Creates Teadoc documentation from the project
    source files. The Teadoc documentation is created under
-   "doc/teadoc". This is tipically used when building a release.
+   'doc/teadoc'. This is tipically used when building a release.
 
-* -P tea-run-javadoc : Creates Javadoc documentation from the project
+* `-P tea-run-javadoc` : Creates Javadoc documentation from the project
    source files. The Javadoc documentation is created under
-   "doc/javadoc". This is tipically used when building a release.
+   'doc/javadoc'. This is tipically used when building a release.
 
-* -P tea-create-release-bundle : Creates the tarball of a Tea
+* `-P tea-create-release-bundle` : Creates the tarball of a Tea
    release.
 
 
@@ -79,7 +82,7 @@ perform specific tasks.
 == Making a New Release
 
 . Check the release version number. Ensure that the version number is
-coherent in "config/tea-core.conf" and "pom.xml".
+coherent in `config/tea-core.conf` and `pom.xml`.
 
 . Build the release bundle by invoking Maven like this: `mvn -DteaRelease`
 
@@ -94,6 +97,7 @@ coherent in "config/tea-core.conf" and "pom.xml".
 This section is intended to give a hint on the purpose of the layout
 of the files and folders in the Tea source distribution.
 
+----
    tea
       00README.txt              # This is the main README file in the binary
                                 #   distribution.
@@ -112,7 +116,7 @@ of the files and folders in the Tea source distribution.
                                 #   The distribution archives created by the
                                 #   "release" target also appear here.
       tests                     # old test scripts
-
+----
 
 
 
