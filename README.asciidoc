@@ -101,6 +101,7 @@ mvn -DteaRelease
 This section is intended to give a hint on the purpose of the layout
 of the files and folders in the Tea source distribution.
 
+[example]
 ----
    tea
       00README.txt              # This is the main README file in the binary
@@ -121,6 +122,8 @@ of the files and folders in the Tea source distribution.
                                 #   "release" target also appear here.
       tests                     # old test scripts
 ----
+
+
 
 
 
