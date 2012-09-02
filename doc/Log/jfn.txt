@@ -1,3 +1,22 @@
+2012/09/02
+
+Resumo:
+
+1. 
+
+
+
+
+
+GitHub display code listings incorrectly for documents with asciidoc
+markup:
+
+https://github.com/github/markup/issues/108
+
+
+
+
+
 2010/03/01
 
 Resumo:

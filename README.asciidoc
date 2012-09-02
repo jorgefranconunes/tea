@@ -34,9 +34,6 @@ Fetch the source tree from the Git repository hosted at GitHub
 git clone git@github.com:jorgefranconunes/tea.git
 ----
 
-For more insight on the layout of the development tree read the
-section "Guide to the Source Tree" below.
-
 
 
 
@@ -91,37 +88,6 @@ mvn -DteaRelease
 ----
 
 . The release tarbal is created as './target/tea-4.x.y.tar.bz2'.
-
-
-
-
-
-== Guide to the Source Tree
-
-This section is intended to give a hint on the purpose of the layout
-of the files and folders in the Tea source distribution.
-
-[example]
-----
-   tea
-      00README.txt              # This is the main README file in the binary
-                                #   distribution.
-      00README-developers.txt   # This file. (Not included in the binary
-                                #   distribution.)
-      bin                       # shell script executable files
-      apps                      # libraries used by some executables
-      config                    # Tea release information
-      devtools                  # software tools and scripts to help build Tea
-                                #   from the command line. You don't need them
-                                #   to build Tea under an IDE.
-      lib                       # Jars used by the application, and that will
-                                #   be included in the binary distribution.
-      src                       # tea and java source files, and resources
-      target                    # output directory - created on 1st build
-                                #   The distribution archives created by the
-                                #   "release" target also appear here.
-      tests                     # old test scripts
-----
 
 
 
