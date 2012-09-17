@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2012 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -17,7 +17,6 @@ import java.nio.charset.UnsupportedCharsetException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pdmfc.tea.compiler.SArithExpression;
 import com.pdmfc.tea.compiler.SCode;
 import com.pdmfc.tea.compiler.SCompileException;
 import com.pdmfc.tea.compiler.SCompilerStream;
@@ -25,8 +24,6 @@ import com.pdmfc.tea.compiler.SStatement;
 import com.pdmfc.tea.compiler.STeaParserUtils;
 import com.pdmfc.tea.compiler.SWordBlock;
 import com.pdmfc.tea.compiler.SWordCmdSubst;
-import com.pdmfc.tea.compiler.SWordExpression;
-import com.pdmfc.tea.compiler.SWordExpressionBlock;
 import com.pdmfc.tea.compiler.SWordFloat;
 import com.pdmfc.tea.compiler.SWordInt;
 import com.pdmfc.tea.compiler.SWordList;
@@ -499,12 +496,7 @@ public final class SCompiler
             break;
         case '{' :
             skip();
-            if ( peek() == '`' ) {
-                skip();
-                result = new SWordExpressionBlock(getExpressionBlock(l));
-            } else {
-                result = new SWordBlock(getBlockInner('}', l));
-            }
+            result = new SWordBlock(getBlockInner('}', l));
             break;
         case '$' :
             skip();
@@ -513,10 +505,6 @@ public final class SCompiler
         case '"' :
             skip();
             result = new SWordString(getString(l));
-            break;
-        case '`' :
-            skip();
-            result = new SWordExpression(getExpression(l));
             break;
         case '(' :
             skip();
@@ -834,82 +822,6 @@ public final class SCompiler
         }
 
         String result = STeaParserUtils.parseStringLiteral(name.toString());
-
-        return result;
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    private SArithExpression getExpressionBlock(final int line)
-        throws IOException,
-               SCompileException {
-
-        SArithExpression result = getExpression(line);
-
-        if ( peek() != '}' ) {
-            String msg = "unexpected ''{0}'' at line {1}{2}";
-            compileError(msg, peek(), getCurrentLine(), onFileMsg());
-        }
-        skip();
-
-        return result;
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    private SArithExpression getExpression(final int line)
-        throws IOException,
-               SCompileException {
-
-        SArithExpression  result      = new SArithExpression();
-        StringBuilder     buffer      = new StringBuilder();
-        boolean           endWasFound = false;
-
-        while ( !isAtEnd() ) {
-            char c = skip();
-
-            if ( c == '`' ) {
-                endWasFound = true;
-                break;
-            }
-            if ( c == '\\' ) {
-                if ( isAtEnd() ) {
-                    buffer.append('\\');
-                } else {
-                    if ( (c=skip()) == '`' ) {
-                        buffer.append('`');
-                    } else {
-                        buffer.append('\\');
-                        buffer.append(c);
-                    }
-                }
-            } else {
-                buffer.append(c);
-            }
-        }
-
-        if ( !endWasFound ) {
-            String msg = "no ''`'' found before end of script for expression starting at line {0}{1}";
-            compileError(msg, line, onFileMsg());
-        }
-
-        result.initialize(buffer.toString());
 
         return result;
     }

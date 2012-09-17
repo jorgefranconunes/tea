@@ -1,3 +1,39 @@
+2012/09/17
+
+Resumo:
+
+1. 
+
+
+
+
+
+git branch my-branch
+
+git checkout my-branch
+
+
+
+
+
+2012/09/04
+
+Resumo:
+
+1. 
+
+
+
+
+
+GitHub project wikis are stored in a Git repository.
+
+git clone git@github.com:jorgefranconunes/tea.wiki.git
+
+
+
+
+
 2012/09/02
 
 Resumo:
