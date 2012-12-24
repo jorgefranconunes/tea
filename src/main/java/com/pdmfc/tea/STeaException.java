@@ -144,7 +144,7 @@ public class STeaException
             } else {
                 try {
                     _msg = MessageFormat.format(_msgFmt, _fmtArgs);
-                } catch (RuntimeException e) {
+                } catch ( RuntimeException e ) {
                     // Something very bad just happened. Try to
                     // recover to a common sense position...
                     _msg = _msgFmt;

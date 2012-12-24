@@ -60,7 +60,10 @@ public final class STeaRuntime
 
 
     private enum State {
-        INITED, STARTED, RUNNING, ENDED
+        INITED,
+        STARTED,
+        RUNNING,
+        ENDED
     };
 
 

@@ -6,7 +6,7 @@ This document contains instructions on how to setup the development
 environment for working on Tea itself. It is intended for the Tea
 development team.
 
-This development tree is for the 4.y.z main development trunk.
+This development tree is for the 4.y.z master development branch.
 
 
 

@@ -25,6 +25,7 @@ import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypeException;
 import com.pdmfc.tea.runtime.STypes;
+import com.pdmfc.tea.runtime.TeaFunction;
 import com.pdmfc.tea.util.SFormater;
 
 
@@ -95,286 +96,10 @@ public final class SModuleString
     @Override
     public void init(final SContext context)
         throws STeaException {
-       
-        context.newVar("str-printf",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionPrintf(func, context, args);
-                           }
-                       });
 
-        context.newVar("str-fmt",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionFmt(func, context, args);
-                           }
-                       });
-
-        context.newVar("str-cmp",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionCompare(func, context, args);
-                           }
-                       });
-
-        context.newVar("str>",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionGt(func, context, args);
-                           }
-                       });
-
-        context.newVar("str>=",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionGe(func, context, args);
-                           }
-                       });
-
-       context.newVar("str==",
-                      new SObjFunction() {
-                          public Object exec(final SObjFunction func,
-                                             final SContext     context,
-                                             final Object[]     args)
-                              throws STeaException {
-                              return functionEq(func, context, args);
-                          }
-                      });
-       
-       context.newVar("str!=",
-                      new SObjFunction() {
-                          public Object exec(final SObjFunction func,
-                                             final SContext     context,
-                                             final Object[]     args)
-                              throws STeaException {
-                              return functionNe(func, context, args);
-                          }
-                      });
-
-       context.newVar("str<",
-                      new SObjFunction() {
-                          public Object exec(final SObjFunction func,
-                                             final SContext     context,
-                                             final Object[]     args)
-                              throws STeaException {
-                              return functionLt(func, context, args);
-                          }
-                      });
-
-       context.newVar("str<=",
-                      new SObjFunction() {
-                          public Object exec(final SObjFunction func,
-                                             final SContext     context,
-                                             final Object[]     args)
-                              throws STeaException {
-                              return functionLe(func, context, args);
-                          }
-                      });
-
-       context.newVar("str-cat",
-                      new SObjFunction() {
-                          public Object exec(final SObjFunction func,
-                                             final SContext     context,
-                                             final Object[]     args)
-                              throws STeaException {
-                              return functionCat(func, context, args);
-                          }
-                      });
-
-       context.newVar("str-ends-with?",
-                      new SObjFunction() {
-                          public Object exec(final SObjFunction func,
-                                             final SContext     context,
-                                             final Object[]     args)
-                              throws STeaException {
-                              return functionEndsWith(func, context, args);
-                          }
-                      });
-
-       context.newVar("str-starts-with?",
-                      new SObjFunction() {
-                          public Object exec(final SObjFunction func,
-                                             final SContext     context,
-                                             final Object[]     args)
-                              throws STeaException {
-                              return functionStartsWith(func, context, args);
-                          }
-                      });
-
-       context.newVar("str-index-of",
-                      new SObjFunction() {
-                          public Object exec(final SObjFunction func,
-                                             final SContext     context,
-                                             final Object[]     args)
-                              throws STeaException {
-                              return functionIndexOf(func, context, args);
-                          }
-                      });
-
-       context.newVar("str-last-index-of",
-                      new SObjFunction() {
-                          public Object exec(final SObjFunction func,
-                                             final SContext     context,
-                                             final Object[]     args)
-                              throws STeaException {
-                              return functionLastIndexOf(func, context, args);
-                          }
-                      });
-
-       context.newVar("str-lower",
-                      new SObjFunction() {
-                          public Object exec(final SObjFunction func,
-                                             final SContext     context,
-                                             final Object[]     args)
-                              throws STeaException {
-                              return functionLower(func, context, args);
-                          }
-                      });
-
-       context.newVar("str-upper",
-                      new SObjFunction() {
-                          public Object exec(final SObjFunction func,
-                                             final SContext     context,
-                                             final Object[]     args)
-                              throws STeaException {
-                              return functionUpper(func, context, args);
-                          }
-                      });
-
-       context.newVar("str-len",
-                      new SObjFunction() {
-                          public Object exec(final SObjFunction func,
-                                             final SContext     context,
-                                             final Object[]     args)
-                              throws STeaException {
-                              return functionLen(func, context, args);
-                          }
-                      });
-
-       context.newVar("str-substring",
-                      new SObjFunction() {
-                          public Object exec(final SObjFunction func,
-                                             final SContext     context,
-                                             final Object[]     args)
-                              throws STeaException {
-                              return functionSubString(func, context, args);
-                          }
-                      });
-
-       context.newVar("str-trim",
-                      new SObjFunction() {
-                          public Object exec(final SObjFunction func,
-                                             final SContext     context,
-                                             final Object[]     args)
-                              throws STeaException {
-                              return functionTrim(func, context, args);
-                          }
-                      });
-
-       context.newVar("str-join",
-                      new SObjFunction() {
-                          public Object exec(final SObjFunction func,
-                                             final SContext     context,
-                                             final Object[]     args)
-                              throws STeaException {
-                              return functionJoin(func, context, args);
-                          }
-                      });
-
-       context.newVar("str-empty?",
-                      new SObjFunction() {
-                          public Object exec(final SObjFunction func,
-                                             final SContext     context,
-                                             final Object[]     args)
-                              throws STeaException {
-                              return functionEmpty(func, context, args);
-                          }
-                      });
-
-       context.newVar("str-not-empty?",
-                      new SObjFunction() {
-                          public Object exec(final SObjFunction func,
-                                             final SContext     context,
-                                             final Object[]     args)
-                              throws STeaException {
-                              return functionNotEmpty(func, context, args);
-                          }
-                      });
-
-       context.newVar("symbol->string",
-                      new SObjFunction() {
-                          public Object exec(final SObjFunction func,
-                                             final SContext     context,
-                                             final Object[]     args)
-                              throws STeaException {
-                              return functionSymbolToString(func,context,args);
-                          }
-                      });
-
-       context.newVar("string->int",
-                      new SObjFunction() {
-                          public Object exec(final SObjFunction func,
-                                             final SContext     context,
-                                             final Object[]     args)
-                              throws STeaException {
-                              return functionStringToInt(func, context, args);
-                          }
-                      });
-
-       context.newVar("string->float",
-                      new SObjFunction() {
-                          public Object exec(final SObjFunction func,
-                                             final SContext     context,
-                                             final Object[]     args)
-                              throws STeaException {
-                              return functionStringToFloat(func, context, args);
-                          }
-                      });
-
-       context.newVar("int->string",
-                      new SObjFunction() {
-                          public Object exec(final SObjFunction func,
-                                             final SContext     context,
-                                             final Object[]     args)
-                              throws STeaException {
-                              return functionIntToString(func, context, args);
-                          }
-                      });
-
-       context.newVar("float->string",
-                      new SObjFunction() {
-                          public Object exec(final SObjFunction func,
-                                             final SContext     context,
-                                             final Object[]     args)
-                              throws STeaException {
-                              return functionFloatToString(func, context, args);
-                          }
-                      });
-
-       context.newVar("str-unescape",
-                      new SObjFunction() {
-                          public Object exec(final SObjFunction func,
-                                             final SContext     context,
-                                             final Object[]     args)
-                              throws STeaException {
-                              return functionUnescape(func, context, args);
-                          }
-                      });
+        // Nothing to do. The functions provided by this module are
+        // all implemented as methods of this with class with the
+        // TeaFunction annotation.
    }
 
 
@@ -463,9 +188,10 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    private Object functionPrintf(final SObjFunction func,
-                                  final SContext     context,
-                                  final Object[]     args)
+    @TeaFunction("str-printf")
+    public Object functionPrintf(final SObjFunction func,
+                                 final SContext     context,
+                                 final Object[]     args)
         throws STeaException {
 
         SArgs.checkCountAtLeast(args, 2, "string [object ...]");
@@ -522,9 +248,10 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    private Object functionFmt(final SObjFunction func,
-                               final SContext context,
-                               final Object[]   args)
+    @TeaFunction("str-fmt")
+    public Object functionFmt(final SObjFunction func,
+                              final SContext context,
+                              final Object[]   args)
         throws STeaException {
 
         SArgs.checkCountAtLeast(args, 2, "string [object ...]");
@@ -606,9 +333,10 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    private static Object functionUpper(final SObjFunction func,
-                                        final SContext     context,
-                                        final Object[]     args)
+    @TeaFunction("str-upper")
+    public static Object functionUpper(final SObjFunction func,
+                                       final SContext     context,
+                                       final Object[]     args)
         throws STeaException {
 
         SArgs.checkCount(args, 2, "string");
@@ -653,9 +381,10 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    private static Object functionLower(final SObjFunction func,
-                                        final SContext     context,
-                                        final Object[]     args)
+    @TeaFunction("str-lower")
+    public static Object functionLower(final SObjFunction func,
+                                       final SContext     context,
+                                       final Object[]     args)
         throws STeaException {
 
         SArgs.checkCount(args, 2, "string");
@@ -705,9 +434,10 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    private static Object functionCompare(final SObjFunction func,
-                                          final SContext     context,
-                                          final Object[]     args)
+    @TeaFunction("str-cmp")
+    public static Object functionCompare(final SObjFunction func,
+                                         final SContext     context,
+                                         final Object[]     args)
         throws STeaException {
 
         return compare(SModuleMath.MINUS_ONE,
@@ -756,9 +486,10 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    private static Object functionGt(final SObjFunction func,
-                                     final SContext     context,
-                                     final Object[]     args)
+    @TeaFunction("str>")
+    public static Object functionGt(final SObjFunction func,
+                                    final SContext     context,
+                                    final Object[]     args)
         throws STeaException {
 
         return compare(Boolean.FALSE,
@@ -809,9 +540,10 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    private static Object functionGe(final SObjFunction func,
-                                     final SContext     context,
-                                     final Object[]     args)
+    @TeaFunction("str>=")
+    public static Object functionGe(final SObjFunction func,
+                                    final SContext     context,
+                                    final Object[]     args)
         throws STeaException {
 
         return compare(Boolean.FALSE,
@@ -860,9 +592,10 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    private static Object functionEq(final SObjFunction func,
-                                     final SContext     context,
-                                     final Object[]     args)
+    @TeaFunction("str==")
+    public static Object functionEq(final SObjFunction func,
+                                    final SContext     context,
+                                    final Object[]     args)
         throws STeaException {
 
         return compare(Boolean.FALSE,
@@ -911,9 +644,10 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    private static Object functionNe(final SObjFunction func,
-                                     final SContext     context,
-                                     final Object[]     args)
+    @TeaFunction("str!=")
+    public static Object functionNe(final SObjFunction func,
+                                    final SContext     context,
+                                    final Object[]     args)
         throws STeaException {
 
         return compare(Boolean.TRUE,
@@ -964,9 +698,10 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    private static Object functionLt(final SObjFunction func,
-                                     final SContext     context,
-                                     final Object[]     args)
+    @TeaFunction("str<")
+    public static Object functionLt(final SObjFunction func,
+                                    final SContext     context,
+                                    final Object[]     args)
         throws STeaException {
 
         return compare(Boolean.TRUE,
@@ -1017,9 +752,10 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    private static Object functionLe(final SObjFunction func,
-                                     final SContext     context,
-                                     final Object[]     args)
+    @TeaFunction("str<=")
+    public static Object functionLe(final SObjFunction func,
+                                    final SContext     context,
+                                    final Object[]     args)
         throws STeaException {
 
         return compare(Boolean.TRUE,
@@ -1119,9 +855,10 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    private static Object functionCat(final SObjFunction func,
-                                      final SContext     context,
-                                      final Object[]     args)
+    @TeaFunction("str-cat")
+    public static Object functionCat(final SObjFunction func,
+                                     final SContext     context,
+                                     final Object[]     args)
         throws STeaException {
 
         SArgs.checkCountAtLeast(args, 2, "string ...");
@@ -1178,9 +915,10 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    private static  Object functionEndsWith(final SObjFunction func,
-                                            final SContext     context,
-                                            final Object[]     args)
+    @TeaFunction("str-ends-with?")
+    public static  Object functionEndsWith(final SObjFunction func,
+                                           final SContext     context,
+                                           final Object[]     args)
         throws STeaException {
 
         SArgs.checkCount(args, 3, "string1 string2");
@@ -1231,9 +969,10 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    private static Object functionStartsWith(final SObjFunction func,
-                                             final SContext     context,
-                                             final Object[]     args)
+    @TeaFunction("str-starts-with?")
+    public static Object functionStartsWith(final SObjFunction func,
+                                            final SContext     context,
+                                            final Object[]     args)
         throws STeaException {
 
         SArgs.checkCount(args, 3, "string1 string2");
@@ -1293,9 +1032,10 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    private static Object functionIndexOf(final SObjFunction func,
-                                          final SContext     context,
-                                          final Object[]     args)
+    @TeaFunction("str-index-of")
+    public static Object functionIndexOf(final SObjFunction func,
+                                         final SContext     context,
+                                         final Object[]     args)
         throws STeaException {
 
         SArgs.checkCountBetween(args,3,4, "string sub-string [start-index]");
@@ -1358,9 +1098,10 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    private static Object functionLastIndexOf(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
+    @TeaFunction("last-index-of")
+    public static Object functionLastIndexOf(final SObjFunction func,
+                                             final SContext     context,
+                                             final Object[]     args)
         throws STeaException {
 
         SArgs.checkCountBetween(args,3,4, "string sub-string [start-index]");
@@ -1408,9 +1149,10 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    private static Object functionLen(final SObjFunction func,
-                                      final SContext context,
-                                      final Object[]   args)
+    @TeaFunction("str-len")
+    public static Object functionLen(final SObjFunction func,
+                                     final SContext     context,
+                                     final Object[]     args)
         throws STeaException {
 
         SArgs.checkCount(args, 2, "string");
@@ -1478,9 +1220,10 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    private static Object functionSubString(final SObjFunction func,
-                                            final SContext     context,
-                                            final Object[]     args)
+    @TeaFunction("str-substring")
+    public static Object functionSubString(final SObjFunction func,
+                                           final SContext     context,
+                                           final Object[]     args)
         throws STeaException {
 
         SArgs.checkCountBetween(args, 3, 4, "string start-index [end-index]");
@@ -1542,9 +1285,10 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    private static Object functionTrim(final SObjFunction func,
-                                       final SContext     context,
-                                       final Object[]     args)
+    @TeaFunction("str-trim")
+    public static Object functionTrim(final SObjFunction func,
+                                      final SContext     context,
+                                      final Object[]     args)
         throws STeaException {
 
         SArgs.checkCount(args, 2, "string");
@@ -1596,9 +1340,10 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    private static Object functionJoin(final SObjFunction func,
-                                       final SContext     context,
-                                       final Object[]     args)
+    @TeaFunction("str-join")
+    public static Object functionJoin(final SObjFunction func,
+                                      final SContext     context,
+                                      final Object[]     args)
         throws STeaException {
 
         SArgs.checkCount(args, 3, "string-list string");
@@ -1672,9 +1417,10 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    private static Object functionEmpty(final SObjFunction func,
-                                        final SContext     context,
-                                        final Object[]     args)
+    @TeaFunction("str-empty?")
+    public static Object functionEmpty(final SObjFunction func,
+                                       final SContext     context,
+                                       final Object[]     args)
         throws STeaException {
 
         SArgs.checkCount(args, 2, "string");
@@ -1720,9 +1466,10 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    private static Object functionNotEmpty(final SObjFunction func,
-                                           final SContext     context,
-                                           final Object[]     args)
+    @TeaFunction("str-not-empty?")
+    public static Object functionNotEmpty(final SObjFunction func,
+                                          final SContext     context,
+                                          final Object[]     args)
         throws STeaException {
 
         SArgs.checkCount(args, 2, "string");
@@ -1768,9 +1515,10 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    private static Object functionSymbolToString(final SObjFunction func,
-                                                 final SContext context,
-                                                 final Object[]   args)
+    @TeaFunction("symbol->string")
+    public static Object functionSymbolToString(final SObjFunction func,
+                                                final SContext context,
+                                                final Object[]   args)
         throws STeaException {
 
         SArgs.checkCount(args, 2, "symbol");
@@ -1824,9 +1572,10 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    private static Object functionStringToInt(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
+    @TeaFunction("string->int")
+    public static Object functionStringToInt(final SObjFunction func,
+                                             final SContext     context,
+                                             final Object[]     args)
         throws STeaException {
 
         SArgs.checkCount(args, 2, "string");
@@ -1879,9 +1628,10 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    private static Object functionStringToFloat(final SObjFunction func,
-                                                final SContext     context,
-                                                final Object[]     args)
+    @TeaFunction("string->float")
+    public static Object functionStringToFloat(final SObjFunction func,
+                                               final SContext     context,
+                                               final Object[]     args)
         throws STeaException {
 
         SArgs.checkCount(args, 2, "string");
@@ -1934,9 +1684,10 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    private static Object functionIntToString(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
+    @TeaFunction("int->string")
+    public static Object functionIntToString(final SObjFunction func,
+                                             final SContext     context,
+                                             final Object[]     args)
         throws STeaException {
 
         SArgs.checkCount(args, 2, "integer");
@@ -1982,9 +1733,10 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    private static Object functionFloatToString(final SObjFunction func,
-                                                final SContext     context,
-                                                final Object[]     args)
+    @TeaFunction("float->string")
+    public static Object functionFloatToString(final SObjFunction func,
+                                               final SContext     context,
+                                               final Object[]     args)
         throws STeaException {
 
         SArgs.checkCount(args, 2, "float");
@@ -2047,9 +1799,10 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    private static Object functionUnescape(final SObjFunction func,
-                                           final SContext     context,
-                                           final Object[]     args)
+    @TeaFunction("str-unescape")
+    public static Object functionUnescape(final SObjFunction func,
+                                          final SContext     context,
+                                          final Object[]     args)
         throws STeaException {
 
         SArgs.checkCount(args, 2, "string");

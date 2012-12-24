@@ -1,3 +1,55 @@
+2012/12/07
+
+Resumo:
+
+1. 
+
+
+
+
+
+Goal: simplify the initialization of a Tea Java module when creating
+the set of Tea functions that module is intended to provide.
+
+Example:
+
+Instead of having the following on the module "init(SContext)" method 
+
+        context.newVar("str-printf",
+                       new SObjFunction() {
+                           public Object exec(final SObjFunction func,
+                                              final SContext     context,
+                                              final Object[]     args)
+                               throws STeaException {
+                               return functionPrintf(func, context, args);
+                           }
+                       });
+
+we annotate method "functionPrinf(...)" in the module Java class in
+the following way:
+
+    @TeaFunction(name="str-printf")
+    private Object functionPrintf(final SObjFunction func,
+                                  final SContext     context,
+                                  final Object[]     args)
+        throws STeaException {
+
+        // ...
+    }
+
+
+Required changes:
+
+SModuleUtils.addModule(SContext, SModule) - Will check for the
+annotations and create the appropriate SObjFunction in the given
+SContext.
+
+Work will be performed on branch task-EasyModuleInit
+
+
+
+
+
 2012/09/17
 
 Resumo:

@@ -1,17 +1,24 @@
 /**************************************************************************
  *
- * Copyright (c) 2010-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2010-2012 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
 package com.pdmfc.tea.runtime;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.text.MessageFormat;
+
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.modules.SModule;
 import com.pdmfc.tea.runtime.SContext;
+import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjPair;
 import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaFunction;
 
 
 
@@ -77,7 +84,7 @@ public final class SModuleUtils
 
         try {
             module = (SModule)Class.forName(className).newInstance();
-        } catch (Throwable e) {
+        } catch ( Throwable e ) {
             String msg = "Failed to create instance for module {0} - {1} - {2}";
             Object[] fmtArgs =
                 { className, e.getClass().getName(), e.getMessage() };
@@ -103,7 +110,7 @@ public final class SModuleUtils
                                     final SModule  module)
         throws STeaException {
 
-        module.init(context);
+        initializeModule(context, module);
 
         SObjPair head    = getHead(context, SYMBOL_MODULES);
         SObjPair newHead =
@@ -112,6 +119,99 @@ public final class SModuleUtils
         context.newVar(SYMBOL_MODULES, newHead);
 
         return module;
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    private static void initializeModule(final SContext context,
+                                         final SModule  module)
+        throws STeaException {
+
+        module.init(context);
+
+        // Create additional functions for methods annotated with the
+        // "TeaFunction" annotation.
+
+        Class<TeaFunction> annotationClass = TeaFunction.class;
+
+        for ( Method method : module.getClass().getMethods() ) {
+            TeaFunction annotation = method.getAnnotation(annotationClass);
+
+            if ( annotation != null ) {
+                SObjFunction function     = buildTeaFunction(module, method);
+                String       functionName = annotation.value();
+
+                context.newVar(functionName, function);
+            }
+        }
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    private static SObjFunction buildTeaFunction(final SModule module,
+                                                 final Method  method) {
+
+        checkMethodSignature(method);
+
+        SObjFunction function = new ModuleMethodTeaFunction(module, method);
+
+        return function;
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * Checks if the given method as the right signature for a method that
+ * can be used as the implementation of a Tea function.
+ *
+ * If the method does not have the appropriate signature then an
+ * IllegalArgumentException will be thrown.
+ *
+ **************************************************************************/
+
+    private static void checkMethodSignature(final Method method) {
+
+        boolean    isOk     = true;
+        Class<?>[] argTypes = method.getParameterTypes();
+
+        if ( argTypes.length != 3 ) {
+            isOk = false;
+        } else if ( !SObjFunction.class.isAssignableFrom(argTypes[0]) ) {
+            isOk = false;
+        } else if ( !SContext.class.isAssignableFrom(argTypes[1]) ) {
+            isOk = false;
+        } else if ( !argTypes[2].isArray() ) {
+            isOk = false;
+        }
+
+        if ( !isOk ) {
+            String msgFmt = "Method {0}.{1} has invalid signature";
+            String msg    =
+                MessageFormat.format(msgFmt,
+                                     method.getDeclaringClass().getName(),
+                                     method.getName());
+
+            throw new IllegalArgumentException(msg);
+        }
     }
 
 
@@ -365,6 +465,86 @@ public final class SModuleUtils
         SModule module = (SModule)car;
 
         module.end();
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    private static final class ModuleMethodTeaFunction
+        extends Object
+        implements SObjFunction {
+
+
+
+
+
+        private Object _object = null;
+        private Method _method = null;
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+        public ModuleMethodTeaFunction(final Object object,
+                                       final Method method) {
+
+            _object = object;
+            _method = method;
+        }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+        @Override
+        public final Object exec(final SObjFunction function,
+                                 final SContext     context,
+                                 final Object[]     args)
+            throws STeaException {
+
+            Object        result = null;
+            STeaException error  = null;
+
+            try {
+                result = _method.invoke(_object, function, context, args);
+            } catch ( InvocationTargetException e ) {
+                Throwable cause = e.getCause();
+                if ( cause instanceof STeaException ) {
+                    error = (STeaException)cause;
+                } else {
+                    error = new SRuntimeException(cause);
+                }
+            } catch ( IllegalAccessException e ) {
+                error = new SRuntimeException(e);
+            }
+
+            if ( error != null ) {
+                throw error;
+            }
+
+            return result;
+        }
+
+ 
     }
 
 

@@ -30,12 +30,18 @@ public class SContext
 
 
 
-    private SContext _parent;
+    private SContext _parent = null;
 
-    // Members related to the internal hashtable:
-    private SVarSet[] _varTable;
-    private int       _varCount;
-    private int       _hashThreshold;
+    // The buckets in the hash table.
+    private SVarSet[] _varTable = null;
+
+    // The number of variables currently defined in this context.
+    private int _varCount = 0;
+
+    // The hash table threshold. When the number of entries (Tea
+    // variables) in the hash table grows above this threshold then
+    // the hash table is rehashed with a larger number of buckets.
+    private int _hashThreshold = -1;
 
     // The load factor should always be positive.
     private static final float HASH_LOAD_FACTOR = 0.75f;
@@ -150,8 +156,8 @@ public class SContext
 
     private void initHashtable() {
 
-        _varTable           = new SVarSet[INITIAL_CAPACITY];
-        _hashThreshold      = (int)(INITIAL_CAPACITY * HASH_LOAD_FACTOR);
+        _varTable      = new SVarSet[INITIAL_CAPACITY];
+        _hashThreshold = (int)(INITIAL_CAPACITY * HASH_LOAD_FACTOR);
     }
 
 
@@ -166,8 +172,8 @@ public class SContext
 
     protected final void clearAll() {
 
-        _varTable           = null;
-        _hashThreshold      = 0;
+        _varTable      = null;
+        _hashThreshold = 0;
     }
 
 
