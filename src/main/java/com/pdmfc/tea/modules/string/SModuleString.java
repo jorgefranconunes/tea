@@ -1098,7 +1098,7 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    @TeaFunction("last-index-of")
+    @TeaFunction("str-last-index-of")
     public static Object functionLastIndexOf(final SObjFunction func,
                                              final SContext     context,
                                              final Object[]     args)
