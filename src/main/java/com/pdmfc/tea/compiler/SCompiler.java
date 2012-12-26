@@ -275,14 +275,16 @@ public final class SCompiler
  * @return A <code>{@link SCode}</code> object containing the bytecode
  * that can be executed later.
  *
- * @exception SCompileException Thrown if a
- * syntax error was found during compilation or there were problems
- * reading from the <code>InputStream</code>.
+ * @exception IOException Thrown if there were any problems reading
+ * from the given reader.
+ *
+ * @exception SCompileException Thrown if a syntax error was found
+ * during compilation.
  *
  **************************************************************************/
 
     public SCode compile(final Reader reader,
-                          final String fileName)
+                         final String fileName)
         throws IOException,
                SCompileException {
 

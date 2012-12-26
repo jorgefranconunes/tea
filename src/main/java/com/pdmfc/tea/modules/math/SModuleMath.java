@@ -20,6 +20,7 @@ import com.pdmfc.tea.runtime.SObjVar;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.STypeException;
 import com.pdmfc.tea.runtime.STypes;
+import com.pdmfc.tea.runtime.TeaFunction;
 
 
 
@@ -41,7 +42,7 @@ import com.pdmfc.tea.runtime.STypes;
 
 /**************************************************************************
  *
- * Package of math related commands.
+ * Tea package providing math related commands.
  *
  **************************************************************************/
 
@@ -128,418 +129,13 @@ public final class SModuleMath
  *
  **************************************************************************/
 
+    @Override
     public void init(final SContext context)
         throws STeaException {
 
-        context.newVar("==",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionEq(func, context, args);
-                           }
-                       });
-        
-        context.newVar("!=",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionNe(func, context, args);
-                           }
-                       });
-        
-        context.newVar(">",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionGt(func, context, args);
-                           }
-                       });
-        
-        context.newVar(">=",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionGe(func, context, args);
-                           }
-                       });
-        
-        context.newVar("<",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionLt(func, context, args);
-                           }
-                       });
-        
-        context.newVar("<=",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionLe(func, context, args);
-                           }
-                       });
-        
-        context.newVar("+",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionAdd(func, context, args);
-                           }
-                       });
-        
-        context.newVar("-",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionSub(func, context, args);
-                           }
-                       });
-        
-        context.newVar("*",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionMul(func, context, args);
-                           }
-                       });
-        
-        context.newVar("/",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionDiv(func, context, args);
-                           }
-                       });
-        
-        context.newVar("%",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionMod(func, context, args);
-                           }
-                       });
-        
-        context.newVar("and",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionAnd(func, context, args);
-                           }
-                       });
-        
-        context.newVar("or",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionOr(func, context, args);
-                           }
-                       });
-        
-        context.newVar("not",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionNot(func, context, args);
-                           }
-                       });
-        
-        context.newVar("abs",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionAbs(func, context, args);
-                           }
-                       });
-        
-        context.newVar("round",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionRound(func, context, args);
-                           }
-                       });
-        
-        context.newVar("floor",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionFloor(func, context, args);
-                           }
-                       });
-        
-        context.newVar("ceil",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionCeil(func, context, args);
-                           }
-                       });
-        
-        context.newVar("sqrt",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionSqrt(func, context, args);
-                           }
-                       });
-        
-        context.newVar("min",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionMin(func, context, args);
-                           }
-                       });
-        
-        context.newVar("max",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionMax(func, context, args);
-                           }
-                       });
-        
-        context.newVar("rand-int",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionRandInt(func, context, args);
-                           }
-                       });
-        
-        context.newVar("int",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionInt(func, context, args);
-                           }
-                       });
-        
-        context.newVar("=",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionSetValue(func, context, args);
-                           }
-                       });
-        
-        context.newVar("+=",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionIncBy(func, context, args);
-                           }
-                       });
-        
-        context.newVar("-=",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionDecBy(func, context, args);
-                           }
-                       });
-        
-        context.newVar("*=",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionMulBy(func, context, args);
-                           }
-                       });
-        
-        context.newVar("/=",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionDivBy(func, context, args);
-                           }
-                       });
-        
-        context.newVar("++",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionInc(func, context, args);
-                           }
-                       });
-        
-        context.newVar("--",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionDec(func, context, args);
-                           }
-                       });
-        
-        context.newVar("~",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionBinNeg(func, context, args);
-                           }
-                       });
-        
-        context.newVar("&",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionBinAnd(func, context, args);
-                           }
-                       });
-        
-        context.newVar("|",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionBinOr(func, context, args);
-                           }
-                       });
-        
-        context.newVar("^",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionBinXor(func, context, args);
-                           }
-                       });
-        
-        context.newVar("<<",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionBinSl(func, context, args);
-                           }
-                       });
-        
-        context.newVar(">>",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionBinSr(func, context, args);
-                           }
-                       });
-        
-        context.newVar("&=",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionBinAndBy(func,context,args);
-                           }
-                       });
-
-        context.newVar("|=",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionBinOrBy(func,context,args);
-                           }
-                       });
-
-        context.newVar("^=",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionBinXorBy(func,context,args);
-                           }
-                       });
-
-        context.newVar("<<=",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionBinSlBy(func,context,args);
-                           }
-                       });
-
-        context.newVar(">>=",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionBinSrBy(func,context,args);
-                           }
-                       });
+        // Nothing to do. The functions provided by this module are
+        // all implemented as methods of this with class with the
+        // TeaFunction annotation.
     }
 
 
@@ -552,6 +148,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
+    @Override
     public void end() {
 
         // Nothing to do.
@@ -567,6 +164,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
+    @Override
     public void start() {
 
         // Nothing to do.
@@ -582,6 +180,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
+    @Override
     public void stop() {
 
         // Nothing to do.
@@ -617,13 +216,26 @@ public final class SModuleMath
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>==</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionEq(final SObjFunction func,
-                                     final SContext     context,
-                                     final Object[]     args)
+    @TeaFunction("==")
+    public static Object functionEq(final SObjFunction func,
+                                    final SContext     context,
+                                    final Object[]     args)
         throws STeaException {
 
         return compare(Comparison.EQ, func, context, args);
@@ -663,13 +275,26 @@ public final class SModuleMath
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>!=</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionNe(final SObjFunction func,
-                                     final SContext     context,
-                                     final Object[]     args)
+    @TeaFunction("!=")
+    public static Object functionNe(final SObjFunction func,
+                                    final SContext     context,
+                                    final Object[]     args)
         throws STeaException {
 
         return compare(Comparison.NE, func, context, args);
@@ -709,13 +334,26 @@ public final class SModuleMath
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>&gt;</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionGt(final SObjFunction func,
-                                     final SContext     context,
-                                     final Object[]     args)
+    @TeaFunction(">")
+    public static Object functionGt(final SObjFunction func,
+                                    final SContext     context,
+                                    final Object[]     args)
         throws STeaException {
 
         return compare(Comparison.GT, func, context, args);
@@ -756,13 +394,26 @@ public final class SModuleMath
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>&gt;=</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionGe(final SObjFunction func,
-                                     final SContext     context,
-                                     final Object[]     args)
+    @TeaFunction(">=")
+    public static Object functionGe(final SObjFunction func,
+                                    final SContext     context,
+                                    final Object[]     args)
         throws STeaException {
 
         return compare(Comparison.GE, func, context, args);
@@ -802,13 +453,26 @@ public final class SModuleMath
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>&lt;</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionLt(final SObjFunction func,
-                                     final SContext     context,
-                                     final Object[]     args)
+    @TeaFunction("<")
+    public static Object functionLt(final SObjFunction func,
+                                    final SContext     context,
+                                    final Object[]     args)
         throws STeaException {
 
         return compare(Comparison.LT, func, context, args);
@@ -849,13 +513,26 @@ public final class SModuleMath
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>&lt;=</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionLe(final SObjFunction func,
-                                     final SContext     context,
-                                     final Object[]     args)
+    @TeaFunction("<=")
+    public static Object functionLe(final SObjFunction func,
+                                    final SContext     context,
+                                    final Object[]     args)
         throws STeaException {
 
         return compare(Comparison.LE, func, context, args);
@@ -1022,13 +699,26 @@ public final class SModuleMath
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>+</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionAdd(final SObjFunction func,
-                                      final SContext     context,
-                                      final Object[]     args)
+    @TeaFunction("+")
+    public static Object functionAdd(final SObjFunction func,
+                                     final SContext     context,
+                                     final Object[]     args)
         throws STeaException {
 
         return arithmOp(ArithOp.ADD, func, context, args);
@@ -1068,13 +758,26 @@ public final class SModuleMath
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>-</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionSub(final SObjFunction func,
-                                      final SContext     context,
-                                      final Object[]     args)
+    @TeaFunction("-")
+    public static Object functionSub(final SObjFunction func,
+                                     final SContext     context,
+                                     final Object[]     args)
         throws STeaException {
 
         return arithmOp(ArithOp.SUB, func, context, args);
@@ -1113,13 +816,26 @@ public final class SModuleMath
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>*</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionMul(final SObjFunction func,
-                                      final SContext     context,
-                                      final Object[]     args)
+    @TeaFunction("*")
+    public static Object functionMul(final SObjFunction func,
+                                     final SContext     context,
+                                     final Object[]     args)
         throws STeaException {
 
         return arithmOp(ArithOp.MUL, func, context, args);
@@ -1159,13 +875,26 @@ public final class SModuleMath
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>/</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionDiv(final SObjFunction func,
-                                      final SContext     context,
-                                      final Object[]     args)
+    @TeaFunction("/")
+    public static Object functionDiv(final SObjFunction func,
+                                     final SContext     context,
+                                     final Object[]     args)
         throws STeaException {
 
         return arithmOp(ArithOp.DIV, func, context, args);
@@ -1448,13 +1177,26 @@ public final class SModuleMath
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>%</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionMod(final SObjFunction func,
-                                      final SContext     context,
-                                      final Object[]     args)
+    @TeaFunction("%")
+    public static Object functionMod(final SObjFunction func,
+                                     final SContext     context,
+                                     final Object[]     args)
         throws STeaException {
 
         SArgs.checkCount(args, 3, "dividend divisor");
@@ -1524,13 +1266,26 @@ public final class SModuleMath
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>and</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionAnd(final SObjFunction func,
-                                      final SContext     context,
-                                      final Object[]     args)
+    @TeaFunction("and")
+    public static Object functionAnd(final SObjFunction func,
+                                     final SContext     context,
+                                     final Object[]     args)
         throws STeaException {
 
         for ( int i=1, count=args.length; i<count; i++ ) {
@@ -1587,13 +1342,26 @@ public final class SModuleMath
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>or</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionOr(final SObjFunction func,
-                                     final SContext     context,
-                                     final Object[]     args)
+    @TeaFunction("or")
+    public static Object functionOr(final SObjFunction func,
+                                    final SContext     context,
+                                    final Object[]     args)
         throws STeaException {
 
         for ( int i=1, count=args.length; i<count; i++ ) {
@@ -1647,13 +1415,26 @@ public final class SModuleMath
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>not</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionNot(final SObjFunction func,
-                                      final SContext     context,
-                                      final Object[]     args)
+    @TeaFunction("not")
+    public static Object functionNot(final SObjFunction func,
+                                     final SContext     context,
+                                     final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -1698,13 +1479,26 @@ public final class SModuleMath
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>abs</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionAbs(final SObjFunction func,
-                                      final SContext     context,
-                                      final Object[]     args)
+    @TeaFunction("abs")
+    public static Object functionAbs(final SObjFunction func,
+                                     final SContext     context,
+                                     final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -1752,13 +1546,26 @@ public final class SModuleMath
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>round</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionRound(final SObjFunction func,
-                                        final SContext     context,
-                                        final Object[]     args)
+    @TeaFunction("round")
+    public static Object functionRound(final SObjFunction func,
+                                       final SContext     context,
+                                       final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -1801,13 +1608,26 @@ public final class SModuleMath
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>floor</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionFloor(final SObjFunction func,
-                                        final SContext     context,
-                                        final Object[]     args)
+    @TeaFunction("floor")
+    public static Object functionFloor(final SObjFunction func,
+                                       final SContext     context,
+                                       final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -1850,13 +1670,26 @@ public final class SModuleMath
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>ceil</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionCeil(final SObjFunction func,
-                                       final SContext     context,
-                                       final Object[]     args)
+    @TeaFunction("ceil")
+    public static Object functionCeil(final SObjFunction func,
+                                      final SContext     context,
+                                      final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -1899,13 +1732,26 @@ public final class SModuleMath
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>sqrt</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionSqrt(final SObjFunction func,
-                                       final SContext     context,
-                                       final Object[]     args)
+    @TeaFunction("sqrt")
+    public static Object functionSqrt(final SObjFunction func,
+                                      final SContext     context,
+                                      final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -1929,13 +1775,26 @@ public final class SModuleMath
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>min</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionMin(final SObjFunction func,
-                                      final SContext     context,
-                                      final Object[]     args)
+    @TeaFunction("min")
+    public static Object functionMin(final SObjFunction func,
+                                     final SContext     context,
+                                     final Object[]     args)
         throws STeaException {
 
         return findExtreme(C_LT, func, context, args);
@@ -1947,13 +1806,26 @@ public final class SModuleMath
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>max</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionMax(final SObjFunction func,
-                                      final SContext     context,
-                                      final Object[]     args)
+    @TeaFunction("max")
+    public static Object functionMax(final SObjFunction func,
+                                     final SContext     context,
+                                     final Object[]     args)
         throws STeaException {
 
         return findExtreme(C_GT, func, context, args);
@@ -2071,11 +1943,11 @@ public final class SModuleMath
 
 //* 
 //* <TeaFunction name="int"
-//*                 arguments="[aSymbol] aValue"
-//*             module="tea.math">
+//*              arguments="[aSymbol] aValue"
+//*              module="tea.math">
 //*
 //* <Overview>
-//* Creates a new integer mutable numeric object.
+//* Creates a new variable containing a numeric object.
 //* </Overview>
 //*
 //* <Parameter name="aSymbol">
@@ -2088,14 +1960,12 @@ public final class SModuleMath
 //* </Parameter>
 //*
 //* <Returns>
-//* The newly created integer mutable numeric object.
+//* The result of converting the given argument to an integer value.
 //* </Returns>
 //*
 //* <Description>
-//* Creates a new integer mutable numeric object and initializes it
-//* with <Arg name="aValue"/>. If the <Arg name="aSymbol"/> argument
-//* is specified then a variable is created in the current context
-//* and a reference to the new object is stored in it.
+//* Creates a new variable in the current context and initializes it
+//* with <Arg name="aValue"/>.
 //* </Description>
 //* 
 //* </TeaFunction>
@@ -2103,13 +1973,26 @@ public final class SModuleMath
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>int</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionInt(final SObjFunction func,
-                                      final SContext     context,
-                                      final Object[]     args)
+    @TeaFunction("int")
+    public static Object functionInt(final SObjFunction func,
+                                     final SContext     context,
+                                     final Object[]     args)
         throws STeaException {
 
         if ( args.length == 3 ) {
@@ -2158,17 +2041,26 @@ public final class SModuleMath
 
 /**************************************************************************
  *
- * This method is supposed to be called with <TT>args</TT> having at least
- * one element.
+ * Implements the Tea <code>rand-int</code> function.
  *
- * @exception STeaException
- *   Thrown if there is not at leat one argument for the command.
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private Object functionRandInt(final SObjFunction func,
-                                   final SContext     context,
-                                   final Object[]     args)
+    @TeaFunction("rand-int")
+    public Object functionRandInt(final SObjFunction func,
+                                  final SContext     context,
+                                  final Object[]     args)
         throws STeaException {
 
         return Integer.valueOf(_generator.nextInt());
@@ -2211,13 +2103,26 @@ public final class SModuleMath
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>=</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionSetValue(final SObjFunction func,
-                                           final SContext     context,
-                                           final Object[]     args)
+    @TeaFunction("=")
+    public static Object functionSetValue(final SObjFunction func,
+                                          final SContext     context,
+                                          final Object[]     args)
         throws STeaException {
 
       if ( args.length != 3 ) {
@@ -2279,13 +2184,26 @@ public final class SModuleMath
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>+=</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionIncBy(final SObjFunction func,
-                                        final SContext     context,
-                                        final Object[]     args)
+    @TeaFunction("+=")
+    public static Object functionIncBy(final SObjFunction func,
+                                       final SContext     context,
+                                       final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -2362,13 +2280,26 @@ public final class SModuleMath
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>-=</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionDecBy(final SObjFunction func,
-                                        final SContext     context,
-                                        final Object[]     args)
+    @TeaFunction("-=")
+    public static Object functionDecBy(final SObjFunction func,
+                                       final SContext     context,
+                                       final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -2445,13 +2376,26 @@ public final class SModuleMath
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>*=</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionMulBy(final SObjFunction func,
-                                        final SContext     context,
-                                        final Object[]     args)
+    @TeaFunction("*=")
+    public static Object functionMulBy(final SObjFunction func,
+                                       final SContext     context,
+                                       final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -2528,13 +2472,26 @@ public final class SModuleMath
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>/*</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionDivBy(final SObjFunction func,
-                                        final SContext     context,
-                                        final Object[]     args)
+    @TeaFunction("/=")
+    public static Object functionDivBy(final SObjFunction func,
+                                       final SContext     context,
+                                       final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -2606,11 +2563,24 @@ public final class SModuleMath
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>++</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionInc(final SObjFunction func,
+    @TeaFunction("++")
+    public static Object functionIncr(final SObjFunction func,
                                       final SContext     context,
                                       final Object[]     args)
         throws STeaException {
@@ -2683,11 +2653,24 @@ public final class SModuleMath
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>--</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionDec(final SObjFunction func,
+    @TeaFunction("--")
+    public static Object functionDecr(final SObjFunction func,
                                       final SContext     context,
                                       final Object[]     args)
         throws STeaException {
@@ -2748,13 +2731,26 @@ public final class SModuleMath
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>~</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private Object functionBinNeg(final SObjFunction func,
-                                  final SContext     context,
-                                  final Object[]     args)
+    @TeaFunction("~")
+    public Object functionBinNeg(final SObjFunction func,
+                                 final SContext     context,
+                                 final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -2798,13 +2794,26 @@ public final class SModuleMath
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>&amp;</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private Object functionBinAnd(final SObjFunction func,
-                                  final SContext     context,
-                                  final Object[]     args)
+    @TeaFunction("&")
+    public Object functionBinAnd(final SObjFunction func,
+                                 final SContext     context,
+                                 final Object[]     args)
         throws STeaException {
 
         int lastIndex = args.length;
@@ -2850,13 +2859,26 @@ public final class SModuleMath
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>|</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private Object functionBinOr(final SObjFunction func,
-                                 final SContext     context,
-                                 final Object[]     args)
+    @TeaFunction("|")
+    public Object functionBinOr(final SObjFunction func,
+                                final SContext     context,
+                                final Object[]     args)
         throws STeaException {
 
         int lastIndex = args.length;
@@ -2902,13 +2924,26 @@ public final class SModuleMath
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>^</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private Object functionBinXor(final SObjFunction func,
-                                  final SContext     context,
-                                  final Object[]     args)
+    @TeaFunction("^")
+    public Object functionBinXor(final SObjFunction func,
+                                 final SContext     context,
+                                 final Object[]     args)
         throws STeaException {
 
         int lastIndex = args.length;
@@ -2957,13 +2992,26 @@ public final class SModuleMath
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>&lt;&lt;</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private Object functionBinSl(final SObjFunction func,
-                                 final SContext     context,
-                                 final Object[]     args)
+    @TeaFunction("<<")
+    public Object functionBinSl(final SObjFunction func,
+                                final SContext     context,
+                                final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -3011,13 +3059,26 @@ public final class SModuleMath
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>&gt;&gt;</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private Object functionBinSr(final SObjFunction func,
-                                 final SContext     context,
-                                 final Object[]     args)
+    @TeaFunction(">>")
+    public Object functionBinSr(final SObjFunction func,
+                                final SContext     context,
+                                final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -3078,13 +3139,26 @@ public final class SModuleMath
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>&amp;=</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionBinAndBy(final SObjFunction func,
-                                           final SContext     context,
-                                           final Object[]     args)
+    @TeaFunction("&=")
+    public static Object functionBinAndBy(final SObjFunction func,
+                                          final SContext     context,
+                                          final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -3160,13 +3234,26 @@ public final class SModuleMath
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>|=</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionBinOrBy(final SObjFunction func,
-                                          final SContext     context,
-                                          final Object[]     args)
+    @TeaFunction("|=")
+    public static Object functionBinOrBy(final SObjFunction func,
+                                         final SContext     context,
+                                         final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -3242,13 +3329,26 @@ public final class SModuleMath
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>^=</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionBinXorBy(final SObjFunction func,
-                                           final SContext     context,
-                                           final Object[]     args)
+    @TeaFunction("^=")
+    public static Object functionBinXorBy(final SObjFunction func,
+                                          final SContext     context,
+                                          final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -3324,13 +3424,26 @@ public final class SModuleMath
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>&lt;&lt;=</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionBinSlBy(final SObjFunction func,
-                                          final SContext     context,
-                                          final Object[]     args)
+    @TeaFunction("<<=")
+    public static Object functionBinSlBy(final SObjFunction func,
+                                         final SContext     context,
+                                         final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -3406,13 +3519,26 @@ public final class SModuleMath
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>&gt;&gt;=</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionBinSrBy(final SObjFunction func,
-                                          final SContext     context,
-                                          final Object[]     args)
+    @TeaFunction(">>=")
+    public static Object functionBinSrBy(final SObjFunction func,
+                                         final SContext     context,
+                                         final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {

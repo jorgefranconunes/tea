@@ -46,6 +46,7 @@ import com.pdmfc.tea.runtime.SReturnException;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypeException;
 import com.pdmfc.tea.runtime.STypes;
+import com.pdmfc.tea.runtime.TeaFunction;
 
 
 
@@ -107,27 +108,6 @@ public final class SModuleLang
     // THashtable containing the Java system properties.
     private SHashtable _systemProps = null;
 
-    // Signals if a GC is to be performed after executing an external
-    // program. Prior to version 1.3 Sun's JRE did not correctly
-    // released resources (file descriptors) after invoking
-    // "Runtime.exec(...)", requiring a GC work around that problem.
-    private static boolean _requiresGc = false;
-
-
-
-
-
-    static {
-        String version = System.getProperty("java.version");
-        
-        _requiresGc = 
-            (version.length() >= 4)
-            && (version.charAt(1) == '.')
-            && (version.charAt(3) == '.')
-            && (version.charAt(0) <= '1')
-            && (version.charAt(2) <= '2');
-    }
-
 
 
 
@@ -153,6 +133,7 @@ public final class SModuleLang
  *
  **************************************************************************/
 
+    @Override
     public void init(final SContext context)
         throws STeaException {
 
@@ -164,441 +145,11 @@ public final class SModuleLang
         context.newVar(TEA_VERSION_VAR,
                        SConfigInfo.getProperty(PROP_TEA_VERSION));
 
-        context.newVar("echo",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionEcho(func, context, args);
-                           }
-                       });
-
-        context.newVar("define",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionDefine(func, context, args);
-                           }
-                       });
-
-        context.newVar("global",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionGlobal(func, context, args);
-                           }
-                       });
-
-        context.newVar("set!",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionSet(func, context, args);
-                           }
-                       });
-
-        context.newVar("get",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionGet(func, context, args);
-                           }
-                       });
-        
-        context.newVar("break",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionBreak(func, context, args);
-                           }
-                       });
-
-        context.newVar("continue",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionContinue(func, context, args);
-                           }
-                       });
-
-        context.newVar("return",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionReturn(func, context, args);
-                           }
-                       });
-
-        context.newVar("error",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionError(func, context, args);
-                           }
-                       });
-
-        context.newVar("is",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionIs(func, context, args);
-                           }
-                       });
-
-        context.newVar("exit",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionExit(func, context, args);
-                           }
-                       });
-
-        context.newVar("if",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionIf(func, context, args);
-                           }
-                       });
-
-        context.newVar("cond",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionCond(func, context, args);
-                           }
-                       });
-
-        context.newVar("while",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionWhile(func, context, args);
-                           }
-                       });
-
-        context.newVar("foreach",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionForeach(func, context, args);
-                           }
-                       });
-
-        context.newVar("exec",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionExec(func, context, args);
-                           }
-                       });
-
-        context.newVar("lambda",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionLambda(func, context, args);
-                           }
-                       });
-
-        context.newVar("load",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionLoad(func, context, args);
-                           }
-                       });
-
-        context.newVar("load-function",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionLoadFunction(func, context, args);
-                           }
-                       });
-        
-        context.newVar("system",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionSystem(func, context, args);
-                           }
-                       });
-
-        context.newVar("source",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionSource(func, context, args);
-                           }
-                       });
-
-        context.newVar("compile",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionCompile(func, context, args);
-                           }
-                       });
-
-        context.newVar("apply",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionApply(func, context, args);
-                           }
-                       });
-
-        context.newVar("map",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionMap(func, context, args);
-                           }
-                       });
-        
-        context.newVar("map-apply",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionMapApply(func, context, args);
-                           }
-                       });
-
-        context.newVar("null?",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionIsNull(func, context, args);
-                           }
-                       });
-
-        context.newVar("not-null?",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionIsNotNull(func, context, args);
-                           }
-                       });
-
-        context.newVar("bool?",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionIsBoolean(func, context, args);
-                           }
-                       });
-
-        context.newVar("block?",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionIsBlock(func, context, args);
-                           }
-                       });
-
-        context.newVar("float?",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionIsFloat(func, context, args);
-                           }
-                       });
-
-        context.newVar("int?",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionIsInt(func, context, args);
-                           }
-                       });
-
-        context.newVar("pair?",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionIsPair(func, context, args);
-                           }
-                       });
-
-        SObjFunction isFunc = new SObjFunction() {
-                public Object exec(final SObjFunction func,
-                                   final SContext     context,
-                                   final Object[]     args)
-                    throws STeaException {
-                    return functionIsFunction(func, context, args);
-                }
-            };
-
-        context.newVar("function?", isFunc);
-
-        // For backwards compatibility with Tea 1.x.
-        context.newVar("proc?", isFunc);
-
-        context.newVar("symbol?",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionIsSymbol(func, context, args);
-                           }
-                       });
-
-        context.newVar("string?",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionIsString(func, context, args);
-                           }
-                       });
-
-        context.newVar("same?",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionIsSame(func, context, args);
-                           }
-                       });
-
-        context.newVar("not-same?",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionIsNotSame(func,context,args);
-                           }
-                       });
-
-        context.newVar("time",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionTime(func, context, args);
-                           }
-                       });
-
-        context.newVar("catch",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionCatch(func, context, args);
-                           }
-                       });
-
-        context.newVar("sleep",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionSleep(func, context, args);
-                           }
-                       });
-
         context.newVar("import", new SFunctionImport(_globalContext));
 
-        context.newVar("tea-get-system-property",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionGetProp(func, context,args);
-                           }
-                       });
-
-        context.newVar("tea-set-system-property",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionSetProp(func, context,args);
-                           }
-                       });
-
-        context.newVar("tea-get-system-properties",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionGetProps(func,context,args);
-                           }
-                       });
+        // The other functions provided by this module are implemented
+        // as methods of this with class with the TeaFunction
+        // annotation.
    }
 
 
@@ -611,6 +162,7 @@ public final class SModuleLang
  *
  **************************************************************************/
 
+    @Override
     public void end() {
 
         // Nothing to do.
@@ -626,6 +178,7 @@ public final class SModuleLang
  *
  **************************************************************************/
 
+    @Override
     public void start() {
 
         // Nothing to do.
@@ -641,10 +194,11 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-      public void stop() {
+    @Override
+    public void stop() {
           
-          // Nothing to do.
-      }
+        // Nothing to do.
+    }
 
 
 
@@ -685,13 +239,26 @@ public final class SModuleLang
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>apply</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionApply(final SObjFunction func,
-                                        final SContext     context,
-                                        final Object[]     args)
+    @TeaFunction("apply")
+    public static Object functionApply(final SObjFunction func,
+                                       final SContext     context,
+                                       final Object[]     args)
         throws STeaException {
 
         if ( args.length < 2 ) {
@@ -766,13 +333,26 @@ public final class SModuleLang
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>break</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionBreak(final SObjFunction func,
-                                        final SContext     context,
-                                        final Object[]     args)
+    @TeaFunction("break")
+    public static Object functionBreak(final SObjFunction func,
+                                       final SContext     context,
+                                       final Object[]     args)
         throws STeaException {
         
         if ( args.length > 2 ) {
@@ -848,13 +428,26 @@ public final class SModuleLang
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>catch</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionCatch(final SObjFunction func,
-                                        final SContext     context,
-                                        final Object[]     args)
+    @TeaFunction("catch")
+    public static Object functionCatch(final SObjFunction func,
+                                       final SContext     context,
+                                       final Object[]     args)
         throws STeaException {
 
         if ( (args.length<2) || (args.length>4) ) {
@@ -950,13 +543,26 @@ public final class SModuleLang
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>cond</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionCond(final SObjFunction func,
-                                       final SContext     context,
-                                       final Object[]     args)
+    @TeaFunction("cond")
+    public static Object functionCond(final SObjFunction func,
+                                      final SContext     context,
+                                      final Object[]     args)
         throws STeaException {
        
         int numArgs = args.length;
@@ -1016,17 +622,30 @@ public final class SModuleLang
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>continue</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-   private static Object functionContinue(final SObjFunction func,
+    @TeaFunction("continue")
+    public static Object functionContinue(final SObjFunction func,
                                           final SContext     context,
                                           final Object[]     args)
-       throws STeaException {
+        throws STeaException {
 
-       throw new SContinueException();
-   }
+        throw new SContinueException();
+    }
 
 
 
@@ -1104,13 +723,26 @@ public final class SModuleLang
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>define</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionDefine(final SObjFunction func,
-                                         final SContext     context,
-                                         final Object[]     args)
+    @TeaFunction("define")
+    public static Object functionDefine(final SObjFunction func,
+                                        final SContext     context,
+                                        final Object[]     args)
         throws STeaException {
 
         if ( (args.length<2) || (args.length>4) ) {
@@ -1130,6 +762,8 @@ public final class SModuleLang
          case 4 :
              result = newFunction(args);
              break;
+        default :
+            // Will never happen.
         }
 
         context.newVar(symbol, result);
@@ -1184,13 +818,26 @@ public final class SModuleLang
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>global</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private Object functionGlobal(final SObjFunction func,
-                                  final SContext     context,
-                                  final Object[]     args)
+    @TeaFunction("global")
+    public Object functionGlobal(final SObjFunction func,
+                                 final SContext     context,
+                                 final Object[]     args)
         throws STeaException {
 
         if ( (args.length<2) || (args.length>4) ) {
@@ -1210,6 +857,8 @@ public final class SModuleLang
         case 4 :
             result = newFunction(args);
             break;
+        default :
+            // Will never happen.
         }
 
         _globalContext.newVar(symbol, result);
@@ -1349,13 +998,26 @@ public final class SModuleLang
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>echo</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private  static Object functionEcho(final SObjFunction func,
-                                        final SContext     context,
-                                        final Object[]     args)
+    @TeaFunction("echo")
+    public  static Object functionEcho(final SObjFunction func,
+                                       final SContext     context,
+                                       final Object[]     args)
         throws STeaException {
 
         int argCount = args.length;
@@ -1408,13 +1070,26 @@ public final class SModuleLang
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>error</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionError(final SObjFunction func,
-                                        final SContext     context,
-                                        final Object[]     args)
+    @TeaFunction("error")
+    public static Object functionError(final SObjFunction func,
+                                       final SContext     context,
+                                       final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -1464,26 +1139,39 @@ public final class SModuleLang
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>exec</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-   private static Object functionExec(final SObjFunction func,
+    @TeaFunction("exec")
+    public static Object functionExec(final SObjFunction func,
                                       final SContext     context,
                                       final Object[]     args)
-      throws STeaException {
+        throws STeaException {
 
-      if ( args.length != 2 ) {
-         throw new SNumArgException(args, "block");
-      }
+        if ( args.length != 2 ) {
+            throw new SNumArgException(args, "block");
+        }
 
-      Object    result = null;
-      SObjBlock block  = SArgs.getBlock(args, 1);
+        Object    result = null;
+        SObjBlock block  = SArgs.getBlock(args, 1);
 
-      result = block.exec();
+        result = block.exec();
 
-      return result;
-   }
+        return result;
+    }
 
 
 
@@ -1510,13 +1198,26 @@ public final class SModuleLang
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>exit</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionExit(final SObjFunction func,
-                                       final SContext     context,
-                                       final Object[]     args)
+    @TeaFunction("exit")
+    public static Object functionExit(final SObjFunction func,
+                                      final SContext     context,
+                                      final Object[]     args)
         throws STeaException {
 
         if ( args.length > 2 ) {
@@ -1585,13 +1286,26 @@ public final class SModuleLang
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>foreach</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionForeach(final SObjFunction func,
-                                          final SContext     context,
-                                          final Object[]     args)
+    @TeaFunction("foreach")
+    public static Object functionForeach(final SObjFunction func,
+                                         final SContext     context,
+                                         final Object[]     args)
         throws STeaException {
 
         if ( args.length != 4 ) {
@@ -1605,14 +1319,15 @@ public final class SModuleLang
         SObjVar    var        = newContext.newVar(symbol, SObjNull.NULL);
         Object     result     = SObjNull.NULL;
 
-        for ( Iterator e=list.iterator(); e.hasNext(); ) {
-            var.set(e.next());
+        for ( Object element : list ) {
+            var.set(element);
             try {
                 result = block.exec(newContext);
             } catch (SBreakException e1) {
                 result  = e1.getBreakValue();
                 break;
             } catch (SContinueException e2) {
+                // Just continue for the next element.
             }
         }
 
@@ -1648,13 +1363,26 @@ public final class SModuleLang
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>get</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionGet(final SObjFunction func,
-                                      final SContext     context,
-                                      final Object[]     args)
+    @TeaFunction("get")
+    public static Object functionGet(final SObjFunction func,
+                                     final SContext     context,
+                                     final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -1711,13 +1439,26 @@ public final class SModuleLang
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>if</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionIf(final SObjFunction func,
-                                     final SContext     context,
-                                     final Object[]     args)
+    @TeaFunction("if")
+    public static Object functionIf(final SObjFunction func,
+                                    final SContext     context,
+                                    final Object[]     args)
         throws STeaException {
 
         int numArgs = args.length;
@@ -1777,25 +1518,34 @@ public final class SModuleLang
 
 /**************************************************************************
  *
- * This method is supposed to be called with <TT>args</TT> having at least
- * one element.
+ * Implements the Tea <code>is</code> function.
  *
- * @exception STeaException Thrown if there is not two arguments for
- * the command.
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-   private static Object functionIs(final SObjFunction func,
+    @TeaFunction("is")
+    public static Object functionIs(final SObjFunction func,
                                     final SContext     context,
                                     final Object[]     args)
-       throws STeaException {
+        throws STeaException {
 
-       if ( args.length != 2 ) {
-           throw new SNumArgException(args, "object");
-       }
+        if ( args.length != 2 ) {
+            throw new SNumArgException(args, "object");
+        }
 
-       return args[1];
-   }
+        return args[1];
+    }
 
 
 
@@ -1807,10 +1557,8 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    private static Object typeCheck(final Class<?>     type,
-                                    final SObjFunction func,
-                                    final SContext     context,
-                                    final Object[]     args)
+    private static Object typeCheck(final Class<?> type,
+                                    final Object[] args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -1853,16 +1601,29 @@ public final class SModuleLang
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>block?</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionIsBlock(final SObjFunction func,
-                                          final SContext     context,
-                                          final Object[]     args)
+    @TeaFunction("block?")
+    public static Object functionIsBlock(final SObjFunction func,
+                                         final SContext     context,
+                                         final Object[]     args)
         throws STeaException {
 
-        return typeCheck(SObjBlock.class, func, context, args);
+        return typeCheck(SObjBlock.class, args);
     }
 
 
@@ -1895,16 +1656,29 @@ public final class SModuleLang
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>bool?</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionIsBoolean(final SObjFunction func,
-                                            final SContext     context,
-                                            final Object[]     args)
+    @TeaFunction("bool?")
+    public static Object functionIsBoolean(final SObjFunction func,
+                                           final SContext     context,
+                                           final Object[]     args)
         throws STeaException {
 
-        return typeCheck(Boolean.class, func, context, args);
+        return typeCheck(Boolean.class, args);
     }
 
 
@@ -1937,16 +1711,29 @@ public final class SModuleLang
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>float?</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionIsFloat(final SObjFunction func,
-                                          final SContext     context,
-                                          final Object[]     args)
+    @TeaFunction("float?")
+    public static Object functionIsFloat(final SObjFunction func,
+                                         final SContext     context,
+                                         final Object[]     args)
         throws STeaException {
 
-        return typeCheck(Double.class, func, context, args);
+        return typeCheck(Double.class, args);
     }
 
 
@@ -1978,16 +1765,29 @@ public final class SModuleLang
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>function?</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionIsFunction(final SObjFunction func,
-                                             final SContext     context,
-                                             final Object[]     args)
+    @TeaFunction("function?")
+    public static Object functionIsFunction(final SObjFunction func,
+                                            final SContext     context,
+                                            final Object[]     args)
         throws STeaException {
 
-        return typeCheck(SObjFunction.class, func, context, args);
+        return typeCheck(SObjFunction.class, args);
     }
 
 
@@ -2020,16 +1820,29 @@ public final class SModuleLang
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>int?</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionIsInt(final SObjFunction func,
-                                        final SContext     context,
-                                        final Object[]     args)
+    @TeaFunction("int?")
+    public static Object functionIsInt(final SObjFunction func,
+                                       final SContext     context,
+                                       final Object[]     args)
         throws STeaException {
         
-        return typeCheck(Integer.class, func, context, args);
+        return typeCheck(Integer.class, args);
     }
 
 
@@ -2062,16 +1875,29 @@ public final class SModuleLang
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>pair?</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionIsPair(final SObjFunction func,
-                                         final SContext     context,
-                                         final Object[]     args)
+    @TeaFunction("pair?")
+    public static Object functionIsPair(final SObjFunction func,
+                                        final SContext     context,
+                                        final Object[]     args)
         throws STeaException {
         
-        return typeCheck(SObjPair.class, func, context, args);
+        return typeCheck(SObjPair.class, args);
     }
 
 
@@ -2104,16 +1930,29 @@ public final class SModuleLang
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>string?</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionIsString(final SObjFunction func,
-                                           final SContext     context,
-                                           final Object[]     args)
+    @TeaFunction("string?")
+    public static Object functionIsString(final SObjFunction func,
+                                          final SContext     context,
+                                          final Object[]     args)
         throws STeaException {
         
-        return typeCheck(String.class, func, context, args);
+        return typeCheck(String.class, args);
     }
 
 
@@ -2146,16 +1985,29 @@ public final class SModuleLang
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>symbol?</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionIsSymbol(final SObjFunction func,
-                                           final SContext     context,
-                                           final Object[]     args)
+    @TeaFunction("symbol?")
+    public static Object functionIsSymbol(final SObjFunction func,
+                                          final SContext     context,
+                                          final Object[]     args)
         throws STeaException {
         
-        return typeCheck(SObjSymbol.class, func, context, args);
+        return typeCheck(SObjSymbol.class, args);
     }
 
 
@@ -2188,13 +2040,26 @@ public final class SModuleLang
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>not-null?</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionIsNotNull(final SObjFunction func,
-                                            final SContext     context,
-                                            final Object[]     args)
+    @TeaFunction("not-null?")
+    public static Object functionIsNotNull(final SObjFunction func,
+                                           final SContext     context,
+                                           final Object[]     args)
         throws STeaException {
         
         if ( args.length != 2 ) {
@@ -2239,13 +2104,26 @@ public final class SModuleLang
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>not-same?</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionIsNotSame(final SObjFunction func,
-                                            final SContext     context,
-                                            final Object[]     args)
+    @TeaFunction("not-same?")
+    public static Object functionIsNotSame(final SObjFunction func,
+                                           final SContext     context,
+                                           final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -2285,13 +2163,26 @@ public final class SModuleLang
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>null?</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionIsNull(final SObjFunction func,
-                                         final SContext context,
-                                         final Object[]   args)
+    @TeaFunction("null?")
+    public static Object functionIsNull(final SObjFunction func,
+                                        final SContext context,
+                                        final Object[]   args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -2336,13 +2227,26 @@ public final class SModuleLang
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>same?</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionIsSame(final SObjFunction func,
-                                         final SContext     context,
-                                         final Object[]     args)
+    @TeaFunction("same?")
+    public static Object functionIsSame(final SObjFunction func,
+                                        final SContext     context,
+                                        final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -2386,17 +2290,26 @@ public final class SModuleLang
 
 /**************************************************************************
  *
- * This method is supposed to be called with <TT>args</TT> having at least
- * one element.
+ * Implements the Tea <code>lambda</code> function.
  *
- * @exception com.pdmfc.tea.STeaException
- *   Thrown if there is not two arguments for the command.
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionLambda(final SObjFunction func,
-                                         final SContext     context,
-                                         final Object[]     args)
+    @TeaFunction("lambda")
+    public static Object functionLambda(final SObjFunction func,
+                                        final SContext     context,
+                                        final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -2408,13 +2321,14 @@ public final class SModuleLang
         SObjFunction result       = null;
 
         if ( formalParam instanceof SObjPair ) {
-            return newFixedArgsFunction(args, (SObjPair)formalParam, body);
+            result = newFixedArgsFunction(args, (SObjPair)formalParam, body);
+        } else if ( formalParam instanceof SObjSymbol ) {
+            result = newVarArgsFunction((SObjSymbol)formalParam, body);
+        } else {
+            throw new STypeException(args, 1, "symbol or a symbol list");
         }
-        if ( formalParam instanceof SObjSymbol ) {
-            return newVarArgsFunction((SObjSymbol)formalParam, body);
-        }
-        
-        throw new STypeException(args, 1, "symbol or a symbol list");
+
+        return result;
     }
 
 
@@ -2444,17 +2358,26 @@ public final class SModuleLang
 
 /**************************************************************************
  *
- * This method is supposed to be called with <TT>args</TT> having at least
- * one element.
+ * Implements the Tea <code>load</code> function.
  *
- * @exception STeaException
- *   Thrown if there is not two arguments for the command.
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private Object functionLoad(final SObjFunction func,
-                                final SContext     context,
-                                final Object[]     args)
+    @TeaFunction("load")
+    public Object functionLoad(final SObjFunction func,
+                               final SContext     context,
+                               final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -2501,17 +2424,26 @@ public final class SModuleLang
 
 /**************************************************************************
  *
- * This method is supposed to be called with <TT>args</TT> having at least
- * one element.
+ * Implements the Tea <code>load-function</code> function.
  *
- * @exception STeaException
- *   Thrown if there is not two arguments for the command.
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private Object functionLoadFunction(final SObjFunction func,
-                                        final SContext     context,
-                                        final Object[]     args)
+    @TeaFunction("load-function")
+    public Object functionLoadFunction(final SObjFunction func,
+                                       final SContext     context,
+                                       final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -2594,13 +2526,26 @@ public final class SModuleLang
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>map</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionMap(final SObjFunction func,
-                                      final SContext     context,
-                                      final Object[]     args)
+    @TeaFunction("map")
+    public static Object functionMap(final SObjFunction func,
+                                     final SContext     context,
+                                     final Object[]     args)
         throws STeaException {
 
         if ( args.length < 3 ) {
@@ -2716,13 +2661,26 @@ public final class SModuleLang
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>map-apply</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionMapApply(final SObjFunction func,
-                                           final SContext     context,
-                                           final Object[]     args)
+    @TeaFunction("map-apply")
+    public static Object functionMapApply(final SObjFunction func,
+                                          final SContext     context,
+                                          final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -2836,17 +2794,30 @@ public final class SModuleLang
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>return</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-   private static Object functionReturn(final SObjFunction func,
+    @TeaFunction("return")
+    public static Object functionReturn(final SObjFunction func,
                                         final SContext     context,
                                         final Object[]     args)
-       throws STeaException {
+        throws STeaException {
 
-       throw new SReturnException((args.length>1) ? args[1] : SObjNull.NULL);
-   }
+        throw new SReturnException((args.length>1) ? args[1] : SObjNull.NULL);
+    }
 
 
 
@@ -2889,13 +2860,26 @@ public final class SModuleLang
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>set!</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionSet(final SObjFunction func,
-                                      final SContext     context,
-                                      final Object[]     args)
+    @TeaFunction("set!")
+    public static Object functionSet(final SObjFunction func,
+                                     final SContext     context,
+                                     final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -2941,13 +2925,26 @@ public final class SModuleLang
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>sleep</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionSleep(final SObjFunction func,
-                                        final SContext     context,
-                                        final Object[]     args)
+    @TeaFunction("sleep")
+    public static Object functionSleep(final SObjFunction func,
+                                       final SContext     context,
+                                       final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -3027,16 +3024,29 @@ public final class SModuleLang
 
 /**************************************************************************
  *
+ *Implements the Tea <code>source</code> function.
  *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private Object functionSource(final SObjFunction func,
-                                  final SContext     context,
-                                  final Object[]     args)
+    @TeaFunction("source")
+    public Object functionSource(final SObjFunction func,
+                                 final SContext     context,
+                                 final Object[]     args)
         throws STeaException {
 
-        SCode    program    = compileFromSource(func, context, args);
+        SCode    program    = compileFromSource(context, args);
         SContext runContext = _globalContext.newChild();
         Object   result     = program.exec(runContext);
 
@@ -3099,16 +3109,29 @@ public final class SModuleLang
 
 /**************************************************************************
  *
+ * Implements the Tea <code>compile</code> function.
  *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private Object functionCompile(final SObjFunction func,
-                                   final SContext     context,
-                                   final Object[]     args)
+    @TeaFunction("compile")
+    public Object functionCompile(final SObjFunction func,
+                                  final SContext     context,
+                                  final Object[]     args)
         throws STeaException {
 
-        final SCode     program      = compileFromSource(func, context, args);
+        final SCode     program      = compileFromSource(context, args);
         final SContext  blockContext = _globalContext;
         SObjBlock       result       =
             new SObjBlock() {
@@ -3138,9 +3161,8 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    private SCode compileFromSource(final SObjFunction func,
-                                    final SContext     context,
-                                    final Object[]     args)
+    private SCode compileFromSource(final SContext context,
+                                    final Object[] args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -3221,17 +3243,26 @@ public final class SModuleLang
 
 /**************************************************************************
  *
- * This method is supposed to be called with <TT>args</TT> having at least
- * one element.
+ * Implements the Tea <code>system</code> function.
  *
- * @exception STeaException Thrown if there is not two arguments for
- * the command.
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionSystem(final SObjFunction func,
-                                         final SContext     context,
-                                         final Object[]     args)
+    @TeaFunction("system")
+    public static Object functionSystem(final SObjFunction func,
+                                        final SContext     context,
+                                        final Object[]     args)
         throws STeaException {
 
         if ( args.length < 2 ) {
@@ -3269,10 +3300,6 @@ public final class SModuleLang
             status = proc.waitFor();
         } catch (InterruptedException e) {
             throw new SRuntimeException(e);
-        }
-
-        if ( _requiresGc ) {
-            System.gc();
         }
 
         return Integer.valueOf(status);
@@ -3313,13 +3340,26 @@ public final class SModuleLang
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>time</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionTime(final SObjFunction func,
-                                       final SContext     context,
-                                       final Object[]     args)
+    @TeaFunction("time")
+    public static Object functionTime(final SObjFunction func,
+                                      final SContext     context,
+                                      final Object[]     args)
         throws STeaException {
 
         if ( (args.length<2) || (args.length>3) ) {
@@ -3391,13 +3431,26 @@ public final class SModuleLang
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>while</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionWhile(final SObjFunction func,
-                                        final SContext     context,
-                                        final Object[]     args)
+    @TeaFunction("while")
+    public static Object functionWhile(final SObjFunction func,
+                                       final SContext     context,
+                                       final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -3408,13 +3461,13 @@ public final class SModuleLang
 
         if ( condition instanceof Boolean ) {
             if ( ((Boolean)condition).booleanValue() ) {
-                return infiniteLoop(context, args);
+                return infiniteLoop(args);
             } else {
                 return SObjNull.NULL;
             }
         }
 
-        return normalLoop(context, args);
+        return normalLoop(args);
     }
 
 
@@ -3428,8 +3481,7 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    private static Object normalLoop(final SContext context,
-                                     final Object[] args)
+    private static Object normalLoop(final Object[] args)
         throws STeaException {
 
         SObjBlock condBlock   = SArgs.getBlock(args, 1);
@@ -3476,8 +3528,7 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    private static Object infiniteLoop(final SContext context,
-                                       final Object[] args)
+    private static Object infiniteLoop(final Object[] args)
         throws STeaException {
 
         SObjBlock block      = SArgs.getBlock(args, 2);
@@ -3531,13 +3582,26 @@ public final class SModuleLang
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>tea-get-system-property</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private Object functionGetProp(final SObjFunction obj,
-                                   final SContext     context,
-                                   final Object[]     args)
+    @TeaFunction("tea-get-system-property")
+    public static Object functionGetProp(final SObjFunction obj,
+                                         final SContext     context,
+                                         final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -3554,7 +3618,7 @@ public final class SModuleLang
 
         try {
             value = System.getProperty(key);
-        } catch (Throwable e) {
+        } catch ( RuntimeException e ) {
             String   msg = "Failed to get system property \"{0}\" - {1} - {2}";
             Object[] fmtArgs = { key, e.getClass().getName(), e.getMessage() };
             throw new SRuntimeException(args, msg, fmtArgs);
@@ -3600,13 +3664,26 @@ public final class SModuleLang
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>tea-set-system-property</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private Object functionSetProp(final SObjFunction obj,
-                                   final SContext     context,
-                                   final Object[]     args)
+    @TeaFunction("tea-set-system-property")
+    public static Object functionSetProp(final SObjFunction obj,
+                                         final SContext     context,
+                                         final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -3624,7 +3701,7 @@ public final class SModuleLang
 
         try {
             prevValue = System.setProperty(key, value);
-        } catch (Throwable e) {
+        } catch ( RuntimeException e ) {
             String   msg = "Failed to set system property \"{0}\" - {1} - {2}";
             Object[] fmtArgs = { key, e.getClass().getName(), e.getMessage() };
             throw new SRuntimeException(args, msg, fmtArgs);
@@ -3660,13 +3737,26 @@ public final class SModuleLang
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>tea-get-system-properties</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private Object functionGetProps(final SObjFunction obj,
-                                    final SContext     context,
-                                    final Object[]     args)
+    @TeaFunction("tea-get-system-properties")
+    public Object functionGetProps(final SObjFunction obj,
+                                   final SContext     context,
+                                   final Object[]     args)
         throws STeaException {
 
         if ( _systemProps == null ) {

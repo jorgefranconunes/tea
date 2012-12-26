@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import com.pdmfc.tea.SConfigInfo;
 import com.pdmfc.tea.STeaException;
@@ -121,12 +122,12 @@ final class SFunctionImport
 
     // Keys are import paths (String). Values are ImportItem
     // instances.
-    private HashMap<String,ImportItem> _itemsByPath =
+    private Map<String,ImportItem> _itemsByPath =
         new HashMap<String,ImportItem>();
 
     // Keys are import items full paths (String). Values are
     // ImportItem instances.
-    private HashMap<String,ImportItem> _itemsByFullPath =
+    private Map<String,ImportItem> _itemsByFullPath =
         new HashMap<String,ImportItem>();
 
 
@@ -410,11 +411,9 @@ final class SFunctionImport
                 long    lastModified  = _file.lastModified();
                 boolean fileExists    = lastModified != 0;
 
-                if ( fileExists ) {
-                    if ( lastModified != _lastImportTime ) {
-                        result     = tryToPerformImport();
-                        fileExists = (result != null);
-                    }
+                if ( fileExists && (lastModified!=_lastImportTime) ) {
+                    result     = tryToPerformImport();
+                    fileExists = (result != null);
                 }
 
                 if ( !fileExists ) {

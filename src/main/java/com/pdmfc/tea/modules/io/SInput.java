@@ -14,19 +14,14 @@ import java.io.Reader;
 
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.modules.io.SIOException;
-import com.pdmfc.tea.modules.io.SOutput;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.tos.STosUtil;
-import com.pdmfc.tea.runtime.SArgs;
 import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SObjByteArray;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjNull;
 import com.pdmfc.tea.runtime.SObjSymbol;
-import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SRuntimeException;
-import com.pdmfc.tea.runtime.STypeException;
 
 
 
@@ -78,9 +73,6 @@ public class SInput
     private static final String     CLASS_NAME   = "TInput";
     private static final SObjSymbol CLASS_NAME_S =
         SObjSymbol.addSymbol(CLASS_NAME);
-    private static final SObjSymbol WRITE_METHOD =
-        SObjSymbol.addSymbol("write");
-    private static final int         BUFFER_SIZE  = 8192;
 
 
 

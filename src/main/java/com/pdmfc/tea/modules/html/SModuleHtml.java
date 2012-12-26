@@ -12,6 +12,7 @@ import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.STypeException;
+import com.pdmfc.tea.runtime.TeaFunction;
 
 
 
@@ -66,28 +67,13 @@ public final class SModuleHtml
  *
  **************************************************************************/
 
+    @Override
     public void init(final SContext context)
         throws STeaException {
 
-        context.newVar("html-encode",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionHtmlEncode(func, context, args);
-                           }
-                       });
-
-        context.newVar("url-encode",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionUrlEncode(func, context, args);
-                           }
-                       });
+        // Nothing to do. The functions provided by this module are
+        // all implemented as methods of this with class with the
+        // TeaFunction annotation.
     }
 
 
@@ -100,6 +86,7 @@ public final class SModuleHtml
  *
  **************************************************************************/
 
+    @Override
     public void end() {
 
         // Nothing to do.
@@ -115,6 +102,7 @@ public final class SModuleHtml
  *
  **************************************************************************/
 
+    @Override
     public void start() {
 
         // Nothing to do.
@@ -130,6 +118,7 @@ public final class SModuleHtml
  *
  **************************************************************************/
 
+    @Override
     public void stop() {
 
         // Nothing to do.
@@ -164,14 +153,26 @@ public final class SModuleHtml
 
 /**************************************************************************
  *
- * @exception STeaException Thrown whenever an argument could not be
- * printed because of its type.
+ * Implements the Tea <code>html-encode</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionHtmlEncode(final SObjFunction func,
-                                             final SContext     context,
-                                             final Object[]     args)
+    @TeaFunction("html-encode")
+    public static Object functionHtmlEncode(final SObjFunction func,
+                                            final SContext     context,
+                                            final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -260,14 +261,26 @@ public final class SModuleHtml
 
 /**************************************************************************
  *
- * @exception STeaException
- *   Thrown wherener an argument could not be printed because of its type.
+ * Implements the Tea <code>url-encode</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionUrlEncode(final SObjFunction func,
-                                            final SContext     context,
-                                            final Object[]     args)
+    @TeaFunction("url-encode")
+    public static Object functionUrlEncode(final SObjFunction func,
+                                           final SContext     context,
+                                           final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {

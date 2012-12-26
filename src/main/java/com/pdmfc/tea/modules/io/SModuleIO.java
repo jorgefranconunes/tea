@@ -27,6 +27,7 @@ import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypeException;
 import com.pdmfc.tea.runtime.STypes;
 import com.pdmfc.tea.runtime.SUtils;
+import com.pdmfc.tea.runtime.TeaFunction;
 
 
 
@@ -104,6 +105,7 @@ public final class SModuleIO
  *
  **************************************************************************/
 
+    @Override
     public void init(final SContext context)
         throws STeaException {
 
@@ -126,135 +128,9 @@ public final class SModuleIO
         context.newVar("stdout", _stdout);
         context.newVar("stderr", _stderr);
 
-        context.newVar("file-basename",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionBasename(func, context, args);
-                           }
-                       });
+        // The functions provided by this module are implemented as
+        // methods of this with class with the TeaFunction annotation.
 
-        context.newVar("file-copy",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionCopy(func, context, args);
-                           }
-                       });
-
-        context.newVar("file-dirname",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionDirname(func, context, args);
-                           }
-                       });
-
-        context.newVar("file-extension",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionExtension(func, context, args);
-                           }
-                       });
-
-        context.newVar("file-exists?",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionFileExists(func, context, args);
-                           }
-                       });
-
-        context.newVar("file-is-dir?",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionIsDir(func, context, args);
-                           }
-                       });
-
-        context.newVar("file-is-regular?",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionIsRegular(func, context, args);
-                           }
-                       });
-
-        context.newVar("file-join",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionJoin(func, context, args);
-                           }
-                       });
-
-        context.newVar("file-mkdir",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionMkdir(func, context, args);
-                           }
-                       });
-
-        context.newVar("file-rename",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionRename(func, context, args);
-                           }
-                       });
-
-        context.newVar("file-size",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionSize(func, context, args);
-                           }
-                       });
-
-        context.newVar("file-split-path-list",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionSplitPathList(func,context,args);
-                           }
-                       });
-
-        context.newVar("file-unlink",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionUnlink(func, context, args);
-                           }
-                       });
     }
 
 
@@ -267,6 +143,7 @@ public final class SModuleIO
  *
  **************************************************************************/
 
+    @Override
     public void end() {
 
         // Nothing to do.
@@ -278,10 +155,11 @@ public final class SModuleIO
 
 /**************************************************************************
  *
- * 
+ * {@inheritDoc}
  *
  **************************************************************************/
 
+    @Override
     public void start() {
 
         // Nothing to do.
@@ -293,11 +171,11 @@ public final class SModuleIO
 
 /**************************************************************************
  *
- * Signals that the package will not be used util another call to the
- * <TT>start()</TT> method. It flushes the output buffers.
+ * {@inheritDoc}
  *
  **************************************************************************/
 
+    @Override
     public void stop() {
 
         if ( _stdout != null ) {
@@ -350,13 +228,26 @@ public final class SModuleIO
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>file-basename</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionBasename(final SObjFunction func,
-                                           final SContext     context,
-                                           final Object[]     args)
+    @TeaFunction("file-basename")
+    public static Object functionBasename(final SObjFunction func,
+                                          final SContext     context,
+                                          final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -400,13 +291,26 @@ public final class SModuleIO
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>file-copy</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionCopy(final SObjFunction func,
-                                       final SContext     context,
-                                       final Object[]     args)
+    @TeaFunction("file-copy")
+    public static Object functionCopy(final SObjFunction func,
+                                      final SContext     context,
+                                      final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -502,13 +406,26 @@ public final class SModuleIO
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>file-dirname</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionDirname(final SObjFunction func,
-                                          final SContext     context,
-                                          final Object[]     args)
+    @TeaFunction("file-dirname")
+    public static Object functionDirname(final SObjFunction func,
+                                         final SContext     context,
+                                         final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -558,13 +475,26 @@ public final class SModuleIO
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>file-extension</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionExtension(final SObjFunction func,
-                                            final SContext     context,
-                                            final Object[]     args)
+    @TeaFunction("file-extension")
+    public static Object functionExtension(final SObjFunction func,
+                                           final SContext     context,
+                                           final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -610,13 +540,26 @@ public final class SModuleIO
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>file-exists?</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionFileExists(final SObjFunction func,
-                                             final SContext     context,
-                                             final Object[]      args)
+    @TeaFunction("file-exists?")
+    public static Object functionFileExists(final SObjFunction func,
+                                            final SContext     context,
+                                            final Object[]      args)
         throws STeaException {
 
         int numArgs = args.length;
@@ -661,13 +604,26 @@ public final class SModuleIO
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>file-is-dir?</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
     
-    private static Object functionIsDir(final SObjFunction func,
-                                        final SContext     context,
-                                        final Object[]     args)
+    @TeaFunction("file-is-dir?")
+    public static Object functionIsDir(final SObjFunction func,
+                                       final SContext     context,
+                                       final Object[]     args)
         throws STeaException {
 
         int numArgs = args.length;
@@ -712,13 +668,26 @@ public final class SModuleIO
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>file-is-regular?</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionIsRegular(final SObjFunction func,
-                                            final SContext     context,
-                                            final Object[]     args)
+    @TeaFunction("file-is-regular?")
+    public static Object functionIsRegular(final SObjFunction func,
+                                           final SContext     context,
+                                           final Object[]     args)
         throws STeaException {
 
         int numArgs = args.length;
@@ -766,13 +735,26 @@ public final class SModuleIO
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>file-join</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionJoin(final SObjFunction func,
-                                       final SContext     context,
-                                       final Object[]     args)
+    @TeaFunction("file-join")
+    public static Object functionJoin(final SObjFunction func,
+                                      final SContext     context,
+                                      final Object[]     args)
         throws STeaException {
 
         int           numArgs = args.length;
@@ -881,13 +863,26 @@ public final class SModuleIO
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>file-mkdir</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionMkdir(final SObjFunction func,
-                                        final SContext     context,
-                                        final Object[]     args)
+    @TeaFunction("file-mkdir")
+    public static Object functionMkdir(final SObjFunction func,
+                                       final SContext     context,
+                                       final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -933,13 +928,26 @@ public final class SModuleIO
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>file-rename</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionRename(final SObjFunction func,
-                                         final SContext     context,
-                                         final Object[]     args)
+    @TeaFunction("file-rename")
+    public static Object functionRename(final SObjFunction func,
+                                        final SContext     context,
+                                        final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -981,13 +989,26 @@ public final class SModuleIO
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>file-size</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionSize(final SObjFunction func,
-                                       final SContext     context,
-                                       final Object[]     args)
+    @TeaFunction("file-size")
+    public static Object functionSize(final SObjFunction func,
+                                      final SContext     context,
+                                      final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -1031,13 +1052,26 @@ public final class SModuleIO
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>file-split-path-list</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionSplitPathList(final SObjFunction func,
-                                                final SContext     context,
-                                                final Object[]     args)
+    @TeaFunction("file-split-path-list")
+    public static Object functionSplitPathList(final SObjFunction func,
+                                               final SContext     context,
+                                               final Object[]     args)
         throws STeaException {
 
         int numArgs = args.length;
@@ -1089,13 +1123,26 @@ public final class SModuleIO
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>file-unlink</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionUnlink(final SObjFunction func,
-                                         final SContext     context,
-                                         final Object[]     args)
+    @TeaFunction("file-unlink")
+    public static Object functionUnlink(final SObjFunction func,
+                                        final SContext     context,
+                                        final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {

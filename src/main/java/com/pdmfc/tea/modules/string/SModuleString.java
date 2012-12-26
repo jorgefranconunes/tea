@@ -184,7 +184,19 @@ public final class SModuleString
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>str-printf</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
@@ -244,7 +256,19 @@ public final class SModuleString
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>str-fmt</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
@@ -329,7 +353,19 @@ public final class SModuleString
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>str-upper</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
@@ -377,7 +413,19 @@ public final class SModuleString
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>str-lower</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
@@ -430,7 +478,19 @@ public final class SModuleString
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>str-cmp</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
@@ -482,7 +542,19 @@ public final class SModuleString
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>str&gt;</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
@@ -536,7 +608,19 @@ public final class SModuleString
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>str&gt;=</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
@@ -588,7 +672,19 @@ public final class SModuleString
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>str==</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
@@ -640,7 +736,19 @@ public final class SModuleString
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>str!=</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
@@ -694,7 +802,19 @@ public final class SModuleString
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>str&lt;</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
@@ -748,7 +868,19 @@ public final class SModuleString
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>str&lt;=</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
@@ -851,7 +983,19 @@ public final class SModuleString
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>str-cat</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
@@ -911,7 +1055,19 @@ public final class SModuleString
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>str-ends-with?</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
@@ -965,7 +1121,19 @@ public final class SModuleString
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>str-starts-with?</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
@@ -1028,7 +1196,19 @@ public final class SModuleString
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>str-index-of</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
@@ -1094,7 +1274,19 @@ public final class SModuleString
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>str-last-index-of</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
@@ -1145,7 +1337,19 @@ public final class SModuleString
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>str-len</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
@@ -1216,7 +1420,19 @@ public final class SModuleString
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>str-substring</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
@@ -1281,7 +1497,19 @@ public final class SModuleString
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>str-trim</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
@@ -1336,7 +1564,19 @@ public final class SModuleString
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>str-join</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
@@ -1413,7 +1653,19 @@ public final class SModuleString
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>str-empty?</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
@@ -1462,7 +1714,19 @@ public final class SModuleString
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>str-not-empty?</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
@@ -1486,7 +1750,7 @@ public final class SModuleString
 
 
 //* 
-//* <TeaFunction name="symbol->string"
+//* <TeaFunction name="symbol-&gt;string"
 //*              arguments="aSymbol"
 //*              module="tea.string">
 //*
@@ -1511,7 +1775,19 @@ public final class SModuleString
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>symbol-&gt;string</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
@@ -1534,7 +1810,7 @@ public final class SModuleString
 
 
 //* 
-//* <TeaFunction name="string->int"
+//* <TeaFunction name="string-&gt;int"
 //*              arguments="aString"
 //*              module="tea.string">
 //*
@@ -1568,7 +1844,19 @@ public final class SModuleString
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>string-&gt;int</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
@@ -1597,7 +1885,7 @@ public final class SModuleString
 
 
 //* 
-//* <TeaFunction name="string->float"
+//* <TeaFunction name="string-&gt;float"
 //*              arguments="aString"
 //*              module="tea.string">
 //*
@@ -1624,7 +1912,19 @@ public final class SModuleString
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>string-&gt;float</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
@@ -1653,7 +1953,7 @@ public final class SModuleString
 
 
 //* 
-//* <TeaFunction name="int->string"
+//* <TeaFunction name="int-&gt;string"
 //*              arguments="aValue"
 //*              module="tea.string">
 //*
@@ -1680,7 +1980,19 @@ public final class SModuleString
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>int-&gt;string</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
@@ -1703,7 +2015,7 @@ public final class SModuleString
 
 
 //* 
-//* <TeaFunction name="float->string"
+//* <TeaFunction name="float-&gt;string"
 //*              arguments="aValue"
 //*              module="tea.string">
 //*
@@ -1729,7 +2041,19 @@ public final class SModuleString
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>float-&gt;string</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
@@ -1795,7 +2119,19 @@ public final class SModuleString
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>str-unescape</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 

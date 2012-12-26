@@ -18,6 +18,7 @@ import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjPair;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypes;
+import com.pdmfc.tea.runtime.TeaFunction;
 
 
 
@@ -43,7 +44,7 @@ import com.pdmfc.tea.runtime.STypes;
 
 /**************************************************************************
  *
- * Package of list related commands.
+ * Tea package providing functions for manipulating lists.
  *
  **************************************************************************/
 
@@ -76,128 +77,14 @@ public final class SModuleList
  *
  **************************************************************************/
 
+    @Override
     public void init(final SContext context)
         throws STeaException {
 
-        context.newVar("cons",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionCons(func, context, args);
-                           }
-                       });
+        // Nothing to do. The functions provided by this module are
+        // all implemented as methods of this with class with the
+        // TeaFunction annotation.
 
-        context.newVar("car",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionCar(func, context, args);
-                           }
-                       });
-        
-        context.newVar("cdr",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionCdr(func, context, args);
-                           }
-                       });
-
-        context.newVar("empty?",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionEmpty(func, context, args);
-                           }
-                       });
-        
-        context.newVar("not-empty?",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionNotEmpty(func, context, args);
-                           }
-                       });
-        
-        context.newVar("set-car!",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionSetCar(func, context, args);
-                           }
-                       });
-        
-        context.newVar("set-cdr!",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionSetCdr(func, context, args);
-                           }
-                       });
-        
-        context.newVar("list",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionList(func, context, args);
-                           }
-                       });
-        
-        context.newVar("nth",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionNth(func, context, args);
-                           }
-                       });
-        
-        context.newVar("prepend",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionPrepend(func, context, args);
-                           }
-                       });
-        
-        context.newVar("append",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionAppend(func, context, args);
-                           }
-                       });
-        
-        context.newVar("length",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionLength(func, context, args);
-                           }
-                       });
     }
 
 
@@ -210,6 +97,7 @@ public final class SModuleList
  *
  **************************************************************************/
 
+    @Override
     public void end() {
 
         // Nothing to do.
@@ -225,6 +113,7 @@ public final class SModuleList
  *
  **************************************************************************/
 
+    @Override
     public void start() {
 
         // Nothing to do.
@@ -240,6 +129,7 @@ public final class SModuleList
  *
  **************************************************************************/
 
+    @Override
     public void stop() {
 
         // Nothing to do.
@@ -251,8 +141,8 @@ public final class SModuleList
 
 //* 
 //* <TeaFunction name="cons"
-//*                 arguments="obj1 obj2"
-//*             module="tea.lists">
+//*              arguments="obj1 obj2"
+//*              module="tea.lists">
 //*
 //* <Overview>
 //* Creates a new pair object.
@@ -278,13 +168,26 @@ public final class SModuleList
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>cons</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionCons(final SObjFunction func,
-                                       final SContext     context,
-                                       final Object[]     args)
+    @TeaFunction("cons")
+    public static Object functionCons(final SObjFunction func,
+                                      final SContext     context,
+                                      final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -300,8 +203,8 @@ public final class SModuleList
 
 //* 
 //* <TeaFunction name="car"
-//*                 arguments="aPair"
-//*             module="tea.lists">
+//*              arguments="aPair"
+//*              module="tea.lists">
 //*
 //* <Overview>
 //* Fetches the left element of a pair object.
@@ -326,13 +229,26 @@ public final class SModuleList
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>car</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionCar(final SObjFunction func,
-                                      final SContext     context,
-                                      final Object[]     args)
+    @TeaFunction("car")
+    public static Object functionCar(final SObjFunction func,
+                                     final SContext     context,
+                                     final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -354,8 +270,8 @@ public final class SModuleList
 
 //* 
 //* <TeaFunction name="cdr"
-//*                 arguments="aPair"
-//*             module="tea.lists">
+//*              arguments="aPair"
+//*              module="tea.lists">
 //*
 //* <Overview>
 //* Fetches the right element of a pair object.
@@ -380,13 +296,26 @@ public final class SModuleList
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>cdr</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionCdr(final SObjFunction func,
-                                      final SContext     context,
-                                      final Object[]     args)
+    @TeaFunction("cdr")
+    public static Object functionCdr(final SObjFunction func,
+                                     final SContext     context,
+                                     final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -408,8 +337,8 @@ public final class SModuleList
 
 //* 
 //* <TeaFunction name="empty?"
-//*                 arguments="aList"
-//*             module="tea.lists">
+//*              arguments="aList"
+//*              module="tea.lists">
 //*
 //* <Overview>
 //* Checks if a list as no elements.
@@ -431,13 +360,26 @@ public final class SModuleList
 
 /**************************************************************************
  *
+ * Implements the Tea <code>empty?</code> function.
  *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  * 
  **************************************************************************/
 
-    private static Object functionEmpty(final SObjFunction func,
-                                        final SContext     context,
-                                        final Object[]     args)
+    @TeaFunction("empty?")
+    public static Object functionEmpty(final SObjFunction func,
+                                       final SContext     context,
+                                       final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -455,8 +397,8 @@ public final class SModuleList
 
 //* 
 //* <TeaFunction name="not-empty?"
-//*                 arguments="aList"
-//*             module="tea.lists">
+//*              arguments="aList"
+//*              module="tea.lists">
 //*
 //* <Overview>
 //* Checks if a list has elements.
@@ -478,13 +420,26 @@ public final class SModuleList
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>not-empty?</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionNotEmpty(final SObjFunction func,
-                                           final SContext     context,
-                                           final Object[]     args)
+    @TeaFunction("not-empty?")
+    public static Object functionNotEmpty(final SObjFunction func,
+                                          final SContext     context,
+                                          final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -531,13 +486,26 @@ public final class SModuleList
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>set-car!</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionSetCar(final SObjFunction func,
-                                         final SContext     context,
-                                         final Object[]     args)
+    @TeaFunction("set-car!")
+    public static Object functionSetCar(final SObjFunction func,
+                                        final SContext     context,
+                                        final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -555,8 +523,8 @@ public final class SModuleList
 
 //* 
 //* <TeaFunction name="set-cdr!"
-//*                 arguments="aPair anObject"
-//*             module="tea.lists">
+//*              arguments="aPair anObject"
+//*              module="tea.lists">
 //*
 //* <Overview>
 //* Modifies the contents of the right side of a pair.
@@ -584,13 +552,26 @@ public final class SModuleList
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>set-cdr!</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionSetCdr(final SObjFunction func,
-                                         final SContext context,
-                                         final Object[]   args)
+    @TeaFunction("set-cdr!")
+    public static Object functionSetCdr(final SObjFunction func,
+                                        final SContext context,
+                                        final Object[]   args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -608,8 +589,8 @@ public final class SModuleList
 
 //* 
 //* <TeaFunction name="list"
-//*                 arguments="[obj1 ...]"
-//*             module="tea.lists">
+//*              arguments="[obj1 ...]"
+//*              module="tea.lists">
 //*
 //* <Overview>
 //* Creates a list object.
@@ -632,13 +613,26 @@ public final class SModuleList
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>list</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionList(final SObjFunction func,
-                                       final SContext     context,
-                                       final Object[]     args)
+    @TeaFunction("list")
+    public static Object functionList(final SObjFunction func,
+                                      final SContext     context,
+                                      final Object[]     args)
         throws STeaException {
 
         SObjPair head    = SObjPair.emptyList();
@@ -664,8 +658,8 @@ public final class SModuleList
 
 //* 
 //* <TeaFunction name="nth"
-//*                 arguments="aList index"
-//*             module="tea.lists">
+//*              arguments="aList index"
+//*              module="tea.lists">
 //*
 //* <Overview>
 //* Fetches an object in a list in a certain position.
@@ -692,13 +686,26 @@ public final class SModuleList
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>nth</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionNth(final SObjFunction func,
-                                      final SContext     context,
-                                      final Object[]     args)
+    @TeaFunction("nth")
+    public static Object functionNth(final SObjFunction func,
+                                     final SContext     context,
+                                     final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -727,8 +734,8 @@ public final class SModuleList
 
 //* 
 //* <TeaFunction name="prepend"
-//*                 arguments="anObject aList"
-//*             module="tea.lists">
+//*              arguments="anObject aList"
+//*              module="tea.lists">
 //*
 //* <Overview>
 //* Creates a new list obtained by inserting a new element at the head
@@ -763,13 +770,26 @@ public final class SModuleList
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>prepend</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionPrepend(final SObjFunction func,
-                                          final SContext     context,
-                                          final Object[]     args)
+    @TeaFunction("prepend")
+    public static Object functionPrepend(final SObjFunction func,
+                                         final SContext     context,
+                                         final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -789,8 +809,8 @@ public final class SModuleList
 
 //* 
 //* <TeaFunction name="append"
-//*                 arguments="anObject aList"
-//*             module="tea.lists">
+//*              arguments="anObject aList"
+//*              module="tea.lists">
 //*
 //* <Overview>
 //* Appends a new element to the end of a list.
@@ -821,13 +841,26 @@ public final class SModuleList
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>append</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionAppend(final SObjFunction func,
-                                         final SContext     context,
-                                         final Object[]     args)
+    @TeaFunction("append")
+    public static Object functionAppend(final SObjFunction func,
+                                        final SContext     context,
+                                        final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -859,8 +892,8 @@ public final class SModuleList
 
 //* 
 //* <TeaFunction name="length"
-//*                 arguments="aList"
-//*             module="tea.lists">
+//*              arguments="aList"
+//*              module="tea.lists">
 //*
 //* <Overview>
 //* Counts the number of elements in a list.
@@ -882,13 +915,26 @@ public final class SModuleList
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>length</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionLength(final SObjFunction func,
-                                         final SContext     context,
-                                         final Object[]     args)
+    @TeaFunction("length")
+    public static Object functionLength(final SObjFunction func,
+                                        final SContext     context,
+                                        final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
