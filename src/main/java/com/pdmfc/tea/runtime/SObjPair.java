@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2012 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -18,8 +18,7 @@ import com.pdmfc.tea.runtime.SRuntimeException;
 
 /**************************************************************************
  *
- * Implements a pair. A list can easily be built with this kind of
- * objects.
+ * Implements a pair. Tea lists are built with this kind of objects.
  *
  **************************************************************************/
 
@@ -97,7 +96,13 @@ public final class SObjPair
 
 /**************************************************************************
  *
- * 
+ * Fetches the pair object to the left of this one.
+ *
+ * @return The pair object following this one.
+ *
+ * @exception SRuntimeException Thrown if this pair has no following
+ * one, or if the object on the left of this pair is not itself a
+ * pair.
  *
  **************************************************************************/
 
@@ -129,8 +134,8 @@ public final class SObjPair
  *
  * @return The number of nodes in the list, starting with this node.
  *
- * @exception com.pdmfc.tea.runtime.SRuntimeException Thrown if the
- * list starting with this node is not properly formed.
+ * @exception SRuntimeException Thrown if the list starting with this
+ * node is not properly formed.
  *
  **************************************************************************/
 
@@ -150,29 +155,6 @@ public final class SObjPair
         }
         
         return numNodes;
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * Builds an <code>java.util.Enumeration</code> that will orderly
- * iterator over the elements in the list whose head is this
- * <code>SObjPair</code> object.
- *
- * @return A newly created <code>java.util.Enumeration</code> object
- * that will iterate over the list elements.
- *
- * @deprecated Use {@link #iterator}.
- *
- **************************************************************************/
-
-    @Deprecated
-    public Enumeration elements() {
-
-        return new SPairEnumeration(this);
     }
 
 
@@ -284,85 +266,6 @@ public final class SObjPair
         public void remove() {
 
             throw new UnsupportedOperationException();
-        }
-
-
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    private static final class SPairEnumeration
-        extends Object
-        implements Enumeration {
-
-
-        private SObjPair _node = null;
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-        public SPairEnumeration(final SObjPair node) {
-
-            _node = node;
-            if ( (_node!=null) && (_node._car==null) ) {
-                _node = null;
-            }
-        }
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-        public boolean hasMoreElements() {
-
-            return (_node!=null) && (_node._car!=null);
-        }
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-        public Object nextElement() {
-
-            if ( (_node==null) || (_node._car==null) ) {
-                throw new NoSuchElementException("SObjPairEnumeration");
-            }
-            Object element = _node._car;
-
-            try {
-                _node = (SObjPair)_node._cdr;
-            } catch (ClassCastException e) {
-                throw new NoSuchElementException("Improperly formed list");
-            }
-
-            return element;
         }
 
 

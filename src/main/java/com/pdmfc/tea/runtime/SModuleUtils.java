@@ -8,7 +8,6 @@ package com.pdmfc.tea.runtime;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.text.MessageFormat;
 
 import com.pdmfc.tea.STeaException;
@@ -516,9 +515,9 @@ public final class SModuleUtils
  **************************************************************************/
 
         @Override
-        public final Object exec(final SObjFunction function,
-                                 final SContext     context,
-                                 final Object[]     args)
+        public Object exec(final SObjFunction function,
+                           final SContext     context,
+                           final Object[]     args)
             throws STeaException {
 
             Object        result = null;

@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2005-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2005-2012 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -20,6 +20,7 @@ import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaFunction;
 
 
 
@@ -231,67 +232,11 @@ public final class SModuleReflect
     public void init(final SContext context)
         throws STeaException {
 
-        context.newVar("java-get-value",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionGetValue(func,
-                                                       context,
-                                                       args);
-                           }
-                       });
-
-        context.newVar("java-set-value",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionSetValue(func,
-                                                       context,
-                                                       args);
-                           }
-                       });
-
-        context.newVar("java-get-method",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionGetMethod(func,
-                                                        context,
-                                                        args);
-                           }
-                       });
-
-        context.newVar("java-exec-method",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionExecMethod(func,
-                                                         context,
-                                                         args);
-                           }
-                       });
-
-        context.newVar("java-new-instance",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionNewInstance(func,
-                                                          context,
-                                                          args);
-                           }
-                       });
-
         context.newVar("java-new-proxy", new SFunctionNewProxy());
+
+        // The other functions provided by this module are implemented
+        // as methods of this with class with the TeaFunction
+        // annotation.        
    }
 
 
@@ -376,13 +321,26 @@ public final class SModuleReflect
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>java-get-value</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionGetValue(final SObjFunction func,
-                                           final SContext     context,
-                                           final Object[]     args)
+    @TeaFunction("java-get-value")
+    public static Object functionGetValue(final SObjFunction func,
+                                          final SContext     context,
+                                          final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -451,13 +409,26 @@ public final class SModuleReflect
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>java-set-value</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionSetValue(final SObjFunction func,
-                                           final SContext     context,
-                                           final Object[]     args)
+    @TeaFunction("java-set-value")
+    public static Object functionSetValue(final SObjFunction func,
+                                          final SContext     context,
+                                          final Object[]     args)
         throws STeaException {
 
         if ( args.length != 4 ) {
@@ -535,13 +506,26 @@ public final class SModuleReflect
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>java-get-method</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionGetMethod(final SObjFunction func,
-                                            final SContext     context,
-                                            final Object[]     args)
+    @TeaFunction("java-get-method")
+    public static Object functionGetMethod(final SObjFunction func,
+                                           final SContext     context,
+                                           final Object[]     args)
         throws STeaException {
 
         if ( args.length < 3 ) {
@@ -646,11 +630,24 @@ public final class SModuleReflect
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>java-new-instance</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-   private static Object functionNewInstance(final SObjFunction func,
+    @TeaFunction("java-new-instance")
+    public static Object functionNewInstance(final SObjFunction func,
                                              final SContext     context,
                                              final Object[]     args)
         throws STeaException {
@@ -740,10 +737,23 @@ public final class SModuleReflect
 
 /**************************************************************************
  *
- * Invokes a java method on the given class from tea arguments
+ * Implements the Tea <code>java-exec-method</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
+    @TeaFunction("java-exec-method")
     public static Object functionExecMethod(final SObjFunction func,
                                             final SContext     context,
                                             final Object[]     args)

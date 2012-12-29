@@ -134,7 +134,7 @@ public final class SModuleMath
         throws STeaException {
 
         // Nothing to do. The functions provided by this module are
-        // all implemented as methods of this with class with the
+        // all implemented as methods of this class with the
         // TeaFunction annotation.
     }
 

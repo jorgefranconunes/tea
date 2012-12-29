@@ -17,6 +17,7 @@ import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjNull;
 import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaFunction;
 
 
 
@@ -77,6 +78,7 @@ public final class SModuleTdbc
  *
  **************************************************************************/
 
+    @Override
     public void init(final SContext context)
         throws STeaException {
 
@@ -97,53 +99,8 @@ public final class SModuleTdbc
         context.newVar(callStatC.getName(), callStatC);
         context.newVar(_connClass.getName(), _connClass);
 
-        context.newVar("tdbc-register-driver",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionRegisterDriver(func,
-                                                             context,
-                                                             args);
-                           }
-                       });
-
-        context.newVar("sql-encode",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionSqlEncode(func,
-                                                        context,
-                                                        args);
-                           }
-                       });
-
-        context.newVar("tdbc-get-open-connections-count",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionGetOpenConnCount(func,
-                                                               context,
-                                                               args);
-                           }
-                       });
-
-        context.newVar("tdbc-close-all-connections",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionCloseAllConn(func,
-                                                           context,
-                                                           args);
-                           }
-                       });
+        // The other functions provided by this module are implemented
+        // as methods of this class with the TeaFunction annotation.
    }
 
 
@@ -156,6 +113,7 @@ public final class SModuleTdbc
  *
  **************************************************************************/
 
+    @Override
     public void end() {
 
         stop();
@@ -171,6 +129,7 @@ public final class SModuleTdbc
  *
  **************************************************************************/
 
+    @Override
     public void start() {
 
         // Nothing to do.
@@ -186,6 +145,7 @@ public final class SModuleTdbc
  *
  **************************************************************************/
 
+    @Override
     public void stop() {
 
         if ( _connClass != null ) {
@@ -199,7 +159,7 @@ public final class SModuleTdbc
 
 //* 
 //* <TeaFunction name="tdbc-register-driver"
-//*                  arguments="javaClassName"
+//*              arguments="javaClassName"
 //*              module="tea.tdbc">
 //*
 //* <Overview>
@@ -219,13 +179,26 @@ public final class SModuleTdbc
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>tdbc-register-driver</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionRegisterDriver(final SObjFunction func,
-                                                 final SContext     context,
-                                                 final Object[]     args)
+    @TeaFunction("tdbc-register-driver")
+    public static Object functionRegisterDriver(final SObjFunction func,
+                                                final SContext     context,
+                                                final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -274,13 +247,26 @@ public final class SModuleTdbc
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>sql-encode</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionSqlEncode(final SObjFunction func,
-                                            final SContext     context,
-                                            final Object[]     args)
+    @TeaFunction("sql-encode")
+    public static Object functionSqlEncode(final SObjFunction func,
+                                           final SContext     context,
+                                           final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -350,13 +336,27 @@ public final class SModuleTdbc
 
 /**************************************************************************
  *
- * Implements the "tdbc-get-open-connections-count" Tea function.
+ * Implements the Tea <code>tdbc-get-open-connections-count</code>
+ * function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private Object functionGetOpenConnCount(final SObjFunction func,
-                                            final SContext     context,
-                                            final Object[]     args)
+    @TeaFunction("tdbc-get-open-connections-count")
+    public Object functionGetOpenConnCount(final SObjFunction func,
+                                           final SContext     context,
+                                           final Object[]     args)
         throws STeaException {
 
         int     count  = _connClass.getOpenConnectionsCount();
@@ -391,13 +391,27 @@ public final class SModuleTdbc
 
 /**************************************************************************
  *
- * Implements the "tdbc-close-all-connections" Tea functions.
+ * Implements the Tea <code>tdbc-close-all-connections</code>
+ * function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private Object functionCloseAllConn(final SObjFunction func,
-                                        final SContext     context,
-                                        final Object[]     args)
+    @TeaFunction("tdbc-close-all-connections")
+    public Object functionCloseAllConn(final SObjFunction func,
+                                       final SContext     context,
+                                       final Object[]     args)
         throws STeaException {
 
         _connClass.closeAll();

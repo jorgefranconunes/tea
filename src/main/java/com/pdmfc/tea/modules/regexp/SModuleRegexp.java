@@ -22,6 +22,7 @@ import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjPair;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypeException;
+import com.pdmfc.tea.runtime.TeaFunction;
 
 
 
@@ -65,9 +66,28 @@ public final class SModuleRegexp
  *
  **************************************************************************/
 
-   public SModuleRegexp() {
+    public SModuleRegexp() {
 
-       // Nothing to do.
+        // Nothing to do.
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * {@inheritDoc}
+ *
+ **************************************************************************/
+
+    @Override
+    public void init(final SContext context)
+        throws STeaException {
+
+        // Nothing to do. The functions provided by this module are
+        // all implemented as methods of this with class with the
+        // TeaFunction annotation.
    }
 
 
@@ -80,84 +100,7 @@ public final class SModuleRegexp
  *
  **************************************************************************/
 
-   public void init(final SContext context)
-       throws STeaException {
-
-       context.newVar("regexp-pattern",
-                      new SObjFunction() {
-                          public Object exec(final SObjFunction func,
-                                             final SContext     context,
-                                             final Object[]     args)
-                              throws STeaException {
-                              return functionPattern(func, context, args);
-                          }
-                      });
-
-       context.newVar("glob",
-                      new SObjFunction() {
-                          public Object exec(final SObjFunction func,
-                                             final SContext     context,
-                                             final Object[]     args)
-                              throws STeaException {
-                              return functionGlob(func, context, args);
-                          }
-                      });
-
-       context.newVar("regsub",
-                      new SObjFunction() {
-                          public Object exec(final SObjFunction func,
-                                             final SContext     context,
-                                             final Object[]     args)
-                              throws STeaException {
-                              return functionRegsub(func, context, args);
-                          }
-                      });
-
-       SObjFunction matches = new SObjFunction() {
-               public Object exec(final SObjFunction func,
-                                  final SContext     context,
-                                  final Object[]     args)
-                   throws STeaException {
-                   return functionMatches(func, context, args);
-               }
-           };
-
-       context.newVar("matches?", matches);
-        
-       // For backwards compatibility with Tea 1.x.
-       context.newVar("matches", matches);
-
-       context.newVar("regexp",
-                      new SObjFunction() {
-                          public Object exec(final SObjFunction func,
-                                             final SContext     context,
-                                             final Object[]     args)
-                              throws STeaException {
-                              return functionRegexp(func, context, args);
-                          }
-                      });
-
-       context.newVar("str-split",
-                      new SObjFunction() {
-                          public Object exec(final SObjFunction func,
-                                             final SContext     context,
-                                             final Object[]     args)
-                              throws STeaException {
-                              return functionSplit(func, context, args);
-                          }
-                      });
-   }
-
-
-
-
-
-/**************************************************************************
- *
- * {@inheritDoc}
- *
- **************************************************************************/
-
+    @Override
     public void end() {
 
         // Nothing to do.
@@ -173,6 +116,7 @@ public final class SModuleRegexp
  *
  **************************************************************************/
 
+    @Override
     public void start() {
 
         // Nothing to do.
@@ -188,6 +132,7 @@ public final class SModuleRegexp
  *
  **************************************************************************/
 
+    @Override
     public void stop() {
 
         // Nothing to do.
@@ -199,8 +144,8 @@ public final class SModuleRegexp
 
 //* 
 //* <TeaFunction name="regexp-pattern"
-//*                 arguments="aString"
-//*             module="tea.regexp">
+//*              arguments="aString"
+//*              module="tea.regexp">
 //*
 //* <Overview>
 //* Creates a regular expression object.
@@ -228,13 +173,26 @@ public final class SModuleRegexp
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>regexp-pattern</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionPattern(final SObjFunction func,
-                                          final SContext     context,
-                                          final Object[]     args)
+    @TeaFunction("regexp-pattern")
+    public static Object functionPattern(final SObjFunction func,
+                                         final SContext     context,
+                                         final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -250,7 +208,7 @@ public final class SModuleRegexp
 
 //* 
 //* <TeaFunction name="glob"
-//*                  arguments="dirName fileSpec [...]"
+//*              arguments="dirName fileSpec [...]"
 //*              module="tea.io">
 //*
 //* <Overview>
@@ -294,13 +252,26 @@ public final class SModuleRegexp
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>glob</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private Object functionGlob(final SObjFunction func,
-                                final SContext     context,
-                                final Object[]     args)
+    @TeaFunction("glob")
+    public Object functionGlob(final SObjFunction func,
+                               final SContext     context,
+                               final Object[]     args)
         throws STeaException {
 
         int numArgs = args.length;
@@ -346,8 +317,8 @@ public final class SModuleRegexp
 
 //* 
 //* <TeaFunction name="regsub"
-//*                 arguments="aRegexp substitution input"
-//*             module="tea.regexp">
+//*              arguments="aRegexp substitution input"
+//*              module="tea.regexp">
 //*
 //* <Overview>
 //* Replaces substrings matching a regular expression.
@@ -380,13 +351,26 @@ public final class SModuleRegexp
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>regsub</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionRegsub(final SObjFunction func,
-                                         final SContext     context,
-                                         final Object[]     args)
+    @TeaFunction("regsub")
+    public static Object functionRegsub(final SObjFunction func,
+                                        final SContext     context,
+                                        final Object[]     args)
         throws STeaException {
 
         if ( args.length != 4 ) {
@@ -408,8 +392,8 @@ public final class SModuleRegexp
 
 //* 
 //* <TeaFunction name="matches?"
-//*                 arguments="aRegexp aString"
-//*             module="tea.regexp">
+//*              arguments="aRegexp aString"
+//*              module="tea.regexp">
 //*
 //* <Overview>
 //* Checks if a regular expression is an exact match for a string.
@@ -440,13 +424,26 @@ public final class SModuleRegexp
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>matches?</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionMatches(final SObjFunction func,
-                                          final SContext     context,
-                                          final Object[]     args)
+    @TeaFunction("matches?")
+    public static Object functionMatches(final SObjFunction func,
+                                         final SContext     context,
+                                         final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -467,8 +464,8 @@ public final class SModuleRegexp
 
 //* 
 //* <TeaFunction name="regexp"
-//*                 arguments="aRegexp aString"
-//*             module="tea.regexp">
+//*              arguments="aRegexp aString"
+//*              module="tea.regexp">
 //*
 //* <Overview>
 //* Finds all matches of a regular expression in a string.
@@ -510,13 +507,26 @@ public final class SModuleRegexp
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>regexp</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionRegexp(final SObjFunction func,
-                                         final SContext     context,
-                                         final Object[]     args)
+    @TeaFunction("regexp")
+    public static Object functionRegexp(final SObjFunction func,
+                                        final SContext     context,
+                                        final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -595,8 +605,8 @@ public final class SModuleRegexp
 
 //* 
 //* <TeaFunction name="str-split"
-//*                 arguments="aString separator"
-//*             module="tea.string">
+//*              arguments="aString separator"
+//*              module="tea.string">
 //*
 //* <Overview>
 //* Splits a string into a list of strings.
@@ -631,17 +641,26 @@ public final class SModuleRegexp
 
 /**************************************************************************
  *
- * This method is supposed to be called with <TT>args</TT> having at least
- * one element.
+ * Implements the Tea <code>str-split</code> function.
  *
- * @exception STeaException
- *   Thrown if there is not at least one argument for the command.
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionSplit(final SObjFunction func,
-                                        final SContext     context,
-                                        final Object[]     args)
+    @TeaFunction("str-split")
+    public static Object functionSplit(final SObjFunction func,
+                                       final SContext     context,
+                                       final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {

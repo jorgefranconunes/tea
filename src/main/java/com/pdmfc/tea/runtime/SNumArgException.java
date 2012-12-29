@@ -15,7 +15,8 @@ import com.pdmfc.tea.runtime.SRuntimeException;
 
 /**************************************************************************
  *
- * 
+ * Exception thrown to signal that a Tea function is being invoked
+ * with the wrong number of arguments.
  *
  **************************************************************************/
 
@@ -41,7 +42,10 @@ public final class SNumArgException
 
 /**************************************************************************
  *
- * 
+ * @param args The arguments the function is being invoked with.
+ *
+ * @param usage Message describing the arguments expected by the
+ * function. It will be used to construct the exception message.
  *
  **************************************************************************/
 

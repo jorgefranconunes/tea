@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2012 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -24,6 +24,7 @@ import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypeException;
 import com.pdmfc.tea.runtime.STypes;
 import com.pdmfc.tea.util.SList;
+import com.pdmfc.tea.runtime.TeaFunction;
 
 
 
@@ -93,116 +94,15 @@ public final class SModuleTos
  *
  **************************************************************************/
 
+    @Override
     public void init(final SContext context)
         throws STeaException {
 
         _globalContext = context;
 
-        context.newVar("class",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionClass(func, context, args);
-                           }
-                       });
+        // The functions provided by this module are implemented as
+        // methods of this class with the TeaFunction annotation.
 
-        context.newVar("new-class",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionNewClass(func, context, args);
-                           }
-                       });
-
-        context.newVar("new",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionNew(func, context, args);
-                           }
-                       });
-
-        context.newVar("method",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionMethod(func, context, args);
-                           }
-                       });
-
-        context.newVar("load-class",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionLoadClass(func, context, args);
-                           }
-                       });
-
-        context.newVar("class-base-of",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionBaseOf(func, context, args);
-                           }
-                       });
-
-        context.newVar("class-of",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionClassOf(func, context, args);
-                           }
-                       });
-
-        context.newVar("class-is-a",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionIsA(func,
-                                                  context,
-                                                  args);
-                           }
-                       });
-
-        context.newVar("class-get-name",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionGetName(func,
-                                                      context,
-                                                      args);
-                           }
-                       });
-
-        context.newVar("tos-obj?",
-                       new SObjFunction() {
-                           public Object exec(final SObjFunction func,
-                                              final SContext     context,
-                                              final Object[]     args)
-                               throws STeaException {
-                               return functionIsTosObj(func,
-                                                       context,
-                                                       args);
-                           }
-                       });
     }
 
 
@@ -215,6 +115,7 @@ public final class SModuleTos
  *
  **************************************************************************/
 
+    @Override
     public void end() {
 
         // Nothing to do.
@@ -230,6 +131,7 @@ public final class SModuleTos
  *
  **************************************************************************/
 
+    @Override
     public void start() {
 
         // Nothing to do.
@@ -245,6 +147,7 @@ public final class SModuleTos
  *
  **************************************************************************/
 
+    @Override
     public void stop() {
 
         // Nothing to do.
@@ -256,8 +159,8 @@ public final class SModuleTos
 
 //* 
 //* <TeaFunction name="class"
-//*                 arguments="className [superClass] memberList"
-//*             module="tea.tos">
+//*              arguments="className [superClass] memberList"
+//*              module="tea.tos">
 //*
 //* <Overview>
 //* Creates a new class object.
@@ -298,13 +201,26 @@ public final class SModuleTos
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>class</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private Object functionClass(final SObjFunction func,
-                                 final SContext     context,
-                                 final Object[]     args)
+    @TeaFunction("class")
+    public Object functionClass(final SObjFunction func,
+                                final SContext     context,
+                                final Object[]     args)
         throws STeaException {
 
         if ( (args.length<3) || (args.length>4) ) {
@@ -343,8 +259,8 @@ public final class SModuleTos
 
 //* 
 //* <TeaFunction name="new-class"
-//*                 arguments="memberList"
-//*             module="tea.tos">
+//*              arguments="memberList"
+//*              module="tea.tos">
 //*
 //* <Prototype arguments="superClass memberList"/>
 //*
@@ -373,13 +289,26 @@ public final class SModuleTos
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>new-class</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private Object functionNewClass(final SObjFunction func,
-                                    final SContext     context,
-                                    final Object[]     args)
+    @TeaFunction("new-class")
+    public Object functionNewClass(final SObjFunction func,
+                                   final SContext     context,
+                                   final Object[]     args)
         throws STeaException {
 
         if ( (args.length<2) || (args.length>3) ) {
@@ -427,8 +356,8 @@ public final class SModuleTos
 
 //* 
 //* <TeaFunction name="new"
-//*                 arguments="className [arg1 ...]"
-//*             module="tea.tos">
+//*              arguments="className [arg1 ...]"
+//*              module="tea.tos">
 //*
 //* <Overview>
 //* Creates an instance of a previously created class.
@@ -454,13 +383,26 @@ public final class SModuleTos
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>new</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionNew(final SObjFunction func,
-                                      final SContext     context,
-                                      final Object[]     args)
+    @TeaFunction("new")
+    public static Object functionNew(final SObjFunction func,
+                                     final SContext     context,
+                                     final Object[]     args)
         throws STeaException {
 
         if ( args.length < 2 ) {
@@ -476,8 +418,8 @@ public final class SModuleTos
 
 //* 
 //* <TeaFunction name="method"
-//*                 arguments="className methodName argList body"
-//*             module="tea.tos">
+//*              arguments="className methodName argList body"
+//*              module="tea.tos">
 //*
 //* <Overview>
 //* Adds a method to a previously created class.
@@ -513,13 +455,26 @@ public final class SModuleTos
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>method</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  * 
  **************************************************************************/
 
-    private static Object functionMethod(final SObjFunction func,
-                                         final SContext     context,
-                                         final Object[]     args)
+    @TeaFunction("method")
+    public static Object functionMethod(final SObjFunction func,
+                                        final SContext     context,
+                                        final Object[]     args)
         throws STeaException {
 
         if ( args.length != 5 ) {
@@ -549,19 +504,6 @@ public final class SModuleTos
 /**************************************************************************
  *
  * Creates a method with a fixed number of parameters.
- *
- * @param arg0
- *    The name of the command from where this method is invoked.
- *
- * @paramList
- *    List of symbols representing the procedure formal arguments.
- *
- * @param body
- *    Block that will be the body of the procedure.
- *
- * @exception com.pdmfc.tea.STeaException
- *    Thrown if any of the elements in the formal parameter list is not
- *    a symbol.
  *
  **************************************************************************/
 
@@ -604,15 +546,6 @@ public final class SModuleTos
  *
  * Creates a procedure that accpets a variable number of arguments.
  *
- * @param symbol
- *    The name of the variable inside the procedure body that is a list
- *    containing all the arguments.
- *
- * @param body
- *    Block that will be the body of the procedure.
- *
- * @exception com.pdmfc.tea.STeaException
- *
  **************************************************************************/
 
     private static void varArgsMethod(final SContext context,
@@ -641,8 +574,8 @@ public final class SModuleTos
 
 //* 
 //* <TeaFunction name="load-class"
-//*                 arguments="javaClassName"
-//*             module="tea.tos">
+//*              arguments="javaClassName"
+//*              module="tea.tos">
 //*
 //* <Overview>
 //* Dynamically loads new TOS class from a Java library.
@@ -664,13 +597,26 @@ public final class SModuleTos
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>load-class</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private Object functionLoadClass(final SObjFunction func,
-                                     final SContext     context,
-                                     final Object[]     args)
+    @TeaFunction("load-class")
+    public Object functionLoadClass(final SObjFunction func,
+                                    final SContext     context,
+                                    final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -722,8 +668,8 @@ public final class SModuleTos
 
 //* 
 //* <TeaFunction name="class-base-of"
-//*                 arguments="classObject"
-//*             module="tea.tos">
+//*              arguments="classObject"
+//*              module="tea.tos">
 //*
 //* <Overview>
 //* Fetches the base class object of a given TOS class.
@@ -747,13 +693,26 @@ public final class SModuleTos
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>class-base-of</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionBaseOf(final SObjFunction func,
-                                         final SContext     context,
-                                         final Object[]     args)
+    @TeaFunction("class-base-of")
+    public static Object functionBaseOf(final SObjFunction func,
+                                        final SContext     context,
+                                        final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -772,8 +731,8 @@ public final class SModuleTos
 
 //* 
 //* <TeaFunction name="class-of"
-//*                 arguments="tosObject"
-//*             module="tea.tos">
+//*              arguments="tosObject"
+//*              module="tea.tos">
 //*
 //* <Overview>
 //* Fetches the class object of a given TOS object.
@@ -795,13 +754,26 @@ public final class SModuleTos
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>class-of</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionClassOf(final SObjFunction func,
-                                          final SContext     context,
-                                          final Object[]     args)
+    @TeaFunction("class-of")
+    public static Object functionClassOf(final SObjFunction func,
+                                         final SContext     context,
+                                         final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -817,8 +789,8 @@ public final class SModuleTos
 
 //* 
 //* <TeaFunction name="class-is-a"
-//*                 arguments="class1 class2"
-//*             module="tea.tos">
+//*              arguments="class1 class2"
+//*              module="tea.tos">
 //*
 //* <Overview>
 //* Checks if a class object is the same as or derived from another.
@@ -858,13 +830,26 @@ public final class SModuleTos
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>class-is-a</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionIsA(final SObjFunction func,
-                                      final SContext     context,
-                                      final Object[]     args)
+    @TeaFunction("class-is-a")
+    public static Object functionIsA(final SObjFunction func,
+                                     final SContext     context,
+                                     final Object[]     args)
         throws STeaException {
 
         if ( args.length != 3 ) {
@@ -890,8 +875,8 @@ public final class SModuleTos
 
 //* 
 //* <TeaFunction name="class-get-name"
-//*                 arguments="classObject"
-//*             module="tea.tos">
+//*              arguments="classObject"
+//*              module="tea.tos">
 //*
 //* <Overview>
 //* Fetches the name associated with a class.
@@ -915,13 +900,26 @@ public final class SModuleTos
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>class-get-name</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionGetName(final SObjFunction func,
-                                          final SContext     context,
-                                          final Object[]     args)
+    @TeaFunction("class-get-name")
+    public static Object functionGetName(final SObjFunction func,
+                                         final SContext     context,
+                                         final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {
@@ -937,8 +935,8 @@ public final class SModuleTos
 
 //* 
 //* <TeaFunction name="tos-obj?"
-//*                 arguments="value"
-//*             module="tea.tos">
+//*              arguments="value"
+//*              module="tea.tos">
 //*
 //* <Overview>
 //* Checks if the given value is a TOS object.
@@ -962,13 +960,26 @@ public final class SModuleTos
 
 /**************************************************************************
  *
- * 
+ * Implements the Tea <code>tos-obj?</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
  *
  **************************************************************************/
 
-    private static Object functionIsTosObj(final SObjFunction func,
-                                           final SContext     context,
-                                           final Object[]     args)
+    @TeaFunction("tos-obj?")
+    public static Object functionIsTosObj(final SObjFunction func,
+                                          final SContext     context,
+                                          final Object[]     args)
         throws STeaException {
 
         if ( args.length != 2 ) {

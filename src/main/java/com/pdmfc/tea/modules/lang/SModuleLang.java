@@ -148,8 +148,7 @@ public final class SModuleLang
         context.newVar("import", new SFunctionImport(_globalContext));
 
         // The other functions provided by this module are implemented
-        // as methods of this with class with the TeaFunction
-        // annotation.
+        // as methods of this class with the TeaFunction annotation.
    }
 
 
@@ -3599,7 +3598,7 @@ public final class SModuleLang
  **************************************************************************/
 
     @TeaFunction("tea-get-system-property")
-    public static Object functionGetProp(final SObjFunction obj,
+    public static Object functionGetProp(final SObjFunction func,
                                          final SContext     context,
                                          final Object[]     args)
         throws STeaException {
@@ -3681,7 +3680,7 @@ public final class SModuleLang
  **************************************************************************/
 
     @TeaFunction("tea-set-system-property")
-    public static Object functionSetProp(final SObjFunction obj,
+    public static Object functionSetProp(final SObjFunction func,
                                          final SContext     context,
                                          final Object[]     args)
         throws STeaException {
@@ -3754,7 +3753,7 @@ public final class SModuleLang
  **************************************************************************/
 
     @TeaFunction("tea-get-system-properties")
-    public Object functionGetProps(final SObjFunction obj,
+    public Object functionGetProps(final SObjFunction func,
                                    final SContext     context,
                                    final Object[]     args)
         throws STeaException {
