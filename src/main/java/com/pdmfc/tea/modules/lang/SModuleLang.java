@@ -3137,7 +3137,7 @@ public final class SModuleLang
                 public SContext getContext() {
                     return blockContext;
                 }
-                public Object exec(SContext context)
+                public Object exec(final SContext context)
                     throws STeaException {
                     return program.exec(context);
                 }

@@ -14,6 +14,7 @@ import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.compiler.SCode;
 import com.pdmfc.tea.compiler.SCompiler;
 import com.pdmfc.tea.runtime.STeaRuntime;
+import com.pdmfc.tea.runtime.TeaRuntimeConfig;
 
 
 
@@ -33,8 +34,8 @@ public class TestRuntime
 
 
 
-    private STeaRuntime _teaRuntime = new STeaRuntime();
-    private SCompiler   _compiler   = new SCompiler();
+    private STeaRuntime _teaRuntime = null;
+    private SCompiler   _compiler   = null;
 
 
 
@@ -48,7 +49,10 @@ public class TestRuntime
 
     public TestRuntime() {
 
-        // Nothing to do.
+        TeaRuntimeConfig config = TeaRuntimeConfig.Builder.start().build();
+
+        _teaRuntime = new STeaRuntime(config);
+        _compiler   = new SCompiler();
     }
 
 

@@ -20,6 +20,7 @@ import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SEncodingUtils;
 import com.pdmfc.tea.runtime.SLibVarUtils;
 import com.pdmfc.tea.runtime.SModuleUtils;
+import com.pdmfc.tea.runtime.TeaRuntimeConfig;
 
 
 
@@ -70,12 +71,8 @@ public final class STeaRuntime
 
 
 
-    private List<String> _importLocations    = new ArrayList<String>();
-    private List<String> _allImportLocations = null;
-
-    private String   _argv0          = null;
-    private String[] _argv           = new String[0];
-    private String   _sourceEncoding = null;
+    private TeaRuntimeConfig _config             = null;
+    private List<String>     _allImportLocations = null;
 
     // List of module class names or SModule instances. These were
     // registered by calls to addModule(...) before the first start.
@@ -96,146 +93,17 @@ public final class STeaRuntime
  *
  * Initializes this toplevel context.
  *
+ * @param config Configuration parameters.
+ *
  **************************************************************************/
 
-    public STeaRuntime() {
+    public STeaRuntime(final TeaRuntimeConfig config) {
+
+        _config = config;
 
         for ( String moduleClassName : CORE_MODULES ) {
             _modules.add(moduleClassName);
         }
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * Specifies the list of locations for importing source files from
- * within the Tea script. The locations can be either file system path
- * names or URLs.
- *
- * <p>This method is intended to be called prior to the first call to
- * <code>{@link #execute(SCode)}</code>. After that it will have no
- * effect.</p>
- *
- * @param dirList List of strings representing file system path names
- * or URLs.
- *
- **************************************************************************/
-
-    public void setImportLocations(final List<String> dirList) {
-
-        _importLocations.clear();
-        _importLocations.addAll(dirList);
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    public void prependImportLocation(final String location) {
-
-        _importLocations.add(0, location);
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    public void prependImportLocations(final List<String> locations) {
-
-        _importLocations.addAll(0, locations);
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    public void appendImportLocation(final String location) {
-
-        _importLocations.add(location);
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    public void appendImportLocations(final List<String> locations) {
-
-        _importLocations.addAll(locations);
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    public void setArgv0(final String argv0) {
-
-        _argv0 = argv0;
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    public void setArgv(final String[] argv) {
-
-        _argv = argv;
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * Specifies the encoding of Tea source files.
- *
- * @param sourceEncoding If null the platform default encoding is
- * assumed.
- *
- **************************************************************************/
-
-    public void setSourceEncoding(final String sourceEncoding) {
-
-        _sourceEncoding = sourceEncoding;
     }
 
 
@@ -343,7 +211,7 @@ public final class STeaRuntime
 
         try {
             SModuleUtils.stopModules(_toplevelContext);
-        } catch (STeaException e) {
+        } catch ( STeaException e ) {
             // How should we report this to the caller?...
         }
     }
@@ -367,7 +235,7 @@ public final class STeaRuntime
 
         try {
             SModuleUtils.endModules(_toplevelContext);
-        } catch (STeaException e) {
+        } catch ( STeaException e ) {
             // How should we report this to the caller?...
         }
    }
@@ -456,9 +324,14 @@ public final class STeaRuntime
     private void doFirstStartInitializations()
         throws STeaException {
 
-        SArgvUtils.setArgv(_toplevelContext, _argv0, _argv);
-        setupLibVar(_importLocations);
-        SEncodingUtils.setSourceEncoding(_toplevelContext, _sourceEncoding);
+        String       argv0           = _config.getArgv0();
+        String[]     argv            = _config.getArgv();
+        String       sourceEncoding  = _config.getSourceEncoding();
+        List<String> importLocations = _config.getImportLocationList();
+
+        SArgvUtils.setArgv(_toplevelContext, argv0, argv);
+        setupLibVar(importLocations);
+        SEncodingUtils.setSourceEncoding(_toplevelContext, sourceEncoding);
         setupModules(_modules);
     }
 
@@ -524,17 +397,18 @@ public final class STeaRuntime
     private void runInitScripts()
         throws STeaException {
 
-        List<String> dirList  = _allImportLocations;
-        SCompiler    compiler = new SCompiler();
+        String       sourceEncoding = _config.getSourceEncoding();
+        List<String> dirList        = _allImportLocations;
+        SCompiler    compiler       = new SCompiler();
 
         for ( String dirPath : dirList ) {
             String path = INIT_FILE;
             SCode  code = null;
             
             try {
-                code = compiler.compile(dirPath, path, _sourceEncoding, path);
+                code = compiler.compile(dirPath, path, sourceEncoding, path);
                 code.exec(_toplevelContext);
-            } catch (IOException e) {
+            } catch ( IOException e ) {
                 // The given path does not exist or is not
                 // readable. Go ahead and just ignore it.
             }

@@ -12,6 +12,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 import com.pdmfc.tea.runtime.STeaRuntime;
+import com.pdmfc.tea.runtime.TeaRuntimeConfig;
 
 
 
@@ -45,7 +46,9 @@ public final class TeaRuntimeTest
     @Before
     public void setUp() {
 
-        _runtime = new STeaRuntime();
+        TeaRuntimeConfig config = TeaRuntimeConfig.Builder.start().build();
+
+        _runtime = new STeaRuntime(config);
     }
 
 

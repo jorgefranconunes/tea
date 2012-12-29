@@ -52,7 +52,7 @@ final class STeaRunnerArgs
 
 /**************************************************************************
  *
- * Instances for external user are only created by the factory method
+ * Instances for external use are only created by the factory method
  * "parse(...)".
  *
  **************************************************************************/
@@ -222,9 +222,9 @@ final class STeaRunnerArgs
     private void parseOption(final String arg)
         throws STeaException {
 
-        SCliOption option      = new SCliOption(arg);
-        String     optionName  = option.getName();
-        String     optionValue = option.getValue();
+        CliOption option      = new CliOption(arg);
+        String    optionName  = option.getName();
+        String    optionValue = option.getValue();
 
         if ( OPTION_LIBRARY.equals(optionName) ) {
             optionSetLibrary(optionValue);
@@ -334,7 +334,7 @@ final class STeaRunnerArgs
  *
  **************************************************************************/
 
-    private static final class SCliOption
+    private static final class CliOption
         extends Object {
 
 
@@ -354,7 +354,7 @@ final class STeaRunnerArgs
  *
  **************************************************************************/
 
-        public SCliOption(final String arg) {
+        public CliOption(final String arg) {
 
             String name     = null;
             String value    = null;

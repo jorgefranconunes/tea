@@ -1,14 +1,17 @@
 /**************************************************************************
  *
- * Copyright (c) 2007-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2007-2012 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
 package com.pdmfc.tea.engine;
 
-import com.pdmfc.tea.STeaException;
-import javax.script.*;
+import javax.script.CompiledScript;
+import javax.script.ScriptContext;
+import javax.script.ScriptEngine;
+import javax.script.ScriptException;
 
+import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.compiler.SCode;
 import com.pdmfc.tea.modules.reflect.STeaJavaTypes;
 import com.pdmfc.tea.runtime.STeaRuntime;
@@ -28,7 +31,7 @@ import com.pdmfc.tea.runtime.STeaRuntime;
  *
  **************************************************************************/
 
-public class TeaCompiledScript
+public final class TeaCompiledScript
     extends CompiledScript {
 
 
@@ -48,7 +51,8 @@ public class TeaCompiledScript
      * @param engine The engine that has instantiated this object.
      * @param code The compiled code wrapped by this class.
      */
-    public TeaCompiledScript(TeaScriptEngine engine, SCode code) {
+    public TeaCompiledScript(final TeaScriptEngine engine,
+                             final SCode code) {
         _engine = engine;
         _code   = code;
     }
@@ -74,7 +78,7 @@ public class TeaCompiledScript
      * See {@link TeaScriptEngine#eval(String, ScriptContext)}
      * for more details on script execution.
      */
-    public Object eval(ScriptContext scriptContext)
+    public Object eval(final ScriptContext scriptContext)
         throws ScriptException {
 
         try {
