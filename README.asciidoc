@@ -54,23 +54,22 @@ mvn -DskipTests=false
 In addition there are some Maven profiles that can be activated to
 perform specific tasks.
 
-* `-P tea-perform-setup` : Sets up the working area as a Tea
+* `-P tea-setup` : Sets up the working area as a Tea
    installation. This is required for running the `teadoc` tool
-   (e.g. when the `tea-run-teadoc` Maven profile is active).
+   (e.g. when the `tea-teadoc` Maven profile is active).
 
-* `-P tea-run-tunit-tests` : Runs TUnit tests, even when
-   `skipTests=true` (which is, by default).
+* `-P tea-tunit-tests` : Runs TUnit tests, even when `skipTests=true`
+   (which is, by default).
 
-* `-P tea-run-teadoc` : Creates Teadoc documentation from the project
+* `-P tea-teadoc` : Creates Teadoc documentation from the project
    source files. The Teadoc documentation is created under
    'doc/teadoc'. This is tipically used when building a release.
 
-* `-P tea-run-javadoc` : Creates Javadoc documentation from the project
+* `-P tea-javadoc` : Creates Javadoc documentation from the project
    source files. The Javadoc documentation is created under
    'doc/javadoc'. This is tipically used when building a release.
 
-* `-P tea-create-release-bundle` : Creates the tarball of a Tea
-   release.
+* `-P tea-build-release` : Creates the tarball of a Tea release.
 
 
 

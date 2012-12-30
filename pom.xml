@@ -397,11 +397,11 @@ details on performing a build.
 
     <!-- Profile used to setup the working area as an
          installation. This is required for running the "teadoc" tool.
-         tests. This profile is activated when the "teaSetup" system
+         tests. This profile is activated when the "teaRelease" system
          property has value "true". This is tipically only used when
          the build is run in a CI environment. -->
     <profile>
-      <id>tea-perform-setup</id>
+      <id>tea-setup</id>
       <activation>
         <property>
           <name>teaRelease</name>
@@ -442,7 +442,7 @@ details on performing a build.
          same system property (skipTests) is also used by the
          maven-surefire-plugin for the same purpose. -->
     <profile>
-      <id>tea-run-tunit-tests</id>
+      <id>tea-tunit-tests</id>
       <activation>
         <property>
           <name>skipTests</name>
@@ -488,10 +488,10 @@ details on performing a build.
 
 
     <!-- Profile used to create Teadoc documentation. This profile is
-         activated when the "teaTeadoc" system property has value
+         activated when the "teaRelease" system property has value
          "true". This is tipically used when building a release. -->
     <profile>
-      <id>tea-run-teadoc</id>
+      <id>tea-teadoc</id>
       <activation>
         <property>
           <name>teaRelease</name>
@@ -535,10 +535,10 @@ details on performing a build.
 
 
     <!-- Profile used to create Javadoc documentation. This profile is
-         activated when the "teaJavadoc" system property has value
+         activated when the "teaRelease" system property has value
          "true". This is tipically used when building a release. -->
     <profile>
-      <id>tea-run-javadoc</id>
+      <id>tea-javadoc</id>
       <activation>
         <property>
           <name>teaRelease</name>
@@ -585,10 +585,10 @@ details on performing a build.
          profile is activated when the "teaRelease" system property
          has value "true". This is tipically used when building a
          release. Note when actually creating a Tea release the
-         following profiles must also be active: tea-perform-setup,
-         tea-run-teadoc, tea-run-javadoc. -->
+         following profiles must also be active: tea-setup,
+         tea-teadoc, tea-javadoc. -->
     <profile>
-      <id>tea-create-release-bundle</id>
+      <id>tea-build-release</id>
       <activation>
         <property>
           <name>teaRelease</name>
@@ -604,7 +604,7 @@ details on performing a build.
             <artifactId>maven-assembly-plugin</artifactId>
             <executions>
               <execution>
-                <id>create-release-bundle</id>
+                <id>build-release</id>
                 <phase>package</phase>
                 <goals>
                   <goal>single</goal>

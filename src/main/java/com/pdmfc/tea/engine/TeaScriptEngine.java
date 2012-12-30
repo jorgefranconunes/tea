@@ -371,7 +371,7 @@ public final class TeaScriptEngine
         throws ScriptException {
         
         StringBuffer cb = new StringBuffer();
-        char ca[] = new char[4096];
+        char[]       ca = new char[4096];
         try {
             while (reader.read(ca) >= 0) {
                 cb.append(ca);
@@ -431,7 +431,7 @@ public final class TeaScriptEngine
         throws ScriptException {
 
         StringBuffer cb = new StringBuffer();
-        char ca[] = new char[4096];
+        char[]       ca = new char[4096];
 
         try {
             while (reader.read(ca) >= 0) {
@@ -753,8 +753,8 @@ public final class TeaScriptEngine
 
         // TODO - make the argv cast error give a more friendly error
 
-        String[] argv    = {};
-        Object   oArgv[] = (Object[])sc.getAttribute(ScriptEngine.ARGV);
+        String[] argv  = {};
+        Object[] oArgv = (Object[])sc.getAttribute(ScriptEngine.ARGV);
 
         if (oArgv != null) {
             argv = new String[oArgv.length];
