@@ -1,7 +1,7 @@
 #!/bin/bash
 ###########################################################################
 #
-# Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
+# Copyright (c) 2001-2013 PDMFC, All Rights Reserved.
 #
 #
 # Tool to generate Tea documentation from Tea and Java source files.
@@ -17,9 +17,9 @@ _teaBaseDir=$(cd $_scriptDir/..; pwd)
 
 
 
-source ${_teaBaseDir}/bin/tea-utils
+source ${_teaBaseDir}/lib/bash/tea-utils.sh
 
-teaReadCoreConfig $_teaBaseDir
+teaLoadCoreConfig $_teaBaseDir
 
 
 

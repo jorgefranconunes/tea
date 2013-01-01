@@ -43,58 +43,13 @@ cd wherever-you-want-to-install
 gunzip -c tea-4.xx.yy.tar.gz | tar xvf -
 
 
-4. Setup the installation by running the "setup" tool. The "setup"
-tool can be found in the "bin" directory at the root of the
-installation tree. This is needed to configure the Java Runtime
-Environment to use and the Java libraries needed by the Tea runtime
-(e.g. JDBC drivers).
-
-The "setup" tool accepts the following options:
-
---java-home=PATH
-
-        Specifies the base directory of your Java installation. The PATH
-        is supposed to refer to a directory containing a "bin" directory
-        with the a "java" program. If this option is not specified
-        then its value is taken to be "/usr".
+4. Ensure the JAVA_HOME environment variable is set. It should point
+to a Java 6 or later JRE. Aletrnatively you can run the tools under
+the "bin" folder passing them a --jre=PATH option pointing to the JRE
+binary.
 
 
---jre=COMMAND
-
-        Specifies the command that will execute a Java program. It must
-        recognize the "-D" and "-classpath" options. If this option is
-        not specified then its value is taken to be "$PATH/bin/java"
-        where PATH was specified through the "--java-home" option.
-
-
---classpath=PATH_LIST
-
-        Specifies the Class Path needed to run the Tea interpreter. If
-        your Java environment needs any additional libraries you should
-        specify them here.
-        If you are going to use the TDBC module then you should also
-        specify here the libraries for your JDBC drivers.
-        (e.g.  PostgreSQL JDBC needs the "postgresql-jdbc.jar").
-
---help
-
-        Display help on the above.
-
-As an example, supposing you have a Java installation under "/usr" you
-would do as follows:
-
-cd wherever-you-want-to-install/tea-4.xx.yy
-./bin/setup --java-home=/usr --classpath=/usr/share/java/postgresql-jdbc.jar
-
-
-5. You will probably want to run the Tea shell ("bin/tsh") just by
-writing "tsh" at the command prompt. To achieve that it will suffice
-to add "wherever-you-installed-tea/tea-4.xx.yy/bin" to your PATH. You
-can also put somewhere in your PATH a soft link pointing to
-"wherever-you-installed-tea/tea-4.xx.yy/bin/tsh".
-
-
-6. To embed Tea into your java applications, you can use the JSR-223
+5. To embed Tea into your java applications, you can use the JSR-223
 API (please read the examples in doc/engineProgGuide.html) or read the
 Tea doc/javadoc API.
 

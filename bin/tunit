@@ -1,10 +1,11 @@
 #!/bin/bash
 ###########################################################################
 #
-# Copyright (c) 2011 PDMFC, All Rights Reserved.
+# Copyright (c) 2011-2013 PDMFC, All Rights Reserved.
 #
 #
-# Tool for running Tea unit tests from the command line.
+# Tool for running Tea unit tests from the command line. Run with the
+# --help option for more details.
 #
 ###########################################################################
 
@@ -17,9 +18,9 @@ _teaBaseDir=$(cd $_scriptDir/..; pwd)
 
 
 
-source ${_teaBaseDir}/bin/tea-utils
+source ${_teaBaseDir}/lib/bash/tea-utils.sh
 
-teaReadCoreConfig $_teaBaseDir
+teaLoadCoreConfig $_teaBaseDir
 
 
 

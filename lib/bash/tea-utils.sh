@@ -1,12 +1,12 @@
 #!/bin/bash
 ###########################################################################
 #
-# Copyright (c) 2001-2010 PDM&FC, All Rights Reserved.
+# Copyright (c) 2001-2012 PDM&FC, All Rights Reserved.
 #
 #
 # Utility functions. This script is not meant to be executed by
 # itself. Instead it is tipically sourced from within other scripts
-# using the "source" operator.
+# using the Bash "source" operator.
 #
 #########################################################################
 
@@ -87,49 +87,19 @@ function teaNormalizePath () {
 #
 ###########################################################################
 
-function teaReadCoreConfig () {
+function teaLoadCoreConfig () {
+
+    local teaBaseDir=$1
 
     # The path of the core configuration parameters file.
-    trcc_configFile=$1/config/tea-core.conf
+    local configFile=${teaBaseDir}/conf/tea-core.conf
 
     # If it does not exist it means the installation tree is broken.
     # This is not supposed to happen.
-    if [ -f $trcc_configFile ]
-	then
-	. $trcc_configFile
+    if [ -f ${configFile} ] ; then
+	source ${configFile}
     else
-	teaError "Tea core configuration file \"$trcc_configFile\" not found."
-    fi
-}
-
-
-
-
-
-###########################################################################
-#
-# Makes the installation configuration parameters available.
-#
-# Arguments:
-#
-# 1. Tea installation base directory.
-#
-###########################################################################
-
-function teaReadInstallConfig () {
-
-    teaReadCoreConfig $1
-
-    # The path of the installation specific configuration parameters
-    # file
-    tric_configFile=$1/config/tea-install.conf
-
-    # If it does not exist it means someone forgot to run "setup".
-    if [ -f $tric_configFile ]
-	then
-	. $tric_configFile
-    else
-	teaError "Tea installation configuration file \"$tric_configFile\" not found."
+	teaError "Tea core configuration file \"${configFile}\" not found."
     fi
 }
 
