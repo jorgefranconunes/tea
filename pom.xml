@@ -2,11 +2,11 @@
 
 <!--
 
-Copyright (c) 2011-2012 PDMFC, All Rights Reserved.
+Copyright (c) 2011-2013 PDMFC, All Rights Reserved.
 
 
-Tea project main Maven POM file. See "00README-developers.txt" for
-details on performing a build.
+Tea project main Maven POM file. See "README.asciidoc" for details on
+performing a build.
 
 -->
 
@@ -22,9 +22,9 @@ details on performing a build.
 
   <artifactId>tea</artifactId>
 
-  <!-- This must be kept sinchronyzed with
-       "config/tea-core.conf". (For now...) -->
-  <version>4.0.0-beta09</version>
+  <!-- This must be kept sinchronyzed with "conf/tea-core.conf". (For
+       now...) -->
+  <version>4.0.0-beta09-SNAPSHOT</version>
 
   <packaging>jar</packaging>
 
@@ -45,18 +45,18 @@ details on performing a build.
 
     <!-- The following are used when generating Teadoc
          documentation. -->
-    <tea.teadoc.header><![CDATA[Tea ${BUILD_VERSION} Reference Documentation<b>&copy; 2012 <a href="http://www.pdmfc.com">PDM&amp;FC</a>]]></tea.teadoc.header>
+    <tea.teadoc.header><![CDATA[Tea ${BUILD_VERSION} Reference Documentation<b>&copy; 2013 <a href="http://www.pdmfc.com">PDM&amp;FC</a>]]></tea.teadoc.header>
     <tea.teadoc.footer>${tea.teadoc.header}</tea.teadoc.footer>
-    <tea.teadoc.bottom><![CDATA[<font size="-1"><a href="mailto:info@pdmfc.com">Report a bug or request new features</a></font><br /><font size="-1">&copy; 2012</font> <a href="http://www.pdmfc.com"><img align="absmiddle" border="0" src="LogoSmallPdmfc.png"></a>]]></tea.teadoc.bottom>
+    <tea.teadoc.bottom><![CDATA[<font size="-1"><a href="mailto:info@pdmfc.com">Report a bug or request new features</a></font><br /><font size="-1">&copy; 2013</font> <a href="http://www.pdmfc.com"><img align="absmiddle" border="0" src="LogoSmallPdmfc.png"></a>]]></tea.teadoc.bottom>
     <tea.teadoc.doctitle>Tea ${BUILD_VERSION} Reference Documentation</tea.teadoc.doctitle>
     <tea.teadoc.windowtitle>${tea.teadoc.doctitle}</tea.teadoc.windowtitle>
 
     <!-- The following are used when generating Javadoc
          documentation. -->
-  <tea.javadoc.header><![CDATA[<b>Tea Java Runtime API</b><br /><b>Version ${project.version}</b>]]></tea.javadoc.header>
-  <tea.javadoc.bottom><![CDATA[<font size="-1">&copy; 2012 <a href="http://www.pdmfc.com" target="_blank">PDMFC</a>, All Rights Reserved.</font>]]></tea.javadoc.bottom>
-  <tea.javadoc.doctitle>${project.name} ${project.version}</tea.javadoc.doctitle>
-  <tea.javadoc.windowtitle>${tea.javadoc.doctitle}</tea.javadoc.windowtitle>
+    <tea.javadoc.header><![CDATA[<b>Tea Java Runtime API</b><br /><b>Version ${project.version}</b>]]></tea.javadoc.header>
+    <tea.javadoc.bottom><![CDATA[<font size="-1">&copy; 2013 <a href="http://www.pdmfc.com" target="_blank">PDMFC</a>, All Rights Reserved.</font>]]></tea.javadoc.bottom>
+    <tea.javadoc.doctitle>${project.name} ${project.version}</tea.javadoc.doctitle>
+    <tea.javadoc.windowtitle>${tea.javadoc.doctitle}</tea.javadoc.windowtitle>
 
   </properties>
 
@@ -192,7 +192,7 @@ details on performing a build.
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-dependency-plugin</artifactId>
-          <version>2.4</version>
+          <version>2.6</version>
         </plugin>
 
 
@@ -213,7 +213,7 @@ details on performing a build.
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
-          <version>3.1</version>
+          <version>3.2</version>
         </plugin>
 
 
@@ -393,48 +393,6 @@ details on performing a build.
 
   <!-- -->
   <profiles>
-
-
-    <!-- Profile used to setup the working area as an
-         installation. This is required for running the "teadoc" tool.
-         tests. This profile is activated when the "teaRelease" system
-         property has value "true". This is tipically only used when
-         the build is run in a CI environment. -->
-    <profile>
-      <id>tea-setup</id>
-      <activation>
-        <property>
-          <name>teaRelease</name>
-          <value>true</value>
-        </property>
-      </activation>
-      <build>
-        <plugins>
-
-          <!--  Set up the working area as an installation. -->
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>exec-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>tea-setup</id>
-                <phase>initialize</phase>
-                <goals>
-                  <goal>exec</goal>
-                </goals>
-                <configuration>
-                  <executable>${basedir}/bin/setup</executable>
-                  <arguments>
-                    <argument>--java-home=${java.home}</argument>
-                  </arguments>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-
-        </plugins>
-      </build>
-    </profile>
 
 
     <!-- Profile used to run TUnit tests. This profile is activated
