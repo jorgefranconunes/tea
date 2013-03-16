@@ -54,10 +54,6 @@ mvn -DskipTests=false
 In addition there are some Maven profiles that can be activated to
 perform specific tasks.
 
-* `-P tea-setup` : Sets up the working area as a Tea
-   installation. This is required for running the `teadoc` tool
-   (e.g. when the `tea-teadoc` Maven profile is active).
-
 * `-P tea-tunit-tests` : Runs TUnit tests, even when `skipTests=true`
    (which is, by default).
 

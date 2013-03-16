@@ -1,13 +1,17 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2012 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2013 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
 package com.pdmfc.tea.modules.html;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.modules.SModule;
+import com.pdmfc.tea.runtime.SArgs;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SObjFunction;
@@ -41,6 +45,12 @@ import com.pdmfc.tea.runtime.TeaFunction;
 public final class SModuleHtml 
     extends Object
     implements SModule {
+
+
+
+
+
+    private static final String DEFAULT_CHARSET = "UTF-8";
 
 
 
@@ -175,23 +185,20 @@ public final class SModuleHtml
                                             final Object[]     args)
         throws STeaException {
 
-        if ( args.length != 2 ) {
-            throw new SNumArgException(args, "string");
-        }
+        SArgs.checkCount(args, 2, "object");
 
-        Object arg = args[1];
+        String result = null;
+        Object arg    = args[1];
 
         if ( arg instanceof String ) {
-           return htmlEncode((String)arg);
-        }
-        if ( arg instanceof Integer ) {
-           return String.valueOf(((Integer)arg).intValue());
-        }
-        if ( arg instanceof Double ) {
-            return String.valueOf(((Double)arg).doubleValue());
+            result = htmlEncode((String)arg);
+        } else if ( arg instanceof Number ) {
+            result = arg.toString();
+        } else {
+            throw new STypeException(args, 1, "string or numeric");
         }
 
-        throw new STypeException(args, 1, "string or an integer");
+        return result;
     }
 
 
@@ -283,61 +290,46 @@ public final class SModuleHtml
                                            final Object[]     args)
         throws STeaException {
 
-        if ( args.length != 2 ) {
-            throw new SNumArgException(args, "string");
-        }
+        SArgs.checkCount(args, 2, "object");
 
-        Object arg = args[1];
+        String result   = null;
+        Object arg      = args[1];
+        String encoding = DEFAULT_CHARSET;
         
         if ( arg instanceof String ) {
-            return urlEncode((String)arg);
-        }
-        if ( arg instanceof Integer ) {
-            return String.valueOf(((Integer)arg).intValue());
-        }
-        if ( arg instanceof Double ) {
-            return String.valueOf(((Double)arg).doubleValue());
+            result = urlEncode((String)arg, encoding);
+        } else if ( arg instanceof Number ) {
+            result = arg.toString();
+        } else {
+            throw new STypeException(args, 1, "string or a numeric");
         }
 
-        throw new STypeException(args, 1, "string or a numeric");
+        return result;
    }
 
 
 
 
 
-/**************************************************************************
+/***************************************************************************
  *
- * 
  *
- **************************************************************************/
+ *
+ ***************************************************************************/
 
-    private static String urlEncode(final String s) {
+    private static String urlEncode(final String s,
+                                    final String encoding) {
 
-        StringBuilder buf  = new StringBuilder();
-        int           size = s.length();
+        String result = null;
 
-        for ( int i=0; i<size; i++ ) {
-            char c = s.charAt(i);
-
-            switch ( c ) {
-            case ' ' : buf.append("%20"); break;
-            case '"' : buf.append("%22"); break;
-            case '$' : buf.append("%24"); break;
-            case '%' : buf.append("%25"); break;
-            case '*' : buf.append("%2a"); break;
-            case '+' : buf.append("%2b"); break;
-            case '/' : buf.append("%2f"); break;
-            case '&' : buf.append("%26"); break;
-            case '<' : buf.append("%3c"); break;
-            case '=' : buf.append("%3d"); break;
-            case '>' : buf.append("%3e"); break;
-            case '?' : buf.append("%3f"); break;
-            case '|' : buf.append("%7c"); break;
-            default  : buf.append(c); break;
-            }
+        try {
+            result = URLEncoder.encode(s, encoding);
+        } catch ( UnsupportedEncodingException e ) {
+            // Should never happen...
+            result = s;
         }
-        return buf.toString();
+
+        return result;
     }
 
 

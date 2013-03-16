@@ -1,0 +1,72 @@
+###########################################################################
+#
+# Copyright (c) 2013 PDMFC, All Rights Reserved.
+#
+#
+# TUnit tests for functions in the tea.html module.
+#
+###########################################################################
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite html-encode-test {
+
+    tunit-test htmlEncodeOk {
+        tunit-assert-equals "Hello,&lt;world&gt;" [html-encode "Hello,<world>"]
+        tunit-assert-equals "100" [html-encode 100]
+        tunit-assert-equals "3.14" [html-encode 3.14]
+    }
+
+    tunit-test-error tooFewArgs {
+        html-encode
+    }
+
+    tunit-test-error tooManyArgs {
+        html-encode "1" "2"
+    }
+
+    tunit-test-error invalidArgType {
+        html-encode $null
+    }
+
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite url-encode-test {
+
+    tunit-test urlEncodeOk {
+        tunit-assert-equals "Hello%2C+world" [url-encode "Hello, world"]
+        tunit-assert-equals "100" [url-encode 100]
+        tunit-assert-equals "3.14" [url-encode 3.14]
+    }
+
+    tunit-test-error tooFewArgs {
+        url-encode
+    }
+
+    tunit-test-error tooManyArgs {
+       url-encode "1" "2"
+    }
+
+    tunit-test-error invalidArgType {
+        url-encode $null
+    }
+
+}
