@@ -38,3 +38,37 @@ tunit-testsuite file-basename-test {
 
 }
 
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite file-dirname-test {
+
+    tunit-test dirnameOk {
+        tunit-assert-equals "hello" [file-dirname "hello/world.tea"]
+        tunit-assert-equals "hello" [file-dirname "hello/world/"]
+        tunit-assert-equals "." [file-dirname "world.tea"]
+        tunit-assert-equals "/" [file-dirname "/whatever"]
+        tunit-assert-equals $null [file-dirname "/"]
+    }
+
+    tunit-test-error tooFewArgs {
+        file-basename
+    }
+
+    tunit-test-error tooManyArgs {
+        file-basename "1" "2"
+    }
+
+    tunit-test-error invalidArgType {
+        file-basename $null
+    }
+
+}
+

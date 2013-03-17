@@ -250,13 +250,152 @@ public final class SModuleIO
                                           final Object[]     args)
         throws STeaException {
 
-        SArgs.checkCount(args, 2, "file-path");
+        SArgs.checkCount(args, 2, "path");
 
         String path     = SArgs.getString(args,1);
         File  file      = new File(path);
         String basename = file.getName();
 
         return basename;
+    }
+
+
+
+
+
+//* 
+//* <TeaFunction name="file-dirname"
+//*              arguments="pathName"
+//*              module="tea.io">
+//*
+//* <Overview>
+//* Retrieves the directory part of a path name.
+//* </Overview>
+//*
+//* <Parameter name="pathName">
+//* String representing a path name.
+//* </Parameter>
+//*
+//* <Returns>
+//* A string representing the parent directory of <Arg name="pathName"/>
+//* or null if <Arg name="pathName"/> has no parent directory.
+//* </Returns>
+//*
+//* <Description>
+//* If <Arg name="pathName"/> is comprised of just a base name
+//* (e.g. "hello.com.pdmfc.tea.) then the parent directory is taken to be ".".
+//* <P>Some <Arg name="pathName"/> may have no parent directory. This
+//* is the case of root directories (e.g. "/" in unix, "c:\" in
+//* windows).</P>
+//* </Description>
+//* 
+//* </TeaFunction>
+//* 
+
+/**************************************************************************
+ *
+ * Implements the Tea <code>file-dirname</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
+ *
+ **************************************************************************/
+
+    @TeaFunction("file-dirname")
+    public static Object functionDirname(final SObjFunction func,
+                                         final SContext     context,
+                                         final Object[]     args)
+        throws STeaException {
+
+        SArgs.checkCount(args, 2, "path");
+
+        String path    = SArgs.getString(args,1);
+        File   file    = new File(path);
+        String dirName = file.getParent();
+
+        if ( (dirName==null) && !file.isAbsolute() ) {
+             dirName = ".";
+        }
+
+        Object result = (dirName==null) ? SObjNull.NULL : dirName;
+
+        return result;
+    }
+
+
+
+
+
+//* 
+//* <TeaFunction name="file-extension"
+//*                 arguments="pathName"
+//*             module="tea.io">
+//*
+//* <Overview>
+//* Retrieves the extension of a file name.
+//* </Overview>
+//*
+//* <Parameter name="pathName">
+//* String representing a path name.
+//* </Parameter>
+//*
+//* <Returns>
+//* A string representing the extension part of <Arg name="pathName"/>.
+//* </Returns>
+//*
+//* <Description>
+//* The extension is the part of the path name following the last dot
+//* character in the base name of <Arg name="pathName"/>. If the base
+//* name has no dot than an empty string returned.
+//* </Description>
+//* 
+//* </TeaFunction>
+//* 
+
+/**************************************************************************
+ *
+ * Implements the Tea <code>file-extension</code> function.
+ *
+ * @param func The Tea function object for which this function is
+ * being called.
+ *
+ * @param context The Tea context where the function is being invoked.
+ *
+ * @param args The arguments the function is being invoked with.
+ *
+ * @exception STeaException Thrown if the function did not complete
+ * successfully.
+ *
+ * @return The value returned by the Tea function.
+ *
+ **************************************************************************/
+
+    @TeaFunction("file-extension")
+    public static Object functionExtension(final SObjFunction func,
+                                           final SContext     context,
+                                           final Object[]     args)
+        throws STeaException {
+
+        if ( args.length != 2 ) {
+            throw new SNumArgException(args, "file-name");
+        }
+
+        String pathName   = SArgs.getString(args, 1);
+        String baseName   = (new File(pathName)).getName();
+        int    indexOfDot = baseName.lastIndexOf('.');
+        String extension  =
+            (indexOfDot<0) ? "" : baseName.substring(indexOfDot+1);
+
+        return extension;
     }
 
 
@@ -371,145 +510,6 @@ public final class SModuleIO
                 try { out.close(); } catch (Exception e2) {/* */}
             }
         }
-    }
-
-
-
-
-
-//* 
-//* <TeaFunction name="file-dirname"
-//*                 arguments="pathName"
-//*             module="tea.io">
-//*
-//* <Overview>
-//* Retrieves the directory part of a path name.
-//* </Overview>
-//*
-//* <Parameter name="pathName">
-//* String representing a path name.
-//* </Parameter>
-//*
-//* <Returns>
-//* A string representing the parent directory of <Arg name="pathName"/>
-//* or null if <Arg name="pathName"/> has no parent directory.
-//* </Returns>
-//*
-//* <Description>
-//* If <Arg name="pathName"/> is comprised of just a base name
-//* (e.g. "hello.com.pdmfc.tea.) then the parent directory is taken to be ".".
-//* <P>Some <Arg name="pathName"/> may have no parent directory. This
-//* is the case of root directories (e.g. "/" in unix, "c:\" in
-//* windows).</P>
-//* </Description>
-//* 
-//* </TeaFunction>
-//* 
-
-/**************************************************************************
- *
- * Implements the Tea <code>file-dirname</code> function.
- *
- * @param func The Tea function object for which this function is
- * being called.
- *
- * @param context The Tea context where the function is being invoked.
- *
- * @param args The arguments the function is being invoked with.
- *
- * @exception STeaException Thrown if the function did not complete
- * successfully.
- *
- * @return The value returned by the Tea function.
- *
- **************************************************************************/
-
-    @TeaFunction("file-dirname")
-    public static Object functionDirname(final SObjFunction func,
-                                         final SContext     context,
-                                         final Object[]     args)
-        throws STeaException {
-
-        if ( args.length != 2 ) {
-            throw new SNumArgException(args, "file-name");
-        }
-
-        String path    = SArgs.getString(args,1);
-        File   aFile   = new File(path);
-        String dirName = aFile.getParent();
-
-        if ( (dirName==null) && !aFile.isAbsolute() ) {
-            dirName = ".";
-        }
-
-        return (dirName==null) ? SObjNull.NULL : dirName;
-    }
-
-
-
-
-
-//* 
-//* <TeaFunction name="file-extension"
-//*                 arguments="pathName"
-//*             module="tea.io">
-//*
-//* <Overview>
-//* Retrieves the extension of a file name.
-//* </Overview>
-//*
-//* <Parameter name="pathName">
-//* String representing a path name.
-//* </Parameter>
-//*
-//* <Returns>
-//* A string representing the extension part of <Arg name="pathName"/>.
-//* </Returns>
-//*
-//* <Description>
-//* The extension is the part of the path name following the last dot
-//* character in the base name of <Arg name="pathName"/>. If the base
-//* name has no dot than an empty string returned.
-//* </Description>
-//* 
-//* </TeaFunction>
-//* 
-
-/**************************************************************************
- *
- * Implements the Tea <code>file-extension</code> function.
- *
- * @param func The Tea function object for which this function is
- * being called.
- *
- * @param context The Tea context where the function is being invoked.
- *
- * @param args The arguments the function is being invoked with.
- *
- * @exception STeaException Thrown if the function did not complete
- * successfully.
- *
- * @return The value returned by the Tea function.
- *
- **************************************************************************/
-
-    @TeaFunction("file-extension")
-    public static Object functionExtension(final SObjFunction func,
-                                           final SContext     context,
-                                           final Object[]     args)
-        throws STeaException {
-
-        if ( args.length != 2 ) {
-            throw new SNumArgException(args, "file-name");
-        }
-
-        String pathName   = SArgs.getString(args, 1);
-        String baseName   = (new File(pathName)).getName();
-        int    indexOfDot = baseName.lastIndexOf('.');
-        String extension  =
-            (indexOfDot<0) ? "" : baseName.substring(indexOfDot+1);
-
-        return extension;
     }
 
 
