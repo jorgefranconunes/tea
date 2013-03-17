@@ -355,7 +355,7 @@ public final class SModuleIO
 //* <Description>
 //* The extension is the part of the path name following the last dot
 //* character in the base name of <Arg name="pathName"/>. If the base
-//* name has no dot than an empty string returned.
+//* name has no dot or if it ends with a dot than an empty string returned.
 //* </Description>
 //* 
 //* </TeaFunction>
@@ -385,12 +385,11 @@ public final class SModuleIO
                                            final Object[]     args)
         throws STeaException {
 
-        if ( args.length != 2 ) {
-            throw new SNumArgException(args, "file-name");
-        }
+        SArgs.checkCount(args, 2, "path");
 
-        String pathName   = SArgs.getString(args, 1);
-        String baseName   = (new File(pathName)).getName();
+        String path       = SArgs.getString(args, 1);
+        File   file       = new File(path);
+        String baseName   = file.getName();
         int    indexOfDot = baseName.lastIndexOf('.');
         String extension  =
             (indexOfDot<0) ? "" : baseName.substring(indexOfDot+1);

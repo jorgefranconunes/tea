@@ -59,15 +59,48 @@ tunit-testsuite file-dirname-test {
     }
 
     tunit-test-error tooFewArgs {
-        file-basename
+        file-dirname
     }
 
     tunit-test-error tooManyArgs {
-        file-basename "1" "2"
+        file-dirname "1" "2"
     }
 
     tunit-test-error invalidArgType {
-        file-basename $null
+        file-dirname $null
+    }
+
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite file-extension-test {
+
+    tunit-test dirnameOk {
+        tunit-assert-equals "tea" [file-extension "hello/world.tea"]
+        tunit-assert-equals "tea" [file-extension "world.tea"]
+        tunit-assert-equals "" [file-extension "world."]
+        tunit-assert-equals "" [file-extension "world"]
+    }
+
+    tunit-test-error tooFewArgs {
+        file-extension
+    }
+
+    tunit-test-error tooManyArgs {
+        file-extension "1" "2"
+    }
+
+    tunit-test-error invalidArgType {
+        file-extension $null
     }
 
 }
