@@ -1,0 +1,40 @@
+###########################################################################
+#
+# Copyright (c) 2013 PDMFC, All Rights Reserved.
+#
+#
+# TUnit tests for functions in the tea.html module.
+#
+###########################################################################
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite file-basename-test {
+
+    tunit-test basenameOk {
+        tunit-assert-equals "world.tea" [file-basename "hello/world.tea"]
+        tunit-assert-equals "world.tea" [file-basename "world.tea"]
+    }
+
+    tunit-test-error tooFewArgs {
+        file-basename
+    }
+
+    tunit-test-error tooManyArgs {
+        file-basename "1" "2"
+    }
+
+    tunit-test-error invalidArgType {
+        file-basename $null
+    }
+
+}
+

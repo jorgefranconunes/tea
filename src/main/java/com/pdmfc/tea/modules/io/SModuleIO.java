@@ -204,8 +204,8 @@ public final class SModuleIO
 
 //* 
 //* <TeaFunction name="file-basename"
-//*                 arguments="pathName"
-//*             module="tea.io">
+//*              arguments="pathName"
+//*              module="tea.io">
 //*
 //* <Overview>
 //* Retrieves the basename component of a path name.
@@ -250,11 +250,13 @@ public final class SModuleIO
                                           final Object[]     args)
         throws STeaException {
 
-        if ( args.length != 2 ) {
-            throw new SNumArgException(args, "file-name");
-        }
+        SArgs.checkCount(args, 2, "file-path");
 
-        return (new File(SArgs.getString(args,1))).getName();
+        String path     = SArgs.getString(args,1);
+        File  file      = new File(path);
+        String basename = file.getName();
+
+        return basename;
     }
 
 
