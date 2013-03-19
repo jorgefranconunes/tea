@@ -581,8 +581,8 @@ public final class SModuleIO
 
 //* 
 //* <TeaFunction name="file-is-dir?"
-//*                 arguments="pathName"
-//*             module="tea.io">
+//*              arguments="pathName"
+//*              module="tea.io">
 //*
 //* <Overview>
 //* Checks if a path name refers to a directory.
@@ -627,16 +627,13 @@ public final class SModuleIO
                                        final Object[]     args)
         throws STeaException {
 
-        int numArgs = args.length;
+        SArgs.checkCount(args, 2, "path");
 
-        if ( numArgs != 2 ) {
-            throw new SNumArgException(args, "file-name");
-        }
+        String  path   = SArgs.getString(args, 1);
+        File    file   = new File(path);
+        Boolean result = file.isDirectory() ? Boolean.TRUE : Boolean.FALSE;
 
-        String fileName = SArgs.getString(args,1);
-        File   file     = new File(fileName);
-
-        return file.isDirectory() ? Boolean.TRUE : Boolean.FALSE;
+        return result;
     }
 
 

@@ -141,6 +141,8 @@ tunit-testsuite file-copy-test {
     tunit-test-error invalidArgType {
         file-copy $null $null
     }
+    
+}
 
 
 
@@ -155,7 +157,7 @@ tunit-testsuite file-copy-test {
 tunit-testsuite file-exists-test {
 
     tunit-test existsOk {
-        define home      [tea-get-system-property "user.home"]
+        define home [tea-get-system-property "user.home"]
         tunit-assert [file-exists? $home]
     }
 
@@ -173,5 +175,36 @@ tunit-testsuite file-exists-test {
 
 }
 
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite file-is-dir-test {
+
+    tunit-test isDirOk {
+        define home [tea-get-system-property "user.home"]
+        tunit-assert [file-is-dir? $home]
+    }
+
+    tunit-test-error tooFewArgs {
+        file-is-dir?
+    }
+
+    tunit-test-error tooManyArgs {
+        file-is-dir? "1" "2"
+    }
+
+    tunit-test-error invalidArgType {
+        file-is-dir? $null
+    }
+
 }
+
+
 
