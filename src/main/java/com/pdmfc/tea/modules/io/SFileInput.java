@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2013 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -18,7 +18,6 @@ import com.pdmfc.tea.runtime.SArgs;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjSymbol;
-import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SRuntimeException;
 
 
@@ -67,7 +66,11 @@ public final class SFileInput
  *
  * The constructor initializes the object internal state.
  *
- * @param myClass The <TT>STosClass</TT> object for this object.
+ * @param myClass The <code>STosClass</code> object for this object.
+ *
+ * @throws STeaException Thrown if there were problems initializing
+ * the base objects. Unless something has gone horribly wrong with the
+ * TOS internals it is never thrown.
  *
  **************************************************************************/
 
@@ -115,9 +118,7 @@ public final class SFileInput
                               final Object[]     args)
         throws STeaException {
 
-        if ( args.length != 3 ) {
-            throw new SNumArgException(args, "file-name");
-        }
+        SArgs.checkCount(args, 3, "path");
 
         String          fileName    = SArgs.getString(args,2);
         FileInputStream aFileInput  = null;
@@ -140,7 +141,7 @@ public final class SFileInput
 
 /**************************************************************************
  *
- * 
+ * @return The name of this TOS class.
  *
  **************************************************************************/
 
@@ -155,7 +156,15 @@ public final class SFileInput
 
 /**************************************************************************
  *
- * 
+ * @param context The Tea context where the object constructor will be
+ * called.
+ *
+ * @param args The arguments to be passed to the constructor.
+ *
+ * @return A newly initialized TFileInput TOS object.
+ *
+ * @throws STeaException Thrown if there were problems instatiating
+ * the TOS object or executing the constructor.
  *
  **************************************************************************/
 
@@ -166,7 +175,7 @@ public final class SFileInput
         STosObj input = STosUtil.newInstance(CLASS_NAME_S, context, args);
 
         if ( !(input instanceof SFileInput) ) {
-            String msg = "invalid ''{0}'' class";
+            String msg = "invalid \"{0}\" class";
             throw new SRuntimeException(msg, CLASS_NAME);
         }
 

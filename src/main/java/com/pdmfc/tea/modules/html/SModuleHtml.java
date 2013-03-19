@@ -13,7 +13,6 @@ import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.modules.SModule;
 import com.pdmfc.tea.runtime.SArgs;
 import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.STypeException;
 import com.pdmfc.tea.runtime.TeaFunction;
