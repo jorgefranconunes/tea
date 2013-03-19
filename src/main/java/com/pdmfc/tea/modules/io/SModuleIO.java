@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2012 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2013 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -403,8 +403,8 @@ public final class SModuleIO
 
 //* 
 //* <TeaFunction name="file-copy"
-//*                 arguments="sourcePath destPath"
-//*             module="tea.io">
+//*              arguments="sourcePath destPath"
+//*               module="tea.io">
 //*
 //* <Overview>
 //* Makes a copy of a file.
@@ -453,11 +453,12 @@ public final class SModuleIO
                                       final Object[]     args)
         throws STeaException {
 
-        if ( args.length != 3 ) {
-            throw new SNumArgException(args, "src-file dst-file");
-        }
-        File    srcFile = new File(SArgs.getString(args,1));
-        File    dstFile = new File(SArgs.getString(args,2));
+        SArgs.checkCount(args, 3, "src-path dst-path");
+
+        String  srcPath = SArgs.getString(args, 1);
+        File    srcFile = new File(srcPath);
+        String  dstPath = SArgs.getString(args,2);
+        File    dstFile = new File(dstPath);
         boolean status  = true;
 
         try {
@@ -467,11 +468,13 @@ public final class SModuleIO
             if ( !srcName.equals(dstName) ) {
                 copyFile(srcFile, dstFile);
             }
-        } catch (IOException e) {
+        } catch ( IOException e ) {
             status = false;
         }
 
-        return status ? Boolean.TRUE : Boolean.FALSE;
+        Boolean result = status ? Boolean.TRUE : Boolean.FALSE;
+
+        return result;
     }
 
 
@@ -499,7 +502,7 @@ public final class SModuleIO
             while ( (count=in.read(buffer)) != -1 ) {
                 out.write(buffer, 0, count);
             }
-        } catch (IOException e) {
+        } catch ( IOException e ) {
             throw e;
         } finally {
             if (in != null) {

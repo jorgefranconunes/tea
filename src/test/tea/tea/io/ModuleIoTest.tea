@@ -105,3 +105,42 @@ tunit-testsuite file-extension-test {
 
 }
 
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite file-copy-test {
+
+    tunit-test copyOk {
+        # TBD
+    }
+    
+    tunit-test copyFailedNonExistentFrom {
+        define home      [tea-get-system-property "user.home"]
+        define srcPath   [file-join $home "THIS_DOES_NOT_EXIST"]
+        define dstPath   [file-join $home "THIS_WILL_NOT_BE_CREATED"]
+        define isSuccess [file-copy $srcPath $dstPath]
+        
+        tunit-assert [not $isSuccess]
+    }
+
+    tunit-test-error tooFewArgs {
+        file-copy
+    }
+
+    tunit-test-error tooManyArgs {
+        file-copy "1" "2" "3"
+    }
+
+    tunit-test-error invalidArgType {
+        file-copy $null $null
+    }
+
+}
+
