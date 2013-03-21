@@ -1,15 +1,14 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2012 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2013 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
-package com.pdmfc.tea.util;
+package com.pdmfc.tea.modules.tos;
 
+import java.lang.Iterable;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-
-import com.pdmfc.tea.util.SListNode;
 
 
 
@@ -22,16 +21,17 @@ import com.pdmfc.tea.util.SListNode;
  *
  **************************************************************************/
 
-public final class SList
-    extends Object {
+public final class SList<T>
+    extends Object
+    implements Iterable<T> {
 
 
 
 
     
-    protected SListNode _head;
-    protected SListNode _tail;
-    protected int       _size;
+    protected ListNode<T> _head;
+    protected ListNode<T> _tail;
+    protected int      _size;
 
 
 
@@ -59,13 +59,13 @@ public final class SList
  * Appends the object given as argument to the end of the list.
  *
  * @param obj Reference to the object to be appended to the end of the
- *    list.
+ * list.
  *
  **************************************************************************/
 
-    public void append(final Object obj) {
+    public void append(final T obj) {
 
-        SListNode node = new SListNode(obj);
+        ListNode<T> node = new ListNode<T>(obj);
 
         if ( _head == null ) {
             _head = node;
@@ -86,13 +86,13 @@ public final class SList
  * Inserts the object given as argument to the start of the list.
  *
  * @param obj Reference to the object to be inserted at the start of
- *    the list.
+ * the list.
  *
  **************************************************************************/
 
-    public void prepend(final Object obj) {
+    public void prepend(final T obj) {
 
-        SListNode node = new SListNode(obj);
+        ListNode<T> node = new ListNode<T>(obj);
 
         if ( _head == null ) {
             _head = node;
@@ -151,9 +151,12 @@ public final class SList
  *
  **************************************************************************/
 
-    public Iterator iterator() {
+    @Override
+    public Iterator<T> iterator() {
 
-        return new SListIterator(_head);
+        Iterator<T> result = new ListIterator<T>(_head);
+
+        return result;
     }
 
 
@@ -166,9 +169,33 @@ public final class SList
  *
  **************************************************************************/
 
-    public SListNode head() {
+    private static final class ListNode<T>
+        extends Object {
 
-        return _head;
+
+
+
+
+        public T        _element = null;
+        public ListNode _next    = null;
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+        public ListNode(final T element) {
+
+            _element = element;
+            _next    = null;
+        }
+
+
     }
 
 
@@ -177,20 +204,20 @@ public final class SList
 
 /**************************************************************************
  *
- * Implements the <TT>Enumeration</TT> interface for a <TT>SList</TT>
- * object.
+ * Implements the <code>Iterator</code> interface for a
+ * <code>SList</code> object.
  *
  **************************************************************************/
 
-    private static final class SListIterator
+    private static final class ListIterator<T>
 	extends Object
-	implements Iterator {
+	implements Iterator<T> {
 
 
 
 
 
-	private SListNode _current;
+	private ListNode<T> _current;
 
 
 
@@ -202,7 +229,7 @@ public final class SList
  *
  **************************************************************************/
 
-	public SListIterator(final SListNode head) {
+	public ListIterator(final ListNode<T> head) {
 
 	    _current = head;
 	}
@@ -232,13 +259,13 @@ public final class SList
  *
  **************************************************************************/
 
-	public Object next() {
+	public T next() {
 
 	    if ( _current == null ) {
-		throw new NoSuchElementException("SListIterator");
+		throw new NoSuchElementException("ListIterator");
 	    }
 
-	    SListNode node = _current;
+	    ListNode<T> node = _current;
 
 	    _current = _current._next;
 

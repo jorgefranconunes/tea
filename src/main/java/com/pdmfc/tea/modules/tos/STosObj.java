@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2013 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -13,7 +13,6 @@ import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjNull;
 import com.pdmfc.tea.runtime.SObjSymbol;
-import com.pdmfc.tea.util.SListNode;
 
 
 
@@ -156,21 +155,16 @@ public class STosObj
 
 /**************************************************************************
  *
- * Instanciates the member for this object.
- *
- * @return
- *    An <TT>SContext</TT> with the members.
+ * 
  *
  **************************************************************************/
 
     private SMemberSet instanciateMembers() {
 
         SMemberSet members = new SMemberSet();
-        SListNode  node    = _myClass.memberNames().head(); 
-
-        while ( node != null ) {
-            members.newVar((SObjSymbol)node._element, SObjNull.NULL);
-            node = node._next;
+       
+        for ( SObjSymbol memberName : _myClass.memberNames() ) {
+            members.newVar(memberName, SObjNull.NULL);
         }
 
         return members;

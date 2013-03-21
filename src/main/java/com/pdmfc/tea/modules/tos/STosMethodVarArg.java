@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2013 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -16,7 +16,6 @@ import com.pdmfc.tea.runtime.SObjNull;
 import com.pdmfc.tea.runtime.SObjPair;
 import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SReturnException;
-import com.pdmfc.tea.util.SListNode;
 
 
 
@@ -43,7 +42,6 @@ public final class STosMethodVarArg
 
     private STosClass _myClass;
     private int       _level;
-    private SListNode _memberNames;
 
     private static final SObjSymbol SYMBOL_THIS =SObjSymbol.addSymbol("this");
     private static final SObjSymbol SYMBOL_SUPER=SObjSymbol.addSymbol("super");
@@ -73,11 +71,10 @@ public final class STosMethodVarArg
                             final SObjSymbol argName,
                             final SObjBlock  body) {
 
-        _argName    = argName;
-        _body       = body;
-        _myClass     = theClass;
-        _level       = theClass.level();
-        _memberNames = theClass.memberNames().head();
+        _argName = argName;
+        _body    = body;
+        _myClass = theClass;
+        _level   = theClass.level();
     }
 
 

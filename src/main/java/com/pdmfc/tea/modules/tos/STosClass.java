@@ -1,19 +1,19 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2013 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
 package com.pdmfc.tea.modules.tos;
 
 import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.modules.tos.SList;
 import com.pdmfc.tea.modules.tos.SNoSuchMethodException;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SNoSuchVarException;
-import com.pdmfc.tea.util.SList;
 
 
 
@@ -36,7 +36,7 @@ public class STosClass
     private STosClass _superClass;
 
     // List of member names (symbols)
-    private SList _members;
+    private SList<SObjSymbol> _members;
 
     // The level down in the class hierarchy (0 => no base class)
     private int _level;
@@ -69,18 +69,15 @@ public class STosClass
  *
  * Defines a new TOS class.
  *
- * @param superClass
- *    The base class of the class being defined. If it is null
- *    it means the class being defined has no base class.
+ * @param superClass The base class of the class being defined. If it
+ * is null it means the class being defined has no base class.
  *
- * @param members
- *    Array with the member names. It must be a <code>Vector</code> of
- *    <code>SObjSymbol</code> objects.
+ * @param members Array with the member names.
  *
  **************************************************************************/
 
-    public STosClass(final STosClass superClass,
-                     final SList     members) {
+    public STosClass(final STosClass         superClass,
+                     final SList<SObjSymbol> members) {
 
         _name        = null;
         _superClass  = superClass;
@@ -104,7 +101,7 @@ public class STosClass
  *
  **************************************************************************/
 
-    public STosClass(final SList members) {
+    public STosClass(final SList<SObjSymbol> members) {
 
         this(null, members);
     }
@@ -124,7 +121,7 @@ public class STosClass
 
     public STosClass(final STosClass superClass) {
 
-        this(superClass, new SList());
+        this(superClass, new SList<SObjSymbol>());
     }
 
 
@@ -139,7 +136,7 @@ public class STosClass
 
     public STosClass() {
 
-        this(null, new SList());
+        this(null, new SList<SObjSymbol>());
     }
 
 
@@ -175,7 +172,7 @@ public class STosClass
  *
  **************************************************************************/
 
-    public final SList memberNames() {
+    public final SList<SObjSymbol> memberNames() {
 
         return _members;
     }

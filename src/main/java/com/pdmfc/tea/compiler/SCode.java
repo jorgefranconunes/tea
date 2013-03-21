@@ -96,7 +96,7 @@ public final class SCode
                 int      lineNum = statement.getLineNumber();
                 Object[] fmtArgs = { String.valueOf(lineNum), _fileName };
                 String   fmtMsg  = (_fileName==null) ? ERR_STAT :ERR_STAT_FILE;
-                SRuntimeException error =new SRuntimeException(e.getMessage());
+                SRuntimeException error = new SRuntimeException(e.getMessage());
 
                 error.addMessage(fmtMsg, fmtArgs);
                 throw error;                

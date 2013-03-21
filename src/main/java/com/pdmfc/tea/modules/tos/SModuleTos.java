@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2012 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2013 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -12,6 +12,7 @@ import java.util.Map;
 
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.modules.SModule;
+import com.pdmfc.tea.modules.tos.SList;
 import com.pdmfc.tea.runtime.SArgs;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjBlock;
@@ -23,7 +24,6 @@ import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypeException;
 import com.pdmfc.tea.runtime.STypes;
-import com.pdmfc.tea.util.SList;
 import com.pdmfc.tea.runtime.TeaFunction;
 
 
@@ -228,21 +228,24 @@ public final class SModuleTos
             throw new SNumArgException(args, usage);
         }
 
-        SObjSymbol className   = SArgs.getSymbol(args, 1);
-        STosClass  baseClass   = (args.length==3)
-            ? null : STosUtil.getClass(context,args,2);
-        SObjPair   memberList  = SArgs.getPair(args, (args.length==3)? 2 : 3);
-        SList      memberNames = new SList();
+        SObjSymbol className          = SArgs.getSymbol(args, 1);
+        STosClass  baseClass          =
+            (args.length==3) ? null : STosUtil.getClass(context,args,2);
+        SObjPair          memberList  =
+            SArgs.getPair(args, (args.length==3)? 2 : 3);
+        SList<SObjSymbol> memberNames =
+            new SList<SObjSymbol>();
 
         for ( SObjPair e=memberList; e._car!=null; e=(SObjPair)e._cdr ) {
-            Object memberName = e._car;
-            if ( !(memberName instanceof SObjSymbol) ) {
+            try {
+                SObjSymbol memberName = (SObjSymbol)e._car;
+                memberNames.prepend(memberName);
+            } catch ( ClassCastException exception ) {
                 String msg = "found a {0} when expecting a Symbol";
                 throw new SRuntimeException(args,
                                             msg,
-                                            STypes.getTypeName(memberName));
+                                            STypes.getTypeName(e._car));
             }
-            memberNames.prepend(e._car);
         }
 
         STosClass theClass = new STosClass(baseClass, memberNames);
@@ -316,10 +319,10 @@ public final class SModuleTos
                                        "[base-class] list-of-members");
         }
 
-        STosClass baseClass   = null;
-        SObjPair  memberList  = null;
-        SList     memberNames = new SList();
-        STosClass result      = null;
+        STosClass         baseClass   = null;
+        SObjPair          memberList  = null;
+        SList<SObjSymbol> memberNames = new SList<SObjSymbol>();
+        STosClass         result      = null;
 
         switch ( args.length ) {
         case 2:
@@ -335,14 +338,15 @@ public final class SModuleTos
         }
 
         for ( SObjPair e=memberList; e._car!=null; e=(SObjPair)e._cdr ) {
-            Object memberName = e._car;
-            if ( !(memberName instanceof SObjSymbol) ) {
+            try {
+                SObjSymbol memberName = (SObjSymbol)e._car;
+                memberNames.prepend(memberName);
+            } catch ( ClassCastException exception ) {
                 String msg = "found a {0} when expecting a Symbol";
                 throw new SRuntimeException(args,
                                             msg,
-                                            STypes.getTypeName(memberName));
+                                            STypes.getTypeName(e._car));
             }
-            memberNames.prepend(e._car);
         }
 
         result = new STosClass(baseClass, memberNames);
