@@ -277,3 +277,33 @@ tunit-testsuite file-join-test {
 
 
 
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite mkdir-test {
+
+    tunit-test mkdirOk {
+        tunit-assert [not [file-mkdir "."]]
+    }
+
+    tunit-test-error tooFewArgs {
+        file-mkdir
+    }
+
+    tunit-test-error tooManyArgs {
+        file-mkdir "1" "2"
+    }
+
+    tunit-test-error invalidArgType {
+        file-mkdir $null
+    }
+
+}
+
+
+

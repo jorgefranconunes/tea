@@ -776,8 +776,8 @@ public final class SModuleIO
 
 //* 
 //* <TeaFunction name="file-mkdir"
-//*                 arguments="dirPath"
-//*             module="tea.io">
+//*              arguments="dirPath"
+//*              module="tea.io">
 //*
 //* <Overview>
 //* Creates a directory.
@@ -822,12 +822,13 @@ public final class SModuleIO
                                        final Object[]     args)
         throws STeaException {
 
-        if ( args.length != 2 ) {
-            throw new SNumArgException(args, "dirPath");
-        }
-        File dir = new File(SArgs.getString(args,1));
+        SArgs.checkCount(args, 2, "path");
 
-        return dir.mkdir() ? Boolean.TRUE : Boolean.FALSE;
+        String  path   = SArgs.getString(args, 1);
+        File    dir    = new File(path);
+        Boolean result = dir.mkdir() ? Boolean.TRUE : Boolean.FALSE;
+
+        return result;
     }
 
 
