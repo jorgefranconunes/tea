@@ -688,16 +688,13 @@ public final class SModuleIO
                                            final Object[]     args)
         throws STeaException {
 
-        int numArgs = args.length;
-        
-        if ( numArgs != 2 ) {
-            throw new SNumArgException(args, "file-name");
-        }
+        SArgs.checkCount(args, 2, "path");
 
-        String fileName = SArgs.getString(args,1);
-        File   file     = new File(fileName);
+        String  path   = SArgs.getString(args, 1);
+        File    file   = new File(path);
+        Boolean result = file.isFile() ? Boolean.TRUE : Boolean.FALSE;
 
-        return file.isFile() ? Boolean.TRUE : Boolean.FALSE;
+        return result;
     }
 
 

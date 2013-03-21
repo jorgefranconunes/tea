@@ -208,3 +208,34 @@ tunit-testsuite file-is-dir-test {
 
 
 
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite file-is-regular-test {
+
+    tunit-test isDirOk {
+        define home [tea-get-system-property "user.home"]
+        tunit-assert [not [file-is-regular? $home]]
+    }
+
+    tunit-test-error tooFewArgs {
+        file-is-regular?
+    }
+
+    tunit-test-error tooManyArgs {
+        file-is-regular? "1" "2"
+    }
+
+    tunit-test-error invalidArgType {
+        file-is-regular? $null
+    }
+
+}
+
+
+
