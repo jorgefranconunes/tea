@@ -218,7 +218,7 @@ tunit-testsuite file-is-dir-test {
 
 tunit-testsuite file-is-regular-test {
 
-    tunit-test isDirOk {
+    tunit-test isRegularOk {
         define home [tea-get-system-property "user.home"]
         tunit-assert [not [file-is-regular? $home]]
     }
@@ -233,6 +233,44 @@ tunit-testsuite file-is-regular-test {
 
     tunit-test-error invalidArgType {
         file-is-regular? $null
+    }
+
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite file-join-test {
+    
+    define separator [java-get-value java.io.File separator]
+
+    tunit-test joinOk {
+        assertCheck () ()
+        assertCheck ( ) ( "" )
+        assertCheck ( "1" ) ( "1" )
+        assertCheck ( "1" ) ( "" "1" )
+        assertCheck ( "1" ) ( "1" "" )
+        assertCheck ( "1" ) ( "" "1" "" )
+        assertCheck ( "1" "2" ) ( "1" "2" )
+        assertCheck ( "1" "2" ) ( "1" "" "2" )
+        assertCheck ( "1" "2" "3" ) ( "1" "2" "3" )
+    }
+
+    tunit-test-error invalidArgType {
+        file-join $null
+    }
+    
+    
+    define assertCheck ( expectedItemList itemList ) {
+        define expected [str-join $expectedItemList $separator]
+        tunit-assert-equals $expected [apply file-join $itemList]
     }
 
 }

@@ -642,8 +642,8 @@ public final class SModuleIO
 
 //* 
 //* <TeaFunction name="file-is-regular?"
-//*                 arguments="pathName"
-//*             module="tea.io">
+//*              arguments="pathName"
+//*               module="tea.io">
 //*
 //* <Overview>
 //* Checks if a path name refers to a regular file.
@@ -703,8 +703,8 @@ public final class SModuleIO
 
 //* 
 //* <TeaFunction name="file-join"
-//*                 arguments="component1 [component2 ...]"
-//*             module="tea.io">
+//*              arguments="component1 [component2 ...]"
+//*              module="tea.io">
 //*
 //* <Overview>
 //* Builds a path name by joining the name components.
@@ -752,80 +752,22 @@ public final class SModuleIO
                                       final Object[]     args)
         throws STeaException {
 
-        int           numArgs = args.length;
-        StringBuilder result  = new StringBuilder();
+        StringBuilder buffer = new StringBuilder();
 
-        try {
-            if ( numArgs > 1 ) {
-                append(result, args[1]);
-            }
-            for ( int i=2; i<numArgs; i++ ) {
-                if ( result.length() > 0 ) {
-                    result.append(File.separatorChar);
+        for ( int i=1, count=args.length; i<count; ++i ) {
+            String component = SArgs.getString(args, i);
+
+            if ( component.length() > 0 ) {
+                if ( buffer.length() > 0 ) {
+                    buffer.append(File.separatorChar);
                 }
-                append(result, args[i]);
-            }
-        } catch (SRuntimeException e) {
-            throw new SRuntimeException(args, e.getMessage());
-        }
-
-        return result.toString();
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    private static void append(final StringBuilder result,
-                               final Object        component)
-        throws SRuntimeException {
-
-        if ( component instanceof SObjPair ) {
-            result.append(join((SObjPair)component));
-        } else {
-            try {
-                result.append((String)component);
-            } catch (ClassCastException e) {
-                String msg = "components must be strings, not {0}";
-                throw new STypeException(msg, STypes.getTypeName(component));
+                buffer.append(component);
             }
         }
-    }
 
+        String result = buffer.toString();
 
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    private static String join(final SObjPair componentList)
-        throws SRuntimeException {
-
-        Iterator      elems  = componentList.iterator();
-        StringBuilder result = new StringBuilder();
-
-        if ( elems.hasNext() ) {
-            append(result, elems.next());
-        }
-
-        while ( elems.hasNext() ) {
-            if ( result.length() > 0 ) {
-                result.append(File.separatorChar);
-            }
-            append(result, elems.next());
-        }
-
-        return result.toString();
+        return result;
     }
 
 
