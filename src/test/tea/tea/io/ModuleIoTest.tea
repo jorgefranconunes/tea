@@ -318,9 +318,9 @@ tunit-testsuite file-mkdir-test {
 tunit-testsuite file-rename-test {
 
     tunit-test renameOk {
-        define home      [tea-get-system-property "user.home"]
-        define srcPath   [file-join $home "THIS_DOES_NOT_EXIST"]
-        define dstPath   [file-join $home "THIS_DOES_NOT_EXIST_TOO"]
+        define home    [tea-get-system-property "user.home"]
+        define srcPath [file-join $home "THIS_DOES_NOT_EXIST"]
+        define dstPath [file-join $home "THIS_DOES_NOT_EXIST_TOO"]
         tunit-assert [not [file-rename $srcPath $dstPath]]
     }
 
@@ -334,6 +334,38 @@ tunit-testsuite file-rename-test {
 
     tunit-test-error invalidArgType {
         file-rename $null $null
+    }
+
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite file-size-test {
+
+    tunit-test sizeOk {
+        define home [tea-get-system-property "user.home"]
+        define path [file-join $home "THIS_DOES_NOT_EXIST"]
+        tunit-assert-equals 0 [file-size $path]
+    }
+
+    tunit-test-error tooFewArgs {
+        file-size
+    }
+
+    tunit-test-error tooManyArgs {
+        file-size "1" "2"
+    }
+
+    tunit-test-error invalidArgType {
+        file-size $null
     }
 
 }

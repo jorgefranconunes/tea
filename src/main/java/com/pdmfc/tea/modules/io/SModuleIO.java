@@ -906,8 +906,8 @@ public final class SModuleIO
 
 //* 
 //* <TeaFunction name="file-size"
-//*                 arguments="fileName"
-//*             module="tea.io">
+//*              arguments="fileName"
+//*              module="tea.io">
 //*
 //* <Overview>
 //* Fetches the size of a file in bytes.
@@ -952,12 +952,14 @@ public final class SModuleIO
                                       final Object[]     args)
         throws STeaException {
 
-        if ( args.length != 2 ) {
-            throw new SNumArgException(args, "fileName");
-        }
-        long size = (new  File(SArgs.getString(args,1))).length();
+        SArgs.checkCount(args, 2, "path");
 
-        return Integer.valueOf((int)size);
+        String  path   = SArgs.getString(args, 1);
+        File    file   = new  File(path);
+        long    size   = file.length();
+        Integer result = Integer.valueOf((int)size);
+
+        return result;
     }
 
 
