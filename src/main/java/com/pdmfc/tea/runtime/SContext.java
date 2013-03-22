@@ -274,7 +274,7 @@ public class SContext
         int       hash  = name.hashCode();
         int       index = (hash & 0x7FFFFFFF) % table.length;
 
-        for ( SVarSet entry=table[index]; entry!=null; entry=entry._next ){
+        for ( SVarSet entry=table[index]; entry!=null; entry=entry._next ) {
             if ( entry._symbolHash == hash ) {
                 // There was already a variable with the same name:
                 entry._value = value;

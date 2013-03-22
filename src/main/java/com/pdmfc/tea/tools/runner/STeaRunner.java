@@ -112,13 +112,13 @@ public final class STeaRunner
         if ( isOk ) {
             try {
                 retVal = execute(shellArgs);
-            } catch (IOException e) {
+            } catch ( IOException e ) {
                 isOk     = false;
                 errorMsg = "Failed to read script - " + e.getMessage();
-            }  catch (SRuntimeException e1) {
+            }  catch ( SRuntimeException e ) {
                 isOk     = false;
-                errorMsg = e1.getFullMessage();
-            } catch (STeaException e) {
+                errorMsg = e.getFullMessage();
+            } catch ( STeaException e ) {
                 isOk     = false;
                 errorMsg = e.getMessage();
             }

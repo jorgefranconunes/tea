@@ -80,6 +80,9 @@ public final class SMethodLoader
  *
  * @param args The arguments the function was called with.
  *
+ * @return The value returned be the invocation of the underlying
+ * function.
+ *
  * @exception STeaException Thrown if there were problems
  * instantianting the new <code>SObjProc</code> or while invoking the
  * <code>exec()</code> method for that object.
@@ -132,16 +135,16 @@ public final class SMethodLoader
 
       try {
          proc = (SObjFunction)Class.forName(className).newInstance();
-      } catch (ClassNotFoundException e1) {
+      } catch ( ClassNotFoundException e1 ) {
          msg = "could not find class '" + className + "'";
-      } catch (InstantiationException e2) {
+      } catch ( InstantiationException e2 ) {
          msg = "failed instantiation for object of class '" + className + "'";
-      } catch (IllegalAccessException e3) {
+      } catch ( IllegalAccessException e3 ) {
          msg = "class '" + className
              + "' or its initializer are not accessible";
-      } catch (ClassCastException e4) {
+      } catch ( ClassCastException e4 ) {
          msg = "class '" + className + "' does not implement SObjFunction";
-      } catch (NoSuchMethodError e5) {
+      } catch ( NoSuchMethodError e5 ) {
          msg = "class '" + className + "' does not have a default constructor";
       }
 

@@ -10,7 +10,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Iterator;
+import java.util.StringTokenizer;
 
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.modules.SModule;
@@ -23,10 +23,6 @@ import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjNull;
 import com.pdmfc.tea.runtime.SObjPair;
 import com.pdmfc.tea.runtime.SNumArgException;
-import com.pdmfc.tea.runtime.SRuntimeException;
-import com.pdmfc.tea.runtime.STypeException;
-import com.pdmfc.tea.runtime.STypes;
-import com.pdmfc.tea.runtime.SUtils;
 import com.pdmfc.tea.runtime.TeaFunction;
 
 
@@ -1019,9 +1015,59 @@ public final class SModuleIO
         SArgs.checkCount(args, 2, "string-path-list");
 
         String   pathList = SArgs.getString(args,1);
-        SObjPair result   = SUtils.buildPathList(pathList);
+        SObjPair result   = buildPathList(pathList);
 
         return result;
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * Creates a Tea list of strings from the <code>pathList</code>
+ * argument. The path components in <code>pathList</code> are supposed
+ * to be separated with the plataform path separator character.
+ *
+ * @param pathList Represents a list of paths.
+ *
+ * @return The head of a Tea list.
+ *
+ **************************************************************************/
+
+    private static SObjPair buildPathList(final String pathList) {
+
+        SObjPair empty    = SObjPair.emptyList();
+        SObjPair head     = empty;
+        SObjPair elem     = null;
+        String   pathSep  = File.pathSeparator;
+
+        if ( pathList == null ) {
+            return empty;
+        }
+
+        StringTokenizer st = new StringTokenizer(pathList, pathSep);
+
+        while ( st.hasMoreTokens() ) {
+            String   path = st.nextToken();
+            SObjPair node = null;
+
+            if ( path.length() == 0 ) {
+                continue;
+            }
+            path = path.replace('|', ':');
+            node = new SObjPair(path, empty);
+ 
+            if ( elem == null ) {
+                head = node;
+            } else {
+                elem._cdr = node;
+            }
+            elem = node;
+        }
+
+        return head;
     }
 
 

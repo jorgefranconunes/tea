@@ -19,6 +19,8 @@ import java.util.NoSuchElementException;
  * Implements an ordered list of objects. The list can be traversed
  * from its beggining to its end.
  *
+ * @param <T> The type of the objects this list will contain.
+ *
  **************************************************************************/
 
 public final class SList<T>
@@ -29,9 +31,9 @@ public final class SList<T>
 
 
     
-    protected ListNode<T> _head;
-    protected ListNode<T> _tail;
-    protected int      _size;
+    private ListNode<T> _head = null;
+    private ListNode<T> _tail = null;
+    private int         _size = 0;
 
 
 
@@ -39,15 +41,13 @@ public final class SList<T>
 
 /**************************************************************************
  *
- * This constructor builds an empty list.
+ * Initializes an empty list.
  *
  **************************************************************************/
 
     public SList() {
 
-        _head = null;
-        _tail = null;
-        _size = 0;
+        // Nothing to do.
     }
 
 
@@ -210,29 +210,14 @@ public final class SList<T>
  **************************************************************************/
 
     private static final class ListIterator<T>
-	extends Object
-	implements Iterator<T> {
+        extends Object
+        implements Iterator<T> {
 
 
 
 
 
-	private ListNode<T> _current;
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-	public ListIterator(final ListNode<T> head) {
-
-	    _current = head;
-	}
+        private ListNode<T> _current;
 
 
 
@@ -244,33 +229,10 @@ public final class SList<T>
  *
  **************************************************************************/
 
-	public boolean hasNext() {
+        public ListIterator(final ListNode<T> head) {
 
-	    return _current!=null;
-	}
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-	public T next() {
-
-	    if ( _current == null ) {
-		throw new NoSuchElementException("ListIterator");
-	    }
-
-	    ListNode<T> node = _current;
-
-	    _current = _current._next;
-
-	    return node._element;
-	}
+            _current = head;
+        }
 
 
 
@@ -282,10 +244,48 @@ public final class SList<T>
  *
  **************************************************************************/
 
-	public void remove() {
+        public boolean hasNext() {
 
-	    throw new UnsupportedOperationException();
-	}
+            return _current!=null;
+        }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+        public T next() {
+
+            if ( _current == null ) {
+                throw new NoSuchElementException("ListIterator");
+            }
+
+            ListNode<T> node = _current;
+
+            _current = _current._next;
+
+            return node._element;
+        }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+        public void remove() {
+
+            throw new UnsupportedOperationException();
+        }
 
 
     }

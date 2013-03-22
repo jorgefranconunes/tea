@@ -41,14 +41,14 @@ performing a build.
 
     <!-- Used bellow and also within some properties files that get
          filtered. -->
-    <BUILD_VERSION>${project.version}</BUILD_VERSION>
+    <tea.version>${project.version}</tea.version>
 
     <!-- The following are used when generating Teadoc
          documentation. -->
-    <tea.teadoc.header><![CDATA[Tea ${BUILD_VERSION} Reference Documentation<b>&copy; 2013 <a href="http://www.pdmfc.com">PDM&amp;FC</a>]]></tea.teadoc.header>
+    <tea.teadoc.header><![CDATA[Tea ${tea.version} Reference Documentation<b>&copy; 2013 <a href="http://www.pdmfc.com">PDM&amp;FC</a>]]></tea.teadoc.header>
     <tea.teadoc.footer>${tea.teadoc.header}</tea.teadoc.footer>
     <tea.teadoc.bottom><![CDATA[<font size="-1"><a href="mailto:info@pdmfc.com">Report a bug or request new features</a></font><br /><font size="-1">&copy; 2013</font> <a href="http://www.pdmfc.com"><img align="absmiddle" border="0" src="LogoSmallPdmfc.png"></a>]]></tea.teadoc.bottom>
-    <tea.teadoc.doctitle>Tea ${BUILD_VERSION} Reference Documentation</tea.teadoc.doctitle>
+    <tea.teadoc.doctitle>Tea ${tea.version} Reference Documentation</tea.teadoc.doctitle>
     <tea.teadoc.windowtitle>${tea.teadoc.doctitle}</tea.teadoc.windowtitle>
 
     <!-- The following are used when generating Javadoc

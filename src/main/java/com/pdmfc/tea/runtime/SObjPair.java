@@ -1,12 +1,11 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2012 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2013 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
 package com.pdmfc.tea.runtime;
 
-import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
