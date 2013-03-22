@@ -837,8 +837,8 @@ public final class SModuleIO
 
 //* 
 //* <TeaFunction name="file-rename"
-//*                 arguments="sourcePath destPath"
-//*             module="tea.io">
+//*              arguments="sourcePath destPath"
+//*              module="tea.io">
 //*
 //* <Overview>
 //* Changes the name of a file or directory.
@@ -888,13 +888,16 @@ public final class SModuleIO
                                         final Object[]     args)
         throws STeaException {
 
-        if ( args.length != 3 ) {
-            throw new SNumArgException(args, "old-name new-name");
-        }
-        File oldFile = new File(SArgs.getString(args,1));
-        File newFile = new File(SArgs.getString(args,2));
+        SArgs.checkCount(args, 3, "old-name new-name");
 
-        return oldFile.renameTo(newFile) ? Boolean.TRUE : Boolean.FALSE;
+        String  oldPath = SArgs.getString(args, 1);
+        File    oldFile = new File(oldPath);
+        String  newPath = SArgs.getString(args, 2);
+        File    newFile = new File(newPath);
+        Boolean result  =
+            oldFile.renameTo(newFile) ? Boolean.TRUE : Boolean.FALSE;
+
+        return result;
     }
 
 

@@ -285,7 +285,7 @@ tunit-testsuite file-join-test {
 #
 ###########################################################################
 
-tunit-testsuite mkdir-test {
+tunit-testsuite file-mkdir-test {
 
     tunit-test mkdirOk {
         tunit-assert [not [file-mkdir "."]]
@@ -301,6 +301,39 @@ tunit-testsuite mkdir-test {
 
     tunit-test-error invalidArgType {
         file-mkdir $null
+    }
+
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite file-rename-test {
+
+    tunit-test renameOk {
+        define home      [tea-get-system-property "user.home"]
+        define srcPath   [file-join $home "THIS_DOES_NOT_EXIST"]
+        define dstPath   [file-join $home "THIS_DOES_NOT_EXIST_TOO"]
+        tunit-assert [not [file-rename $srcPath $dstPath]]
+    }
+
+    tunit-test-error tooFewArgs {
+        file-rename
+    }
+
+    tunit-test-error tooManyArgs {
+        file-rename "1" "2" "3"
+    }
+
+    tunit-test-error invalidArgType {
+        file-rename $null $null
     }
 
 }
