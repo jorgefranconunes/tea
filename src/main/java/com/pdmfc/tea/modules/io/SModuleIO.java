@@ -472,7 +472,7 @@ public final class SModuleIO
             status = false;
         }
 
-        Boolean result = status ? Boolean.TRUE : Boolean.FALSE;
+        Boolean result = status;
 
         return result;
     }
@@ -570,7 +570,7 @@ public final class SModuleIO
 
         String  path   = SArgs.getString(args, 1);
         File    file   = new File(path);
-        Boolean result = file.exists() ? Boolean.TRUE : Boolean.FALSE;
+        Boolean result = file.exists();
 
         return result;
     }
@@ -631,7 +631,7 @@ public final class SModuleIO
 
         String  path   = SArgs.getString(args, 1);
         File    file   = new File(path);
-        Boolean result = file.isDirectory() ? Boolean.TRUE : Boolean.FALSE;
+        Boolean result = file.isDirectory();
 
         return result;
     }
@@ -692,7 +692,7 @@ public final class SModuleIO
 
         String  path   = SArgs.getString(args, 1);
         File    file   = new File(path);
-        Boolean result = file.isFile() ? Boolean.TRUE : Boolean.FALSE;
+        Boolean result = file.isFile();
 
         return result;
     }
@@ -826,7 +826,7 @@ public final class SModuleIO
 
         String  path   = SArgs.getString(args, 1);
         File    dir    = new File(path);
-        Boolean result = dir.mkdir() ? Boolean.TRUE : Boolean.FALSE;
+        Boolean result = dir.mkdir();
 
         return result;
     }
@@ -894,8 +894,7 @@ public final class SModuleIO
         File    oldFile = new File(oldPath);
         String  newPath = SArgs.getString(args, 2);
         File    newFile = new File(newPath);
-        Boolean result  =
-            oldFile.renameTo(newFile) ? Boolean.TRUE : Boolean.FALSE;
+        Boolean result  = oldFile.renameTo(newFile);
 
         return result;
     }
@@ -1017,7 +1016,7 @@ public final class SModuleIO
                                                final Object[]     args)
         throws STeaException {
 
-        SArgs.checkCount(2, "string-path-list");
+        SArgs.checkCount(args, 2, "string-path-list");
 
         String   pathList = SArgs.getString(args,1);
         SObjPair result   = SUtils.buildPathList(pathList);
@@ -1031,8 +1030,8 @@ public final class SModuleIO
 
 //* 
 //* <TeaFunction name="file-unlink"
-//*                 arguments="fileName"
-//*             module="tea.io">
+//*              arguments="fileName"
+//*              module="tea.io">
 //*
 //* <Overview>
 //* Deletes a file.
@@ -1084,14 +1083,13 @@ public final class SModuleIO
                                         final Object[]     args)
         throws STeaException {
 
-        if ( args.length != 2 ) {
-            throw new SNumArgException(args, "file-name");
-        }
+        SArgs.checkCount(args, 2, "path");
 
-        return
-            (new File(SArgs.getString(args,1))).delete()
-            ? Boolean.TRUE
-            : Boolean.FALSE;
+        String  path   = SArgs.getString(args,1);
+        File    file   = new File(path);
+        Boolean result = file.delete();
+
+        return result;
     }
 
 

@@ -418,6 +418,39 @@ tunit-testsuite file-split-path-list-test {
 
 ###########################################################################
 #
+# 
+#
+###########################################################################
+
+tunit-testsuite file-unlink-test {
+
+    tunit-test unlinkOk {
+        define home [tea-get-system-property "user.home"]
+        define path [file-join $home "THIS_DOES_NOT_EXIST"]
+        
+        tunit-assert [not [file-unlink $path]]
+    }
+
+    tunit-test-error tooFewArgs {
+        file-unlink
+    }
+
+    tunit-test-error tooManyArgs {
+        file-unlink "1" "2"
+    }
+
+    tunit-test-error invalidArgType {
+        file-unlink $null
+    }
+    
+}
+
+
+
+
+
+###########################################################################
+#
 # Checks that two lists are "equal".
 #
 ###########################################################################
