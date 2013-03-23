@@ -968,7 +968,7 @@ public final class SModuleIO
 
 //* 
 //* <TeaFunction name="file-split-path-list"
-//*                  arguments="pathList"
+//*              arguments="pathList"
 //*              module="tea.io">
 //*
 //* <Overview>
@@ -1017,11 +1017,7 @@ public final class SModuleIO
                                                final Object[]     args)
         throws STeaException {
 
-        int numArgs = args.length;
-
-        if ( numArgs != 2 ) {
-            throw new SNumArgException(args, "string-path-list");
-        }
+        SArgs.checkCount(2, "string-path-list");
 
         String   pathList = SArgs.getString(args,1);
         SObjPair result   = SUtils.buildPathList(pathList);

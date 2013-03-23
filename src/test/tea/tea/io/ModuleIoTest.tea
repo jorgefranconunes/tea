@@ -372,3 +372,86 @@ tunit-testsuite file-size-test {
 
 
 
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite file-split-path-list-test {
+
+    tunit-test resultOk {
+        define pathSep [java-get-value java.io.File pathSeparator]
+        
+        assert-lists-equal \
+                () \
+                [file-split-path-list ""]
+        
+        assert-lists-equal \
+                ( "hello" ) \
+                [file-split-path-list "hello"]
+        
+        assert-lists-equal \
+                ( "hello" "world" ) \
+                [file-split-path-list [str-join ("hello" "world") $pathSep]]
+    }
+
+    tunit-test-error tooFewArgs {
+        file-split-path-list
+    }
+
+    tunit-test-error tooManyArgs {
+        file-split-path-list "1" "2"
+    }
+
+    tunit-test-error invalidArgType {
+        file-split-path-list $null
+    }
+
+}
+
+
+
+
+
+###########################################################################
+#
+# Checks that two lists are "equal".
+#
+###########################################################################
+    
+define assert-lists-equal ( expectedList actualList ) {
+        
+    #
+    # First check they both have the same size.
+    #
+    define expectedLength [length $expectedList]
+    define actualLength   [length $actualList]
+    
+    if { != $expectedLength $actualLength } {
+        define msg "Lists are different. Expected size {0} but got size {1}."
+        tunit-fail [str-fmt $msg $expectedLength $actualLength]
+    }
+
+    #
+    # And now check each corresponding elements are "equal".
+    #
+    define index 0
+    
+    while { < $index $expectedLength } {
+        define expectedValue [nth $expectedList $index]
+        define actualValue   [nth $actualList $index]
+        
+        if { not-same? $expectedValue $actualValue } {
+            define msg "Element {0} differs. Expected \"{1}\" but got \"{2}\"."
+            tunit-fail [str-fmt $msg $index $expectedValue $actualValue]
+        }
+        
+        ++ index
+    }
+}
+
+
+
