@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2012 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2013 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -205,15 +205,16 @@ public final class SModuleLang
 
 //* 
 //* <TeaFunction name="apply"
-//*                 arguments="aFunction arg1 ... [aList]"
-//*             module="tea.lang">
+//*              arguments="aFunction [arg1 ...] [aList]"
+//*              module="tea.lang">
 //*
 //* <Overview>
-//* Invokes a a function with a given set of arguments.
+//* Invokes a a function with a given list of arguments.
 //* </Overview>
 //*
 //* <Parameter name="aFunction">
-//* Function object that will be called.
+//* Function object that will be called. It can also be a symbol bound
+//* to a variable containing a function
 //* </Parameter>
 //*
 //* <Parameter name="arg1">
@@ -260,16 +261,15 @@ public final class SModuleLang
                                        final Object[]     args)
         throws STeaException {
 
-        if ( args.length < 2 ) {
-            throw new SNumArgException(args, "procedure obj1 ... list");
-        }
+        SArgs.checkCountAtLeast(args, 2, "function obj1 ... list");
 
         Object       result      = null;
         SObjFunction proc        = SArgs.getFunction(context, args, 1);
         Object[]     procArgs    = null;
         int          procNumArgs = 0;
         Object       lastArg     = args[args.length-1];
-        boolean      hasList     = (args.length>2) && (lastArg instanceof SObjPair);
+        boolean      hasList     =
+            (args.length>2) && (lastArg instanceof SObjPair);
         int          indexOfLast = args.length - (hasList ? 2 : 1);
         int          index;
 
@@ -286,8 +286,10 @@ public final class SModuleLang
             procArgs[index-1] = args[index];
         }
         if ( hasList ) {
-            for ( Iterator i=((SObjPair)lastArg).iterator(); i.hasNext(); ) {
-                procArgs[index++-1] = i.next();
+            for ( Iterator i=((SObjPair)lastArg).iterator();
+                  i.hasNext(); 
+                  ++index ) {
+                procArgs[index-1] = i.next();
             }
         }
 
@@ -463,7 +465,7 @@ public final class SModuleLang
 
         try {
             value = block.exec(scope);
-        } catch (STeaException e) {
+        } catch ( STeaException e ) {
             value = e.getMessage();
             result = Boolean.TRUE;
             error  = e;
@@ -473,7 +475,7 @@ public final class SModuleLang
             try {
                 var = context.getVarObject(symbol);
                 var.set(value);
-            } catch (SNoSuchVarException e) {
+            } catch ( SNoSuchVarException e ) {
                 var = context.newVar(symbol, value);
             }
         }        
@@ -481,13 +483,13 @@ public final class SModuleLang
             SObjVar var2 = null;
             try {
                 var2 = context.getVarObject(symbSt);
-            } catch (SNoSuchVarException e) {
+            } catch ( SNoSuchVarException e ) {
                 var2 = context.newVar(symbSt, SObjNull.NULL);
             }
             if ( null != error ) {
                 try {
                     var2.set(((SRuntimeException)error).getFullMessage());
-                } catch (ClassCastException e) {
+                } catch ( ClassCastException e ) {
                     StringWriter swriter = new StringWriter();
                     PrintWriter  pwriter = new PrintWriter(swriter);
                     error.printStackTrace(pwriter);
@@ -926,7 +928,7 @@ public final class SModuleLang
 
             try {
                 parameters[i] = (SObjSymbol)paramName;
-            } catch (ClassCastException e1) {
+            } catch ( ClassCastException e1 ) {
                 String msg = "formal parameter {0} must be a symbol, not a {1}";
                 throw new SRuntimeException(args,
                                             msg,
@@ -1322,10 +1324,10 @@ public final class SModuleLang
             var.set(element);
             try {
                 result = block.exec(newContext);
-            } catch (SBreakException e1) {
+            } catch ( SBreakException e1 ) {
                 result  = e1.getBreakValue();
                 break;
-            } catch (SContinueException e2) {
+            } catch ( SContinueException e2 ) {
                 // Just continue for the next element.
             }
         }
@@ -2387,7 +2389,7 @@ public final class SModuleLang
         
         try {
             SModuleUtils.addAndStartModule(_globalContext, moduleClassName);
-        } catch (STeaException e) {
+        } catch ( STeaException e ) {
             throw new SRuntimeException(args, e.getMessage());
         }
         
@@ -2458,15 +2460,15 @@ public final class SModuleLang
             try {
                 javaClass = Class.forName(className);
                 teaFunc = (SObjFunction)javaClass.newInstance();
-            } catch (ClassNotFoundException e1) {
+            } catch ( ClassNotFoundException e1 ) {
                 msg = "could not find class '" + className + "'";
-            } catch (InstantiationException e2) {
+            } catch ( InstantiationException e2 ) {
                 msg = "failed instantiation for object of class '" + className + "'";
-            } catch (IllegalAccessException e3) {
+            } catch ( IllegalAccessException e3 ) {
                 msg = "class '" + className+"' or its initializer are not accessible";
-            } catch (ClassCastException e4) {
+            } catch ( ClassCastException e4 ) {
                 msg = "class '" + className + "' is not a SObjFunction";
-            } catch (NoSuchMethodError e5) {
+            } catch ( NoSuchMethodError e5 ) {
                 msg = "class '" + className + "' does not have a default constructor";
             }
             if ( msg != null ) {
@@ -2563,7 +2565,7 @@ public final class SModuleLang
             for ( int i=0; i<iterators.length; i++ ) {
                 try {
                     procArgs[i+1] = iterators[i].next();
-                } catch (NoSuchElementException e) {
+                } catch ( NoSuchElementException e ) {
                     String msg = "lists with diferent sizes";
                     throw new SRuntimeException(args, msg);
                 }
@@ -2702,7 +2704,7 @@ public final class SModuleLang
             SObjPair argList = null;
             try {
                 argList = (SObjPair)o;
-            } catch (ClassCastException e) {
+            } catch ( ClassCastException e ) {
                 String msg = "arg 2, element {0} must be a list, not a {1}";
                 throw new SRuntimeException(args,
                                             msg,
@@ -2724,7 +2726,7 @@ public final class SModuleLang
             SObjPair argList = null;
             try {
                 argList = (SObjPair)o;
-            } catch (ClassCastException e) {
+            } catch ( ClassCastException e ) {
                 String msg = "arg 2, element {0} must be a list, not a {1}";
                 throw new SRuntimeException(args,
                                             msg,
@@ -2761,7 +2763,7 @@ public final class SModuleLang
         for ( int i=1; i<argCount; i++ ) {
             try {
                 args[i] = iterator.next();
-            } catch (NoSuchElementException e) {
+            } catch ( NoSuchElementException e ) {
                 throw new SRuntimeException("argument list too short");
             }
         }
@@ -2955,7 +2957,7 @@ public final class SModuleLang
 
         try {
             Thread.sleep(timeToSleep);
-        } catch (InterruptedException e) {
+        } catch ( InterruptedException e ) {
             result = Boolean.FALSE;
         }
 
@@ -3177,7 +3179,7 @@ public final class SModuleLang
             
             try {
                 program  = _compiler.compile(fileName, encoding, fileName);
-            } catch (IOException e) {
+            } catch ( IOException e ) {
                 String   msg     = "Failed to read \"{0}\" - {1}";
                 Object[] fmtArgs = { fileName, e.getMessage() };
                 throw new SRuntimeException(msg, fmtArgs);
@@ -3190,12 +3192,12 @@ public final class SModuleLang
 
             try {
                 program = _compiler.compile(input, null);
-            } catch (IOException e) {
+            } catch ( IOException e ) {
                 String   msg     = "Failed to read input stream - {0}";
                 Object[] fmtArgs = { e.getMessage() };
                 throw new SRuntimeException(msg, fmtArgs);
             } finally {
-                try { ((SInput)arg).close(); } catch (IOException e) {/* */}
+                try { ((SInput)arg).close(); } catch ( IOException e ) {/* */}
             }
         } else {
             String msg = "argument 1 must be string or input stream, not {0}";
@@ -3282,7 +3284,7 @@ public final class SModuleLang
 
         try {
             proc = Runtime.getRuntime().exec(cmdArgs);
-        } catch (IOException e) {
+        } catch ( IOException e ) {
             throw new SRuntimeException(e);
         }
         input = proc.getInputStream();
@@ -3291,13 +3293,13 @@ public final class SModuleLang
             while ( (count=input.read(buffer)) > 0 ) {
                 System.out.write(buffer, 0, count);
             }
-        } catch (IOException e) {
+        } catch ( IOException e ) {
             throw new SRuntimeException(e);
         }
 
         try {
             status = proc.waitFor();
-        } catch (InterruptedException e) {
+        } catch ( InterruptedException e ) {
             throw new SRuntimeException(e);
         }
 
@@ -3475,8 +3477,8 @@ public final class SModuleLang
 
 /**************************************************************************
  *
- * Performes a normal loop. The first argument tp the command is supposed
- * to be a block returning a boolean.
+ * Performes a normal loop. The first argument to the command is
+ * supposed to be a block returning a boolean.
  *
  **************************************************************************/
 
@@ -3495,15 +3497,15 @@ public final class SModuleLang
 
             try {
                 condValue = ((Boolean)condition).booleanValue();
-            } catch (ClassCastException e) {
+            } catch ( ClassCastException e ) {
                 throw new STypeException(args, 1, "block returning a bool");
             }
             if ( condValue ) {
                 try {
                     result = block.exec(bodyContext);
-                } catch (SContinueException e1) {
+                } catch ( SContinueException e1 ) {
                     // Continue from the beggining of the block.
-                } catch (SBreakException e2) {
+                } catch ( SBreakException e2 ) {
                     // Stop looping.
                     result  = e2.getBreakValue();
                     break;
@@ -3537,9 +3539,9 @@ public final class SModuleLang
         while ( true ) {
             try {
                 result = block.exec(newContext);
-            } catch (SContinueException e1) {
+            } catch ( SContinueException e1 ) {
                 // Continue from the beggining of the block.
-            } catch (SBreakException e2) {
+            } catch ( SBreakException e2 ) {
                 // Stop looping.
                 result  = e2.getBreakValue();
                 break;
