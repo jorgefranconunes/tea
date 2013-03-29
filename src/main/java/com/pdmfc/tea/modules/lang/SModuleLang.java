@@ -279,7 +279,7 @@ public final class SModuleLang
             procNumArgs = args.length - 1;
         }
 
-        procArgs = new Object[procNumArgs];
+        procArgs    = new Object[procNumArgs];
         procArgs[0] = args[1];
       
         for ( index=2; index<=indexOfLast; index++ ) {
@@ -304,8 +304,8 @@ public final class SModuleLang
 
 //* 
 //* <TeaFunction name="break"
-//*                 arguments="[object]"
-//*             module="tea.lang">
+//*              arguments="[object]"
+//*              module="tea.lang">
 //*
 //* <Overview>
 //* Ends the looping of the flux control functions.
@@ -355,12 +355,12 @@ public final class SModuleLang
                                        final SContext     context,
                                        final Object[]     args)
         throws STeaException {
-        
-        if ( args.length > 2 ) {
-            throw new SNumArgException(args, "[obj]");
-        }
 
-        throw new SBreakException((args.length==2) ? args[1] : SObjNull.NULL);
+        SArgs.checkCountAtMost(args, 2, "[object]");
+
+        Object breakValue = (args.length==2) ? args[1] : SObjNull.NULL;
+
+        throw new SBreakException(breakValue);
     }
 
 

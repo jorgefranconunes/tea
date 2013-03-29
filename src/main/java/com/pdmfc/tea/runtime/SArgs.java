@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2010-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2010-2013 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -106,6 +106,41 @@ public final class SArgs
         throws SNumArgException {
 
         if ( args.length < minArgCount ) {
+            throw new SNumArgException(args, usageMessage);
+        }
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * Checks that argument count in a function call is at most a given
+ * number.
+ *
+ * <p>If the argument count is more than the given number then a
+ * <code>{@link SNumArgException}</code> will be thrown.</p>
+ *
+ * @param args The arguments passed to a function call.
+ *
+ * @param maxArgCount The maximum number of arguments the function is
+ * expecting.
+ *
+ * @param usageMessage The usage message given to the <code>{@link
+ * SNumArgException}</code> if one is thrown.
+ *
+ * @exception SNumArgException Thrown if <code>args.length</code> is
+ * more than <code>argCount</code>.
+ *
+ **************************************************************************/
+
+    public static void checkCountAtMost(final Object[] args,
+                                        final int      maxArgCount,
+                                        final String   usageMessage)
+        throws SNumArgException {
+
+        if ( args.length > maxArgCount ) {
             throw new SNumArgException(args, usageMessage);
         }
     }
