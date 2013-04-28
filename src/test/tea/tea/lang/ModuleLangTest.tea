@@ -1,0 +1,264 @@
+###########################################################################
+#
+# Copyright (c) 2013 PDMFC, All Rights Reserved.
+#
+#
+# TUnit tests for functions in the tea.lang module.
+#
+###########################################################################
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite apply-test {
+
+    tunit-test applyOk {
+        tunit-assert-equals 0 [apply count-args]
+        tunit-assert-equals 0 [apply $count-args]
+        tunit-assert-equals 0 [apply $count-args ()]
+        
+        tunit-assert-equals 1 [apply $count-args "1"]
+        tunit-assert-equals 1 [apply $count-args "1" ()]
+        tunit-assert-equals 1 [apply $count-args ( "1" )]
+        
+        tunit-assert-equals 2 [apply $count-args "1" "2"]
+        tunit-assert-equals 2 [apply $count-args "1" "2" ()]
+        tunit-assert-equals 2 [apply $count-args "1" ( "2" )]
+        tunit-assert-equals 2 [apply $count-args ( "1" "2" )]
+        
+        tunit-assert-equals 3 [apply $count-args "1" "2" "3"]
+        tunit-assert-equals 3 [apply $count-args "1" "2" "3" ()]
+        tunit-assert-equals 3 [apply $count-args "1" "2" ( "3" )]
+        tunit-assert-equals 3 [apply $count-args "1" ( "2" "3" )]
+        tunit-assert-equals 3 [apply $count-args ( "1" "2" "3" )]
+    }
+
+    tunit-test-error tooFewArgs {
+        apply
+    }
+
+    tunit-test-error invalidArgType {
+        apply $null
+    }
+    
+    tunit-test-error unknownFunction {
+        apply nonexisting-function
+    }
+    
+    
+    define count-args args {
+        length $args
+    }
+
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite break-test {
+    
+    
+    tunit-test breakInFunction {
+        tunit-assert-null [function-with-break]
+        tunit-assert-equals "Hello" [function-with-break "Hello"]
+    }
+    
+    
+    tunit-test breakInForeach {
+        tunit-assert-null [foreach-with-break]
+        tunit-assert-equals "Hello" [foreach-with-break "Hello"]
+    }
+    
+    
+    tunit-test breakInWhile {
+        tunit-assert-null [while-with-break]
+        tunit-assert-equals "Hello" [while-with-break "Hello"]
+    }
+    
+    
+    tunit-test-error tooManyArgs {
+        break 1 2
+    }
+    
+    
+    define function-with-break args {
+        
+        apply break $args
+        tunit-fail "Should not to to here..."
+    }
+    
+    
+    define foreach-with-break args {
+        
+        define myList   ( 0 1 2 3 4 5 6 7 8 9 10 )
+        define index    0
+        define maxIndex 5
+        
+        foreach item $myList {
+            if { == $index $maxIndex } {
+                apply break $args
+            }
+            if { > $index $maxIndex } {
+                tunit-fail "Break in foreach failed"
+            }
+            ++ index
+        }
+    }
+    
+    
+    define while-with-break args {
+        
+        define maxCount 10
+        define index    0
+        define maxIndex 5
+        
+        while { < $index $maxCount } {
+            if { == $index $maxIndex } {
+                apply break $args
+            }
+            if { > $index $maxIndex } {
+                tunit-fail "Break in while failed"
+            }
+            ++ index
+        }
+    }
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite catch-test {
+    
+    
+    tunit-test-error tooFewArgs {
+        catch
+    }
+    
+    
+    tunit-test-error tooManyArgs {
+        catch {} stuff moreStuff evenMoreStuff
+    }
+    
+    tunit-test-error invalidArgType1 {
+        catch ""
+    }
+    
+    tunit-test-error invalidArgType2 {
+        catch {} ""
+    }
+    
+    tunit-test-error invalidArgType3 {
+        catch {} stuff ""
+    }
+    
+    
+    tunit-test catchNoError1 {
+        define catchResult [catch {}]
+        
+        tunit-assert [not $catchResult]
+    }
+    
+    
+    tunit-test catchNoError2 {
+        define result      $null
+        define catchResult [catch {is 123} result]
+        
+        tunit-assert [not $catchResult]
+        tunit-assert-equals 123 $result
+    }
+    
+    
+    define test-catch-no-error ( testName expectedValue block ) {
+        
+        tunit-test $testName {
+            define result        $null
+            define stackTraceStr $null
+            define catchResult   [catch $block result stackTraceStr]
+        
+            tunit-assert [not $catchResult]
+            tunit-assert-equals $expectedValue $result
+            tunit-assert-null $stackTraceStr
+        }
+    }
+    
+    
+    tunit-test-error catchNoError2a {
+        catch {is 1234} UNDEFINED_VAR
+    }
+    
+    
+    tunit-test-error catchNoError2b {
+        define result $null
+        catch {is 1234} result OTHER_UNDEFINED_VAR
+    }
+    
+    
+    test-catch-no-error catchNoError3 12345 { is 12345 }
+    
+    
+    test-catch-no-error catchNoError4 123456 { return 123456 }
+    
+    
+    test-catch-no-error catchNoError5 "InBreak" { break "InBreak" }
+    
+    
+    test-catch-no-error catchNoError6 $null { continue }
+    
+    
+    tunit-test catchWithError1 {
+        define myMsg "Whatever..."
+        define result      $null
+        define catchResult [catch {error $myMsg} result]
+        
+        tunit-assert $catchResult
+        tunit-assert-equals $myMsg $result
+    }
+    
+    
+    define test-catch-with-error ( testName block ) {
+        
+        tunit-test $testName {
+            define result      $null
+            define stackTraceStr $null
+            define catchResult [catch $block result stackTraceStr]
+        
+            tunit-assert $catchResult
+            tunit-assert-not-null $result
+            tunit-assert-not-null $stackTraceStr
+        }
+    }
+    
+    
+    test-catch-with-error catchWithError2 { / 1 0 }
+    
+    
+    test-catch-with-error catchWithError3 { get UNDEFINED_VAR }
+    
+    
+    test-catch-with-error catchWithError4 {
+        java-exec-method java.lang.Integer parseInt "hohoho"
+    }
+    
+    
+}

@@ -42,7 +42,7 @@ public class SRuntimeException
 
 /**************************************************************************
  *
- * Empty constructorm such that derived classes may call one of the
+ * Empty constructor such that derived classes may call one of the
  * init methods.
  *
  **************************************************************************/

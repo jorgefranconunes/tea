@@ -419,8 +419,8 @@ public final class SModuleLang
 //* <P>
 //* If there is no variable identified by <Arg name="aSymbol"/> 
 //* or <Arg name="aStSymbol"/> 
-//* accessible in the current context then one will be created in the
-//* current context.
+//* accessible in the current context then one an error will be thrown
+//* complaining about the unknown variable.
 //* </P>
 //* </Description>
 //* 
@@ -451,13 +451,11 @@ public final class SModuleLang
                                        final Object[]     args)
         throws STeaException {
 
-        if ( (args.length<2) || (args.length>4) ) {
-            throw new SNumArgException(args, "block [symbol] [st-symbol]");
-        }
+        SArgs.checkCountBetween(args, 2, 4, "block [symbol] [st-symbol]");
 
         SObjBlock  block  = SArgs.getBlock(args, 1);
-        SObjSymbol symbol = (args.length>=3) ? SArgs.getSymbol(args, 2) :null;
-        SObjSymbol symbSt = (args.length==4) ? SArgs.getSymbol(args, 3) :null;
+        SObjSymbol symbol = (args.length>=3) ? SArgs.getSymbol(args, 2) : null;
+        SObjSymbol symbSt = (args.length==4) ? SArgs.getSymbol(args, 3) : null;
         SContext   scope  = block.getContext().newChild();
         Object     result = Boolean.FALSE;
         Object     value  = null;
@@ -465,40 +463,69 @@ public final class SModuleLang
 
         try {
             value = block.exec(scope);
+        } catch ( SRuntimeException e ) {
+            value  = e.getMessage();
+            result = Boolean.TRUE;
+            error  = e;
+        } catch ( SReturnException e ) {
+            // This is not an error.
+            value = e.getReturnValue();
+        } catch ( SBreakException e ) {
+            // This is not an error.
+            value = e.getBreakValue();
+        } catch ( SContinueException e ) {
+            // This is not an error.
+            value = SObjNull.NULL;
         } catch ( STeaException e ) {
-            value = e.getMessage();
+            value  = e.getMessage();
             result = Boolean.TRUE;
             error  = e;
         }
+
         if ( symbol != null ) {
-            SObjVar var = null;
-            try {
-                var = context.getVarObject(symbol);
-                var.set(value);
-            } catch ( SNoSuchVarException e ) {
-                var = context.newVar(symbol, value);
-            }
-        }        
+            SObjVar var = context.getVarObject(symbol);
+            var.set(value);
+        }
+
         if ( symbSt != null ) {
-            SObjVar var2 = null;
-            try {
-                var2 = context.getVarObject(symbSt);
-            } catch ( SNoSuchVarException e ) {
-                var2 = context.newVar(symbSt, SObjNull.NULL);
-            }
-            if ( null != error ) {
-                try {
-                    var2.set(((SRuntimeException)error).getFullMessage());
-                } catch ( ClassCastException e ) {
-                    StringWriter swriter = new StringWriter();
-                    PrintWriter  pwriter = new PrintWriter(swriter);
-                    error.printStackTrace(pwriter);
-                    var2.set(swriter.toString());
+            SObjVar var2 = context.getVarObject(symbSt);
+
+            if ( error != null ) {
+                String stackTraceStr = null;
+
+                if ( error instanceof SRuntimeException ) {
+                    stackTraceStr = ((SRuntimeException)error).getFullMessage();
+                } else {
+                     stackTraceStr = stackTraceToString(error);
                 }
+                var2.set(stackTraceStr);
             } else {
                 var2.set(SObjNull.NULL);
             }
         }        
+
+        return result;
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    private static String stackTraceToString(final Throwable error) {
+
+        StringWriter swriter = new StringWriter();
+        PrintWriter  pwriter = new PrintWriter(swriter);
+        
+        error.printStackTrace(pwriter);
+        pwriter.close();
+
+        String result = swriter.toString();
 
         return result;
     }
