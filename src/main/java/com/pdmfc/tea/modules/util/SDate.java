@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2013 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -977,7 +977,7 @@ public final class SDate
         throws STeaException {
 
         if ( args.length != 3 ) {
-            throw new SNumArgException(args, "TDate");
+            throw new SNumArgException(args, CLASS_NAME);
         }
         
         Calendar when   = getDate(args, 2)._calendar;
@@ -1041,7 +1041,7 @@ public final class SDate
         throws STeaException {
 
         if ( args.length != 3 ) {
-            throw new SNumArgException(args, "TDate");
+            throw new SNumArgException(args, CLASS_NAME);
         }
         
         Calendar when = getDate(args, 2)._calendar;
@@ -1097,7 +1097,7 @@ public final class SDate
         throws STeaException {
 
         if ( args.length != 3 ) {
-            throw new SNumArgException(args, "TDate");
+            throw new SNumArgException(args, CLASS_NAME);
         }
         
         Calendar when = getDate(args, 2)._calendar;
@@ -1153,7 +1153,7 @@ public final class SDate
         throws STeaException {
 
         if ( args.length != 3 ) {
-            throw new SNumArgException(args, "TDate");
+            throw new SNumArgException(args, CLASS_NAME);
         }
 
         Calendar cal  = _calendar;
@@ -1218,7 +1218,7 @@ public final class SDate
         throws STeaException {
 
         if ( args.length != 3 ) {
-            throw new SNumArgException(args, "TDate");
+            throw new SNumArgException(args, CLASS_NAME);
         }
 
         Calendar cal  = _calendar;

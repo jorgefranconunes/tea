@@ -236,7 +236,7 @@ abstract class SStatement
  *
  **************************************************************************/
 
-    private static class Generic
+    private static final class Generic
         extends SStatement {
 
 
@@ -664,7 +664,7 @@ abstract class SStatement
  *
  **************************************************************************/
 
-        public Order5(final int            lineNumber,
+        public Order5(final int             lineNumber,
                       final SStatement.Node head) {
 
             super(lineNumber);

@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2013 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -83,7 +83,7 @@ public final class STosUtil
 
         try {
             return (STosObj)args[index];
-        } catch (ClassCastException e) {
+        } catch ( ClassCastException e ) {
             throw new STypeException(args, index, "TOS object");
       }
     }
@@ -122,10 +122,10 @@ public final class STosUtil
         if ( ref instanceof SObjSymbol ) {
             try {
                 ref = context.getVar((SObjSymbol)ref);
-            } catch (SNoSuchVarException e) {
+            } catch ( SNoSuchVarException e ) {
                 try {
                     ref = getClassWithEffort(context, (SObjSymbol)ref);
-                } catch (SNoSuchVarException e2) {
+                } catch ( SNoSuchVarException e2 ) {
                     throw new SNoSuchClassException(args, (SObjSymbol)ref);
                 }
             }
@@ -160,16 +160,16 @@ public final class STosUtil
 
         try {
             classObject = context.getVar(className);
-        } catch (SNoSuchVarException e) {
+        } catch ( SNoSuchVarException e ) {
             try {
                 classObject = getClassWithEffort(context, className);
-            } catch (SNoSuchVarException e2) {
+            } catch ( SNoSuchVarException e2 ) {
                 throw new SNoSuchClassException(className);
             }
         }
         try {
             return (STosClass)classObject;
-        } catch (ClassCastException e) {
+        } catch ( ClassCastException e ) {
             throw new STypeException("Variable "
                                      + className.getName()
                                      + " does not contain a class object.");
@@ -198,10 +198,10 @@ public final class STosUtil
     
         try {
             callbackFunc = (SObjFunction)context.getVar(CALLBACK_NAME);
-        } catch (ClassCastException e1) {
+        } catch ( ClassCastException e1 ) {
             // Variable TEA_NOCLASS_CALLBACK does not containg a Tea function.
             throw new SNoSuchVarException(name);
-        } catch (SNoSuchVarException e2) {
+        } catch ( SNoSuchVarException e2 ) {
             // Variable TEA_NOCLASS_CALLBACK is not defined.
             throw new SNoSuchVarException(name);
         }

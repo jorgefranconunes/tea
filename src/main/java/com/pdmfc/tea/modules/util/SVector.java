@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2013 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -848,7 +848,7 @@ public final class SVector
         if ( size > 1 ) {
              _compFunc = SArgs.getFunction(context, args, 2);
              _context  = context;
-             qs(_vector, 0, size-1);
+             quicksort(_vector, 0, size-1);
              _compFunc = null;
              _context  = null;
          }
@@ -866,9 +866,9 @@ public final class SVector
  *
  **************************************************************************/
 
-    private void qs(final List<Object> v,
-                    final int          left,
-                    final int          right)
+    private void quicksort(final List<Object> v,
+                           final int          left,
+                           final int          right)
         throws STeaException {
 
         int    i = left;
@@ -893,10 +893,10 @@ public final class SVector
         } while ( i <= j );
         
         if ( left < j ) {
-            qs(v, left, j);
+            quicksort(v, left, j);
         }
         if ( i < right ) {
-            qs(v, i, right);
+            quicksort(v, i, right);
         }
     }
 

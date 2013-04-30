@@ -6,7 +6,6 @@
 
 package com.pdmfc.tea.modules.tos;
 
-import java.lang.Iterable;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 

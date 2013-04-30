@@ -38,14 +38,13 @@ public final class STosMethodVarArg
     private SObjSymbol _argName;
 
     // The TOS method body.
-    private SObjBlock    _body;
+    private SObjBlock _body;
 
-    private STosClass _myClass;
-    private int       _level;
+    private int _level;
 
     private static final SObjSymbol SYMBOL_THIS =SObjSymbol.addSymbol("this");
     private static final SObjSymbol SYMBOL_SUPER=SObjSymbol.addSymbol("super");
-    
+
 
 
 
@@ -73,7 +72,6 @@ public final class STosMethodVarArg
 
         _argName = argName;
         _body    = body;
-        _myClass = theClass;
         _level   = theClass.level();
     }
 

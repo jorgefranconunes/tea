@@ -194,7 +194,7 @@ public final class SJavaClass
                  && (argTypes[1]==SContext.class)
                  && (argTypes[2]==Object[].class)
                  && (retType==Object.class)
-                 && !methodName.equals("exec") ) {
+                 && !"exec".equals(methodName) ) {
                 if ( methodName.equals(CONSTRUCTOR_NAME) ) {
                     addConstructor(new SJavaMethod(method));
                 } else {

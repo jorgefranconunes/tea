@@ -1,20 +1,18 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2013 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
 package com.pdmfc.tea.modules.io;
 
-import java.io.IOException;
-
 import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.io.PrintWriter;
-import java.io.IOException;
 
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.modules.io.SIOException;
@@ -384,9 +382,7 @@ public class SOutput
         throws IOException,
                SIOException {
 
-        if ( _outputWriter == null ) {
-            throw new SIOException("stream is closed");
-        }
+        checkOutputOpen();
 
         flushStream();
         _outputWriter.print(aString);
@@ -413,9 +409,7 @@ public class SOutput
         throws IOException,
                SIOException {
 
-        if ( _outputWriter == null ) {
-            throw new SIOException("stream is closed");
-        }
+        checkOutputOpen();
 
         flushStream();
         _outputWriter.print(value);
@@ -442,9 +436,7 @@ public class SOutput
         throws IOException,
                SIOException {
 
-        if ( _outputWriter == null ) {
-            throw new SIOException("stream is closed");
-        }
+        checkOutputOpen();
 
         flushStream();
         _outputWriter.print(value);
@@ -520,9 +512,7 @@ public class SOutput
         throws IOException,
                SIOException {
 
-        if ( _outputWriter == null ) {
-            throw new SIOException("stream is closed");
-        }
+        checkOutputOpen();
 
         flushStream();
         _outputWriter.println();
@@ -553,9 +543,7 @@ public class SOutput
         throws IOException,
                SIOException {
 
-        if ( _outputWriter == null ) {
-            throw new SIOException("stream is closed");
-        }
+        checkOutputOpen();
 
         flushStream();
         _outputWriter.println(aString);
@@ -585,9 +573,7 @@ public class SOutput
         throws IOException,
                SIOException {
 
-        if ( _outputWriter == null ) {
-            throw new SIOException("stream is closed");
-        }
+        checkOutputOpen();
 
         flushStream();
         _outputWriter.println(value);
@@ -617,9 +603,7 @@ public class SOutput
         throws IOException,
                SIOException {
 
-        if ( _outputWriter == null ) {
-            throw new SIOException("stream is closed");
-        }
+        checkOutputOpen();
 
         flushStream();
         _outputWriter.println(value);
@@ -709,9 +693,7 @@ public class SOutput
         throws IOException,
                STeaException {
 
-        if ( _outputWriter == null ) {
-            throw new SIOException("stream is closed");
-        }
+        checkOutputOpen();
         if ( _formater == null ) {
             _formater = new SFormaterOutput();
         }
@@ -940,6 +922,24 @@ public class SOutput
         }
 
         return (SOutput)output;
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    private void checkOutputOpen()
+        throws SIOException {
+
+        if ( _outputWriter == null ) {
+            throw new SIOException("stream is closed");
+        }
     }
 
 

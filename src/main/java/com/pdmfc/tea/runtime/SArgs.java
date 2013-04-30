@@ -191,6 +191,32 @@ public final class SArgs
 
 /**************************************************************************
  *
+ * 
+ *
+ **************************************************************************/
+
+    private static <T> T getArg(final Object[] args,
+                                final int      index,
+                                final String   usage)
+        throws STypeException {
+
+        T result = null;
+
+        try {
+            result = (T)args[index];
+        } catch ( ClassCastException e ) {
+            throw new STypeException(args, index, usage);
+        }
+
+        return result;
+    }
+
+
+
+
+
+/**************************************************************************
+ *
  * Tries to convert argument <TT>index</TT> into a SObjBlock. If that
  * argument is not a block, an exception is thrown.
  *
@@ -208,11 +234,9 @@ public final class SArgs
                                      final int      index)
         throws STypeException {
 
-        try {
-            return (SObjBlock)args[index];
-        } catch (ClassCastException e) {
-            throw new STypeException(args, index, "block");
-        }
+        SObjBlock result = getArg(args, index, "block");
+
+        return result;
     }
 
 
@@ -238,11 +262,9 @@ public final class SArgs
                                    final int      index)
         throws STypeException {
 
-        try {
-            return (SObjPair)args[index];
-        } catch (ClassCastException e) {
-            throw new STypeException(args, index, "pair");
-        }
+        SObjPair result = getArg(args, index, "pair");
+
+        return result;
     }
 
 
@@ -269,14 +291,7 @@ public final class SArgs
                                        final int      index)
         throws STypeException {
 
-        Object     value  = args[index];
-        SObjSymbol result = null;
-
-        try {
-            result = (SObjSymbol)value;
-        } catch (ClassCastException e) {
-            throw new STypeException(args, index, "symbol");
-        }
+        SObjSymbol result = getArg(args, index, "symbol");
 
         return result;
     }
@@ -305,11 +320,9 @@ public final class SArgs
                                    final int      index)
         throws STypeException {
 
-        try {
-            return (Number)args[index];
-        } catch (ClassCastException e) {
-            throw new STypeException(args, index, "numeric");
-        }
+        Number result = getArg(args, index, "numeric");
+
+        return result;
     }
 
 
@@ -336,11 +349,9 @@ public final class SArgs
                                  final int      index)
         throws STypeException {
 
-        try {
-            return (Integer)args[index];
-        } catch (ClassCastException e) {
-            throw new STypeException(args, index, "int");
-        }
+        Integer result = getArg(args, index, "int");
+
+        return result;
     }
 
 
@@ -367,11 +378,9 @@ public final class SArgs
                                   final int      index)
         throws STypeException {
 
-        try {
-            return (Double)args[index];
-        } catch (ClassCastException e) {
-            throw new STypeException(args, index, "float");
-        }
+        Double result = getArg(args, index, "float");
+
+        return result;
     }
 
 
@@ -398,11 +407,9 @@ public final class SArgs
                                      final int      index)
         throws STypeException {
 
-        try {
-            return (Boolean)args[index];
-        } catch (ClassCastException e) {
-            throw new STypeException(args, index, "boolean");
-        }
+        Boolean result = getArg(args, index, "boolean");
+
+        return result;
     }
 
 
@@ -429,11 +436,9 @@ public final class SArgs
                                    final int      index)
         throws STypeException {
 
-        try {
-            return (String)args[index];
-        } catch (ClassCastException e) {
-            throw new STypeException(args, index, "string");
-        }
+        String result = getArg(args, index, "string");
+
+        return result;
     }
 
 
@@ -467,30 +472,38 @@ public final class SArgs
                                            final int       index)
         throws STeaException {
 
-        Object obj = args[index];
-        Object value;
+        SObjFunction result = null;
+        Object       arg    = args[index];
 
-        if ( obj instanceof SObjFunction ) {
-            return (SObjFunction)obj;
+        if ( arg instanceof SObjFunction ) {
+            result = (SObjFunction)arg;
+        } else {
+            if ( !(arg instanceof SObjSymbol) ) {
+                throw new STypeException(args, index, "function or a symbol");
+            } else {
+                SObjSymbol symbol = (SObjSymbol)arg;
+                Object     value  = null;
+
+                try {
+                    value = context.getVar(symbol);
+                } catch ( SNoSuchVarException e ) {
+                    value = STypes.getVarWithEffort(context, symbol);
+                }
+
+                if ( value instanceof SObjFunction ) {
+                    result = (SObjFunction)value;
+                } else {
+                    String msg =
+                        "variable {0} should contain a function, not a {1}";
+                    throw new SRuntimeException(args,
+                                                msg,
+                                                arg,
+                                                STypes.getTypeName(value));
+                }
+            }
         }
 
-        try {
-            value = context.getVar((SObjSymbol)obj);
-        } catch (ClassCastException e1) {
-            throw new STypeException(args, index, "function or a symbol");
-        } catch (SNoSuchVarException e2) {
-            value = STypes.getVarWithEffort(context, (SObjSymbol)obj);
-        }
-        
-        try {
-            return (SObjFunction)value;
-        } catch (ClassCastException e1) {
-            String msg = "variable {0} should contain a function, not a {1}";
-            throw new SRuntimeException(args,
-                                        msg,
-                                        obj,
-                                        STypes.getTypeName(value));
-        }
+        return result;
     }
                                      
 

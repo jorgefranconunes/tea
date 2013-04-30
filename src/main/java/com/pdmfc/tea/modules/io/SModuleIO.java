@@ -22,7 +22,6 @@ import com.pdmfc.tea.runtime.SArgs;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjNull;
 import com.pdmfc.tea.runtime.SObjPair;
-import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.TeaFunction;
 
 
@@ -72,7 +71,6 @@ public final class SModuleIO
 
     private static final int BUFFER_SIZE = 4096;
 
-    private SInput  _stdin  = null;
     private SOutput _stdout = null;
     private SOutput _stderr = null;
 
@@ -111,16 +109,16 @@ public final class SModuleIO
         context.newVar(inClass.getName(), inClass);
         context.newVar(outClass.getName(), outClass);
 
-        _stdin  = SInput.newInstance(context);
+        SInput stdin  = SInput.newInstance(context);
         _stdout = SOutput.newInstance(context);
         _stderr = SOutput.newInstance(context);
         
-        _stdin.open(System.in);
+        stdin.open(System.in);
         _stdout.open(System.out);
         _stdout.setLineBuffering(true);
         _stderr.open(System.err);
 
-        context.newVar("stdin",  _stdin);
+        context.newVar("stdin",  stdin);
         context.newVar("stdout", _stdout);
         context.newVar("stderr", _stderr);
 
@@ -177,18 +175,18 @@ public final class SModuleIO
         if ( _stdout != null ) {
             try {
                 _stdout.flush();
-            } catch (IOException e1) {
+            } catch ( IOException e1 ) {
                 // We do not care.
-            } catch (STeaException e2) {
+            } catch ( STeaException e2 ) {
                 // We do not care.
             }
         }
         if ( _stderr != null ) {
             try {
                 _stderr.flush();
-            } catch (IOException e3) {
+            } catch ( IOException e3 ) {
                 // We do not care.
-            } catch (STeaException e4) {
+            } catch ( STeaException e4 ) {
                 // We do not care.
             }
         }
@@ -498,14 +496,12 @@ public final class SModuleIO
             while ( (count=in.read(buffer)) != -1 ) {
                 out.write(buffer, 0, count);
             }
-        } catch ( IOException e ) {
-            throw e;
         } finally {
-            if (in != null) {
-                try { in.close(); } catch (Exception e2) {/* */}
+            if ( in != null ) {
+                try { in.close(); } catch ( IOException e2 ) {/* */}
             }
-            if (out != null) {
-                try { out.close(); } catch (Exception e2) {/* */}
+            if ( out != null ) {
+                try { out.close(); } catch ( IOException e2 ) {/* */}
             }
         }
     }
