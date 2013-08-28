@@ -11,6 +11,12 @@
 
 
 
+define SEP [java-get-value java.io.File separator]
+
+
+
+
+
 ###########################################################################
 #
 # 
@@ -54,7 +60,7 @@ tunit-testsuite file-dirname-test {
         tunit-assert-equals "hello" [file-dirname "hello/world.tea"]
         tunit-assert-equals "hello" [file-dirname "hello/world/"]
         tunit-assert-equals "." [file-dirname "world.tea"]
-        tunit-assert-equals "/" [file-dirname "/whatever"]
+        tunit-assert-equals $SEP [file-dirname "/whatever"]
         tunit-assert-equals $null [file-dirname "/"]
     }
 
@@ -249,7 +255,7 @@ tunit-testsuite file-is-regular-test {
 
 tunit-testsuite file-join-test {
     
-    define separator [java-get-value java.io.File separator]
+    define separator $SEP
 
     tunit-test joinOk {
         assertCheck () ()

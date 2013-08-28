@@ -1,8 +1,14 @@
 ###########################################################################
 #
-# Copyright (c) 2011 PDM&FC, All Rights Reserved.
+# Copyright (c) 2011-2013 PDM&FC, All Rights Reserved.
 #
 ###########################################################################
+
+
+
+
+
+define SEP [java-get-value java.io.File separator]
 
 
 
@@ -227,7 +233,7 @@ define build-surefire-classname ( path prefix ) {
     }
     
     # More cleanups.
-    if { str-starts-with? $buffer "/" } {
+    if { str-starts-with? $buffer $SEP } {
         set! buffer [str-substring $buffer 1]
     }
     
@@ -237,7 +243,7 @@ define build-surefire-classname ( path prefix ) {
     }
     
     # Replace file separator with "."
-    regsub "/" "." $buffer
+    regsub [str-cat "\\" $SEP] "." $buffer
 }
 
 
