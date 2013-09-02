@@ -139,8 +139,8 @@ public final class SModuleHtml
 
 //* 
 //* <TeaFunction name="html-encode"
-//*                 arguments="aString"
-//*             module="tea.html">
+//*              arguments="aString"
+//*              module="tea.html">
 //*
 //* <Overview>
 //* Encodes a string so it can be used inside an HTML document.
@@ -239,8 +239,8 @@ public final class SModuleHtml
 
 //* 
 //* <TeaFunction name="url-encode"
-//*                 arguments="aString"
-//*             module="tea.html">
+//*              arguments="aString"
+//*              module="tea.html">
 //*
 //* <Overview>
 //* Encodes a string so it can be used as an URL GET parameter.
@@ -293,10 +293,9 @@ public final class SModuleHtml
 
         String result   = null;
         Object arg      = args[1];
-        String encoding = DEFAULT_CHARSET;
         
         if ( arg instanceof String ) {
-            result = urlEncode((String)arg, encoding);
+            result = urlEncode((String)arg);
         } else if ( arg instanceof Number ) {
             result = arg.toString();
         } else {
@@ -316,13 +315,12 @@ public final class SModuleHtml
  *
  ***************************************************************************/
 
-    private static String urlEncode(final String s,
-                                    final String encoding) {
+    private static String urlEncode(final String s) {
 
         String result = null;
 
         try {
-            result = URLEncoder.encode(s, encoding);
+            result = URLEncoder.encode(s, DEFAULT_CHARSET);
         } catch ( UnsupportedEncodingException e ) {
             // Should never happen...
             result = s;

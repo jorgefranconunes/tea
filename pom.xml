@@ -398,7 +398,7 @@ performing a build.
     <!-- Profile used to run TUnit tests. This profile is activated
          when the "skipTests" system property has value "false". The
          same system property (skipTests) is also used by the
-         maven-surefire-plugin for the same purpose. -->
+         maven-surefire-plugin for a similar purpose. -->
     <profile>
       <id>tea-tunit-tests</id>
       <activation>
@@ -416,7 +416,7 @@ performing a build.
             <artifactId>exec-maven-plugin</artifactId>
             <executions>
               <execution>
-                <id>run-tunit-tests</id>
+                <id>run-tunit</id>
                 <phase>test</phase>
                 <goals>
                   <goal>exec</goal>
@@ -472,8 +472,14 @@ performing a build.
                 </goals>
                 <configuration>
                   <classpathScope>test</classpathScope>
-                  <executable>${basedir}/devtools/bin/build-teadoc</executable>
+                  <executable>${java.home}/bin/java</executable>
                   <arguments>
+                    <argument>-classpath</argument>
+                    <classpath />
+                    <argument>com.pdmfc.tea.tools.runner.STeaRunner</argument>
+                    <argument>--library=${basedir}/apps/teadoc/lib/tea</argument>
+                    <argument>--script=${basedir}/apps/teadoc/lib/tea/doc-html.tea</argument>
+                    <argument>--</argument>
                     <argument>--header=${tea.teadoc.header}</argument>
                     <argument>--footer=${tea.teadoc.footer}</argument>
                     <argument>--bottom=${tea.teadoc.bottom}</argument>
