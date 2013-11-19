@@ -66,7 +66,7 @@ function teaNormalizePath () {
 
     case "$OSTYPE" in
 	cygwin )
-	    cygpath --windows "$1" | sed 's/\\\/\\//g'
+	    cygpath --windows "$1"
 	    ;;
 	* )
 	    echo $1

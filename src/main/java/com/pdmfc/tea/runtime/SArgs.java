@@ -195,18 +195,22 @@ public final class SArgs
  *
  **************************************************************************/
 
+    @Deprecated
     private static <T> T getArg(final Object[] args,
                                 final int      index,
-                                final String   usage)
+                                final String   usage,
+                                final Class<T> type)
         throws STypeException {
 
-        T result = null;
+        Object value = args[index];
 
-        try {
-            result = (T)args[index];
-        } catch ( ClassCastException e ) {
-            throw new STypeException(args, index, usage);
+        if ( value != null ) {
+            if ( !type.isAssignableFrom(value.getClass()) ) {
+                throw new STypeException(args, index, usage);
+            }
         }
+
+        T result = (T)value;
 
         return result;
     }
@@ -234,64 +238,13 @@ public final class SArgs
                                      final int      index)
         throws STypeException {
 
-        SObjBlock result = getArg(args, index, "block");
+        SObjBlock result = null;
 
-        return result;
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * Tries to convert argument <TT>index</TT> into a SObjPair. If that
- * argument is not a pair, an exception is thrown.
- *
- * @param args Array of <TT>Object</TT>, supposed to be the arguments
- *     received by a call to the command.
- *
- * @param index The index of the argument to convert.
- *
- * @exception STypeException Thrown if <TT>args[index]</TT> is not a
- * SObjPair.
- *
- **************************************************************************/
-
-    public static SObjPair getPair(final Object[] args,
-                                   final int      index)
-        throws STypeException {
-
-        SObjPair result = getArg(args, index, "pair");
-
-        return result;
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * This is an utility method, to be used by derived classes. It tries to
- * convert argument <TT>index</TT> into a SObjSymbol. If that argument is
- * not a pair, an exception is thrown.
- *
- * @param args Array of <TT>Object</TT>, supposed to be the arguments
- *     received by a call to the command.
- *
- * @param index The index of the argument to convert.
- *
- * @exception STypeException Thrown if <code>args[index]</code> is not
- * a <code>SObjSymbol</code>.
- *
- **************************************************************************/
-
-    public static SObjSymbol getSymbol(final Object[] args,
-                                       final int      index)
-        throws STypeException {
-
-        SObjSymbol result = getArg(args, index, "symbol");
+        try {
+            result = (SObjBlock)args[index];
+        } catch ( ClassCastException e ) {
+            throw new STypeException(args, index, "block");
+        }
 
         return result;
     }
@@ -320,7 +273,82 @@ public final class SArgs
                                    final int      index)
         throws STypeException {
 
-        Number result = getArg(args, index, "numeric");
+        Number result = null;
+
+        try {
+            result = (Number)args[index];
+        } catch ( ClassCastException e ) {
+            throw new STypeException(args, index, "numeric");
+        }
+
+        return result;
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * Tries to convert argument <TT>index</TT> into a SObjPair. If that
+ * argument is not a pair, an exception is thrown.
+ *
+ * @param args Array of <TT>Object</TT>, supposed to be the arguments
+ *     received by a call to the command.
+ *
+ * @param index The index of the argument to convert.
+ *
+ * @exception STypeException Thrown if <TT>args[index]</TT> is not a
+ * SObjPair.
+ *
+ **************************************************************************/
+
+    public static SObjPair getPair(final Object[] args,
+                                   final int      index)
+        throws STypeException {
+
+        SObjPair result = null;
+
+        try {
+            result = (SObjPair)args[index];
+        } catch ( ClassCastException e ) {
+            throw new STypeException(args, index, "pair");
+        }
+
+        return result;
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * This is an utility method, to be used by derived classes. It tries to
+ * convert argument <TT>index</TT> into a SObjSymbol. If that argument is
+ * not a pair, an exception is thrown.
+ *
+ * @param args Array of <TT>Object</TT>, supposed to be the arguments
+ *     received by a call to the command.
+ *
+ * @param index The index of the argument to convert.
+ *
+ * @exception STypeException Thrown if <code>args[index]</code> is not
+ * a <code>SObjSymbol</code>.
+ *
+ **************************************************************************/
+
+    public static SObjSymbol getSymbol(final Object[] args,
+                                       final int      index)
+        throws STypeException {
+
+        SObjSymbol result = null;
+
+        try {
+            result = (SObjSymbol)args[index];
+        } catch ( ClassCastException e ) {
+            throw new STypeException(args, index, "symbol");
+        }
 
         return result;
     }
@@ -349,7 +377,7 @@ public final class SArgs
                                  final int      index)
         throws STypeException {
 
-        Integer result = getArg(args, index, "int");
+        Integer result = getArg(args, index, "int", Integer.class);
 
         return result;
     }
@@ -378,7 +406,7 @@ public final class SArgs
                                   final int      index)
         throws STypeException {
 
-        Double result = getArg(args, index, "float");
+        Double result = getArg(args, index, "float", Double.class);
 
         return result;
     }
@@ -407,7 +435,7 @@ public final class SArgs
                                      final int      index)
         throws STypeException {
 
-        Boolean result = getArg(args, index, "boolean");
+        Boolean result = getArg(args, index, "boolean", Boolean.class);
 
         return result;
     }
@@ -436,7 +464,13 @@ public final class SArgs
                                    final int      index)
         throws STypeException {
 
-        String result = getArg(args, index, "string");
+        String result = null;
+
+        try {
+            result = (String)args[index];
+        } catch ( ClassCastException e ) {
+            throw new STypeException(args, index, "string");
+        }
 
         return result;
     }

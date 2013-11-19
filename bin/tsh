@@ -30,7 +30,7 @@ TEA_CORE_LIBRARY="."
 TEA_CORE_CLASSPATH="${_teaBaseDir}/lib/jars/tea-${TEA_VERSION}.jar"
 
 _teaLibrary=${TEA_CORE_LIBRARY}
-_teaClasspath=${TEA_CORE_CLASSPATH}
+_teaClasspath=$(teaNormalizePath ${TEA_CORE_CLASSPATH})
 _teaJre=${TEA_JRE}
 _teaJreOptions=""
 _teaScript=""
