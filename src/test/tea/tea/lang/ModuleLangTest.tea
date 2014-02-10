@@ -262,3 +262,122 @@ tunit-testsuite catch-test {
     
     
 }
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite cond-test {
+    
+    
+    tunit-test-error tooFewArgs {
+        cond
+    }
+    
+    
+    tunit-test-error invalidArgType {
+        cond 1 2
+    }
+    
+    
+    define test-cond-no-error ( testName expectedValue argList ) {
+        
+        tunit-test $testName {
+            define result     $null
+            define condResult [apply cond $argList]
+            
+            tunit-assert-equals $expectedValue $condResult
+        }
+    }
+    
+    
+    test-cond-no-error oneCond1 1 (
+        $true 1
+    )
+    
+    
+    test-cond-no-error oneCond2 1 (
+        { is $true } 1
+    )
+    
+    
+    test-cond-no-error oneCond3 1 (
+        { is $true } { is 1 }
+    )
+    
+    
+    test-cond-no-error oneCondWithElse1 1 (
+        $true 1 2
+    )
+    
+    
+    test-cond-no-error oneCondWithElse2 2 (
+        $false 1 2
+    )
+    
+    
+    test-cond-no-error oneCondWithElse2 2 (
+        $false 1 { is 2 }
+    )
+    
+    
+    test-cond-no-error nConds1 1 (
+        $true 1 $true 2
+    )
+    
+    
+    test-cond-no-error nConds2 2 (
+        $false 1 $true 2
+    )
+    
+    
+    test-cond-no-error nConds3 $null (
+        $false 1 $false 2
+    )
+    
+    
+    tunit-test nConds4 {
+        define counter 0
+        define result [cond \
+                { ++ counter ; is $false } 10 \
+                { ++ counter ; is $true } 11 \
+                { ++ counter ; is $true } 12 \
+                13
+            ]
+            
+        tunit-assert-equals 2 $counter
+        tunit-assert-equals 11 $result
+    }
+    
+    
+    tunit-test nConds5 {
+        define counter 0
+        define result [cond \
+                $false { ++ counter ; is 10 } \
+                $true  { ++ counter ; is 11 } \
+                $true  { ++ counter ; is 12 }\
+                { ++ counter ; is 13 }
+            ]
+            
+        tunit-assert-equals 1 $counter
+        tunit-assert-equals 11 $result
+    }
+    
+    
+    test-cond-no-error allCondsFalseNoElse1 $null (
+        $false 1
+    )
+    
+    
+    test-cond-no-error allCondsFalseNoElse2 $null (
+        $false 1 $false 2
+    )
+    
+    
+}

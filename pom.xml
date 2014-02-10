@@ -2,7 +2,7 @@
 
 <!--
 
-Copyright (c) 2011-2013 PDMFC, All Rights Reserved.
+Copyright (c) 2011-2014 PDMFC, All Rights Reserved.
 
 
 Tea project main Maven POM file. See "README.asciidoc" for details on
@@ -45,16 +45,16 @@ performing a build.
 
     <!-- The following are used when generating Teadoc
          documentation. -->
-    <tea.teadoc.header><![CDATA[Tea ${tea.version} Reference Documentation<b>&copy; 2013 <a href="http://www.pdmfc.com">PDM&amp;FC</a>]]></tea.teadoc.header>
+    <tea.teadoc.header><![CDATA[Tea ${tea.version} Reference Documentation<b>&copy; 2014 <a href="http://www.pdmfc.com">PDM&amp;FC</a>]]></tea.teadoc.header>
     <tea.teadoc.footer>${tea.teadoc.header}</tea.teadoc.footer>
-    <tea.teadoc.bottom><![CDATA[<font size="-1"><a href="mailto:info@pdmfc.com">Report a bug or request new features</a></font><br /><font size="-1">&copy; 2013</font> <a href="http://www.pdmfc.com"><img align="absmiddle" border="0" src="LogoSmallPdmfc.png"></a>]]></tea.teadoc.bottom>
+    <tea.teadoc.bottom><![CDATA[<font size="-1"><a href="mailto:info@pdmfc.com">Report a bug or request new features</a></font><br /><font size="-1">&copy; 2014</font> <a href="http://www.pdmfc.com"><img align="absmiddle" border="0" src="LogoSmallPdmfc.png"></a>]]></tea.teadoc.bottom>
     <tea.teadoc.doctitle>Tea ${tea.version} Reference Documentation</tea.teadoc.doctitle>
     <tea.teadoc.windowtitle>${tea.teadoc.doctitle}</tea.teadoc.windowtitle>
 
     <!-- The following are used when generating Javadoc
          documentation. -->
     <tea.javadoc.header><![CDATA[<b>Tea Java Runtime API</b><br /><b>Version ${project.version}</b>]]></tea.javadoc.header>
-    <tea.javadoc.bottom><![CDATA[<font size="-1">&copy; 2013 <a href="http://www.pdmfc.com" target="_blank">PDMFC</a>, All Rights Reserved.</font>]]></tea.javadoc.bottom>
+    <tea.javadoc.bottom><![CDATA[<font size="-1">&copy; 2014 <a href="http://www.pdmfc.com" target="_blank">PDMFC</a>, All Rights Reserved.</font>]]></tea.javadoc.bottom>
     <tea.javadoc.doctitle>${project.name} ${project.version}</tea.javadoc.doctitle>
     <tea.javadoc.windowtitle>${tea.javadoc.doctitle}</tea.javadoc.windowtitle>
 

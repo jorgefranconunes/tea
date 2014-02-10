@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2013 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -591,41 +591,57 @@ public final class SModuleLang
                                       final SContext     context,
                                       final Object[]     args)
         throws STeaException {
-       
-        int numArgs = args.length;
 
-        if ( numArgs < 3 ) {
-            throw new SNumArgException(args, "condition result [...]");
-        }
+        SArgs.checkCountAtLeast(args, 3, "condition result [...]");
 
+        Object  result        = SObjNull.NULL;
+        int     numArgs       = args.length;
         boolean hasElseClause = (numArgs%2)==0;
         int     numCondArgs   = hasElseClause ? numArgs-1 : numArgs;
-        Object  elseClause    =
-            hasElseClause ? args[numCondArgs] : SObjNull.NULL;
+        boolean isMatched     = false;
 
-        for ( int i=1; i<numCondArgs; ) {
-            Object condition = args[i++];
-            Object result    = args[i++];
+        for ( int i=1; (i<numCondArgs) && !isMatched; i+=2 ) {
+            Object condition = evalCondArg(args[i]);
 
-            if ( condition instanceof SObjBlock ) {
-                condition = ((SObjBlock)condition).exec();
-            }
             if ( !(condition instanceof Boolean) ) {
                 throw new STypeException(args, i, "boolean or a block");
             }
+
             if ( ((Boolean)condition).booleanValue() ) {
-                if ( result instanceof SObjBlock ) {
-                    result = ((SObjBlock)result).exec();
-                }
-                return result;
+                result    = evalCondArg(args[i+1]);
+                isMatched = true;
             }
         }
 
-        if ( elseClause instanceof SObjBlock ) {
-            elseClause = ((SObjBlock)elseClause).exec();
+        if ( !isMatched ) {
+            if ( hasElseClause ) {
+                result = evalCondArg(args[numCondArgs]);
+            }
         }
 
-        return elseClause;
+        return result;
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    private static Object evalCondArg(final Object condArg)
+        throws STeaException {
+
+        Object result = condArg;
+
+        if ( condArg instanceof SObjBlock ) {
+            result = ((SObjBlock)condArg).exec();
+        }
+
+        return result;
     }
 
 
