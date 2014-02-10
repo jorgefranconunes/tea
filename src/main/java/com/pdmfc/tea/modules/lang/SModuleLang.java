@@ -534,9 +534,10 @@ public final class SModuleLang
 
 
 //* 
-//* <TeaFunction name="cond"
-//*                 arguments="condition1 anObject1 [condition2 anObject2 ...] [elseObject]"
-//*             module="tea.lang">
+//* <TeaFunction
+//*     name="cond"
+//*     arguments="condition1 anObject1 [condition2 anObject2 ...] [elseObject]"
+//*     module="tea.lang">
 //*
 //* <Overview>
 //* Returns one of several possible values, depending on the boolean value
