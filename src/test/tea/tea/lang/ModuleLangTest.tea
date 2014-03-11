@@ -567,3 +567,51 @@ tunit-testsuite echo-test {
     
     
 }
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite error-test {
+    
+    
+    tunit-test tooFewArgs {
+        
+        define msg $null
+        
+        tunit-assert [catch { error } msg]
+        tunit-assert [matches? ".*message.*" $msg]
+    }
+    
+    
+    tunit-test tooManyArgs {
+        
+        define msg $null
+        
+        tunit-assert [catch { error "One" "Two" } msg]
+        tunit-assert [matches? ".*message.*" $msg]
+    }
+    
+    
+    tunit-test-error invalidArgType {
+        
+        error 1
+    }
+    
+    
+    tunit-test allOk {
+        
+        define msg $null
+        
+        tunit-assert [catch { error "demo" } msg]
+        tunit-assert-equals "demo" $msg
+    }
+    
+    
+}

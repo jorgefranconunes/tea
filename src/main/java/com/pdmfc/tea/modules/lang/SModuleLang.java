@@ -1104,8 +1104,8 @@ public final class SModuleLang
 
 //* 
 //* <TeaFunction name="error"
-//*                 arguments="message"
-//*             module="tea.lang">
+//*              arguments="message"
+//*              module="tea.lang">
 //*
 //* <Overview>
 //* Generates a run-time error.
@@ -1145,10 +1145,11 @@ public final class SModuleLang
                                        final Object[]     args)
         throws STeaException {
 
-        if ( args.length != 2 ) {
-            throw new SNumArgException(args, "args: message");
-        }
-        throw new SRuntimeException(SArgs.getString(args,1));
+        SArgs.checkCount(args, 2, "message");
+
+        String msg = SArgs.getString(args, 1);
+
+        throw new SRuntimeException(msg);
     }
 
 
