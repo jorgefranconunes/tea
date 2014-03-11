@@ -381,3 +381,151 @@ tunit-testsuite cond-test {
     
     
 }
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite continue-test {
+    
+    
+    tunit-test allOk {
+        
+        continue
+    }
+    
+    
+    tunit-test-error tooManyArgs {
+        
+        continue 123
+    }
+    
+    
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite define-test {
+    
+    
+    tunit-test-error tooFewArgs {
+        
+        define
+    }
+    
+    
+    tunit-test-error tooMayArgs {
+        
+        define one 2 3 4
+    }
+    
+    
+    tunit-test-error invalidArgType1 {
+        
+        define 1 2
+    }
+    
+    
+    tunit-test-error invalidArgType2 {
+        
+        define myVar 123 {}
+    }
+    
+    
+    tunit-test-error invalidArgType3 {
+        
+        define myVar () 123
+    }
+    
+    
+    tunit-test-error invalidArgType4 {
+        
+        define myVar whatever 123
+    }
+    
+    
+    tunit-test-error invalidArgType5 {
+        
+        define myVar ( 1 ) {}
+    }
+    
+    
+    tunit-test withoutVal {
+        
+        define myVar
+        
+        tunit-assert-null $myVar
+    }
+    
+    
+    tunit-test defineVar {
+        
+        define myVarInt 123
+        tunit-assert-equals 123 $myVarInt
+        
+        define myVarStr "abc"
+        tunit-assert-equals "abc" $myVarStr
+    }
+    
+    
+    tunit-test defineFuncFixedArgs1 {
+        
+        define myFunc () { is 123 }
+        
+        tunit-assert [function? $myFunc]
+        tunit-assert-equals 123 [$myFunc]
+    }
+    
+    
+    tunit-test defineFuncFixedArgs2 {
+        
+        define myFunc ( arg ) { is $arg }
+        
+        tunit-assert [function? $myFunc]
+        tunit-assert-equals 123 [$myFunc 123]
+        tunit-assert-null [$myFunc $null]
+    }
+    
+    
+    tunit-test defineFuncVarArgs1 {
+        
+        define myFunc args { length $args }
+        
+        tunit-assert [function? $myFunc]
+        tunit-assert-equals 0 [$myFunc]
+        tunit-assert-equals 1 [$myFunc "hello"]
+        tunit-assert-equals 2 [$myFunc "hello" "world"]
+        tunit-assert-equals 3 [$myFunc "hello" "world" "goodbye"]
+    }
+    
+    
+    tunit-test defineFuncVarArgs2 {
+        
+        define myFunc args { is $args }
+        
+        tunit-assert [function? $myFunc]
+        
+        define result [$myFunc 4 3 2 1]
+        
+        tunit-assert-equals 4 [nth $result 0]
+        tunit-assert-equals 3 [nth $result 1]
+        tunit-assert-equals 2 [nth $result 2]
+        tunit-assert-equals 1 [nth $result 3]
+    }
+    
+    
+}

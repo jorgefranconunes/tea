@@ -100,9 +100,9 @@ public final class SArgs
  *
  **************************************************************************/
 
-    public static void checkCountAtLeast(final Object[] args,
-                                         final int      minArgCount,
-                                         final String   usageMessage)
+    public static void checkAtLeast(final Object[] args,
+                                    final int      minArgCount,
+                                    final String   usageMessage)
         throws SNumArgException {
 
         if ( args.length < minArgCount ) {
@@ -135,9 +135,9 @@ public final class SArgs
  *
  **************************************************************************/
 
-    public static void checkCountAtMost(final Object[] args,
-                                        final int      maxArgCount,
-                                        final String   usageMessage)
+    public static void checkAtMost(final Object[] args,
+                                   final int      maxArgCount,
+                                   final String   usageMessage)
         throws SNumArgException {
 
         if ( args.length > maxArgCount ) {
@@ -172,10 +172,10 @@ public final class SArgs
  *
  **************************************************************************/
 
-    public static void checkCountBetween(final Object[] args,
-                                         final int      minArgCount,
-                                         final int      maxArgCount,
-                                         final String   usageMessage)
+    public static void checkBetween(final Object[] args,
+                                    final int      minArgCount,
+                                    final int      maxArgCount,
+                                    final String   usageMessage)
         throws SNumArgException {
 
         int argCount = args.length;
@@ -183,36 +183,6 @@ public final class SArgs
         if ( (argCount<minArgCount) || (argCount>maxArgCount) ) {
             throw new SNumArgException(args, usageMessage);
         }
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    @Deprecated
-    private static <T> T getArg(final Object[] args,
-                                final int      index,
-                                final String   usage,
-                                final Class<T> type)
-        throws STypeException {
-
-        Object value = args[index];
-
-        if ( value != null ) {
-            if ( !type.isAssignableFrom(value.getClass()) ) {
-                throw new STypeException(args, index, usage);
-            }
-        }
-
-        T result = (T)value;
-
-        return result;
     }
 
 
@@ -377,7 +347,13 @@ public final class SArgs
                                  final int      index)
         throws STypeException {
 
-        Integer result = getArg(args, index, "int", Integer.class);
+        Integer result = null;
+
+        try {
+            result = (Integer)args[index];
+        } catch ( ClassCastException e ) {
+            throw new STypeException(args, index, "int");
+        }
 
         return result;
     }
@@ -406,7 +382,13 @@ public final class SArgs
                                   final int      index)
         throws STypeException {
 
-        Double result = getArg(args, index, "float", Double.class);
+        Double result = null;
+
+        try {
+            result = (Double)args[index];
+        } catch ( ClassCastException e ) {
+            throw new STypeException(args, index, "float");
+        }
 
         return result;
     }
@@ -435,7 +417,13 @@ public final class SArgs
                                      final int      index)
         throws STypeException {
 
-        Boolean result = getArg(args, index, "boolean", Boolean.class);
+        Boolean result = null;
+
+        try {
+            result = (Boolean)args[index];
+        } catch ( ClassCastException e ) {
+            throw new STypeException(args, index, "boolean");
+        }
 
         return result;
     }

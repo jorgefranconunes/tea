@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2013 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -142,7 +142,7 @@ public final class SFileOutput
         
         int numArgs = args.length;
 
-        SArgs.checkCountBetween(args, 3, 4, "path [append]");
+        SArgs.checkBetween(args, 3, 4, "path [append]");
 
         String           fileName  = SArgs.getString(args,2);
         boolean          append    =

@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2012 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -206,7 +206,7 @@ public final class SModuleString
                                  final Object[]     args)
         throws STeaException {
 
-        SArgs.checkCountAtLeast(args, 2, "string [object ...]");
+        SArgs.checkAtLeast(args, 2, "string [object ...]");
 
         _formatResult.setLength(0);
 
@@ -278,7 +278,7 @@ public final class SModuleString
                               final Object[]   args)
         throws STeaException {
 
-        SArgs.checkCountAtLeast(args, 2, "string [object ...]");
+        SArgs.checkAtLeast(args, 2, "string [object ...]");
 
         String   fmt         = SArgs.getString(args, 1);
         int      fmtArgCount = args.length - 2;
@@ -1005,7 +1005,7 @@ public final class SModuleString
                                      final Object[]     args)
         throws STeaException {
 
-        SArgs.checkCountAtLeast(args, 2, "string ...");
+        SArgs.checkAtLeast(args, 2, "string ...");
 
         String        arg1   = SArgs.getString(args,1);
         StringBuilder buffer = new StringBuilder(arg1);
@@ -1218,7 +1218,7 @@ public final class SModuleString
                                          final Object[]     args)
         throws STeaException {
 
-        SArgs.checkCountBetween(args,3,4, "string sub-string [start-index]");
+        SArgs.checkBetween(args,3,4, "string sub-string [start-index]");
 
         String str1       = SArgs.getString(args,1);
         String str2       = SArgs.getString(args,2);
@@ -1296,7 +1296,7 @@ public final class SModuleString
                                              final Object[]     args)
         throws STeaException {
 
-        SArgs.checkCountBetween(args,3,4, "string sub-string [start-index]");
+        SArgs.checkBetween(args,3,4, "string sub-string [start-index]");
 
         String str1       = SArgs.getString(args,1);
         String str2       = SArgs.getString(args,2);
@@ -1442,7 +1442,7 @@ public final class SModuleString
                                            final Object[]     args)
         throws STeaException {
 
-        SArgs.checkCountBetween(args, 3, 4, "string start-index [end-index]");
+        SArgs.checkBetween(args, 3, 4, "string start-index [end-index]");
 
         String str    = SArgs.getString(args,1);
         int    start  = SArgs.getInt(args,2).intValue();

@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2011-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -105,7 +105,7 @@ public final class SFunctionNewProxy
         throws STeaException {
 
         String usageMessage = "function javaInterface [javaInterface ...]";
-        SArgs.checkCountAtLeast(args, 3, usageMessage);
+        SArgs.checkAtLeast(args, 3, usageMessage);
 
         SObjFunction proxyFunction  = SArgs.getFunction(context, args, 1);
         int          interfaceCount = args.length-2;

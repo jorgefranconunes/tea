@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2012 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -554,7 +554,7 @@ public final class SModuleMath
                                   final Object[]     args)
         throws STeaException {
 
-        SArgs.checkCountAtLeast(args, 3, "num1 num2 ...");
+        SArgs.checkAtLeast(args, 3, "num1 num2 ...");
 
         Object  op1         = args[1];
         boolean op1IsInt    = op1 instanceof Integer;

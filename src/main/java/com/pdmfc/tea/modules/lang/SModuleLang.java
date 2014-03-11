@@ -260,7 +260,7 @@ public final class SModuleLang
                                        final Object[]     args)
         throws STeaException {
 
-        SArgs.checkCountAtLeast(args, 2, "function obj1 ... list");
+        SArgs.checkAtLeast(args, 2, "function obj1 ... list");
 
         Object       result      = null;
         SObjFunction proc        = SArgs.getFunction(context, args, 1);
@@ -355,7 +355,7 @@ public final class SModuleLang
                                        final Object[]     args)
         throws STeaException {
 
-        SArgs.checkCountAtMost(args, 2, "[object]");
+        SArgs.checkAtMost(args, 2, "[object]");
 
         Object breakValue = (args.length==2) ? args[1] : SObjNull.NULL;
 
@@ -450,7 +450,7 @@ public final class SModuleLang
                                        final Object[]     args)
         throws STeaException {
 
-        SArgs.checkCountBetween(args, 2, 4, "block [symbol] [st-symbol]");
+        SArgs.checkBetween(args, 2, 4, "block [symbol] [st-symbol]");
 
         SObjBlock  block  = SArgs.getBlock(args, 1);
         SObjSymbol symbol = (args.length>=3) ? SArgs.getSymbol(args, 2) : null;
@@ -593,7 +593,7 @@ public final class SModuleLang
                                       final Object[]     args)
         throws STeaException {
 
-        SArgs.checkCountAtLeast(args, 3, "condition result [...]");
+        SArgs.checkAtLeast(args, 3, "condition result [...]");
 
         Object  result        = SObjNull.NULL;
         int     numArgs       = args.length;
@@ -688,6 +688,8 @@ public final class SModuleLang
                                           final Object[]     args)
         throws STeaException {
 
+        SArgs.checkCount(args, 1, "No args required");
+
         throw new SContinueException();
     }
 
@@ -697,7 +699,7 @@ public final class SModuleLang
 
 //* 
 //* <TeaFunction name="define"
-//*                  arguments="varName"
+//*              arguments="varName"
 //*              module="tea.lang">
 //* 
 //* <Prototype arguments="varName value"/>
@@ -789,28 +791,7 @@ public final class SModuleLang
                                         final Object[]     args)
         throws STeaException {
 
-        if ( (args.length<2) || (args.length>4) ) {
-            throw new SNumArgException(args, "var-name [value]");
-        }
-
-        SObjSymbol symbol = SArgs.getSymbol(args, 1);
-        Object     result  = null;
-
-        switch ( args.length ) {
-        case 2 :
-            result = SObjNull.NULL;
-            break;
-        case 3 :
-            result = args[2];
-            break;
-         case 4 :
-             result = newFunction(args);
-             break;
-        default :
-            // Will never happen.
-        }
-
-        context.newVar(symbol, result);
+        Object result = functionDefineVar(context, func, context, args);
 
         return result;
     }
@@ -821,8 +802,8 @@ public final class SModuleLang
 
 //* 
 //* <TeaFunction name="global"
-//*                 arguments="varName value"
-//*             module="tea.lang">
+//*              arguments="varName value"
+//*              module="tea.lang">
 //*
 //* <Prototype arguments="functionName formalArgs body"/>
 //*
@@ -884,9 +865,28 @@ public final class SModuleLang
                                  final Object[]     args)
         throws STeaException {
 
-        if ( (args.length<2) || (args.length>4) ) {
-            throw new SNumArgException(args, "var-name [value]");
-        }
+        Object result = functionDefineVar(_globalContext, func, context, args);
+
+        return result;
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    private static Object functionDefineVar(final SContext varContext,
+                                            final SObjFunction func,
+                                            final SContext     context,
+                                            final Object[]     args)
+        throws STeaException {
+
+        SArgs.checkBetween(args, 2, 4, "var-name [value]");
 
         SObjSymbol symbol = SArgs.getSymbol(args, 1);
         Object     result  = null;
@@ -898,14 +898,15 @@ public final class SModuleLang
         case 3 :
             result = args[2];
             break;
-        case 4 :
-            result = newFunction(args);
-            break;
+         case 4 :
+             result = newFunction(args);
+             break;
         default :
             // Will never happen.
+            throw new IllegalStateException("Oops...");
         }
 
-        _globalContext.newVar(symbol, result);
+        varContext.newVar(symbol, result);
 
         return result;
     }
@@ -923,17 +924,19 @@ public final class SModuleLang
     private static SObjFunction newFunction(final Object[] args)
         throws STeaException {
 
-        Object    formalParam = args[2];
-        SObjBlock body        = SArgs.getBlock(args,3);
+        Object       formalParam = args[2];
+        SObjBlock    body        = SArgs.getBlock(args,3);
+        SObjFunction result      = null;
 
         if ( formalParam instanceof SObjPair ) {
-            return newFixedArgsFunction(args, (SObjPair)formalParam, body);
-        }
-        if ( formalParam instanceof SObjSymbol ) {
-            return newVarArgsFunction((SObjSymbol)formalParam, body);
+            result = newFixedArgsFunction(args, (SObjPair)formalParam, body);
+        } else if ( formalParam instanceof SObjSymbol ) {
+            result = newVarArgsFunction((SObjSymbol)formalParam, body);
+        } else {
+            throw new STypeException(args, 2, "symbol or a symbol list");
         }
 
-        throw new STypeException(args, 2, "symbol or a symbol list");
+        return result;
     }
 
 
@@ -980,7 +983,9 @@ public final class SModuleLang
             }
         }
 
-        return new SLambdaFunction(parameters, body);
+        SObjFunction result = new SLambdaFunction(parameters, body);
+
+        return result;
     }
 
 
@@ -1004,7 +1009,9 @@ public final class SModuleLang
                                                    final SObjBlock  body)
         throws STeaException {
 
-        return new SLambdaFunctionVarArg(symbol, body);
+        SObjFunction result = new SLambdaFunctionVarArg(symbol, body);
+
+        return result;
     }
 
 
