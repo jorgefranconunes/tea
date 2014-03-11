@@ -529,3 +529,41 @@ tunit-testsuite define-test {
     
     
 }
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite echo-test {
+    
+    
+    tunit-test ok1 {
+        
+        tunit-assert-equals 0 [echo]
+        tunit-assert-equals 1 [echo "one"]
+        tunit-assert-equals 2 [echo "one" "two"]
+        tunit-assert-equals 3 [echo "one" "two" "three"]
+    }
+    
+    
+    tunit-test ok2 {
+        
+        tunit-assert-equals 1 [echo 1]
+        tunit-assert-equals 1 [echo 1.2]
+        tunit-assert-equals 1 [echo $true]
+    }
+    
+    
+    tunit-test-error err1 {
+        
+        echo $null
+    }
+    
+    
+}

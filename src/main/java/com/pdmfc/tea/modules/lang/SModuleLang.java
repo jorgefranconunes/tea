@@ -1020,8 +1020,8 @@ public final class SModuleLang
 
 //* 
 //* <TeaFunction name="echo"
-//*             arguments="[arg1 ...]"
-//*                 module="tea.lang">
+//*              arguments="[arg1 ...]"
+//*              module="tea.lang">
 //* 
 //* <Overview>
 //* Sends a string to the process standard output stream
@@ -1093,7 +1093,9 @@ public final class SModuleLang
         }
         System.out.println();
 
-        return Integer.valueOf(argCount);
+        Integer result = Integer.valueOf(argCount-1);
+
+        return result;
     }
 
 
