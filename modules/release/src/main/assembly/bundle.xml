@@ -10,18 +10,15 @@
 
   <id>tea-bundle</id>
 
-  <formats>
-    <format>tar.bz2</format>
-  </formats>
-
   <includeBaseDirectory>true</includeBaseDirectory>
+  <baseDirectory>tea-${project.version}</baseDirectory>
 
 
   <fileSets>
 
     <!-- Command line tools. -->
     <fileSet>
-      <directory>bin</directory>
+      <directory>../../bin</directory>
       <includes>
         <include>tsh</include>
         <include>teadoc</include>
@@ -31,7 +28,7 @@
 
     <!-- Config files. -->
     <fileSet>
-      <directory>config</directory>
+      <directory>../../config</directory>
       <includes>
         <include>tea-core.conf</include>
       </includes>
@@ -39,7 +36,7 @@
     
     <!-- Documentation. -->
     <fileSet>
-      <directory>.</directory>
+      <directory>../../.</directory>
       <includes>
         <include>00README.txt</include>
         <include>COPYING.txt</include>
@@ -52,7 +49,7 @@
 
     <!-- Will disappear soon... -->
     <fileSet>
-      <directory>apps</directory>
+      <directory>../apps../</directory>
       <includes>
         <include>teadoc/**</include>
       </includes>

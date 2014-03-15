@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+
+Copyright (c) 2011-2014 PDMFC, All Rights Reserved.
+
+
+Maven POM for the "runner" sub-project.
+
+-->
+
+<project
+   xmlns="http://maven.apache.org/POM/4.0.0"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                       http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+  <packaging>jar</packaging>
+
+  <groupId>com.pdmfc.tea</groupId>
+  <artifactId>tea-runner</artifactId>
+
+  <parent>
+    <groupId>com.pdmfc.tea</groupId>
+    <artifactId>tea-main</artifactId>
+    <version>4.0.0-beta09-SNAPSHOT</version>
+    <relativePath>..</relativePath>
+  </parent>
+
+
+
+
+
+  <properties>
+    <tea.projectRootDir>${basedir}/../..</tea.projectRootDir>
+  </properties>
+
+
+
+
+
+  <!-- List of dependencies for this module. -->
+
+  <dependencies>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- Required for running Cobertura instrumented classes with
+         exec-maven-plugin. -->
+    <dependency>
+      <groupId>net.sourceforge.cobertura</groupId>
+      <artifactId>cobertura</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- Derby DB engine. Used only in unit tests. -->
+    <dependency>
+      <groupId>org.apache.derby</groupId>
+      <artifactId>derby</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+  </dependencies>
+
+
+
+
+
+  <!-- -->
+
+  <build>
+
+    <plugins>
+
+
+      <!-- Add the Tea library source files to the resources included
+           in the JAR. -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-tea-lib-resources</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>target/classes/lib/tea-${project.version}</outputDirectory>
+              <resources>          
+                <resource>
+                  <directory>src/main/tea</directory>
+                  <filtering>false</filtering>
+                </resource>
+              </resources>              
+            </configuration>            
+          </execution>
+        </executions>
+      </plugin>
+
+
+      <!-- Include the appropriate manifest in the final JAR. -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>com.pdmfc.tea.tools.runner.STeaRunner</mainClass>
+              <addClasspath>true</addClasspath>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+
+
+      <!-- Copy the final JAR to the location expected by the Tea
+           command line tools. -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+
+          <execution>
+            <id>copy-dependencies</id>
+            <phase>package</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <includeScope>runtime</includeScope>
+              <overWriteReleases>true</overWriteReleases>
+              <overWriteSnapshots>true</overWriteSnapshots>
+              <overWriteIfNewer>true</overWriteIfNewer>
+            </configuration>
+          </execution>
+
+          <execution>
+            <id>copy-goal</id>
+            <phase>package</phase>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>${project.groupId}</groupId>
+                  <artifactId>${project.artifactId}</artifactId>
+                  <version>${project.version}</version>
+                </artifactItem>
+              </artifactItems>
+              <outputDirectory>../../lib/jars</outputDirectory>
+            </configuration>
+          </execution>
+
+        </executions>
+      </plugin>
+
+
+      <!-- Remove the final JAR also from where it was copied to
+           during assembly. -->
+      <plugin>
+        <artifactId>maven-clean-plugin</artifactId>
+        <configuration>
+          <filesets>
+            <fileset>
+              <directory>../../lib/jars</directory>
+              <includes>
+                <include>**/*.jar</include>
+              </includes>
+            </fileset>
+            <fileset>
+              <directory>../../doc/teadoc</directory>
+            </fileset>
+            <fileset>
+              <directory>../../doc/javadoc</directory>
+            </fileset>
+          </filesets>
+        </configuration>
+      </plugin>
+
+
+    </plugins>
+
+
+
+
+    <!-- -->
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
+
+
+  </build>
+
+
+
+
+
+  <!-- -->
+  <profiles>
+
+
+    <!-- Profile used to run TUnit tests. This profile is activated
+         when the "skipTests" system property has value "false". The
+         same system property (skipTests) is also used by the
+         maven-surefire-plugin for a similar purpose. -->
+    <profile>
+      <id>tea-tunit-tests</id>
+      <activation>
+        <property>
+          <name>skipTests</name>
+          <value>false</value>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+
+          <!-- Run the TUnit tests. -->
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>run-tunit</id>
+                <phase>test</phase>
+                <goals>
+                  <goal>exec</goal>
+                </goals>
+                <configuration>
+                  <classpathScope>test</classpathScope>
+                  <executable>${java.home}/bin/java</executable>
+                  <arguments>
+                    <argument>-Dderby.stream.error.file=${project.build.directory}/derby.log</argument>
+                    <argument>-classpath</argument>
+                    <classpath />
+                    <argument>com.pdmfc.tea.tools.runner.STeaRunner</argument>
+                    <argument>--script=resource:/lib/tea-${project.version}/tea/tools/tunit/tunit-main.tea</argument>
+                    <argument>--</argument>
+                    <argument>surefireReport</argument>
+                    <argument>--dir=${basedir}/src/test/tea</argument>
+                    <argument>--report-dir=${basedir}/target/surefire-reports</argument>
+                  </arguments>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+
+        </plugins>
+      </build>
+    </profile>
+
+
+    <!-- Profile used to create Teadoc documentation. This profile is
+         activated when the "teaRelease" system property has value
+         "true". This is tipically used when building a release. -->
+    <profile>
+      <id>tea-teadoc</id>
+      <activation>
+        <property>
+          <name>teaRelease</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+
+          <!-- Generate Teadoc documentation. -->
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>run-teadoc</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>exec</goal>
+                </goals>
+                <configuration>
+                  <classpathScope>test</classpathScope>
+                  <executable>${java.home}/bin/java</executable>
+                  <arguments>
+                    <argument>-classpath</argument>
+                    <classpath />
+                    <argument>com.pdmfc.tea.tools.runner.STeaRunner</argument>
+                    <argument>--library=${tea.projectRootDir}/apps/teadoc/lib/tea</argument>
+                    <argument>--script=${tea.projectRootDir}/apps/teadoc/lib/tea/doc-html.tea</argument>
+                    <argument>--</argument>
+                    <argument>--header=${tea.teadoc.header}</argument>
+                    <argument>--footer=${tea.teadoc.footer}</argument>
+                    <argument>--bottom=${tea.teadoc.bottom}</argument>
+                    <argument>--doc-title=${tea.teadoc.doctitle}</argument>
+                    <argument>--window-title=${tea.teadoc.windowtitle}</argument>
+                    <argument>--path-list=${basedir}/src/main</argument>
+                    <argument>--output-dir=${tea.projectRootDir}/doc/teadoc</argument>
+                  </arguments>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+
+        </plugins>
+      </build>
+    </profile>
+
+
+    <!-- Profile used to create Javadoc documentation. This profile is
+         activated when the "teaRelease" system property has value
+         "true". This is tipically used when building a release. -->
+    <profile>
+      <id>tea-javadoc</id>
+      <activation>
+        <property>
+          <name>teaRelease</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+
+          <!-- Generate Javadoc documentation. -->
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>run-javadoc</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>javadoc</goal>
+                </goals>
+                <configuration>
+                  <reportOutputDirectory>${tea.projectRootDir}/doc</reportOutputDirectory>
+                  <destDir>javadoc</destDir>
+                  <doctitle>${tea.javadoc.doctitle}</doctitle>
+                  <windowtitle>${tea.javadoc.windowtitle}</windowtitle>
+                  <header>${tea.javadoc.header}</header>
+                  <bottom>${tea.javadoc.bottom}</bottom>
+                  <author>true</author>
+                  <splitindex>true</splitindex>
+                  <version>true</version>
+                  <use>true</use>
+                  <quiet>true</quiet>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+
+        </plugins>
+      </build>
+    </profile>
+
+
+  </profiles>
+
+
+
+
+
+  <!-- More project information. -->
+
+  <name>Tea Runner</name>
+
+  <description>Utility for running Tea scripts from the command
+  line.</description>
+
+
+</project>
+

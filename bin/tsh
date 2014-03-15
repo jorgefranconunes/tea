@@ -1,7 +1,7 @@
 #!/bin/bash
 ###########################################################################
 #
-# Copyright (c) 2001-2013 PDMFC, All Rights Reserved.
+# Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
 #
 #
 # Executes a Tea script read from a file or from stdin. Run with
@@ -27,7 +27,7 @@ teaLoadCoreConfig ${_teaBaseDir}
 
 
 TEA_CORE_LIBRARY="."
-TEA_CORE_CLASSPATH="${_teaBaseDir}/lib/jars/tea-${TEA_VERSION}.jar"
+TEA_CORE_CLASSPATH=$(ls ${_teaBaseDir}/lib/jars/tea-*.jar)
 
 _teaLibrary=${TEA_CORE_LIBRARY}
 _teaClasspath=$(teaNormalizePath ${TEA_CORE_CLASSPATH})

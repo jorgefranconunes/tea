@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+
+Copyright (c) 2011-2014 PDMFC, All Rights Reserved.
+
+
+Tea project main Maven POM file. See "README.asciidoc" for details on
+performing a build.
+
+-->
+
+<project
+   xmlns="http://maven.apache.org/POM/4.0.0"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                       http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+  <packaging>pom</packaging>
+
+  <groupId>com.pdmfc.tea</groupId>
+  <artifactId>tea-main</artifactId>
+  <version>4.0.0-beta09-SNAPSHOT</version>
+
+
+
+
+
+  <properties>
+
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+    <!-- By default unit tests (JUnit+TUnit) are not run. -->
+    <skipTests>true</skipTests>
+
+    <!-- Used below and also within some properties files that get
+         filtered. -->
+    <tea.version>${project.version}</tea.version>
+
+    <!-- The following are used when generating Teadoc
+         documentation. -->
+    <tea.teadoc.header><![CDATA[Tea ${tea.version} Reference Documentation<b>&copy; 2014 <a href="http://www.pdmfc.com">PDM&amp;FC</a>]]></tea.teadoc.header>
+    <tea.teadoc.footer>${tea.teadoc.header}</tea.teadoc.footer>
+    <tea.teadoc.bottom><![CDATA[<font size="-1"><a href="mailto:info@pdmfc.com">Report a bug or request new features</a></font><br /><font size="-1">&copy; 2014</font> <a href="http://www.pdmfc.com"><img align="absmiddle" border="0" src="LogoSmallPdmfc.png"></a>]]></tea.teadoc.bottom>
+    <tea.teadoc.doctitle>Tea ${tea.version} Reference Documentation</tea.teadoc.doctitle>
+    <tea.teadoc.windowtitle>${tea.teadoc.doctitle}</tea.teadoc.windowtitle>
+
+    <!-- The following are used when generating Javadoc
+         documentation. -->
+    <tea.javadoc.header><![CDATA[<b>Tea Java Runtime API</b><br /><b>Version ${project.version}</b>]]></tea.javadoc.header>
+    <tea.javadoc.bottom><![CDATA[<font size="-1">&copy; 2014 <a href="http://www.pdmfc.com" target="_blank">PDMFC</a>, All Rights Reserved.</font>]]></tea.javadoc.bottom>
+    <tea.javadoc.doctitle>${project.name} ${project.version}</tea.javadoc.doctitle>
+    <tea.javadoc.windowtitle>${tea.javadoc.doctitle}</tea.javadoc.windowtitle>
+
+  </properties>
+
+
+
+
+
+  <modules>
+    <module>release</module>
+    <module>runner</module>
+  </modules>
+
+
+
+
+
+  <!-- Define the versions of all dependencies used in all
+       modules. This way modules will not need to know or to refer to
+       the dependency version. -->
+
+  <dependencyManagement>
+    <dependencies>
+        
+      <!-- JUnit -->
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.10</version>
+      </dependency>
+
+      <!-- The version of this dependency MUST match the Cobertura
+           version used by the cobertura-maven-plugin. -->
+      <dependency>
+        <groupId>net.sourceforge.cobertura</groupId>
+        <artifactId>cobertura</artifactId>
+        <version>2.0.3</version>
+      </dependency>
+
+      <!-- Derby DB engine. Used only in unit tests. -->
+      <dependency>
+        <groupId>org.apache.derby</groupId>
+        <artifactId>derby</artifactId>
+        <version>10.9.1.0</version>
+      </dependency>
+
+    </dependencies>
+  </dependencyManagement>
+
+
+
+
+
+  <!-- -->
+
+  <build>
+
+    <defaultGoal>package</defaultGoal>
+
+
+    <!-- Plugins configuration that applies to all POMs inheriting
+         from this POM. -->
+    <pluginManagement>
+
+      <plugins>
+      
+
+        <!-- Compiler configuration. -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>2.3.2</version>
+          <configuration>
+            <source>1.6</source>
+            <target>1.6</target>
+            <showWarnings>true</showWarnings>
+            <compilerArgument>-Xlint</compilerArgument>
+            <compilerArgument>-Xlint:-serial</compilerArgument>
+          </configuration>
+        </plugin>
+
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>2.5</version>
+        </plugin>
+
+
+        <!-- JUnit tests configuration -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>2.16</version>
+          <configuration>
+
+            <!-- Show exception stack traces of tests in stdout. -->
+            <useFile>false</useFile>
+            <skipTests>${skipTests}</skipTests>
+
+            <systemProperties>
+              <!-- This ensures that if the embeded Derby DB is used
+                   in JUnit tests it will create its log file under
+                   the "target" folder. -->
+              <property>
+                <name>derby.stream.error.file</name>
+                <value>${project.build.directory}/derby.log</value>
+              </property>
+            </systemProperties>
+
+          </configuration>
+        </plugin>
+
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>2.4</version>
+        </plugin>
+
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <version>2.6</version>
+        </plugin>
+
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>2.5</version>
+        </plugin>
+
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>2.8.1</version>
+        </plugin>
+
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-site-plugin</artifactId>
+          <version>3.3</version>
+        </plugin>
+
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <version>2.3</version>
+        </plugin>
+
+
+        <!-- Used for executing Tea tools. -->
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>exec-maven-plugin</artifactId>
+          <version>1.2.1</version>
+        </plugin>
+      
+  
+      </plugins>
+
+    </pluginManagement>
+
+
+  </build>
+
+
+
+
+
+  <!-- -->
+  <profiles>
+
+
+    <!-- Profile used to create Javadoc documentation. This profile is
+         activated when the "teaRelease" system property has value
+         "true". This is tipically used when building a release. -->
+    <profile>
+      <id>tea-javadoc</id>
+      <activation>
+        <property>
+          <name>teaRelease</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+
+          <!-- Generate Javadoc documentation. -->
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>run-javadoc</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>javadoc</goal>
+                </goals>
+                <configuration>
+                  <reportOutputDirectory>${basedir}/doc</reportOutputDirectory>
+                  <destDir>javadoc</destDir>
+                  <doctitle>${tea.javadoc.doctitle}</doctitle>
+                  <windowtitle>${tea.javadoc.windowtitle}</windowtitle>
+                  <header>${tea.javadoc.header}</header>
+                  <bottom>${tea.javadoc.bottom}</bottom>
+                  <author>true</author>
+                  <splitindex>true</splitindex>
+                  <version>true</version>
+                  <use>true</use>
+                  <quiet>true</quiet>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+
+        </plugins>
+      </build>
+    </profile>
+
+
+  </profiles>
+
+
+
+
+
+  <!-- Report configuration. -->
+
+  <reporting>
+
+    <plugins>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <version>2.4</version>
+        <configuration>
+          <dependencyDetailsEnabled>false</dependencyDetailsEnabled>
+          <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+        </configuration>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>index</report>
+              <report>project-team</report>
+              <report>mailing-list</report>
+              <report>scm</report>
+              <report>issue-tracking</report>
+              <report>cim</report>
+              <report>dependencies</report>
+              <report>summary</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.8.1</version>
+        <configuration>
+          <doctitle>${tea.javadoc.doctitle}</doctitle>
+          <windowtitle>${tea.javadoc.windowtitle}</windowtitle>
+          <header>${tea.javadoc.header}</header>
+          <bottom>${tea.javadoc.bottom}</bottom>
+          <author>true</author>
+          <splitindex>true</splitindex>
+          <version>true</version>
+          <use>true</use>
+          <quiet>true</quiet>
+        </configuration>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>javadoc</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+
+      <!-- The JXR reporting plugin must come before the PMD and
+           Surefire reporting plugins. -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jxr-plugin</artifactId>
+        <version>2.3</version>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-report-plugin</artifactId>
+        <version>2.12</version>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-pmd-plugin</artifactId>
+        <version>2.7.1</version>
+        <configuration>
+          <targetJdk>1.6</targetJdk>
+          <verbose>true</verbose>
+          <rulesets>
+            <ruleset>../src/main/config/pmd/pmd-rulesets.xml</ruleset>
+          </rulesets>
+        </configuration>
+      </plugin>
+      
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>2.9.1</version>
+        <configuration>
+          <configLocation>../src/main/config/checkstyle/checkstyle.xml</configLocation>
+        </configuration>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>checkstyle</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+
+      <!-- Make sure the the maven-surefire-plugin runs the tests in a
+           distinct JVM, otherwise Cobertura will not use the
+           instrumented classes. See
+           http://mojo.codehaus.org/cobertura-maven-plugin/ for
+           documentation. -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>cobertura-maven-plugin</artifactId>
+        <version>2.6</version>
+        <configuration>
+          <formats>
+            <format>html</format>
+            <format>xml</format>
+          </formats>
+        </configuration>
+      </plugin>
+
+      <!-- See http://mojo.codehaus.org/findbugs-maven-plugin/ for
+           documentation. -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>findbugs-maven-plugin</artifactId>
+        <version>2.5.2</version>
+        <configuration>
+          <effort>Max</effort>
+          <xmlOutput>true</xmlOutput>
+          <xmlOutputDirectory>target/site</xmlOutputDirectory>
+        </configuration>
+      </plugin>
+
+      <!-- See http://mojo.codehaus.org/jdepend-maven-plugin/ for
+           documentation. -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>jdepend-maven-plugin</artifactId>
+        <version>2.0-beta-2</version>
+      </plugin>
+
+    </plugins>
+
+  </reporting>
+
+
+
+
+
+  <!-- More project information. -->
+
+  <name>Tea</name>
+
+  <description>The Tea scripting language.</description>
+
+  <url>https://github.com/jorgefranconunes/tea</url>
+
+  <inceptionYear>1997</inceptionYear>
+
+  <organization>
+    <name>PDMFC</name>
+    <url>http://www.pdmfc.com</url>
+  </organization>
+
+  <issueManagement>
+    <system>Github</system>
+    <url>https://github.com/jorgefranconunes/tea/issues</url>
+  </issueManagement>
+
+  <scm>
+    <developerConnection>scm:git:git://github.com/jorgefranconunes/tea.git</developerConnection>
+    <tag>HEAD</tag>
+    <url>https://github.com/jorgefranconunes/tea</url>
+  </scm>
+
+  <mailingLists>
+    <mailingList>
+      <name>Tea developers</name>
+      <post>tea.dev@pdmfc.com</post>
+      <archive>https://mailman.pdmfc.com/pipermail/tea.dev/</archive>
+    </mailingList>
+  </mailingLists>
+
+  <developers>
+    <developer>
+      <id>jfn</id>
+      <name>Jorge Nunes</name>
+      <email>jorge.nunes@pdmfc.com</email>
+      <organization>PDMFC</organization>
+      <roles>
+        <role>developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>pcorreia</id>
+      <name>Paulo Correia</name>
+      <email>paulo.correia@pdmfc.com</email>
+      <organization>PDMFC</organization>
+      <roles>
+        <role>developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>jpsl</id>
+      <name>João Luis</name>
+      <email>joao.luis@pdmfc.com</email>
+      <organization>PDMFC</organization>
+      <roles>
+        <role>developer</role>
+      </roles>
+    </developer>
+  </developers>
+
+
+</project>
+
