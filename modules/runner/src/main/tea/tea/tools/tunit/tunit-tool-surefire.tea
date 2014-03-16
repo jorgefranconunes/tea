@@ -53,6 +53,10 @@ global tunit-tool-surefire ( cmdName args ) {
         apply $surefireListener $args
     }]
     
+    # TBD - We should blow up if we are unable to create the report
+    # dir...
+    file-make-path $reportDir
+    
     $testRunner addSourceDir $sourceDir
     $testRunner runAllTests $testListener
 }

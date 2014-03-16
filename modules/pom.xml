@@ -2,10 +2,10 @@
 
 <!--
 
-Copyright (c) 2011-2014 PDMFC, All Rights Reserved.
+Copyright (c) 2014 PDMFC, All Rights Reserved.
 
 
-Tea project main Maven POM file. See "README.asciidoc" for details on
+Tea project main Maven POM file. See "../README.asciidoc" for details on
 performing a build.
 
 -->
@@ -42,7 +42,7 @@ performing a build.
          documentation. -->
     <tea.teadoc.header><![CDATA[Tea ${tea.version} Reference Documentation<b>&copy; 2014 <a href="http://www.pdmfc.com">PDM&amp;FC</a>]]></tea.teadoc.header>
     <tea.teadoc.footer>${tea.teadoc.header}</tea.teadoc.footer>
-    <tea.teadoc.bottom><![CDATA[<font size="-1"><a href="mailto:info@pdmfc.com">Report a bug or request new features</a></font><br /><font size="-1">&copy; 2014</font> <a href="http://www.pdmfc.com"><img align="absmiddle" border="0" src="LogoSmallPdmfc.png"></a>]]></tea.teadoc.bottom>
+    <tea.teadoc.bottom><![CDATA[<font size="-1"><a href="mailto:info@pdmfc.com">Report a bug or request new features</a></font>]]></tea.teadoc.bottom>
     <tea.teadoc.doctitle>Tea ${tea.version} Reference Documentation</tea.teadoc.doctitle>
     <tea.teadoc.windowtitle>${tea.teadoc.doctitle}</tea.teadoc.windowtitle>
 
@@ -58,7 +58,7 @@ performing a build.
 
 
 
-
+  <!-- The project Maven modules. -->
   <modules>
     <module>release</module>
     <module>runner</module>
@@ -230,50 +230,23 @@ performing a build.
   <profiles>
 
 
-    <!-- Profile used to create Javadoc documentation. This profile is
-         activated when the "teaRelease" system property has value
-         "true". This is tipically used when building a release. -->
+    <!-- Used for creating the Maven site. The system property
+         "tea.mavensite" defines the path of the directory where the
+         site files are created. -->
     <profile>
-      <id>tea-javadoc</id>
+      <id>tea-mavensite</id>
       <activation>
         <property>
-          <name>teaRelease</name>
-          <value>true</value>
+          <name>tea.mavensite</name>
         </property>
       </activation>
-      <build>
-        <plugins>
-
-          <!-- Generate Javadoc documentation. -->
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-javadoc-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>run-javadoc</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>javadoc</goal>
-                </goals>
-                <configuration>
-                  <reportOutputDirectory>${basedir}/doc</reportOutputDirectory>
-                  <destDir>javadoc</destDir>
-                  <doctitle>${tea.javadoc.doctitle}</doctitle>
-                  <windowtitle>${tea.javadoc.windowtitle}</windowtitle>
-                  <header>${tea.javadoc.header}</header>
-                  <bottom>${tea.javadoc.bottom}</bottom>
-                  <author>true</author>
-                  <splitindex>true</splitindex>
-                  <version>true</version>
-                  <use>true</use>
-                  <quiet>true</quiet>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-
-        </plugins>
-      </build>
+      <distributionManagement>
+	<site>
+	  <id>tea.mavensite</id>
+	  <name>Tea Project Maven Reports</name>
+	  <url>file:///${tea.mavensite}</url>
+	</site>
+      </distributionManagement>
     </profile>
 
 
@@ -283,7 +256,9 @@ performing a build.
 
 
 
-  <!-- Report configuration. -->
+  <!-- Report configuration. This refers to the reports that are
+       included in the Maven generated site. The information on that
+       site is only relevant to developers. -->
 
   <reporting>
 
@@ -331,6 +306,7 @@ performing a build.
         <reportSets>
           <reportSet>
             <reports>
+              <report>aggregate</report>
               <report>javadoc</report>
             </reports>
           </reportSet>

@@ -40,13 +40,14 @@ git clone git@github.com:jorgefranconunes/tea.git
 
 == Building
 
-To perform a full build just run `mvn` at the root of the working
-copy.
+To perform a full build just run `mvn` in the +modules+ dir of the
+working copy.
 
 By default unit tests are not run. To run the unit tests as part of
 the build define the system property `skipTests=false`, like this:
 
 ----
+cd ./modules
 mvn -DskipTests=false
 ----
 
@@ -65,8 +66,6 @@ perform specific tasks.
    source files. The Javadoc documentation is created under
    'doc/javadoc'. This is tipically used when building a release.
 
-* `-P tea-build-release` : Creates the tarball of a Tea release.
-
 
 
 
@@ -79,10 +78,11 @@ coherent in `config/tea-core.conf` and `pom.xml`.
 . Build the release bundle by invoking Maven like this:
 +
 ----
-mvn -DteaRelease
+mvn -Dtea.release
 ----
 
-. The release tarbal is created as './target/tea-4.x.y.tar.bz2'.
+. The release tarbal in the project root directory as
+'./target/tea-4.x.y.tar.bz2'.
 
 
 

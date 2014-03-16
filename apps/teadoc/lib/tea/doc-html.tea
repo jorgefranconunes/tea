@@ -1,6 +1,6 @@
 ###########################################################################
 #
-# Copyright (c) 2001-2012 PDMFC, All Rights Reserved.
+# Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
 #
 ###########################################################################
 
@@ -53,7 +53,7 @@ define show-header () {
     
     echo
     echo "TeaDoc " $TEA_VERSION
-    echo "Copyright (c) 2001-2012 PDMFC, All Rights Reserved."
+    echo "Copyright (c) 2001-2014 PDMFC, All Rights Reserved."
     echo
     echo "Tool for Generating Tea Documentation from Source Files"
     echo
@@ -86,10 +86,6 @@ Available options:
 	Name of directory where the genarated HTML files will be
 	placed. If not specified it will default to the current
 	directory.
---native-parser=JAVA_CLASS
-	Name of the Java class that will be used to parse XML files.
-	This Java class must implement the SAX interface. This is a
-	mandatory option.
 --header=TEXT
 	Specifies the text to be placed at the top of each generated
 	HTML file. This text will be placed at the extreme right of
@@ -155,7 +151,6 @@ define fetch-option-value ( optionName optionValue ) {
 
 define pathList      ()
 define outputDir     "."
-define nativeParser  $null
 define teadocBaseDir [file-dirname $argv0]
 define dtdFile       [file-join $teadocBaseDir "../../TeaDoc.dtd"]
 define stylesFile    [file-join $teadocBaseDir "../../stylesheet.css"]
@@ -173,10 +168,6 @@ foreach cliArg $argv {
     }
     if { not-null? [set! opt [fetch-option-value "--output-dir=" $cliArg]] } {
         set! outputDir $opt
-        continue
-    }
-    if { not-null? [set! opt [fetch-option-value "--native-parser=" $cliArg]] } {
-        set! nativeParser $opt
         continue
     }
     if { not-null? [set! opt [fetch-option-value "--header=" $cliArg]] } {
@@ -220,10 +211,12 @@ if { empty? $pathList } {
     
     
     
-define _docProducer [new DocProducer $nativeParser]
+define _docProducer [new DocProducer]
 
+file-make-path $outputDir
 file-copy $dtdFile [file-join $outputDir [file-basename $dtdFile]]
 file-copy $stylesFile [file-join $outputDir [file-basename $stylesFile]]
+
 $_docProducer generateDocs $pathList $outputDir
 
 

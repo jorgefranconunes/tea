@@ -2,7 +2,7 @@
 
 <!--
 
-Copyright (c) 2011-2014 PDMFC, All Rights Reserved.
+Copyright (c) 2014 PDMFC, All Rights Reserved.
 
 
 Maven POM for the "runner" sub-project.
@@ -260,13 +260,13 @@ Maven POM for the "runner" sub-project.
 
 
     <!-- Profile used to create Teadoc documentation. This profile is
-         activated when the "teaRelease" system property has value
+         activated when the "tea.release" system property has value
          "true". This is tipically used when building a release. -->
     <profile>
       <id>tea-teadoc</id>
       <activation>
         <property>
-          <name>teaRelease</name>
+          <name>tea.release</name>
           <value>true</value>
         </property>
       </activation>
@@ -313,13 +313,13 @@ Maven POM for the "runner" sub-project.
 
 
     <!-- Profile used to create Javadoc documentation. This profile is
-         activated when the "teaRelease" system property has value
+         activated when the "tea.release" system property has value
          "true". This is tipically used when building a release. -->
     <profile>
       <id>tea-javadoc</id>
       <activation>
         <property>
-          <name>teaRelease</name>
+          <name>tea.release</name>
           <value>true</value>
         </property>
       </activation>
@@ -339,7 +339,7 @@ Maven POM for the "runner" sub-project.
                 </goals>
                 <configuration>
                   <reportOutputDirectory>${tea.projectRootDir}/doc</reportOutputDirectory>
-                  <destDir>javadoc</destDir>
+                  <destDir>javadoc/runner</destDir>
                   <doctitle>${tea.javadoc.doctitle}</doctitle>
                   <windowtitle>${tea.javadoc.windowtitle}</windowtitle>
                   <header>${tea.javadoc.header}</header>
