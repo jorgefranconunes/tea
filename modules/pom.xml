@@ -60,6 +60,7 @@ performing a build.
 
   <!-- The project Maven modules. -->
   <modules>
+    <module>engine</module>
     <module>release</module>
     <module>runner</module>
     <module>runtime</module>
