@@ -62,6 +62,7 @@ performing a build.
   <modules>
     <module>release</module>
     <module>runner</module>
+    <module>runtime</module>
   </modules>
 
 

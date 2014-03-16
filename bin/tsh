@@ -27,7 +27,7 @@ teaLoadCoreConfig ${_teaBaseDir}
 
 
 TEA_CORE_LIBRARY="."
-TEA_CORE_CLASSPATH=$(ls ${_teaBaseDir}/lib/jars/tea-*.jar)
+TEA_CORE_CLASSPATH="${_teaBaseDir}/lib/jars/tea-runner-${TEA_VERSION}.jar"
 
 _teaLibrary=${TEA_CORE_LIBRARY}
 _teaClasspath=$(teaNormalizePath ${TEA_CORE_CLASSPATH})

@@ -45,6 +45,12 @@ Maven POM for the "runner" sub-project.
   <dependencies>
 
     <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>tea-runtime</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <scope>test</scope>
@@ -78,32 +84,6 @@ Maven POM for the "runner" sub-project.
     <plugins>
 
 
-      <!-- Add the Tea library source files to the resources included
-           in the JAR. -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-resources-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>copy-tea-lib-resources</id>
-            <phase>process-resources</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>target/classes/lib/tea-${project.version}</outputDirectory>
-              <resources>          
-                <resource>
-                  <directory>src/main/tea</directory>
-                  <filtering>false</filtering>
-                </resource>
-              </resources>              
-            </configuration>            
-          </execution>
-        </executions>
-      </plugin>
-
-
       <!-- Include the appropriate manifest in the final JAR. -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -133,6 +113,7 @@ Maven POM for the "runner" sub-project.
               <goal>copy-dependencies</goal>
             </goals>
             <configuration>
+              <outputDirectory>../../lib/jars</outputDirectory>
               <includeScope>runtime</includeScope>
               <overWriteReleases>true</overWriteReleases>
               <overWriteSnapshots>true</overWriteSnapshots>
@@ -178,7 +159,7 @@ Maven POM for the "runner" sub-project.
               <directory>../../doc/teadoc</directory>
             </fileset>
             <fileset>
-              <directory>../../doc/javadoc</directory>
+              <directory>../../doc/javadoc/runner</directory>
             </fileset>
           </filesets>
         </configuration>
@@ -186,17 +167,6 @@ Maven POM for the "runner" sub-project.
 
 
     </plugins>
-
-
-
-
-    <!-- -->
-    <resources>
-      <resource>
-        <directory>src/main/resources</directory>
-        <filtering>true</filtering>
-      </resource>
-    </resources>
 
 
   </build>
@@ -299,7 +269,7 @@ Maven POM for the "runner" sub-project.
                     <argument>--bottom=${tea.teadoc.bottom}</argument>
                     <argument>--doc-title=${tea.teadoc.doctitle}</argument>
                     <argument>--window-title=${tea.teadoc.windowtitle}</argument>
-                    <argument>--path-list=${basedir}/src/main</argument>
+                    <argument>--path-list=${tea.projectRootDir}/modules/runtime/src/main</argument>
                     <argument>--output-dir=${tea.projectRootDir}/doc/teadoc</argument>
                   </arguments>
                 </configuration>
@@ -367,7 +337,7 @@ Maven POM for the "runner" sub-project.
 
   <!-- More project information. -->
 
-  <name>Tea Runner</name>
+  <name>Tea Runner Tool</name>
 
   <description>Utility for running Tea scripts from the command
   line.</description>
