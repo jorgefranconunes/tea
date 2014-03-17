@@ -1158,8 +1158,8 @@ public final class SModuleLang
 
 //* 
 //* <TeaFunction name="exec"
-//*                 arguments="block"
-//*             module="tea.lang">
+//*              arguments="block"
+//*              module="tea.lang">
 //*
 //* <Overview>
 //* Executes the Tea code represented by a code block object.
@@ -1215,14 +1215,10 @@ public final class SModuleLang
                                       final Object[]     args)
         throws STeaException {
 
-        if ( args.length != 2 ) {
-            throw new SNumArgException(args, "block");
-        }
+        SArgs.checkCount(args, 2, "block");
 
-        Object    result = null;
         SObjBlock block  = SArgs.getBlock(args, 1);
-
-        result = block.exec();
+        Object    result = block.exec();
 
         return result;
     }

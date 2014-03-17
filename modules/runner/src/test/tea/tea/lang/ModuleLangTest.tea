@@ -615,3 +615,46 @@ tunit-testsuite error-test {
     
     
 }
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite exec-test {
+    
+    
+    tunit-test-error tooFewArgs {
+        
+        exec
+    }
+    
+    
+    tunit-test-error tooManyArgs {
+        
+        exec {} 123
+    }
+    
+    
+    tunit-test-error invalidArgType {
+        
+        exec 123
+    }
+    
+    
+    tunit-test allOk {
+        
+        define myVar $null
+        define myResult [exec { set! myVar 123; is 1234 }]
+        
+        tunit-assert-equals 123 $myVar
+        tunit-assert-equals 1234 $myResult
+    }
+    
+    
+}
