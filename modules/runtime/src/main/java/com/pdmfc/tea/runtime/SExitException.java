@@ -37,7 +37,7 @@ public final class SExitException
  *
  **************************************************************************/
 
-    public SExitException(Integer value) {
+    public SExitException(final Integer value) {
 
         _value = value;
     }

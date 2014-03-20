@@ -475,6 +475,8 @@ public final class SModuleLang
         } catch ( SContinueException e ) {
             // This is not an error.
             value = SObjNull.NULL;
+        } catch ( SExitException e ) {
+            value = e.getExitValue();
         } catch ( STeaException e ) {
             value  = e.getMessage();
             result = Boolean.TRUE;
@@ -483,7 +485,7 @@ public final class SModuleLang
 
         if ( symbol != null ) {
             SObjVar var = context.getVarObject(symbol);
-            var.set(value);
+            var.set((value==null) ? SObjNull.NULL : value);
         }
 
         if ( symbSt != null ) {
@@ -1229,8 +1231,8 @@ public final class SModuleLang
 
 //* 
 //* <TeaFunction name="exit"
-//*                 arguments="status"
-//*             module="tea.lang">
+//*              arguments="status"
+//*              module="tea.lang">
 //*
 //* <Overview>
 //* Terminates the execution of the current process.
@@ -1270,9 +1272,7 @@ public final class SModuleLang
                                       final Object[]     args)
         throws STeaException {
 
-        if ( args.length > 2 ) {
-            throw new SNumArgException(args, "[exit-code]");
-        }
+        SArgs.checkAtMost(args, 2, "[exit-code]");
 
         Integer retVal =
             (args.length==1) ? SModuleMath.ZERO : SArgs.getInt(args,1);

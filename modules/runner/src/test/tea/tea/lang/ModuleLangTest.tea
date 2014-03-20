@@ -658,3 +658,59 @@ tunit-testsuite exec-test {
     
     
 }
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite exit-test {
+    
+    
+    tunit-test tooFewArgs {
+        
+        test-exit-with () 0
+    }
+    
+    
+    tunit-test-error tooManyArgs {
+        
+        exit 1 2
+        
+        tunit-assert [catch { error "One" "Two" } msg]
+        tunit-assert [matches? ".*message.*" $msg]
+    }
+    
+    
+    tunit-test-error invalidArgType {
+        
+        exit "hello"
+    }
+    
+    
+    tunit-test allOk {
+        
+        test-exit-with ( 321 ) 321
+    }
+    
+    
+    define test-exit-with ( argList expectedValue ) {
+        
+        define myVar  $null
+        define result $null
+        define status \
+                [catch { apply exit $argList ; set! myVar "Oops" } result] 
+        
+        tunit-assert [not $status]
+        tunit-assert-equals $expectedValue $result
+        tunit-assert-null $myVar
+    }
+    
+    
+}
+
