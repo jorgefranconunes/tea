@@ -1,13 +1,13 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
 package com.pdmfc.tea.modules;
 
 import com.pdmfc.tea.STeaException;
-import com.pdmfc.tea.runtime.SContext;
+import com.pdmfc.tea.runtime.TeaEnvironment;
 
 
 
@@ -29,14 +29,15 @@ public interface SModule {
  *
  * Populates the <code>context</code> with commands and variables.
  *
- * @param context The root context to be populated.
+ * @param environment The Tea environment the module may interact
+ * with.
  *
  * @throws STeaException If there were any problems initializing the
  * module.
  *
  **************************************************************************/
 
-   void init(SContext context)
+   void init(TeaEnvironment environment)
        throws STeaException;
 
 

@@ -24,6 +24,7 @@ import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypeException;
 import com.pdmfc.tea.runtime.STypes;
+import com.pdmfc.tea.runtime.TeaEnvironment;
 import com.pdmfc.tea.runtime.TeaFunction;
 
 
@@ -67,7 +68,7 @@ public final class SModuleTos
     private Map<String,STosClass> _tosClasses =
         new HashMap<String,STosClass>();
 
-    private SContext _globalContext = null;
+    private TeaEnvironment _environment = null;
 
 
 
@@ -95,14 +96,13 @@ public final class SModuleTos
  **************************************************************************/
 
     @Override
-    public void init(final SContext context)
+    public void init(final TeaEnvironment environment)
         throws STeaException {
 
-        _globalContext = context;
+        _environment = environment;
 
         // The functions provided by this module are implemented as
         // methods of this class with the TeaFunction annotation.
-
     }
 
 
@@ -248,10 +248,11 @@ public final class SModuleTos
             }
         }
 
-        STosClass theClass = new STosClass(baseClass, memberNames);
+        STosClass theClass     = new STosClass(baseClass, memberNames);
+        String    classNameStr = className.getName();
 
-        theClass.setName(className.getName());
-        _globalContext.newVar(className, theClass);
+        theClass.setName(classNameStr);
+        _environment.addGlobalVar(classNameStr, theClass);
 
         return theClass;
     }

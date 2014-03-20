@@ -22,6 +22,7 @@ import com.pdmfc.tea.runtime.SArgs;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjNull;
 import com.pdmfc.tea.runtime.SObjPair;
+import com.pdmfc.tea.runtime.TeaEnvironment;
 import com.pdmfc.tea.runtime.TeaFunction;
 
 
@@ -100,27 +101,29 @@ public final class SModuleIO
  **************************************************************************/
 
     @Override
-    public void init(final SContext context)
+    public void init(final TeaEnvironment environment)
         throws STeaException {
 
         STosClass inClass  = new SJavaClass("com.pdmfc.tea.modules.io.SInput");
         STosClass outClass = new SJavaClass("com.pdmfc.tea.modules.io.SOutput");
 
-        context.newVar(inClass.getName(), inClass);
-        context.newVar(outClass.getName(), outClass);
+        SContext globalContext = environment.getGlobalContext();
 
-        SInput stdin  = SInput.newInstance(context);
-        _stdout = SOutput.newInstance(context);
-        _stderr = SOutput.newInstance(context);
+        globalContext.newVar(inClass.getName(), inClass);
+        globalContext.newVar(outClass.getName(), outClass);
+
+        SInput stdin  = SInput.newInstance(globalContext);
+        _stdout = SOutput.newInstance(globalContext);
+        _stderr = SOutput.newInstance(globalContext);
         
         stdin.open(System.in);
         _stdout.open(System.out);
         _stdout.setLineBuffering(true);
         _stderr.open(System.err);
 
-        context.newVar("stdin",  stdin);
-        context.newVar("stdout", _stdout);
-        context.newVar("stderr", _stderr);
+        globalContext.newVar("stdin",  stdin);
+        globalContext.newVar("stdout", _stdout);
+        globalContext.newVar("stderr", _stderr);
 
         // The functions provided by this module are implemented as
         // methods of this with class with the TeaFunction annotation.

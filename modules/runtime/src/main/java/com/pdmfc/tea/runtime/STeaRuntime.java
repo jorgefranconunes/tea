@@ -83,7 +83,7 @@ public final class STeaRuntime
 
     private State _state = State.INITED;
 
-    private SContext _toplevelContext = new SContext();
+    private TeaEnvironment _environment = null;
 
 
 
@@ -100,6 +100,7 @@ public final class STeaRuntime
     public STeaRuntime(final TeaRuntimeConfig config) {
 
         _config = config;
+        _environment = new TeaEnvironmentImpl();
 
         for ( String moduleClassName : CORE_MODULES ) {
             _modules.add(moduleClassName);
@@ -124,9 +125,9 @@ public final class STeaRuntime
         if ( _isFirstStart ) {
             _modules.add(className);
         } else if ( _state == State.RUNNING ) {
-            SModuleUtils.addAndStartModule(_toplevelContext, className);
+            SModuleUtils.addAndStartModule(_environment, className);
         } else {
-            SModuleUtils.addModule(_toplevelContext, className);
+            SModuleUtils.addModule(_environment, className);
         }
     }
 
@@ -148,9 +149,9 @@ public final class STeaRuntime
         if ( _isFirstStart ) {
             _modules.add(module);
         } else if ( _state == State.RUNNING ) {
-            SModuleUtils.addAndStartModule(_toplevelContext, module);
+            SModuleUtils.addAndStartModule(_environment, module);
         } else {
-            SModuleUtils.addModule(_toplevelContext, module);
+            SModuleUtils.addModule(_environment, module);
         }
     }
 
@@ -164,9 +165,12 @@ public final class STeaRuntime
  *
  **************************************************************************/
 
+    @Deprecated
     public SContext getToplevelContext() {
 
-        return _toplevelContext;
+        SContext globalContext = _environment.getGlobalContext();
+
+        return globalContext;
     }
 
 
@@ -210,7 +214,7 @@ public final class STeaRuntime
         _isFirstExec = true;
 
         try {
-            SModuleUtils.stopModules(_toplevelContext);
+            SModuleUtils.stopModules(_environment);
         } catch ( STeaException e ) {
             // How should we report this to the caller?...
         }
@@ -234,7 +238,7 @@ public final class STeaRuntime
        _state = State.ENDED;
 
         try {
-            SModuleUtils.endModules(_toplevelContext);
+            SModuleUtils.endModules(_environment);
         } catch ( STeaException e ) {
             // How should we report this to the caller?...
         }
@@ -275,7 +279,9 @@ public final class STeaRuntime
                 doStart();
             }
 
-            result = code.exec(_toplevelContext);
+            SContext globalContext = _environment.getGlobalContext();
+
+            result = code.exec(globalContext);
         } finally {
             _state = State.STARTED;
         }
@@ -304,7 +310,7 @@ public final class STeaRuntime
             doFirstStartInitializations();
         }
 
-        SModuleUtils.startModules(_toplevelContext);
+        SModuleUtils.startModules(_environment);
 
         if ( wasFirstStart ) {
             runInitScripts();
@@ -329,9 +335,11 @@ public final class STeaRuntime
         String       sourceEncoding  = _config.getSourceEncoding();
         List<String> importLocations = _config.getImportLocationList();
 
-        SArgvUtils.setArgv(_toplevelContext, argv0, argv);
+        SContext globalContext = _environment.getGlobalContext();
+
+        SArgvUtils.setArgv(globalContext, argv0, argv);
         setupLibVar(importLocations);
-        SEncodingUtils.setSourceEncoding(_toplevelContext, sourceEncoding);
+        SEncodingUtils.setSourceEncoding(globalContext, sourceEncoding);
         setupModules(_modules);
     }
 
@@ -352,7 +360,9 @@ public final class STeaRuntime
         _allImportLocations.addAll(locations);
         _allImportLocations.add(CORE_IMPORT_DIR);
 
-        SLibVarUtils.setupLibVar(_toplevelContext, _allImportLocations);
+        SContext globalContext = _environment.getGlobalContext();
+
+        SLibVarUtils.setupLibVar(globalContext, _allImportLocations);
     }
 
 
@@ -372,11 +382,11 @@ public final class STeaRuntime
             if ( moduleOrClassName instanceof String ) {
                 String moduleClassName = (String)moduleOrClassName;
 
-                SModuleUtils.addModule(_toplevelContext, moduleClassName);
+                SModuleUtils.addModule(_environment, moduleClassName);
             } else {
                 SModule module = (SModule)moduleOrClassName;
 
-                SModuleUtils.addModule(_toplevelContext, module);
+                SModuleUtils.addModule(_environment, module);
             }
 
         }
@@ -402,12 +412,13 @@ public final class STeaRuntime
         SCompiler    compiler       = new SCompiler();
 
         for ( String dirPath : dirList ) {
-            String path = INIT_FILE;
-            SCode  code = null;
+            String   path          = INIT_FILE;
+            SContext globalContext = _environment.getGlobalContext();
+            SCode    code          = null;
             
             try {
                 code = compiler.compile(dirPath, path, sourceEncoding, path);
-                code.exec(_toplevelContext);
+                code.exec(globalContext);
             } catch ( IOException e ) {
                 // The given path does not exist or is not
                 // readable. Go ahead and just ignore it.

@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2013 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -15,6 +15,7 @@ import com.pdmfc.tea.runtime.SArgs;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.STypeException;
+import com.pdmfc.tea.runtime.TeaEnvironment;
 import com.pdmfc.tea.runtime.TeaFunction;
 
 
@@ -77,7 +78,7 @@ public final class SModuleHtml
  **************************************************************************/
 
     @Override
-    public void init(final SContext context)
+    public void init(final TeaEnvironment environment)
         throws STeaException {
 
         // Nothing to do. The functions provided by this module are

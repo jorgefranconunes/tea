@@ -20,6 +20,7 @@ import com.pdmfc.tea.runtime.SObjVar;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.STypeException;
 import com.pdmfc.tea.runtime.STypes;
+import com.pdmfc.tea.runtime.TeaEnvironment;
 import com.pdmfc.tea.runtime.TeaFunction;
 
 
@@ -130,7 +131,7 @@ public final class SModuleMath
  **************************************************************************/
 
     @Override
-    public void init(final SContext context)
+    public void init(final TeaEnvironment environment)
         throws STeaException {
 
         // Nothing to do. The functions provided by this module are

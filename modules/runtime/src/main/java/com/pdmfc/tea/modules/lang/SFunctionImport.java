@@ -26,6 +26,7 @@ import com.pdmfc.tea.runtime.SObjNull;
 import com.pdmfc.tea.runtime.SObjPair;
 import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaEnvironment;
 
 
 
@@ -118,7 +119,7 @@ final class SFunctionImport
     // The parent context for the context where the code in the
     // imported files will be executed. Each imported file is executed
     // in a separate context.
-    private SContext _rootContext = null;
+    private SContext _globalContext = null;
 
     // Keys are import paths (String). Values are ImportItem
     // instances.
@@ -140,9 +141,9 @@ final class SFunctionImport
  *
  **************************************************************************/
 
-    public SFunctionImport(final SContext rootContext) {
+    public SFunctionImport(final TeaEnvironment environment) {
 
-        _rootContext = rootContext;
+        _globalContext = environment.getGlobalContext();
     }
 
 
@@ -230,7 +231,7 @@ final class SFunctionImport
             }
 
             ImportItem item     =
-                new ImportItem(_rootContext, baseDir, fileName);
+                new ImportItem(_globalContext, baseDir, fileName);
             String     fullPath = item.getFullPath();
             ImportItem prevItem = _itemsByFullPath.get(fullPath);
 
@@ -285,7 +286,7 @@ final class SFunctionImport
 
 
 
-        private SContext _rootContext = null;
+        private SContext _globalContext = null;
         private String  _importPath     = null;
         private String  _fullPath       = null;
         private long    _lastImportTime = 0;
@@ -308,7 +309,7 @@ final class SFunctionImport
                           final String   baseDir,
                           final String   importPath) {
 
-            _rootContext = rootContext;
+            _globalContext = rootContext;
             _importPath  = importPath;
             _fullPath    = baseDir + "/" + importPath;
             _isFile      = 
@@ -353,7 +354,7 @@ final class SFunctionImport
             Object result         = null;
             String path           = _fullPath;
             String sourceEncoding =
-                SEncodingUtils.getSourceEncoding(_rootContext);
+                SEncodingUtils.getSourceEncoding(_globalContext);
             SCode  code           = null;
             
             try {
@@ -372,7 +373,7 @@ final class SFunctionImport
                     ? _file.lastModified()
                     : System.currentTimeMillis();
 
-                SContext execContext = _rootContext.newChild();
+                SContext execContext = _globalContext.newChild();
                 
                 result = code.exec(execContext);
             }

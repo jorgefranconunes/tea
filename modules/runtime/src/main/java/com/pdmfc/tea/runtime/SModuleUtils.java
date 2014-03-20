@@ -17,6 +17,7 @@ import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjPair;
 import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaEnvironment;
 import com.pdmfc.tea.runtime.TeaFunction;
 
 
@@ -75,8 +76,8 @@ public final class SModuleUtils
  *
  **************************************************************************/
 
-    public static SModule addModule(final SContext context,
-                                    final String   className)
+    public static SModule addModule(final TeaEnvironment environment,
+                                    final String         className)
         throws STeaException {
 
         SModule module = null;
@@ -90,7 +91,7 @@ public final class SModuleUtils
             throw new SRuntimeException(msg, fmtArgs);
         }
 
-        addModule(context, module);
+        addModule(environment, module);
 
         return module;
     }
@@ -105,12 +106,13 @@ public final class SModuleUtils
  *
  **************************************************************************/
 
-    public static SModule addModule(final SContext context,
-                                    final SModule  module)
+    public static SModule addModule(final TeaEnvironment environment,
+                                    final SModule        module)
         throws STeaException {
 
-        initializeModule(context, module);
+        initializeModule(environment, module);
 
+        SContext context = environment.getGlobalContext();
         SObjPair head    = getHead(context, SYMBOL_MODULES);
         SObjPair newHead =
             new SObjPair(module, (head!=null) ? head : SObjPair.emptyList());
@@ -130,11 +132,11 @@ public final class SModuleUtils
  *
  **************************************************************************/
 
-    private static void initializeModule(final SContext context,
-                                         final SModule  module)
+    private static void initializeModule(final TeaEnvironment environment,
+                                         final SModule        module)
         throws STeaException {
 
-        module.init(context);
+        module.init(environment);
 
         // Create additional functions for methods annotated with the
         // "TeaFunction" annotation.
@@ -148,7 +150,7 @@ public final class SModuleUtils
                 SObjFunction function     = buildTeaFunction(module, method);
                 String       functionName = annotation.value();
 
-                context.newVar(functionName, function);
+                environment.addGlobalVar(functionName, function);
             }
         }
     }
@@ -223,14 +225,15 @@ public final class SModuleUtils
  *
  **************************************************************************/
 
-    public static void addAndStartModule(final SContext context,
-                                         final String   className)
+    public static void addAndStartModule(final TeaEnvironment environment,
+                                         final String         className)
         throws STeaException {
 
-        SModule module = addModule(context, className);
+        SModule module = addModule(environment, className);
 
         module.start();
 
+        SContext context = environment.getGlobalContext();
         SObjPair head    = getHead(context, SYMBOL_MODULES_STARTED);
         SObjPair newHead = new SObjPair(module, head);
 
@@ -247,14 +250,15 @@ public final class SModuleUtils
  *
  **************************************************************************/
 
-    public static void addAndStartModule(final SContext context,
-                                         final SModule  module)
+    public static void addAndStartModule(final TeaEnvironment environment,
+                                         final SModule        module)
         throws STeaException {
 
-        addModule(context, module);
+        addModule(environment, module);
 
         module.start();
 
+        SContext context = environment.getGlobalContext();
         SObjPair head    = getHead(context, SYMBOL_MODULES_STARTED);
         SObjPair newHead = new SObjPair(module, head);
 
@@ -304,9 +308,10 @@ public final class SModuleUtils
  *
  **************************************************************************/
 
-    public static void startModules(final SContext context)
+    public static void startModules(final TeaEnvironment environment)
         throws STeaException {
 
+        SContext context     = environment.getGlobalContext();
         SObjPair modulesHead = getHead(context, SYMBOL_MODULES);
 
         startModules(0, context, modulesHead);
@@ -363,12 +368,13 @@ public final class SModuleUtils
  *
  **************************************************************************/
 
-    public static void stopModules(final SContext context)
+    public static void stopModules(final TeaEnvironment environment)
         throws STeaException {
 
+        SContext context     = environment.getGlobalContext();
         SObjPair modulesHead = getHead(context, SYMBOL_MODULES_STARTED);
 
-        stopModules(0, context, modulesHead);
+        stopModules(0, modulesHead);
 
         context.newVar(SYMBOL_MODULES_STARTED, SObjPair.emptyList());
     }
@@ -384,7 +390,6 @@ public final class SModuleUtils
  **************************************************************************/
 
     private static void stopModules(final int      index,
-                                    final SContext context,
                                     final SObjPair modulesHead)
         throws STeaException {
 
@@ -420,12 +425,13 @@ public final class SModuleUtils
  *
  **************************************************************************/
 
-    public static void endModules(final SContext context)
+    public static void endModules(final TeaEnvironment environment)
         throws STeaException {
 
+        SContext context     = environment.getGlobalContext();
         SObjPair modulesHead = getHead(context, SYMBOL_MODULES);
 
-        endModules(0, context, modulesHead);
+        endModules(0, modulesHead);
 
         context.newVar(SYMBOL_MODULES, SObjPair.emptyList());
     }
@@ -441,7 +447,6 @@ public final class SModuleUtils
  **************************************************************************/
 
     private static void endModules(final int      index,
-                                   final SContext context,
                                    final SObjPair modulesHead)
         throws STeaException {
 

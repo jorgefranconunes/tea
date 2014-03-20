@@ -45,6 +45,7 @@ import com.pdmfc.tea.runtime.SReturnException;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypeException;
 import com.pdmfc.tea.runtime.STypes;
+import com.pdmfc.tea.runtime.TeaEnvironment;
 import com.pdmfc.tea.runtime.TeaFunction;
 
 
@@ -93,7 +94,7 @@ public final class SModuleLang
 
 
 
-    private SContext _globalContext = null;
+    private TeaEnvironment _environment = null;
 
     // These are used by the implementation of the Tea "source"
     // function.
@@ -133,18 +134,19 @@ public final class SModuleLang
  **************************************************************************/
 
     @Override
-    public void init(final SContext context)
+    public void init(final TeaEnvironment environment)
         throws STeaException {
 
-        _globalContext = context;
+        _environment = environment;
 
-        context.newVar("true",  Boolean.TRUE);
-        context.newVar("false", Boolean.FALSE);
-        context.newVar("null",  SObjNull.NULL);
-        context.newVar(TEA_VERSION_VAR,
-                       SConfigInfo.getProperty(PROP_TEA_VERSION));
+        _environment.addGlobalVar("true",  Boolean.TRUE);
+        _environment.addGlobalVar("false", Boolean.FALSE);
+        _environment.addGlobalVar("null",  SObjNull.NULL);
+        _environment.addGlobalVar(TEA_VERSION_VAR,
+                                  SConfigInfo.getProperty(PROP_TEA_VERSION));
 
-        context.newVar("import", new SFunctionImport(_globalContext));
+        _environment.addGlobalVar("import",
+                                  new SFunctionImport(_environment));
 
         // The other functions provided by this module are implemented
         // as methods of this class with the TeaFunction annotation.
@@ -867,7 +869,9 @@ public final class SModuleLang
                                  final Object[]     args)
         throws STeaException {
 
-        Object result = functionDefineVar(_globalContext, func, context, args);
+        SContext globalContext = _environment.getGlobalContext();
+        Object   result        =
+            functionDefineVar(globalContext, func, context, args);
 
         return result;
     }
@@ -882,7 +886,7 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    private static Object functionDefineVar(final SContext varContext,
+    private static Object functionDefineVar(final SContext     varContext,
                                             final SObjFunction func,
                                             final SContext     context,
                                             final Object[]     args)
@@ -2438,7 +2442,7 @@ public final class SModuleLang
         String moduleClassName = SArgs.getString(args, 1);
         
         try {
-            SModuleUtils.addAndStartModule(_globalContext, moduleClassName);
+            SModuleUtils.addAndStartModule(_environment, moduleClassName);
         } catch ( STeaException e ) {
             throw new SRuntimeException(args, e.getMessage());
         }
@@ -3097,9 +3101,10 @@ public final class SModuleLang
                                  final Object[]     args)
         throws STeaException {
 
-        SCode    program    = compileFromSource(context, args);
-        SContext runContext = _globalContext.newChild();
-        Object   result     = program.exec(runContext);
+        SCode    program       = compileFromSource(context, args);
+        SContext globalContext = _environment.getGlobalContext();
+        SContext runContext    = globalContext.newChild();
+        Object   result        = program.exec(runContext);
 
         return result;
     }
@@ -3183,7 +3188,7 @@ public final class SModuleLang
         throws STeaException {
 
         final SCode     program      = compileFromSource(context, args);
-        final SContext  blockContext = _globalContext;
+        final SContext  blockContext = _environment.getGlobalContext();
         SObjBlock       result       =
             new SObjBlock() {
                 public SContext getContext() {

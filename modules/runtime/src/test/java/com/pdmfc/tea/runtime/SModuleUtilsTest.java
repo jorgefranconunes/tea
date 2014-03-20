@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2012 PDMFC, All Rights Reserved.
+ * Copyright (c) 2012-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -14,6 +14,7 @@ import com.pdmfc.tea.modules.SModule;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjSymbol;
+import com.pdmfc.tea.runtime.TeaEnvironment;
 import com.pdmfc.tea.runtime.TeaFunction;
 
 
@@ -43,19 +44,20 @@ public final class SModuleUtilsTest
     public void addModuleWithTeaFunctionAnnotation()
         throws STeaException {
 
-        SObjSymbol myFunctionName = SObjSymbol.addSymbol("my-function");
-        SContext   toplevel       = new SContext();
-        SModule    myModule       = new MyTestModule();
+        SObjSymbol     myFunctionName = SObjSymbol.addSymbol("my-function");
+        TeaEnvironment environment    = new TeaEnvironmentImpl();
+        SContext       context        = environment.getGlobalContext();
+        SModule        myModule       = new MyTestModule();
 
-        SModuleUtils.addModule(toplevel, myModule);
+        SModuleUtils.addModule(environment, myModule);
 
-        SObjFunction myFunction = (SObjFunction)toplevel.getVar(myFunctionName);
+        SObjFunction myFunction = (SObjFunction)context.getVar(myFunctionName);
 
         assertNotNull(myFunction);
 
         Object[] myArgs   = { myFunctionName, "Whatever" };
         String   myResult =
-            (String)myFunction.exec(myFunction, toplevel, myArgs);
+            (String)myFunction.exec(myFunction, context, myArgs);
 
         assertEquals("Whatever - YES", myResult);
     }
@@ -90,11 +92,11 @@ public final class SModuleUtilsTest
     public void addModuleWithTeaFunctionAnnotationFailure01()
         throws STeaException {
 
-        SObjSymbol myFunctionName = SObjSymbol.addSymbol("my-function");
-        SContext   toplevel       = new SContext();
-        SModule    myModule       = new MyTestModuleFailure01();
+        SObjSymbol     myFunctionName = SObjSymbol.addSymbol("my-function");
+        TeaEnvironment environment    = new TeaEnvironmentImpl();
+        SModule        myModule       = new MyTestModuleFailure01();
 
-        SModuleUtils.addModule(toplevel, myModule);
+        SModuleUtils.addModule(environment, myModule);
 
         fail("SModule.addModule(...) failed to fail!");
     }
@@ -125,11 +127,11 @@ public final class SModuleUtilsTest
     public void addModuleWithTeaFunctionAnnotationFailure02()
         throws STeaException {
 
-        SObjSymbol myFunctionName = SObjSymbol.addSymbol("my-function");
-        SContext   toplevel       = new SContext();
-        SModule    myModule       = new MyTestModuleFailure02();
+        SObjSymbol     myFunctionName = SObjSymbol.addSymbol("my-function");
+        TeaEnvironment environment    = new TeaEnvironmentImpl();
+        SModule        myModule       = new MyTestModuleFailure02();
 
-        SModuleUtils.addModule(toplevel, myModule);
+        SModuleUtils.addModule(environment, myModule);
 
         fail("SModule.addModule(...) failed to fail!");
     }
@@ -162,11 +164,11 @@ public final class SModuleUtilsTest
     public void addModuleWithTeaFunctionAnnotationFailure03()
         throws STeaException {
 
-        SObjSymbol myFunctionName = SObjSymbol.addSymbol("my-function");
-        SContext   toplevel       = new SContext();
-        SModule    myModule       = new MyTestModuleFailure03();
+        SObjSymbol     myFunctionName = SObjSymbol.addSymbol("my-function");
+        TeaEnvironment environment    = new TeaEnvironmentImpl();
+        SModule        myModule       = new MyTestModuleFailure03();
 
-        SModuleUtils.addModule(toplevel, myModule);
+        SModuleUtils.addModule(environment, myModule);
 
         fail("SModule.addModule(...) failed to fail!");
     }
@@ -199,19 +201,20 @@ public final class SModuleUtilsTest
     public void addModuleWithTeaFunctionAnnotationTeaException()
         throws STeaException {
 
-        SObjSymbol myFunctionName = SObjSymbol.addSymbol("my-function");
-        SContext   toplevel       = new SContext();
-        SModule    myModule       = new MyTestModuleTeaException();
+        SObjSymbol     myFunctionName = SObjSymbol.addSymbol("my-function");
+        TeaEnvironment environment    = new TeaEnvironmentImpl();
+        SContext       context        = environment.getGlobalContext();
+        SModule        myModule       = new MyTestModuleTeaException();
 
-        SModuleUtils.addModule(toplevel, myModule);
+        SModuleUtils.addModule(environment, myModule);
 
-        SObjFunction myFunction = (SObjFunction)toplevel.getVar(myFunctionName);
+        SObjFunction myFunction = (SObjFunction)context.getVar(myFunctionName);
 
         assertNotNull(myFunction);
 
         Object[] myArgs   = { myFunctionName, "Whatever" };
         String   myResult =
-            (String)myFunction.exec(myFunction, toplevel, myArgs);
+            (String)myFunction.exec(myFunction, context, myArgs);
 
         fail("Invocation of function should have generated Tea exception");
     }
@@ -247,19 +250,20 @@ public final class SModuleUtilsTest
     public void addModuleWithTeaFunctionAnnotationJavaException()
         throws STeaException {
 
-        SObjSymbol myFunctionName = SObjSymbol.addSymbol("my-function");
-        SContext   toplevel       = new SContext();
-        SModule    myModule       = new MyTestModuleJavaException();
+        SObjSymbol     myFunctionName = SObjSymbol.addSymbol("my-function");
+        TeaEnvironment environment    = new TeaEnvironmentImpl();
+        SContext       context        = environment.getGlobalContext();
+        SModule        myModule       = new MyTestModuleJavaException();
 
-        SModuleUtils.addModule(toplevel, myModule);
+        SModuleUtils.addModule(environment, myModule);
 
-        SObjFunction myFunction = (SObjFunction)toplevel.getVar(myFunctionName);
+        SObjFunction myFunction = (SObjFunction)context.getVar(myFunctionName);
 
         assertNotNull(myFunction);
 
         Object[] myArgs   = { myFunctionName, "Whatever" };
         String   myResult =
-            (String)myFunction.exec(myFunction, toplevel, myArgs);
+            (String)myFunction.exec(myFunction, context, myArgs);
 
         fail("Invocation of function should have generated Tea exception");
     }
@@ -294,7 +298,7 @@ public final class SModuleUtilsTest
         implements SModule {
 
         @Override
-        public void init(SContext context) {}
+        public void init(final TeaEnvironment environment) {}
 
         @Override
         public void end() {}

@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2005-2012 PDMFC, All Rights Reserved.
+ * Copyright (c) 2005-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -20,6 +20,7 @@ import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaEnvironment;
 import com.pdmfc.tea.runtime.TeaFunction;
 
 
@@ -229,10 +230,10 @@ public final class SModuleReflect
  **************************************************************************/
 
     @Override
-    public void init(final SContext context)
+    public void init(final TeaEnvironment environment)
         throws STeaException {
 
-        context.newVar("java-new-proxy", new SFunctionNewProxy());
+        environment.addGlobalVar("java-new-proxy", new SFunctionNewProxy());
 
         // The other functions provided by this module are implemented
         // as methods of this with class with the TeaFunction

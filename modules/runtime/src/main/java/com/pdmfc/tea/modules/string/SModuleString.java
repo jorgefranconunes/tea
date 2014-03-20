@@ -26,6 +26,7 @@ import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypeException;
 import com.pdmfc.tea.runtime.STypes;
 import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.runtime.TeaEnvironment;
 import com.pdmfc.tea.util.SFormater;
 
 
@@ -94,7 +95,7 @@ public final class SModuleString
  **************************************************************************/
 
     @Override
-    public void init(final SContext context)
+    public void init(final TeaEnvironment environment)
         throws STeaException {
 
         // Nothing to do. The functions provided by this module are

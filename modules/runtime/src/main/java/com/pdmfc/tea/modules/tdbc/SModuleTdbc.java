@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2012 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -17,6 +17,7 @@ import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjNull;
 import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaEnvironment;
 import com.pdmfc.tea.runtime.TeaFunction;
 
 
@@ -79,7 +80,7 @@ public final class SModuleTdbc
  **************************************************************************/
 
     @Override
-    public void init(final SContext context)
+    public void init(final TeaEnvironment environment)
         throws STeaException {
 
         STosClass rSetClass =
@@ -93,11 +94,11 @@ public final class SModuleTdbc
 
         _connClass = new SConnectionClass();
 
-        context.newVar(rSetClass.getName(), rSetClass);
-        context.newVar(statClass.getName(), statClass);
-        context.newVar(prepStatC.getName(), prepStatC);
-        context.newVar(callStatC.getName(), callStatC);
-        context.newVar(_connClass.getName(), _connClass);
+        environment.addGlobalVar(rSetClass.getName(), rSetClass);
+        environment.addGlobalVar(statClass.getName(), statClass);
+        environment.addGlobalVar(prepStatC.getName(), prepStatC);
+        environment.addGlobalVar(callStatC.getName(), callStatC);
+        environment.addGlobalVar(_connClass.getName(), _connClass);
 
         // The other functions provided by this module are implemented
         // as methods of this class with the TeaFunction annotation.
