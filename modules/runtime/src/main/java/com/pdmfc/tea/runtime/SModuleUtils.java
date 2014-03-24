@@ -412,7 +412,7 @@ public final class SModuleUtils
 
         module.stop();
 
-        stopModules(index+1, context, modulesHead.cdr());
+        stopModules(index+1, modulesHead.cdr());
     }
 
 
@@ -464,7 +464,7 @@ public final class SModuleUtils
             throw new SRuntimeException(msg, fmtArgs);
         }
 
-        endModules(index+1, context, modulesHead.cdr());
+        endModules(index+1, modulesHead.cdr());
 
         SModule module = (SModule)car;
 
