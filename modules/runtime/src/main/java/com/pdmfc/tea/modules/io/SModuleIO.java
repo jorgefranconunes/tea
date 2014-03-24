@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2013 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -1058,7 +1058,7 @@ public final class SModuleIO
             if ( elem == null ) {
                 head = node;
             } else {
-                elem._cdr = node;
+                elem.setCdr(node);
             }
             elem = node;
         }

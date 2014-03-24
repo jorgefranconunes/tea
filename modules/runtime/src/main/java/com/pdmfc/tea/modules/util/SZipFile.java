@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -294,7 +294,7 @@ public final class SZipFile
             if ( node == null ) {
                 head = newNode;
             } else {
-                node._cdr = newNode;
+                node.setCdr(newNode);
             }
             node = newNode;
         }

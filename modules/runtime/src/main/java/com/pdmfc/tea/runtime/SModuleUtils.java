@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2010-2012 PDMFC, All Rights Reserved.
+ * Copyright (c) 2010-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -327,12 +327,12 @@ public final class SModuleUtils
                                      final SObjPair modulesHead)
         throws STeaException {
 
-        Object car = modulesHead._car;
-
-        if ( car == null ) {
+        if ( modulesHead.isEmpty() )  {
             // We reached the end of the list.
             return;
         }
+
+        Object car = modulesHead.car();
 
         if ( !(car instanceof SModule) ) {
             String msg = "Element {0} of {1} should be an SModule, not a {2}";
@@ -341,7 +341,7 @@ public final class SModuleUtils
             throw new SRuntimeException(msg, fmtArgs);
         }
 
-        startModules(index+1, context, modulesHead.nextPair());
+        startModules(index+1, context, modulesHead.cdr());
 
         SModule module = (SModule)car;
 
@@ -388,12 +388,12 @@ public final class SModuleUtils
                                     final SObjPair modulesHead)
         throws STeaException {
 
-        Object car = modulesHead._car;
-
-        if ( car == null ) {
+        if ( modulesHead.isEmpty() ) {
             // We reached the end of the list.
             return;
         }
+
+        Object car = modulesHead.car();
 
         if ( !(car instanceof SModule) ) {
             String msg = "Element {0} of {1} should be an SModule, not a {2}";
@@ -407,7 +407,7 @@ public final class SModuleUtils
 
         module.stop();
 
-        stopModules(index+1, context, modulesHead.nextPair());
+        stopModules(index+1, context, modulesHead.cdr());
     }
 
 
@@ -445,12 +445,12 @@ public final class SModuleUtils
                                    final SObjPair modulesHead)
         throws STeaException {
 
-        Object car = modulesHead._car;
-
-        if ( car == null ) {
+        if ( modulesHead.isEmpty() ) {
             // We reached the end of the list.
             return;
         }
+
+        Object car = modulesHead.car();
 
         if ( !(car instanceof SModule) ) {
             String msg = "Element {0} of {1} should be an SModule, not a {2}";
@@ -459,7 +459,7 @@ public final class SModuleUtils
             throw new SRuntimeException(msg, fmtArgs);
         }
 
-        endModules(index+1, context, modulesHead.nextPair());
+        endModules(index+1, context, modulesHead.cdr());
 
         SModule module = (SModule)car;
 

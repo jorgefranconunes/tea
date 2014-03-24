@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2013 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -9,7 +9,7 @@ package com.pdmfc.tea.runtime;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.SEmptyListException;
 
 
 
@@ -30,10 +30,10 @@ public final class SObjPair
 
 
     /** The left hand side object of the pair. */
-    public Object _car = null;
+    private Object _car = null;
 
     /** The right hand side object of the pair. */
-    public Object _cdr = null;
+    private SObjPair _cdr = null;
 
 
 
@@ -64,8 +64,8 @@ public final class SObjPair
  *
  **************************************************************************/
 
-    public SObjPair(final Object car,
-                    final Object cdr) {
+    public SObjPair(final Object   car,
+                    final SObjPair cdr) {
 
         _car = car;
         _cdr = cdr;
@@ -95,32 +95,94 @@ public final class SObjPair
 
 /**************************************************************************
  *
+ * 
+ *
+ **************************************************************************/
+
+    public boolean isEmpty() {
+
+        boolean result = (_car==null);
+
+        return result;
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    public Object car()
+        throws SEmptyListException {
+
+        if ( _car == null ) {
+            throw new SEmptyListException();
+        }
+
+        return _car;
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    public SObjPair setCar(final Object car ) {
+
+        _car = car;
+
+        return this;
+    }
+
+
+
+
+
+/**************************************************************************
+ *
  * Fetches the pair object to the left of this one.
  *
  * @return The pair object following this one.
  *
- * @exception SRuntimeException Thrown if this pair has no following
- * one, or if the object on the left of this pair is not itself a
- * pair.
+ * @exception SEmptyListException Thrown if this pair has no following
+ * one.
  *
  **************************************************************************/
 
-    public SObjPair nextPair()
-        throws SRuntimeException {
+    public SObjPair cdr()
+        throws SEmptyListException {
 
         if ( _cdr == null ) {
-            String msg = "No such element";
-            throw new SRuntimeException(msg);
+            throw new SEmptyListException();
         }
 
-        if ( !(_cdr instanceof SObjPair) ) {
-            String msg = "Improperly formed list";
-            throw new SRuntimeException(msg);
-        }
+        return _cdr;
+    }
 
-        SObjPair result = (SObjPair)_cdr;
 
-        return result;
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    public SObjPair setCdr(final SObjPair cdr) {
+
+        _cdr = cdr;
+
+        return this;
     }
 
 
@@ -133,24 +195,16 @@ public final class SObjPair
  *
  * @return The number of nodes in the list, starting with this node.
  *
- * @exception SRuntimeException Thrown if the list starting with this
- * node is not properly formed.
- *
  **************************************************************************/
 
-    public int length()
-        throws SRuntimeException {
+    public int length() {
 
         int      numNodes = 0;
         SObjPair node     = this;
 
         while ( node._car != null ) {
             numNodes++;
-            try {
-                node = (SObjPair)node._cdr;
-            } catch (ClassCastException e) {
-                throw new SRuntimeException("Improperly formed list");
-            }
+            node = node._cdr;
         }
         
         return numNodes;
@@ -243,11 +297,7 @@ public final class SObjPair
             }
             Object element = _node._car;
 
-            try {
-                _node = (SObjPair)_node._cdr;
-            } catch (ClassCastException e) {
-                throw new NoSuchElementException("Improperly formed list");
-            }
+            _node = _node._cdr;
 
             return element;
         }

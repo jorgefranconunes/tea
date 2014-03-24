@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2012 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -547,12 +547,12 @@ public final class SModuleRegexp
             if ( head == null ) {
                 head = node;
             } else {
-                tail._cdr = node;
+                tail.setCdr(node);
             }
             tail = node;
         }
         if ( tail != null ) {
-            tail._cdr = SObjPair.emptyList();
+            tail.setCdr(SObjPair.emptyList());
         } else {
             head = SObjPair.emptyList();
         }
@@ -590,11 +590,11 @@ public final class SModuleRegexp
          if ( head == null ) {
             head = node;
          } else {
-            tail._cdr = node;
+             tail.setCdr(node);
          }
          tail = node;
       }
-      tail._cdr = SObjPair.emptyList();
+      tail.setCdr(SObjPair.emptyList());
 
       return head;
    }
@@ -687,7 +687,7 @@ public final class SModuleRegexp
             if ( head == null ) {
                 head = node;
             } else {
-                tail._cdr = node;
+                tail.setCdr(node);
             }
             tail = node;
             index = match.end();
@@ -699,10 +699,10 @@ public final class SModuleRegexp
         if ( head == null ) {
             head = node;
         } else {
-            tail._cdr = node;
+            tail.setCdr(node);
         }
         tail = node;
-        tail._cdr = SObjPair.emptyList();
+        tail.setCdr(SObjPair.emptyList());
 
         return head;
     }

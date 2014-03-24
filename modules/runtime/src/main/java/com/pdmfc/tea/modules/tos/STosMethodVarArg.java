@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2013 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -125,7 +125,7 @@ public final class STosMethodVarArg
             if ( element == null ) {
                 head = node;
             } else {
-                element._cdr = node;
+                element.setCdr(node);
             }
             element = node;
         }

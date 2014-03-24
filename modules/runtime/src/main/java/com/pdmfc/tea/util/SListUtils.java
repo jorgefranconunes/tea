@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2010-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2010-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -143,7 +143,7 @@ public final class SListUtils
             if ( elem == null ) {
                 head = node;
             } else {
-                elem._cdr = node;
+                elem.setCdr(node);
             }
             elem = node;
         }

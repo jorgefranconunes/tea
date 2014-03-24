@@ -98,7 +98,7 @@ tunit-testsuite break-test {
     define function-with-break args {
         
         apply break $args
-        tunit-fail "Should not to to here..."
+        tunit-fail "Should not be here..."
     }
     
     
@@ -709,6 +709,124 @@ tunit-testsuite exit-test {
         tunit-assert [not $status]
         tunit-assert-equals $expectedValue $result
         tunit-assert-null $myVar
+    }
+    
+    
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite foreach-test {
+    
+    
+    tunit-test-error tooFewArgs {
+        
+        foreach
+    }
+    
+    
+    tunit-test-error tooManyArgs {
+        
+        foreach myVar ( 1 ) {} 3
+    }
+    
+    
+    tunit-test hideVar {
+        
+        define myVar 314
+        
+        foreach myVar ( 123 ) {
+            tunit-assert-equals 123 $myVar
+        }
+        
+        tunit-assert-equals $myVar 314
+    }
+    
+    
+    tunit-test allOk {
+        
+        define myList ( 1 2 3 one two three)
+        define head   $myList
+        
+        foreach myVar $myList {
+            define item [car $head]
+            set! head [cdr $head]
+            
+            tunit-assert-equals $item $myVar
+        }
+    }
+    
+    
+    tunit-test withBreak {
+        
+        define myList   ( 1 2 3 4 5 6 7 8 9 10 )
+        define maxCount 3
+        define counterA 0
+        define counterB 0 
+        
+        foreach myVar $myList {
+            ++ counterA
+            if { == $counterB $maxCount } {
+                break
+            }
+            ++ counterB
+        }
+        
+        tunit-assert-equals $maxCount $counterB
+        tunit-assert-equals [+ 1 $maxCount] $counterA
+    }
+    
+    
+    tunit-test withContinue {
+        
+        define myList   ( 1 2 3 4 5 6 7 8 9 10 )
+        define maxCount 3
+        define counterA 0
+        define counterB 0 
+        
+        foreach myVar $myList {
+            ++ counterA
+            if { == $counterB $maxCount } {
+                continue
+            }
+            ++ counterB
+        }
+        
+        tunit-assert-equals $maxCount $counterB
+        tunit-assert-equals [length $myList] $counterA
+    }
+    
+    
+    tunit-test withLists {
+        
+        testListSize ()
+        testListSize ( 1 )
+        testListSize ( 1 2 )
+        testListSize ( 1 2 3 )
+        testListSize ( 1 2 3 4 )
+        testListSize ( 1 2 3 4 "five" six seven )
+    }
+    
+    
+    define testListSize ( myList ) {
+        
+        define listSize [length $myList]
+        define counter  0
+        
+        foreach myVar $myList {
+            tunit-assert-equals [nth $myList $counter] $myVar
+            ++ counter
+        }
+        
+        tunit-assert-equals $listSize $counter
     }
     
     

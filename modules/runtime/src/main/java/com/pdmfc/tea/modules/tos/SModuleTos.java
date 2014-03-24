@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2013 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -236,15 +236,15 @@ public final class SModuleTos
         SList<SObjSymbol> memberNames =
             new SList<SObjSymbol>();
 
-        for ( SObjPair e=memberList; e._car!=null; e=(SObjPair)e._cdr ) {
+        for ( SObjPair e=memberList; !e.isEmpty(); e=e.cdr() ) {
             try {
-                SObjSymbol memberName = (SObjSymbol)e._car;
+                SObjSymbol memberName = (SObjSymbol)e.car();
                 memberNames.prepend(memberName);
             } catch ( ClassCastException exception ) {
                 String msg = "found a {0} when expecting a Symbol";
                 throw new SRuntimeException(args,
                                             msg,
-                                            STypes.getTypeName(e._car));
+                                            STypes.getTypeName(e.car()));
             }
         }
 
@@ -337,15 +337,15 @@ public final class SModuleTos
             throw new SNumArgException(args, "[base-class] list-of-members");
         }
 
-        for ( SObjPair e=memberList; e._car!=null; e=(SObjPair)e._cdr ) {
+        for ( SObjPair e=memberList; !e.isEmpty(); e=e.cdr() ) {
             try {
-                SObjSymbol memberName = (SObjSymbol)e._car;
+                SObjSymbol memberName = (SObjSymbol)e.car();
                 memberNames.prepend(memberName);
             } catch ( ClassCastException exception ) {
                 String msg = "found a {0} when expecting a Symbol";
                 throw new SRuntimeException(args,
                                             msg,
-                                            STypes.getTypeName(e._car));
+                                            STypes.getTypeName(e.car()));
             }
         }
 

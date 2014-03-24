@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -31,7 +31,7 @@ public final class SEmptyListException
  *
  **************************************************************************/
 
-    private SEmptyListException() {
+    public SEmptyListException() {
 
         // Nothing to do.
     }

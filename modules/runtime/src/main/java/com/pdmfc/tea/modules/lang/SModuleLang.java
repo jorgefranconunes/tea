@@ -1358,26 +1358,27 @@ public final class SModuleLang
                                          final Object[]     args)
         throws STeaException {
 
-        if ( args.length != 4 ) {
-            throw new SNumArgException(args, "var list block");
-        }
+        SArgs.checkCount(args, 4, "var list block");
 
         SObjSymbol symbol     = SArgs.getSymbol(args, 1);
         SObjPair   list       = SArgs.getPair(args, 2);
         SObjBlock  block      = SArgs.getBlock(args, 3);
-        SContext   newContext = block.getContext().newChild();
-        SObjVar    var        = newContext.newVar(symbol, SObjNull.NULL);
         Object     result     = SObjNull.NULL;
 
-        for ( Object element : list ) {
-            var.set(element);
-            try {
-                result = block.exec(newContext);
-            } catch ( SBreakException e1 ) {
-                result  = e1.getBreakValue();
-                break;
-            } catch ( SContinueException e2 ) {
-                // Just continue for the next element.
+        if ( !list.isEmpty() ) {
+            SContext   newContext = block.getContext().newChild();
+            SObjVar    var        = newContext.newVar(symbol, SObjNull.NULL);
+
+            for ( Object element : list ) {
+                var.set(element);
+                try {
+                    result = block.exec(newContext);
+                } catch ( SBreakException e1 ) {
+                    result  = e1.getBreakValue();
+                    break;
+                } catch ( SContinueException e2 ) {
+                    // Just continue for the next element.
+                }
             }
         }
 
@@ -2624,7 +2625,7 @@ public final class SModuleLang
             if ( resElem == null ) {
                 resHead = node;
             } else {
-                resElem._cdr = node;
+                resElem.setCdr(node);
             }
             resElem = node;
         }
@@ -2785,8 +2786,8 @@ public final class SModuleLang
             fillArgs(funcArgs, argList);
             Object   funcResult = proc.exec(proc, context, funcArgs);
             node = new SObjPair(funcResult ,emptyList);
-            resultTail._cdr = node;
-            resultTail      = node;
+            resultTail.setCdr(node);
+            resultTail = node;
         }
 
         return resultHead;

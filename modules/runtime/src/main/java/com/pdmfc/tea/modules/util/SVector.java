@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2013 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -680,7 +680,7 @@ public final class SVector
             if ( node == null ) {
                 head = newNode;
             } else {
-                node._cdr = newNode;
+                node.setCdr(newNode);
             }
             node = newNode;
         }

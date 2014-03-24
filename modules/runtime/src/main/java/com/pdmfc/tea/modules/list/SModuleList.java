@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2012 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -194,7 +194,10 @@ public final class SModuleList
             throw new SNumArgException(args, "obj1 obj2");
         }
 
-        return new SObjPair(args[1], args[2]);
+        Object   car = args[1];
+        SObjPair cdr = SArgs.getPair(args, 2);
+
+        return new SObjPair(car, cdr);
     }
 
 
@@ -257,11 +260,11 @@ public final class SModuleList
 
         SObjPair pair = SArgs.getPair(args, 1);
 
-        if ( pair._car == null ) {
+        if ( pair.isEmpty() ) {
             throw new SEmptyListException(args, 1);
         }
 
-        return pair._car;
+        return pair.car();
     }
 
 
@@ -324,11 +327,11 @@ public final class SModuleList
 
         SObjPair pair = SArgs.getPair(args, 1);
         
-        if ( pair._car == null ) {
+        if ( pair.isEmpty() ) {
             throw new SEmptyListException(args, 1);
         }
 
-        return pair._cdr;
+        return pair.cdr();
     }
 
 
@@ -388,7 +391,7 @@ public final class SModuleList
 
         SObjPair pair = SArgs.getPair(args, 1);
 
-        return (pair._car==null) ? Boolean.TRUE : Boolean.FALSE;
+        return pair.isEmpty() ? Boolean.TRUE : Boolean.FALSE;
     }
 
 
@@ -448,7 +451,7 @@ public final class SModuleList
 
         SObjPair pair = SArgs.getPair(args, 1);
 
-        return (pair._car==null) ? Boolean.FALSE : Boolean.TRUE;
+        return pair.isEmpty() ? Boolean.FALSE : Boolean.TRUE;
     }
 
 
@@ -512,7 +515,7 @@ public final class SModuleList
             throw new SNumArgException(args, "pair obj");
         }
 
-        SArgs.getPair(args, 1)._car = args[2];
+        SArgs.getPair(args, 1).setCar(args[2]);
 
         return args[2];
     }
@@ -578,7 +581,7 @@ public final class SModuleList
             throw new SNumArgException(args, "pair obj");
         }
 
-        SArgs.getPair(args, 1)._cdr = args[2];
+        SArgs.getPair(args, 1).setCdr(SArgs.getPair(args, 2));
 
         return args[2];
     }
@@ -644,7 +647,7 @@ public final class SModuleList
             if ( element == null ) {
                 head = node;
             } else {
-                element._cdr = node;
+                element.setCdr(node);
             }
             element = node;
         }
@@ -871,17 +874,12 @@ public final class SModuleList
         SObjPair head = SArgs.getPair(args, 2);
         SObjPair node = head;
 
-        while ( node._car != null ) {
-            try {
-                node = (SObjPair)node._cdr;
-            } catch (ClassCastException e) {
-                String msg="invalid list. Each cdr should be a pair, not a {0}";
-                String invalidTypeName = STypes.getTypeName(node._cdr);
-                throw new SRuntimeException(args,msg, invalidTypeName);
-            }
+        while ( !node.isEmpty() ) {
+            node = node.cdr();
         }
-        node._car = obj;
-        node._cdr = SObjPair.emptyList();
+
+        node.setCar(obj);
+        node.setCdr(SObjPair.emptyList());
 
         return head;
     }
