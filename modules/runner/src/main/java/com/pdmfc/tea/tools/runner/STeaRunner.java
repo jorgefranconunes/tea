@@ -1,12 +1,14 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2012 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
 package com.pdmfc.tea.tools.runner;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.UnsupportedCharsetException;
 
 import com.pdmfc.tea.STeaException;
 import com.pdmfc.tea.compiler.SCode;
@@ -156,13 +158,15 @@ public final class STeaRunner
         throws IOException,
                STeaException {
 
-        int              retVal = 0;
-        SCode            code   = compileScript(args);
-        TeaRuntimeConfig config =
+        int              retVal     = 0;
+        String           scriptPath = args.getScriptPath();
+        Charset          charset    = findCharset(args.getEncoding());
+        SCode            code       = compileScript(scriptPath, charset);
+        TeaRuntimeConfig config     =
             TeaRuntimeConfig.Builder.start()
-            .setArgv0(args.getScriptPath())
+            .setArgv0(scriptPath)
             .setArgv(args.getScriptCliArgs())
-            .setSourceEncoding(args.getEncoding())
+            .setSourceCharset(charset)
             .setImportLocationList(args.getLibraryList())
             .build();
 
@@ -195,22 +199,49 @@ public final class STeaRunner
  *
  **************************************************************************/
 
-    private static SCode compileScript(final STeaRunnerArgs args)
+    private static SCode compileScript(final String  scriptPath,
+                                       final Charset charset)
         throws IOException,
                STeaException {
 
-        String    scriptLocation = args.getScriptPath();
-        String    encoding       = args.getEncoding();
         SCompiler compiler       = new SCompiler();
         SCode     code           = null;
 
-        if ( scriptLocation == null ) {
-            code = compiler.compile(System.in, encoding, null);
+        if ( scriptPath == null ) {
+            code = compiler.compile(System.in, charset, null);
         } else {
-            code = compiler.compile(scriptLocation, encoding, scriptLocation);
+            code = compiler.compile(scriptPath, charset, scriptPath);
         }
 
         return code;
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    private static Charset findCharset(final String charsetName)
+        throws STeaException {
+
+        Charset charset = null;
+
+        if ( charsetName != null ) {
+            try {
+                charset = Charset.forName(charsetName);
+            } catch ( UnsupportedCharsetException e ) {
+                String   msg     = "Unsupported charset \"{0}\"";
+                Object[] fmtArgs = { charsetName };
+                throw new STeaException(msg, fmtArgs);
+            }
+        }
+
+        return charset;
     }
 
 

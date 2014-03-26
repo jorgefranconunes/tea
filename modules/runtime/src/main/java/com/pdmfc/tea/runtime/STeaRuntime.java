@@ -1,12 +1,13 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2012 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
 package com.pdmfc.tea.runtime;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +18,6 @@ import com.pdmfc.tea.compiler.SCompiler;
 import com.pdmfc.tea.modules.SModule;
 import com.pdmfc.tea.runtime.SArgvUtils;
 import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SEncodingUtils;
 import com.pdmfc.tea.runtime.SLibVarUtils;
 import com.pdmfc.tea.runtime.SModuleUtils;
 import com.pdmfc.tea.runtime.TeaRuntimeConfig;
@@ -99,8 +99,8 @@ public final class STeaRuntime
 
     public STeaRuntime(final TeaRuntimeConfig config) {
 
-        _config = config;
-        _environment = new TeaEnvironmentImpl();
+        _config      = config;
+        _environment = new TeaEnvironmentImpl(config.getSourceCharset());
 
         for ( String moduleClassName : CORE_MODULES ) {
             _modules.add(moduleClassName);
@@ -332,14 +332,12 @@ public final class STeaRuntime
 
         String       argv0           = _config.getArgv0();
         String[]     argv            = _config.getArgv();
-        String       sourceEncoding  = _config.getSourceEncoding();
         List<String> importLocations = _config.getImportLocationList();
 
         SContext globalContext = _environment.getGlobalContext();
 
         SArgvUtils.setArgv(globalContext, argv0, argv);
         setupLibVar(importLocations);
-        SEncodingUtils.setSourceEncoding(globalContext, sourceEncoding);
         setupModules(_modules);
     }
 
@@ -407,9 +405,9 @@ public final class STeaRuntime
     private void runInitScripts()
         throws STeaException {
 
-        String       sourceEncoding = _config.getSourceEncoding();
-        List<String> dirList        = _allImportLocations;
-        SCompiler    compiler       = new SCompiler();
+        Charset      sourceCharset = _config.getSourceCharset();
+        List<String> dirList       = _allImportLocations;
+        SCompiler    compiler      = new SCompiler();
 
         for ( String dirPath : dirList ) {
             String   path          = INIT_FILE;
@@ -417,7 +415,7 @@ public final class STeaRuntime
             SCode    code          = null;
             
             try {
-                code = compiler.compile(dirPath, path, sourceEncoding, path);
+                code = compiler.compile(dirPath, path, sourceCharset, path);
                 code.exec(globalContext);
             } catch ( IOException e ) {
                 // The given path does not exist or is not

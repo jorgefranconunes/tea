@@ -45,7 +45,7 @@ public final class SModuleUtilsTest
         throws STeaException {
 
         SObjSymbol     myFunctionName = SObjSymbol.addSymbol("my-function");
-        TeaEnvironment environment    = new TeaEnvironmentImpl();
+        TeaEnvironment environment    = buildTeaEnvironment();
         SContext       context        = environment.getGlobalContext();
         SModule        myModule       = new MyTestModule();
 
@@ -93,7 +93,7 @@ public final class SModuleUtilsTest
         throws STeaException {
 
         SObjSymbol     myFunctionName = SObjSymbol.addSymbol("my-function");
-        TeaEnvironment environment    = new TeaEnvironmentImpl();
+        TeaEnvironment environment    = buildTeaEnvironment();
         SModule        myModule       = new MyTestModuleFailure01();
 
         SModuleUtils.addModule(environment, myModule);
@@ -128,7 +128,7 @@ public final class SModuleUtilsTest
         throws STeaException {
 
         SObjSymbol     myFunctionName = SObjSymbol.addSymbol("my-function");
-        TeaEnvironment environment    = new TeaEnvironmentImpl();
+        TeaEnvironment environment    = buildTeaEnvironment();
         SModule        myModule       = new MyTestModuleFailure02();
 
         SModuleUtils.addModule(environment, myModule);
@@ -165,7 +165,7 @@ public final class SModuleUtilsTest
         throws STeaException {
 
         SObjSymbol     myFunctionName = SObjSymbol.addSymbol("my-function");
-        TeaEnvironment environment    = new TeaEnvironmentImpl();
+        TeaEnvironment environment    = buildTeaEnvironment();
         SModule        myModule       = new MyTestModuleFailure03();
 
         SModuleUtils.addModule(environment, myModule);
@@ -202,7 +202,7 @@ public final class SModuleUtilsTest
         throws STeaException {
 
         SObjSymbol     myFunctionName = SObjSymbol.addSymbol("my-function");
-        TeaEnvironment environment    = new TeaEnvironmentImpl();
+        TeaEnvironment environment    = buildTeaEnvironment();
         SContext       context        = environment.getGlobalContext();
         SModule        myModule       = new MyTestModuleTeaException();
 
@@ -251,7 +251,7 @@ public final class SModuleUtilsTest
         throws STeaException {
 
         SObjSymbol     myFunctionName = SObjSymbol.addSymbol("my-function");
-        TeaEnvironment environment    = new TeaEnvironmentImpl();
+        TeaEnvironment environment    = buildTeaEnvironment();
         SContext       context        = environment.getGlobalContext();
         SModule        myModule       = new MyTestModuleJavaException();
 
@@ -281,6 +281,23 @@ public final class SModuleUtilsTest
 
             throw new IllegalStateException("Oops...");
         }
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    private TeaEnvironment buildTeaEnvironment() {
+
+        TeaEnvironment environment = new TeaEnvironmentImpl(null);
+
+        return environment;
     }
 
 

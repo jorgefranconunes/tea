@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringWriter;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -29,7 +30,6 @@ import com.pdmfc.tea.runtime.SArgs;
 import com.pdmfc.tea.runtime.SBreakException;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SContinueException;
-import com.pdmfc.tea.runtime.SEncodingUtils;
 import com.pdmfc.tea.runtime.SExitException;
 import com.pdmfc.tea.runtime.SLambdaFunction;
 import com.pdmfc.tea.runtime.SLambdaFunctionVarArg;
@@ -137,16 +137,15 @@ public final class SModuleLang
     public void init(final TeaEnvironment environment)
         throws STeaException {
 
-        _environment = environment;
-
-        _environment.addGlobalVar("true",  Boolean.TRUE);
-        _environment.addGlobalVar("false", Boolean.FALSE);
-        _environment.addGlobalVar("null",  SObjNull.NULL);
-        _environment.addGlobalVar(TEA_VERSION_VAR,
+        environment.addGlobalVar("true",  Boolean.TRUE);
+        environment.addGlobalVar("false", Boolean.FALSE);
+        environment.addGlobalVar("null",  SObjNull.NULL);
+        environment.addGlobalVar(TEA_VERSION_VAR,
                                   SConfigInfo.getProperty(PROP_TEA_VERSION));
 
-        _environment.addGlobalVar("import",
-                                  new SFunctionImport(_environment));
+        environment.addGlobalVar("import", new SFunctionImport(environment));
+
+        _environment = environment;
 
         // The other functions provided by this module are implemented
         // as methods of this class with the TeaFunction annotation.
@@ -3226,14 +3225,14 @@ public final class SModuleLang
         }
         
         Object arg      = args[1];
-        String encoding = SEncodingUtils.getSourceEncoding(context);
+        Charset charset = _environment.getSourceCharset();
         SCode  program  = null;
 
         if ( arg instanceof String ) {
             String fileName = (String)arg;
             
             try {
-                program  = _compiler.compile(fileName, encoding, fileName);
+                program  = _compiler.compile(fileName, charset, fileName);
             } catch ( IOException e ) {
                 String   msg     = "Failed to read \"{0}\" - {1}";
                 Object[] fmtArgs = { fileName, e.getMessage() };

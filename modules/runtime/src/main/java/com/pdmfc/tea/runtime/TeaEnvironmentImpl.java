@@ -6,6 +6,8 @@
 
 package com.pdmfc.tea.runtime;
 
+import java.nio.charset.Charset;
+
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.TeaEnvironment;
@@ -29,6 +31,7 @@ final class TeaEnvironmentImpl
 
 
     private SContext _globalContext = null;
+    private Charset  _sourceCharset = null;
 
 
 
@@ -40,9 +43,14 @@ final class TeaEnvironmentImpl
  *
  **************************************************************************/
 
-    public TeaEnvironmentImpl() {
+    public TeaEnvironmentImpl(final Charset sourceCharset) {
 
         _globalContext = new SContext();
+        _sourceCharset = sourceCharset;
+
+        if ( _sourceCharset == null ) {
+            _sourceCharset = Charset.defaultCharset();
+        }
     }
 
 
@@ -72,13 +80,30 @@ final class TeaEnvironmentImpl
 
 /**************************************************************************
  *
- * 
+ * {@inheritDoc}
  *
  **************************************************************************/
 
+    @Override
     public SContext getGlobalContext() {
 
         return _globalContext;
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * {@inheritDoc}
+ *
+ **************************************************************************/
+
+    @Override
+    public Charset getSourceCharset() {
+
+        return _sourceCharset;
     }
 
 

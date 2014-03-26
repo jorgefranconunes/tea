@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -8,6 +8,7 @@ package com.pdmfc.tea.modules.lang;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -18,7 +19,6 @@ import com.pdmfc.tea.compiler.SCode;
 import com.pdmfc.tea.compiler.SCompiler;
 import com.pdmfc.tea.runtime.SArgs;
 import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SEncodingUtils;
 import com.pdmfc.tea.runtime.SNoSuchVarException;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SObjFunction;
@@ -116,10 +116,10 @@ final class SFunctionImport
     public static final SObjSymbol LIB_VAR   =
         SObjSymbol.addSymbol(SConfigInfo.getProperty(PROP_LIB_VAR));
 
-    // The parent context for the context where the code in the
-    // imported files will be executed. Each imported file is executed
-    // in a separate context.
-    private SContext _globalContext = null;
+    // The environment where the code in the imported files will be
+    // executed. Each imported file will executed in a separate
+    // context descending from the global context.
+    private TeaEnvironment _environment = null;
 
     // Keys are import paths (String). Values are ImportItem
     // instances.
@@ -143,7 +143,7 @@ final class SFunctionImport
 
     public SFunctionImport(final TeaEnvironment environment) {
 
-        _globalContext = environment.getGlobalContext();
+        _environment = environment;
     }
 
 
@@ -230,8 +230,7 @@ final class SFunctionImport
                 continue;
             }
 
-            ImportItem item     =
-                new ImportItem(_globalContext, baseDir, fileName);
+            ImportItem item     = new ImportItem(baseDir, fileName);
             String     fullPath = item.getFullPath();
             ImportItem prevItem = _itemsByFullPath.get(fullPath);
 
@@ -279,14 +278,13 @@ final class SFunctionImport
  *
  **************************************************************************/
 
-    private static final class ImportItem
+    private final class ImportItem
         extends Object {
 
 
 
 
 
-        private SContext _globalContext = null;
         private String  _importPath     = null;
         private String  _fullPath       = null;
         private long    _lastImportTime = 0;
@@ -305,11 +303,9 @@ final class SFunctionImport
  *
  **************************************************************************/
 
-        public ImportItem(final SContext rootContext,
-                          final String   baseDir,
+        public ImportItem(final String   baseDir,
                           final String   importPath) {
 
-            _globalContext = rootContext;
             _importPath  = importPath;
             _fullPath    = baseDir + "/" + importPath;
             _isFile      = 
@@ -351,14 +347,13 @@ final class SFunctionImport
         public Object tryToPerformImport()
             throws STeaException {
 
-            Object result         = null;
-            String path           = _fullPath;
-            String sourceEncoding =
-                SEncodingUtils.getSourceEncoding(_globalContext);
-            SCode  code           = null;
+            Object  result        = null;
+            String  path          = _fullPath;
+            Charset sourceCharset = _environment.getSourceCharset();
+            SCode   code          = null;
             
             try {
-                code = _compiler.compile(path, sourceEncoding, _importPath);
+                code = _compiler.compile(path, sourceCharset, _importPath);
             } catch (IOException e) {
                 // The path does not exist or is not accessible.
             }
@@ -373,7 +368,8 @@ final class SFunctionImport
                     ? _file.lastModified()
                     : System.currentTimeMillis();
 
-                SContext execContext = _globalContext.newChild();
+                SContext globalContext = _environment.getGlobalContext();
+                SContext execContext   = globalContext.newChild();
                 
                 result = code.exec(execContext);
             }

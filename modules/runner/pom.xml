@@ -261,6 +261,7 @@ Maven POM for the "runner" sub-project.
                     <argument>-classpath</argument>
                     <classpath />
                     <argument>com.pdmfc.tea.tools.runner.STeaRunner</argument>
+                    <argument>--encoding=${project.build.sourceEncoding}</argument>
                     <argument>--library=${tea.projectRootDir}/apps/teadoc/lib/tea</argument>
                     <argument>--script=${tea.projectRootDir}/apps/teadoc/lib/tea/doc-html.tea</argument>
                     <argument>--</argument>

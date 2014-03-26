@@ -6,6 +6,8 @@
 
 package com.pdmfc.tea.runtime;
 
+import java.nio.charset.Charset;
+
 import com.pdmfc.tea.runtime.SContext;
 
 
@@ -48,11 +50,29 @@ public interface TeaEnvironment {
 
 /**************************************************************************
  *
- * 
+ * Retrieves the Tea global context. This is the root context from
+ * which all other contexts descend. Tea global variables exist in the
+ * global context.
+ *
+ * @return The Tea global context.
  *
  **************************************************************************/
 
     SContext getGlobalContext();
+
+
+
+
+
+/**************************************************************************
+ *
+ * Retrieves the charset assumed for the Tea source code.
+ *
+ * @return The charset for Tea source code to be executed.
+ *
+ **************************************************************************/
+
+    public Charset getSourceCharset();
 
 
 }

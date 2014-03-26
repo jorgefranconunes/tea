@@ -1,11 +1,12 @@
 /**************************************************************************
  *
- * Copyright (c) 2012 PDMFC, All Rights Reserved.
+ * Copyright (c) 2012-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
 package com.pdmfc.tea.runtime;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -31,7 +32,7 @@ public final class TeaRuntimeConfig
 
     private String       _argv0              = null;
     private String[]     _argv               = null;
-    private String       _sourceEncoding     = null;
+    private Charset      _sourceCharset      = null;
     private List<String> _importLocationList = null;
 
 
@@ -46,9 +47,9 @@ public final class TeaRuntimeConfig
 
     private TeaRuntimeConfig(final Builder builder) {
 
-        _argv0 = builder._argv0;
-        _argv  = builder._argv;
-        _sourceEncoding = builder._sourceEncoding;
+        _argv0         = builder._argv0;
+        _argv          = builder._argv;
+        _sourceCharset = builder._sourceCharset;
 
         List<String> importlocationListCopy =
             new ArrayList<String>(builder._importLocationList);
@@ -97,9 +98,9 @@ public final class TeaRuntimeConfig
  *
  **************************************************************************/
 
-    public String getSourceEncoding() {
+    public Charset getSourceCharset() {
 
-        return _sourceEncoding;
+        return _sourceCharset;
     }
 
 
@@ -136,7 +137,7 @@ public final class TeaRuntimeConfig
 
         private String       _argv0              = null;
         private String[]     _argv               = {};
-        private String       _sourceEncoding     = null;
+        private Charset      _sourceCharset      = null;
         private List<String> _importLocationList = new ArrayList<String>();
 
 
@@ -198,9 +199,9 @@ public final class TeaRuntimeConfig
  *
  **************************************************************************/
 
-        public Builder setSourceEncoding(final String sourceEncoding) {
+        public Builder setSourceCharset(final Charset sourceCharset) {
 
-            _sourceEncoding = sourceEncoding;
+            _sourceCharset = sourceCharset;
 
             return this;
         }

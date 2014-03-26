@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2012 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -13,7 +13,6 @@ import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.Charset;
-import java.nio.charset.UnsupportedCharsetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,7 +82,7 @@ public final class SCompiler
  * @param location File system path or URL identifying the entity to
  * be read and compiled.
  *
- * @param encoding The text encoding of the file to be read. If null
+ * @param charset The text encoding of the file to be read. If null
  * the platform default encoding is assumed.
  *
  * @param fileName Name to be associated with the compiled
@@ -103,13 +102,12 @@ public final class SCompiler
  *
  **************************************************************************/
 
-    public SCode compile(final String location,
-                         final String encoding,
-                         final String fileName)
+    public SCode compile(final String  location,
+                         final Charset charset,
+                         final String  fileName)
         throws IOException,
                SCompileException {
 
-        Charset charset = findCharset(encoding);
         Reader  reader  = SInputSourceFactory.openReader(location, charset);
         SCode   code    = compile(reader, fileName);
 
@@ -130,7 +128,7 @@ public final class SCompiler
  * @param location A path relative to <code>baseLocation</code>
  * identifying the entity to be read and compiled.
  *
- * @param encoding The text encoding of the file to be read. If null
+ * @param charset The text encoding of the file to be read. If null
  * the platform default encoding is assumed.
  *
  * @param fileName Name to be associated with the compiled
@@ -150,14 +148,13 @@ public final class SCompiler
  *
  **************************************************************************/
 
-    public SCode compile(final String baseLocation,
-                         final String location,
-                         final String encoding,
-                         final String fileName)
+    public SCode compile(final String  baseLocation,
+                         final String  location,
+                         final Charset charset,
+                         final String  fileName)
         throws IOException,
                SCompileException {
 
-        Charset charset = findCharset(encoding);
         Reader  reader  =
             SInputSourceFactory.openReader(baseLocation, location, charset);
         SCode   code    = null;
@@ -179,9 +176,10 @@ public final class SCompiler
  *
  * Compiles the Tea script read from an <code>InputStream</code>.
  *
- * @param input The input stream where the script will be read from.
+ * @param input The input stream where the Tea script will be read
+ * from.
  *
- * @param encoding The text encoding of the file to be read. If null
+ * @param charset The text encoding of the file to be read. If null
  * the platform default encoding is assumed.
  *
  * @param fileName Name to be associated with the compiled
@@ -193,8 +191,8 @@ public final class SCompiler
  * @return The object representing the compiled code that can be
  * executed later.
  *
- * @exception IOException Thrown if the provided location could not be
- * opened for reading or if there was any error during reading.
+ * @exception IOException Thrown if there was any error reading from
+ * the provided input stream.
  *
  * @exception SCompileException Thrown the Tea script had syntax
  * errors.
@@ -202,13 +200,14 @@ public final class SCompiler
  **************************************************************************/
 
     public SCode compile(final InputStream input,
-                         final String      encoding,
+                         final Charset     charset,
                          final String      fileName)
         throws IOException,
                SCompileException {
 
-        Charset charset     = findCharset(encoding);
-        Reader  inputReader = new InputStreamReader(input, charset);
+        Charset theCharset  =
+            (charset!=null) ? charset : Charset.defaultCharset();
+        Reader  inputReader = new InputStreamReader(input, theCharset);
         Reader  reader      = new BufferedReader(inputReader);
         SCode   code        = null;
 
@@ -302,35 +301,6 @@ public final class SCompiler
         }
 
         return code;
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    private Charset findCharset(final String charsetName)
-        throws SCompileException {
-
-        Charset charset = null;
-
-        if ( charsetName == null ) {
-            charset = Charset.defaultCharset();
-        } else {
-            try {
-                charset = Charset.forName(charsetName);
-            } catch (UnsupportedCharsetException e) {
-                String msg = "Unsupported charset \"{0}\"";
-                compileError(msg, charsetName);
-            }
-        }
-
-        return charset;
     }
 
 
@@ -513,14 +483,14 @@ public final class SCompiler
             result = new SWordList(getList(l));
             break;
         case '+' :
-            result = objIntOrFloat();
+            result = objNumber();
             break;
         case '-' :
-            result = objIntOrFloat();
+            result = objNumber();
             break;
         default :
             if ( Character.isDigit(c) ) {
-                result = objIntOrFloat();
+                result = objNumber();
             } else {
                 result = new SWordSymbol(getSymbolName());
             }
@@ -540,7 +510,7 @@ public final class SCompiler
  *
  **************************************************************************/
 
-   private SWord objIntOrFloat()
+   private SWord objNumber()
          throws IOException,
                 SCompileException {
 

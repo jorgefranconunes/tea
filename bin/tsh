@@ -54,7 +54,7 @@ function displayHeader() {
 
     cat <<EOF
 Tea ${TEA_VERSION}
-Copyright (c) 2001-2013 PDMFC, All Rights Reserved.
+Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
 
 EOF
 }

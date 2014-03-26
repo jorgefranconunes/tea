@@ -9,6 +9,8 @@ package com.pdmfc.tea.engine;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
+import java.nio.charset.Charset;
+import java.nio.charset.UnsupportedCharsetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -707,7 +709,7 @@ public final class TeaScriptEngine
                     TeaRuntimeConfig.Builder.start()
                     .setArgv0(getArgv0(sc))
                     .setArgv(getArgv(sc))
-                    .setSourceEncoding(getSourceEncoding(sc))
+                    .setSourceCharset(getSourceCharset(sc))
                     .setImportLocationList(getImportLocationList(sc))
                     .build();
 
@@ -812,11 +814,20 @@ public final class TeaScriptEngine
  *
  **************************************************************************/
 
-    private String getSourceEncoding(final ScriptContext sc) {
+    private Charset getSourceCharset(final ScriptContext sc) {
 
-        String encoding = (String)sc.getAttribute(KEY_ENCODING);
+        String charsetName = (String)sc.getAttribute(KEY_ENCODING);
+        Charset charset    = null;
 
-        return encoding;
+        if ( charsetName != null ) {
+            try {
+                charset = Charset.forName(charsetName);
+            } catch ( UnsupportedCharsetException e ) {
+                // Too bad... Should we do something about it?...
+            }
+        }
+        
+        return charset;
     }
 
 
