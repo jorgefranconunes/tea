@@ -20,8 +20,8 @@ import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaFunctionImplementor;
 import com.pdmfc.tea.runtime.TeaEnvironment;
-import com.pdmfc.tea.runtime.TeaFunction;
 
 
 
@@ -338,7 +338,7 @@ public final class SModuleReflect
  *
  **************************************************************************/
 
-    @TeaFunction("java-get-value")
+    @TeaFunctionImplementor("java-get-value")
     public static Object functionGetValue(final SObjFunction func,
                                           final SContext     context,
                                           final Object[]     args)
@@ -426,7 +426,7 @@ public final class SModuleReflect
  *
  **************************************************************************/
 
-    @TeaFunction("java-set-value")
+    @TeaFunctionImplementor("java-set-value")
     public static Object functionSetValue(final SObjFunction func,
                                           final SContext     context,
                                           final Object[]     args)
@@ -523,7 +523,7 @@ public final class SModuleReflect
  *
  **************************************************************************/
 
-    @TeaFunction("java-get-method")
+    @TeaFunctionImplementor("java-get-method")
     public static Object functionGetMethod(final SObjFunction func,
                                            final SContext     context,
                                            final Object[]     args)
@@ -647,7 +647,7 @@ public final class SModuleReflect
  *
  **************************************************************************/
 
-    @TeaFunction("java-new-instance")
+    @TeaFunctionImplementor("java-new-instance")
     public static Object functionNewInstance(final SObjFunction func,
                                              final SContext     context,
                                              final Object[]     args)
@@ -754,7 +754,7 @@ public final class SModuleReflect
  *
  **************************************************************************/
 
-    @TeaFunction("java-exec-method")
+    @TeaFunctionImplementor("java-exec-method")
     public static Object functionExecMethod(final SObjFunction func,
                                             final SContext     context,
                                             final Object[]     args)

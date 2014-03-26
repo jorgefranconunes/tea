@@ -18,7 +18,7 @@ import com.pdmfc.tea.runtime.SObjPair;
 import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.TeaEnvironment;
-import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.runtime.TeaFunctionImplementor;
 
 
 
@@ -141,10 +141,12 @@ public final class SModuleUtils
         // Create additional functions for methods annotated with the
         // "TeaFunction" annotation.
 
-        Class<TeaFunction> annotationClass = TeaFunction.class;
+        Class<TeaFunctionImplementor> annotationClass =
+            TeaFunctionImplementor.class;
 
         for ( Method method : module.getClass().getMethods() ) {
-            TeaFunction annotation = method.getAnnotation(annotationClass);
+            TeaFunctionImplementor annotation =
+                method.getAnnotation(annotationClass);
 
             if ( annotation != null ) {
                 SObjFunction function     = buildTeaFunction(module, method);

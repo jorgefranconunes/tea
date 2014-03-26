@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2011-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -11,7 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import com.pdmfc.tea.runtime.STeaRuntime;
+import com.pdmfc.tea.runtime.TeaRuntime;
 import com.pdmfc.tea.runtime.TeaRuntimeConfig;
 
 
@@ -31,7 +31,7 @@ public final class TeaRuntimeTest
 
 
 
-    private STeaRuntime _runtime = null;
+    private TeaRuntime _runtime = null;
 
 
 
@@ -48,7 +48,7 @@ public final class TeaRuntimeTest
 
         TeaRuntimeConfig config = TeaRuntimeConfig.Builder.start().build();
 
-        _runtime = new STeaRuntime(config);
+        _runtime = new TeaRuntime(config);
     }
 
 

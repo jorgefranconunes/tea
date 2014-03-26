@@ -25,8 +25,8 @@ import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypeException;
 import com.pdmfc.tea.runtime.STypes;
-import com.pdmfc.tea.runtime.TeaFunction;
 import com.pdmfc.tea.runtime.TeaEnvironment;
+import com.pdmfc.tea.runtime.TeaFunctionImplementor;
 import com.pdmfc.tea.util.SFormater;
 
 
@@ -201,7 +201,7 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    @TeaFunction("str-printf")
+    @TeaFunctionImplementor("str-printf")
     public Object functionPrintf(final SObjFunction func,
                                  final SContext     context,
                                  final Object[]     args)
@@ -273,7 +273,7 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    @TeaFunction("str-fmt")
+    @TeaFunctionImplementor("str-fmt")
     public Object functionFmt(final SObjFunction func,
                               final SContext context,
                               final Object[]   args)
@@ -370,7 +370,7 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    @TeaFunction("str-upper")
+    @TeaFunctionImplementor("str-upper")
     public static Object functionUpper(final SObjFunction func,
                                        final SContext     context,
                                        final Object[]     args)
@@ -430,7 +430,7 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    @TeaFunction("str-lower")
+    @TeaFunctionImplementor("str-lower")
     public static Object functionLower(final SObjFunction func,
                                        final SContext     context,
                                        final Object[]     args)
@@ -495,7 +495,7 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    @TeaFunction("str-cmp")
+    @TeaFunctionImplementor("str-cmp")
     public static Object functionCompare(final SObjFunction func,
                                          final SContext     context,
                                          final Object[]     args)
@@ -559,7 +559,7 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    @TeaFunction("str>")
+    @TeaFunctionImplementor("str>")
     public static Object functionGt(final SObjFunction func,
                                     final SContext     context,
                                     final Object[]     args)
@@ -625,7 +625,7 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    @TeaFunction("str>=")
+    @TeaFunctionImplementor("str>=")
     public static Object functionGe(final SObjFunction func,
                                     final SContext     context,
                                     final Object[]     args)
@@ -689,7 +689,7 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    @TeaFunction("str==")
+    @TeaFunctionImplementor("str==")
     public static Object functionEq(final SObjFunction func,
                                     final SContext     context,
                                     final Object[]     args)
@@ -753,7 +753,7 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    @TeaFunction("str!=")
+    @TeaFunctionImplementor("str!=")
     public static Object functionNe(final SObjFunction func,
                                     final SContext     context,
                                     final Object[]     args)
@@ -819,7 +819,7 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    @TeaFunction("str<")
+    @TeaFunctionImplementor("str<")
     public static Object functionLt(final SObjFunction func,
                                     final SContext     context,
                                     final Object[]     args)
@@ -885,7 +885,7 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    @TeaFunction("str<=")
+    @TeaFunctionImplementor("str<=")
     public static Object functionLe(final SObjFunction func,
                                     final SContext     context,
                                     final Object[]     args)
@@ -1000,7 +1000,7 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    @TeaFunction("str-cat")
+    @TeaFunctionImplementor("str-cat")
     public static Object functionCat(final SObjFunction func,
                                      final SContext     context,
                                      final Object[]     args)
@@ -1072,7 +1072,7 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    @TeaFunction("str-ends-with?")
+    @TeaFunctionImplementor("str-ends-with?")
     public static  Object functionEndsWith(final SObjFunction func,
                                            final SContext     context,
                                            final Object[]     args)
@@ -1138,7 +1138,7 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    @TeaFunction("str-starts-with?")
+    @TeaFunctionImplementor("str-starts-with?")
     public static Object functionStartsWith(final SObjFunction func,
                                             final SContext     context,
                                             final Object[]     args)
@@ -1213,7 +1213,7 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    @TeaFunction("str-index-of")
+    @TeaFunctionImplementor("str-index-of")
     public static Object functionIndexOf(final SObjFunction func,
                                          final SContext     context,
                                          final Object[]     args)
@@ -1291,7 +1291,7 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    @TeaFunction("str-last-index-of")
+    @TeaFunctionImplementor("str-last-index-of")
     public static Object functionLastIndexOf(final SObjFunction func,
                                              final SContext     context,
                                              final Object[]     args)
@@ -1354,7 +1354,7 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    @TeaFunction("str-len")
+    @TeaFunctionImplementor("str-len")
     public static Object functionLen(final SObjFunction func,
                                      final SContext     context,
                                      final Object[]     args)
@@ -1437,7 +1437,7 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    @TeaFunction("str-substring")
+    @TeaFunctionImplementor("str-substring")
     public static Object functionSubString(final SObjFunction func,
                                            final SContext     context,
                                            final Object[]     args)
@@ -1514,7 +1514,7 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    @TeaFunction("str-trim")
+    @TeaFunctionImplementor("str-trim")
     public static Object functionTrim(final SObjFunction func,
                                       final SContext     context,
                                       final Object[]     args)
@@ -1581,7 +1581,7 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    @TeaFunction("str-join")
+    @TeaFunctionImplementor("str-join")
     public static Object functionJoin(final SObjFunction func,
                                       final SContext     context,
                                       final Object[]     args)
@@ -1670,7 +1670,7 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    @TeaFunction("str-empty?")
+    @TeaFunctionImplementor("str-empty?")
     public static Object functionEmpty(final SObjFunction func,
                                        final SContext     context,
                                        final Object[]     args)
@@ -1731,7 +1731,7 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    @TeaFunction("str-not-empty?")
+    @TeaFunctionImplementor("str-not-empty?")
     public static Object functionNotEmpty(final SObjFunction func,
                                           final SContext     context,
                                           final Object[]     args)
@@ -1792,7 +1792,7 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    @TeaFunction("symbol->string")
+    @TeaFunctionImplementor("symbol->string")
     public static Object functionSymbolToString(final SObjFunction func,
                                                 final SContext context,
                                                 final Object[]   args)
@@ -1861,7 +1861,7 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    @TeaFunction("string->int")
+    @TeaFunctionImplementor("string->int")
     public static Object functionStringToInt(final SObjFunction func,
                                              final SContext     context,
                                              final Object[]     args)
@@ -1929,7 +1929,7 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    @TeaFunction("string->float")
+    @TeaFunctionImplementor("string->float")
     public static Object functionStringToFloat(final SObjFunction func,
                                                final SContext     context,
                                                final Object[]     args)
@@ -1997,7 +1997,7 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    @TeaFunction("int->string")
+    @TeaFunctionImplementor("int->string")
     public static Object functionIntToString(final SObjFunction func,
                                              final SContext     context,
                                              final Object[]     args)
@@ -2058,7 +2058,7 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    @TeaFunction("float->string")
+    @TeaFunctionImplementor("float->string")
     public static Object functionFloatToString(final SObjFunction func,
                                                final SContext     context,
                                                final Object[]     args)
@@ -2136,7 +2136,7 @@ public final class SModuleString
  *
  **************************************************************************/
 
-    @TeaFunction("str-unescape")
+    @TeaFunctionImplementor("str-unescape")
     public static Object functionUnescape(final SObjFunction func,
                                           final SContext     context,
                                           final Object[]     args)

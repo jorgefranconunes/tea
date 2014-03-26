@@ -16,7 +16,7 @@ import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.STypeException;
 import com.pdmfc.tea.runtime.TeaEnvironment;
-import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.runtime.TeaFunctionImplementor;
 
 
 
@@ -179,7 +179,7 @@ public final class SModuleHtml
  *
  **************************************************************************/
 
-    @TeaFunction("html-encode")
+    @TeaFunctionImplementor("html-encode")
     public static Object functionHtmlEncode(final SObjFunction func,
                                             final SContext     context,
                                             final Object[]     args)
@@ -284,7 +284,7 @@ public final class SModuleHtml
  *
  **************************************************************************/
 
-    @TeaFunction("url-encode")
+    @TeaFunctionImplementor("url-encode")
     public static Object functionUrlEncode(final SObjFunction func,
                                            final SContext     context,
                                            final Object[]     args)

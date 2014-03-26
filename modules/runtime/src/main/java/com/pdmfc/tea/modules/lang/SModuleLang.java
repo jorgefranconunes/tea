@@ -20,8 +20,8 @@ import java.util.Properties;
 
 import com.pdmfc.tea.SConfigInfo;
 import com.pdmfc.tea.STeaException;
-import com.pdmfc.tea.compiler.SCode;
-import com.pdmfc.tea.compiler.SCompiler;
+import com.pdmfc.tea.compiler.TeaCode;
+import com.pdmfc.tea.compiler.TeaCompiler;
 import com.pdmfc.tea.modules.SModule;
 import com.pdmfc.tea.modules.io.SInput;
 import com.pdmfc.tea.modules.math.SModuleMath;
@@ -46,7 +46,7 @@ import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypeException;
 import com.pdmfc.tea.runtime.STypes;
 import com.pdmfc.tea.runtime.TeaEnvironment;
-import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.runtime.TeaFunctionImplementor;
 
 
 
@@ -98,7 +98,7 @@ public final class SModuleLang
 
     // These are used by the implementation of the Tea "source"
     // function.
-    private SCompiler _compiler = new SCompiler();
+    private TeaCompiler _compiler = new TeaCompiler();
 
     // These are used by the implementation of the Tea "load-function"
     // function.
@@ -255,7 +255,7 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    @TeaFunction("apply")
+    @TeaFunctionImplementor("apply")
     public static Object functionApply(final SObjFunction func,
                                        final SContext     context,
                                        final Object[]     args)
@@ -350,7 +350,7 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    @TeaFunction("break")
+    @TeaFunctionImplementor("break")
     public static Object functionBreak(final SObjFunction func,
                                        final SContext     context,
                                        final Object[]     args)
@@ -445,7 +445,7 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    @TeaFunction("catch")
+    @TeaFunctionImplementor("catch")
     public static Object functionCatch(final SObjFunction func,
                                        final SContext     context,
                                        final Object[]     args)
@@ -590,7 +590,7 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    @TeaFunction("cond")
+    @TeaFunctionImplementor("cond")
     public static Object functionCond(final SObjFunction func,
                                       final SContext     context,
                                       final Object[]     args)
@@ -685,7 +685,7 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    @TeaFunction("continue")
+    @TeaFunctionImplementor("continue")
     public static Object functionContinue(final SObjFunction func,
                                           final SContext     context,
                                           final Object[]     args)
@@ -788,7 +788,7 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    @TeaFunction("define")
+    @TeaFunctionImplementor("define")
     public static Object functionDefine(final SObjFunction func,
                                         final SContext     context,
                                         final Object[]     args)
@@ -862,7 +862,7 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    @TeaFunction("global")
+    @TeaFunctionImplementor("global")
     public Object functionGlobal(final SObjFunction func,
                                  final SContext     context,
                                  final Object[]     args)
@@ -1070,7 +1070,7 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    @TeaFunction("echo")
+    @TeaFunctionImplementor("echo")
     public  static Object functionEcho(final SObjFunction func,
                                        final SContext     context,
                                        final Object[]     args)
@@ -1144,7 +1144,7 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    @TeaFunction("error")
+    @TeaFunctionImplementor("error")
     public static Object functionError(final SObjFunction func,
                                        final SContext     context,
                                        final Object[]     args)
@@ -1214,7 +1214,7 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    @TeaFunction("exec")
+    @TeaFunctionImplementor("exec")
     public static Object functionExec(final SObjFunction func,
                                       final SContext     context,
                                       final Object[]     args)
@@ -1269,7 +1269,7 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    @TeaFunction("exit")
+    @TeaFunctionImplementor("exit")
     public static Object functionExit(final SObjFunction func,
                                       final SContext     context,
                                       final Object[]     args)
@@ -1355,7 +1355,7 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    @TeaFunction("foreach")
+    @TeaFunctionImplementor("foreach")
     public static Object functionForeach(final SObjFunction func,
                                          final SContext     context,
                                          final Object[]     args)
@@ -1433,7 +1433,7 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    @TeaFunction("get")
+    @TeaFunctionImplementor("get")
     public static Object functionGet(final SObjFunction func,
                                      final SContext     context,
                                      final Object[]     args)
@@ -1509,7 +1509,7 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    @TeaFunction("if")
+    @TeaFunctionImplementor("if")
     public static Object functionIf(final SObjFunction func,
                                     final SContext     context,
                                     final Object[]     args)
@@ -1588,7 +1588,7 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    @TeaFunction("is")
+    @TeaFunctionImplementor("is")
     public static Object functionIs(final SObjFunction func,
                                     final SContext     context,
                                     final Object[]     args)
@@ -1671,7 +1671,7 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    @TeaFunction("block?")
+    @TeaFunctionImplementor("block?")
     public static Object functionIsBlock(final SObjFunction func,
                                          final SContext     context,
                                          final Object[]     args)
@@ -1726,7 +1726,7 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    @TeaFunction("bool?")
+    @TeaFunctionImplementor("bool?")
     public static Object functionIsBoolean(final SObjFunction func,
                                            final SContext     context,
                                            final Object[]     args)
@@ -1781,7 +1781,7 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    @TeaFunction("float?")
+    @TeaFunctionImplementor("float?")
     public static Object functionIsFloat(final SObjFunction func,
                                          final SContext     context,
                                          final Object[]     args)
@@ -1835,7 +1835,7 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    @TeaFunction("function?")
+    @TeaFunctionImplementor("function?")
     public static Object functionIsFunction(final SObjFunction func,
                                             final SContext     context,
                                             final Object[]     args)
@@ -1890,7 +1890,7 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    @TeaFunction("int?")
+    @TeaFunctionImplementor("int?")
     public static Object functionIsInt(final SObjFunction func,
                                        final SContext     context,
                                        final Object[]     args)
@@ -1945,7 +1945,7 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    @TeaFunction("pair?")
+    @TeaFunctionImplementor("pair?")
     public static Object functionIsPair(final SObjFunction func,
                                         final SContext     context,
                                         final Object[]     args)
@@ -2000,7 +2000,7 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    @TeaFunction("string?")
+    @TeaFunctionImplementor("string?")
     public static Object functionIsString(final SObjFunction func,
                                           final SContext     context,
                                           final Object[]     args)
@@ -2055,7 +2055,7 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    @TeaFunction("symbol?")
+    @TeaFunctionImplementor("symbol?")
     public static Object functionIsSymbol(final SObjFunction func,
                                           final SContext     context,
                                           final Object[]     args)
@@ -2110,7 +2110,7 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    @TeaFunction("not-null?")
+    @TeaFunctionImplementor("not-null?")
     public static Object functionIsNotNull(final SObjFunction func,
                                            final SContext     context,
                                            final Object[]     args)
@@ -2174,7 +2174,7 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    @TeaFunction("not-same?")
+    @TeaFunctionImplementor("not-same?")
     public static Object functionIsNotSame(final SObjFunction func,
                                            final SContext     context,
                                            final Object[]     args)
@@ -2233,7 +2233,7 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    @TeaFunction("null?")
+    @TeaFunctionImplementor("null?")
     public static Object functionIsNull(final SObjFunction func,
                                         final SContext context,
                                         final Object[]   args)
@@ -2297,7 +2297,7 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    @TeaFunction("same?")
+    @TeaFunctionImplementor("same?")
     public static Object functionIsSame(final SObjFunction func,
                                         final SContext     context,
                                         final Object[]     args)
@@ -2360,7 +2360,7 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    @TeaFunction("lambda")
+    @TeaFunctionImplementor("lambda")
     public static Object functionLambda(final SObjFunction func,
                                         final SContext     context,
                                         final Object[]     args)
@@ -2428,7 +2428,7 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    @TeaFunction("load")
+    @TeaFunctionImplementor("load")
     public Object functionLoad(final SObjFunction func,
                                final SContext     context,
                                final Object[]     args)
@@ -2494,7 +2494,7 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    @TeaFunction("load-function")
+    @TeaFunctionImplementor("load-function")
     public Object functionLoadFunction(final SObjFunction func,
                                        final SContext     context,
                                        final Object[]     args)
@@ -2596,7 +2596,7 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    @TeaFunction("map")
+    @TeaFunctionImplementor("map")
     public static Object functionMap(final SObjFunction func,
                                      final SContext     context,
                                      final Object[]     args)
@@ -2731,7 +2731,7 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    @TeaFunction("map-apply")
+    @TeaFunctionImplementor("map-apply")
     public static Object functionMapApply(final SObjFunction func,
                                           final SContext     context,
                                           final Object[]     args)
@@ -2864,7 +2864,7 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    @TeaFunction("return")
+    @TeaFunctionImplementor("return")
     public static Object functionReturn(final SObjFunction func,
                                         final SContext     context,
                                         final Object[]     args)
@@ -2930,7 +2930,7 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    @TeaFunction("set!")
+    @TeaFunctionImplementor("set!")
     public static Object functionSet(final SObjFunction func,
                                      final SContext     context,
                                      final Object[]     args)
@@ -2995,7 +2995,7 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    @TeaFunction("sleep")
+    @TeaFunctionImplementor("sleep")
     public static Object functionSleep(final SObjFunction func,
                                        final SContext     context,
                                        final Object[]     args)
@@ -3094,13 +3094,13 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    @TeaFunction("source")
+    @TeaFunctionImplementor("source")
     public Object functionSource(final SObjFunction func,
                                  final SContext     context,
                                  final Object[]     args)
         throws STeaException {
 
-        SCode    program       = compileFromSource(context, args);
+        TeaCode  program       = compileFromSource(context, args);
         SContext globalContext = _environment.getGlobalContext();
         SContext runContext    = globalContext.newChild();
         Object   result        = program.exec(runContext);
@@ -3180,13 +3180,13 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    @TeaFunction("compile")
+    @TeaFunctionImplementor("compile")
     public Object functionCompile(final SObjFunction func,
                                   final SContext     context,
                                   final Object[]     args)
         throws STeaException {
 
-        final SCode     program      = compileFromSource(context, args);
+        final TeaCode   program      = compileFromSource(context, args);
         final SContext  blockContext = _environment.getGlobalContext();
         SObjBlock       result       =
             new SObjBlock() {
@@ -3216,17 +3216,17 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    private SCode compileFromSource(final SContext context,
-                                    final Object[] args)
+    private TeaCode compileFromSource(final SContext context,
+                                      final Object[] args)
         throws STeaException {
 
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "file");
         }
         
-        Object arg      = args[1];
+        Object  arg     = args[1];
         Charset charset = _environment.getSourceCharset();
-        SCode  program  = null;
+        TeaCode program = null;
 
         if ( arg instanceof String ) {
             String fileName = (String)arg;
@@ -3314,7 +3314,7 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    @TeaFunction("system")
+    @TeaFunctionImplementor("system")
     public static Object functionSystem(final SObjFunction func,
                                         final SContext     context,
                                         final Object[]     args)
@@ -3411,7 +3411,7 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    @TeaFunction("time")
+    @TeaFunctionImplementor("time")
     public static Object functionTime(final SObjFunction func,
                                       final SContext     context,
                                       final Object[]     args)
@@ -3502,7 +3502,7 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    @TeaFunction("while")
+    @TeaFunctionImplementor("while")
     public static Object functionWhile(final SObjFunction func,
                                        final SContext     context,
                                        final Object[]     args)
@@ -3653,7 +3653,7 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    @TeaFunction("tea-get-system-property")
+    @TeaFunctionImplementor("tea-get-system-property")
     public static Object functionGetProp(final SObjFunction func,
                                          final SContext     context,
                                          final Object[]     args)
@@ -3735,7 +3735,7 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    @TeaFunction("tea-set-system-property")
+    @TeaFunctionImplementor("tea-set-system-property")
     public static Object functionSetProp(final SObjFunction func,
                                          final SContext     context,
                                          final Object[]     args)
@@ -3808,7 +3808,7 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    @TeaFunction("tea-get-system-properties")
+    @TeaFunctionImplementor("tea-get-system-properties")
     public Object functionGetProps(final SObjFunction func,
                                    final SContext     context,
                                    final Object[]     args)

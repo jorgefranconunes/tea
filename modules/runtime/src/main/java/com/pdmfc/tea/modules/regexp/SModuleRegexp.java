@@ -22,8 +22,8 @@ import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjPair;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypeException;
+import com.pdmfc.tea.runtime.TeaFunctionImplementor;
 import com.pdmfc.tea.runtime.TeaEnvironment;
-import com.pdmfc.tea.runtime.TeaFunction;
 
 
 
@@ -190,7 +190,7 @@ public final class SModuleRegexp
  *
  **************************************************************************/
 
-    @TeaFunction("regexp-pattern")
+    @TeaFunctionImplementor("regexp-pattern")
     public static Object functionPattern(final SObjFunction func,
                                          final SContext     context,
                                          final Object[]     args)
@@ -269,7 +269,7 @@ public final class SModuleRegexp
  *
  **************************************************************************/
 
-    @TeaFunction("glob")
+    @TeaFunctionImplementor("glob")
     public Object functionGlob(final SObjFunction func,
                                final SContext     context,
                                final Object[]     args)
@@ -368,7 +368,7 @@ public final class SModuleRegexp
  *
  **************************************************************************/
 
-    @TeaFunction("regsub")
+    @TeaFunctionImplementor("regsub")
     public static Object functionRegsub(final SObjFunction func,
                                         final SContext     context,
                                         final Object[]     args)
@@ -441,7 +441,7 @@ public final class SModuleRegexp
  *
  **************************************************************************/
 
-    @TeaFunction("matches?")
+    @TeaFunctionImplementor("matches?")
     public static Object functionMatches(final SObjFunction func,
                                          final SContext     context,
                                          final Object[]     args)
@@ -524,7 +524,7 @@ public final class SModuleRegexp
  *
  **************************************************************************/
 
-    @TeaFunction("regexp")
+    @TeaFunctionImplementor("regexp")
     public static Object functionRegexp(final SObjFunction func,
                                         final SContext     context,
                                         final Object[]     args)
@@ -658,7 +658,7 @@ public final class SModuleRegexp
  *
  **************************************************************************/
 
-    @TeaFunction("str-split")
+    @TeaFunctionImplementor("str-split")
     public static Object functionSplit(final SObjFunction func,
                                        final SContext     context,
                                        final Object[]     args)

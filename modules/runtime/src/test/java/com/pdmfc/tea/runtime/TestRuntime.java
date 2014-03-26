@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -11,9 +11,9 @@ import static org.junit.Assert.*;
 import java.text.MessageFormat;
 
 import com.pdmfc.tea.STeaException;
-import com.pdmfc.tea.compiler.SCode;
-import com.pdmfc.tea.compiler.SCompiler;
-import com.pdmfc.tea.runtime.STeaRuntime;
+import com.pdmfc.tea.compiler.TeaCode;
+import com.pdmfc.tea.compiler.TeaCompiler;
+import com.pdmfc.tea.runtime.TeaRuntime;
 import com.pdmfc.tea.runtime.TeaRuntimeConfig;
 
 
@@ -34,8 +34,8 @@ public class TestRuntime
 
 
 
-    private STeaRuntime _teaRuntime = null;
-    private SCompiler   _compiler   = null;
+    private TeaRuntime  _teaRuntime = null;
+    private TeaCompiler _compiler   = null;
 
 
 
@@ -51,8 +51,8 @@ public class TestRuntime
 
         TeaRuntimeConfig config = TeaRuntimeConfig.Builder.start().build();
 
-        _teaRuntime = new STeaRuntime(config);
-        _compiler   = new SCompiler();
+        _teaRuntime = new TeaRuntime(config);
+        _compiler   = new TeaCompiler();
     }
 
 
@@ -113,8 +113,8 @@ public class TestRuntime
     public Object eval(final String script)
         throws STeaException {
 
-        SCode  code   = _compiler.compile(script);
-        Object result = _teaRuntime.execute(code);
+        TeaCode code   = _compiler.compile(script);
+        Object  result = _teaRuntime.execute(code);
 
         return result;
     }

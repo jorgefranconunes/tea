@@ -91,7 +91,7 @@ Maven POM for the "release" sub-project.
                   <arguments>
                     <argument>-classpath</argument>
                     <classpath />
-                    <argument>com.pdmfc.tea.tools.runner.STeaRunner</argument>
+                    <argument>com.pdmfc.tea.tools.runner.TeaRunner</argument>
                     <argument>--encoding=${project.build.sourceEncoding}</argument>
                     <argument>--library=${tea.projectRootDir}/apps/teadoc/lib/tea</argument>
                     <argument>--script=${tea.projectRootDir}/apps/teadoc/lib/tea/doc-html.tea</argument>

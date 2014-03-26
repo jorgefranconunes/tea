@@ -91,7 +91,7 @@ Maven POM for the "runner" sub-project.
         <configuration>
           <archive>
             <manifest>
-              <mainClass>com.pdmfc.tea.tools.runner.STeaRunner</mainClass>
+              <mainClass>com.pdmfc.tea.tools.runner.TeaRunner</mainClass>
               <addClasspath>true</addClasspath>
             </manifest>
           </archive>
@@ -212,7 +212,7 @@ Maven POM for the "runner" sub-project.
                     <argument>-Dderby.stream.error.file=${project.build.directory}/derby.log</argument>
                     <argument>-classpath</argument>
                     <classpath />
-                    <argument>com.pdmfc.tea.tools.runner.STeaRunner</argument>
+                    <argument>com.pdmfc.tea.tools.runner.TeaRunner</argument>
                     <argument>--script=resource:/lib/tea-${project.version}/tea/tools/tunit/tunit-main.tea</argument>
                     <argument>--</argument>
                     <argument>surefireReport</argument>
@@ -260,7 +260,7 @@ Maven POM for the "runner" sub-project.
                   <arguments>
                     <argument>-classpath</argument>
                     <classpath />
-                    <argument>com.pdmfc.tea.tools.runner.STeaRunner</argument>
+                    <argument>com.pdmfc.tea.tools.runner.TeaRunner</argument>
                     <argument>--encoding=${project.build.sourceEncoding}</argument>
                     <argument>--library=${tea.projectRootDir}/apps/teadoc/lib/tea</argument>
                     <argument>--script=${tea.projectRootDir}/apps/teadoc/lib/tea/doc-html.tea</argument>

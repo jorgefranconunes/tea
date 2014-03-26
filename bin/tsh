@@ -282,7 +282,7 @@ done
 exec "$_teaJre" \
     $_teaJreOptions \
     -classpath "$_teaClasspath" \
-    com.pdmfc.tea.tools.runner.STeaRunner \
+    com.pdmfc.tea.tools.runner.TeaRunner \
     --library="$_teaLibrary" \
     --script="$_teaScript" \
     $_encodingOptions \

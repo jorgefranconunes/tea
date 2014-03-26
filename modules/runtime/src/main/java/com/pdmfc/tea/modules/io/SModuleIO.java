@@ -22,8 +22,8 @@ import com.pdmfc.tea.runtime.SArgs;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjNull;
 import com.pdmfc.tea.runtime.SObjPair;
+import com.pdmfc.tea.runtime.TeaFunctionImplementor;
 import com.pdmfc.tea.runtime.TeaEnvironment;
-import com.pdmfc.tea.runtime.TeaFunction;
 
 
 
@@ -241,7 +241,7 @@ public final class SModuleIO
  *
  **************************************************************************/
 
-    @TeaFunction("file-basename")
+    @TeaFunctionImplementor("file-basename")
     public static Object functionBasename(final SObjFunction func,
                                           final SContext     context,
                                           final Object[]     args)
@@ -307,7 +307,7 @@ public final class SModuleIO
  *
  **************************************************************************/
 
-    @TeaFunction("file-dirname")
+    @TeaFunctionImplementor("file-dirname")
     public static Object functionDirname(final SObjFunction func,
                                          final SContext     context,
                                          final Object[]     args)
@@ -376,7 +376,7 @@ public final class SModuleIO
  *
  **************************************************************************/
 
-    @TeaFunction("file-extension")
+    @TeaFunctionImplementor("file-extension")
     public static Object functionExtension(final SObjFunction func,
                                            final SContext     context,
                                            final Object[]     args)
@@ -444,7 +444,7 @@ public final class SModuleIO
  *
  **************************************************************************/
 
-    @TeaFunction("file-copy")
+    @TeaFunctionImplementor("file-copy")
     public static Object functionCopy(final SObjFunction func,
                                       final SContext     context,
                                       final Object[]     args)
@@ -555,7 +555,7 @@ public final class SModuleIO
  *
  **************************************************************************/
 
-    @TeaFunction("file-exists?")
+    @TeaFunctionImplementor("file-exists?")
     public static Object functionFileExists(final SObjFunction func,
                                             final SContext     context,
                                             final Object[]      args)
@@ -616,7 +616,7 @@ public final class SModuleIO
  *
  **************************************************************************/
     
-    @TeaFunction("file-is-dir?")
+    @TeaFunctionImplementor("file-is-dir?")
     public static Object functionIsDir(final SObjFunction func,
                                        final SContext     context,
                                        final Object[]     args)
@@ -677,7 +677,7 @@ public final class SModuleIO
  *
  **************************************************************************/
 
-    @TeaFunction("file-is-regular?")
+    @TeaFunctionImplementor("file-is-regular?")
     public static Object functionIsRegular(final SObjFunction func,
                                            final SContext     context,
                                            final Object[]     args)
@@ -741,7 +741,7 @@ public final class SModuleIO
  *
  **************************************************************************/
 
-    @TeaFunction("file-join")
+    @TeaFunctionImplementor("file-join")
     public static Object functionJoin(final SObjFunction func,
                                       final SContext     context,
                                       final Object[]     args)
@@ -811,7 +811,7 @@ public final class SModuleIO
  *
  **************************************************************************/
 
-    @TeaFunction("file-mkdir")
+    @TeaFunctionImplementor("file-mkdir")
     public static Object functionMkdir(final SObjFunction func,
                                        final SContext     context,
                                        final Object[]     args)
@@ -877,7 +877,7 @@ public final class SModuleIO
  *
  **************************************************************************/
 
-    @TeaFunction("file-rename")
+    @TeaFunctionImplementor("file-rename")
     public static Object functionRename(final SObjFunction func,
                                         final SContext     context,
                                         final Object[]     args)
@@ -940,7 +940,7 @@ public final class SModuleIO
  *
  **************************************************************************/
 
-    @TeaFunction("file-size")
+    @TeaFunctionImplementor("file-size")
     public static Object functionSize(final SObjFunction func,
                                       final SContext     context,
                                       final Object[]     args)
@@ -1005,7 +1005,7 @@ public final class SModuleIO
  *
  **************************************************************************/
 
-    @TeaFunction("file-split-path-list")
+    @TeaFunctionImplementor("file-split-path-list")
     public static Object functionSplitPathList(final SObjFunction func,
                                                final SContext     context,
                                                final Object[]     args)
@@ -1122,7 +1122,7 @@ public final class SModuleIO
  *
  **************************************************************************/
 
-    @TeaFunction("file-unlink")
+    @TeaFunctionImplementor("file-unlink")
     public static Object functionUnlink(final SObjFunction func,
                                         final SContext     context,
                                         final Object[]     args)

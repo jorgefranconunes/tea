@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2011-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -15,7 +15,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 import com.pdmfc.tea.STeaException;
-import com.pdmfc.tea.tools.runner.STeaRunnerArgs;
+import com.pdmfc.tea.tools.runner.TeaRunnerArgs;
 
 
 
@@ -44,8 +44,8 @@ public final class TeaRunnerArgsTest
     public void noArgs()
         throws STeaException {
 
-        String[]       noArgs = {};
-        STeaRunnerArgs args   = STeaRunnerArgs.parse(noArgs);
+        String[]      noArgs = {};
+        TeaRunnerArgs args   = TeaRunnerArgs.parse(noArgs);
 
         assertEmptyArgs(args);
     }
@@ -64,8 +64,8 @@ public final class TeaRunnerArgsTest
     public void emptyArgs()
         throws STeaException {
 
-        String[]       emptyArgs = { "--" };
-        STeaRunnerArgs args      = STeaRunnerArgs.parse(emptyArgs);
+        String[]      emptyArgs = { "--" };
+        TeaRunnerArgs args      = TeaRunnerArgs.parse(emptyArgs);
 
         assertEmptyArgs(args);
     }
@@ -80,7 +80,7 @@ public final class TeaRunnerArgsTest
  *
  **************************************************************************/
 
-    private void assertEmptyArgs(final STeaRunnerArgs args)
+    private void assertEmptyArgs(final TeaRunnerArgs args)
         throws STeaException {
 
         assertEquals(0, args.getLibraryList().size());
@@ -103,8 +103,8 @@ public final class TeaRunnerArgsTest
     public void unknownOption()
         throws STeaException {
 
-        String[]       emptyArgs = { "--whatever=stuff" };
-        STeaRunnerArgs args      = STeaRunnerArgs.parse(emptyArgs);
+        String[]      emptyArgs = { "--whatever=stuff" };
+        TeaRunnerArgs args      = TeaRunnerArgs.parse(emptyArgs);
 
         fail("An exception should have been thrown by now...");
     }
@@ -123,8 +123,8 @@ public final class TeaRunnerArgsTest
     public void scriptOption()
         throws STeaException {
 
-        String[]       cliArgs = { "--script=AA" };
-        STeaRunnerArgs args      = STeaRunnerArgs.parse(cliArgs);
+        String[]      cliArgs = { "--script=AA" };
+        TeaRunnerArgs args    = TeaRunnerArgs.parse(cliArgs);
 
         assertEquals("AA", args.getScriptPath());
     }
@@ -143,8 +143,8 @@ public final class TeaRunnerArgsTest
     public void scriptOptionOverride()
         throws STeaException {
 
-        String[]       cliArgs = { "--script=AA", "--script=BB" };
-        STeaRunnerArgs args      = STeaRunnerArgs.parse(cliArgs);
+        String[]      cliArgs = { "--script=AA", "--script=BB" };
+        TeaRunnerArgs args    = TeaRunnerArgs.parse(cliArgs);
 
         assertEquals("BB", args.getScriptPath());
     }
@@ -163,8 +163,8 @@ public final class TeaRunnerArgsTest
     public void encodingOption()
         throws STeaException {
 
-        String[]       cliArgs = { "--encoding=AA" };
-        STeaRunnerArgs args      = STeaRunnerArgs.parse(cliArgs);
+        String[]      cliArgs = { "--encoding=AA" };
+        TeaRunnerArgs args    = TeaRunnerArgs.parse(cliArgs);
 
         assertEquals("AA", args.getEncoding());
     }
@@ -183,8 +183,8 @@ public final class TeaRunnerArgsTest
     public void encodingOptionOverride()
         throws STeaException {
 
-        String[]       cliArgs = { "--encoding=AA", "--encoding=BB" };
-        STeaRunnerArgs args      = STeaRunnerArgs.parse(cliArgs);
+        String[]      cliArgs = { "--encoding=AA", "--encoding=BB" };
+        TeaRunnerArgs args    = TeaRunnerArgs.parse(cliArgs);
 
         assertEquals("BB", args.getEncoding());
     }
@@ -203,8 +203,8 @@ public final class TeaRunnerArgsTest
     public void libraryOption1()
         throws STeaException {
 
-        String[]       cliArgs = { "--library=AA" };
-        STeaRunnerArgs args      = STeaRunnerArgs.parse(cliArgs);
+        String[]      cliArgs = { "--library=AA" };
+        TeaRunnerArgs args    = TeaRunnerArgs.parse(cliArgs);
 
         String[] expected = { "AA" };
 
@@ -225,8 +225,8 @@ public final class TeaRunnerArgsTest
     public void libraryOption2()
         throws STeaException {
 
-        String[]       cliArgs = { ("--library=AA"+File.pathSeparator+"BB") };
-        STeaRunnerArgs args      = STeaRunnerArgs.parse(cliArgs);
+        String[]      cliArgs = { ("--library=AA"+File.pathSeparator+"BB") };
+        TeaRunnerArgs args    = TeaRunnerArgs.parse(cliArgs);
 
         String[] expected = { "AA", "BB" };
 
@@ -248,7 +248,7 @@ public final class TeaRunnerArgsTest
         throws STeaException {
 
         String[]       cliArgs = { ("--library=A|A"+File.pathSeparator+"BB") };
-        STeaRunnerArgs args      = STeaRunnerArgs.parse(cliArgs);
+        TeaRunnerArgs args     = TeaRunnerArgs.parse(cliArgs);
 
         String[] expected = { "A:A", "BB" };
 
@@ -269,11 +269,11 @@ public final class TeaRunnerArgsTest
     public void libraryOptionAppend1()
         throws STeaException {
 
-        String[]       cliArgs = {
+        String[] cliArgs = {
             "--library=AA",
             "--library=BB"
         };
-        STeaRunnerArgs args    = STeaRunnerArgs.parse(cliArgs);
+        TeaRunnerArgs args = TeaRunnerArgs.parse(cliArgs);
 
         String[] expected = { "AA", "BB" };
 
@@ -294,11 +294,11 @@ public final class TeaRunnerArgsTest
     public void libraryOptionAppend2()
         throws STeaException {
 
-        String[]       cliArgs = {
+        String[] cliArgs = {
             ("--library=AA"+File.pathSeparator+"BB"),
             "--library=CC"
         };
-        STeaRunnerArgs args    = STeaRunnerArgs.parse(cliArgs);
+        TeaRunnerArgs args = TeaRunnerArgs.parse(cliArgs);
 
         String[] expected = { "AA", "BB", "CC" };
 
@@ -319,8 +319,8 @@ public final class TeaRunnerArgsTest
     public void libraryItemOption1()
         throws STeaException {
 
-        String[]       cliArgs = { "--library-item=AA" };
-        STeaRunnerArgs args      = STeaRunnerArgs.parse(cliArgs);
+        String[]      cliArgs = { "--library-item=AA" };
+        TeaRunnerArgs args    = TeaRunnerArgs.parse(cliArgs);
 
         String[] expected = { "AA" };
 
@@ -341,10 +341,10 @@ public final class TeaRunnerArgsTest
     public void libraryItemOption2()
         throws STeaException {
 
-        String[]       cliArgs = {
+        String[] cliArgs = {
             ("--library-item=AA"+File.pathSeparator+"BB")
         };
-        STeaRunnerArgs args      = STeaRunnerArgs.parse(cliArgs);
+        TeaRunnerArgs args = TeaRunnerArgs.parse(cliArgs);
 
         String[] expected = { ("AA"+File.pathSeparator+"BB") };
 
@@ -361,8 +361,8 @@ public final class TeaRunnerArgsTest
  *
  **************************************************************************/
 
-    private void assertLibraryListEquals(final String[]       expected,
-                                         final STeaRunnerArgs args) {
+    private void assertLibraryListEquals(final String[]      expected,
+                                         final TeaRunnerArgs args) {
 
         String[] actual = args.getLibraryList().toArray(new String[0]);
 

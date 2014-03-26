@@ -17,8 +17,8 @@ import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjNull;
 import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaFunctionImplementor;
 import com.pdmfc.tea.runtime.TeaEnvironment;
-import com.pdmfc.tea.runtime.TeaFunction;
 
 
 
@@ -196,7 +196,7 @@ public final class SModuleTdbc
  *
  **************************************************************************/
 
-    @TeaFunction("tdbc-register-driver")
+    @TeaFunctionImplementor("tdbc-register-driver")
     public static Object functionRegisterDriver(final SObjFunction func,
                                                 final SContext     context,
                                                 final Object[]     args)
@@ -264,7 +264,7 @@ public final class SModuleTdbc
  *
  **************************************************************************/
 
-    @TeaFunction("sql-encode")
+    @TeaFunctionImplementor("sql-encode")
     public static Object functionSqlEncode(final SObjFunction func,
                                            final SContext     context,
                                            final Object[]     args)
@@ -354,7 +354,7 @@ public final class SModuleTdbc
  *
  **************************************************************************/
 
-    @TeaFunction("tdbc-get-open-connections-count")
+    @TeaFunctionImplementor("tdbc-get-open-connections-count")
     public Object functionGetOpenConnCount(final SObjFunction func,
                                            final SContext     context,
                                            final Object[]     args)
@@ -409,7 +409,7 @@ public final class SModuleTdbc
  *
  **************************************************************************/
 
-    @TeaFunction("tdbc-close-all-connections")
+    @TeaFunctionImplementor("tdbc-close-all-connections")
     public Object functionCloseAllConn(final SObjFunction func,
                                        final SContext     context,
                                        final Object[]     args)

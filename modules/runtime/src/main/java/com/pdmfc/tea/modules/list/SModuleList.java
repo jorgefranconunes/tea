@@ -19,7 +19,7 @@ import com.pdmfc.tea.runtime.SObjPair;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypes;
 import com.pdmfc.tea.runtime.TeaEnvironment;
-import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.runtime.TeaFunctionImplementor;
 
 
 
@@ -185,7 +185,7 @@ public final class SModuleList
  *
  **************************************************************************/
 
-    @TeaFunction("cons")
+    @TeaFunctionImplementor("cons")
     public static Object functionCons(final SObjFunction func,
                                       final SContext     context,
                                       final Object[]     args)
@@ -249,7 +249,7 @@ public final class SModuleList
  *
  **************************************************************************/
 
-    @TeaFunction("car")
+    @TeaFunctionImplementor("car")
     public static Object functionCar(final SObjFunction func,
                                      final SContext     context,
                                      final Object[]     args)
@@ -316,7 +316,7 @@ public final class SModuleList
  *
  **************************************************************************/
 
-    @TeaFunction("cdr")
+    @TeaFunctionImplementor("cdr")
     public static Object functionCdr(final SObjFunction func,
                                      final SContext     context,
                                      final Object[]     args)
@@ -380,7 +380,7 @@ public final class SModuleList
  * 
  **************************************************************************/
 
-    @TeaFunction("empty?")
+    @TeaFunctionImplementor("empty?")
     public static Object functionEmpty(final SObjFunction func,
                                        final SContext     context,
                                        final Object[]     args)
@@ -440,7 +440,7 @@ public final class SModuleList
  *
  **************************************************************************/
 
-    @TeaFunction("not-empty?")
+    @TeaFunctionImplementor("not-empty?")
     public static Object functionNotEmpty(final SObjFunction func,
                                           final SContext     context,
                                           final Object[]     args)
@@ -506,7 +506,7 @@ public final class SModuleList
  *
  **************************************************************************/
 
-    @TeaFunction("set-car!")
+    @TeaFunctionImplementor("set-car!")
     public static Object functionSetCar(final SObjFunction func,
                                         final SContext     context,
                                         final Object[]     args)
@@ -572,7 +572,7 @@ public final class SModuleList
  *
  **************************************************************************/
 
-    @TeaFunction("set-cdr!")
+    @TeaFunctionImplementor("set-cdr!")
     public static Object functionSetCdr(final SObjFunction func,
                                         final SContext context,
                                         final Object[]   args)
@@ -633,7 +633,7 @@ public final class SModuleList
  *
  **************************************************************************/
 
-    @TeaFunction("list")
+    @TeaFunctionImplementor("list")
     public static Object functionList(final SObjFunction func,
                                       final SContext     context,
                                       final Object[]     args)
@@ -706,7 +706,7 @@ public final class SModuleList
  *
  **************************************************************************/
 
-    @TeaFunction("nth")
+    @TeaFunctionImplementor("nth")
     public static Object functionNth(final SObjFunction func,
                                      final SContext     context,
                                      final Object[]     args)
@@ -790,7 +790,7 @@ public final class SModuleList
  *
  **************************************************************************/
 
-    @TeaFunction("prepend")
+    @TeaFunctionImplementor("prepend")
     public static Object functionPrepend(final SObjFunction func,
                                          final SContext     context,
                                          final Object[]     args)
@@ -861,7 +861,7 @@ public final class SModuleList
  *
  **************************************************************************/
 
-    @TeaFunction("append")
+    @TeaFunctionImplementor("append")
     public static Object functionAppend(final SObjFunction func,
                                         final SContext     context,
                                         final Object[]     args)
@@ -930,7 +930,7 @@ public final class SModuleList
  *
  **************************************************************************/
 
-    @TeaFunction("length")
+    @TeaFunctionImplementor("length")
     public static Object functionLength(final SObjFunction func,
                                         final SContext     context,
                                         final Object[]     args)

@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2007-2012 PDMFC, All Rights Reserved.
+ * Copyright (c) 2007-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -12,9 +12,9 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
 import com.pdmfc.tea.STeaException;
-import com.pdmfc.tea.compiler.SCode;
+import com.pdmfc.tea.compiler.TeaCode;
 import com.pdmfc.tea.modules.reflect.STeaJavaTypes;
-import com.pdmfc.tea.runtime.STeaRuntime;
+import com.pdmfc.tea.runtime.TeaRuntime;
 
 
 
@@ -23,7 +23,7 @@ import com.pdmfc.tea.runtime.STeaRuntime;
 /**************************************************************************
  *
  * A JSR-223 <code>javax.script.CompiledScript</code>
- * wrapper around an {@link SCode}.
+ * wrapper around an {@link TeaCode}.
  * It associates the compiled code with the engine
  * that instantiated this object.
  * 
@@ -39,7 +39,7 @@ public final class TeaCompiledScript
 
 
     private TeaScriptEngine    _engine;
-    private SCode              _code;
+    private TeaCode            _code;
 
 
 
@@ -52,7 +52,7 @@ public final class TeaCompiledScript
      * @param code The compiled code wrapped by this class.
      */
     public TeaCompiledScript(final TeaScriptEngine engine,
-                             final SCode code) {
+                             final TeaCode         code) {
         _engine = engine;
         _code   = code;
     }
@@ -84,11 +84,11 @@ public final class TeaCompiledScript
         try {
             //System.out.println("teaCompiledScript.eval("+scriptContext+")");
 
-            STeaRuntime teaRuntime = _engine.context2TeaGlobals(scriptContext);
+            TeaRuntime teaRuntime = _engine.context2TeaGlobals(scriptContext);
 
             //TeaBindings b = (TeaBindings)scriptContext.getBindings(ScriptContext.ENGINE_SCOPE);
-            //STeaRuntime context    = b.getMyRuntime();
-            //STeaRuntime context    = TeaScriptEngine.getRuntime(scriptContext);
+            //TeaRuntime context    = b.getMyRuntime();
+            //TeaRuntime context    = TeaScriptEngine.getRuntime(scriptContext);
             //System.out.println("eval TeaRuntime="+teaRuntime);
 
             // put Bindings as global vars, and prepare the context for execution

@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2012 PDMFC, All Rights Reserved.
+ * Copyright (c) 2012-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -31,7 +31,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface TeaFunction {
+public @interface TeaFunctionImplementor {
 
 
 

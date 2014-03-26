@@ -21,7 +21,7 @@ import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.STypeException;
 import com.pdmfc.tea.runtime.STypes;
 import com.pdmfc.tea.runtime.TeaEnvironment;
-import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.runtime.TeaFunctionImplementor;
 
 
 
@@ -136,7 +136,7 @@ public final class SModuleMath
 
         // Nothing to do. The functions provided by this module are
         // all implemented as methods of this class with the
-        // TeaFunction annotation.
+        // TeaFunctionImplementor annotation.
     }
 
 
@@ -233,7 +233,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    @TeaFunction("==")
+    @TeaFunctionImplementor("==")
     public static Object functionEq(final SObjFunction func,
                                     final SContext     context,
                                     final Object[]     args)
@@ -292,7 +292,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    @TeaFunction("!=")
+    @TeaFunctionImplementor("!=")
     public static Object functionNe(final SObjFunction func,
                                     final SContext     context,
                                     final Object[]     args)
@@ -351,7 +351,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    @TeaFunction(">")
+    @TeaFunctionImplementor(">")
     public static Object functionGt(final SObjFunction func,
                                     final SContext     context,
                                     final Object[]     args)
@@ -411,7 +411,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    @TeaFunction(">=")
+    @TeaFunctionImplementor(">=")
     public static Object functionGe(final SObjFunction func,
                                     final SContext     context,
                                     final Object[]     args)
@@ -470,7 +470,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    @TeaFunction("<")
+    @TeaFunctionImplementor("<")
     public static Object functionLt(final SObjFunction func,
                                     final SContext     context,
                                     final Object[]     args)
@@ -530,7 +530,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    @TeaFunction("<=")
+    @TeaFunctionImplementor("<=")
     public static Object functionLe(final SObjFunction func,
                                     final SContext     context,
                                     final Object[]     args)
@@ -716,7 +716,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    @TeaFunction("+")
+    @TeaFunctionImplementor("+")
     public static Object functionAdd(final SObjFunction func,
                                      final SContext     context,
                                      final Object[]     args)
@@ -775,7 +775,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    @TeaFunction("-")
+    @TeaFunctionImplementor("-")
     public static Object functionSub(final SObjFunction func,
                                      final SContext     context,
                                      final Object[]     args)
@@ -833,7 +833,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    @TeaFunction("*")
+    @TeaFunctionImplementor("*")
     public static Object functionMul(final SObjFunction func,
                                      final SContext     context,
                                      final Object[]     args)
@@ -892,7 +892,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    @TeaFunction("/")
+    @TeaFunctionImplementor("/")
     public static Object functionDiv(final SObjFunction func,
                                      final SContext     context,
                                      final Object[]     args)
@@ -1194,7 +1194,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    @TeaFunction("%")
+    @TeaFunctionImplementor("%")
     public static Object functionMod(final SObjFunction func,
                                      final SContext     context,
                                      final Object[]     args)
@@ -1283,7 +1283,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    @TeaFunction("and")
+    @TeaFunctionImplementor("and")
     public static Object functionAnd(final SObjFunction func,
                                      final SContext     context,
                                      final Object[]     args)
@@ -1359,7 +1359,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    @TeaFunction("or")
+    @TeaFunctionImplementor("or")
     public static Object functionOr(final SObjFunction func,
                                     final SContext     context,
                                     final Object[]     args)
@@ -1432,7 +1432,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    @TeaFunction("not")
+    @TeaFunctionImplementor("not")
     public static Object functionNot(final SObjFunction func,
                                      final SContext     context,
                                      final Object[]     args)
@@ -1496,7 +1496,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    @TeaFunction("abs")
+    @TeaFunctionImplementor("abs")
     public static Object functionAbs(final SObjFunction func,
                                      final SContext     context,
                                      final Object[]     args)
@@ -1563,7 +1563,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    @TeaFunction("round")
+    @TeaFunctionImplementor("round")
     public static Object functionRound(final SObjFunction func,
                                        final SContext     context,
                                        final Object[]     args)
@@ -1625,7 +1625,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    @TeaFunction("floor")
+    @TeaFunctionImplementor("floor")
     public static Object functionFloor(final SObjFunction func,
                                        final SContext     context,
                                        final Object[]     args)
@@ -1687,7 +1687,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    @TeaFunction("ceil")
+    @TeaFunctionImplementor("ceil")
     public static Object functionCeil(final SObjFunction func,
                                       final SContext     context,
                                       final Object[]     args)
@@ -1749,7 +1749,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    @TeaFunction("sqrt")
+    @TeaFunctionImplementor("sqrt")
     public static Object functionSqrt(final SObjFunction func,
                                       final SContext     context,
                                       final Object[]     args)
@@ -1792,7 +1792,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    @TeaFunction("min")
+    @TeaFunctionImplementor("min")
     public static Object functionMin(final SObjFunction func,
                                      final SContext     context,
                                      final Object[]     args)
@@ -1823,7 +1823,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    @TeaFunction("max")
+    @TeaFunctionImplementor("max")
     public static Object functionMax(final SObjFunction func,
                                      final SContext     context,
                                      final Object[]     args)
@@ -1990,7 +1990,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    @TeaFunction("int")
+    @TeaFunctionImplementor("int")
     public static Object functionInt(final SObjFunction func,
                                      final SContext     context,
                                      final Object[]     args)
@@ -2058,7 +2058,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    @TeaFunction("rand-int")
+    @TeaFunctionImplementor("rand-int")
     public Object functionRandInt(final SObjFunction func,
                                   final SContext     context,
                                   final Object[]     args)
@@ -2120,7 +2120,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    @TeaFunction("=")
+    @TeaFunctionImplementor("=")
     public static Object functionSetValue(final SObjFunction func,
                                           final SContext     context,
                                           final Object[]     args)
@@ -2201,7 +2201,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    @TeaFunction("+=")
+    @TeaFunctionImplementor("+=")
     public static Object functionIncBy(final SObjFunction func,
                                        final SContext     context,
                                        final Object[]     args)
@@ -2297,7 +2297,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    @TeaFunction("-=")
+    @TeaFunctionImplementor("-=")
     public static Object functionDecBy(final SObjFunction func,
                                        final SContext     context,
                                        final Object[]     args)
@@ -2393,7 +2393,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    @TeaFunction("*=")
+    @TeaFunctionImplementor("*=")
     public static Object functionMulBy(final SObjFunction func,
                                        final SContext     context,
                                        final Object[]     args)
@@ -2489,7 +2489,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    @TeaFunction("/=")
+    @TeaFunctionImplementor("/=")
     public static Object functionDivBy(final SObjFunction func,
                                        final SContext     context,
                                        final Object[]     args)
@@ -2580,7 +2580,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    @TeaFunction("++")
+    @TeaFunctionImplementor("++")
     public static Object functionIncr(final SObjFunction func,
                                       final SContext     context,
                                       final Object[]     args)
@@ -2670,7 +2670,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    @TeaFunction("--")
+    @TeaFunctionImplementor("--")
     public static Object functionDecr(final SObjFunction func,
                                       final SContext     context,
                                       final Object[]     args)
@@ -2748,7 +2748,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    @TeaFunction("~")
+    @TeaFunctionImplementor("~")
     public Object functionBinNeg(final SObjFunction func,
                                  final SContext     context,
                                  final Object[]     args)
@@ -2811,7 +2811,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    @TeaFunction("&")
+    @TeaFunctionImplementor("&")
     public Object functionBinAnd(final SObjFunction func,
                                  final SContext     context,
                                  final Object[]     args)
@@ -2876,7 +2876,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    @TeaFunction("|")
+    @TeaFunctionImplementor("|")
     public Object functionBinOr(final SObjFunction func,
                                 final SContext     context,
                                 final Object[]     args)
@@ -2941,7 +2941,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    @TeaFunction("^")
+    @TeaFunctionImplementor("^")
     public Object functionBinXor(final SObjFunction func,
                                  final SContext     context,
                                  final Object[]     args)
@@ -3009,7 +3009,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    @TeaFunction("<<")
+    @TeaFunctionImplementor("<<")
     public Object functionBinSl(final SObjFunction func,
                                 final SContext     context,
                                 final Object[]     args)
@@ -3076,7 +3076,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    @TeaFunction(">>")
+    @TeaFunctionImplementor(">>")
     public Object functionBinSr(final SObjFunction func,
                                 final SContext     context,
                                 final Object[]     args)
@@ -3156,7 +3156,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    @TeaFunction("&=")
+    @TeaFunctionImplementor("&=")
     public static Object functionBinAndBy(final SObjFunction func,
                                           final SContext     context,
                                           final Object[]     args)
@@ -3251,7 +3251,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    @TeaFunction("|=")
+    @TeaFunctionImplementor("|=")
     public static Object functionBinOrBy(final SObjFunction func,
                                          final SContext     context,
                                          final Object[]     args)
@@ -3346,7 +3346,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    @TeaFunction("^=")
+    @TeaFunctionImplementor("^=")
     public static Object functionBinXorBy(final SObjFunction func,
                                           final SContext     context,
                                           final Object[]     args)
@@ -3441,7 +3441,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    @TeaFunction("<<=")
+    @TeaFunctionImplementor("<<=")
     public static Object functionBinSlBy(final SObjFunction func,
                                          final SContext     context,
                                          final Object[]     args)
@@ -3536,7 +3536,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    @TeaFunction(">>=")
+    @TeaFunctionImplementor(">>=")
     public static Object functionBinSrBy(final SObjFunction func,
                                          final SContext     context,
                                          final Object[]     args)

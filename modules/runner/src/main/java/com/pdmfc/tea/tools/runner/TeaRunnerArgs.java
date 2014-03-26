@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2007-2012 PDMFC, All Rights Reserved.
+ * Copyright (c) 2007-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -22,7 +22,7 @@ import com.pdmfc.tea.STeaException;
  *
  **************************************************************************/
 
-final class STeaRunnerArgs
+final class TeaRunnerArgs
     extends Object {
 
 
@@ -57,7 +57,7 @@ final class STeaRunnerArgs
  *
  **************************************************************************/
 
-    private STeaRunnerArgs() {
+    private TeaRunnerArgs() {
 
         // Nothing to do.
     }
@@ -78,10 +78,10 @@ final class STeaRunnerArgs
  *
  **************************************************************************/
 
-    public static STeaRunnerArgs parse(final String[] cliArgs)
+    public static TeaRunnerArgs parse(final String[] cliArgs)
         throws STeaException {
 
-        STeaRunnerArgs result = new STeaRunnerArgs();
+        TeaRunnerArgs result = new TeaRunnerArgs();
 
         result.doParse(cliArgs);
 

@@ -11,14 +11,14 @@ import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
 
 import com.pdmfc.tea.STeaException;
-import com.pdmfc.tea.compiler.SCode;
-import com.pdmfc.tea.compiler.SCompiler;
+import com.pdmfc.tea.compiler.TeaCode;
+import com.pdmfc.tea.compiler.TeaCompiler;
 import com.pdmfc.tea.runtime.SExitException;
 import com.pdmfc.tea.runtime.SFlowControlException;
-import com.pdmfc.tea.runtime.STeaRuntime;
+import com.pdmfc.tea.runtime.TeaRuntime;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.TeaRuntimeConfig;
-import com.pdmfc.tea.tools.runner.STeaRunnerArgs;
+import com.pdmfc.tea.tools.runner.TeaRunnerArgs;
 
 
 
@@ -30,7 +30,7 @@ import com.pdmfc.tea.tools.runner.STeaRunnerArgs;
  *
  **************************************************************************/
 
-public final class STeaRunner
+public final class TeaRunner
     extends Object {
 
 
@@ -43,7 +43,7 @@ public final class STeaRunner
  *
  **************************************************************************/
 
-    private STeaRunner() {
+    private TeaRunner() {
 
         // Nothing to do.
     }
@@ -97,14 +97,14 @@ public final class STeaRunner
 
     public static void main(final String[] args) {
 
-        int            retVal    = -1;
-        boolean        isOk      = true;
-        String         errorMsg  = null;
-        STeaRunnerArgs shellArgs = null;
+        int           retVal    = -1;
+        boolean       isOk      = true;
+        String        errorMsg  = null;
+        TeaRunnerArgs shellArgs = null;
 
         if ( isOk ) {
             try {
-                shellArgs = STeaRunnerArgs.parse(args);
+                shellArgs = TeaRunnerArgs.parse(args);
             } catch (STeaException e) {
                 isOk     = false;
                 errorMsg = e.getMessage();
@@ -154,14 +154,14 @@ public final class STeaRunner
  *
  **************************************************************************/
 
-    private static int execute(final STeaRunnerArgs args)
+    private static int execute(final TeaRunnerArgs args)
         throws IOException,
                STeaException {
 
         int              retVal     = 0;
         String           scriptPath = args.getScriptPath();
         Charset          charset    = findCharset(args.getEncoding());
-        SCode            code       = compileScript(scriptPath, charset);
+        TeaCode          code       = compileScript(scriptPath, charset);
         TeaRuntimeConfig config     =
             TeaRuntimeConfig.Builder.start()
             .setArgv0(scriptPath)
@@ -170,7 +170,7 @@ public final class STeaRunner
             .setImportLocationList(args.getLibraryList())
             .build();
 
-        STeaRuntime context = new STeaRuntime(config);
+        TeaRuntime context = new TeaRuntime(config);
 
         context.start();
 
@@ -199,13 +199,13 @@ public final class STeaRunner
  *
  **************************************************************************/
 
-    private static SCode compileScript(final String  scriptPath,
-                                       final Charset charset)
+    private static TeaCode compileScript(final String  scriptPath,
+                                         final Charset charset)
         throws IOException,
                STeaException {
 
-        SCompiler compiler       = new SCompiler();
-        SCode     code           = null;
+        TeaCompiler compiler = new TeaCompiler();
+        TeaCode     code     = null;
 
         if ( scriptPath == null ) {
             code = compiler.compile(System.in, charset, null);

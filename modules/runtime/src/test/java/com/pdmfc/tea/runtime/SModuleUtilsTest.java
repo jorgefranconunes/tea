@@ -15,7 +15,7 @@ import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.TeaEnvironment;
-import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.runtime.TeaFunctionImplementor;
 
 
 
@@ -67,7 +67,7 @@ public final class SModuleUtilsTest
         extends MyAbstractModule {
 
 
-        @TeaFunction("my-function")
+        @TeaFunctionImplementor("my-function")
         public static Object myFunction(final SObjFunction func,
                                         final SContext     context,
                                         final Object[]     args)
@@ -106,7 +106,7 @@ public final class SModuleUtilsTest
         extends MyAbstractModule {
 
 
-        @TeaFunction("my-function")
+        @TeaFunctionImplementor("my-function")
         public static Object myFunction()
             throws STeaException {
             throw new IllegalStateException("Should not be here!");
@@ -141,7 +141,7 @@ public final class SModuleUtilsTest
         extends MyAbstractModule {
 
 
-        @TeaFunction("my-function")
+        @TeaFunctionImplementor("my-function")
         public static Object myFunction(final SObjFunction function,
                                         final Object       wrongType,
                                         final Object[]     args)
@@ -178,7 +178,7 @@ public final class SModuleUtilsTest
         extends MyAbstractModule {
 
 
-        @TeaFunction("my-function")
+        @TeaFunctionImplementor("my-function")
         public static Object myFunction(final SObjFunction function,
                                         final SContext     context,
                                         final Object       wrongType)
@@ -224,7 +224,7 @@ public final class SModuleUtilsTest
         extends MyAbstractModule {
 
 
-        @TeaFunction("my-function")
+        @TeaFunctionImplementor("my-function")
         public static Object myFunction(final SObjFunction func,
                                         final SContext     context,
                                         final Object[]     args)
@@ -273,7 +273,7 @@ public final class SModuleUtilsTest
         extends MyAbstractModule {
 
 
-        @TeaFunction("my-function")
+        @TeaFunctionImplementor("my-function")
         public static Object myFunction(final SObjFunction func,
                                         final SContext     context,
                                         final Object[]     args)

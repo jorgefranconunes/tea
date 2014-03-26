@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2012 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -24,7 +24,7 @@ import com.pdmfc.tea.runtime.SRuntimeException;
  *
  **************************************************************************/
 
-public final class SCode
+public final class TeaCode
     extends Object {
 
 
@@ -50,7 +50,7 @@ public final class SCode
  *
  **************************************************************************/
 
-    SCode(final String fileName) {
+    TeaCode(final String fileName) {
 
         _fileName = fileName;
     }

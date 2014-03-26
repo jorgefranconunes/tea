@@ -16,9 +16,9 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pdmfc.tea.compiler.SCode;
-import com.pdmfc.tea.compiler.SCompileException;
-import com.pdmfc.tea.compiler.SCompilerStream;
+import com.pdmfc.tea.compiler.TeaCode;
+import com.pdmfc.tea.compiler.TeaCompileException;
+import com.pdmfc.tea.compiler.CompilerStream;
 import com.pdmfc.tea.compiler.SStatement;
 import com.pdmfc.tea.compiler.STeaParserUtils;
 import com.pdmfc.tea.compiler.SWordBlock;
@@ -38,7 +38,7 @@ import com.pdmfc.tea.util.SInputSourceFactory;
 /**************************************************************************
  *
  * Parses a Tea script and produces code that can be executed
- * later. Compiled code is represented as a <code>{@link SCode}</code>
+ * later. Compiled code is represented as a <code>{@link TeaCode}</code>
  * object.
  *
  * <p>Objects of this class are intended to be used from within a
@@ -46,15 +46,15 @@ import com.pdmfc.tea.util.SInputSourceFactory;
  *
  **************************************************************************/
 
-public final class SCompiler
+public final class TeaCompiler
     extends Object {
 
 
 
 
 
-    private SCompilerStream _in       = null;
-    private String          _fileName = null;
+    private CompilerStream _in       = null;
+    private String         _fileName = null;
 
 
 
@@ -66,7 +66,7 @@ public final class SCompiler
  *
  **************************************************************************/
 
-    public SCompiler() {
+    public TeaCompiler() {
 
         // Nothing to do.
     }
@@ -97,19 +97,19 @@ public final class SCompiler
  * @exception IOException Thrown if the provided location could not be
  * opened for reading or if there was any error during reading.
  *
- * @exception SCompileException Thrown the Tea script had syntax
+ * @exception TeaCompileException Thrown the Tea script had syntax
  * errors.
  *
  **************************************************************************/
 
-    public SCode compile(final String  location,
-                         final Charset charset,
-                         final String  fileName)
+    public TeaCode compile(final String  location,
+                           final Charset charset,
+                           final String  fileName)
         throws IOException,
-               SCompileException {
+               TeaCompileException {
 
         Reader  reader  = SInputSourceFactory.openReader(location, charset);
-        SCode   code    = compile(reader, fileName);
+        TeaCode code    = compile(reader, fileName);
 
         return code;
     }
@@ -143,21 +143,21 @@ public final class SCompiler
  * @exception IOException Thrown if the provided location could not be
  * opened for reading or if there was any error during reading.
  *
- * @exception SCompileException Thrown the Tea script had syntax
+ * @exception TeaCompileException Thrown the Tea script had syntax
  * errors.
  *
  **************************************************************************/
 
-    public SCode compile(final String  baseLocation,
-                         final String  location,
-                         final Charset charset,
+    public TeaCode compile(final String  baseLocation,
+                           final String  location,
+                           final Charset charset,
                          final String  fileName)
         throws IOException,
-               SCompileException {
+               TeaCompileException {
 
         Reader  reader  =
             SInputSourceFactory.openReader(baseLocation, location, charset);
-        SCode   code    = null;
+        TeaCode code    = null;
 
         try {
             code = compile(reader, fileName);
@@ -194,22 +194,22 @@ public final class SCompiler
  * @exception IOException Thrown if there was any error reading from
  * the provided input stream.
  *
- * @exception SCompileException Thrown the Tea script had syntax
+ * @exception TeaCompileException Thrown the Tea script had syntax
  * errors.
  *
  **************************************************************************/
 
-    public SCode compile(final InputStream input,
-                         final Charset     charset,
-                         final String      fileName)
+    public TeaCode compile(final InputStream input,
+                           final Charset     charset,
+                           final String      fileName)
         throws IOException,
-               SCompileException {
+               TeaCompileException {
 
         Charset theCharset  =
             (charset!=null) ? charset : Charset.defaultCharset();
         Reader  inputReader = new InputStreamReader(input, theCharset);
         Reader  reader      = new BufferedReader(inputReader);
-        SCode   code        = null;
+        TeaCode code        = null;
 
         try {
             code = compile(reader, fileName);
@@ -230,19 +230,19 @@ public final class SCompiler
  *
  * @param script A Tea script.
  *
- * @return A <code>SCode</code> object containing the bytecode that can be
+ * @return A <code>TeaCode</code> object containing the bytecode that can be
  * executed later.
  *
- * @exception SCompileException Thrown if a syntax error was found
+ * @exception TeaCompileException Thrown if a syntax error was found
  * during compilation.
  *
  **************************************************************************/
 
-    public SCode compile(final String script)
-        throws SCompileException {
+    public TeaCode compile(final String script)
+        throws TeaCompileException {
 
-        Reader reader = new StringReader(script);
-        SCode  code   = null;
+        Reader  reader = new StringReader(script);
+        TeaCode code   = null;
 
         try {
             code = compile(reader, null);
@@ -271,26 +271,26 @@ public final class SCompiler
  * code. Compile or runtime error messages will use this name when
  * identifying the source file where the error occurred.
  *
- * @return A <code>{@link SCode}</code> object containing the bytecode
+ * @return A <code>{@link TeaCode}</code> object containing the bytecode
  * that can be executed later.
  *
  * @exception IOException Thrown if there were any problems reading
  * from the given reader.
  *
- * @exception SCompileException Thrown if a syntax error was found
+ * @exception TeaCompileException Thrown if a syntax error was found
  * during compilation.
  *
  **************************************************************************/
 
-    public SCode compile(final Reader reader,
-                         final String fileName)
+    public TeaCode compile(final Reader reader,
+                           final String fileName)
         throws IOException,
-               SCompileException {
+               TeaCompileException {
 
-        SCode code = null;
+        TeaCode code = null;
 
         _fileName = fileName;
-        _in       = new SCompilerStream(reader);
+        _in       = new CompilerStream(reader);
 
         try {
             code = getBlockWhole();
@@ -313,11 +313,11 @@ public final class SCompiler
  *
  **************************************************************************/
 
-    private SCode getBlockWhole()
+    private TeaCode getBlockWhole()
         throws IOException,
-               SCompileException {
+               TeaCompileException {
 
-        SCode code = getBlock();
+        TeaCode code = getBlock();
 
         if ( !isAtEnd() ) {
             String msg = "unexpected ''{0}'' at line {1}{2}";
@@ -337,12 +337,12 @@ public final class SCompiler
  *
  **************************************************************************/
 
-    private SCode getBlockInner(final char c,
-                                final int  line)
+    private TeaCode getBlockInner(final char c,
+                                  final int  line)
         throws IOException,
-               SCompileException {
+               TeaCompileException {
 
-        SCode code = getBlock();
+        TeaCode code = getBlock();
 
         if ( isAtEnd() ) {
             String msg = "no ''{0}'' found before end of script for block starting at line {1}{2}";
@@ -367,11 +367,11 @@ public final class SCompiler
  *
  **************************************************************************/
 
-    private SCode getBlock()
+    private TeaCode getBlock()
         throws IOException,
-               SCompileException {
+               TeaCompileException {
 
-        SCode code = new SCode(_fileName);
+        TeaCode code = new TeaCode(_fileName);
 
         skipToStatement();
         while ( !atEndOfBlock() ) {
@@ -394,7 +394,7 @@ public final class SCompiler
 
     private SStatement getStatement()
         throws IOException,
-               SCompileException {
+               TeaCompileException {
 
         SStatement.Factory statFact  = new SStatement.Factory(getCurrentLine());
         SStatement         statement = null;
@@ -420,7 +420,7 @@ public final class SCompiler
 
     private List<SWord> getList(final int line)
         throws IOException,
-               SCompileException {
+               TeaCompileException {
 
         List<SWord> list = new ArrayList<SWord>();
 
@@ -455,7 +455,7 @@ public final class SCompiler
 
     private SWord getWord()
         throws IOException,
-               SCompileException {
+               TeaCompileException {
 
         SWord result = null;
         int  l       = getCurrentLine();
@@ -512,7 +512,7 @@ public final class SCompiler
 
    private SWord objNumber()
          throws IOException,
-                SCompileException {
+                TeaCompileException {
 
       boolean       justDigits   = true;
       StringBuilder buffer       = new StringBuilder();
@@ -573,7 +573,7 @@ public final class SCompiler
  **************************************************************************/
 
     private int parseDec(final String str)
-        throws SCompileException {
+        throws TeaCompileException {
 
         int result = 0;
 
@@ -598,7 +598,7 @@ public final class SCompiler
  **************************************************************************/
 
     private long parseLong(final String str)
-        throws SCompileException {
+        throws TeaCompileException {
 
         long result = 0L;
 
@@ -623,7 +623,7 @@ public final class SCompiler
  **************************************************************************/
 
     private int parseOct(final String str)
-        throws SCompileException {
+        throws TeaCompileException {
 
         int result = 0;
 
@@ -652,7 +652,7 @@ public final class SCompiler
  **************************************************************************/
 
     private int parseHex(final String str)
-        throws SCompileException {
+        throws TeaCompileException {
 
         int result = 0;
 
@@ -677,7 +677,7 @@ public final class SCompiler
  **************************************************************************/
 
     private double parseFloat(final String str)
-        throws SCompileException {
+        throws TeaCompileException {
 
         double result = 0.0;
 
@@ -763,7 +763,7 @@ public final class SCompiler
 
     private String getString(final int line)
         throws IOException,
-               SCompileException {
+               TeaCompileException {
 
         StringBuilder name        = new StringBuilder();
         boolean       endWasFound = false;
@@ -1107,9 +1107,9 @@ public final class SCompiler
 
     private void compileError(final String    msg,
                               final Object... fmtArgs)
-        throws SCompileException {
+        throws TeaCompileException {
 
-        throw new SCompileException(msg, fmtArgs);
+        throw new TeaCompileException(msg, fmtArgs);
     }
 
 

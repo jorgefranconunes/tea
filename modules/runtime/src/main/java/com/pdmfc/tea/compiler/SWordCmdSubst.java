@@ -1,13 +1,13 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
 package com.pdmfc.tea.compiler;
 
 import com.pdmfc.tea.STeaException;
-import com.pdmfc.tea.compiler.SCode;
+import com.pdmfc.tea.compiler.TeaCode;
 import com.pdmfc.tea.compiler.SWord;
 import com.pdmfc.tea.compiler.SWordSubstUtils;
 import com.pdmfc.tea.runtime.SContext;
@@ -35,7 +35,7 @@ final class SWordCmdSubst
 
 
 
-    private SCode _code = null;
+    private TeaCode _code = null;
 
 
 
@@ -50,7 +50,7 @@ final class SWordCmdSubst
  *
  **************************************************************************/
 
-    public SWordCmdSubst(final SCode code) {
+    public SWordCmdSubst(final TeaCode code) {
 
         _code = code;
     }

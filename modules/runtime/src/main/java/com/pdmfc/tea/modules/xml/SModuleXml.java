@@ -12,8 +12,8 @@ import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.STypeException;
+import com.pdmfc.tea.runtime.TeaFunctionImplementor;
 import com.pdmfc.tea.runtime.TeaEnvironment;
-import com.pdmfc.tea.runtime.TeaFunction;
 
 
 
@@ -170,7 +170,7 @@ public final class SModuleXml
  *
  **************************************************************************/
 
-    @TeaFunction("xml-encode")
+    @TeaFunctionImplementor("xml-encode")
     public static Object functionXmlEncode(final SObjFunction func,
                                            final SContext     context,
                                            final Object[]     args)

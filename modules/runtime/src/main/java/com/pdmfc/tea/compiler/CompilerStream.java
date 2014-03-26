@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2010-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2010-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -20,7 +20,7 @@ import java.io.Reader;
  *
  **************************************************************************/
 
-final class SCompilerStream
+final class CompilerStream
     extends Object {
 
 
@@ -47,7 +47,7 @@ final class SCompilerStream
  *
  **************************************************************************/
 
-    public SCompilerStream(final Reader reader)
+    public CompilerStream(final Reader reader)
         throws IOException {
 
         _in          = new BufferedReader(reader);

@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -18,7 +18,7 @@ import com.pdmfc.tea.STeaException;
  *
  **************************************************************************/
 
-public final class SCompileException
+public final class TeaCompileException
     extends STeaException {
 
 
@@ -31,7 +31,7 @@ public final class SCompileException
  *
  **************************************************************************/
 
-    public SCompileException(final String msg) {
+    public TeaCompileException(final String msg) {
 
         super(msg);
     }
@@ -50,8 +50,8 @@ public final class SCompileException
  *
  **************************************************************************/
 
-    public SCompileException(final String    msgFmt,
-                             final Object... fmtArgs) {
+    public TeaCompileException(final String    msgFmt,
+                               final Object... fmtArgs) {
 
         super(msgFmt, fmtArgs);
     }

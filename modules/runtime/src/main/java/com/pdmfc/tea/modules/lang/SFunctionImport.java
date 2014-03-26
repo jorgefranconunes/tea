@@ -15,8 +15,8 @@ import java.util.Map;
 
 import com.pdmfc.tea.SConfigInfo;
 import com.pdmfc.tea.STeaException;
-import com.pdmfc.tea.compiler.SCode;
-import com.pdmfc.tea.compiler.SCompiler;
+import com.pdmfc.tea.compiler.TeaCode;
+import com.pdmfc.tea.compiler.TeaCompiler;
 import com.pdmfc.tea.runtime.SArgs;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SNoSuchVarException;
@@ -292,7 +292,7 @@ final class SFunctionImport
         private File    _file           = null;
 
         // Used to compile the code in the imported files.
-        private SCompiler _compiler = new SCompiler();
+        private TeaCompiler _compiler = new TeaCompiler();
 
 
 
@@ -350,7 +350,7 @@ final class SFunctionImport
             Object  result        = null;
             String  path          = _fullPath;
             Charset sourceCharset = _environment.getSourceCharset();
-            SCode   code          = null;
+            TeaCode code          = null;
             
             try {
                 code = _compiler.compile(path, sourceCharset, _importPath);

@@ -1,13 +1,13 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
 package com.pdmfc.tea.compiler;
 
 import com.pdmfc.tea.STeaException;
-import com.pdmfc.tea.compiler.SCode;
+import com.pdmfc.tea.compiler.TeaCode;
 import com.pdmfc.tea.compiler.SWord;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjBlock;
@@ -32,7 +32,7 @@ final class SWordBlock
 
 
 
-    private SCode _code;
+    private TeaCode _code;
 
 
 
@@ -44,7 +44,7 @@ final class SWordBlock
  *
  **************************************************************************/
 
-    public SWordBlock(final SCode code) {
+    public SWordBlock(final TeaCode code) {
 
         _code = code;
     }
@@ -61,7 +61,7 @@ final class SWordBlock
 
     public Object get(final SContext context) {
 
-        final SCode code = _code;
+        final TeaCode code = _code;
 
         SObjBlock block = new SObjBlock() {
                 public SContext getContext() {

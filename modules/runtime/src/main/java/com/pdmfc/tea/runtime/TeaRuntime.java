@@ -13,8 +13,8 @@ import java.util.List;
 
 import com.pdmfc.tea.SConfigInfo;
 import com.pdmfc.tea.STeaException;
-import com.pdmfc.tea.compiler.SCode;
-import com.pdmfc.tea.compiler.SCompiler;
+import com.pdmfc.tea.compiler.TeaCode;
+import com.pdmfc.tea.compiler.TeaCompiler;
 import com.pdmfc.tea.modules.SModule;
 import com.pdmfc.tea.runtime.SArgvUtils;
 import com.pdmfc.tea.runtime.SContext;
@@ -32,7 +32,7 @@ import com.pdmfc.tea.runtime.TeaRuntimeConfig;
  *
  **************************************************************************/
 
-public final class STeaRuntime
+public final class TeaRuntime
     extends Object {
 
 
@@ -97,7 +97,7 @@ public final class STeaRuntime
  *
  **************************************************************************/
 
-    public STeaRuntime(final TeaRuntimeConfig config) {
+    public TeaRuntime(final TeaRuntimeConfig config) {
 
         _config      = config;
         _environment = new TeaEnvironmentImpl(config.getSourceCharset());
@@ -264,7 +264,7 @@ public final class STeaRuntime
  *
  **************************************************************************/
 
-    public Object execute(final SCode code)
+    public Object execute(final TeaCode code)
         throws STeaException {
 
         checkState(State.STARTED);
@@ -407,12 +407,12 @@ public final class STeaRuntime
 
         Charset      sourceCharset = _config.getSourceCharset();
         List<String> dirList       = _allImportLocations;
-        SCompiler    compiler      = new SCompiler();
+        TeaCompiler    compiler      = new TeaCompiler();
 
         for ( String dirPath : dirList ) {
             String   path          = INIT_FILE;
             SContext globalContext = _environment.getGlobalContext();
-            SCode    code          = null;
+            TeaCode  code          = null;
             
             try {
                 code = compiler.compile(dirPath, path, sourceCharset, path);

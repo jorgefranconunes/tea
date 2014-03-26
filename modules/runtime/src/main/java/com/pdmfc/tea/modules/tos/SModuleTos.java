@@ -24,8 +24,8 @@ import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypeException;
 import com.pdmfc.tea.runtime.STypes;
+import com.pdmfc.tea.runtime.TeaFunctionImplementor;
 import com.pdmfc.tea.runtime.TeaEnvironment;
-import com.pdmfc.tea.runtime.TeaFunction;
 
 
 
@@ -217,7 +217,7 @@ public final class SModuleTos
  *
  **************************************************************************/
 
-    @TeaFunction("class")
+    @TeaFunctionImplementor("class")
     public Object functionClass(final SObjFunction func,
                                 final SContext     context,
                                 final Object[]     args)
@@ -309,7 +309,7 @@ public final class SModuleTos
  *
  **************************************************************************/
 
-    @TeaFunction("new-class")
+    @TeaFunctionImplementor("new-class")
     public Object functionNewClass(final SObjFunction func,
                                    final SContext     context,
                                    final Object[]     args)
@@ -404,7 +404,7 @@ public final class SModuleTos
  *
  **************************************************************************/
 
-    @TeaFunction("new")
+    @TeaFunctionImplementor("new")
     public static Object functionNew(final SObjFunction func,
                                      final SContext     context,
                                      final Object[]     args)
@@ -476,7 +476,7 @@ public final class SModuleTos
  * 
  **************************************************************************/
 
-    @TeaFunction("method")
+    @TeaFunctionImplementor("method")
     public static Object functionMethod(final SObjFunction func,
                                         final SContext     context,
                                         final Object[]     args)
@@ -618,7 +618,7 @@ public final class SModuleTos
  *
  **************************************************************************/
 
-    @TeaFunction("load-class")
+    @TeaFunctionImplementor("load-class")
     public Object functionLoadClass(final SObjFunction func,
                                     final SContext     context,
                                     final Object[]     args)
@@ -714,7 +714,7 @@ public final class SModuleTos
  *
  **************************************************************************/
 
-    @TeaFunction("class-base-of")
+    @TeaFunctionImplementor("class-base-of")
     public static Object functionBaseOf(final SObjFunction func,
                                         final SContext     context,
                                         final Object[]     args)
@@ -775,7 +775,7 @@ public final class SModuleTos
  *
  **************************************************************************/
 
-    @TeaFunction("class-of")
+    @TeaFunctionImplementor("class-of")
     public static Object functionClassOf(final SObjFunction func,
                                          final SContext     context,
                                          final Object[]     args)
@@ -851,7 +851,7 @@ public final class SModuleTos
  *
  **************************************************************************/
 
-    @TeaFunction("class-is-a")
+    @TeaFunctionImplementor("class-is-a")
     public static Object functionIsA(final SObjFunction func,
                                      final SContext     context,
                                      final Object[]     args)
@@ -921,7 +921,7 @@ public final class SModuleTos
  *
  **************************************************************************/
 
-    @TeaFunction("class-get-name")
+    @TeaFunctionImplementor("class-get-name")
     public static Object functionGetName(final SObjFunction func,
                                          final SContext     context,
                                          final Object[]     args)
@@ -981,7 +981,7 @@ public final class SModuleTos
  *
  **************************************************************************/
 
-    @TeaFunction("tos-obj?")
+    @TeaFunctionImplementor("tos-obj?")
     public static Object functionIsTosObj(final SObjFunction func,
                                           final SContext     context,
                                           final Object[]     args)
