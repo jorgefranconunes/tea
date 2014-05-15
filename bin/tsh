@@ -166,10 +166,10 @@ function parseCliOptions () {
                 ;;
             --jre-options=* )
                 local item=$(expr "${option}" : '--jre-options=\(.*\)')
-                if [ -z "${_jreOptions}" ] ; then
-                    _teaJreOptions=${_jreOptions}
+                if [ -z "${_teaJreOptions}" ] ; then
+                    _teaJreOptions=${item}
                 else
-                    _teaJreOptions="${item} ${_jreOptions}"
+                    _teaJreOptions="${item} ${_teaJreOptions}"
                 fi
                 ;;
             --encoding=* )
