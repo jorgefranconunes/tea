@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.io.SIOException;
 import com.pdmfc.tea.modules.io.SInput;
 import com.pdmfc.tea.modules.io.SOutput;
@@ -56,7 +56,7 @@ public class SSocketBase
  **************************************************************************/
 
     public SSocketBase(final STosClass myClass)
-        throws STeaException {
+        throws TeaException {
 
         super(myClass);
     }
@@ -72,7 +72,7 @@ public class SSocketBase
  **************************************************************************/
 
     void initialize(final SContext context)
-        throws STeaException {
+        throws TeaException {
 
         _input  = SInput.newInstance(context);
         _output = SOutput.newInstance(context);
@@ -91,7 +91,7 @@ public class SSocketBase
     public Object connect(final SObjFunction obj,
                           final SContext     context,
                           final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 4 ) {
             throw new SNumArgException(args, "host port");
@@ -168,7 +168,7 @@ public class SSocketBase
     public Object close(final SObjFunction obj,
                         final SContext     context,
                         final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         close();
 
@@ -233,7 +233,7 @@ public class SSocketBase
     public Object getInput(final SObjFunction obj,
                            final SContext     context,
                            final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         return _input;
     }
@@ -251,7 +251,7 @@ public class SSocketBase
     public Object getOutput(final SObjFunction obj,
                             final SContext     context,
                             final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         return _output;
     }
@@ -268,7 +268,7 @@ public class SSocketBase
 
     private Socket createSocket(final String host,
                                 final int    port)
-        throws STeaException {
+        throws TeaException {
 
         if ( _sockFactory == null ) {
             throw new SRuntimeException("internal socket factory not set");

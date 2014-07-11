@@ -11,7 +11,7 @@ import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.io.SInput;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
@@ -70,7 +70,7 @@ public final class SZipFile
  **************************************************************************/
 
     public SZipFile(final STosClass myClass)
-        throws STeaException {
+        throws TeaException {
 
         super(myClass);
     }
@@ -111,7 +111,7 @@ public final class SZipFile
     public Object constructor(final SObjFunction obj,
                               final SContext     context,
                               final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         switch ( args.length ) {
         case 2 :
@@ -164,7 +164,7 @@ public final class SZipFile
     public Object open(final SObjFunction obj,
                        final SContext     context,
                        final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "pathName");
@@ -223,7 +223,7 @@ public final class SZipFile
     public Object close(final SObjFunction obj,
                         final SContext     context,
                         final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SRuntimeException("no arguments are needed");
@@ -272,7 +272,7 @@ public final class SZipFile
     public Object getEntryNames(final SObjFunction obj,
                                 final SContext     context,
                                 final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SRuntimeException("no arguments are needed");
@@ -333,7 +333,7 @@ public final class SZipFile
     public Object getInput(final SObjFunction obj,
                            final SContext     context,
                            final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SRuntimeException("entryName");
@@ -401,7 +401,7 @@ public final class SZipFile
     public Object isDirectory(final SObjFunction obj,
                               final SContext     context,
                               final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SRuntimeException("entryName");

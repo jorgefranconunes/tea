@@ -10,7 +10,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.runtime.SObjSymbol;
 
 
@@ -27,7 +27,7 @@ import com.pdmfc.tea.runtime.SObjSymbol;
  **************************************************************************/
 
 public class SRuntimeException
-    extends STeaException {
+    extends TeaException {
 
 
 

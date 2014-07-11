@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.tdbc.SPreparedStatement;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
@@ -81,7 +81,7 @@ public final class SCallableStatement
  **************************************************************************/
 
     public SCallableStatement(final STosClass myClass)
-        throws STeaException {
+        throws TeaException {
         
         super(myClass);
     }
@@ -128,7 +128,7 @@ public final class SCallableStatement
  **************************************************************************/
 
     public static SStatement newInstance(final SContext context)
-        throws STeaException {
+        throws TeaException {
 
         STosObj callStat = STosUtil.newInstance(CLASS_NAME_S, context);
 
@@ -159,7 +159,7 @@ public final class SCallableStatement
     public Object constructor(final SObjFunction obj,
                               final SContext     context,
                               final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         return obj;
     }
@@ -600,7 +600,7 @@ public final class SCallableStatement
     public Object fetchOutParameters(final SObjFunction obj,
                                      final SContext     context,
                                      final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
          try {
             for ( SOutParameter outParam : _outList ) {
@@ -661,7 +661,7 @@ public final class SCallableStatement
  **************************************************************************/
 
         public abstract void retrieve(CallableStatement stat)
-            throws STeaException,
+            throws TeaException,
                    SQLException;
 
 
@@ -860,7 +860,7 @@ public final class SCallableStatement
  **************************************************************************/
 
         public void retrieve(final CallableStatement stat)
-            throws STeaException,
+            throws TeaException,
                    SQLException {
 
             Date  date   = stat.getTimestamp(_index);

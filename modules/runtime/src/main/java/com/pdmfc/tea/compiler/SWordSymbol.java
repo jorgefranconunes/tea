@@ -6,7 +6,7 @@
 
 package com.pdmfc.tea.compiler;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.compiler.SWord;
 import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.SContext;
@@ -88,7 +88,7 @@ final class SWordSymbol
  **************************************************************************/
 
     public SObjFunction toFunction(final SContext context)
-        throws STeaException {
+        throws TeaException {
 
         SObjFunction result = SWordSubstUtils.toFunction(_symbol, context);
 

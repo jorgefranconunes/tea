@@ -6,7 +6,7 @@
 
 package com.pdmfc.tea.runtime;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.runtime.SContext;
 
 
@@ -50,13 +50,13 @@ public interface SObjBlock {
  *
  * @return The value returned by the last statement in the block.
  *
- * @exception STeaException Thrown if something happened while
+ * @exception TeaException Thrown if something happened while
  * executing the statements that form the block.
  *
  **************************************************************************/
 
     Object exec(SContext aContext)
-        throws STeaException;
+        throws TeaException;
 
 
 
@@ -70,13 +70,13 @@ public interface SObjBlock {
  * @return The value returned by the execution of last statement in
  * the block. Null if the block had no statements.
  *
- * @exception STeaException Thrown if something happened while
+ * @exception TeaException Thrown if something happened while
  * executing the statements that form the block.
  *
  **************************************************************************/
 
     Object exec()
-        throws STeaException;
+        throws TeaException;
 
 
 }

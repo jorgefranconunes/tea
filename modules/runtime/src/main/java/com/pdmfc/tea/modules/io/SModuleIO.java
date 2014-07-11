@@ -12,8 +12,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.StringTokenizer;
 
-import com.pdmfc.tea.STeaException;
-import com.pdmfc.tea.modules.SModule;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.io.SInput;
 import com.pdmfc.tea.modules.tos.SJavaClass;
 import com.pdmfc.tea.modules.tos.STosClass;
@@ -24,6 +23,7 @@ import com.pdmfc.tea.runtime.SObjNull;
 import com.pdmfc.tea.runtime.SObjPair;
 import com.pdmfc.tea.runtime.TeaFunctionImplementor;
 import com.pdmfc.tea.runtime.TeaEnvironment;
+import com.pdmfc.tea.runtime.TeaModule;
 
 
 
@@ -64,7 +64,7 @@ import com.pdmfc.tea.runtime.TeaEnvironment;
 
 public final class SModuleIO
     extends Object
-    implements SModule {
+    implements TeaModule {
 
 
 
@@ -102,7 +102,7 @@ public final class SModuleIO
 
     @Override
     public void init(final TeaEnvironment environment)
-        throws STeaException {
+        throws TeaException {
 
         STosClass inClass  = new SJavaClass("com.pdmfc.tea.modules.io.SInput");
         STosClass outClass = new SJavaClass("com.pdmfc.tea.modules.io.SOutput");
@@ -180,7 +180,7 @@ public final class SModuleIO
                 _stdout.flush();
             } catch ( IOException e1 ) {
                 // We do not care.
-            } catch ( STeaException e2 ) {
+            } catch ( TeaException e2 ) {
                 // We do not care.
             }
         }
@@ -189,7 +189,7 @@ public final class SModuleIO
                 _stderr.flush();
             } catch ( IOException e3 ) {
                 // We do not care.
-            } catch ( STeaException e4 ) {
+            } catch ( TeaException e4 ) {
                 // We do not care.
             }
         }
@@ -234,7 +234,7 @@ public final class SModuleIO
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -245,7 +245,7 @@ public final class SModuleIO
     public static Object functionBasename(final SObjFunction func,
                                           final SContext     context,
                                           final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         SArgs.checkCount(args, 2, "path");
 
@@ -300,7 +300,7 @@ public final class SModuleIO
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -311,7 +311,7 @@ public final class SModuleIO
     public static Object functionDirname(final SObjFunction func,
                                          final SContext     context,
                                          final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         SArgs.checkCount(args, 2, "path");
 
@@ -369,7 +369,7 @@ public final class SModuleIO
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -380,7 +380,7 @@ public final class SModuleIO
     public static Object functionExtension(final SObjFunction func,
                                            final SContext     context,
                                            final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         SArgs.checkCount(args, 2, "path");
 
@@ -437,7 +437,7 @@ public final class SModuleIO
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -448,7 +448,7 @@ public final class SModuleIO
     public static Object functionCopy(final SObjFunction func,
                                       final SContext     context,
                                       final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         SArgs.checkCount(args, 3, "src-path dst-path");
 
@@ -548,7 +548,7 @@ public final class SModuleIO
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -559,7 +559,7 @@ public final class SModuleIO
     public static Object functionFileExists(final SObjFunction func,
                                             final SContext     context,
                                             final Object[]      args)
-        throws STeaException {
+        throws TeaException {
 
         SArgs.checkCount(args, 2, "path");
 
@@ -609,7 +609,7 @@ public final class SModuleIO
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -620,7 +620,7 @@ public final class SModuleIO
     public static Object functionIsDir(final SObjFunction func,
                                        final SContext     context,
                                        final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         SArgs.checkCount(args, 2, "path");
 
@@ -670,7 +670,7 @@ public final class SModuleIO
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -681,7 +681,7 @@ public final class SModuleIO
     public static Object functionIsRegular(final SObjFunction func,
                                            final SContext     context,
                                            final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         SArgs.checkCount(args, 2, "path");
 
@@ -734,7 +734,7 @@ public final class SModuleIO
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -745,7 +745,7 @@ public final class SModuleIO
     public static Object functionJoin(final SObjFunction func,
                                       final SContext     context,
                                       final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         StringBuilder buffer = new StringBuilder();
 
@@ -804,7 +804,7 @@ public final class SModuleIO
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -815,7 +815,7 @@ public final class SModuleIO
     public static Object functionMkdir(final SObjFunction func,
                                        final SContext     context,
                                        final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         SArgs.checkCount(args, 2, "path");
 
@@ -870,7 +870,7 @@ public final class SModuleIO
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -881,7 +881,7 @@ public final class SModuleIO
     public static Object functionRename(final SObjFunction func,
                                         final SContext     context,
                                         final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         SArgs.checkCount(args, 3, "old-name new-name");
 
@@ -933,7 +933,7 @@ public final class SModuleIO
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -944,7 +944,7 @@ public final class SModuleIO
     public static Object functionSize(final SObjFunction func,
                                       final SContext     context,
                                       final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         SArgs.checkCount(args, 2, "path");
 
@@ -998,7 +998,7 @@ public final class SModuleIO
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -1009,7 +1009,7 @@ public final class SModuleIO
     public static Object functionSplitPathList(final SObjFunction func,
                                                final SContext     context,
                                                final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         SArgs.checkCount(args, 2, "string-path-list");
 
@@ -1115,7 +1115,7 @@ public final class SModuleIO
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -1126,7 +1126,7 @@ public final class SModuleIO
     public static Object functionUnlink(final SObjFunction func,
                                         final SContext     context,
                                         final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         SArgs.checkCount(args, 2, "path");
 

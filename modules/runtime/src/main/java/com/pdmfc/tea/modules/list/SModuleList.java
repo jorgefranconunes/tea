@@ -8,8 +8,7 @@ package com.pdmfc.tea.modules.list;
 
 import java.util.Iterator;
 
-import com.pdmfc.tea.STeaException;
-import com.pdmfc.tea.modules.SModule;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.runtime.SArgs;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SEmptyListException;
@@ -20,6 +19,7 @@ import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypes;
 import com.pdmfc.tea.runtime.TeaEnvironment;
 import com.pdmfc.tea.runtime.TeaFunctionImplementor;
+import com.pdmfc.tea.runtime.TeaModule;
 
 
 
@@ -51,7 +51,7 @@ import com.pdmfc.tea.runtime.TeaFunctionImplementor;
 
 public final class SModuleList
     extends Object
-    implements SModule {
+    implements TeaModule {
 
 
 
@@ -80,7 +80,7 @@ public final class SModuleList
 
     @Override
     public void init(final TeaEnvironment teaEnvironment)
-        throws STeaException {
+        throws TeaException {
 
         // Nothing to do. The functions provided by this module are
         // all implemented as methods of this with class with the
@@ -178,7 +178,7 @@ public final class SModuleList
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -189,7 +189,7 @@ public final class SModuleList
     public static Object functionCons(final SObjFunction func,
                                       final SContext     context,
                                       final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "obj1 obj2");
@@ -242,7 +242,7 @@ public final class SModuleList
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -253,7 +253,7 @@ public final class SModuleList
     public static Object functionCar(final SObjFunction func,
                                      final SContext     context,
                                      final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "pair");
@@ -309,7 +309,7 @@ public final class SModuleList
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -320,7 +320,7 @@ public final class SModuleList
     public static Object functionCdr(final SObjFunction func,
                                      final SContext     context,
                                      final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "pair");
@@ -373,7 +373,7 @@ public final class SModuleList
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -384,7 +384,7 @@ public final class SModuleList
     public static Object functionEmpty(final SObjFunction func,
                                        final SContext     context,
                                        final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "pair");
@@ -433,7 +433,7 @@ public final class SModuleList
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -444,7 +444,7 @@ public final class SModuleList
     public static Object functionNotEmpty(final SObjFunction func,
                                           final SContext     context,
                                           final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "pair");
@@ -499,7 +499,7 @@ public final class SModuleList
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -510,7 +510,7 @@ public final class SModuleList
     public static Object functionSetCar(final SObjFunction func,
                                         final SContext     context,
                                         final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "pair obj");
@@ -565,7 +565,7 @@ public final class SModuleList
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -576,7 +576,7 @@ public final class SModuleList
     public static Object functionSetCdr(final SObjFunction func,
                                         final SContext context,
                                         final Object[]   args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "pair obj");
@@ -626,7 +626,7 @@ public final class SModuleList
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -637,7 +637,7 @@ public final class SModuleList
     public static Object functionList(final SObjFunction func,
                                       final SContext     context,
                                       final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         SObjPair head    = SObjPair.emptyList();
         SObjPair element = null;
@@ -699,7 +699,7 @@ public final class SModuleList
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -710,7 +710,7 @@ public final class SModuleList
     public static Object functionNth(final SObjFunction func,
                                      final SContext     context,
                                      final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "list index");
@@ -783,7 +783,7 @@ public final class SModuleList
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -794,7 +794,7 @@ public final class SModuleList
     public static Object functionPrepend(final SObjFunction func,
                                          final SContext     context,
                                          final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "object list");
@@ -854,7 +854,7 @@ public final class SModuleList
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -865,7 +865,7 @@ public final class SModuleList
     public static Object functionAppend(final SObjFunction func,
                                         final SContext     context,
                                         final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "object list");
@@ -923,7 +923,7 @@ public final class SModuleList
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -934,7 +934,7 @@ public final class SModuleList
     public static Object functionLength(final SObjFunction func,
                                         final SContext     context,
                                         final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "list");

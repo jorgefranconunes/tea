@@ -6,7 +6,7 @@
 
 package com.pdmfc.tea.compiler;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.compiler.SWord;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjFunction;
@@ -83,7 +83,7 @@ final class SWordFloat
  **************************************************************************/
 
     public SObjFunction toFunction(final SContext context)
-        throws STeaException {
+        throws TeaException {
 
         throw new SRuntimeException("a float can not be used as a function");
     }

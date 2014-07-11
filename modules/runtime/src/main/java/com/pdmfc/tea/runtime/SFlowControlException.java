@@ -6,7 +6,7 @@
 
 package com.pdmfc.tea.runtime;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 
 
 
@@ -19,7 +19,7 @@ import com.pdmfc.tea.STeaException;
  **************************************************************************/
 
 public class SFlowControlException
-    extends STeaException {
+    extends TeaException {
 }
 
 

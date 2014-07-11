@@ -9,7 +9,7 @@ package com.pdmfc.tea.modules.io;
 import java.io.InputStream;
 import java.io.IOException;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.io.SInput;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
@@ -74,7 +74,7 @@ public final class SUrlInput
  **************************************************************************/
 
    public SUrlInput(final STosClass myClass)
-       throws STeaException {
+       throws TeaException {
 
        super(myClass);
    }
@@ -114,7 +114,7 @@ public final class SUrlInput
     public Object constructor(final SObjFunction obj,
                               final SContext     context,
                               final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "file-name");
@@ -166,7 +166,7 @@ public final class SUrlInput
 
     public static SUrlInput newInstance(final SContext context,
                                         final Object[] args)
-        throws STeaException {
+        throws TeaException {
 
         STosObj input = STosUtil.newInstance(CLASS_NAME_S, context, args);
 

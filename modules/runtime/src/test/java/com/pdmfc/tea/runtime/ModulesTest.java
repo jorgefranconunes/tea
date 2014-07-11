@@ -9,13 +9,14 @@ package com.pdmfc.tea.runtime;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import com.pdmfc.tea.STeaException;
-import com.pdmfc.tea.modules.SModule;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.TeaEnvironment;
+import com.pdmfc.tea.runtime.TeaEnvironmentImpl;
 import com.pdmfc.tea.runtime.TeaFunctionImplementor;
+import com.pdmfc.tea.runtime.TeaModule;
 
 
 
@@ -27,7 +28,7 @@ import com.pdmfc.tea.runtime.TeaFunctionImplementor;
  *
  **************************************************************************/
 
-public final class SModuleUtilsTest
+public final class ModulesTest
     extends Object {
 
 
@@ -42,14 +43,15 @@ public final class SModuleUtilsTest
 
     @Test
     public void addModuleWithTeaFunctionAnnotation()
-        throws STeaException {
+        throws TeaException {
 
         SObjSymbol     myFunctionName = SObjSymbol.addSymbol("my-function");
         TeaEnvironment environment    = buildTeaEnvironment();
+        Modules        modules        = new Modules(environment);
         SContext       context        = environment.getGlobalContext();
-        SModule        myModule       = new MyTestModule();
+        TeaModule      myModule       = new MyTestModule();
 
-        SModuleUtils.addModule(environment, myModule);
+        modules.add(myModule);
 
         SObjFunction myFunction = (SObjFunction)context.getVar(myFunctionName);
 
@@ -71,7 +73,7 @@ public final class SModuleUtilsTest
         public static Object myFunction(final SObjFunction func,
                                         final SContext     context,
                                         final Object[]     args)
-            throws STeaException {
+            throws TeaException {
             String argument = (String)args[1];
             String result   = argument + " - YES";
             return result;
@@ -90,13 +92,14 @@ public final class SModuleUtilsTest
 
     @Test(expected=IllegalArgumentException.class)
     public void addModuleWithTeaFunctionAnnotationFailure01()
-        throws STeaException {
+        throws TeaException {
 
         SObjSymbol     myFunctionName = SObjSymbol.addSymbol("my-function");
         TeaEnvironment environment    = buildTeaEnvironment();
-        SModule        myModule       = new MyTestModuleFailure01();
+        Modules        modules        = new Modules(environment);
+        TeaModule      myModule       = new MyTestModuleFailure01();
 
-        SModuleUtils.addModule(environment, myModule);
+        modules.add(myModule);
 
         fail("SModule.addModule(...) failed to fail!");
     }
@@ -108,7 +111,7 @@ public final class SModuleUtilsTest
 
         @TeaFunctionImplementor("my-function")
         public static Object myFunction()
-            throws STeaException {
+            throws TeaException {
             throw new IllegalStateException("Should not be here!");
         }
     }
@@ -125,13 +128,14 @@ public final class SModuleUtilsTest
 
     @Test(expected=IllegalArgumentException.class)
     public void addModuleWithTeaFunctionAnnotationFailure02()
-        throws STeaException {
+        throws TeaException {
 
         SObjSymbol     myFunctionName = SObjSymbol.addSymbol("my-function");
         TeaEnvironment environment    = buildTeaEnvironment();
-        SModule        myModule       = new MyTestModuleFailure02();
+        Modules        modules        = new Modules(environment);
+        TeaModule      myModule       = new MyTestModuleFailure02();
 
-        SModuleUtils.addModule(environment, myModule);
+        modules.add(myModule);
 
         fail("SModule.addModule(...) failed to fail!");
     }
@@ -145,7 +149,7 @@ public final class SModuleUtilsTest
         public static Object myFunction(final SObjFunction function,
                                         final Object       wrongType,
                                         final Object[]     args)
-            throws STeaException {
+            throws TeaException {
             throw new IllegalStateException("Should not be here!");
         }
     }
@@ -162,13 +166,14 @@ public final class SModuleUtilsTest
 
     @Test(expected=IllegalArgumentException.class)
     public void addModuleWithTeaFunctionAnnotationFailure03()
-        throws STeaException {
+        throws TeaException {
 
         SObjSymbol     myFunctionName = SObjSymbol.addSymbol("my-function");
         TeaEnvironment environment    = buildTeaEnvironment();
-        SModule        myModule       = new MyTestModuleFailure03();
+        Modules        modules        = new Modules(environment);
+        TeaModule      myModule       = new MyTestModuleFailure03();
 
-        SModuleUtils.addModule(environment, myModule);
+        modules.add(myModule);
 
         fail("SModule.addModule(...) failed to fail!");
     }
@@ -182,7 +187,7 @@ public final class SModuleUtilsTest
         public static Object myFunction(final SObjFunction function,
                                         final SContext     context,
                                         final Object       wrongType)
-            throws STeaException {
+            throws TeaException {
             throw new IllegalStateException("Should not be here!");
         }
     }
@@ -197,16 +202,17 @@ public final class SModuleUtilsTest
  *
  **************************************************************************/
 
-    @Test(expected=STeaException.class)
+    @Test(expected=TeaException.class)
     public void addModuleWithTeaFunctionAnnotationTeaException()
-        throws STeaException {
+        throws TeaException {
 
         SObjSymbol     myFunctionName = SObjSymbol.addSymbol("my-function");
         TeaEnvironment environment    = buildTeaEnvironment();
+        Modules        modules        = new Modules(environment);
         SContext       context        = environment.getGlobalContext();
-        SModule        myModule       = new MyTestModuleTeaException();
+        TeaModule      myModule       = new MyTestModuleTeaException();
 
-        SModuleUtils.addModule(environment, myModule);
+        modules.add(myModule);
 
         SObjFunction myFunction = (SObjFunction)context.getVar(myFunctionName);
 
@@ -228,9 +234,9 @@ public final class SModuleUtilsTest
         public static Object myFunction(final SObjFunction func,
                                         final SContext     context,
                                         final Object[]     args)
-            throws STeaException {
+            throws TeaException {
 
-            throw new STeaException("Oops...");
+            throw new TeaException("Oops...");
         }
 
 
@@ -246,16 +252,17 @@ public final class SModuleUtilsTest
  *
  **************************************************************************/
 
-    @Test(expected=STeaException.class)
+    @Test(expected=TeaException.class)
     public void addModuleWithTeaFunctionAnnotationJavaException()
-        throws STeaException {
+        throws TeaException {
 
         SObjSymbol     myFunctionName = SObjSymbol.addSymbol("my-function");
         TeaEnvironment environment    = buildTeaEnvironment();
+        Modules        modules        = new Modules(environment);
         SContext       context        = environment.getGlobalContext();
-        SModule        myModule       = new MyTestModuleJavaException();
+        TeaModule      myModule       = new MyTestModuleJavaException();
 
-        SModuleUtils.addModule(environment, myModule);
+        modules.add(myModule);
 
         SObjFunction myFunction = (SObjFunction)context.getVar(myFunctionName);
 
@@ -277,7 +284,7 @@ public final class SModuleUtilsTest
         public static Object myFunction(final SObjFunction func,
                                         final SContext     context,
                                         final Object[]     args)
-            throws STeaException {
+            throws TeaException {
 
             throw new IllegalStateException("Oops...");
         }
@@ -312,7 +319,7 @@ public final class SModuleUtilsTest
 
     private static abstract class MyAbstractModule
         extends Object
-        implements SModule {
+        implements TeaModule {
 
         @Override
         public void init(final TeaEnvironment environment) {}

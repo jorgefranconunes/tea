@@ -1,12 +1,12 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
+ * Copyright (c) 2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
-package com.pdmfc.tea.compiler;
+package com.pdmfc.tea;
 
-import com.pdmfc.tea.TeaException;
+import java.text.MessageFormat;
 
 
 
@@ -14,51 +14,13 @@ import com.pdmfc.tea.TeaException;
 
 /**************************************************************************
  *
- * Signals an abnormal condition while compiling Tea script.
+ * A runtime exception denoting an unrecoverable error in the Tea
+ * runtime.
  *
  **************************************************************************/
 
-public final class TeaCompileException
-    extends TeaException {
-
-
-
-
-
-/**************************************************************************
- *
- * @param msg The message to use as error message.
- *
- **************************************************************************/
-
-    public TeaCompileException(final String msg) {
-
-        super(msg);
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * @param msgFmt The <code>java.text.MessageFormat</code> like format
- * to use as error message.
- *
- * @param fmtArgs Formating arguments to use when building the actual
- * error message.
- *
- **************************************************************************/
-
-    public TeaCompileException(final String    msgFmt,
-                               final Object... fmtArgs) {
-
-        super(msgFmt, fmtArgs);
-    }
-
-
-}
-
+public final class TeaError
+    extends RuntimeException {
 
 
 
@@ -69,3 +31,47 @@ public final class TeaCompileException
  * 
  *
  **************************************************************************/
+
+    private TeaError(final String msg) {
+
+        super(msg);
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * Throws a newly created <code>CliException</code>
+ *
+ **************************************************************************/
+
+    public static void raise(final String    msgFmt,
+                             final Object... fmtArgs)
+        throws TeaError {
+
+        String msg = null;
+
+        if ( (fmtArgs==null) || (fmtArgs.length==0) ) {
+            msg = msgFmt;
+        } else {
+            msg = MessageFormat.format(msgFmt, fmtArgs);
+        }
+
+        throw new TeaError(msg);
+    }
+
+
+}
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+

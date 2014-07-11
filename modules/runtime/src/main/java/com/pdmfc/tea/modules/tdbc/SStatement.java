@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.tdbc.SClosedEventListener;
 import com.pdmfc.tea.modules.tdbc.SResultSet;
 import com.pdmfc.tea.modules.tos.STosClass;
@@ -79,7 +79,7 @@ public class SStatement
  **************************************************************************/
 
     public SStatement(final STosClass myClass)
-        throws STeaException {
+        throws TeaException {
 
         super(myClass);
     }
@@ -144,7 +144,7 @@ public class SStatement
  **************************************************************************/
 
     public static SStatement newInstance(final SContext context)
-        throws STeaException {
+        throws TeaException {
 
         STosObj stat = STosUtil.newInstance(CLASS_NAME_S, context);
 
@@ -190,7 +190,7 @@ public class SStatement
     public Object constructor(final SObjFunction obj,
                               final SContext     context,
                               final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         return obj;
     }
@@ -250,7 +250,7 @@ public class SStatement
     public Object query(final SObjFunction obj,
                         final SContext     context,
                         final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         checkStatement();
 
@@ -328,7 +328,7 @@ public class SStatement
     public Object update(final SObjFunction obj,
                          final SContext     context,
                          final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         checkStatement();
 
@@ -405,7 +405,7 @@ public class SStatement
     public Object execute(final SObjFunction obj,
                           final SContext     context,
                           final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         checkStatement();
 
@@ -468,7 +468,7 @@ public class SStatement
     public final Object getResultSet(final SObjFunction obj,
                                      final SContext     context,
                                      final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         checkStatement();
 
@@ -531,7 +531,7 @@ public class SStatement
     public final Object getMoreResults(final SObjFunction obj,
                                        final SContext     context,
                                        final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         checkStatement();
 
@@ -592,7 +592,7 @@ public class SStatement
     public final Object getFetchSize(final SObjFunction obj,
                                      final SContext     context,
                                      final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         checkStatement();
 
@@ -656,7 +656,7 @@ public class SStatement
     public final Object setFetchSize(final SObjFunction obj,
                                      final SContext     context,
                                      final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         checkStatement();
 
@@ -715,7 +715,7 @@ public class SStatement
     public final Object close(final SObjFunction obj,
                               final SContext     context,
                               final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         try {
             close();

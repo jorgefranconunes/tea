@@ -13,8 +13,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import com.pdmfc.tea.SConfigInfo;
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaConfigInfo;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.compiler.TeaCode;
 import com.pdmfc.tea.compiler.TeaCompiler;
 import com.pdmfc.tea.runtime.SArgs;
@@ -114,7 +114,7 @@ final class SFunctionImport
     // names where the "import" function looks for Tea
     // source files.
     public static final SObjSymbol LIB_VAR   =
-        SObjSymbol.addSymbol(SConfigInfo.getProperty(PROP_LIB_VAR));
+        SObjSymbol.addSymbol(TeaConfigInfo.get(PROP_LIB_VAR));
 
     // The environment where the code in the imported files will be
     // executed. Each imported file will executed in a separate
@@ -155,7 +155,7 @@ final class SFunctionImport
  * This method is supposed to be called with <code>args</code> having
  * at least one element.
  *
- * @exception STeaException Thrown if there is not two arguments for
+ * @exception TeaException Thrown if there is not two arguments for
  * the command or if there were any problems while executing the
  * imported file.
  *
@@ -164,7 +164,7 @@ final class SFunctionImport
     public Object exec(final SObjFunction func,
                        final SContext     context,
                        final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "file");
@@ -201,7 +201,7 @@ final class SFunctionImport
 
     private Object searchAndImport(final SContext context,
                                    final String   fileName)
-        throws STeaException {
+        throws TeaException {
 
         Object   result  = null;
         SObjPair urlList = null;        
@@ -345,7 +345,7 @@ final class SFunctionImport
  **************************************************************************/
 
         public Object tryToPerformImport()
-            throws STeaException {
+            throws TeaException {
 
             Object  result        = null;
             String  path          = _fullPath;
@@ -394,7 +394,7 @@ final class SFunctionImport
  **************************************************************************/
 
         public Object performImport()
-            throws STeaException {
+            throws TeaException {
 
             if ( _lastImportTime == 0 ) {
                 String   msg     = "file \"{0}\" has changed path";

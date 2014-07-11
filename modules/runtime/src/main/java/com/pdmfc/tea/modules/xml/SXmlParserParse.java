@@ -20,7 +20,7 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.io.SInput;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.runtime.SContext;
@@ -217,7 +217,7 @@ final class SXmlParserParse
       public Object exec(final SObjFunction obj,
                          final SContext     context,
                          final Object[]     args)
-         throws STeaException {
+         throws TeaException {
 
          if ( args.length != 3 ) {
             throw new SNumArgException(args, "xml-file");
@@ -273,9 +273,9 @@ final class SXmlParserParse
     private void parse(final SContext    context,
                        final XMLReader   parser,
                        final InputSource input)
-        throws STeaException {
+        throws TeaException {
 
-         STeaException error = null;
+         TeaException error = null;
 
          _context             = context;
          _startDocumentMethod = null;
@@ -292,7 +292,7 @@ final class SXmlParserParse
          try {
             parser.parse(input);
          } catch (SAXException e1) {
-            error = (STeaException)e1.getException();
+            error = (TeaException)e1.getException();
          } catch (java.io.IOException e2) {
             error = new SRuntimeException("problems reading input ("
                                           + e2.getMessage() + ")");
@@ -331,7 +331,7 @@ final class SXmlParserParse
  *
  * @exception org.xml.sax.SAXException Thrown if there were any
  * problems executing the <TT>startDocument</TT> TOS method. This
- * exception object encapsulates the <TT>STeaException</TT> thrown by
+ * exception object encapsulates the <TT>TeaException</TT> thrown by
  * the Tea code.
  *
  **************************************************************************/
@@ -346,7 +346,7 @@ final class SXmlParserParse
             _args2[0] = _handler;
             _args2[1] = START_DOC;
             _startDocumentMethod.exec(_handler, _context, _args2);
-         } catch (STeaException e) {
+         } catch (TeaException e) {
             throw new SAXException(e);
          }
       }
@@ -363,7 +363,7 @@ final class SXmlParserParse
  *
  * @exception org.xml.sax.SAXException Thrown if there were any
  * problemas executing the <TT>endDocument</TT> TOS method. This
- * exception object encapsulates the <TT>STeaException</TT> thrown by
+ * exception object encapsulates the <TT>TeaException</TT> thrown by
  * the Tea code.
  *
  **************************************************************************/
@@ -378,7 +378,7 @@ final class SXmlParserParse
             _args2[0] = _handler;
             _args2[1] = END_DOC;
             _endDocumentMethod.exec(_handler, _context, _args2);
-         } catch (STeaException e) {
+         } catch (TeaException e) {
             throw new SAXException(e);
          }
       }
@@ -402,7 +402,7 @@ final class SXmlParserParse
  *
  * @exception org.xml.sax.SAXException Thrown if there were any
  * problemas executing the <TT>endDocument</TT> TOS method. This
- * exception object encapsulates the <TT>STeaException</TT> thrown by
+ * exception object encapsulates the <TT>TeaException</TT> thrown by
  * the Tea code.
  *
  **************************************************************************/
@@ -418,7 +418,7 @@ final class SXmlParserParse
 
         try {
             attribsTable = SHashtable.newInstance(_context);
-        } catch (STeaException e) {
+        } catch (TeaException e) {
             throw new SAXException(e);
         }
         tbl = attribsTable.getInternalMap();
@@ -438,7 +438,7 @@ final class SXmlParserParse
             _args4[2] = name;
             _args4[3] = attribsTable;
             _startElementMethod.exec(_handler, _context, _args4);
-        } catch (STeaException e) {
+        } catch (TeaException e) {
             throw new SAXException(e);
         }
     }
@@ -458,7 +458,7 @@ final class SXmlParserParse
  *
  * @exception org.xml.sax.SAXException Thrown if there were any
  * problemas executing the <TT>endDocument</TT> TOS method. This
- * exception object encapsulates the <TT>STeaException</TT> thrown by
+ * exception object encapsulates the <TT>TeaException</TT> thrown by
  * the Tea code.
  *
  **************************************************************************/
@@ -476,7 +476,7 @@ final class SXmlParserParse
             _args3[1] = END_ELEM;
             _args3[2] = name;
             _endElementMethod.exec(_handler, _context, _args3);
-        } catch (STeaException e) {
+        } catch (TeaException e) {
             throw new SAXException(e);
         }
     }
@@ -501,7 +501,7 @@ final class SXmlParserParse
  *
  * @exception org.xml.sax.SAXException Thrown if there were any
  * problemas executing the <TT>endDocument</TT> TOS method. This
- * exception object encapsulates the <TT>STeaException</TT> thrown by
+ * exception object encapsulates the <TT>TeaException</TT> thrown by
  * the Tea code.
  *
  **************************************************************************/
@@ -519,7 +519,7 @@ final class SXmlParserParse
             _args3[1] = CHARS;
             _args3[2] = new String(ch, start, length);
             _charactersMethod.exec(_handler, _context, _args3);
-        } catch (STeaException e) {
+        } catch (TeaException e) {
             throw new SAXException(e);
         }
     }
@@ -565,7 +565,7 @@ final class SXmlParserParse
             _args4[2] = target;
             _args4[3] = (data==null) ? SObjNull.NULL : data;
             _procInstMethod.exec(_handler, _context, _args4);
-        } catch (STeaException e) {
+        } catch (TeaException e) {
             throw new SAXException(e);
         }
     }

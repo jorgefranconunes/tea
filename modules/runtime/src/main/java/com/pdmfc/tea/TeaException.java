@@ -19,7 +19,7 @@ import java.text.MessageFormat;
  *
  **************************************************************************/
 
-public class STeaException
+public class TeaException
     extends Exception {
 
 
@@ -42,7 +42,7 @@ public class STeaException
  *
  **************************************************************************/
 
-    protected STeaException() {
+    protected TeaException() {
 
         // Nothing to do.
     }
@@ -65,7 +65,7 @@ public class STeaException
  *
  **************************************************************************/
 
-    public STeaException(final String    msgFmt,
+    public TeaException(final String    msgFmt,
                          final Object... fmtArgs) {
 
         init(msgFmt, fmtArgs);
@@ -84,7 +84,7 @@ public class STeaException
  *
  **************************************************************************/
 
-    public STeaException(final Throwable e) {
+    public TeaException(final Throwable e) {
 
         String msg = e.getMessage();
 

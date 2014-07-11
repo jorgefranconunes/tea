@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.reflect.JavaWrapperObject;
 import com.pdmfc.tea.modules.tdbc.SCallableStatement;
 import com.pdmfc.tea.modules.tdbc.SConnection;
@@ -80,7 +80,7 @@ public final class STeaJavaTypes
 
     public static Object java2Tea(final Object   obj,
                                   final SContext context)
-        throws STeaException {
+        throws TeaException {
         
         if ( null == obj ) {
             return SObjNull.NULL;
@@ -90,8 +90,8 @@ public final class STeaJavaTypes
                 SDate teaObj = SDate.newInstance(context);
                 teaObj.initFromDate((Date)obj);
                 return teaObj;
-            } catch (STeaException e) {
-                throw new STeaException(e);
+            } catch (TeaException e) {
+                throw new TeaException(e);
             }
         }
         if ( obj instanceof Float ) {
@@ -181,7 +181,7 @@ public final class STeaJavaTypes
 
     private static SHashtable javaMap2Tea(final Map<Object,Object> map,
                                           final SContext           context)
-        throws STeaException {
+        throws TeaException {
 
         SHashtable         teaObj = null;
         Map<Object,Object> teaMap = null;
@@ -189,8 +189,8 @@ public final class STeaJavaTypes
         try {
             teaObj = SHashtable.newInstance(context);
             teaMap = teaObj.getInternalMap();
-        } catch (STeaException e) {
-            throw new STeaException(e);
+        } catch (TeaException e) {
+            throw new TeaException(e);
         }
         
         for ( Map.Entry<Object,Object> entry : map.entrySet() ) {
@@ -217,7 +217,7 @@ public final class STeaJavaTypes
     
     private static SObjPair javaList2Tea(final List<Object> list,
                                          final SContext     context)
-        throws STeaException {
+        throws TeaException {
 
         int      size = list.size();
         SObjPair head = SObjPair.emptyList();
@@ -244,7 +244,7 @@ public final class STeaJavaTypes
     
     private static SObjPair javaArray2Tea(final Object   anArrayObj,
                                           final SContext context)
-        throws STeaException {
+        throws TeaException {
 
         int      size = Array.getLength(anArrayObj);
         SObjPair head = SObjPair.emptyList();
@@ -270,7 +270,7 @@ public final class STeaJavaTypes
  ***************************************************************************/
 
     public static Object tea2Java(final Object obj)
-        throws STeaException {
+        throws TeaException {
 
         if ( obj == SObjNull.NULL ) {
             return null;
@@ -339,7 +339,7 @@ public final class STeaJavaTypes
  ***************************************************************************/
     
     private static List teaList2List(final SObjPair head)
-        throws STeaException {
+        throws TeaException {
         
         List<Object> list = new ArrayList<Object>();
         
@@ -363,7 +363,7 @@ public final class STeaJavaTypes
  ***************************************************************************/
 
     private static Map teaMap2Map(final SHashtable hashtable)
-        throws STeaException {
+        throws TeaException {
         
         Map<Object,Object>  teaMap = hashtable.getInternalMap();
         Map<Object, Object> map    = new HashMap<Object, Object>();

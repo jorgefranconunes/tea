@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.io.SIOException;
 import com.pdmfc.tea.modules.net.SPlainSocketBase;
 import com.pdmfc.tea.modules.net.SSocketBase;
@@ -79,7 +79,7 @@ public final class SPlainServerSocket
  **************************************************************************/
 
     public SPlainServerSocket(final STosClass myClass)
-        throws STeaException {
+        throws TeaException {
 
         super(myClass);
     }
@@ -117,7 +117,7 @@ public final class SPlainServerSocket
     public Object constructor(final SObjFunction obj,
                               final SContext     context,
                               final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "port-number");
@@ -161,7 +161,7 @@ public final class SPlainServerSocket
     public Object accept(final SObjFunction obj,
                          final SContext     context,
                          final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( _serverSocket == null ) {
             try {
@@ -218,7 +218,7 @@ public final class SPlainServerSocket
     public Object close(final SObjFunction obj,
                         final SContext     context,
                         final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         try {
             close();
@@ -261,7 +261,7 @@ public final class SPlainServerSocket
 
     public static Object newInstance(final SContext context,
                                      final Object[] args)
-        throws STeaException {
+        throws TeaException {
 
         STosObj servSock = STosUtil.newInstance(CLASS_NAME_S, context, args);
 

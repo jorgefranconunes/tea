@@ -10,7 +10,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 
 
 
@@ -74,12 +74,12 @@ final class TeaRunnerArgs
  * @param cliArgs The command line arguments to be passed to the Tea
  * runner.
  *
- * @exception STeaException Thrown in the case of an unknown option.
+ * @exception TeaException Thrown in the case of an unknown option.
  *
  **************************************************************************/
 
     public static TeaRunnerArgs parse(final String[] cliArgs)
-        throws STeaException {
+        throws TeaException {
 
         TeaRunnerArgs result = new TeaRunnerArgs();
 
@@ -170,12 +170,12 @@ final class TeaRunnerArgs
  * @param cliArgs The command line arguments passed to the Tea
  * launcher.
  *
- * @exception STeaException Thrown in the case of an unknown option.
+ * @exception TeaException Thrown in the case of an unknown option.
  *
  **************************************************************************/
 
     private void doParse(final String[] cliArgs)
-        throws STeaException {
+        throws TeaException {
 
         _isParsingOptions = true;
         _scriptPath       = null;
@@ -200,7 +200,7 @@ final class TeaRunnerArgs
  **************************************************************************/
 
     private void parseArg(final String arg)
-        throws STeaException {
+        throws TeaException {
 
         if ( _isParsingOptions ) {
             parseOption(arg);
@@ -220,7 +220,7 @@ final class TeaRunnerArgs
  **************************************************************************/
 
     private void parseOption(final String arg)
-        throws STeaException {
+        throws TeaException {
 
         CliOption option      = new CliOption(arg);
         String    optionName  = option.getName();
@@ -239,7 +239,7 @@ final class TeaRunnerArgs
         } else {
             String   msg     = "Unknown option \"{0}\"";
             Object[] fmtArgs = { optionName };
-            throw new STeaException(msg, fmtArgs);
+            throw new TeaException(msg, fmtArgs);
         }
     }
 

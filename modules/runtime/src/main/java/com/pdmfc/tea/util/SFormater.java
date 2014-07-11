@@ -6,7 +6,7 @@
 
 package com.pdmfc.tea.util;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypeException;
 import com.pdmfc.tea.runtime.STypes;
@@ -154,7 +154,7 @@ public abstract class SFormater
  * @param firstArg Index into the <TT>args</TT> array pointing to the
  * first of the objects to be formated.
  *
- * @exception STeaException Thrown if there were not enough arguments
+ * @exception TeaException Thrown if there were not enough arguments
  * acording to the format string or if some of the arguments was of a
  * type not expected by the format string.
  *
@@ -163,7 +163,7 @@ public abstract class SFormater
     public final void format(final String   fmtString,
                              final Object[] args,
                              final int      firstArg)
-        throws STeaException {
+        throws TeaException {
 
         init(fmtString, args, firstArg);
 
@@ -189,7 +189,7 @@ public abstract class SFormater
  **************************************************************************/
 
     private void processArg()
-        throws STeaException {
+        throws TeaException {
 
         if ( atEnd() ) {
             return;
@@ -226,7 +226,7 @@ public abstract class SFormater
  **************************************************************************/
 
     private void processFieldWidth()
-       throws STeaException {
+       throws TeaException {
 
         if ( !atEnd() ) {
             processFieldWidth(nextChar());
@@ -245,7 +245,7 @@ public abstract class SFormater
  **************************************************************************/
 
     private void processFieldWidth(final char firstFormatChar)
-        throws STeaException {
+        throws TeaException {
 
         char c = firstFormatChar;
 
@@ -280,7 +280,7 @@ public abstract class SFormater
  **************************************************************************/
 
     private void processSigFigs()
-        throws STeaException {
+        throws TeaException {
 
         if ( atEnd() ) {
             return;
@@ -308,7 +308,7 @@ public abstract class SFormater
  **************************************************************************/
 
     private void processTypeField(final char type)
-        throws STeaException {
+        throws TeaException {
 
         Object arg = nextArg();
 
@@ -383,7 +383,7 @@ public abstract class SFormater
  **************************************************************************/
 
     private Object nextArg()
-        throws STeaException {
+        throws TeaException {
 
         try {
             return _args[_argIndex++];

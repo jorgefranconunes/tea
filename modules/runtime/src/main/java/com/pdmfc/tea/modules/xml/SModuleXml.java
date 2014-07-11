@@ -6,14 +6,14 @@
 
 package com.pdmfc.tea.modules.xml;
 
-import com.pdmfc.tea.STeaException;
-import com.pdmfc.tea.modules.SModule;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.STypeException;
 import com.pdmfc.tea.runtime.TeaFunctionImplementor;
 import com.pdmfc.tea.runtime.TeaEnvironment;
+import com.pdmfc.tea.runtime.TeaModule;
 
 
 
@@ -41,7 +41,7 @@ import com.pdmfc.tea.runtime.TeaEnvironment;
 
 public final class SModuleXml
     extends Object
-    implements SModule {
+    implements TeaModule {
 
 
 
@@ -70,7 +70,7 @@ public final class SModuleXml
 
     @Override
     public void init(final TeaEnvironment environment)
-        throws STeaException {
+        throws TeaException {
 
         // Nothing to do. The functions provided by this module are
         // all implemented as methods of this class with the
@@ -163,7 +163,7 @@ public final class SModuleXml
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -174,7 +174,7 @@ public final class SModuleXml
     public static Object functionXmlEncode(final SObjFunction func,
                                            final SContext     context,
                                            final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "string");

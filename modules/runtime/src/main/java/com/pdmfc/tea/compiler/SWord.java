@@ -6,7 +6,7 @@
 
 package com.pdmfc.tea.compiler;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjFunction;
 
@@ -37,12 +37,12 @@ interface SWord {
  *
  * @return The object representing an argument to the command.
  *
- * @exception STeaException Thrown for whatever abnormal condition.
+ * @exception TeaException Thrown for whatever abnormal condition.
  *
  **************************************************************************/
 
     Object get(SContext context)
-        throws STeaException;
+        throws TeaException;
 
 
 
@@ -61,7 +61,7 @@ interface SWord {
  **************************************************************************/
 
     SObjFunction toFunction(SContext context)
-        throws STeaException;
+        throws TeaException;
 
 }
 

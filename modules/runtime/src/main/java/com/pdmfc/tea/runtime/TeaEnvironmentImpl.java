@@ -8,6 +8,8 @@ package com.pdmfc.tea.runtime;
 
 import java.nio.charset.Charset;
 
+import com.pdmfc.tea.TeaException;
+import com.pdmfc.tea.runtime.Modules;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjSymbol;
 import com.pdmfc.tea.runtime.TeaEnvironment;
@@ -31,6 +33,7 @@ final class TeaEnvironmentImpl
 
 
     private SContext _globalContext = null;
+    private Modules  _modules       = null;
     private Charset  _sourceCharset = null;
 
 
@@ -46,6 +49,7 @@ final class TeaEnvironmentImpl
     public TeaEnvironmentImpl(final Charset sourceCharset) {
 
         _globalContext = new SContext();
+        _modules       = new Modules(this);
         _sourceCharset = sourceCharset;
 
         if ( _sourceCharset == null ) {
@@ -104,6 +108,70 @@ final class TeaEnvironmentImpl
     public Charset getSourceCharset() {
 
         return _sourceCharset;
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * {@inheritDoc}
+ *
+ **************************************************************************/
+
+    @Override
+    public TeaEnvironment addModule(final TeaModule module)
+        throws TeaException {
+
+        _modules.add(module);
+
+        return this;
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    public void start() {
+
+        _modules.start();
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    public void stop() {
+
+        _modules.stop();
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    public void end() {
+
+        _modules.end();
     }
 
 

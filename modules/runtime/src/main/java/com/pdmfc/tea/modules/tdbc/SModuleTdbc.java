@@ -6,8 +6,7 @@
 
 package com.pdmfc.tea.modules.tdbc;
 
-import com.pdmfc.tea.STeaException;
-import com.pdmfc.tea.modules.SModule;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.tdbc.SConnectionClass;
 import com.pdmfc.tea.modules.tos.SJavaClass;
 import com.pdmfc.tea.modules.tos.STosClass;
@@ -19,6 +18,7 @@ import com.pdmfc.tea.runtime.SObjNull;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.TeaFunctionImplementor;
 import com.pdmfc.tea.runtime.TeaEnvironment;
+import com.pdmfc.tea.runtime.TeaModule;
 
 
 
@@ -46,7 +46,7 @@ import com.pdmfc.tea.runtime.TeaEnvironment;
 
 public final class SModuleTdbc
     extends Object
-    implements SModule {
+    implements TeaModule {
 
 
 
@@ -81,7 +81,7 @@ public final class SModuleTdbc
 
     @Override
     public void init(final TeaEnvironment environment)
-        throws STeaException {
+        throws TeaException {
 
         STosClass rSetClass =
             new SJavaClass("com.pdmfc.tea.modules.tdbc.SResultSet");
@@ -189,7 +189,7 @@ public final class SModuleTdbc
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -200,7 +200,7 @@ public final class SModuleTdbc
     public static Object functionRegisterDriver(final SObjFunction func,
                                                 final SContext     context,
                                                 final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "className");
@@ -257,7 +257,7 @@ public final class SModuleTdbc
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -268,7 +268,7 @@ public final class SModuleTdbc
     public static Object functionSqlEncode(final SObjFunction func,
                                            final SContext     context,
                                            final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "string");
@@ -347,7 +347,7 @@ public final class SModuleTdbc
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -358,7 +358,7 @@ public final class SModuleTdbc
     public Object functionGetOpenConnCount(final SObjFunction func,
                                            final SContext     context,
                                            final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         int     count  = _connClass.getOpenConnectionsCount();
         Integer result = Integer.valueOf(count);
@@ -402,7 +402,7 @@ public final class SModuleTdbc
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -413,7 +413,7 @@ public final class SModuleTdbc
     public Object functionCloseAllConn(final SObjFunction func,
                                        final SContext     context,
                                        final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         _connClass.closeAll();
 

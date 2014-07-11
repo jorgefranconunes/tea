@@ -10,7 +10,7 @@ import static org.junit.Assert.*;
 
 import java.text.MessageFormat;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.compiler.TeaCode;
 import com.pdmfc.tea.compiler.TeaCompiler;
 import com.pdmfc.tea.runtime.TeaRuntime;
@@ -111,7 +111,7 @@ public class TestRuntime
  **************************************************************************/
 
     public Object eval(final String script)
-        throws STeaException {
+        throws TeaException {
 
         TeaCode code   = _compiler.compile(script);
         Object  result = _teaRuntime.execute(code);
@@ -169,7 +169,7 @@ public class TestRuntime
 
         try {
             result = eval(script);
-        } catch (STeaException e) {
+        } catch (TeaException e) {
             failWithMsg("Unexpected Tea exception - {0} - {1}",
                         e.getClass().getName(),
                         e.getMessage());

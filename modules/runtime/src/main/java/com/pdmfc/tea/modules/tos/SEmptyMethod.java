@@ -6,7 +6,7 @@
 
 package com.pdmfc.tea.modules.tos;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SObjNull;
@@ -44,7 +44,7 @@ final class SEmptyMethod
       public Object exec(final SObjFunction obj,
                          final SContext     context,
                          final Object[]     args)
-         throws STeaException {
+         throws TeaException {
 
          return SObjNull.NULL;
       }

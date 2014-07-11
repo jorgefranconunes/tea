@@ -13,8 +13,8 @@ import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import com.pdmfc.tea.STeaException;
-import com.pdmfc.tea.modules.SModule;
+import com.pdmfc.tea.TeaException;
+import com.pdmfc.tea.runtime.TeaModule;
 import com.pdmfc.tea.runtime.SArgs;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SNumArgException;
@@ -55,7 +55,7 @@ import com.pdmfc.tea.runtime.TeaEnvironment;
 
 public final class SModuleRegexp
     extends Object
-    implements SModule {
+    implements TeaModule {
 
 
 
@@ -84,7 +84,7 @@ public final class SModuleRegexp
 
     @Override
     public void init(final TeaEnvironment environment)
-        throws STeaException {
+        throws TeaException {
 
         // Nothing to do. The functions provided by this module are
         // all implemented as methods of this with class with the
@@ -183,7 +183,7 @@ public final class SModuleRegexp
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -194,7 +194,7 @@ public final class SModuleRegexp
     public static Object functionPattern(final SObjFunction func,
                                          final SContext     context,
                                          final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "pattern-string");
@@ -262,7 +262,7 @@ public final class SModuleRegexp
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -273,7 +273,7 @@ public final class SModuleRegexp
     public Object functionGlob(final SObjFunction func,
                                final SContext     context,
                                final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         int numArgs = args.length;
 
@@ -361,7 +361,7 @@ public final class SModuleRegexp
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -372,7 +372,7 @@ public final class SModuleRegexp
     public static Object functionRegsub(final SObjFunction func,
                                         final SContext     context,
                                         final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 4 ) {
             throw new SNumArgException(args, "regex substitution input");
@@ -434,7 +434,7 @@ public final class SModuleRegexp
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -445,7 +445,7 @@ public final class SModuleRegexp
     public static Object functionMatches(final SObjFunction func,
                                          final SContext     context,
                                          final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "regex input");
@@ -517,7 +517,7 @@ public final class SModuleRegexp
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -528,7 +528,7 @@ public final class SModuleRegexp
     public static Object functionRegexp(final SObjFunction func,
                                         final SContext     context,
                                         final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "regex string");
@@ -651,7 +651,7 @@ public final class SModuleRegexp
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -662,7 +662,7 @@ public final class SModuleRegexp
     public static Object functionSplit(final SObjFunction func,
                                        final SContext     context,
                                        final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "string split-string");
@@ -724,7 +724,7 @@ public final class SModuleRegexp
  *
  * @param index The index of the argument to convert.
  *
- * @exception com.pdmfc.tea.STeaException Thrown if argument
+ * @exception com.pdmfc.tea.TeaException Thrown if argument
  * <TT>index</TT> could not be converted to a
  * <TT>java.util.regex.Pattern</TT>.
  *
@@ -732,7 +732,7 @@ public final class SModuleRegexp
 
     private static Pattern getPattern(final Object[] args,
                                       final int      index)
-        throws STeaException {
+        throws TeaException {
 
         Object theArg = args[index];
 

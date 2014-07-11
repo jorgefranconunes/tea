@@ -12,7 +12,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.StringTokenizer;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SRuntimeException;
@@ -97,7 +97,7 @@ public final class SJavaMethod
     public Object exec(final SObjFunction obj,
                        final SContext     context,
                        final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( _javaMethod == null ) {
             throw new SRuntimeException(_errorMsg);
@@ -114,8 +114,8 @@ public final class SJavaMethod
             internalError(e2);
         } catch (InvocationTargetException e3) {
             Throwable error = e3.getTargetException();
-            if ( error instanceof STeaException ) {
-                throw (STeaException)error;
+            if ( error instanceof TeaException ) {
+                throw (TeaException)error;
             } else {
                 internalError(error);
             }

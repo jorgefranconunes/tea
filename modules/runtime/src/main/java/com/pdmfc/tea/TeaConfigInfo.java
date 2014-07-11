@@ -22,7 +22,7 @@ import java.util.Properties;
  *
  **************************************************************************/
 
-public final class SConfigInfo
+public final class TeaConfigInfo
     extends Object {
 
 
@@ -48,7 +48,7 @@ public final class SConfigInfo
     static {
         String      resourcePath = RES_NAME;
         InputStream in           =
-            SConfigInfo.class.getResourceAsStream(resourcePath);
+            TeaConfigInfo.class.getResourceAsStream(resourcePath);
 
         if ( in != null ) {
             try {
@@ -79,7 +79,7 @@ public final class SConfigInfo
  *
  **************************************************************************/
 
-    private SConfigInfo() {
+    private TeaConfigInfo() {
 
         // Nothing to do.
     }
@@ -97,7 +97,7 @@ public final class SConfigInfo
  *
  **************************************************************************/
 
-    public static String getProperty(final String key) {
+    public static String get(final String key) {
 
         return _props.getProperty(key);
     }

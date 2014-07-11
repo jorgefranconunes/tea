@@ -9,9 +9,8 @@ package com.pdmfc.tea.modules.string;
 import java.text.MessageFormat;
 import java.util.Iterator;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.compiler.STeaParserUtils;
-import com.pdmfc.tea.modules.SModule;
 import com.pdmfc.tea.modules.math.SModuleMath;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.util.SDate;
@@ -27,6 +26,7 @@ import com.pdmfc.tea.runtime.STypeException;
 import com.pdmfc.tea.runtime.STypes;
 import com.pdmfc.tea.runtime.TeaEnvironment;
 import com.pdmfc.tea.runtime.TeaFunctionImplementor;
+import com.pdmfc.tea.runtime.TeaModule;
 import com.pdmfc.tea.util.SFormater;
 
 
@@ -59,7 +59,7 @@ import com.pdmfc.tea.util.SFormater;
 
 public final class SModuleString
     extends Object
-    implements SModule {
+    implements TeaModule {
 
 
 
@@ -96,7 +96,7 @@ public final class SModuleString
 
     @Override
     public void init(final TeaEnvironment environment)
-        throws STeaException {
+        throws TeaException {
 
         // Nothing to do. The functions provided by this module are
         // all implemented as methods of this with class with the
@@ -194,7 +194,7 @@ public final class SModuleString
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -205,7 +205,7 @@ public final class SModuleString
     public Object functionPrintf(final SObjFunction func,
                                  final SContext     context,
                                  final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         SArgs.checkAtLeast(args, 2, "string [object ...]");
 
@@ -266,7 +266,7 @@ public final class SModuleString
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -277,7 +277,7 @@ public final class SModuleString
     public Object functionFmt(final SObjFunction func,
                               final SContext context,
                               final Object[]   args)
-        throws STeaException {
+        throws TeaException {
 
         SArgs.checkAtLeast(args, 2, "string [object ...]");
 
@@ -363,7 +363,7 @@ public final class SModuleString
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -374,7 +374,7 @@ public final class SModuleString
     public static Object functionUpper(final SObjFunction func,
                                        final SContext     context,
                                        final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         SArgs.checkCount(args, 2, "string");
 
@@ -423,7 +423,7 @@ public final class SModuleString
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -434,7 +434,7 @@ public final class SModuleString
     public static Object functionLower(final SObjFunction func,
                                        final SContext     context,
                                        final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         SArgs.checkCount(args, 2, "string");
 
@@ -488,7 +488,7 @@ public final class SModuleString
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -499,7 +499,7 @@ public final class SModuleString
     public static Object functionCompare(final SObjFunction func,
                                          final SContext     context,
                                          final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         return compare(SModuleMath.MINUS_ONE,
                        SModuleMath.ZERO,
@@ -552,7 +552,7 @@ public final class SModuleString
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -563,7 +563,7 @@ public final class SModuleString
     public static Object functionGt(final SObjFunction func,
                                     final SContext     context,
                                     final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         return compare(Boolean.FALSE,
                        Boolean.FALSE,
@@ -618,7 +618,7 @@ public final class SModuleString
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -629,7 +629,7 @@ public final class SModuleString
     public static Object functionGe(final SObjFunction func,
                                     final SContext     context,
                                     final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         return compare(Boolean.FALSE,
                        Boolean.TRUE,
@@ -682,7 +682,7 @@ public final class SModuleString
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -693,7 +693,7 @@ public final class SModuleString
     public static Object functionEq(final SObjFunction func,
                                     final SContext     context,
                                     final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         return compare(Boolean.FALSE,
                        Boolean.TRUE,
@@ -746,7 +746,7 @@ public final class SModuleString
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -757,7 +757,7 @@ public final class SModuleString
     public static Object functionNe(final SObjFunction func,
                                     final SContext     context,
                                     final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         return compare(Boolean.TRUE,
                        Boolean.FALSE,
@@ -812,7 +812,7 @@ public final class SModuleString
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -823,7 +823,7 @@ public final class SModuleString
     public static Object functionLt(final SObjFunction func,
                                     final SContext     context,
                                     final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         return compare(Boolean.TRUE,
                        Boolean.FALSE,
@@ -878,7 +878,7 @@ public final class SModuleString
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -889,7 +889,7 @@ public final class SModuleString
     public static Object functionLe(final SObjFunction func,
                                     final SContext     context,
                                     final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         return compare(Boolean.TRUE,
                        Boolean.TRUE,
@@ -934,7 +934,7 @@ public final class SModuleString
                                   final SObjFunction func,
                                   final SContext     context,
                                   final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         SArgs.checkCount(args, 3, "string1 string2");
 
@@ -993,7 +993,7 @@ public final class SModuleString
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -1004,7 +1004,7 @@ public final class SModuleString
     public static Object functionCat(final SObjFunction func,
                                      final SContext     context,
                                      final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         SArgs.checkAtLeast(args, 2, "string ...");
 
@@ -1065,7 +1065,7 @@ public final class SModuleString
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -1076,7 +1076,7 @@ public final class SModuleString
     public static  Object functionEndsWith(final SObjFunction func,
                                            final SContext     context,
                                            final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         SArgs.checkCount(args, 3, "string1 string2");
 
@@ -1131,7 +1131,7 @@ public final class SModuleString
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -1142,7 +1142,7 @@ public final class SModuleString
     public static Object functionStartsWith(final SObjFunction func,
                                             final SContext     context,
                                             final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         SArgs.checkCount(args, 3, "string1 string2");
 
@@ -1206,7 +1206,7 @@ public final class SModuleString
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -1217,7 +1217,7 @@ public final class SModuleString
     public static Object functionIndexOf(final SObjFunction func,
                                          final SContext     context,
                                          final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         SArgs.checkBetween(args,3,4, "string sub-string [start-index]");
 
@@ -1284,7 +1284,7 @@ public final class SModuleString
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -1295,7 +1295,7 @@ public final class SModuleString
     public static Object functionLastIndexOf(final SObjFunction func,
                                              final SContext     context,
                                              final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         SArgs.checkBetween(args,3,4, "string sub-string [start-index]");
 
@@ -1347,7 +1347,7 @@ public final class SModuleString
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -1358,7 +1358,7 @@ public final class SModuleString
     public static Object functionLen(final SObjFunction func,
                                      final SContext     context,
                                      final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         SArgs.checkCount(args, 2, "string");
 
@@ -1430,7 +1430,7 @@ public final class SModuleString
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -1441,7 +1441,7 @@ public final class SModuleString
     public static Object functionSubString(final SObjFunction func,
                                            final SContext     context,
                                            final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         SArgs.checkBetween(args, 3, 4, "string start-index [end-index]");
 
@@ -1507,7 +1507,7 @@ public final class SModuleString
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -1518,7 +1518,7 @@ public final class SModuleString
     public static Object functionTrim(final SObjFunction func,
                                       final SContext     context,
                                       final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         SArgs.checkCount(args, 2, "string");
 
@@ -1574,7 +1574,7 @@ public final class SModuleString
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -1585,7 +1585,7 @@ public final class SModuleString
     public static Object functionJoin(final SObjFunction func,
                                       final SContext     context,
                                       final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         SArgs.checkCount(args, 3, "string-list string");
 
@@ -1663,7 +1663,7 @@ public final class SModuleString
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -1674,7 +1674,7 @@ public final class SModuleString
     public static Object functionEmpty(final SObjFunction func,
                                        final SContext     context,
                                        final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         SArgs.checkCount(args, 2, "string");
 
@@ -1724,7 +1724,7 @@ public final class SModuleString
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -1735,7 +1735,7 @@ public final class SModuleString
     public static Object functionNotEmpty(final SObjFunction func,
                                           final SContext     context,
                                           final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         SArgs.checkCount(args, 2, "string");
 
@@ -1785,7 +1785,7 @@ public final class SModuleString
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -1796,7 +1796,7 @@ public final class SModuleString
     public static Object functionSymbolToString(final SObjFunction func,
                                                 final SContext context,
                                                 final Object[]   args)
-        throws STeaException {
+        throws TeaException {
 
         SArgs.checkCount(args, 2, "symbol");
 
@@ -1854,7 +1854,7 @@ public final class SModuleString
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -1865,7 +1865,7 @@ public final class SModuleString
     public static Object functionStringToInt(final SObjFunction func,
                                              final SContext     context,
                                              final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         SArgs.checkCount(args, 2, "string");
 
@@ -1922,7 +1922,7 @@ public final class SModuleString
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -1933,7 +1933,7 @@ public final class SModuleString
     public static Object functionStringToFloat(final SObjFunction func,
                                                final SContext     context,
                                                final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         SArgs.checkCount(args, 2, "string");
 
@@ -1990,7 +1990,7 @@ public final class SModuleString
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -2001,7 +2001,7 @@ public final class SModuleString
     public static Object functionIntToString(final SObjFunction func,
                                              final SContext     context,
                                              final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         SArgs.checkCount(args, 2, "integer");
 
@@ -2051,7 +2051,7 @@ public final class SModuleString
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -2062,7 +2062,7 @@ public final class SModuleString
     public static Object functionFloatToString(final SObjFunction func,
                                                final SContext     context,
                                                final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         SArgs.checkCount(args, 2, "float");
 
@@ -2129,7 +2129,7 @@ public final class SModuleString
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -2140,7 +2140,7 @@ public final class SModuleString
     public static Object functionUnescape(final SObjFunction func,
                                           final SContext     context,
                                           final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         SArgs.checkCount(args, 2, "string");
 

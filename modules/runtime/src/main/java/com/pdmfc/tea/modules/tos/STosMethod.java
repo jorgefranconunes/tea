@@ -6,7 +6,7 @@
 
 package com.pdmfc.tea.modules.tos;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SBreakException;
 import com.pdmfc.tea.runtime.SContinueException;
@@ -95,7 +95,7 @@ public final class STosMethod
  * @param args
  *    Array with the arguments passed to the command.
  *
- * @exception STeaException
+ * @exception TeaException
  *   Thrown if there is not two arguments for the command.
  *
  **************************************************************************/
@@ -103,7 +103,7 @@ public final class STosMethod
     public Object exec(final SObjFunction func,
                        final SContext     context,
                        final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != (_argNames.length+2) ) {
             throw new SNumArgException(args, parametersText());

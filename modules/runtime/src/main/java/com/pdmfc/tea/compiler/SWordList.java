@@ -8,7 +8,7 @@ package com.pdmfc.tea.compiler;
 
 import java.util.List;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.compiler.SWord;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjFunction;
@@ -61,7 +61,7 @@ final class SWordList
  **************************************************************************/
 
     public Object get(final SContext context)
-        throws STeaException {
+        throws TeaException {
 
         SObjPair empty = new SObjPair(null, null);
         SObjPair head  = empty;
@@ -93,7 +93,7 @@ final class SWordList
  **************************************************************************/
 
     public SObjFunction toFunction(final SContext context)
-        throws STeaException {
+        throws TeaException {
 
         throw new SRuntimeException("a list can not be used as a function");
     }

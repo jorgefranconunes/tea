@@ -6,7 +6,7 @@
 
 package com.pdmfc.tea.modules.tos;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.tos.SList;
 import com.pdmfc.tea.modules.tos.SNoSuchMethodException;
 import com.pdmfc.tea.modules.tos.STosObj;
@@ -207,13 +207,13 @@ public class STosClass
  * @return A new <code>STosObj</code> object, representing a new instance
  * of this class. The object will have to be initialized.
  *
- * @exception STeaException Not throws by this method. Only declared
+ * @exception TeaException Not throws by this method. Only declared
  * for derived classes that reimplement this method.
  *
  **************************************************************************/
 
     public STosObj newInstance()
-        throws STeaException {
+        throws TeaException {
 
         return new STosObj(this);
     }
@@ -237,7 +237,7 @@ public class STosClass
 
     public final STosObj newInstance(final SContext context,
                                      final Object[] args)
-        throws STeaException {
+        throws TeaException {
 
         STosObj obj = newInstance();
 

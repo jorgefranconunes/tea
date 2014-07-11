@@ -27,7 +27,7 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineFactory;
 import javax.script.ScriptException;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.compiler.TeaCode;
 import com.pdmfc.tea.compiler.TeaCompileException;
 import com.pdmfc.tea.compiler.TeaCompiler;
@@ -513,7 +513,7 @@ public final class TeaScriptEngine
             Object       result =
                 STeaJavaTypes.tea2Java(obj.exec(obj, teaContext, newArgs));
             return result;
-        } catch (STeaException e) {
+        } catch (TeaException e) {
             throw new ScriptException(e);
         } finally {
             // retrived updated global vars to Bindings.
@@ -568,7 +568,7 @@ public final class TeaScriptEngine
             Object       result =
                 STeaJavaTypes.tea2Java(obj.exec(obj, teaContext, newArgs));
             return result;
-        } catch (STeaException e) {
+        } catch (TeaException e) {
             throw new ScriptException(e);
         } finally {
             // retrived updated global vars to Bindings.
@@ -866,7 +866,7 @@ public final class TeaScriptEngine
             // resulting in STosObj like SDate.
             try {
                 teaRuntime.execute(_emptyCode);
-            } catch (STeaException ex) {
+            } catch (TeaException ex) {
                 throw new ScriptException(ex);
             }
             
@@ -940,7 +940,7 @@ public final class TeaScriptEngine
                               STeaJavaTypes.java2Tea(sc, teaContext));
 
             return teaRuntime;
-        } catch (STeaException e) {
+        } catch (TeaException e) {
             throw new ScriptException(e);
         }
     }
@@ -1013,7 +1013,7 @@ public final class TeaScriptEngine
                 }
             }
 
-        } catch (STeaException e) {
+        } catch (TeaException e) {
             throw new ScriptException(e);
         } finally {
             // no more Tea code ought to be executed without calling

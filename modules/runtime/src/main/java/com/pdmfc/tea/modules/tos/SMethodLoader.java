@@ -6,7 +6,7 @@
 
 package com.pdmfc.tea.modules.tos;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.runtime.SArgs;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjFunction;
@@ -83,7 +83,7 @@ public final class SMethodLoader
  * @return The value returned be the invocation of the underlying
  * function.
  *
- * @exception STeaException Thrown if there were problems
+ * @exception TeaException Thrown if there were problems
  * instantianting the new <code>SObjProc</code> or while invoking the
  * <code>exec()</code> method for that object.
  *
@@ -92,7 +92,7 @@ public final class SMethodLoader
    public Object exec(final SObjFunction obj,
                       final SContext     context,
                       final Object[]     args)
-      throws STeaException {
+      throws TeaException {
 
       if ( _method != null ) {
          return _method.exec(obj, context, args);

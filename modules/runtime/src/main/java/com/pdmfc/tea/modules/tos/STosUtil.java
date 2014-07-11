@@ -6,7 +6,7 @@
 
 package com.pdmfc.tea.modules.tos;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.SNoSuchClassException;
 import com.pdmfc.tea.runtime.SContext;
@@ -107,7 +107,7 @@ public final class STosUtil
  *
  * @param index An index into the <code>args</code> array.
  *
- * @exception STeaException Thrown if the <code>STosClass</code>
+ * @exception TeaException Thrown if the <code>STosClass</code>
  * object could not be retrieved.
  *
  **************************************************************************/
@@ -115,7 +115,7 @@ public final class STosUtil
     public static STosClass getClass(final SContext context,
                                      final Object[] args,
                                      final int      index)
-        throws STeaException {
+        throws TeaException {
 
         Object ref = args[index];
 
@@ -154,7 +154,7 @@ public final class STosUtil
 
     public static STosClass getClass(final SContext   context,
                                      final SObjSymbol className)
-        throws STeaException  {
+        throws TeaException  {
 
         Object classObject;
 
@@ -188,7 +188,7 @@ public final class STosUtil
 
     private static Object getClassWithEffort(final SContext   context,
                                              final SObjSymbol name)
-        throws STeaException {
+        throws TeaException {
 
         SObjFunction callbackFunc = null;
         Object[]     callbackArgs = new Object[2];
@@ -224,7 +224,7 @@ public final class STosUtil
     public static STosObj newInstance(final SObjSymbol className,
                                       final SContext   context,
                                       final Object[]   constructorArgs)
-        throws STeaException {
+        throws TeaException {
 
         STosClass tosClass = getClass(context, className);
         STosObj   tosObj   = tosClass.newInstance(context, constructorArgs);
@@ -244,7 +244,7 @@ public final class STosUtil
 
     public static STosObj newInstance(final SObjSymbol className,
                                       final SContext   context) 
-        throws STeaException {
+        throws TeaException {
 
         Object[] constructorArgs = new Object[2];
 

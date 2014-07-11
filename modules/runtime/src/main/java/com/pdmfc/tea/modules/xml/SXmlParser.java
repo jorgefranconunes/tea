@@ -10,7 +10,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
@@ -74,7 +74,7 @@ public final class SXmlParser
  **************************************************************************/
 
       public SXmlParser(final STosClass myClass)
-         throws STeaException {
+         throws TeaException {
 
          super(myClass);
       }
@@ -144,7 +144,7 @@ public final class SXmlParser
     public Object constructor(final SObjFunction obj,
                               final SContext     context,
                               final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         switch ( args.length ) {
         case 2 :
@@ -214,7 +214,7 @@ public final class SXmlParser
     public Object setNativeParser(final SObjFunction obj,
                                   final SContext     context,
                                   final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "java-class-name");
@@ -267,7 +267,7 @@ public final class SXmlParser
     public Object parse(final SObjFunction obj,
                         final SContext     context,
                         final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         SXmlParserParse parseMethod = new SXmlParserParse();
 
@@ -303,7 +303,7 @@ public final class SXmlParser
     public Object startDocument(final SObjFunction obj,
                                 final SContext     context,
                                 final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         return obj;
     }
@@ -335,7 +335,7 @@ public final class SXmlParser
     public Object endDocument(final SObjFunction obj,
                               final SContext     context,
                               final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         return obj;
     }
@@ -380,7 +380,7 @@ public final class SXmlParser
     public Object startElement(final SObjFunction obj,
                                final SContext     context,
                                final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         return obj;
     }
@@ -417,7 +417,7 @@ public final class SXmlParser
     public Object endElement(final SObjFunction obj,
                              final SContext     context,
                              final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         return obj;
     }
@@ -454,7 +454,7 @@ public final class SXmlParser
     public Object characters(final SObjFunction obj,
                              final SContext     context,
                              final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         return obj;
     }
@@ -498,7 +498,7 @@ public final class SXmlParser
     public Object processingInstruction(final SObjFunction obj,
                                         final SContext     context,
                                         final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         return obj;
     }
@@ -542,7 +542,7 @@ public final class SXmlParser
     public Object setHandler(final SObjFunction obj,
                              final SContext     context,
                              final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "event-handler");
@@ -580,7 +580,7 @@ public final class SXmlParser
 
     public static SXmlParser newInstance(final SContext context,
                                          final Object[] args)
-        throws STeaException {
+        throws TeaException {
 
         STosObj parser = STosUtil.newInstance(CLASS_NAME_S, context);
 

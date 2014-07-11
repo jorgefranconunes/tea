@@ -6,7 +6,7 @@
 
 package com.pdmfc.tea.runtime;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.STypeException;
 import com.pdmfc.tea.runtime.STypes;
@@ -483,7 +483,7 @@ public final class SArgs
  *
  * @param index The index of the argument to convert.
  *
- * @exception com.pdmfc.tea.STeaException Thrown if
+ * @exception com.pdmfc.tea.TeaException Thrown if
  * <TT>args[index]</TT> is neither a <TT>SObjFunction</TT> nor a
  * <TT>SObjSymbol</TT>
  *
@@ -492,7 +492,7 @@ public final class SArgs
     public static SObjFunction getFunction(final SContext context,
                                            final Object[]  args,
                                            final int       index)
-        throws STeaException {
+        throws TeaException {
 
         SObjFunction result = null;
         Object       arg    = args[index];

@@ -11,7 +11,7 @@ import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.compiler.TeaCode;
 import com.pdmfc.tea.modules.reflect.STeaJavaTypes;
 import com.pdmfc.tea.runtime.TeaRuntime;
@@ -98,7 +98,7 @@ public final class TeaCompiledScript
             Object result = teaRuntime.execute(_code); // Tea 3.1.2 or higher.
 
             return STeaJavaTypes.tea2Java(result);
-        } catch (STeaException e) {
+        } catch (TeaException e) {
             //System.out.println("eval exception "+e.getMessage());
             //for(StackTraceElement ste : e.getStackTrace()) {
             //    System.out.println(ste.toString());

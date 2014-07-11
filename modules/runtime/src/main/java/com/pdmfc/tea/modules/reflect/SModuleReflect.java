@@ -10,8 +10,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import com.pdmfc.tea.STeaException;
-import com.pdmfc.tea.modules.SModule;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.reflect.SFunctionNewProxy;
 import com.pdmfc.tea.modules.reflect.SMethodFinder;
 import com.pdmfc.tea.modules.reflect.SReflectUtils;
@@ -22,6 +21,7 @@ import com.pdmfc.tea.runtime.SObjFunction;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.TeaFunctionImplementor;
 import com.pdmfc.tea.runtime.TeaEnvironment;
+import com.pdmfc.tea.runtime.TeaModule;
 
 
 
@@ -202,7 +202,7 @@ import com.pdmfc.tea.runtime.TeaEnvironment;
 
 public final class SModuleReflect
     extends Object
-    implements SModule {
+    implements TeaModule {
 
 
 
@@ -231,7 +231,7 @@ public final class SModuleReflect
 
     @Override
     public void init(final TeaEnvironment environment)
-        throws STeaException {
+        throws TeaException {
 
         environment.addGlobalVar("java-new-proxy", new SFunctionNewProxy());
 
@@ -331,7 +331,7 @@ public final class SModuleReflect
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -342,7 +342,7 @@ public final class SModuleReflect
     public static Object functionGetValue(final SObjFunction func,
                                           final SContext     context,
                                           final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args,
@@ -419,7 +419,7 @@ public final class SModuleReflect
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -430,7 +430,7 @@ public final class SModuleReflect
     public static Object functionSetValue(final SObjFunction func,
                                           final SContext     context,
                                           final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 4 ) {
             String usage = "[className|wrapperObj] memberName value";
@@ -516,7 +516,7 @@ public final class SModuleReflect
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -527,7 +527,7 @@ public final class SModuleReflect
     public static Object functionGetMethod(final SObjFunction func,
                                            final SContext     context,
                                            final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length < 3 ) {
             String usage = "className methodName [argType1 [argType2 ...]]";
@@ -552,7 +552,7 @@ public final class SModuleReflect
                 public Object exec(final SObjFunction func,
                                    final SContext     context,
                                    final Object[]     args)
-                    throws STeaException {
+                    throws TeaException {
 
                     if ( args.length != functionArgCount ) {
                         throw new SNumArgException(args, usageMessage);
@@ -640,7 +640,7 @@ public final class SModuleReflect
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -651,7 +651,7 @@ public final class SModuleReflect
     public static Object functionNewInstance(final SObjFunction func,
                                              final SContext     context,
                                              final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length < 2 ) {
             throw new SNumArgException(args, "className [arg1 [arg2 ...]]");
@@ -747,7 +747,7 @@ public final class SModuleReflect
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -758,7 +758,7 @@ public final class SModuleReflect
     public static Object functionExecMethod(final SObjFunction func,
                                             final SContext     context,
                                             final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length < 3 ) {
             String usage = "className methodName [arg1 [arg2 ...]]";

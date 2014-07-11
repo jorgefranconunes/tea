@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.tos.STosUtil;
@@ -77,7 +77,7 @@ public final class SHashtable
  **************************************************************************/
 
     public SHashtable(final STosClass myClass)
-        throws STeaException {
+        throws TeaException {
 
         super(myClass);
 
@@ -103,7 +103,7 @@ public final class SHashtable
 
     private SHashtable(final STosClass          myClass,
                        final Map<Object,Object> contents)
-        throws STeaException {
+        throws TeaException {
 
         super(myClass);
 
@@ -165,7 +165,7 @@ public final class SHashtable
     public Object constructor(final SObjFunction obj,
                               final SContext     context,
                               final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         return obj;
     }
@@ -222,7 +222,7 @@ public final class SHashtable
     public Object put(final SObjFunction obj,
                       final SContext     context,
                       final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 4 ) {
             throw new SNumArgException(args, "key value");
@@ -281,7 +281,7 @@ public final class SHashtable
     public Object get(final SObjFunction obj,
                       final SContext     context,
                       final Object[]     args)
-        throws STeaException {
+        throws TeaException {
         
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "key");
@@ -334,7 +334,7 @@ public final class SHashtable
     public Object getKeys(final SObjFunction obj,
                           final SContext     context,
                           final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         SObjPair    empty   = SObjPair.emptyList();
         SObjPair    head    = empty;
@@ -397,7 +397,7 @@ public final class SHashtable
     public Object getElements(final SObjFunction obj,
                               final SContext     context,
                               final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         SObjPair   empty     = SObjPair.emptyList();
         SObjPair   head      = empty;
@@ -460,7 +460,7 @@ public final class SHashtable
     public Object isKey(final SObjFunction obj,
                         final SContext     context,
                         final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "key");
@@ -510,7 +510,7 @@ public final class SHashtable
     public Object clear(final SObjFunction obj,
                         final SContext     context,
                         final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         _hashtable.clear();
 
@@ -566,7 +566,7 @@ public final class SHashtable
     public Object remove(final SObjFunction obj,
                          final SContext     context,
                          final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         int keyCount = args.length - 2;
 
@@ -617,7 +617,7 @@ public final class SHashtable
  **************************************************************************/
 
     public static SHashtable newInstance(final SContext context)
-        throws STeaException {
+        throws TeaException {
 
         STosClass  theClass = STosUtil.getClass(context, CLASS_NAME_S);
         SHashtable table    = new SHashtable(theClass);
@@ -649,7 +649,7 @@ public final class SHashtable
 
     public static SHashtable newInstance(final SContext           context,
                                          final Map<Object,Object> contents)
-        throws STeaException {
+        throws TeaException {
 
         STosClass  theClass = STosUtil.getClass(context, CLASS_NAME_S);
         SHashtable table    = new SHashtable(theClass, contents);

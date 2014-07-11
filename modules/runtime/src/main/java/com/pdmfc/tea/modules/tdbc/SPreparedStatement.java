@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Date;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.tdbc.SStatement;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
@@ -81,7 +81,7 @@ public class SPreparedStatement
  **************************************************************************/
 
     public SPreparedStatement(final STosClass myClass)
-        throws STeaException {
+        throws TeaException {
 
         super(myClass);
     }
@@ -134,7 +134,7 @@ public class SPreparedStatement
  **************************************************************************/
 
     public static SStatement newInstance(final SContext context)
-        throws STeaException {
+        throws TeaException {
 
         STosObj prepStat = STosUtil.newInstance(CLASS_NAME_S, context);
 
@@ -165,7 +165,7 @@ public class SPreparedStatement
     public Object constructor(final SObjFunction obj,
                               final SContext     context,
                               final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         return obj;
     }
@@ -209,7 +209,7 @@ public class SPreparedStatement
     public Object query(final SObjFunction obj,
                         final SContext     context,
                         final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         ResultSet  rSet    = null;
         SResultSet tosRSet = null;
@@ -267,7 +267,7 @@ public class SPreparedStatement
     public Object update(final SObjFunction obj,
                          final SContext     context,
                          final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         int result = 0;
 
@@ -314,7 +314,7 @@ public class SPreparedStatement
     public Object execute(final SObjFunction obj,
                           final SContext     context,
                           final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         boolean result = false;
 
@@ -595,7 +595,7 @@ public class SPreparedStatement
     public Object setString(final SObjFunction obj,
                             final SContext     context,
                             final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 4 ) {
             throw new SNumArgException(args, "index value");
@@ -704,7 +704,7 @@ public class SPreparedStatement
     public Object setDate(final SObjFunction obj,
                           final SContext     context,
                           final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 4 ) {
             throw new SNumArgException(args, "index value");

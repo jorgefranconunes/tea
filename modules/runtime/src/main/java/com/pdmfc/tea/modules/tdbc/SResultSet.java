@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Date;
 import java.util.ArrayList;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.tdbc.SClosedEventListener;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
@@ -102,7 +102,7 @@ public final class SResultSet
  **************************************************************************/
 
     public SResultSet(final STosClass myClass)
-        throws STeaException {
+        throws TeaException {
 
         super(myClass);
    }
@@ -179,7 +179,7 @@ public final class SResultSet
  **************************************************************************/
 
     public static SResultSet newInstance(final SContext context)
-        throws STeaException {
+        throws TeaException {
 
         STosObj rSet = STosUtil.newInstance(CLASS_NAME_S, context);
 
@@ -222,7 +222,7 @@ public final class SResultSet
     public Object constructor(final SObjFunction obj,
                               final SContext     context,
                               final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         return obj;
     }
@@ -588,7 +588,7 @@ public final class SResultSet
  *
  * @return The value of a field of the current row.
  *
- * @exception STeaException Thrown if the result set has been closed,
+ * @exception TeaException Thrown if the result set has been closed,
  * if there is no current row or if there were any problems accessing
  * the database.
  *
@@ -708,7 +708,7 @@ public final class SResultSet
  *
  * @return The value of a field of the current row.
  *
- * @exception STeaException Thrown if the result set has been closed,
+ * @exception TeaException Thrown if the result set has been closed,
  * if there is no current row or if there were any problems accessing
  * the database.
  *
@@ -827,7 +827,7 @@ public final class SResultSet
  *
  * @return The value of a field of the current row.
  *
- * @exception STeaException Thrown if the result set has been closed,
+ * @exception TeaException Thrown if the result set has been closed,
  * if there is no current row or if there were any problems accessing
  * the database.
  *
@@ -917,7 +917,7 @@ public final class SResultSet
     public Object getDate(final SObjFunction obj,
                           final SContext   context,
                           final Object[]   args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "column-index");
@@ -953,7 +953,7 @@ public final class SResultSet
  *
  * @return The value of a field of the current row.
  *
- * @exception STeaException Thrown if the result set has been closed,
+ * @exception TeaException Thrown if the result set has been closed,
  * if there is no current row or if there were any problems accessing
  * the database.
  *
@@ -1012,7 +1012,7 @@ public final class SResultSet
     public Object close(final SObjFunction obj,
                         final SContext     context,
                         final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         try {
             close();
@@ -1095,7 +1095,7 @@ public final class SResultSet
  * @return
  *    The number of columns in this result set.
  *
- * @exception com.pdmfc.tea.STeaException
+ * @exception com.pdmfc.tea.TeaException
  *    Thrown if the result set has been closed or if there were any
  *    problem comunicating with the database.
  *
@@ -1104,7 +1104,7 @@ public final class SResultSet
     public Object getColumnCount(final SObjFunction obj,
                                  final SContext     context,
                                  final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         checkResultSet();
 
@@ -1194,7 +1194,7 @@ public final class SResultSet
  * @return A <TT>String</TT> with the name of a column of this result
  * set.
  *
- * @exception STeaException Thrown if the result set has been closed
+ * @exception TeaException Thrown if the result set has been closed
  * or if there were any problem comunicating with the database.
  *
  **************************************************************************/

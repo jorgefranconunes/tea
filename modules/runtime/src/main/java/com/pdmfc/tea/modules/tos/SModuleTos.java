@@ -10,8 +10,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import com.pdmfc.tea.STeaException;
-import com.pdmfc.tea.modules.SModule;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.tos.SList;
 import com.pdmfc.tea.runtime.SArgs;
 import com.pdmfc.tea.runtime.SContext;
@@ -26,6 +25,7 @@ import com.pdmfc.tea.runtime.STypeException;
 import com.pdmfc.tea.runtime.STypes;
 import com.pdmfc.tea.runtime.TeaFunctionImplementor;
 import com.pdmfc.tea.runtime.TeaEnvironment;
+import com.pdmfc.tea.runtime.TeaModule;
 
 
 
@@ -57,7 +57,7 @@ import com.pdmfc.tea.runtime.TeaEnvironment;
 
 public final class SModuleTos
     extends Object
-    implements SModule {
+    implements TeaModule {
 
 
 
@@ -97,7 +97,7 @@ public final class SModuleTos
 
     @Override
     public void init(final TeaEnvironment environment)
-        throws STeaException {
+        throws TeaException {
 
         _environment = environment;
 
@@ -210,7 +210,7 @@ public final class SModuleTos
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -221,7 +221,7 @@ public final class SModuleTos
     public Object functionClass(final SObjFunction func,
                                 final SContext     context,
                                 final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( (args.length<3) || (args.length>4) ) {
             String usage = "class-name [base-class] list-of-members";
@@ -302,7 +302,7 @@ public final class SModuleTos
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -313,7 +313,7 @@ public final class SModuleTos
     public Object functionNewClass(final SObjFunction func,
                                    final SContext     context,
                                    final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( (args.length<2) || (args.length>3) ) {
             throw new SNumArgException(args,
@@ -397,7 +397,7 @@ public final class SModuleTos
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -408,7 +408,7 @@ public final class SModuleTos
     public static Object functionNew(final SObjFunction func,
                                      final SContext     context,
                                      final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length < 2 ) {
             throw new SNumArgException(args, "class-name [constructor-args]");
@@ -469,7 +469,7 @@ public final class SModuleTos
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -480,7 +480,7 @@ public final class SModuleTos
     public static Object functionMethod(final SObjFunction func,
                                         final SContext     context,
                                         final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 5 ) {
             String usage = "class-name method-name formal-param body";
@@ -514,7 +514,7 @@ public final class SModuleTos
 
     private static void fixedArgsMethod(final SContext context,
                                         final Object[] args)
-        throws STeaException {
+        throws TeaException {
         
         STosClass    methodClass = STosUtil.getClass(context, args, 1);
         SObjSymbol   methodName  = SArgs.getSymbol(args, 2);
@@ -555,7 +555,7 @@ public final class SModuleTos
 
     private static void varArgsMethod(final SContext context,
                                       final Object[] args)
-        throws STeaException {
+        throws TeaException {
 
         STosClass    methodClass = STosUtil.getClass(context, args, 1);
         SObjSymbol   methodName  = SArgs.getSymbol(args, 2);
@@ -611,7 +611,7 @@ public final class SModuleTos
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -622,7 +622,7 @@ public final class SModuleTos
     public Object functionLoadClass(final SObjFunction func,
                                     final SContext     context,
                                     final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "java-class-name");
@@ -707,7 +707,7 @@ public final class SModuleTos
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -718,7 +718,7 @@ public final class SModuleTos
     public static Object functionBaseOf(final SObjFunction func,
                                         final SContext     context,
                                         final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "classObject");
@@ -768,7 +768,7 @@ public final class SModuleTos
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -779,7 +779,7 @@ public final class SModuleTos
     public static Object functionClassOf(final SObjFunction func,
                                          final SContext     context,
                                          final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "tosObject");
@@ -844,7 +844,7 @@ public final class SModuleTos
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -855,7 +855,7 @@ public final class SModuleTos
     public static Object functionIsA(final SObjFunction func,
                                      final SContext     context,
                                      final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "class1 class2");
@@ -914,7 +914,7 @@ public final class SModuleTos
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -925,7 +925,7 @@ public final class SModuleTos
     public static Object functionGetName(final SObjFunction func,
                                          final SContext     context,
                                          final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "classObject");
@@ -974,7 +974,7 @@ public final class SModuleTos
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -985,7 +985,7 @@ public final class SModuleTos
     public static Object functionIsTosObj(final SObjFunction func,
                                           final SContext     context,
                                           final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "value");

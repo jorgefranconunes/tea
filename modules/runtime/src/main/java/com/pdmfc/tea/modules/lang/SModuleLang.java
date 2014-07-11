@@ -18,11 +18,10 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Properties;
 
-import com.pdmfc.tea.SConfigInfo;
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaConfigInfo;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.compiler.TeaCode;
 import com.pdmfc.tea.compiler.TeaCompiler;
-import com.pdmfc.tea.modules.SModule;
 import com.pdmfc.tea.modules.io.SInput;
 import com.pdmfc.tea.modules.math.SModuleMath;
 import com.pdmfc.tea.modules.util.SHashtable;
@@ -33,7 +32,6 @@ import com.pdmfc.tea.runtime.SContinueException;
 import com.pdmfc.tea.runtime.SExitException;
 import com.pdmfc.tea.runtime.SLambdaFunction;
 import com.pdmfc.tea.runtime.SLambdaFunctionVarArg;
-import com.pdmfc.tea.runtime.SModuleUtils;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SObjBlock;
 import com.pdmfc.tea.runtime.SObjFunction;
@@ -47,6 +45,7 @@ import com.pdmfc.tea.runtime.STypeException;
 import com.pdmfc.tea.runtime.STypes;
 import com.pdmfc.tea.runtime.TeaEnvironment;
 import com.pdmfc.tea.runtime.TeaFunctionImplementor;
+import com.pdmfc.tea.runtime.TeaModule;
 
 
 
@@ -79,7 +78,7 @@ import com.pdmfc.tea.runtime.TeaFunctionImplementor;
 
 public final class SModuleLang
     extends Object
-    implements SModule {
+    implements TeaModule {
 
 
 
@@ -135,13 +134,13 @@ public final class SModuleLang
 
     @Override
     public void init(final TeaEnvironment environment)
-        throws STeaException {
+        throws TeaException {
 
         environment.addGlobalVar("true",  Boolean.TRUE);
         environment.addGlobalVar("false", Boolean.FALSE);
         environment.addGlobalVar("null",  SObjNull.NULL);
         environment.addGlobalVar(TEA_VERSION_VAR,
-                                  SConfigInfo.getProperty(PROP_TEA_VERSION));
+                                 TeaConfigInfo.get(PROP_TEA_VERSION));
 
         environment.addGlobalVar("import", new SFunctionImport(environment));
 
@@ -248,7 +247,7 @@ public final class SModuleLang
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -259,7 +258,7 @@ public final class SModuleLang
     public static Object functionApply(final SObjFunction func,
                                        final SContext     context,
                                        final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         SArgs.checkAtLeast(args, 2, "function obj1 ... list");
 
@@ -343,7 +342,7 @@ public final class SModuleLang
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -354,7 +353,7 @@ public final class SModuleLang
     public static Object functionBreak(final SObjFunction func,
                                        final SContext     context,
                                        final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         SArgs.checkAtMost(args, 2, "[object]");
 
@@ -438,7 +437,7 @@ public final class SModuleLang
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -449,7 +448,7 @@ public final class SModuleLang
     public static Object functionCatch(final SObjFunction func,
                                        final SContext     context,
                                        final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         SArgs.checkBetween(args, 2, 4, "block [symbol] [st-symbol]");
 
@@ -459,7 +458,7 @@ public final class SModuleLang
         SContext   scope  = block.getContext().newChild();
         Object     result = Boolean.FALSE;
         Object     value  = null;
-        STeaException error  = null;
+        TeaException error  = null;
 
         try {
             value = block.exec(scope);
@@ -478,7 +477,7 @@ public final class SModuleLang
             value = SObjNull.NULL;
         } catch ( SExitException e ) {
             value = e.getExitValue();
-        } catch ( STeaException e ) {
+        } catch ( TeaException e ) {
             value  = e.getMessage();
             result = Boolean.TRUE;
             error  = e;
@@ -583,7 +582,7 @@ public final class SModuleLang
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -594,7 +593,7 @@ public final class SModuleLang
     public static Object functionCond(final SObjFunction func,
                                       final SContext     context,
                                       final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         SArgs.checkAtLeast(args, 3, "condition result [...]");
 
@@ -637,7 +636,7 @@ public final class SModuleLang
  **************************************************************************/
 
     private static Object evalCondArg(final Object condArg)
-        throws STeaException {
+        throws TeaException {
 
         Object result = condArg;
 
@@ -678,7 +677,7 @@ public final class SModuleLang
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -689,7 +688,7 @@ public final class SModuleLang
     public static Object functionContinue(final SObjFunction func,
                                           final SContext     context,
                                           final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         SArgs.checkCount(args, 1, "No args required");
 
@@ -781,7 +780,7 @@ public final class SModuleLang
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -792,7 +791,7 @@ public final class SModuleLang
     public static Object functionDefine(final SObjFunction func,
                                         final SContext     context,
                                         final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         Object result = functionDefineVar(context, func, context, args);
 
@@ -855,7 +854,7 @@ public final class SModuleLang
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -866,7 +865,7 @@ public final class SModuleLang
     public Object functionGlobal(final SObjFunction func,
                                  final SContext     context,
                                  final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         SContext globalContext = _environment.getGlobalContext();
         Object   result        =
@@ -889,7 +888,7 @@ public final class SModuleLang
                                             final SObjFunction func,
                                             final SContext     context,
                                             final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         SArgs.checkBetween(args, 2, 4, "var-name [value]");
 
@@ -927,7 +926,7 @@ public final class SModuleLang
  **************************************************************************/
 
     private static SObjFunction newFunction(final Object[] args)
-        throws STeaException {
+        throws TeaException {
 
         Object       formalParam = args[2];
         SObjBlock    body        = SArgs.getBlock(args,3);
@@ -960,7 +959,7 @@ public final class SModuleLang
  *
  * @param body Block that will be the body of the procedure.
  *
- * @exception com.pdmfc.tea.STeaException Thrown if any of the
+ * @exception com.pdmfc.tea.TeaException Thrown if any of the
  * elements in the formal parameter list is not a symbol.
  *
  **************************************************************************/
@@ -968,7 +967,7 @@ public final class SModuleLang
     private static SObjFunction newFixedArgsFunction(final Object[]  args,
                                                      final SObjPair  paramList,
                                                      final SObjBlock body)
-        throws STeaException {
+        throws TeaException {
 
         int          numParam   = paramList.length();
         SObjSymbol[] parameters = new SObjSymbol[numParam];
@@ -1006,13 +1005,13 @@ public final class SModuleLang
  *
  * @param body Block that will be the body of the procedure.
  *
- * @exception com.pdmfc.tea.STeaException
+ * @exception com.pdmfc.tea.TeaException
  *
  **************************************************************************/
 
     private static SObjFunction newVarArgsFunction(final SObjSymbol symbol,
                                                    final SObjBlock  body)
-        throws STeaException {
+        throws TeaException {
 
         SObjFunction result = new SLambdaFunctionVarArg(symbol, body);
 
@@ -1063,7 +1062,7 @@ public final class SModuleLang
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -1074,7 +1073,7 @@ public final class SModuleLang
     public  static Object functionEcho(final SObjFunction func,
                                        final SContext     context,
                                        final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         int argCount = args.length;
 
@@ -1137,7 +1136,7 @@ public final class SModuleLang
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -1148,7 +1147,7 @@ public final class SModuleLang
     public static Object functionError(final SObjFunction func,
                                        final SContext     context,
                                        final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         SArgs.checkCount(args, 2, "message");
 
@@ -1207,7 +1206,7 @@ public final class SModuleLang
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -1218,7 +1217,7 @@ public final class SModuleLang
     public static Object functionExec(final SObjFunction func,
                                       final SContext     context,
                                       final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         SArgs.checkCount(args, 2, "block");
 
@@ -1262,7 +1261,7 @@ public final class SModuleLang
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -1273,7 +1272,7 @@ public final class SModuleLang
     public static Object functionExit(final SObjFunction func,
                                       final SContext     context,
                                       final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         SArgs.checkAtMost(args, 2, "[exit-code]");
 
@@ -1348,7 +1347,7 @@ public final class SModuleLang
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -1359,7 +1358,7 @@ public final class SModuleLang
     public static Object functionForeach(final SObjFunction func,
                                          final SContext     context,
                                          final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         SArgs.checkCount(args, 4, "var list block");
 
@@ -1426,7 +1425,7 @@ public final class SModuleLang
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -1437,7 +1436,7 @@ public final class SModuleLang
     public static Object functionGet(final SObjFunction func,
                                      final SContext     context,
                                      final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "symbol");
@@ -1502,7 +1501,7 @@ public final class SModuleLang
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -1513,7 +1512,7 @@ public final class SModuleLang
     public static Object functionIf(final SObjFunction func,
                                     final SContext     context,
                                     final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         int numArgs = args.length;
 
@@ -1581,7 +1580,7 @@ public final class SModuleLang
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -1592,7 +1591,7 @@ public final class SModuleLang
     public static Object functionIs(final SObjFunction func,
                                     final SContext     context,
                                     final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "object");
@@ -1613,7 +1612,7 @@ public final class SModuleLang
 
     private static Object typeCheck(final Class<?> type,
                                     final Object[] args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "obj");
@@ -1664,7 +1663,7 @@ public final class SModuleLang
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -1675,7 +1674,7 @@ public final class SModuleLang
     public static Object functionIsBlock(final SObjFunction func,
                                          final SContext     context,
                                          final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         return typeCheck(SObjBlock.class, args);
     }
@@ -1719,7 +1718,7 @@ public final class SModuleLang
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -1730,7 +1729,7 @@ public final class SModuleLang
     public static Object functionIsBoolean(final SObjFunction func,
                                            final SContext     context,
                                            final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         return typeCheck(Boolean.class, args);
     }
@@ -1774,7 +1773,7 @@ public final class SModuleLang
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -1785,7 +1784,7 @@ public final class SModuleLang
     public static Object functionIsFloat(final SObjFunction func,
                                          final SContext     context,
                                          final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         return typeCheck(Double.class, args);
     }
@@ -1828,7 +1827,7 @@ public final class SModuleLang
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -1839,7 +1838,7 @@ public final class SModuleLang
     public static Object functionIsFunction(final SObjFunction func,
                                             final SContext     context,
                                             final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         return typeCheck(SObjFunction.class, args);
     }
@@ -1883,7 +1882,7 @@ public final class SModuleLang
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -1894,7 +1893,7 @@ public final class SModuleLang
     public static Object functionIsInt(final SObjFunction func,
                                        final SContext     context,
                                        final Object[]     args)
-        throws STeaException {
+        throws TeaException {
         
         return typeCheck(Integer.class, args);
     }
@@ -1938,7 +1937,7 @@ public final class SModuleLang
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -1949,7 +1948,7 @@ public final class SModuleLang
     public static Object functionIsPair(final SObjFunction func,
                                         final SContext     context,
                                         final Object[]     args)
-        throws STeaException {
+        throws TeaException {
         
         return typeCheck(SObjPair.class, args);
     }
@@ -1993,7 +1992,7 @@ public final class SModuleLang
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -2004,7 +2003,7 @@ public final class SModuleLang
     public static Object functionIsString(final SObjFunction func,
                                           final SContext     context,
                                           final Object[]     args)
-        throws STeaException {
+        throws TeaException {
         
         return typeCheck(String.class, args);
     }
@@ -2048,7 +2047,7 @@ public final class SModuleLang
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -2059,7 +2058,7 @@ public final class SModuleLang
     public static Object functionIsSymbol(final SObjFunction func,
                                           final SContext     context,
                                           final Object[]     args)
-        throws STeaException {
+        throws TeaException {
         
         return typeCheck(SObjSymbol.class, args);
     }
@@ -2103,7 +2102,7 @@ public final class SModuleLang
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -2114,7 +2113,7 @@ public final class SModuleLang
     public static Object functionIsNotNull(final SObjFunction func,
                                            final SContext     context,
                                            final Object[]     args)
-        throws STeaException {
+        throws TeaException {
         
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "object");
@@ -2167,7 +2166,7 @@ public final class SModuleLang
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -2178,7 +2177,7 @@ public final class SModuleLang
     public static Object functionIsNotSame(final SObjFunction func,
                                            final SContext     context,
                                            final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "obj1 obj2");
@@ -2226,7 +2225,7 @@ public final class SModuleLang
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -2237,7 +2236,7 @@ public final class SModuleLang
     public static Object functionIsNull(final SObjFunction func,
                                         final SContext context,
                                         final Object[]   args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "object");
@@ -2290,7 +2289,7 @@ public final class SModuleLang
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -2301,7 +2300,7 @@ public final class SModuleLang
     public static Object functionIsSame(final SObjFunction func,
                                         final SContext     context,
                                         final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "obj1 obj2");
@@ -2353,7 +2352,7 @@ public final class SModuleLang
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -2364,7 +2363,7 @@ public final class SModuleLang
     public static Object functionLambda(final SObjFunction func,
                                         final SContext     context,
                                         final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "formal-parameters block");
@@ -2421,7 +2420,7 @@ public final class SModuleLang
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -2432,21 +2431,45 @@ public final class SModuleLang
     public Object functionLoad(final SObjFunction func,
                                final SContext     context,
                                final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "java-package-name");
         }
 
-        String moduleClassName = SArgs.getString(args, 1);
+        String    moduleClassName = SArgs.getString(args, 1);
+        TeaModule module          = newModule(moduleClassName);
         
-        try {
-            SModuleUtils.addAndStartModule(_environment, moduleClassName);
-        } catch ( STeaException e ) {
-            throw new SRuntimeException(args, e.getMessage());
-        }
+        _environment.addModule(module);
         
         return SObjNull.NULL;
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    private TeaModule newModule(final String className)
+        throws TeaException {
+
+        TeaModule module = null;
+
+        try {
+            module = (TeaModule)Class.forName(className).newInstance();
+        } catch ( Throwable e ) {
+            String msg = "Failed to create instance for module {0} - {1} - {2}";
+            Object[] fmtArgs =
+                { className, e.getClass().getName(), e.getMessage() };
+            new TeaException(msg, fmtArgs);
+        }
+
+        return module;
     }
 
 
@@ -2487,7 +2510,7 @@ public final class SModuleLang
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -2498,7 +2521,7 @@ public final class SModuleLang
     public Object functionLoadFunction(final SObjFunction func,
                                        final SContext     context,
                                        final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "java-class-name");
@@ -2589,7 +2612,7 @@ public final class SModuleLang
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -2600,7 +2623,7 @@ public final class SModuleLang
     public static Object functionMap(final SObjFunction func,
                                      final SContext     context,
                                      final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length < 3 ) {
             throw new SNumArgException(args, "procedure list1 ...");
@@ -2652,13 +2675,13 @@ public final class SModuleLang
  *    An array of <TT>Enumerator</TT> objects, each one associated with a
  *    list.
  *
- * @exception STeaException
+ * @exception TeaException
  *    Thrown if any of the arguments was not a list.
  *
  **************************************************************************/
 
     private static Iterator[] buildListOfI(final Object[] args)
-        throws STeaException {
+        throws TeaException {
 
         Iterator[] iterators = new Iterator[args.length-2];
 
@@ -2724,7 +2747,7 @@ public final class SModuleLang
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -2735,7 +2758,7 @@ public final class SModuleLang
     public static Object functionMapApply(final SObjFunction func,
                                           final SContext     context,
                                           final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "procedure list-of-arg-list");
@@ -2857,7 +2880,7 @@ public final class SModuleLang
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -2868,7 +2891,7 @@ public final class SModuleLang
     public static Object functionReturn(final SObjFunction func,
                                         final SContext     context,
                                         final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         throw new SReturnException((args.length>1) ? args[1] : SObjNull.NULL);
     }
@@ -2923,7 +2946,7 @@ public final class SModuleLang
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -2934,7 +2957,7 @@ public final class SModuleLang
     public static Object functionSet(final SObjFunction func,
                                      final SContext     context,
                                      final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "symbol value");
@@ -2988,7 +3011,7 @@ public final class SModuleLang
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -2999,7 +3022,7 @@ public final class SModuleLang
     public static Object functionSleep(final SObjFunction func,
                                        final SContext     context,
                                        final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "millis-to-sleep");
@@ -3087,7 +3110,7 @@ public final class SModuleLang
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -3098,7 +3121,7 @@ public final class SModuleLang
     public Object functionSource(final SObjFunction func,
                                  final SContext     context,
                                  final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         TeaCode  program       = compileFromSource(context, args);
         SContext globalContext = _environment.getGlobalContext();
@@ -3173,7 +3196,7 @@ public final class SModuleLang
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -3184,7 +3207,7 @@ public final class SModuleLang
     public Object functionCompile(final SObjFunction func,
                                   final SContext     context,
                                   final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         final TeaCode   program      = compileFromSource(context, args);
         final SContext  blockContext = _environment.getGlobalContext();
@@ -3194,11 +3217,11 @@ public final class SModuleLang
                     return blockContext;
                 }
                 public Object exec(final SContext context)
-                    throws STeaException {
+                    throws TeaException {
                     return program.exec(context);
                 }
                 public Object exec()
-                    throws STeaException {
+                    throws TeaException {
                     return program.exec(blockContext.newChild());
                 }
             };
@@ -3218,7 +3241,7 @@ public final class SModuleLang
 
     private TeaCode compileFromSource(final SContext context,
                                       final Object[] args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "file");
@@ -3307,7 +3330,7 @@ public final class SModuleLang
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -3318,7 +3341,7 @@ public final class SModuleLang
     public static Object functionSystem(final SObjFunction func,
                                         final SContext     context,
                                         final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length < 2 ) {
             throw new SNumArgException(args, "command [arg ...]");
@@ -3404,7 +3427,7 @@ public final class SModuleLang
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -3415,7 +3438,7 @@ public final class SModuleLang
     public static Object functionTime(final SObjFunction func,
                                       final SContext     context,
                                       final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( (args.length<2) || (args.length>3) ) {
             throw new SNumArgException(args, "block [count]");
@@ -3495,7 +3518,7 @@ public final class SModuleLang
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -3506,7 +3529,7 @@ public final class SModuleLang
     public static Object functionWhile(final SObjFunction func,
                                        final SContext     context,
                                        final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "condition body-block");
@@ -3537,7 +3560,7 @@ public final class SModuleLang
  **************************************************************************/
 
     private static Object normalLoop(final Object[] args)
-        throws STeaException {
+        throws TeaException {
 
         SObjBlock condBlock   = SArgs.getBlock(args, 1);
         SObjBlock block       = SArgs.getBlock(args, 2);
@@ -3584,7 +3607,7 @@ public final class SModuleLang
  **************************************************************************/
 
     private static Object infiniteLoop(final Object[] args)
-        throws STeaException {
+        throws TeaException {
 
         SObjBlock block      = SArgs.getBlock(args, 2);
         SContext  newContext = block.getContext().newChild();
@@ -3646,7 +3669,7 @@ public final class SModuleLang
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -3657,7 +3680,7 @@ public final class SModuleLang
     public static Object functionGetProp(final SObjFunction func,
                                          final SContext     context,
                                          final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "propertyName");
@@ -3728,7 +3751,7 @@ public final class SModuleLang
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -3739,7 +3762,7 @@ public final class SModuleLang
     public static Object functionSetProp(final SObjFunction func,
                                          final SContext     context,
                                          final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "propertyName propertyValue");
@@ -3801,7 +3824,7 @@ public final class SModuleLang
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -3812,7 +3835,7 @@ public final class SModuleLang
     public Object functionGetProps(final SObjFunction func,
                                    final SContext     context,
                                    final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( _systemProps == null ) {
             Properties props = System.getProperties();

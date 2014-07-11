@@ -8,8 +8,7 @@ package com.pdmfc.tea.modules.math;
 
 import java.util.Random;
 
-import com.pdmfc.tea.STeaException;
-import com.pdmfc.tea.modules.SModule;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.runtime.SArgs;
 import com.pdmfc.tea.runtime.SArithmeticException;
 import com.pdmfc.tea.runtime.SContext;
@@ -22,6 +21,7 @@ import com.pdmfc.tea.runtime.STypeException;
 import com.pdmfc.tea.runtime.STypes;
 import com.pdmfc.tea.runtime.TeaEnvironment;
 import com.pdmfc.tea.runtime.TeaFunctionImplementor;
+import com.pdmfc.tea.runtime.TeaModule;
 
 
 
@@ -49,7 +49,7 @@ import com.pdmfc.tea.runtime.TeaFunctionImplementor;
 
 public final class SModuleMath
     extends Object
-    implements SModule {
+    implements TeaModule {
 
 
 
@@ -132,7 +132,7 @@ public final class SModuleMath
 
     @Override
     public void init(final TeaEnvironment environment)
-        throws STeaException {
+        throws TeaException {
 
         // Nothing to do. The functions provided by this module are
         // all implemented as methods of this class with the
@@ -226,7 +226,7 @@ public final class SModuleMath
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -237,7 +237,7 @@ public final class SModuleMath
     public static Object functionEq(final SObjFunction func,
                                     final SContext     context,
                                     final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         return compare(Comparison.EQ, func, context, args);
     }
@@ -285,7 +285,7 @@ public final class SModuleMath
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -296,7 +296,7 @@ public final class SModuleMath
     public static Object functionNe(final SObjFunction func,
                                     final SContext     context,
                                     final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         return compare(Comparison.NE, func, context, args);
     }
@@ -344,7 +344,7 @@ public final class SModuleMath
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -355,7 +355,7 @@ public final class SModuleMath
     public static Object functionGt(final SObjFunction func,
                                     final SContext     context,
                                     final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         return compare(Comparison.GT, func, context, args);
     }
@@ -404,7 +404,7 @@ public final class SModuleMath
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -415,7 +415,7 @@ public final class SModuleMath
     public static Object functionGe(final SObjFunction func,
                                     final SContext     context,
                                     final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         return compare(Comparison.GE, func, context, args);
     }
@@ -463,7 +463,7 @@ public final class SModuleMath
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -474,7 +474,7 @@ public final class SModuleMath
     public static Object functionLt(final SObjFunction func,
                                     final SContext     context,
                                     final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         return compare(Comparison.LT, func, context, args);
     }
@@ -523,7 +523,7 @@ public final class SModuleMath
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -534,7 +534,7 @@ public final class SModuleMath
     public static Object functionLe(final SObjFunction func,
                                     final SContext     context,
                                     final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         return compare(Comparison.LE, func, context, args);
     }
@@ -553,7 +553,7 @@ public final class SModuleMath
                                   final SObjFunction func,
                                   final SContext     context,
                                   final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         SArgs.checkAtLeast(args, 3, "num1 num2 ...");
 
@@ -709,7 +709,7 @@ public final class SModuleMath
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -720,7 +720,7 @@ public final class SModuleMath
     public static Object functionAdd(final SObjFunction func,
                                      final SContext     context,
                                      final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         return arithmOp(ArithOp.ADD, func, context, args);
     }
@@ -768,7 +768,7 @@ public final class SModuleMath
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -779,7 +779,7 @@ public final class SModuleMath
     public static Object functionSub(final SObjFunction func,
                                      final SContext     context,
                                      final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         return arithmOp(ArithOp.SUB, func, context, args);
     }
@@ -826,7 +826,7 @@ public final class SModuleMath
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -837,7 +837,7 @@ public final class SModuleMath
     public static Object functionMul(final SObjFunction func,
                                      final SContext     context,
                                      final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         return arithmOp(ArithOp.MUL, func, context, args);
     }
@@ -885,7 +885,7 @@ public final class SModuleMath
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -896,7 +896,7 @@ public final class SModuleMath
     public static Object functionDiv(final SObjFunction func,
                                      final SContext     context,
                                      final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         return arithmOp(ArithOp.DIV, func, context, args);
     }
@@ -915,7 +915,7 @@ public final class SModuleMath
                                    final SObjFunction func,
                                    final SContext     context,
                                    final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length < 2 ) {
             return opNullValue(op);
@@ -954,7 +954,7 @@ public final class SModuleMath
                                     final int      input,
                                     final Object[] args,
                                     final int      first)
-        throws STeaException {
+        throws TeaException {
 
         int result = input;
 
@@ -994,7 +994,7 @@ public final class SModuleMath
                                       final double   input,
                                       final Object[] args,
                                       final int      first)
-        throws STeaException {
+        throws TeaException {
 
         double result = input;
 
@@ -1113,14 +1113,14 @@ public final class SModuleMath
  * @return The result of the unary operation. It will be of the same
  * type as <code>op</code>.
  *
- * @exception STeaException Throws if <code>op</code> is neither an
+ * @exception TeaException Throws if <code>op</code> is neither an
  * int nor a float and the selected arithmetic operation is "minus".
  *
  **************************************************************************/
 
     private static Object unaryOp(final ArithOp  operator,
                                   final Object[] args)
-        throws STeaException {
+        throws TeaException {
 
         Object result  = null;
         Object operand = args[1];
@@ -1187,7 +1187,7 @@ public final class SModuleMath
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -1198,7 +1198,7 @@ public final class SModuleMath
     public static Object functionMod(final SObjFunction func,
                                      final SContext     context,
                                      final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         SArgs.checkCount(args, 3, "dividend divisor");
 
@@ -1276,7 +1276,7 @@ public final class SModuleMath
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -1287,7 +1287,7 @@ public final class SModuleMath
     public static Object functionAnd(final SObjFunction func,
                                      final SContext     context,
                                      final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         for ( int i=1, count=args.length; i<count; i++ ) {
             Object obj = args[i];
@@ -1352,7 +1352,7 @@ public final class SModuleMath
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -1363,7 +1363,7 @@ public final class SModuleMath
     public static Object functionOr(final SObjFunction func,
                                     final SContext     context,
                                     final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         for ( int i=1, count=args.length; i<count; i++ ) {
             Object obj = args[i];
@@ -1425,7 +1425,7 @@ public final class SModuleMath
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -1436,7 +1436,7 @@ public final class SModuleMath
     public static Object functionNot(final SObjFunction func,
                                      final SContext     context,
                                      final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "boolean");
@@ -1489,7 +1489,7 @@ public final class SModuleMath
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -1500,7 +1500,7 @@ public final class SModuleMath
     public static Object functionAbs(final SObjFunction func,
                                      final SContext     context,
                                      final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "value");
@@ -1556,7 +1556,7 @@ public final class SModuleMath
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -1567,7 +1567,7 @@ public final class SModuleMath
     public static Object functionRound(final SObjFunction func,
                                        final SContext     context,
                                        final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "value");
@@ -1618,7 +1618,7 @@ public final class SModuleMath
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -1629,7 +1629,7 @@ public final class SModuleMath
     public static Object functionFloor(final SObjFunction func,
                                        final SContext     context,
                                        final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "value");
@@ -1680,7 +1680,7 @@ public final class SModuleMath
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -1691,7 +1691,7 @@ public final class SModuleMath
     public static Object functionCeil(final SObjFunction func,
                                       final SContext     context,
                                       final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "value");
@@ -1742,7 +1742,7 @@ public final class SModuleMath
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -1753,7 +1753,7 @@ public final class SModuleMath
     public static Object functionSqrt(final SObjFunction func,
                                       final SContext     context,
                                       final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "value");
@@ -1785,7 +1785,7 @@ public final class SModuleMath
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -1796,7 +1796,7 @@ public final class SModuleMath
     public static Object functionMin(final SObjFunction func,
                                      final SContext     context,
                                      final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         return findExtreme(C_LT, func, context, args);
     }
@@ -1816,7 +1816,7 @@ public final class SModuleMath
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -1827,7 +1827,7 @@ public final class SModuleMath
     public static Object functionMax(final SObjFunction func,
                                      final SContext     context,
                                      final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         return findExtreme(C_GT, func, context, args);
     }
@@ -1846,7 +1846,7 @@ public final class SModuleMath
                                       final SObjFunction func,
                                       final SContext     context,
                                       final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length < 2 ) {
             throw new SNumArgException(args, "value ...");
@@ -1983,7 +1983,7 @@ public final class SModuleMath
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -1994,7 +1994,7 @@ public final class SModuleMath
     public static Object functionInt(final SObjFunction func,
                                      final SContext     context,
                                      final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length == 3 ) {
             SObjSymbol symbol = SArgs.getSymbol(args, 1);
@@ -2051,7 +2051,7 @@ public final class SModuleMath
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -2062,7 +2062,7 @@ public final class SModuleMath
     public Object functionRandInt(final SObjFunction func,
                                   final SContext     context,
                                   final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         return Integer.valueOf(_generator.nextInt());
     }
@@ -2113,7 +2113,7 @@ public final class SModuleMath
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -2124,7 +2124,7 @@ public final class SModuleMath
     public static Object functionSetValue(final SObjFunction func,
                                           final SContext     context,
                                           final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
       if ( args.length != 3 ) {
          throw new SNumArgException(args, "symbol value");
@@ -2194,7 +2194,7 @@ public final class SModuleMath
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -2205,7 +2205,7 @@ public final class SModuleMath
     public static Object functionIncBy(final SObjFunction func,
                                        final SContext     context,
                                        final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "symbol value");
@@ -2226,7 +2226,7 @@ public final class SModuleMath
             String   msg     =
                 "Variable \"{0}\" must contain a numeric, not a {1}";
             Object[] fmtArgs = { symbol, STypes.getTypeName(value) };
-            throw new STeaException(msg, fmtArgs);
+            throw new TeaException(msg, fmtArgs);
         }
 
         var.set(value);
@@ -2290,7 +2290,7 @@ public final class SModuleMath
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -2301,7 +2301,7 @@ public final class SModuleMath
     public static Object functionDecBy(final SObjFunction func,
                                        final SContext     context,
                                        final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "symbol value");
@@ -2322,7 +2322,7 @@ public final class SModuleMath
             String   msg     =
                 "Variable \"{0}\" must contain a numeric, not a {1}";
             Object[] fmtArgs = { symbol, STypes.getTypeName(value) };
-            throw new STeaException(msg, fmtArgs);
+            throw new TeaException(msg, fmtArgs);
         }
 
         var.set(value);
@@ -2386,7 +2386,7 @@ public final class SModuleMath
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -2397,7 +2397,7 @@ public final class SModuleMath
     public static Object functionMulBy(final SObjFunction func,
                                        final SContext     context,
                                        final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "symbol value");
@@ -2418,7 +2418,7 @@ public final class SModuleMath
             String   msg     =
                 "Variable \"{0}\" must contain a numeric, not a {1}";
             Object[] fmtArgs = { symbol, STypes.getTypeName(value) };
-            throw new STeaException(msg, fmtArgs);
+            throw new TeaException(msg, fmtArgs);
         }
 
         var.set(value);
@@ -2482,7 +2482,7 @@ public final class SModuleMath
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -2493,7 +2493,7 @@ public final class SModuleMath
     public static Object functionDivBy(final SObjFunction func,
                                        final SContext     context,
                                        final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "symbol value");
@@ -2514,7 +2514,7 @@ public final class SModuleMath
             String   msg     =
                 "Variable \"{0}\" must contain a numeric, not a {1}";
             Object[] fmtArgs = { symbol, STypes.getTypeName(value) };
-            throw new STeaException(msg, fmtArgs);
+            throw new TeaException(msg, fmtArgs);
         }
 
         var.set(value);
@@ -2573,7 +2573,7 @@ public final class SModuleMath
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -2584,7 +2584,7 @@ public final class SModuleMath
     public static Object functionIncr(final SObjFunction func,
                                       final SContext     context,
                                       final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "symbol");
@@ -2604,7 +2604,7 @@ public final class SModuleMath
             String   msg     =
                 "Variable \"{0}\" must contain a numeric, not a {1}";
             Object[] fmtArgs = { symbol, STypes.getTypeName(value) };
-            throw new STeaException(msg, fmtArgs);
+            throw new TeaException(msg, fmtArgs);
         }
 
         var.set(value);
@@ -2663,7 +2663,7 @@ public final class SModuleMath
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -2674,7 +2674,7 @@ public final class SModuleMath
     public static Object functionDecr(final SObjFunction func,
                                       final SContext     context,
                                       final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "symbol");
@@ -2694,7 +2694,7 @@ public final class SModuleMath
             String   msg     =
                 "Variable \"{0}\" must contain a numeric, not a {1}";
             Object[] fmtArgs = { symbol, STypes.getTypeName(value) };
-            throw new STeaException(msg, fmtArgs);
+            throw new TeaException(msg, fmtArgs);
         }
 
         var.set(value);
@@ -2741,7 +2741,7 @@ public final class SModuleMath
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -2752,7 +2752,7 @@ public final class SModuleMath
     public Object functionBinNeg(final SObjFunction func,
                                  final SContext     context,
                                  final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "value");
@@ -2804,7 +2804,7 @@ public final class SModuleMath
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -2815,7 +2815,7 @@ public final class SModuleMath
     public Object functionBinAnd(final SObjFunction func,
                                  final SContext     context,
                                  final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         int lastIndex = args.length;
         int result    = (lastIndex==1) ? 0 : SArgs.getInt(args,1).intValue();
@@ -2869,7 +2869,7 @@ public final class SModuleMath
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -2880,7 +2880,7 @@ public final class SModuleMath
     public Object functionBinOr(final SObjFunction func,
                                 final SContext     context,
                                 final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         int lastIndex = args.length;
         int result    = (lastIndex==1) ? 0 : SArgs.getInt(args,1).intValue();
@@ -2934,7 +2934,7 @@ public final class SModuleMath
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -2945,7 +2945,7 @@ public final class SModuleMath
     public Object functionBinXor(final SObjFunction func,
                                  final SContext     context,
                                  final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         int lastIndex = args.length;
         int result    = (lastIndex==1) ? 0 : SArgs.getInt(args,1).intValue();
@@ -3002,7 +3002,7 @@ public final class SModuleMath
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -3013,7 +3013,7 @@ public final class SModuleMath
     public Object functionBinSl(final SObjFunction func,
                                 final SContext     context,
                                 final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "value shift");
@@ -3069,7 +3069,7 @@ public final class SModuleMath
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -3080,7 +3080,7 @@ public final class SModuleMath
     public Object functionBinSr(final SObjFunction func,
                                 final SContext     context,
                                 final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "value shift");
@@ -3149,7 +3149,7 @@ public final class SModuleMath
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -3160,7 +3160,7 @@ public final class SModuleMath
     public static Object functionBinAndBy(final SObjFunction func,
                                           final SContext     context,
                                           final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "symbol value");
@@ -3179,7 +3179,7 @@ public final class SModuleMath
             String   msg     =
                 "Variable \"{0}\" must contain a numeric, not a {1}";
             Object[] fmtArgs = { symbol, STypes.getTypeName(value) };
-            throw new STeaException(msg, fmtArgs);
+            throw new TeaException(msg, fmtArgs);
         }
         resObj = Integer.valueOf(result);
 
@@ -3244,7 +3244,7 @@ public final class SModuleMath
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -3255,7 +3255,7 @@ public final class SModuleMath
     public static Object functionBinOrBy(final SObjFunction func,
                                          final SContext     context,
                                          final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "symbol value");
@@ -3274,7 +3274,7 @@ public final class SModuleMath
             String   msg     =
                 "Variable \"{0}\" must contain a numeric, not a {1}";
             Object[] fmtArgs = { symbol, STypes.getTypeName(value) };
-            throw new STeaException(msg, fmtArgs);
+            throw new TeaException(msg, fmtArgs);
         }
         resObj = Integer.valueOf(result);
 
@@ -3339,7 +3339,7 @@ public final class SModuleMath
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -3350,7 +3350,7 @@ public final class SModuleMath
     public static Object functionBinXorBy(final SObjFunction func,
                                           final SContext     context,
                                           final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "symbol value");
@@ -3369,7 +3369,7 @@ public final class SModuleMath
             String   msg     =
                 "Variable \"{0}\" must contain a numeric, not a {1}";
             Object[] fmtArgs = { symbol, STypes.getTypeName(value) };
-            throw new STeaException(msg, fmtArgs);
+            throw new TeaException(msg, fmtArgs);
         }
         resObj = Integer.valueOf(result);
 
@@ -3434,7 +3434,7 @@ public final class SModuleMath
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -3445,7 +3445,7 @@ public final class SModuleMath
     public static Object functionBinSlBy(final SObjFunction func,
                                          final SContext     context,
                                          final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "symbol value");
@@ -3464,7 +3464,7 @@ public final class SModuleMath
             String   msg     =
                 "Variable \"{0}\" must contain a numeric, not a {1}";
             Object[] fmtArgs = { symbol, STypes.getTypeName(value) };
-            throw new STeaException(msg, fmtArgs);
+            throw new TeaException(msg, fmtArgs);
         }
         resObj = Integer.valueOf(result);
 
@@ -3529,7 +3529,7 @@ public final class SModuleMath
  *
  * @param args The arguments the function is being invoked with.
  *
- * @exception STeaException Thrown if the function did not complete
+ * @exception TeaException Thrown if the function did not complete
  * successfully.
  *
  * @return The value returned by the Tea function.
@@ -3540,7 +3540,7 @@ public final class SModuleMath
     public static Object functionBinSrBy(final SObjFunction func,
                                          final SContext     context,
                                          final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "symbol value");
@@ -3559,7 +3559,7 @@ public final class SModuleMath
             String   msg     =
                 "Variable \"{0}\" must contain a numeric, not a {1}";
             Object[] fmtArgs = { symbol, STypes.getTypeName(value) };
-            throw new STeaException(msg, fmtArgs);
+            throw new TeaException(msg, fmtArgs);
         }
         resObj = Integer.valueOf(result);
 

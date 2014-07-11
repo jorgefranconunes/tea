@@ -6,7 +6,7 @@
 
 package com.pdmfc.tea.runtime;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjBlock;
 import com.pdmfc.tea.runtime.SObjFunction;
@@ -98,7 +98,7 @@ public final class SLambdaFunction
  *
  * @param args Array with the arguments passed to the command.
  *
- * @exception STeaException Thrown if the number of arguments does not
+ * @exception TeaException Thrown if the number of arguments does not
  * match or if there were any problems executing the function body.
  *
  **************************************************************************/
@@ -106,7 +106,7 @@ public final class SLambdaFunction
     public Object exec(final SObjFunction func,
                        final SContext     context,
                        final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != _argCountPlusOne ) {
             throw new SNumArgException(args, parametersText());

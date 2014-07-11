@@ -15,7 +15,7 @@ import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.reflect.STeaJavaTypes;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjSymbol;
@@ -218,7 +218,7 @@ final class SReflectUtils
                                       final Method   method,
                                       final SContext context,
                                       final Object[] methodArgs) 
-        throws STeaException {
+        throws TeaException {
 
         Object javaResult = null;
 
@@ -247,8 +247,8 @@ final class SReflectUtils
             if ( cause instanceof UndeclaredThrowableException ) {
                 cause = cause.getCause();
             }
-            if ( cause instanceof STeaException ) {
-                throw (STeaException)cause;
+            if ( cause instanceof TeaException ) {
+                throw (TeaException)cause;
             } else {
                 throw new SRuntimeException(cause);
             }

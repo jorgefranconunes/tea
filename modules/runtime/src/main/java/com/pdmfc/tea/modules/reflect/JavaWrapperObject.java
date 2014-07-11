@@ -8,7 +8,7 @@ package com.pdmfc.tea.modules.reflect;
 
 import java.lang.reflect.Method;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.reflect.SMethodFinder;
 import com.pdmfc.tea.modules.reflect.SReflectUtils;
 import com.pdmfc.tea.modules.reflect.STeaJavaTypes;
@@ -83,7 +83,7 @@ final class JavaWrapperObject
     public Object exec(final SObjFunction func,
                        final SContext     context,
                        final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length < 2 ) {
             throw new SNumArgException(args, "methodName [arg1 [arg2 ...]]");

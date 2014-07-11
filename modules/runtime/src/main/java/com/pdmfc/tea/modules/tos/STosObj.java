@@ -6,7 +6,7 @@
 
 package com.pdmfc.tea.modules.tos;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.runtime.SArgs;
 import com.pdmfc.tea.runtime.SContext;
@@ -68,7 +68,7 @@ public class STosObj
  **************************************************************************/
 
     public STosObj(final STosClass theClass)
-        throws STeaException {
+        throws TeaException {
 
         _selfObj = this;
         _myClass = theClass;
@@ -90,14 +90,14 @@ public class STosObj
  *
  * @param args The arguments to the constructor.
  *
- * @exception com.pdmfc.tea.STeaException Only thrown by the call to
+ * @exception com.pdmfc.tea.TeaException Only thrown by the call to
  * the constructor method.
  *
  **************************************************************************/
 
     public final void init(final SContext context,
                            final Object[] args)
-        throws STeaException {
+        throws TeaException {
 
         SObjFunction constructor = _myClass.getConstructor();
 
@@ -262,7 +262,7 @@ public class STosObj
  *
  * @return The object returned by the execution of the method.
  *
- * @exception STeaException Only thrown by the execution of the
+ * @exception TeaException Only thrown by the execution of the
  * method.
  *
  **************************************************************************/
@@ -270,7 +270,7 @@ public class STosObj
     public final Object exec(final SObjFunction obj,
                              final SContext     context,
                              final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length < 2 ) {
             return SObjNull.NULL;

@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.tos.STosUtil;
@@ -75,7 +75,7 @@ public final class SDate
  **************************************************************************/
 
    public SDate(final STosClass myClass)
-       throws STeaException {
+       throws TeaException {
 
       super(myClass);
    }
@@ -974,7 +974,7 @@ public final class SDate
     public Object compare(final SObjFunction obj,
                           final SContext     context,
                           final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, CLASS_NAME);
@@ -1038,7 +1038,7 @@ public final class SDate
     public Object before(final SObjFunction obj,
                          final SContext     context,
                          final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, CLASS_NAME);
@@ -1094,7 +1094,7 @@ public final class SDate
     public Object after(final SObjFunction obj,
                         final SContext     context,
                         final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, CLASS_NAME);
@@ -1150,7 +1150,7 @@ public final class SDate
     public Object same(final SObjFunction obj,
                        final SContext     context,
                        final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, CLASS_NAME);
@@ -1215,7 +1215,7 @@ public final class SDate
     public Object notSame(final SObjFunction obj,
                           final SContext     context,
                           final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, CLASS_NAME);
@@ -1293,7 +1293,7 @@ public final class SDate
  **************************************************************************/
 
     public static SDate newInstance(final SContext context)
-        throws STeaException {
+        throws TeaException {
 
         STosObj date = STosUtil.newInstance(CLASS_NAME_S, context);
 

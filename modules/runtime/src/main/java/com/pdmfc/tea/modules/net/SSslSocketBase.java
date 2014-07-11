@@ -6,7 +6,7 @@
 
 package com.pdmfc.tea.modules.net;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjFunction;
@@ -66,7 +66,7 @@ public class SSslSocketBase
  **************************************************************************/
 
     public SSslSocketBase(final STosClass myClass)
-        throws STeaException {
+        throws TeaException {
 
         super(myClass);
     }
@@ -84,7 +84,7 @@ public class SSslSocketBase
     public Object constructor(final SObjFunction obj,
                               final SContext     context,
                               final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         initialize(context);
 

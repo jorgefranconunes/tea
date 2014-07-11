@@ -14,7 +14,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.io.PrintWriter;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.io.SIOException;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
@@ -94,7 +94,7 @@ public class SOutput
  **************************************************************************/
 
     public SOutput(final STosClass myClass)
-        throws STeaException {
+        throws TeaException {
 
         super(myClass);
     }
@@ -112,7 +112,7 @@ public class SOutput
     public Object constructor(final SObjFunction obj,
                               final SContext     context,
                               final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         return obj;
     }
@@ -652,7 +652,7 @@ public class SOutput
     public Object printf(final SObjFunction obj,
                          final SContext     context,
                          final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length < 3 ) {
             throw new SNumArgException(args, "format-string [...]");
@@ -691,7 +691,7 @@ public class SOutput
                        final Object[] args,
                        final int      firstArg)
         throws IOException,
-               STeaException {
+               TeaException {
 
         checkOutputOpen();
         if ( _formater == null ) {
@@ -913,7 +913,7 @@ public class SOutput
  **************************************************************************/
 
     public static SOutput newInstance(final SContext context)
-        throws STeaException {
+        throws TeaException {
 
         STosObj output = STosUtil.newInstance(CLASS_NAME_S, context);
 

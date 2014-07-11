@@ -10,7 +10,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.reflect.JavaWrapperObject;
 import com.pdmfc.tea.modules.reflect.SReflectUtils;
 import com.pdmfc.tea.modules.reflect.STeaJavaTypes;
@@ -102,7 +102,7 @@ public final class SFunctionNewProxy
     public Object exec(final SObjFunction function,
                        final SContext     context,
                        final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         String usageMessage = "function javaInterface [javaInterface ...]";
         SArgs.checkAtLeast(args, 3, usageMessage);
@@ -168,11 +168,11 @@ public final class SFunctionNewProxy
                                             final Object[]     args) {
 
         Object        result = null;
-        STeaException error  = null;
+        TeaException error  = null;
 
         try {
             result = doInvokeProxyMethod(proxyFunction, context, method, args);
-        } catch ( STeaException e ) {
+        } catch ( TeaException e ) {
             error = e;
         }
 
@@ -205,7 +205,7 @@ public final class SFunctionNewProxy
                                               final SContext     context,
                                               final Method       method,
                                               final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         int      argCount         = (args==null) ? 0 : args.length;
         int      functionArgCount = argCount + 2;

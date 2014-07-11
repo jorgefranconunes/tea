@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.compiler.TeaCode;
 import com.pdmfc.tea.compiler.TeaCompiler;
 import com.pdmfc.tea.runtime.SExitException;
@@ -105,7 +105,7 @@ public final class TeaRunner
         if ( isOk ) {
             try {
                 shellArgs = TeaRunnerArgs.parse(args);
-            } catch (STeaException e) {
+            } catch (TeaException e) {
                 isOk     = false;
                 errorMsg = e.getMessage();
             }
@@ -120,7 +120,7 @@ public final class TeaRunner
             }  catch ( SRuntimeException e ) {
                 isOk     = false;
                 errorMsg = e.getFullMessage();
-            } catch ( STeaException e ) {
+            } catch ( TeaException e ) {
                 isOk     = false;
                 errorMsg = e.getMessage();
             }
@@ -146,7 +146,7 @@ public final class TeaRunner
  * @exception IOException Thrown if there were any problems reading
  * the Tea script.
  *
- * @exception STeaException Thrown if there were any problems
+ * @exception TeaException Thrown if there were any problems
  * compiling or executing the script.
  *
  * @return The system exit status obtained from the execution of the
@@ -156,7 +156,7 @@ public final class TeaRunner
 
     private static int execute(final TeaRunnerArgs args)
         throws IOException,
-               STeaException {
+               TeaException {
 
         int              retVal     = 0;
         String           scriptPath = args.getScriptPath();
@@ -202,7 +202,7 @@ public final class TeaRunner
     private static TeaCode compileScript(final String  scriptPath,
                                          final Charset charset)
         throws IOException,
-               STeaException {
+               TeaException {
 
         TeaCompiler compiler = new TeaCompiler();
         TeaCode     code     = null;
@@ -227,7 +227,7 @@ public final class TeaRunner
  **************************************************************************/
 
     private static Charset findCharset(final String charsetName)
-        throws STeaException {
+        throws TeaException {
 
         Charset charset = null;
 
@@ -237,7 +237,7 @@ public final class TeaRunner
             } catch ( UnsupportedCharsetException e ) {
                 String   msg     = "Unsupported charset \"{0}\"";
                 Object[] fmtArgs = { charsetName };
-                throw new STeaException(msg, fmtArgs);
+                throw new TeaException(msg, fmtArgs);
             }
         }
 

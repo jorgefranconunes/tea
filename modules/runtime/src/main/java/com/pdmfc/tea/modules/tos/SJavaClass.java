@@ -10,7 +10,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.runtime.SContext;
@@ -290,7 +290,7 @@ public final class SJavaClass
  **************************************************************************/
 
     public STosObj newInstance()
-        throws STeaException {
+        throws TeaException {
 
         STosObj obj = null;
 
@@ -310,8 +310,8 @@ public final class SJavaClass
                                         + "(" + e3.getMessage() + ")");
         } catch (InvocationTargetException e4) {
             Throwable error = e4.getTargetException();
-            if ( error instanceof STeaException ) {
-                throw (STeaException)error;
+            if ( error instanceof TeaException ) {
+                throw (TeaException)error;
             } else {
                 internalError(error);
             }

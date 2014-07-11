@@ -9,7 +9,7 @@ package com.pdmfc.tea.modules.io;
 import java.io.FileOutputStream;
 import java.io.FileNotFoundException;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.io.SOutput;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
@@ -68,14 +68,14 @@ public final class SFileOutput
  *
  * @param myClass The <code>STosClass</code> object for this object.
  *
- * @throws STeaException Thrown if there were problems initializing
+ * @throws TeaException Thrown if there were problems initializing
  * the base objects. Unless something has gone horribly wrong with the
  * TOS internals it is never thrown.
  *
  **************************************************************************/
 
    public SFileOutput(final STosClass myClass)
-       throws STeaException {
+       throws TeaException {
 
        super(myClass);
    }
@@ -189,14 +189,14 @@ public final class SFileOutput
  *
  * @return A newly initialized TFileInput TOS object.
  *
- * @throws STeaException Thrown if there were problems instatiating
+ * @throws TeaException Thrown if there were problems instatiating
  * the TOS object or executing the constructor.
  *
  **************************************************************************/
 
     public static SFileOutput newInstance(final SContext context,
                                           final Object[] args)
-        throws STeaException {
+        throws TeaException {
 
         STosObj output = STosUtil.newInstance(CLASS_NAME_S, context, args);
 

@@ -6,7 +6,7 @@
 
 package com.pdmfc.tea.compiler;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.compiler.SWord;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjFunction;
@@ -93,7 +93,7 @@ abstract class SStatement
  *
  * @return The object returned by the execution of the command.
  *
- * @exception STeaException An exception can be thrown in four cases:
+ * @exception TeaException An exception can be thrown in four cases:
  *
  * <ul>
  *
@@ -112,7 +112,7 @@ abstract class SStatement
  **************************************************************************/
 
     public abstract Object exec(SContext context)
-        throws STeaException;
+        throws TeaException;
 
 
 
@@ -284,7 +284,7 @@ abstract class SStatement
  **************************************************************************/
 
         public final Object exec(final SContext context)
-            throws STeaException {
+            throws TeaException {
 
             int            numArgs  = _wordCount;
             SStatement.Node node     = _wordsHead._next;
@@ -403,7 +403,7 @@ abstract class SStatement
  **************************************************************************/
 
         public Object exec(final SContext context)
-            throws STeaException {
+            throws TeaException {
 
             SObjFunction function = _word0.toFunction(context);
             Object[]     args     = {
@@ -470,7 +470,7 @@ abstract class SStatement
  **************************************************************************/
 
         public Object exec(final SContext context)
-            throws STeaException {
+            throws TeaException {
 
             SObjFunction function = _word0.toFunction(context);
             Object[]     args     = {
@@ -541,7 +541,7 @@ abstract class SStatement
  **************************************************************************/
 
         public Object exec(final SContext context)
-            throws STeaException {
+            throws TeaException {
 
             SObjFunction function = _word0.toFunction(context);
             Object[]     args     = {
@@ -616,7 +616,7 @@ abstract class SStatement
  **************************************************************************/
 
         public Object exec(final SContext context)
-            throws STeaException {
+            throws TeaException {
 
             SObjFunction function = _word0.toFunction(context);
             Object[]     args     = {
@@ -693,7 +693,7 @@ abstract class SStatement
  **************************************************************************/
 
         public Object exec(final SContext context)
-            throws STeaException {
+            throws TeaException {
 
             SObjFunction function = _word0.toFunction(context);
             Object[]     args     = {

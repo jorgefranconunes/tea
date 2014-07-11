@@ -6,7 +6,7 @@
 
 package com.pdmfc.tea.compiler;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.compiler.SWord;
 import com.pdmfc.tea.compiler.SWordSubstUtils;
 import com.pdmfc.tea.runtime.SContext;
@@ -81,14 +81,14 @@ final class SWordVarSubst
  *
  * @return The contents of the variable.
  *
- * @exception com.pdmfc.tea.STeaException A
+ * @exception com.pdmfc.tea.TeaException A
  * <TT>SNoSuchVarException</TT> is thrown if there is not a variable
  * with the correct name in the <TT>context</TT>.
  *
  **************************************************************************/
 
     public Object get(final SContext context)
-        throws STeaException {
+        throws TeaException {
 
         return context.getVar(_symbol);
     }
@@ -104,7 +104,7 @@ final class SWordVarSubst
  **************************************************************************/
 
     public SObjFunction toFunction(final SContext context)
-        throws STeaException {
+        throws TeaException {
 
         Object       obj    = context.getVar(_symbol);
         SObjFunction result = SWordSubstUtils.toFunction(obj, context);

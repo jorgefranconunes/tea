@@ -15,7 +15,7 @@ import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.tdbc.SClosedEventListener;
 import com.pdmfc.tea.modules.tdbc.SCallableStatement;
 import com.pdmfc.tea.modules.tdbc.SPreparedStatement;
@@ -79,7 +79,7 @@ public final class SConnection
  **************************************************************************/
 
     public SConnection(final STosClass myClass)
-        throws STeaException {
+        throws TeaException {
 
         super(myClass);
     }
@@ -197,7 +197,7 @@ public final class SConnection
     public Object constructor(final SObjFunction obj,
                               final SContext     context,
                               final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         switch ( args.length ) {
         case 2 :
@@ -268,7 +268,7 @@ public final class SConnection
     public Object connect(final SObjFunction obj,
                           final SContext     context,
                           final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( (args.length!=3) && (args.length!=5) ) {
             throw new SNumArgException(args, "url [username password]");
@@ -348,7 +348,7 @@ public final class SConnection
  * @param password The password of the database user trying to
  * connect.
  *
- * @exception com.pdmfc.tea.STeaException Thrown if there were any
+ * @exception com.pdmfc.tea.TeaException Thrown if there were any
  * problems connectiong to the databae.
  *
  **************************************************************************/
@@ -398,7 +398,7 @@ public final class SConnection
     public Object statement(final SObjFunction obj,
                             final SContext     context,
                             final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         checkConnection();
 
@@ -475,7 +475,7 @@ public final class SConnection
     public Object prepare(final SObjFunction obj,
                           final SContext     context,
                           final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "sql-statement");
@@ -503,14 +503,14 @@ public final class SConnection
  *
  * @return A newly created <code>SPreparedStatement</code> object.
  *
- * @exception STeaException Thrown if there were any problems
+ * @exception TeaException Thrown if there were any problems
  * obtaining a new statement or if there is no connection yet.
  *
  **************************************************************************/
 
     private SPreparedStatement prepareStatement(final SContext context,
                                                 final String   sql)
-        throws STeaException,
+        throws TeaException,
                SQLException {
 
         checkConnection();
@@ -577,7 +577,7 @@ public final class SConnection
     public Object prepareCall(final SObjFunction obj,
                               final SContext     context,
                               final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "sql-statement");
@@ -600,14 +600,14 @@ public final class SConnection
  * @return A newly created <code>{@link SCalableStatement}</code>
  * object.
  *
- * @exception STeaException Thrown if there were any problems
+ * @exception TeaException Thrown if there were any problems
  * obtaining a new statemente or if there is no connection yet.
  *
  **************************************************************************/
 
     private SCallableStatement prepareCall(final SContext context,
                                            final String   sql)
-        throws STeaException {
+        throws TeaException {
 
         checkConnection();
 
@@ -679,7 +679,7 @@ public final class SConnection
     public Object commit(final SObjFunction obj,
                          final SContext     context,
                          final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         checkConnection();
 
@@ -891,7 +891,7 @@ public final class SConnection
     public Object close(final SObjFunction obj,
                         final SContext     context,
                         final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         try {
             close();
@@ -1044,7 +1044,7 @@ public final class SConnection
 
     public static SConnection newInstance(final SContext   context,
                                           final Connection connection)
-        throws STeaException {
+        throws TeaException {
 
         Object[] ctorArgs = { null, null };
         STosObj  tosConn  =
@@ -1053,7 +1053,7 @@ public final class SConnection
         if ( !(tosConn instanceof SConnection) ) {
             String   msg     = "Invalid class \"{0}\"";
             Object[] fmtArgs = { CLASS_NAME_S };
-            throw new STeaException(msg, fmtArgs);
+            throw new TeaException(msg, fmtArgs);
         }
 
         SConnection result = (SConnection)tosConn;

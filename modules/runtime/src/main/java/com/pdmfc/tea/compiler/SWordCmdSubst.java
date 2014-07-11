@@ -6,7 +6,7 @@
 
 package com.pdmfc.tea.compiler;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.compiler.TeaCode;
 import com.pdmfc.tea.compiler.SWord;
 import com.pdmfc.tea.compiler.SWordSubstUtils;
@@ -69,13 +69,13 @@ final class SWordCmdSubst
  * @return A reference to the object returned by the last statement in
  * the block.
  *
- * @exception STeaException Throw if there were problems evaluating
+ * @exception TeaException Throw if there were problems evaluating
  * the block.
  *
  **************************************************************************/
 
     public Object get(final SContext context)
-        throws STeaException {
+        throws TeaException {
 
         return _code.exec(context);
     }
@@ -91,7 +91,7 @@ final class SWordCmdSubst
  **************************************************************************/
 
     public SObjFunction toFunction(final SContext context)
-        throws STeaException {
+        throws TeaException {
 
         Object       obj    = _code.exec(context);
         SObjFunction result = SWordSubstUtils.toFunction(obj, context);

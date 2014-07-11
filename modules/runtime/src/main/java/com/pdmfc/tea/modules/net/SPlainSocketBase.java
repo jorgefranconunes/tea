@@ -6,7 +6,7 @@
 
 package com.pdmfc.tea.modules.net;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.net.SPlainSocketFactory;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosUtil;
@@ -66,7 +66,7 @@ public final class SPlainSocketBase
  **************************************************************************/
 
     public SPlainSocketBase(STosClass myClass)
-        throws STeaException {
+        throws TeaException {
 
         super(myClass);
     }
@@ -84,7 +84,7 @@ public final class SPlainSocketBase
     public Object constructor(final SObjFunction obj,
                               final SContext     context,
                               final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         initialize(context);
 
@@ -216,7 +216,7 @@ public final class SPlainSocketBase
  **************************************************************************/
 
     public static SPlainSocketBase newInstance(final SContext context)
-        throws STeaException {
+        throws TeaException {
 
         SPlainSocketBase socket = null;
 

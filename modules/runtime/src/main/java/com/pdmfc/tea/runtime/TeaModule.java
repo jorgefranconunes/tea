@@ -4,9 +4,9 @@
  *
  **************************************************************************/
 
-package com.pdmfc.tea.modules;
+package com.pdmfc.tea.runtime;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.runtime.TeaEnvironment;
 
 
@@ -19,7 +19,7 @@ import com.pdmfc.tea.runtime.TeaEnvironment;
  *
  **************************************************************************/
 
-public interface SModule {
+public interface TeaModule {
 
 
 
@@ -32,13 +32,13 @@ public interface SModule {
  * @param environment The Tea environment the module may interact
  * with.
  *
- * @throws STeaException If there were any problems initializing the
+ * @throws TeaException If there were any problems initializing the
  * module.
  *
  **************************************************************************/
 
    void init(TeaEnvironment environment)
-       throws STeaException;
+       throws TeaException;
 
 
 
@@ -46,10 +46,7 @@ public interface SModule {
 
 /**************************************************************************
  *
- * Signals that the package will no longer be used. That means that
- * the commands that may have been created inside the
- * <code>SContext</code> passed to the <code>{@link
- * #init(SContext)}</code> method will not be used again. Resources
+ * Signals that the package will no longer be used. Resources
  * allocated to the commands may be freed.
  *
  **************************************************************************/

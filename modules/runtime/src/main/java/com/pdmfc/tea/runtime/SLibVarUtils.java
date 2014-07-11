@@ -9,7 +9,7 @@ package com.pdmfc.tea.runtime;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pdmfc.tea.SConfigInfo;
+import com.pdmfc.tea.TeaConfigInfo;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjPair;
 import com.pdmfc.tea.runtime.SObjSymbol;
@@ -38,7 +38,7 @@ public final class SLibVarUtils
     // names where the <code>import</code> function looks for Tea
     // source files.
     private static final String VAR_LIBRARY   =
-        SConfigInfo.getProperty("com.pdmfc.tea.libraryVarName");
+        TeaConfigInfo.get("com.pdmfc.tea.libraryVarName");
 
     private static final SObjSymbol SYMBOL_LIBRARY =
         SObjSymbol.addSymbol(VAR_LIBRARY);

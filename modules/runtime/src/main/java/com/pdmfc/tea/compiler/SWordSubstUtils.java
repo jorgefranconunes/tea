@@ -6,7 +6,7 @@
 
 package com.pdmfc.tea.compiler;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SNoSuchVarException;
 import com.pdmfc.tea.runtime.SObjFunction;
@@ -55,7 +55,7 @@ final class SWordSubstUtils
 
     public static SObjFunction toFunction(final Object   firstWord,
                                           final SContext context)
-        throws STeaException {
+        throws TeaException {
 
         SObjFunction result = null;
 
@@ -86,7 +86,7 @@ final class SWordSubstUtils
 
     public static SObjFunction toFunction(final SObjSymbol firstWord,
                                           final SContext   context)
-        throws STeaException {
+        throws TeaException {
 
         Object value = null;
 

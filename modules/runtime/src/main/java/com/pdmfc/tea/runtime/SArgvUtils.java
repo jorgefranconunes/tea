@@ -6,7 +6,7 @@
 
 package com.pdmfc.tea.runtime;
 
-import com.pdmfc.tea.SConfigInfo;
+import com.pdmfc.tea.TeaConfigInfo;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjPair;
 
@@ -31,12 +31,12 @@ final class SArgvUtils
     // The name of the Tea global variable that will contain the 0th
     // argument.
     private static final String VAR_ARGV0 =
-        SConfigInfo.getProperty("com.pdmfc.tea.argv0VarName");
+        TeaConfigInfo.get("com.pdmfc.tea.argv0VarName");
 
     // The name of the Tea global variable that will contain the list
     // of command line arguments.
     private static final String VAR_ARGV =
-        SConfigInfo.getProperty("com.pdmfc.tea.argvVarName");
+        TeaConfigInfo.get("com.pdmfc.tea.argvVarName");
 
 
 

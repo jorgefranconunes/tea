@@ -8,6 +8,7 @@ package com.pdmfc.tea.runtime;
 
 import java.nio.charset.Charset;
 
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.runtime.SContext;
 
 
@@ -29,7 +30,7 @@ public interface TeaEnvironment {
 /**************************************************************************
  *
  * Creates a new global variable. If a variable with the same name
- * already exists it will be overwtiten.
+ * already exists it will be overwriten.
  *
  * @param varName The name of the global variable to be created or
  * updated.
@@ -73,6 +74,19 @@ public interface TeaEnvironment {
  **************************************************************************/
 
     public Charset getSourceCharset();
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    public TeaEnvironment addModule(TeaModule module)
+        throws TeaException;
 
 
 }

@@ -12,7 +12,7 @@ import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.Reader;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.io.SIOException;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
@@ -94,7 +94,7 @@ public class SInput
  **************************************************************************/
 
     public SInput(final STosClass myClass)
-        throws STeaException {
+        throws TeaException {
 
         super(myClass);
     }
@@ -107,7 +107,7 @@ public class SInput
  *
  * The implementation for the <code>constructor</code> method.
  *
- * @throws STeaException Never thrown by this implementation. Only
+ * @throws TeaException Never thrown by this implementation. Only
  * exists so derived classes may implement this method declaring it
  * with the exception.
  *
@@ -116,7 +116,7 @@ public class SInput
     public Object constructor(final SObjFunction obj,
                               final SContext     context,
                               final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         return obj;
     }
@@ -409,7 +409,7 @@ public class SInput
  **************************************************************************/
 
     public static SInput newInstance(final SContext context)
-        throws STeaException {
+        throws TeaException {
 
         STosObj input = STosUtil.newInstance(CLASS_NAME_S, context);
 

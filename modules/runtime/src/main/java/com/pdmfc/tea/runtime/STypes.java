@@ -6,7 +6,7 @@
 
 package com.pdmfc.tea.runtime;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.runtime.SNoSuchVarException;
@@ -163,14 +163,14 @@ public final class STypes
  *
  * @return The object stored in the variable.
  *
- * @exception STeaException Throw if the variable does not exit before
+ * @exception TeaException Throw if the variable does not exit before
  * and after the Tea function is run.
  *
  **************************************************************************/
 
     public static Object getVarWithEffort(final SContext   context,
                                           final SObjSymbol name)
-        throws STeaException {
+        throws TeaException {
 
         SObjFunction callbackFunc = null;
         Object[]     callbackArgs = new Object[2];

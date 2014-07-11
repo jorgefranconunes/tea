@@ -9,7 +9,7 @@ package com.pdmfc.tea.modules.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.tos.STosUtil;
@@ -83,7 +83,7 @@ public final class SVector
  **************************************************************************/
 
     public SVector(final STosClass myClass)
-        throws STeaException {
+        throws TeaException {
 
         super(myClass);
 
@@ -109,7 +109,7 @@ public final class SVector
 
     private SVector(final STosClass    myClass,
                     final List<Object> contents)
-        throws STeaException {
+        throws TeaException {
 
         super(myClass);
 
@@ -837,7 +837,7 @@ public final class SVector
     public Object sort(final SObjFunction obj,
                        final SContext     context,
                        final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "comparison-function");
@@ -869,7 +869,7 @@ public final class SVector
     private void quicksort(final List<Object> v,
                            final int          left,
                            final int          right)
-        throws STeaException {
+        throws TeaException {
 
         int    i = left;
         int    j = right;
@@ -912,7 +912,7 @@ public final class SVector
 
     private int compare(final Object x,
                         final Object y)
-        throws STeaException {
+        throws TeaException {
 
         Object[] args   = new Object[3];
         Object   value  = null;
@@ -973,7 +973,7 @@ public final class SVector
  **************************************************************************/
 
     public static SVector newInstance(final SContext context)
-        throws STeaException {
+        throws TeaException {
 
         STosClass theClass = STosUtil.getClass(context, CLASS_NAME_S);
         SVector   vector   = new SVector(theClass);
@@ -1005,7 +1005,7 @@ public final class SVector
 
     public static SVector newInstance(final SContext     context,
                                       final List<Object> contents)
-        throws STeaException {
+        throws TeaException {
 
         STosClass theClass = STosUtil.getClass(context, CLASS_NAME_S);
         SVector   vector   = new SVector(theClass, contents);

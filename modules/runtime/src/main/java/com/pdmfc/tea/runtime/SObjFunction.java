@@ -6,7 +6,7 @@
 
 package com.pdmfc.tea.runtime;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.runtime.SContext;
 
 
@@ -39,7 +39,7 @@ public interface SObjFunction  {
  *
  * @return An <code>Object</code> object.
  *
- * @exception com.pdmfc.tea.STeaException Thrown if there were
+ * @exception com.pdmfc.tea.TeaException Thrown if there were
  * problems executing the command.
  *
  **************************************************************************/
@@ -47,7 +47,7 @@ public interface SObjFunction  {
     Object exec(SObjFunction func,
                 SContext     context,
                 Object[]     args)
-        throws STeaException;
+        throws TeaException;
 
 
 }

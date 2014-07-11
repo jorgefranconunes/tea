@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.tdbc.SClosedEventListener;
 import com.pdmfc.tea.modules.tdbc.SConnection;
 import com.pdmfc.tea.modules.tos.SJavaMethod;
@@ -120,7 +120,7 @@ final class SConnectionClass
  **************************************************************************/
 
     public STosObj newInstance()
-        throws STeaException {
+        throws TeaException {
 
         SConnection connection = new SConnection(this);
 

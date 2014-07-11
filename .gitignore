@@ -1,7 +1,7 @@
 *~
 *.aux
+*.bak
 *.log
 *.out
 *.pid
 target
-

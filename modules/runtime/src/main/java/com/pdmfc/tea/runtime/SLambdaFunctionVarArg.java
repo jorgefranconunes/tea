@@ -6,7 +6,7 @@
 
 package com.pdmfc.tea.runtime;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SObjBlock;
 import com.pdmfc.tea.runtime.SObjPair;
@@ -89,7 +89,7 @@ public final class SLambdaFunctionVarArg
  *
  * @param args Array with the arguments passed to the command.
  *
- * @exception STeaException Thrown if there is not two arguments for
+ * @exception TeaException Thrown if there is not two arguments for
  * the command.
  *
  **************************************************************************/
@@ -97,7 +97,7 @@ public final class SLambdaFunctionVarArg
     public Object exec(final SObjFunction obj,
                        final SContext     context,
                        final Object[]     args)
-        throws STeaException {
+        throws TeaException {
 
         SContext funcContext = new SContext(_body.getContext());
         Object   result      = SObjNull.NULL;

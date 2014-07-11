@@ -12,7 +12,7 @@ import java.util.Arrays;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineFactory;
 
-import com.pdmfc.tea.SConfigInfo;
+import com.pdmfc.tea.TeaConfigInfo;
 
 
 
@@ -70,7 +70,7 @@ public final class TeaScriptEngineFactory
      */
     public String getEngineVersion() {
         // Since Tea 4, that the engine version is the same as the language version
-        return SConfigInfo.getProperty("com.pdmfc.tea.version");
+        return TeaConfigInfo.get("com.pdmfc.tea.version");
     }
 
 
@@ -127,7 +127,7 @@ public final class TeaScriptEngineFactory
      * version number).
      */
     public String getLanguageVersion() {
-        return SConfigInfo.getProperty("com.pdmfc.tea.version");
+        return TeaConfigInfo.get("com.pdmfc.tea.version");
     }
 
 

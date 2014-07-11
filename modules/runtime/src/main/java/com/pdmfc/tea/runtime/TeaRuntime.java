@@ -11,15 +11,17 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pdmfc.tea.SConfigInfo;
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaConfigInfo;
+import com.pdmfc.tea.TeaError;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.compiler.TeaCode;
 import com.pdmfc.tea.compiler.TeaCompiler;
-import com.pdmfc.tea.modules.SModule;
 import com.pdmfc.tea.runtime.SArgvUtils;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SLibVarUtils;
-import com.pdmfc.tea.runtime.SModuleUtils;
+import com.pdmfc.tea.runtime.TeaEnvironment;
+import com.pdmfc.tea.runtime.TeaEnvironmentImpl;
+import com.pdmfc.tea.runtime.TeaModule;
 import com.pdmfc.tea.runtime.TeaRuntimeConfig;
 
 
@@ -42,12 +44,12 @@ public final class TeaRuntime
     // Name of the file to read from each directory in the TEA_LIBRARY
     // list.
     private static final String INIT_FILE = 
-        SConfigInfo.getProperty("com.pdmfc.tea.initFile");
+        TeaConfigInfo.get("com.pdmfc.tea.initFile");
 
     // The path of a Java resource to use as import directory. This
     // path will be added to the end of list of import directories.
     private static final String CORE_IMPORT_DIR =
-        SConfigInfo.getProperty("com.pdmfc.tea.coreImportDir");
+        TeaConfigInfo.get("com.pdmfc.tea.coreImportDir");
 
     private static final String[] CORE_MODULES = {
         "com.pdmfc.tea.modules.io.SModuleIO",
@@ -74,16 +76,16 @@ public final class TeaRuntime
     private TeaRuntimeConfig _config             = null;
     private List<String>     _allImportLocations = null;
 
-    // List of module class names or SModule instances. These were
-    // registered by calls to addModule(...) before the first start.
-    private List<Object> _modules = new ArrayList<Object>();
+    // List of SModule instances. These were registered by calls to
+    // addModule(...) before the first start.
+    private List<TeaModule> _modules = new ArrayList<TeaModule>();
 
     private boolean _isFirstStart = true;
     private boolean _isFirstExec  = true;
 
     private State _state = State.INITED;
 
-    private TeaEnvironment _environment = null;
+    private TeaEnvironmentImpl _environment = null;
 
 
 
@@ -103,7 +105,8 @@ public final class TeaRuntime
         _environment = new TeaEnvironmentImpl(config.getSourceCharset());
 
         for ( String moduleClassName : CORE_MODULES ) {
-            _modules.add(moduleClassName);
+            TeaModule module = newModule(moduleClassName);
+            _modules.add(module);
         }
     }
 
@@ -117,18 +120,20 @@ public final class TeaRuntime
  *
  **************************************************************************/
 
-    public void addModule(final String className)
-        throws STeaException {
+    private TeaModule newModule(final String className) {
 
-        checkState(State.INITED, State.STARTED, State.RUNNING);
+        TeaModule module = null;
 
-        if ( _isFirstStart ) {
-            _modules.add(className);
-        } else if ( _state == State.RUNNING ) {
-            SModuleUtils.addAndStartModule(_environment, className);
-        } else {
-            SModuleUtils.addModule(_environment, className);
+        try {
+            module = (TeaModule)Class.forName(className).newInstance();
+        } catch ( Throwable e ) {
+            String msg = "Failed to create instance for module {0} - {1} - {2}";
+            Object[] fmtArgs =
+                { className, e.getClass().getName(), e.getMessage() };
+            TeaError.raise(msg, fmtArgs);
         }
+
+        return module;
     }
 
 
@@ -141,17 +146,15 @@ public final class TeaRuntime
  *
  **************************************************************************/
 
-    public void addModule(final SModule module)
-        throws STeaException {
+    public void addModule(final TeaModule module)
+        throws TeaException {
 
         checkState(State.INITED, State.STARTED, State.RUNNING);
 
         if ( _isFirstStart ) {
             _modules.add(module);
-        } else if ( _state == State.RUNNING ) {
-            SModuleUtils.addAndStartModule(_environment, module);
         } else {
-            SModuleUtils.addModule(_environment, module);
+            _environment.addModule(module);
         }
     }
 
@@ -213,11 +216,7 @@ public final class TeaRuntime
         _state       = State.INITED;
         _isFirstExec = true;
 
-        try {
-            SModuleUtils.stopModules(_environment);
-        } catch ( STeaException e ) {
-            // How should we report this to the caller?...
-        }
+        _environment.stop();
     }
 
 
@@ -237,11 +236,7 @@ public final class TeaRuntime
 
        _state = State.ENDED;
 
-        try {
-            SModuleUtils.endModules(_environment);
-        } catch ( STeaException e ) {
-            // How should we report this to the caller?...
-        }
+       _environment.end();
    }
 
 
@@ -257,7 +252,7 @@ public final class TeaRuntime
  * @return The result of executing the Tea code. This will be the
  * value returned by the last function invocation in the program.
  *
- * @exception STeaException Thrown if there were any errors while
+ * @exception TeaException Thrown if there were any errors while
  * executing the Tea program. It may also be thrown the first time
  * this method is called if there were errors executing the
  * <code>init.tea</code> scripts in the import directories.
@@ -265,7 +260,7 @@ public final class TeaRuntime
  **************************************************************************/
 
     public Object execute(final TeaCode code)
-        throws STeaException {
+        throws TeaException {
 
         checkState(State.STARTED);
 
@@ -300,7 +295,7 @@ public final class TeaRuntime
  **************************************************************************/
 
     private void doStart()
-        throws STeaException {
+        throws TeaException {
 
         boolean wasFirstStart = _isFirstStart;
 
@@ -310,7 +305,7 @@ public final class TeaRuntime
             doFirstStartInitializations();
         }
 
-        SModuleUtils.startModules(_environment);
+        _environment.start();
 
         if ( wasFirstStart ) {
             runInitScripts();
@@ -328,7 +323,7 @@ public final class TeaRuntime
  **************************************************************************/
 
     private void doFirstStartInitializations()
-        throws STeaException {
+        throws TeaException {
 
         String       argv0           = _config.getArgv0();
         String[]     argv            = _config.getArgv();
@@ -373,20 +368,11 @@ public final class TeaRuntime
  *
  **************************************************************************/
 
-    private void setupModules(final List<Object> modules)
-        throws STeaException {
+    private void setupModules(final List<TeaModule> modules)
+        throws TeaException {
 
-        for ( Object moduleOrClassName : modules ) {
-            if ( moduleOrClassName instanceof String ) {
-                String moduleClassName = (String)moduleOrClassName;
-
-                SModuleUtils.addModule(_environment, moduleClassName);
-            } else {
-                SModule module = (SModule)moduleOrClassName;
-
-                SModuleUtils.addModule(_environment, module);
-            }
-
+        for ( TeaModule module : modules ) {
+            _environment.addModule(module);
         }
     }
 
@@ -403,11 +389,11 @@ public final class TeaRuntime
  **************************************************************************/
 
     private void runInitScripts()
-        throws STeaException {
+        throws TeaException {
 
         Charset      sourceCharset = _config.getSourceCharset();
         List<String> dirList       = _allImportLocations;
-        TeaCompiler    compiler      = new TeaCompiler();
+        TeaCompiler  compiler      = new TeaCompiler();
 
         for ( String dirPath : dirList ) {
             String   path          = INIT_FILE;

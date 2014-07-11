@@ -6,7 +6,7 @@
 
 package com.pdmfc.tea.compiler;
 
-import com.pdmfc.tea.STeaException;
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.compiler.SStatement;
 import com.pdmfc.tea.runtime.SContext;
 import com.pdmfc.tea.runtime.SFlowControlException;
@@ -69,13 +69,13 @@ public final class TeaCode
  * @return The value returned by the last command in the block or null
  * if it is an empty block.
  *
- * @exception STeaException Only thrown by the execution of one of the
+ * @exception TeaException Only thrown by the execution of one of the
  * statements.
  *
  **************************************************************************/
 
     public Object exec(final SContext context)
-        throws STeaException {
+        throws TeaException {
 
         Object value = SObjNull.NULL;
 
@@ -92,7 +92,7 @@ public final class TeaCode
                 throw e;
             } catch (SFlowControlException e) {
                 throw e;
-            } catch (STeaException e) {
+            } catch (TeaException e) {
                 int      lineNum = statement.getLineNumber();
                 Object[] fmtArgs = { String.valueOf(lineNum), _fileName };
                 String   fmtMsg  = (_fileName==null) ? ERR_STAT :ERR_STAT_FILE;

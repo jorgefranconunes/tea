@@ -15,7 +15,7 @@
  **************************************************************************/
 package com.pdmfc.tea.engine;
 
-import com.pdmfc.tea.SConfigInfo;
+import com.pdmfc.tea.TeaConfigInfo;
 import com.pdmfc.tea.runtime.SObjFunction;
 import java.io.File;
 import java.io.IOException;
@@ -349,10 +349,10 @@ public class TeaScriptEngineTest {
 
 
         assertEquals("Tea Engine", f.getParameter(ScriptEngine.ENGINE));
-        assertEquals(SConfigInfo.getProperty("com.pdmfc.tea.version"), f.getParameter(ScriptEngine.ENGINE_VERSION));
+        assertEquals(TeaConfigInfo.get("com.pdmfc.tea.version"), f.getParameter(ScriptEngine.ENGINE_VERSION));
         assertEquals("Tea Engine", f.getParameter(ScriptEngine.NAME));
         assertEquals("Tea", f.getParameter(ScriptEngine.LANGUAGE));
-        assertEquals(SConfigInfo.getProperty("com.pdmfc.tea.version"), f.getParameter(ScriptEngine.LANGUAGE_VERSION));
+        assertEquals(TeaConfigInfo.get("com.pdmfc.tea.version"), f.getParameter(ScriptEngine.LANGUAGE_VERSION));
         assertNull(f.getParameter("THREADING"));
 
 //        String propKeys[] = {
