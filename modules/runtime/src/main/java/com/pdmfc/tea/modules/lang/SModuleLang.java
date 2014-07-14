@@ -1454,7 +1454,7 @@ public final class SModuleLang
 
 //* 
 //* <TeaFunction name="if"
-//*                  arguments="condition trueResult [falseResult]"
+//*              arguments="condition trueResult [falseResult]"
 //*              module="tea.lang">
 //*
 //* <Overview>
@@ -1517,29 +1517,28 @@ public final class SModuleLang
                                     final Object[]     args)
         throws TeaException {
 
-        int numArgs = args.length;
-
-        if ( (numArgs<3) || (numArgs>4) ) {
-            throw new SNumArgException(args, "condition yesBlock noBlock");
-        }
+        SArgs.checkBetween(args, 3, 4,"condition yesBlock noBlock");
 
         Object condition = args[1];
         Object yesResult = args[2];
-        Object noResult  = (numArgs==4) ? args[3] : SObjNull.NULL;
-        Object result    = SObjNull.NULL;
+        Object noResult  = (args.length==4) ? args[3] : SObjNull.NULL;
         
         if ( condition instanceof SObjBlock ) {
-            condition = ((SObjBlock)condition).exec();
+            SObjBlock conditionBlock = (SObjBlock)condition;
+            condition = conditionBlock.exec();
         }
       
         if ( !(condition instanceof Boolean) ) {
             String expectedTypes = "boolean or a block returning a boolean";
             throw new STypeException(args, 1, expectedTypes);
         }
-        result = ((Boolean)condition).booleanValue() ? yesResult : noResult;
+        
+        Object result =
+            ((Boolean)condition).booleanValue() ? yesResult : noResult;
 
         if ( result instanceof SObjBlock ) {
-            result = ((SObjBlock)result).exec();
+            SObjBlock resultBlock = (SObjBlock)result;
+            result = resultBlock.exec();
         }
 
         return result;

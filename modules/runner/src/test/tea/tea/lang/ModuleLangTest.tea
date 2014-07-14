@@ -845,7 +845,7 @@ tunit-testsuite foreach-test {
 tunit-testsuite get-test {
     
     
-    tunit-test-error toofewArgs {
+    tunit-test-error tooFewArgs {
         
         get
     }
@@ -874,6 +874,85 @@ tunit-testsuite get-test {
         define myVar 123
         
         tunit-assert-equals 123 $myVar
+    }
+    
+    
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite if-test {
+    
+    
+    tunit-test-error tooFewArgs0 {
+        
+        if
+    }
+    
+    
+    tunit-test-error tooFewArgs1 {
+        
+        if $true
+    }
+    
+    
+    tunit-test-error tooManyArgs {
+        
+        if $true 1 2 3
+    }
+    
+    
+    tunit-test-error invalidArgType {
+        
+        if what 1
+    }
+    
+    
+    tunit-test-error invalidContionBlock {
+        
+        if { is 1 } 2
+    }
+    
+    
+    tunit-test boolValueCondition {
+        
+        assert-if-result ( $true 10 ) 10
+        assert-if-result ( $true 10 20 ) 10
+        assert-if-result ( $false 10 ) $null
+        assert-if-result ( $false 10 20 ) 20
+    }
+    
+    
+    tunit-test boolBlockCondition {
+        
+        assert-if-result ( {is $true} 10 ) 10
+        assert-if-result ( {is $true} 10 20 ) 10
+        assert-if-result ( {is $false} 10 ) $null
+        assert-if-result ( {is $false} 10 20 ) 20
+    }
+    
+    
+    tunit-test resultIsBlock {
+        
+        assert-if-result ( $true {is 10} ) 10
+        assert-if-result ( $true {is 10} {is 20} ) 10
+        assert-if-result ( $false {is 10} ) $null
+        assert-if-result ( $false {is 10} {is 20} ) 20
+    }
+    
+    
+    define assert-if-result ( ifArgs expectedResult ) {
+        
+        define result [apply if $ifArgs]
+        tunit-assert [same? $expectedResult $result]
     }
     
     
