@@ -1393,8 +1393,8 @@ public final class SModuleLang
 
 //* 
 //* <TeaFunction name="get"
-//*                 arguments="varName"
-//*             module="tea.lang">
+//*              arguments="varName"
+//*              module="tea.lang">
 //*
 //* <Overview>
 //* Fetches the contents of a variable.
@@ -1409,6 +1409,8 @@ public final class SModuleLang
 //* </Returns>
 //*
 //* <Description>
+//* If the variable is not defined in the current context then an
+//* error will be thrown.
 //* </Description>
 //* 
 //* </TeaFunction>
@@ -1438,11 +1440,12 @@ public final class SModuleLang
                                      final Object[]     args)
         throws TeaException {
 
-        if ( args.length != 2 ) {
-            throw new SNumArgException(args, "symbol");
-        }
+        SArgs.checkCount(args, 2, "symbol");
 
-        return context.getVar(SArgs.getSymbol(args,1));
+        SObjSymbol symbol = SArgs.getSymbol(args, 1);
+        Object     result = context.getVar(symbol);
+
+        return result;
     }
 
 

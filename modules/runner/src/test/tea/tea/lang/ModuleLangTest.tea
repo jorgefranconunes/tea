@@ -832,3 +832,50 @@ tunit-testsuite foreach-test {
     
 }
 
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite get-test {
+    
+    
+    tunit-test-error toofewArgs {
+        
+        get
+    }
+    
+    
+    tunit-test-error tooManyArgs {
+        
+        get one two three
+    }
+    
+    
+    tunit-test-error invalidArgType {
+        
+        get 1
+    }
+    
+    
+    tunit-test-error undefinedVar {
+        
+        get NON_DEFINED_VAR
+    }
+    
+    
+    tunit-test allOk {
+        
+        define myVar 123
+        
+        tunit-assert-equals 123 $myVar
+    }
+    
+    
+}
+
