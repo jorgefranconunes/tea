@@ -8,11 +8,11 @@ package com.pdmfc.tea.modules.tos;
 
 import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.tos.STosClass;
-import com.pdmfc.tea.runtime.SArgs;
-import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.SObjNull;
-import com.pdmfc.tea.runtime.SObjSymbol;
+import com.pdmfc.tea.runtime.Args;
+import com.pdmfc.tea.runtime.TeaContext;
+import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.runtime.TeaNull;
+import com.pdmfc.tea.runtime.TeaSymbol;
 
 
 
@@ -26,7 +26,7 @@ import com.pdmfc.tea.runtime.SObjSymbol;
 
 public class STosObj
     extends Object
-    implements SObjFunction {
+    implements TeaFunction {
 
 
 
@@ -35,7 +35,7 @@ public class STosObj
     // The TOS class this instance belongs to.
     private STosClass _myClass;
 
-    // An array of SContext containing the members for each level.
+    // An array of TeaContext containing the members for each level.
     private SMemberSet[] _members;
 
     // An array with the parts of this TOS object.
@@ -95,11 +95,11 @@ public class STosObj
  *
  **************************************************************************/
 
-    public final void init(final SContext context,
+    public final void init(final TeaContext context,
                            final Object[] args)
         throws TeaException {
 
-        SObjFunction constructor = _myClass.getConstructor();
+        TeaFunction constructor = _myClass.getConstructor();
 
         _members         = new SMemberSet[_level+1];
         _members[_level] = instanciateMembers();
@@ -163,8 +163,8 @@ public class STosObj
 
         SMemberSet members = new SMemberSet();
        
-        for ( SObjSymbol memberName : _myClass.memberNames() ) {
-            members.newVar(memberName, SObjNull.NULL);
+        for ( TeaSymbol memberName : _myClass.memberNames() ) {
+            members.newVar(memberName, TeaNull.NULL);
         }
 
         return members;
@@ -199,7 +199,7 @@ public class STosObj
  *
  **************************************************************************/
 
-    final SContext members(final int level) {
+    final TeaContext members(final int level) {
 
         return _members[level];
     }
@@ -267,17 +267,17 @@ public class STosObj
  *
  **************************************************************************/
 
-    public final Object exec(final SObjFunction obj,
-                             final SContext     context,
-                             final Object[]     args)
+    public final Object exec(final TeaFunction obj,
+                             final TeaContext     context,
+                             final Object[]    args)
         throws TeaException {
 
         if ( args.length < 2 ) {
-            return SObjNull.NULL;
+            return TeaNull.NULL;
         }
 
-        SObjSymbol   methodName = SArgs.getSymbol(args, 1);
-        SObjFunction method     = _myClass.getMethod(methodName);
+        TeaSymbol   methodName = Args.getSymbol(args, 1);
+        TeaFunction method     = _myClass.getMethod(methodName);
         Object       result     = method.exec(obj, context, args);
         
         return result;
@@ -294,7 +294,7 @@ public class STosObj
  **************************************************************************/
 
     private static final class SMemberSet
-        extends SContext {
+        extends TeaContext {
 
 
 

@@ -9,9 +9,9 @@ package com.pdmfc.tea.compiler;
 import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.compiler.TeaCode;
 import com.pdmfc.tea.compiler.SWord;
-import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SObjBlock;
-import com.pdmfc.tea.runtime.SObjFunction;
+import com.pdmfc.tea.runtime.TeaContext;
+import com.pdmfc.tea.runtime.TeaBlock;
+import com.pdmfc.tea.runtime.TeaFunction;
 import com.pdmfc.tea.runtime.SRuntimeException;
 
 
@@ -59,15 +59,15 @@ final class SWordBlock
  *
  **************************************************************************/
 
-    public Object get(final SContext context) {
+    public Object get(final TeaContext context) {
 
         final TeaCode code = _code;
 
-        SObjBlock block = new SObjBlock() {
-                public SContext getContext() {
+        TeaBlock block = new TeaBlock() {
+                public TeaContext getContext() {
                     return context;
                 }
-                public Object exec(final SContext cntxt)
+                public Object exec(final TeaContext cntxt)
                     throws TeaException {
                     return code.exec(cntxt);
                 }
@@ -90,7 +90,7 @@ final class SWordBlock
  *
  **************************************************************************/
 
-    public SObjFunction toFunction(final SContext context)
+    public TeaFunction toFunction(final TeaContext context)
         throws TeaException {
 
         throw new SRuntimeException("a block can not be used as a function");

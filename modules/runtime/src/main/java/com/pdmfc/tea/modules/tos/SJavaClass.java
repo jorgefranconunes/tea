@@ -13,8 +13,8 @@ import java.lang.reflect.Method;
 import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
-import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SObjFunction;
+import com.pdmfc.tea.runtime.TeaContext;
+import com.pdmfc.tea.runtime.TeaFunction;
 import com.pdmfc.tea.runtime.SRuntimeException;
 
 
@@ -190,8 +190,8 @@ public final class SJavaClass
             Class   retType    = method.getReturnType();
 
             if ( (argTypes.length==3)
-                 && (argTypes[0]==SObjFunction.class)
-                 && (argTypes[1]==SContext.class)
+                 && (argTypes[0]==TeaFunction.class)
+                 && (argTypes[1]==TeaContext.class)
                  && (argTypes[2]==Object[].class)
                  && (retType==Object.class)
                  && !"exec".equals(methodName) ) {

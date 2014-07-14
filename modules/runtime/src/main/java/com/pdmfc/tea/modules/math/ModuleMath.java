@@ -9,16 +9,16 @@ package com.pdmfc.tea.modules.math;
 import java.util.Random;
 
 import com.pdmfc.tea.TeaException;
-import com.pdmfc.tea.runtime.SArgs;
+import com.pdmfc.tea.runtime.Args;
 import com.pdmfc.tea.runtime.SArithmeticException;
-import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SObjBlock;
-import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.SObjSymbol;
-import com.pdmfc.tea.runtime.SObjVar;
+import com.pdmfc.tea.runtime.TeaContext;
+import com.pdmfc.tea.runtime.TeaBlock;
+import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.runtime.TeaSymbol;
+import com.pdmfc.tea.runtime.TeaVar;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.STypeException;
-import com.pdmfc.tea.runtime.STypes;
+import com.pdmfc.tea.runtime.Types;
 import com.pdmfc.tea.runtime.TeaEnvironment;
 import com.pdmfc.tea.runtime.TeaFunctionImplementor;
 import com.pdmfc.tea.runtime.TeaModule;
@@ -47,7 +47,7 @@ import com.pdmfc.tea.runtime.TeaModule;
  *
  **************************************************************************/
 
-public final class SModuleMath
+public final class ModuleMath
     extends Object
     implements TeaModule {
 
@@ -58,17 +58,17 @@ public final class SModuleMath
     /**
      * The value zero.
      */
-    public static final Integer ZERO = Integer.valueOf(0);
+    private static final Integer ZERO = Integer.valueOf(0);
 
     /** 
      * The value one.
      */
-    public static final Integer ONE = Integer.valueOf(1);
+    private static final Integer ONE = Integer.valueOf(1);
 
     /**
      * The value minus one.
      */
-    public static final Integer MINUS_ONE = Integer.valueOf(-1);
+    private static final Integer MINUS_ONE = Integer.valueOf(-1);
 
     
     /**
@@ -115,7 +115,7 @@ public final class SModuleMath
  *
  **************************************************************************/
 
-    public SModuleMath() {
+    public ModuleMath() {
 
         // Nothing to do.
     }
@@ -234,9 +234,9 @@ public final class SModuleMath
  **************************************************************************/
 
     @TeaFunctionImplementor("==")
-    public static Object functionEq(final SObjFunction func,
-                                    final SContext     context,
-                                    final Object[]     args)
+    public static Object functionEq(final TeaFunction func,
+                                    final TeaContext  context,
+                                    final Object[]    args)
         throws TeaException {
 
         return compare(Comparison.EQ, func, context, args);
@@ -293,9 +293,9 @@ public final class SModuleMath
  **************************************************************************/
 
     @TeaFunctionImplementor("!=")
-    public static Object functionNe(final SObjFunction func,
-                                    final SContext     context,
-                                    final Object[]     args)
+    public static Object functionNe(final TeaFunction func,
+                                    final TeaContext  context,
+                                    final Object[]    args)
         throws TeaException {
 
         return compare(Comparison.NE, func, context, args);
@@ -352,9 +352,9 @@ public final class SModuleMath
  **************************************************************************/
 
     @TeaFunctionImplementor(">")
-    public static Object functionGt(final SObjFunction func,
-                                    final SContext     context,
-                                    final Object[]     args)
+    public static Object functionGt(final TeaFunction func,
+                                    final TeaContext  context,
+                                    final Object[]    args)
         throws TeaException {
 
         return compare(Comparison.GT, func, context, args);
@@ -412,9 +412,9 @@ public final class SModuleMath
  **************************************************************************/
 
     @TeaFunctionImplementor(">=")
-    public static Object functionGe(final SObjFunction func,
-                                    final SContext     context,
-                                    final Object[]     args)
+    public static Object functionGe(final TeaFunction func,
+                                    final TeaContext  context,
+                                    final Object[]    args)
         throws TeaException {
 
         return compare(Comparison.GE, func, context, args);
@@ -471,9 +471,9 @@ public final class SModuleMath
  **************************************************************************/
 
     @TeaFunctionImplementor("<")
-    public static Object functionLt(final SObjFunction func,
-                                    final SContext     context,
-                                    final Object[]     args)
+    public static Object functionLt(final TeaFunction func,
+                                    final TeaContext  context,
+                                    final Object[]    args)
         throws TeaException {
 
         return compare(Comparison.LT, func, context, args);
@@ -531,9 +531,9 @@ public final class SModuleMath
  **************************************************************************/
 
     @TeaFunctionImplementor("<=")
-    public static Object functionLe(final SObjFunction func,
-                                    final SContext     context,
-                                    final Object[]     args)
+    public static Object functionLe(final TeaFunction func,
+                                    final TeaContext  context,
+                                    final Object[]    args)
         throws TeaException {
 
         return compare(Comparison.LE, func, context, args);
@@ -550,12 +550,12 @@ public final class SModuleMath
  **************************************************************************/
 
     private static Object compare(final Comparison   compOp,
-                                  final SObjFunction func,
-                                  final SContext     context,
-                                  final Object[]     args)
+                                  final TeaFunction func,
+                                  final TeaContext  context,
+                                  final Object[]    args)
         throws TeaException {
 
-        SArgs.checkAtLeast(args, 3, "num1 num2 ...");
+        Args.checkAtLeast(args, 3, "num1 num2 ...");
 
         Object  op1         = args[1];
         boolean op1IsInt    = op1 instanceof Integer;
@@ -717,9 +717,9 @@ public final class SModuleMath
  **************************************************************************/
 
     @TeaFunctionImplementor("+")
-    public static Object functionAdd(final SObjFunction func,
-                                     final SContext     context,
-                                     final Object[]     args)
+    public static Object functionAdd(final TeaFunction func,
+                                     final TeaContext  context,
+                                     final Object[]    args)
         throws TeaException {
 
         return arithmOp(ArithOp.ADD, func, context, args);
@@ -776,9 +776,9 @@ public final class SModuleMath
  **************************************************************************/
 
     @TeaFunctionImplementor("-")
-    public static Object functionSub(final SObjFunction func,
-                                     final SContext     context,
-                                     final Object[]     args)
+    public static Object functionSub(final TeaFunction func,
+                                     final TeaContext  context,
+                                     final Object[]    args)
         throws TeaException {
 
         return arithmOp(ArithOp.SUB, func, context, args);
@@ -834,9 +834,9 @@ public final class SModuleMath
  **************************************************************************/
 
     @TeaFunctionImplementor("*")
-    public static Object functionMul(final SObjFunction func,
-                                     final SContext     context,
-                                     final Object[]     args)
+    public static Object functionMul(final TeaFunction func,
+                                     final TeaContext  context,
+                                     final Object[]    args)
         throws TeaException {
 
         return arithmOp(ArithOp.MUL, func, context, args);
@@ -893,9 +893,9 @@ public final class SModuleMath
  **************************************************************************/
 
     @TeaFunctionImplementor("/")
-    public static Object functionDiv(final SObjFunction func,
-                                     final SContext     context,
-                                     final Object[]     args)
+    public static Object functionDiv(final TeaFunction func,
+                                     final TeaContext  context,
+                                     final Object[]    args)
         throws TeaException {
 
         return arithmOp(ArithOp.DIV, func, context, args);
@@ -912,9 +912,9 @@ public final class SModuleMath
  **************************************************************************/
 
     private static Object arithmOp(final ArithOp      op,
-                                   final SObjFunction func,
-                                   final SContext     context,
-                                   final Object[]     args)
+                                   final TeaFunction func,
+                                   final TeaContext  context,
+                                   final Object[]    args)
         throws TeaException {
 
         if ( args.length < 2 ) {
@@ -1195,15 +1195,15 @@ public final class SModuleMath
  **************************************************************************/
 
     @TeaFunctionImplementor("%")
-    public static Object functionMod(final SObjFunction func,
-                                     final SContext     context,
-                                     final Object[]     args)
+    public static Object functionMod(final TeaFunction func,
+                                     final TeaContext  context,
+                                     final Object[]    args)
         throws TeaException {
 
-        SArgs.checkCount(args, 3, "dividend divisor");
+        Args.checkCount(args, 3, "dividend divisor");
 
-        int dividend = SArgs.getInt(args,1).intValue();
-        int divisor  = SArgs.getInt(args,2).intValue();
+        int dividend = Args.getInt(args,1).intValue();
+        int divisor  = Args.getInt(args,2).intValue();
         int result   = 0;
 
         try {
@@ -1284,16 +1284,16 @@ public final class SModuleMath
  **************************************************************************/
 
     @TeaFunctionImplementor("and")
-    public static Object functionAnd(final SObjFunction func,
-                                     final SContext     context,
-                                     final Object[]     args)
+    public static Object functionAnd(final TeaFunction func,
+                                     final TeaContext  context,
+                                     final Object[]    args)
         throws TeaException {
 
         for ( int i=1, count=args.length; i<count; i++ ) {
             Object obj = args[i];
 
-            if ( obj instanceof SObjBlock ) {
-                obj = ((SObjBlock)obj).exec();
+            if ( obj instanceof TeaBlock ) {
+                obj = ((TeaBlock)obj).exec();
             }
             if ( obj instanceof Boolean ) {
                 if ( !((Boolean)obj).booleanValue() ) {
@@ -1360,16 +1360,16 @@ public final class SModuleMath
  **************************************************************************/
 
     @TeaFunctionImplementor("or")
-    public static Object functionOr(final SObjFunction func,
-                                    final SContext     context,
-                                    final Object[]     args)
+    public static Object functionOr(final TeaFunction func,
+                                    final TeaContext  context,
+                                    final Object[]    args)
         throws TeaException {
 
         for ( int i=1, count=args.length; i<count; i++ ) {
             Object obj = args[i];
 
-            if ( obj instanceof SObjBlock ) {
-                obj = ((SObjBlock)obj).exec();
+            if ( obj instanceof TeaBlock ) {
+                obj = ((TeaBlock)obj).exec();
             }
             if ( obj instanceof Boolean ) {
                 if ( ((Boolean)obj).booleanValue() ) {
@@ -1433,16 +1433,16 @@ public final class SModuleMath
  **************************************************************************/
 
     @TeaFunctionImplementor("not")
-    public static Object functionNot(final SObjFunction func,
-                                     final SContext     context,
-                                     final Object[]     args)
+    public static Object functionNot(final TeaFunction func,
+                                     final TeaContext  context,
+                                     final Object[]    args)
         throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "boolean");
         }
 
-        boolean operand = SArgs.getBoolean(args,1).booleanValue();
+        boolean operand = Args.getBoolean(args,1).booleanValue();
         Boolean result  = operand ? Boolean.FALSE : Boolean.TRUE;
 
         return result;
@@ -1497,9 +1497,9 @@ public final class SModuleMath
  **************************************************************************/
 
     @TeaFunctionImplementor("abs")
-    public static Object functionAbs(final SObjFunction func,
-                                     final SContext     context,
-                                     final Object[]     args)
+    public static Object functionAbs(final TeaFunction func,
+                                     final TeaContext  context,
+                                     final Object[]    args)
         throws TeaException {
 
         if ( args.length != 2 ) {
@@ -1564,16 +1564,16 @@ public final class SModuleMath
  **************************************************************************/
 
     @TeaFunctionImplementor("round")
-    public static Object functionRound(final SObjFunction func,
-                                       final SContext     context,
-                                       final Object[]     args)
+    public static Object functionRound(final TeaFunction func,
+                                       final TeaContext  context,
+                                       final Object[]    args)
         throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "value");
         }
 
-        double operand = SArgs.getFloat(args, 1).doubleValue();
+        double operand = Args.getFloat(args, 1).doubleValue();
         int    result  = (int)Math.round(operand);
 
         return Integer.valueOf(result);
@@ -1626,16 +1626,16 @@ public final class SModuleMath
  **************************************************************************/
 
     @TeaFunctionImplementor("floor")
-    public static Object functionFloor(final SObjFunction func,
-                                       final SContext     context,
-                                       final Object[]     args)
+    public static Object functionFloor(final TeaFunction func,
+                                       final TeaContext  context,
+                                       final Object[]    args)
         throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "value");
         }
 
-        double operand = SArgs.getFloat(args, 1).doubleValue();
+        double operand = Args.getFloat(args, 1).doubleValue();
         int    result  = (int)Math.floor(operand);
 
         return Integer.valueOf(result);
@@ -1688,16 +1688,16 @@ public final class SModuleMath
  **************************************************************************/
 
     @TeaFunctionImplementor("ceil")
-    public static Object functionCeil(final SObjFunction func,
-                                      final SContext     context,
-                                      final Object[]     args)
+    public static Object functionCeil(final TeaFunction func,
+                                      final TeaContext  context,
+                                      final Object[]    args)
         throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "value");
         }
 
-        double operand = SArgs.getNumber(args, 1).doubleValue();
+        double operand = Args.getNumber(args, 1).doubleValue();
         int    result  = (int)Math.ceil(operand);
 
         return Integer.valueOf(result);
@@ -1750,9 +1750,9 @@ public final class SModuleMath
  **************************************************************************/
 
     @TeaFunctionImplementor("sqrt")
-    public static Object functionSqrt(final SObjFunction func,
-                                      final SContext     context,
-                                      final Object[]     args)
+    public static Object functionSqrt(final TeaFunction func,
+                                      final TeaContext  context,
+                                      final Object[]    args)
         throws TeaException {
 
         if ( args.length != 2 ) {
@@ -1762,7 +1762,7 @@ public final class SModuleMath
         double result = 0;
         
         try {
-            result = Math.sqrt(SArgs.getNumber(args,1).doubleValue());
+            result = Math.sqrt(Args.getNumber(args,1).doubleValue());
         } catch (ArithmeticException e) {
             SArithmeticException.raise(args, e);
         }
@@ -1793,9 +1793,9 @@ public final class SModuleMath
  **************************************************************************/
 
     @TeaFunctionImplementor("min")
-    public static Object functionMin(final SObjFunction func,
-                                     final SContext     context,
-                                     final Object[]     args)
+    public static Object functionMin(final TeaFunction func,
+                                     final TeaContext  context,
+                                     final Object[]    args)
         throws TeaException {
 
         return findExtreme(C_LT, func, context, args);
@@ -1824,9 +1824,9 @@ public final class SModuleMath
  **************************************************************************/
 
     @TeaFunctionImplementor("max")
-    public static Object functionMax(final SObjFunction func,
-                                     final SContext     context,
-                                     final Object[]     args)
+    public static Object functionMax(final TeaFunction func,
+                                     final TeaContext  context,
+                                     final Object[]    args)
         throws TeaException {
 
         return findExtreme(C_GT, func, context, args);
@@ -1843,9 +1843,9 @@ public final class SModuleMath
  **************************************************************************/
 
     private static Object findExtreme(final SComparator  comparator,
-                                      final SObjFunction func,
-                                      final SContext     context,
-                                      final Object[]     args)
+                                      final TeaFunction func,
+                                      final TeaContext  context,
+                                      final Object[]    args)
         throws TeaException {
 
         if ( args.length < 2 ) {
@@ -1991,14 +1991,14 @@ public final class SModuleMath
  **************************************************************************/
 
     @TeaFunctionImplementor("int")
-    public static Object functionInt(final SObjFunction func,
-                                     final SContext     context,
-                                     final Object[]     args)
+    public static Object functionInt(final TeaFunction func,
+                                     final TeaContext  context,
+                                     final Object[]    args)
         throws TeaException {
 
         if ( args.length == 3 ) {
-            SObjSymbol symbol = SArgs.getSymbol(args, 1);
-            int        value  = SArgs.getNumber(args, 2).intValue();
+            TeaSymbol symbol = Args.getSymbol(args, 1);
+            int        value  = Args.getNumber(args, 2).intValue();
             Integer    theInt = Integer.valueOf(value);
 
             context.newVar(symbol, theInt);
@@ -2006,7 +2006,7 @@ public final class SModuleMath
             return theInt;
         }
         if ( args.length == 2 ) {
-            return Integer.valueOf(SArgs.getNumber(args, 1).intValue());
+            return Integer.valueOf(Args.getNumber(args, 1).intValue());
         }
 
         throw new SNumArgException(args, "[symbol] value");
@@ -2059,9 +2059,9 @@ public final class SModuleMath
  **************************************************************************/
 
     @TeaFunctionImplementor("rand-int")
-    public Object functionRandInt(final SObjFunction func,
-                                  final SContext     context,
-                                  final Object[]     args)
+    public Object functionRandInt(final TeaFunction func,
+                                  final TeaContext  context,
+                                  final Object[]    args)
         throws TeaException {
 
         return Integer.valueOf(_generator.nextInt());
@@ -2121,18 +2121,18 @@ public final class SModuleMath
  **************************************************************************/
 
     @TeaFunctionImplementor("=")
-    public static Object functionSetValue(final SObjFunction func,
-                                          final SContext     context,
-                                          final Object[]     args)
+    public static Object functionSetValue(final TeaFunction func,
+                                          final TeaContext  context,
+                                          final Object[]    args)
         throws TeaException {
 
       if ( args.length != 3 ) {
          throw new SNumArgException(args, "symbol value");
       }
 
-      SObjSymbol symbol = SArgs.getSymbol(args, 1);
-      SObjVar    var    = context.getVarObject(symbol);
-      Number     val    = SArgs.getNumber(args, 2);
+      TeaSymbol symbol = Args.getSymbol(args, 1);
+      TeaVar    var    = context.getVarObject(symbol);
+      Number     val    = Args.getNumber(args, 2);
 
       var.set(val);
 
@@ -2202,19 +2202,19 @@ public final class SModuleMath
  **************************************************************************/
 
     @TeaFunctionImplementor("+=")
-    public static Object functionIncBy(final SObjFunction func,
-                                       final SContext     context,
-                                       final Object[]     args)
+    public static Object functionIncBy(final TeaFunction func,
+                                       final TeaContext  context,
+                                       final Object[]    args)
         throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "symbol value");
         }
 
-        SObjSymbol symbol  = SArgs.getSymbol(args, 1);
-        SObjVar    var     = context.getVarObject(symbol);
+        TeaSymbol symbol  = Args.getSymbol(args, 1);
+        TeaVar    var     = context.getVarObject(symbol);
         Object     value   = var.get();
-        Number     incrVal = SArgs.getNumber(args, 2);
+        Number     incrVal = Args.getNumber(args, 2);
 
         if ( value instanceof Integer ) {
             int x = ((Integer)value).intValue() + incrVal.intValue();
@@ -2225,7 +2225,7 @@ public final class SModuleMath
         } else {
             String   msg     =
                 "Variable \"{0}\" must contain a numeric, not a {1}";
-            Object[] fmtArgs = { symbol, STypes.getTypeName(value) };
+            Object[] fmtArgs = { symbol, Types.getTypeName(value) };
             throw new TeaException(msg, fmtArgs);
         }
 
@@ -2298,19 +2298,19 @@ public final class SModuleMath
  **************************************************************************/
 
     @TeaFunctionImplementor("-=")
-    public static Object functionDecBy(final SObjFunction func,
-                                       final SContext     context,
-                                       final Object[]     args)
+    public static Object functionDecBy(final TeaFunction func,
+                                       final TeaContext  context,
+                                       final Object[]    args)
         throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "symbol value");
         }
 
-        SObjSymbol symbol  = SArgs.getSymbol(args, 1);
-        SObjVar    var     = context.getVarObject(symbol);
+        TeaSymbol symbol  = Args.getSymbol(args, 1);
+        TeaVar    var     = context.getVarObject(symbol);
         Object     value   = var.get();
-        Number     incrVal = SArgs.getNumber(args, 2);
+        Number     incrVal = Args.getNumber(args, 2);
 
         if ( value instanceof Integer ) {
             int x = ((Integer)value).intValue() - incrVal.intValue();
@@ -2321,7 +2321,7 @@ public final class SModuleMath
         } else {
             String   msg     =
                 "Variable \"{0}\" must contain a numeric, not a {1}";
-            Object[] fmtArgs = { symbol, STypes.getTypeName(value) };
+            Object[] fmtArgs = { symbol, Types.getTypeName(value) };
             throw new TeaException(msg, fmtArgs);
         }
 
@@ -2394,19 +2394,19 @@ public final class SModuleMath
  **************************************************************************/
 
     @TeaFunctionImplementor("*=")
-    public static Object functionMulBy(final SObjFunction func,
-                                       final SContext     context,
-                                       final Object[]     args)
+    public static Object functionMulBy(final TeaFunction func,
+                                       final TeaContext  context,
+                                       final Object[]    args)
         throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "symbol value");
         }
 
-        SObjSymbol symbol  = SArgs.getSymbol(args, 1);
-        SObjVar    var     = context.getVarObject(symbol);
+        TeaSymbol symbol  = Args.getSymbol(args, 1);
+        TeaVar    var     = context.getVarObject(symbol);
         Object     value   = var.get();
-        Number     incrVal = SArgs.getNumber(args, 2);
+        Number     incrVal = Args.getNumber(args, 2);
 
         if ( value instanceof Integer ) {
             int x = ((Integer)value).intValue() * incrVal.intValue();
@@ -2417,7 +2417,7 @@ public final class SModuleMath
         } else {
             String   msg     =
                 "Variable \"{0}\" must contain a numeric, not a {1}";
-            Object[] fmtArgs = { symbol, STypes.getTypeName(value) };
+            Object[] fmtArgs = { symbol, Types.getTypeName(value) };
             throw new TeaException(msg, fmtArgs);
         }
 
@@ -2490,19 +2490,19 @@ public final class SModuleMath
  **************************************************************************/
 
     @TeaFunctionImplementor("/=")
-    public static Object functionDivBy(final SObjFunction func,
-                                       final SContext     context,
-                                       final Object[]     args)
+    public static Object functionDivBy(final TeaFunction func,
+                                       final TeaContext  context,
+                                       final Object[]    args)
         throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "symbol value");
         }
 
-        SObjSymbol symbol  = SArgs.getSymbol(args, 1);
-        SObjVar    var     = context.getVarObject(symbol);
+        TeaSymbol symbol  = Args.getSymbol(args, 1);
+        TeaVar    var     = context.getVarObject(symbol);
         Object     value   = var.get();
-        Number     incrVal = SArgs.getNumber(args, 2);
+        Number     incrVal = Args.getNumber(args, 2);
 
         if ( value instanceof Integer ) {
             int x = ((Integer)value).intValue() / incrVal.intValue();
@@ -2513,7 +2513,7 @@ public final class SModuleMath
         } else {
             String   msg     =
                 "Variable \"{0}\" must contain a numeric, not a {1}";
-            Object[] fmtArgs = { symbol, STypes.getTypeName(value) };
+            Object[] fmtArgs = { symbol, Types.getTypeName(value) };
             throw new TeaException(msg, fmtArgs);
         }
 
@@ -2581,17 +2581,17 @@ public final class SModuleMath
  **************************************************************************/
 
     @TeaFunctionImplementor("++")
-    public static Object functionIncr(final SObjFunction func,
-                                      final SContext     context,
-                                      final Object[]     args)
+    public static Object functionIncr(final TeaFunction func,
+                                      final TeaContext  context,
+                                      final Object[]    args)
         throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "symbol");
         }
 
-        SObjSymbol symbol  = SArgs.getSymbol(args, 1);
-        SObjVar    var     = context.getVarObject(symbol);
+        TeaSymbol symbol  = Args.getSymbol(args, 1);
+        TeaVar    var     = context.getVarObject(symbol);
         Object     value   = var.get();
         
         if ( value instanceof Integer ) {
@@ -2603,7 +2603,7 @@ public final class SModuleMath
         } else {
             String   msg     =
                 "Variable \"{0}\" must contain a numeric, not a {1}";
-            Object[] fmtArgs = { symbol, STypes.getTypeName(value) };
+            Object[] fmtArgs = { symbol, Types.getTypeName(value) };
             throw new TeaException(msg, fmtArgs);
         }
 
@@ -2671,17 +2671,17 @@ public final class SModuleMath
  **************************************************************************/
 
     @TeaFunctionImplementor("--")
-    public static Object functionDecr(final SObjFunction func,
-                                      final SContext     context,
-                                      final Object[]     args)
+    public static Object functionDecr(final TeaFunction func,
+                                      final TeaContext  context,
+                                      final Object[]    args)
         throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "symbol");
         }
 
-        SObjSymbol symbol  = SArgs.getSymbol(args, 1);
-        SObjVar    var     = context.getVarObject(symbol);
+        TeaSymbol symbol  = Args.getSymbol(args, 1);
+        TeaVar    var     = context.getVarObject(symbol);
         Object     value   = var.get();
         
         if ( value instanceof Integer ) {
@@ -2693,7 +2693,7 @@ public final class SModuleMath
         } else {
             String   msg     =
                 "Variable \"{0}\" must contain a numeric, not a {1}";
-            Object[] fmtArgs = { symbol, STypes.getTypeName(value) };
+            Object[] fmtArgs = { symbol, Types.getTypeName(value) };
             throw new TeaException(msg, fmtArgs);
         }
 
@@ -2749,16 +2749,16 @@ public final class SModuleMath
  **************************************************************************/
 
     @TeaFunctionImplementor("~")
-    public Object functionBinNeg(final SObjFunction func,
-                                 final SContext     context,
-                                 final Object[]     args)
+    public Object functionBinNeg(final TeaFunction func,
+                                 final TeaContext  context,
+                                 final Object[]    args)
         throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "value");
         }
 
-        int value  = SArgs.getInt(args, 1).intValue();
+        int value  = Args.getInt(args, 1).intValue();
         int result = ~value;
 
         return Integer.valueOf(result);
@@ -2812,16 +2812,16 @@ public final class SModuleMath
  **************************************************************************/
 
     @TeaFunctionImplementor("&")
-    public Object functionBinAnd(final SObjFunction func,
-                                 final SContext     context,
-                                 final Object[]     args)
+    public Object functionBinAnd(final TeaFunction func,
+                                 final TeaContext  context,
+                                 final Object[]    args)
         throws TeaException {
 
         int lastIndex = args.length;
-        int result    = (lastIndex==1) ? 0 : SArgs.getInt(args,1).intValue();
+        int result    = (lastIndex==1) ? 0 : Args.getInt(args,1).intValue();
 
         for ( int i=2; i<lastIndex; i++ ) {
-            int operand = SArgs.getInt(args,i).intValue();
+            int operand = Args.getInt(args,i).intValue();
 
             result &= operand;
         }
@@ -2877,16 +2877,16 @@ public final class SModuleMath
  **************************************************************************/
 
     @TeaFunctionImplementor("|")
-    public Object functionBinOr(final SObjFunction func,
-                                final SContext     context,
-                                final Object[]     args)
+    public Object functionBinOr(final TeaFunction func,
+                                final TeaContext  context,
+                                final Object[]    args)
         throws TeaException {
 
         int lastIndex = args.length;
-        int result    = (lastIndex==1) ? 0 : SArgs.getInt(args,1).intValue();
+        int result    = (lastIndex==1) ? 0 : Args.getInt(args,1).intValue();
 
         for ( int i=2; i<lastIndex; i++ ) {
-            int operand = SArgs.getInt(args,i).intValue();
+            int operand = Args.getInt(args,i).intValue();
 
             result |= operand;
         }
@@ -2942,16 +2942,16 @@ public final class SModuleMath
  **************************************************************************/
 
     @TeaFunctionImplementor("^")
-    public Object functionBinXor(final SObjFunction func,
-                                 final SContext     context,
-                                 final Object[]     args)
+    public Object functionBinXor(final TeaFunction func,
+                                 final TeaContext  context,
+                                 final Object[]    args)
         throws TeaException {
 
         int lastIndex = args.length;
-        int result    = (lastIndex==1) ? 0 : SArgs.getInt(args,1).intValue();
+        int result    = (lastIndex==1) ? 0 : Args.getInt(args,1).intValue();
 
         for ( int i=2; i<lastIndex; i++ ) {
-            int operand = SArgs.getInt(args,i).intValue();
+            int operand = Args.getInt(args,i).intValue();
 
             result ^= operand;
         }
@@ -3010,17 +3010,17 @@ public final class SModuleMath
  **************************************************************************/
 
     @TeaFunctionImplementor("<<")
-    public Object functionBinSl(final SObjFunction func,
-                                final SContext     context,
-                                final Object[]     args)
+    public Object functionBinSl(final TeaFunction func,
+                                final TeaContext  context,
+                                final Object[]    args)
         throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "value shift");
         }
 
-        int value = SArgs.getInt(args, 1).intValue();
-        int shift = SArgs.getInt(args, 2).intValue();
+        int value = Args.getInt(args, 1).intValue();
+        int shift = Args.getInt(args, 2).intValue();
         int result = value << shift;
 
         return Integer.valueOf(result);
@@ -3077,17 +3077,17 @@ public final class SModuleMath
  **************************************************************************/
 
     @TeaFunctionImplementor(">>")
-    public Object functionBinSr(final SObjFunction func,
-                                final SContext     context,
-                                final Object[]     args)
+    public Object functionBinSr(final TeaFunction func,
+                                final TeaContext  context,
+                                final Object[]    args)
         throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "value shift");
         }
 
-        int value = SArgs.getInt(args, 1).intValue();
-        int shift = SArgs.getInt(args, 2).intValue();
+        int value = Args.getInt(args, 1).intValue();
+        int shift = Args.getInt(args, 2).intValue();
         int result = value >> shift;
 
         return Integer.valueOf(result);
@@ -3157,19 +3157,19 @@ public final class SModuleMath
  **************************************************************************/
 
     @TeaFunctionImplementor("&=")
-    public static Object functionBinAndBy(final SObjFunction func,
-                                          final SContext     context,
-                                          final Object[]     args)
+    public static Object functionBinAndBy(final TeaFunction func,
+                                          final TeaContext  context,
+                                          final Object[]    args)
         throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "symbol value");
         }
 
-        SObjSymbol symbol  = SArgs.getSymbol(args, 1);
-        SObjVar    var     = context.getVarObject(symbol);
+        TeaSymbol symbol  = Args.getSymbol(args, 1);
+        TeaVar    var     = context.getVarObject(symbol);
         Object     value   = var.get();
-        int        operand = SArgs.getInt(args, 2).intValue();
+        int        operand = Args.getInt(args, 2).intValue();
         int        result  = 0;
         Object     resObj  = null;
 
@@ -3178,7 +3178,7 @@ public final class SModuleMath
         } catch (ClassCastException e) {
             String   msg     =
                 "Variable \"{0}\" must contain a numeric, not a {1}";
-            Object[] fmtArgs = { symbol, STypes.getTypeName(value) };
+            Object[] fmtArgs = { symbol, Types.getTypeName(value) };
             throw new TeaException(msg, fmtArgs);
         }
         resObj = Integer.valueOf(result);
@@ -3252,19 +3252,19 @@ public final class SModuleMath
  **************************************************************************/
 
     @TeaFunctionImplementor("|=")
-    public static Object functionBinOrBy(final SObjFunction func,
-                                         final SContext     context,
-                                         final Object[]     args)
+    public static Object functionBinOrBy(final TeaFunction func,
+                                         final TeaContext  context,
+                                         final Object[]    args)
         throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "symbol value");
         }
 
-        SObjSymbol symbol  = SArgs.getSymbol(args, 1);
-        SObjVar    var     = context.getVarObject(symbol);
+        TeaSymbol symbol  = Args.getSymbol(args, 1);
+        TeaVar    var     = context.getVarObject(symbol);
         Object     value   = var.get();
-        int        operand = SArgs.getInt(args, 2).intValue();
+        int        operand = Args.getInt(args, 2).intValue();
         int        result  = 0;
         Object     resObj  = null;
 
@@ -3273,7 +3273,7 @@ public final class SModuleMath
         } catch (ClassCastException e) {
             String   msg     =
                 "Variable \"{0}\" must contain a numeric, not a {1}";
-            Object[] fmtArgs = { symbol, STypes.getTypeName(value) };
+            Object[] fmtArgs = { symbol, Types.getTypeName(value) };
             throw new TeaException(msg, fmtArgs);
         }
         resObj = Integer.valueOf(result);
@@ -3347,19 +3347,19 @@ public final class SModuleMath
  **************************************************************************/
 
     @TeaFunctionImplementor("^=")
-    public static Object functionBinXorBy(final SObjFunction func,
-                                          final SContext     context,
-                                          final Object[]     args)
+    public static Object functionBinXorBy(final TeaFunction func,
+                                          final TeaContext  context,
+                                          final Object[]    args)
         throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "symbol value");
         }
 
-        SObjSymbol symbol  = SArgs.getSymbol(args, 1);
-        SObjVar    var     = context.getVarObject(symbol);
+        TeaSymbol symbol  = Args.getSymbol(args, 1);
+        TeaVar    var     = context.getVarObject(symbol);
         Object     value   = var.get();
-        int        operand = SArgs.getInt(args, 2).intValue();
+        int        operand = Args.getInt(args, 2).intValue();
         int        result  = 0;
         Object     resObj  = null;
 
@@ -3368,7 +3368,7 @@ public final class SModuleMath
         } catch (ClassCastException e) {
             String   msg     =
                 "Variable \"{0}\" must contain a numeric, not a {1}";
-            Object[] fmtArgs = { symbol, STypes.getTypeName(value) };
+            Object[] fmtArgs = { symbol, Types.getTypeName(value) };
             throw new TeaException(msg, fmtArgs);
         }
         resObj = Integer.valueOf(result);
@@ -3442,19 +3442,19 @@ public final class SModuleMath
  **************************************************************************/
 
     @TeaFunctionImplementor("<<=")
-    public static Object functionBinSlBy(final SObjFunction func,
-                                         final SContext     context,
-                                         final Object[]     args)
+    public static Object functionBinSlBy(final TeaFunction func,
+                                         final TeaContext  context,
+                                         final Object[]    args)
         throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "symbol value");
         }
 
-        SObjSymbol symbol = SArgs.getSymbol(args, 1);
-        SObjVar    var    = context.getVarObject(symbol);
+        TeaSymbol symbol = Args.getSymbol(args, 1);
+        TeaVar    var    = context.getVarObject(symbol);
         Object     value  = var.get();
-        int        shift  = SArgs.getInt(args, 2).intValue();
+        int        shift  = Args.getInt(args, 2).intValue();
         int        result = 0;
         Object     resObj = null;
 
@@ -3463,7 +3463,7 @@ public final class SModuleMath
         } catch (ClassCastException e) {
             String   msg     =
                 "Variable \"{0}\" must contain a numeric, not a {1}";
-            Object[] fmtArgs = { symbol, STypes.getTypeName(value) };
+            Object[] fmtArgs = { symbol, Types.getTypeName(value) };
             throw new TeaException(msg, fmtArgs);
         }
         resObj = Integer.valueOf(result);
@@ -3537,19 +3537,19 @@ public final class SModuleMath
  **************************************************************************/
 
     @TeaFunctionImplementor(">>=")
-    public static Object functionBinSrBy(final SObjFunction func,
-                                         final SContext     context,
-                                         final Object[]     args)
+    public static Object functionBinSrBy(final TeaFunction func,
+                                         final TeaContext  context,
+                                         final Object[]    args)
         throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "symbol value");
         }
 
-        SObjSymbol symbol = SArgs.getSymbol(args, 1);
-        SObjVar    var    = context.getVarObject(symbol);
+        TeaSymbol symbol = Args.getSymbol(args, 1);
+        TeaVar    var    = context.getVarObject(symbol);
         Object     value  = var.get();
-        int        shift  = SArgs.getInt(args, 2).intValue();
+        int        shift  = Args.getInt(args, 2).intValue();
         int        result = 0;
         Object     resObj = null;
 
@@ -3558,7 +3558,7 @@ public final class SModuleMath
         } catch (ClassCastException e) {
             String   msg     =
                 "Variable \"{0}\" must contain a numeric, not a {1}";
-            Object[] fmtArgs = { symbol, STypes.getTypeName(value) };
+            Object[] fmtArgs = { symbol, Types.getTypeName(value) };
             throw new TeaException(msg, fmtArgs);
         }
         resObj = Integer.valueOf(result);

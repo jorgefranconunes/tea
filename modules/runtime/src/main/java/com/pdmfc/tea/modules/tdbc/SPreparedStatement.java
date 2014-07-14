@@ -18,11 +18,11 @@ import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.tos.STosUtil;
 import com.pdmfc.tea.modules.util.SDate;
-import com.pdmfc.tea.runtime.SArgs;
-import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.SObjNull;
-import com.pdmfc.tea.runtime.SObjSymbol;
+import com.pdmfc.tea.runtime.Args;
+import com.pdmfc.tea.runtime.TeaContext;
+import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.runtime.TeaNull;
+import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SRuntimeException;
 
@@ -65,8 +65,8 @@ public class SPreparedStatement
 
 
     private static final String     CLASS_NAME   = "TPreparedStatement";
-    private static final SObjSymbol CLASS_NAME_S =
-        SObjSymbol.addSymbol(CLASS_NAME);
+    private static final TeaSymbol CLASS_NAME_S =
+        TeaSymbol.addSymbol(CLASS_NAME);
 
     private PreparedStatement _prepStat = null;
 
@@ -133,7 +133,7 @@ public class SPreparedStatement
  *
  **************************************************************************/
 
-    public static SStatement newInstance(final SContext context)
+    public static SStatement newInstance(final TeaContext context)
         throws TeaException {
 
         STosObj prepStat = STosUtil.newInstance(CLASS_NAME_S, context);
@@ -162,9 +162,9 @@ public class SPreparedStatement
  *
  **************************************************************************/
 
-    public Object constructor(final SObjFunction obj,
-                              final SContext     context,
-                              final Object[]     args)
+    public Object constructor(final TeaFunction obj,
+                              final TeaContext     context,
+                              final Object[]    args)
         throws TeaException {
 
         return obj;
@@ -206,9 +206,9 @@ public class SPreparedStatement
  *
  **************************************************************************/
 
-    public Object query(final SObjFunction obj,
-                        final SContext     context,
-                        final Object[]     args)
+    public Object query(final TeaFunction obj,
+                        final TeaContext     context,
+                        final Object[]    args)
         throws TeaException {
 
         ResultSet  rSet    = null;
@@ -264,9 +264,9 @@ public class SPreparedStatement
  *
  **************************************************************************/
 
-    public Object update(final SObjFunction obj,
-                         final SContext     context,
-                         final Object[]     args)
+    public Object update(final TeaFunction obj,
+                         final TeaContext     context,
+                         final Object[]    args)
         throws TeaException {
 
         int result = 0;
@@ -311,9 +311,9 @@ public class SPreparedStatement
  *
  **************************************************************************/
 
-    public Object execute(final SObjFunction obj,
-                          final SContext     context,
-                          final Object[]     args)
+    public Object execute(final TeaFunction obj,
+                          final TeaContext     context,
+                          final Object[]    args)
         throws TeaException {
 
         boolean result = false;
@@ -377,23 +377,23 @@ public class SPreparedStatement
  *
  **************************************************************************/
 
-    public Object setInt(final SObjFunction obj,
-                         final SContext     context,
-                         final Object[]     args)
+    public Object setInt(final TeaFunction obj,
+                         final TeaContext     context,
+                         final Object[]    args)
         throws SRuntimeException {
 
         if ( args.length != 4 ) {
             throw new SNumArgException(args, "index value");
         }
 
-        int   index    = SArgs.getInt(args, 2).intValue();
+        int   index    = Args.getInt(args, 2).intValue();
         Object valueArg = args[3];
 
         try {
-            if ( valueArg == SObjNull.NULL ) {
+            if ( valueArg == TeaNull.NULL ) {
                 setIntNull(index);
             } else {
-                setInt(index, SArgs.getInt(args,3).intValue());
+                setInt(index, Args.getInt(args,3).intValue());
             }
         } catch (SQLException e) {
             throw new SRuntimeException(e);
@@ -485,23 +485,23 @@ public class SPreparedStatement
  *
  **************************************************************************/
 
-    public Object setFloat(final SObjFunction obj,
-                           final SContext     context,
-                           final Object[]     args)
+    public Object setFloat(final TeaFunction obj,
+                           final TeaContext     context,
+                           final Object[]    args)
         throws SRuntimeException {
 
         if ( args.length != 4 ) {
             throw new SNumArgException(args, "index value");
         }
 
-        int   index    = SArgs.getInt(args, 2).intValue();
+        int   index    = Args.getInt(args, 2).intValue();
         Object valueArg = args[3];
 
         try {
-            if ( valueArg == SObjNull.NULL ) {
+            if ( valueArg == TeaNull.NULL ) {
                 setDoubleNull(index);
             } else {
-                setDouble(index, SArgs.getFloat(args,3).doubleValue());
+                setDouble(index, Args.getFloat(args,3).doubleValue());
             }
         } catch (SQLException e) {
             throw new SRuntimeException(e);
@@ -592,23 +592,23 @@ public class SPreparedStatement
  *
  **************************************************************************/
 
-    public Object setString(final SObjFunction obj,
-                            final SContext     context,
-                            final Object[]     args)
+    public Object setString(final TeaFunction obj,
+                            final TeaContext     context,
+                            final Object[]    args)
         throws TeaException {
 
         if ( args.length != 4 ) {
             throw new SNumArgException(args, "index value");
         }
 
-        int    index    = SArgs.getInt(args, 2).intValue();
+        int    index    = Args.getInt(args, 2).intValue();
         Object valueArg = args[3];
 
         try {
-            if ( valueArg == SObjNull.NULL ) {
+            if ( valueArg == TeaNull.NULL ) {
                 setStringNull(index);
             } else {
-                setString(index, SArgs.getString(args,3));
+                setString(index, Args.getString(args,3));
             }
         } catch (SQLException e) {
             throw new SRuntimeException(e);
@@ -701,20 +701,20 @@ public class SPreparedStatement
  *
  **************************************************************************/
 
-    public Object setDate(final SObjFunction obj,
-                          final SContext     context,
-                          final Object[]     args)
+    public Object setDate(final TeaFunction obj,
+                          final TeaContext     context,
+                          final Object[]    args)
         throws TeaException {
 
         if ( args.length != 4 ) {
             throw new SNumArgException(args, "index value");
         }
 
-        int    index    = SArgs.getInt(args, 2).intValue();
+        int    index    = Args.getInt(args, 2).intValue();
         Object valueArg = args[3];
 
         try {
-            if ( valueArg == SObjNull.NULL ) {
+            if ( valueArg == TeaNull.NULL ) {
                 setTimestampNull(index);
             } else {
                 setTimestamp(index, SDate.getDate(args,3));

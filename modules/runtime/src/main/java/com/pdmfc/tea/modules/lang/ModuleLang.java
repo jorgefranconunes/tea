@@ -23,26 +23,25 @@ import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.compiler.TeaCode;
 import com.pdmfc.tea.compiler.TeaCompiler;
 import com.pdmfc.tea.modules.io.SInput;
-import com.pdmfc.tea.modules.math.SModuleMath;
 import com.pdmfc.tea.modules.util.SHashtable;
-import com.pdmfc.tea.runtime.SArgs;
+import com.pdmfc.tea.runtime.Args;
 import com.pdmfc.tea.runtime.SBreakException;
-import com.pdmfc.tea.runtime.SContext;
+import com.pdmfc.tea.runtime.TeaContext;
 import com.pdmfc.tea.runtime.SContinueException;
 import com.pdmfc.tea.runtime.SExitException;
 import com.pdmfc.tea.runtime.SLambdaFunction;
 import com.pdmfc.tea.runtime.SLambdaFunctionVarArg;
 import com.pdmfc.tea.runtime.SNumArgException;
-import com.pdmfc.tea.runtime.SObjBlock;
-import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.SObjNull;
-import com.pdmfc.tea.runtime.SObjPair;
-import com.pdmfc.tea.runtime.SObjSymbol;
-import com.pdmfc.tea.runtime.SObjVar;
+import com.pdmfc.tea.runtime.TeaBlock;
+import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.runtime.TeaNull;
+import com.pdmfc.tea.runtime.TeaPair;
+import com.pdmfc.tea.runtime.TeaSymbol;
+import com.pdmfc.tea.runtime.TeaVar;
 import com.pdmfc.tea.runtime.SReturnException;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypeException;
-import com.pdmfc.tea.runtime.STypes;
+import com.pdmfc.tea.runtime.Types;
 import com.pdmfc.tea.runtime.TeaEnvironment;
 import com.pdmfc.tea.runtime.TeaFunctionImplementor;
 import com.pdmfc.tea.runtime.TeaModule;
@@ -76,7 +75,7 @@ import com.pdmfc.tea.runtime.TeaModule;
  *
  **************************************************************************/
 
-public final class SModuleLang
+public final class ModuleLang
     extends Object
     implements TeaModule {
 
@@ -101,8 +100,8 @@ public final class SModuleLang
 
     // These are used by the implementation of the Tea "load-function"
     // function.
-    private Map<String,SObjFunction> _funcs =
-        new HashMap<String,SObjFunction>();
+    private Map<String,TeaFunction> _funcs =
+        new HashMap<String,TeaFunction>();
 
     // THashtable containing the Java system properties.
     private SHashtable _systemProps = null;
@@ -117,7 +116,7 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    public SModuleLang() {
+    public ModuleLang() {
 
         // Nothing to do.
     }
@@ -138,7 +137,7 @@ public final class SModuleLang
 
         environment.addGlobalVar("true",  Boolean.TRUE);
         environment.addGlobalVar("false", Boolean.FALSE);
-        environment.addGlobalVar("null",  SObjNull.NULL);
+        environment.addGlobalVar("null",  TeaNull.NULL);
         environment.addGlobalVar(TEA_VERSION_VAR,
                                  TeaConfigInfo.get(PROP_TEA_VERSION));
 
@@ -255,25 +254,25 @@ public final class SModuleLang
  **************************************************************************/
 
     @TeaFunctionImplementor("apply")
-    public static Object functionApply(final SObjFunction func,
-                                       final SContext     context,
-                                       final Object[]     args)
+    public static Object functionApply(final TeaFunction func,
+                                       final TeaContext  context,
+                                       final Object[]    args)
         throws TeaException {
 
-        SArgs.checkAtLeast(args, 2, "function obj1 ... list");
+        Args.checkAtLeast(args, 2, "function obj1 ... list");
 
         Object       result      = null;
-        SObjFunction proc        = SArgs.getFunction(context, args, 1);
+        TeaFunction proc        = Args.getFunction(context, args, 1);
         Object[]     procArgs    = null;
         int          procNumArgs = 0;
         Object       lastArg     = args[args.length-1];
         boolean      hasList     =
-            (args.length>2) && (lastArg instanceof SObjPair);
+            (args.length>2) && (lastArg instanceof TeaPair);
         int          indexOfLast = args.length - (hasList ? 2 : 1);
         int          index;
 
         if ( hasList ) {
-            procNumArgs = args.length - 2 + ((SObjPair)lastArg).length();
+            procNumArgs = args.length - 2 + ((TeaPair)lastArg).length();
         } else {
             procNumArgs = args.length - 1;
         }
@@ -285,7 +284,7 @@ public final class SModuleLang
             procArgs[index-1] = args[index];
         }
         if ( hasList ) {
-            for ( Iterator i=((SObjPair)lastArg).iterator();
+            for ( Iterator i=((TeaPair)lastArg).iterator();
                   i.hasNext(); 
                   ++index ) {
                 procArgs[index-1] = i.next();
@@ -350,14 +349,14 @@ public final class SModuleLang
  **************************************************************************/
 
     @TeaFunctionImplementor("break")
-    public static Object functionBreak(final SObjFunction func,
-                                       final SContext     context,
-                                       final Object[]     args)
+    public static Object functionBreak(final TeaFunction func,
+                                       final TeaContext  context,
+                                       final Object[]    args)
         throws TeaException {
 
-        SArgs.checkAtMost(args, 2, "[object]");
+        Args.checkAtMost(args, 2, "[object]");
 
-        Object breakValue = (args.length==2) ? args[1] : SObjNull.NULL;
+        Object breakValue = (args.length==2) ? args[1] : TeaNull.NULL;
 
         throw new SBreakException(breakValue);
     }
@@ -445,17 +444,17 @@ public final class SModuleLang
  **************************************************************************/
 
     @TeaFunctionImplementor("catch")
-    public static Object functionCatch(final SObjFunction func,
-                                       final SContext     context,
-                                       final Object[]     args)
+    public static Object functionCatch(final TeaFunction func,
+                                       final TeaContext  context,
+                                       final Object[]    args)
         throws TeaException {
 
-        SArgs.checkBetween(args, 2, 4, "block [symbol] [st-symbol]");
+        Args.checkBetween(args, 2, 4, "block [symbol] [st-symbol]");
 
-        SObjBlock  block  = SArgs.getBlock(args, 1);
-        SObjSymbol symbol = (args.length>=3) ? SArgs.getSymbol(args, 2) : null;
-        SObjSymbol symbSt = (args.length==4) ? SArgs.getSymbol(args, 3) : null;
-        SContext   scope  = block.getContext().newChild();
+        TeaBlock  block  = Args.getBlock(args, 1);
+        TeaSymbol symbol = (args.length>=3) ? Args.getSymbol(args, 2) : null;
+        TeaSymbol symbSt = (args.length==4) ? Args.getSymbol(args, 3) : null;
+        TeaContext   scope  = block.getContext().newChild();
         Object     result = Boolean.FALSE;
         Object     value  = null;
         TeaException error  = null;
@@ -474,7 +473,7 @@ public final class SModuleLang
             value = e.getBreakValue();
         } catch ( SContinueException e ) {
             // This is not an error.
-            value = SObjNull.NULL;
+            value = TeaNull.NULL;
         } catch ( SExitException e ) {
             value = e.getExitValue();
         } catch ( TeaException e ) {
@@ -484,12 +483,12 @@ public final class SModuleLang
         }
 
         if ( symbol != null ) {
-            SObjVar var = context.getVarObject(symbol);
-            var.set((value==null) ? SObjNull.NULL : value);
+            TeaVar var = context.getVarObject(symbol);
+            var.set((value==null) ? TeaNull.NULL : value);
         }
 
         if ( symbSt != null ) {
-            SObjVar var2 = context.getVarObject(symbSt);
+            TeaVar var2 = context.getVarObject(symbSt);
 
             if ( error != null ) {
                 String stackTraceStr = null;
@@ -501,7 +500,7 @@ public final class SModuleLang
                 }
                 var2.set(stackTraceStr);
             } else {
-                var2.set(SObjNull.NULL);
+                var2.set(TeaNull.NULL);
             }
         }        
 
@@ -590,14 +589,14 @@ public final class SModuleLang
  **************************************************************************/
 
     @TeaFunctionImplementor("cond")
-    public static Object functionCond(final SObjFunction func,
-                                      final SContext     context,
-                                      final Object[]     args)
+    public static Object functionCond(final TeaFunction func,
+                                      final TeaContext  context,
+                                      final Object[]    args)
         throws TeaException {
 
-        SArgs.checkAtLeast(args, 3, "condition result [...]");
+        Args.checkAtLeast(args, 3, "condition result [...]");
 
-        Object  result        = SObjNull.NULL;
+        Object  result        = TeaNull.NULL;
         int     numArgs       = args.length;
         boolean hasElseClause = (numArgs%2)==0;
         int     numCondArgs   = hasElseClause ? numArgs-1 : numArgs;
@@ -640,8 +639,8 @@ public final class SModuleLang
 
         Object result = condArg;
 
-        if ( condArg instanceof SObjBlock ) {
-            result = ((SObjBlock)condArg).exec();
+        if ( condArg instanceof TeaBlock ) {
+            result = ((TeaBlock)condArg).exec();
         }
 
         return result;
@@ -685,12 +684,12 @@ public final class SModuleLang
  **************************************************************************/
 
     @TeaFunctionImplementor("continue")
-    public static Object functionContinue(final SObjFunction func,
-                                          final SContext     context,
-                                          final Object[]     args)
+    public static Object functionContinue(final TeaFunction func,
+                                          final TeaContext  context,
+                                          final Object[]    args)
         throws TeaException {
 
-        SArgs.checkCount(args, 1, "No args required");
+        Args.checkCount(args, 1, "No args required");
 
         throw new SContinueException();
     }
@@ -788,9 +787,9 @@ public final class SModuleLang
  **************************************************************************/
 
     @TeaFunctionImplementor("define")
-    public static Object functionDefine(final SObjFunction func,
-                                        final SContext     context,
-                                        final Object[]     args)
+    public static Object functionDefine(final TeaFunction func,
+                                        final TeaContext  context,
+                                        final Object[]    args)
         throws TeaException {
 
         Object result = functionDefineVar(context, func, context, args);
@@ -862,12 +861,12 @@ public final class SModuleLang
  **************************************************************************/
 
     @TeaFunctionImplementor("global")
-    public Object functionGlobal(final SObjFunction func,
-                                 final SContext     context,
-                                 final Object[]     args)
+    public Object functionGlobal(final TeaFunction func,
+                                 final TeaContext  context,
+                                 final Object[]    args)
         throws TeaException {
 
-        SContext globalContext = _environment.getGlobalContext();
+        TeaContext globalContext = _environment.getGlobalContext();
         Object   result        =
             functionDefineVar(globalContext, func, context, args);
 
@@ -884,20 +883,20 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    private static Object functionDefineVar(final SContext     varContext,
-                                            final SObjFunction func,
-                                            final SContext     context,
-                                            final Object[]     args)
+    private static Object functionDefineVar(final TeaContext     varContext,
+                                            final TeaFunction func,
+                                            final TeaContext  context,
+                                            final Object[]    args)
         throws TeaException {
 
-        SArgs.checkBetween(args, 2, 4, "var-name [value]");
+        Args.checkBetween(args, 2, 4, "var-name [value]");
 
-        SObjSymbol symbol = SArgs.getSymbol(args, 1);
+        TeaSymbol symbol = Args.getSymbol(args, 1);
         Object     result  = null;
 
         switch ( args.length ) {
         case 2 :
-            result = SObjNull.NULL;
+            result = TeaNull.NULL;
             break;
         case 3 :
             result = args[2];
@@ -925,17 +924,17 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    private static SObjFunction newFunction(final Object[] args)
+    private static TeaFunction newFunction(final Object[] args)
         throws TeaException {
 
         Object       formalParam = args[2];
-        SObjBlock    body        = SArgs.getBlock(args,3);
-        SObjFunction result      = null;
+        TeaBlock    body        = Args.getBlock(args,3);
+        TeaFunction result      = null;
 
-        if ( formalParam instanceof SObjPair ) {
-            result = newFixedArgsFunction(args, (SObjPair)formalParam, body);
-        } else if ( formalParam instanceof SObjSymbol ) {
-            result = newVarArgsFunction((SObjSymbol)formalParam, body);
+        if ( formalParam instanceof TeaPair ) {
+            result = newFixedArgsFunction(args, (TeaPair)formalParam, body);
+        } else if ( formalParam instanceof TeaSymbol ) {
+            result = newVarArgsFunction((TeaSymbol)formalParam, body);
         } else {
             throw new STypeException(args, 2, "symbol or a symbol list");
         }
@@ -964,30 +963,30 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    private static SObjFunction newFixedArgsFunction(final Object[]  args,
-                                                     final SObjPair  paramList,
-                                                     final SObjBlock body)
+    private static TeaFunction newFixedArgsFunction(final Object[]  args,
+                                                     final TeaPair  paramList,
+                                                     final TeaBlock body)
         throws TeaException {
 
         int          numParam   = paramList.length();
-        SObjSymbol[] parameters = new SObjSymbol[numParam];
+        TeaSymbol[] parameters = new TeaSymbol[numParam];
         Iterator     it         = paramList.iterator();
 
         for ( int i=0; it.hasNext(); i++) {
             Object paramName = it.next();
 
             try {
-                parameters[i] = (SObjSymbol)paramName;
+                parameters[i] = (TeaSymbol)paramName;
             } catch ( ClassCastException e1 ) {
                 String msg = "formal parameter {0} must be a symbol, not a {1}";
                 throw new SRuntimeException(args,
                                             msg,
                                             i,
-                                            STypes.getTypeName(paramName));
+                                            Types.getTypeName(paramName));
             }
         }
 
-        SObjFunction result = new SLambdaFunction(parameters, body);
+        TeaFunction result = new SLambdaFunction(parameters, body);
 
         return result;
     }
@@ -1009,11 +1008,11 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    private static SObjFunction newVarArgsFunction(final SObjSymbol symbol,
-                                                   final SObjBlock  body)
+    private static TeaFunction newVarArgsFunction(final TeaSymbol symbol,
+                                                   final TeaBlock  body)
         throws TeaException {
 
-        SObjFunction result = new SLambdaFunctionVarArg(symbol, body);
+        TeaFunction result = new SLambdaFunctionVarArg(symbol, body);
 
         return result;
     }
@@ -1070,9 +1069,9 @@ public final class SModuleLang
  **************************************************************************/
 
     @TeaFunctionImplementor("echo")
-    public  static Object functionEcho(final SObjFunction func,
-                                       final SContext     context,
-                                       final Object[]     args)
+    public  static Object functionEcho(final TeaFunction func,
+                                       final TeaContext  context,
+                                       final Object[]    args)
         throws TeaException {
 
         int argCount = args.length;
@@ -1092,7 +1091,7 @@ public final class SModuleLang
                 System.out.print(((Boolean)arg).booleanValue() ? "1" : "0");
             } else {
                 String msg = "could not print argument {0} is of type {1}";
-                throw new STypeException(msg, i, STypes.getTypeName(arg));
+                throw new STypeException(msg, i, Types.getTypeName(arg));
             }
         }
         System.out.println();
@@ -1144,14 +1143,14 @@ public final class SModuleLang
  **************************************************************************/
 
     @TeaFunctionImplementor("error")
-    public static Object functionError(final SObjFunction func,
-                                       final SContext     context,
-                                       final Object[]     args)
+    public static Object functionError(final TeaFunction func,
+                                       final TeaContext  context,
+                                       final Object[]    args)
         throws TeaException {
 
-        SArgs.checkCount(args, 2, "message");
+        Args.checkCount(args, 2, "message");
 
-        String msg = SArgs.getString(args, 1);
+        String msg = Args.getString(args, 1);
 
         throw new SRuntimeException(msg);
     }
@@ -1214,14 +1213,14 @@ public final class SModuleLang
  **************************************************************************/
 
     @TeaFunctionImplementor("exec")
-    public static Object functionExec(final SObjFunction func,
-                                      final SContext     context,
-                                      final Object[]     args)
+    public static Object functionExec(final TeaFunction func,
+                                      final TeaContext  context,
+                                      final Object[]    args)
         throws TeaException {
 
-        SArgs.checkCount(args, 2, "block");
+        Args.checkCount(args, 2, "block");
 
-        SObjBlock block  = SArgs.getBlock(args, 1);
+        TeaBlock block  = Args.getBlock(args, 1);
         Object    result = block.exec();
 
         return result;
@@ -1269,15 +1268,15 @@ public final class SModuleLang
  **************************************************************************/
 
     @TeaFunctionImplementor("exit")
-    public static Object functionExit(final SObjFunction func,
-                                      final SContext     context,
-                                      final Object[]     args)
+    public static Object functionExit(final TeaFunction func,
+                                      final TeaContext  context,
+                                      final Object[]    args)
         throws TeaException {
 
-        SArgs.checkAtMost(args, 2, "[exit-code]");
+        Args.checkAtMost(args, 2, "[exit-code]");
 
         Integer retVal =
-            (args.length==1) ? SModuleMath.ZERO : SArgs.getInt(args,1);
+            (args.length==1) ? Integer.valueOf(0) : Args.getInt(args,1);
         
         throw new SExitException(retVal);
     }
@@ -1355,21 +1354,21 @@ public final class SModuleLang
  **************************************************************************/
 
     @TeaFunctionImplementor("foreach")
-    public static Object functionForeach(final SObjFunction func,
-                                         final SContext     context,
-                                         final Object[]     args)
+    public static Object functionForeach(final TeaFunction func,
+                                         final TeaContext  context,
+                                         final Object[]    args)
         throws TeaException {
 
-        SArgs.checkCount(args, 4, "var list block");
+        Args.checkCount(args, 4, "var list block");
 
-        SObjSymbol symbol     = SArgs.getSymbol(args, 1);
-        SObjPair   list       = SArgs.getPair(args, 2);
-        SObjBlock  block      = SArgs.getBlock(args, 3);
-        Object     result     = SObjNull.NULL;
+        TeaSymbol symbol     = Args.getSymbol(args, 1);
+        TeaPair   list       = Args.getPair(args, 2);
+        TeaBlock  block      = Args.getBlock(args, 3);
+        Object     result     = TeaNull.NULL;
 
         if ( !list.isEmpty() ) {
-            SContext   newContext = block.getContext().newChild();
-            SObjVar    var        = newContext.newVar(symbol, SObjNull.NULL);
+            TeaContext   newContext = block.getContext().newChild();
+            TeaVar    var        = newContext.newVar(symbol, TeaNull.NULL);
 
             for ( Object element : list ) {
                 var.set(element);
@@ -1435,14 +1434,14 @@ public final class SModuleLang
  **************************************************************************/
 
     @TeaFunctionImplementor("get")
-    public static Object functionGet(final SObjFunction func,
-                                     final SContext     context,
-                                     final Object[]     args)
+    public static Object functionGet(final TeaFunction func,
+                                     final TeaContext  context,
+                                     final Object[]    args)
         throws TeaException {
 
-        SArgs.checkCount(args, 2, "symbol");
+        Args.checkCount(args, 2, "symbol");
 
-        SObjSymbol symbol = SArgs.getSymbol(args, 1);
+        TeaSymbol symbol = Args.getSymbol(args, 1);
         Object     result = context.getVar(symbol);
 
         return result;
@@ -1512,19 +1511,19 @@ public final class SModuleLang
  **************************************************************************/
 
     @TeaFunctionImplementor("if")
-    public static Object functionIf(final SObjFunction func,
-                                    final SContext     context,
-                                    final Object[]     args)
+    public static Object functionIf(final TeaFunction func,
+                                    final TeaContext  context,
+                                    final Object[]    args)
         throws TeaException {
 
-        SArgs.checkBetween(args, 3, 4,"condition yesBlock noBlock");
+        Args.checkBetween(args, 3, 4,"condition yesBlock noBlock");
 
         Object condition = args[1];
         Object yesResult = args[2];
-        Object noResult  = (args.length==4) ? args[3] : SObjNull.NULL;
+        Object noResult  = (args.length==4) ? args[3] : TeaNull.NULL;
         
-        if ( condition instanceof SObjBlock ) {
-            SObjBlock conditionBlock = (SObjBlock)condition;
+        if ( condition instanceof TeaBlock ) {
+            TeaBlock conditionBlock = (TeaBlock)condition;
             condition = conditionBlock.exec();
         }
       
@@ -1536,8 +1535,8 @@ public final class SModuleLang
         Object result =
             ((Boolean)condition).booleanValue() ? yesResult : noResult;
 
-        if ( result instanceof SObjBlock ) {
-            SObjBlock resultBlock = (SObjBlock)result;
+        if ( result instanceof TeaBlock ) {
+            TeaBlock resultBlock = (TeaBlock)result;
             result = resultBlock.exec();
         }
 
@@ -1590,9 +1589,9 @@ public final class SModuleLang
  **************************************************************************/
 
     @TeaFunctionImplementor("is")
-    public static Object functionIs(final SObjFunction func,
-                                    final SContext     context,
-                                    final Object[]     args)
+    public static Object functionIs(final TeaFunction func,
+                                    final TeaContext  context,
+                                    final Object[]    args)
         throws TeaException {
 
         if ( args.length != 2 ) {
@@ -1673,12 +1672,12 @@ public final class SModuleLang
  **************************************************************************/
 
     @TeaFunctionImplementor("block?")
-    public static Object functionIsBlock(final SObjFunction func,
-                                         final SContext     context,
-                                         final Object[]     args)
+    public static Object functionIsBlock(final TeaFunction func,
+                                         final TeaContext  context,
+                                         final Object[]    args)
         throws TeaException {
 
-        return typeCheck(SObjBlock.class, args);
+        return typeCheck(TeaBlock.class, args);
     }
 
 
@@ -1728,9 +1727,9 @@ public final class SModuleLang
  **************************************************************************/
 
     @TeaFunctionImplementor("bool?")
-    public static Object functionIsBoolean(final SObjFunction func,
-                                           final SContext     context,
-                                           final Object[]     args)
+    public static Object functionIsBoolean(final TeaFunction func,
+                                           final TeaContext  context,
+                                           final Object[]    args)
         throws TeaException {
 
         return typeCheck(Boolean.class, args);
@@ -1783,9 +1782,9 @@ public final class SModuleLang
  **************************************************************************/
 
     @TeaFunctionImplementor("float?")
-    public static Object functionIsFloat(final SObjFunction func,
-                                         final SContext     context,
-                                         final Object[]     args)
+    public static Object functionIsFloat(final TeaFunction func,
+                                         final TeaContext  context,
+                                         final Object[]    args)
         throws TeaException {
 
         return typeCheck(Double.class, args);
@@ -1837,12 +1836,12 @@ public final class SModuleLang
  **************************************************************************/
 
     @TeaFunctionImplementor("function?")
-    public static Object functionIsFunction(final SObjFunction func,
-                                            final SContext     context,
-                                            final Object[]     args)
+    public static Object functionIsFunction(final TeaFunction func,
+                                            final TeaContext  context,
+                                            final Object[]    args)
         throws TeaException {
 
-        return typeCheck(SObjFunction.class, args);
+        return typeCheck(TeaFunction.class, args);
     }
 
 
@@ -1892,9 +1891,9 @@ public final class SModuleLang
  **************************************************************************/
 
     @TeaFunctionImplementor("int?")
-    public static Object functionIsInt(final SObjFunction func,
-                                       final SContext     context,
-                                       final Object[]     args)
+    public static Object functionIsInt(final TeaFunction func,
+                                       final TeaContext  context,
+                                       final Object[]    args)
         throws TeaException {
         
         return typeCheck(Integer.class, args);
@@ -1947,12 +1946,12 @@ public final class SModuleLang
  **************************************************************************/
 
     @TeaFunctionImplementor("pair?")
-    public static Object functionIsPair(final SObjFunction func,
-                                        final SContext     context,
-                                        final Object[]     args)
+    public static Object functionIsPair(final TeaFunction func,
+                                        final TeaContext  context,
+                                        final Object[]    args)
         throws TeaException {
         
-        return typeCheck(SObjPair.class, args);
+        return typeCheck(TeaPair.class, args);
     }
 
 
@@ -2002,9 +2001,9 @@ public final class SModuleLang
  **************************************************************************/
 
     @TeaFunctionImplementor("string?")
-    public static Object functionIsString(final SObjFunction func,
-                                          final SContext     context,
-                                          final Object[]     args)
+    public static Object functionIsString(final TeaFunction func,
+                                          final TeaContext  context,
+                                          final Object[]    args)
         throws TeaException {
         
         return typeCheck(String.class, args);
@@ -2057,12 +2056,12 @@ public final class SModuleLang
  **************************************************************************/
 
     @TeaFunctionImplementor("symbol?")
-    public static Object functionIsSymbol(final SObjFunction func,
-                                          final SContext     context,
-                                          final Object[]     args)
+    public static Object functionIsSymbol(final TeaFunction func,
+                                          final TeaContext  context,
+                                          final Object[]    args)
         throws TeaException {
         
-        return typeCheck(SObjSymbol.class, args);
+        return typeCheck(TeaSymbol.class, args);
     }
 
 
@@ -2112,16 +2111,16 @@ public final class SModuleLang
  **************************************************************************/
 
     @TeaFunctionImplementor("not-null?")
-    public static Object functionIsNotNull(final SObjFunction func,
-                                           final SContext     context,
-                                           final Object[]     args)
+    public static Object functionIsNotNull(final TeaFunction func,
+                                           final TeaContext  context,
+                                           final Object[]    args)
         throws TeaException {
         
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "object");
         }
 
-        return (args[1]==SObjNull.NULL) ? Boolean.FALSE : Boolean.TRUE;
+        return (args[1]==TeaNull.NULL) ? Boolean.FALSE : Boolean.TRUE;
     }
 
 
@@ -2176,9 +2175,9 @@ public final class SModuleLang
  **************************************************************************/
 
     @TeaFunctionImplementor("not-same?")
-    public static Object functionIsNotSame(final SObjFunction func,
-                                           final SContext     context,
-                                           final Object[]     args)
+    public static Object functionIsNotSame(final TeaFunction func,
+                                           final TeaContext  context,
+                                           final Object[]    args)
         throws TeaException {
 
         if ( args.length != 3 ) {
@@ -2235,8 +2234,8 @@ public final class SModuleLang
  **************************************************************************/
 
     @TeaFunctionImplementor("null?")
-    public static Object functionIsNull(final SObjFunction func,
-                                        final SContext context,
+    public static Object functionIsNull(final TeaFunction func,
+                                        final TeaContext context,
                                         final Object[]   args)
         throws TeaException {
 
@@ -2244,7 +2243,7 @@ public final class SModuleLang
             throw new SNumArgException(args, "object");
         }
 
-        return (args[1]==SObjNull.NULL) ? Boolean.TRUE : Boolean.FALSE;
+        return (args[1]==TeaNull.NULL) ? Boolean.TRUE : Boolean.FALSE;
     }
 
 
@@ -2299,9 +2298,9 @@ public final class SModuleLang
  **************************************************************************/
 
     @TeaFunctionImplementor("same?")
-    public static Object functionIsSame(final SObjFunction func,
-                                        final SContext     context,
-                                        final Object[]     args)
+    public static Object functionIsSame(final TeaFunction func,
+                                        final TeaContext  context,
+                                        final Object[]    args)
         throws TeaException {
 
         if ( args.length != 3 ) {
@@ -2362,9 +2361,9 @@ public final class SModuleLang
  **************************************************************************/
 
     @TeaFunctionImplementor("lambda")
-    public static Object functionLambda(final SObjFunction func,
-                                        final SContext     context,
-                                        final Object[]     args)
+    public static Object functionLambda(final TeaFunction func,
+                                        final TeaContext  context,
+                                        final Object[]    args)
         throws TeaException {
 
         if ( args.length != 3 ) {
@@ -2372,13 +2371,13 @@ public final class SModuleLang
         }
 
         Object       formalParam  = args[1];
-        SObjBlock    body         = SArgs.getBlock(args, 2);
-        SObjFunction result       = null;
+        TeaBlock    body         = Args.getBlock(args, 2);
+        TeaFunction result       = null;
 
-        if ( formalParam instanceof SObjPair ) {
-            result = newFixedArgsFunction(args, (SObjPair)formalParam, body);
-        } else if ( formalParam instanceof SObjSymbol ) {
-            result = newVarArgsFunction((SObjSymbol)formalParam, body);
+        if ( formalParam instanceof TeaPair ) {
+            result = newFixedArgsFunction(args, (TeaPair)formalParam, body);
+        } else if ( formalParam instanceof TeaSymbol ) {
+            result = newVarArgsFunction((TeaSymbol)formalParam, body);
         } else {
             throw new STypeException(args, 1, "symbol or a symbol list");
         }
@@ -2430,21 +2429,21 @@ public final class SModuleLang
  **************************************************************************/
 
     @TeaFunctionImplementor("load")
-    public Object functionLoad(final SObjFunction func,
-                               final SContext     context,
-                               final Object[]     args)
+    public Object functionLoad(final TeaFunction func,
+                               final TeaContext  context,
+                               final Object[]    args)
         throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "java-package-name");
         }
 
-        String    moduleClassName = SArgs.getString(args, 1);
+        String    moduleClassName = Args.getString(args, 1);
         TeaModule module          = newModule(moduleClassName);
         
         _environment.addModule(module);
         
-        return SObjNull.NULL;
+        return TeaNull.NULL;
     }
 
 
@@ -2468,7 +2467,7 @@ public final class SModuleLang
             String msg = "Failed to create instance for module {0} - {1} - {2}";
             Object[] fmtArgs =
                 { className, e.getClass().getName(), e.getMessage() };
-            new TeaException(msg, fmtArgs);
+            throw new TeaException(msg, fmtArgs);
         }
 
         return module;
@@ -2520,24 +2519,24 @@ public final class SModuleLang
  **************************************************************************/
 
     @TeaFunctionImplementor("load-function")
-    public Object functionLoadFunction(final SObjFunction func,
-                                       final SContext     context,
-                                       final Object[]     args)
+    public Object functionLoadFunction(final TeaFunction func,
+                                       final TeaContext  context,
+                                       final Object[]    args)
         throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "java-class-name");
         }
 
-        String       className = SArgs.getString(args,1);
+        String       className = Args.getString(args,1);
         Class        javaClass = null;
-        SObjFunction teaFunc   = _funcs.get(className);
+        TeaFunction teaFunc   = _funcs.get(className);
         String       msg       = null;
 
         if ( teaFunc == null ) {
             try {
                 javaClass = Class.forName(className);
-                teaFunc = (SObjFunction)javaClass.newInstance();
+                teaFunc = (TeaFunction)javaClass.newInstance();
             } catch ( ClassNotFoundException e1 ) {
                 msg = "could not find class '" + className + "'";
             } catch ( InstantiationException e2 ) {
@@ -2545,7 +2544,7 @@ public final class SModuleLang
             } catch ( IllegalAccessException e3 ) {
                 msg = "class '" + className+"' or its initializer are not accessible";
             } catch ( ClassCastException e4 ) {
-                msg = "class '" + className + "' is not a SObjFunction";
+                msg = "class '" + className + "' is not a TeaFunction";
             } catch ( NoSuchMethodError e5 ) {
                 msg = "class '" + className + "' does not have a default constructor";
             }
@@ -2622,20 +2621,20 @@ public final class SModuleLang
  **************************************************************************/
 
     @TeaFunctionImplementor("map")
-    public static Object functionMap(final SObjFunction func,
-                                     final SContext     context,
-                                     final Object[]     args)
+    public static Object functionMap(final TeaFunction func,
+                                     final TeaContext  context,
+                                     final Object[]    args)
         throws TeaException {
 
         if ( args.length < 3 ) {
             throw new SNumArgException(args, "procedure list1 ...");
         }
         
-        SObjFunction proc      = SArgs.getFunction(context, args, 1);
+        TeaFunction proc      = Args.getFunction(context, args, 1);
         Iterator[]   iterators = buildListOfI(args);
         Object[]     procArgs  = new Object[args.length-1];
-        SObjPair     resHead   = SObjPair.emptyList();
-        SObjPair     resElem   = null;
+        TeaPair     resHead   = TeaPair.emptyList();
+        TeaPair     resElem   = null;
         
         procArgs[0] = args[1];
 
@@ -2648,8 +2647,8 @@ public final class SModuleLang
                     throw new SRuntimeException(args, msg);
                 }
             }
-            SObjPair node = new SObjPair(proc.exec(proc, context, procArgs),
-                                         SObjPair.emptyList());
+            TeaPair node = new TeaPair(proc.exec(proc, context, procArgs),
+                                         TeaPair.emptyList());
             if ( resElem == null ) {
                 resHead = node;
             } else {
@@ -2688,7 +2687,7 @@ public final class SModuleLang
         Iterator[] iterators = new Iterator[args.length-2];
 
         for ( int i=0; i<iterators.length; i++ ) {
-            iterators[i] = SArgs.getPair(args, i+2).iterator();
+            iterators[i] = Args.getPair(args, i+2).iterator();
         }
 
         return iterators;
@@ -2757,63 +2756,63 @@ public final class SModuleLang
  **************************************************************************/
 
     @TeaFunctionImplementor("map-apply")
-    public static Object functionMapApply(final SObjFunction func,
-                                          final SContext     context,
-                                          final Object[]     args)
+    public static Object functionMapApply(final TeaFunction func,
+                                          final TeaContext  context,
+                                          final Object[]    args)
         throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "procedure list-of-arg-list");
         }
 
-        SObjFunction proc       = SArgs.getFunction(context, args, 1);
-        Iterator     iterator   = SArgs.getPair(args, 2).iterator();
+        TeaFunction proc       = Args.getFunction(context, args, 1);
+        Iterator     iterator   = Args.getPair(args, 2).iterator();
         int          iterCount  = -1;
         int          numArgs    = 0;
         Object[]     funcArgs   = null;
-        SObjPair     emptyList  = SObjPair.emptyList();
-        SObjPair     resultHead = emptyList;
-        SObjPair     resultTail = null;
-        SObjPair     node       = null;
+        TeaPair     emptyList  = TeaPair.emptyList();
+        TeaPair     resultHead = emptyList;
+        TeaPair     resultTail = null;
+        TeaPair     node       = null;
 
         if ( iterator.hasNext() ) {
             iterCount++;
             Object o = iterator.next();
-            SObjPair argList = null;
+            TeaPair argList = null;
             try {
-                argList = (SObjPair)o;
+                argList = (TeaPair)o;
             } catch ( ClassCastException e ) {
                 String msg = "arg 2, element {0} must be a list, not a {1}";
                 throw new SRuntimeException(args,
                                             msg,
                                             iterCount,
-                                            STypes.getTypeName(o));
+                                            Types.getTypeName(o));
             }
             numArgs = argList.length() + 1;
             funcArgs = new Object[numArgs];
             funcArgs[0] = proc;
             fillArgs(funcArgs, argList);
             Object funcResult = proc.exec(proc, context, funcArgs);
-            resultHead = new SObjPair(funcResult, emptyList);
+            resultHead = new TeaPair(funcResult, emptyList);
             resultTail = resultHead;
         }
 
         while ( iterator.hasNext() ) {
             iterCount++;
             Object o = iterator.next();
-            SObjPair argList = null;
+            TeaPair argList = null;
             try {
-                argList = (SObjPair)o;
+                argList = (TeaPair)o;
             } catch ( ClassCastException e ) {
                 String msg = "arg 2, element {0} must be a list, not a {1}";
                 throw new SRuntimeException(args,
                                             msg,
                                             iterCount,
-                                            STypes.getTypeName(o));
+                                            Types.getTypeName(o));
             }
             fillArgs(funcArgs, argList);
             Object   funcResult = proc.exec(proc, context, funcArgs);
-            node = new SObjPair(funcResult ,emptyList);
+            node = new TeaPair(funcResult ,emptyList);
             resultTail.setCdr(node);
             resultTail = node;
         }
@@ -2832,7 +2831,7 @@ public final class SModuleLang
  **************************************************************************/
 
     private static void fillArgs(final Object[] args,
-                                 final SObjPair argList)
+                                 final TeaPair argList)
         throws SRuntimeException {
 
         int      argCount = args.length;
@@ -2890,12 +2889,12 @@ public final class SModuleLang
  **************************************************************************/
 
     @TeaFunctionImplementor("return")
-    public static Object functionReturn(final SObjFunction func,
-                                        final SContext     context,
-                                        final Object[]     args)
+    public static Object functionReturn(final TeaFunction func,
+                                        final TeaContext  context,
+                                        final Object[]    args)
         throws TeaException {
 
-        throw new SReturnException((args.length>1) ? args[1] : SObjNull.NULL);
+        throw new SReturnException((args.length>1) ? args[1] : TeaNull.NULL);
     }
 
 
@@ -2956,16 +2955,16 @@ public final class SModuleLang
  **************************************************************************/
 
     @TeaFunctionImplementor("set!")
-    public static Object functionSet(final SObjFunction func,
-                                     final SContext     context,
-                                     final Object[]     args)
+    public static Object functionSet(final TeaFunction func,
+                                     final TeaContext  context,
+                                     final Object[]    args)
         throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "symbol value");
         }
 
-        SObjSymbol varName = SArgs.getSymbol(args, 1);
+        TeaSymbol varName = Args.getSymbol(args, 1);
         Object     value   = args[2];
 
         context.setVar(varName, value);
@@ -3021,9 +3020,9 @@ public final class SModuleLang
  **************************************************************************/
 
     @TeaFunctionImplementor("sleep")
-    public static Object functionSleep(final SObjFunction func,
-                                       final SContext     context,
-                                       final Object[]     args)
+    public static Object functionSleep(final TeaFunction func,
+                                       final TeaContext  context,
+                                       final Object[]    args)
         throws TeaException {
 
         if ( args.length != 2 ) {
@@ -3031,7 +3030,7 @@ public final class SModuleLang
         }
 
         Boolean result      = Boolean.TRUE;
-        int     timeToSleep = SArgs.getInt(args,1).intValue();
+        int     timeToSleep = Args.getInt(args,1).intValue();
 
         try {
             Thread.sleep(timeToSleep);
@@ -3120,14 +3119,14 @@ public final class SModuleLang
  **************************************************************************/
 
     @TeaFunctionImplementor("source")
-    public Object functionSource(final SObjFunction func,
-                                 final SContext     context,
-                                 final Object[]     args)
+    public Object functionSource(final TeaFunction func,
+                                 final TeaContext  context,
+                                 final Object[]    args)
         throws TeaException {
 
         TeaCode  program       = compileFromSource(context, args);
-        SContext globalContext = _environment.getGlobalContext();
-        SContext runContext    = globalContext.newChild();
+        TeaContext globalContext = _environment.getGlobalContext();
+        TeaContext runContext    = globalContext.newChild();
         Object   result        = program.exec(runContext);
 
         return result;
@@ -3206,19 +3205,19 @@ public final class SModuleLang
  **************************************************************************/
 
     @TeaFunctionImplementor("compile")
-    public Object functionCompile(final SObjFunction func,
-                                  final SContext     context,
-                                  final Object[]     args)
+    public Object functionCompile(final TeaFunction func,
+                                  final TeaContext  context,
+                                  final Object[]    args)
         throws TeaException {
 
         final TeaCode   program      = compileFromSource(context, args);
-        final SContext  blockContext = _environment.getGlobalContext();
-        SObjBlock       result       =
-            new SObjBlock() {
-                public SContext getContext() {
+        final TeaContext  blockContext = _environment.getGlobalContext();
+        TeaBlock       result       =
+            new TeaBlock() {
+                public TeaContext getContext() {
                     return blockContext;
                 }
-                public Object exec(final SContext context)
+                public Object exec(final TeaContext context)
                     throws TeaException {
                     return program.exec(context);
                 }
@@ -3241,7 +3240,7 @@ public final class SModuleLang
  *
  **************************************************************************/
 
-    private TeaCode compileFromSource(final SContext context,
+    private TeaCode compileFromSource(final TeaContext context,
                                       final Object[] args)
         throws TeaException {
 
@@ -3280,7 +3279,7 @@ public final class SModuleLang
             }
         } else {
             String msg = "argument 1 must be string or input stream, not {0}";
-            Object[] fmtArgs = { STypes.getTypeName(arg) };
+            Object[] fmtArgs = { Types.getTypeName(arg) };
             throw new STypeException(msg, fmtArgs);
         }
 
@@ -3340,9 +3339,9 @@ public final class SModuleLang
  **************************************************************************/
 
     @TeaFunctionImplementor("system")
-    public static Object functionSystem(final SObjFunction func,
-                                        final SContext     context,
-                                        final Object[]     args)
+    public static Object functionSystem(final TeaFunction func,
+                                        final TeaContext  context,
+                                        final Object[]    args)
         throws TeaException {
 
         if ( args.length < 2 ) {
@@ -3352,7 +3351,7 @@ public final class SModuleLang
         String[] cmdArgs = new String[args.length-1];
 
         for ( int i=1; i<args.length; i++ ) {
-            cmdArgs[i-1] = SArgs.getString(args, i);
+            cmdArgs[i-1] = Args.getString(args, i);
         }
         
         Process     proc   = null;
@@ -3437,19 +3436,19 @@ public final class SModuleLang
  **************************************************************************/
 
     @TeaFunctionImplementor("time")
-    public static Object functionTime(final SObjFunction func,
-                                      final SContext     context,
-                                      final Object[]     args)
+    public static Object functionTime(final TeaFunction func,
+                                      final TeaContext  context,
+                                      final Object[]    args)
         throws TeaException {
 
         if ( (args.length<2) || (args.length>3) ) {
             throw new SNumArgException(args, "block [count]");
         }
 
-        SObjBlock block        = SArgs.getBlock(args, 1);
-        SContext  childContext = block.getContext().newChild();
+        TeaBlock block        = Args.getBlock(args, 1);
+        TeaContext  childContext = block.getContext().newChild();
         int       count        =
-            (args.length==2) ? 1 : SArgs.getInt(args, 2).intValue();
+            (args.length==2) ? 1 : Args.getInt(args, 2).intValue();
         long      startTime;
         long      endTime;
 
@@ -3528,9 +3527,9 @@ public final class SModuleLang
  **************************************************************************/
 
     @TeaFunctionImplementor("while")
-    public static Object functionWhile(final SObjFunction func,
-                                       final SContext     context,
-                                       final Object[]     args)
+    public static Object functionWhile(final TeaFunction func,
+                                       final TeaContext  context,
+                                       final Object[]    args)
         throws TeaException {
 
         if ( args.length != 3 ) {
@@ -3543,7 +3542,7 @@ public final class SModuleLang
             if ( ((Boolean)condition).booleanValue() ) {
                 return infiniteLoop(args);
             } else {
-                return SObjNull.NULL;
+                return TeaNull.NULL;
             }
         }
 
@@ -3564,11 +3563,11 @@ public final class SModuleLang
     private static Object normalLoop(final Object[] args)
         throws TeaException {
 
-        SObjBlock condBlock   = SArgs.getBlock(args, 1);
-        SObjBlock block       = SArgs.getBlock(args, 2);
-        Object    result      = SObjNull.NULL;
-        SContext  condContext = condBlock.getContext().newChild();
-        SContext  bodyContext = block.getContext().newChild();
+        TeaBlock condBlock   = Args.getBlock(args, 1);
+        TeaBlock block       = Args.getBlock(args, 2);
+        Object    result      = TeaNull.NULL;
+        TeaContext  condContext = condBlock.getContext().newChild();
+        TeaContext  bodyContext = block.getContext().newChild();
 
         while ( true ) {
             Object condition = condBlock.exec(condContext);
@@ -3611,9 +3610,9 @@ public final class SModuleLang
     private static Object infiniteLoop(final Object[] args)
         throws TeaException {
 
-        SObjBlock block      = SArgs.getBlock(args, 2);
-        SContext  newContext = block.getContext().newChild();
-        Object    result     = SObjNull.NULL;
+        TeaBlock block      = Args.getBlock(args, 2);
+        TeaContext  newContext = block.getContext().newChild();
+        Object    result     = TeaNull.NULL;
 
         while ( true ) {
             try {
@@ -3679,16 +3678,16 @@ public final class SModuleLang
  **************************************************************************/
 
     @TeaFunctionImplementor("tea-get-system-property")
-    public static Object functionGetProp(final SObjFunction func,
-                                         final SContext     context,
-                                         final Object[]     args)
+    public static Object functionGetProp(final TeaFunction func,
+                                         final TeaContext  context,
+                                         final Object[]    args)
         throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "propertyName");
         }
 
-        String key = SArgs.getString(args, 1);
+        String key = Args.getString(args, 1);
 
         if ( key.length() == 0 ) {
             throw new SRuntimeException(args, "Empty property name");
@@ -3704,7 +3703,7 @@ public final class SModuleLang
             throw new SRuntimeException(args, msg, fmtArgs);
         }
 
-        return (value==null) ? SObjNull.NULL : value;
+        return (value==null) ? TeaNull.NULL : value;
     }
 
 
@@ -3761,17 +3760,17 @@ public final class SModuleLang
  **************************************************************************/
 
     @TeaFunctionImplementor("tea-set-system-property")
-    public static Object functionSetProp(final SObjFunction func,
-                                         final SContext     context,
-                                         final Object[]     args)
+    public static Object functionSetProp(final TeaFunction func,
+                                         final TeaContext  context,
+                                         final Object[]    args)
         throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "propertyName propertyValue");
         }
 
-        String key   = SArgs.getString(args, 1);
-        String value = SArgs.getString(args, 2);
+        String key   = Args.getString(args, 1);
+        String value = Args.getString(args, 2);
 
         if ( key.length() == 0 ) {
             throw new SRuntimeException(args, "Empty property name");
@@ -3787,7 +3786,7 @@ public final class SModuleLang
             throw new SRuntimeException(args, msg, fmtArgs);
         }
 
-        return (prevValue==null) ? SObjNull.NULL : prevValue;
+        return (prevValue==null) ? TeaNull.NULL : prevValue;
     }
 
 
@@ -3834,9 +3833,9 @@ public final class SModuleLang
  **************************************************************************/
 
     @TeaFunctionImplementor("tea-get-system-properties")
-    public Object functionGetProps(final SObjFunction func,
-                                   final SContext     context,
-                                   final Object[]     args)
+    public Object functionGetProps(final TeaFunction func,
+                                   final TeaContext  context,
+                                   final Object[]    args)
         throws TeaException {
 
         if ( _systemProps == null ) {

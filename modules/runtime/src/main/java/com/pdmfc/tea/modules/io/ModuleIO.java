@@ -16,11 +16,11 @@ import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.io.SInput;
 import com.pdmfc.tea.modules.tos.SJavaClass;
 import com.pdmfc.tea.modules.tos.STosClass;
-import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SArgs;
-import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.SObjNull;
-import com.pdmfc.tea.runtime.SObjPair;
+import com.pdmfc.tea.runtime.TeaContext;
+import com.pdmfc.tea.runtime.Args;
+import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.runtime.TeaNull;
+import com.pdmfc.tea.runtime.TeaPair;
 import com.pdmfc.tea.runtime.TeaFunctionImplementor;
 import com.pdmfc.tea.runtime.TeaEnvironment;
 import com.pdmfc.tea.runtime.TeaModule;
@@ -62,7 +62,7 @@ import com.pdmfc.tea.runtime.TeaModule;
  *
  **************************************************************************/
 
-public final class SModuleIO
+public final class ModuleIO
     extends Object
     implements TeaModule {
 
@@ -85,7 +85,7 @@ public final class SModuleIO
  *
  **************************************************************************/
 
-    public SModuleIO() {
+    public ModuleIO() {
 
         // Nothing to do.
     }
@@ -107,7 +107,7 @@ public final class SModuleIO
         STosClass inClass  = new SJavaClass("com.pdmfc.tea.modules.io.SInput");
         STosClass outClass = new SJavaClass("com.pdmfc.tea.modules.io.SOutput");
 
-        SContext globalContext = environment.getGlobalContext();
+        TeaContext globalContext = environment.getGlobalContext();
 
         globalContext.newVar(inClass.getName(), inClass);
         globalContext.newVar(outClass.getName(), outClass);
@@ -242,14 +242,14 @@ public final class SModuleIO
  **************************************************************************/
 
     @TeaFunctionImplementor("file-basename")
-    public static Object functionBasename(final SObjFunction func,
-                                          final SContext     context,
-                                          final Object[]     args)
+    public static Object functionBasename(final TeaFunction func,
+                                          final TeaContext  context,
+                                          final Object[]    args)
         throws TeaException {
 
-        SArgs.checkCount(args, 2, "path");
+        Args.checkCount(args, 2, "path");
 
-        String path     = SArgs.getString(args,1);
+        String path     = Args.getString(args,1);
         File  file      = new File(path);
         String basename = file.getName();
 
@@ -308,14 +308,14 @@ public final class SModuleIO
  **************************************************************************/
 
     @TeaFunctionImplementor("file-dirname")
-    public static Object functionDirname(final SObjFunction func,
-                                         final SContext     context,
-                                         final Object[]     args)
+    public static Object functionDirname(final TeaFunction func,
+                                         final TeaContext  context,
+                                         final Object[]    args)
         throws TeaException {
 
-        SArgs.checkCount(args, 2, "path");
+        Args.checkCount(args, 2, "path");
 
-        String path    = SArgs.getString(args,1);
+        String path    = Args.getString(args,1);
         File   file    = new File(path);
         String dirName = file.getParent();
 
@@ -323,7 +323,7 @@ public final class SModuleIO
              dirName = ".";
         }
 
-        Object result = (dirName==null) ? SObjNull.NULL : dirName;
+        Object result = (dirName==null) ? TeaNull.NULL : dirName;
 
         return result;
     }
@@ -377,14 +377,14 @@ public final class SModuleIO
  **************************************************************************/
 
     @TeaFunctionImplementor("file-extension")
-    public static Object functionExtension(final SObjFunction func,
-                                           final SContext     context,
-                                           final Object[]     args)
+    public static Object functionExtension(final TeaFunction func,
+                                           final TeaContext  context,
+                                           final Object[]    args)
         throws TeaException {
 
-        SArgs.checkCount(args, 2, "path");
+        Args.checkCount(args, 2, "path");
 
-        String path       = SArgs.getString(args, 1);
+        String path       = Args.getString(args, 1);
         File   file       = new File(path);
         String baseName   = file.getName();
         int    indexOfDot = baseName.lastIndexOf('.');
@@ -445,16 +445,16 @@ public final class SModuleIO
  **************************************************************************/
 
     @TeaFunctionImplementor("file-copy")
-    public static Object functionCopy(final SObjFunction func,
-                                      final SContext     context,
-                                      final Object[]     args)
+    public static Object functionCopy(final TeaFunction func,
+                                      final TeaContext  context,
+                                      final Object[]    args)
         throws TeaException {
 
-        SArgs.checkCount(args, 3, "src-path dst-path");
+        Args.checkCount(args, 3, "src-path dst-path");
 
-        String  srcPath = SArgs.getString(args, 1);
+        String  srcPath = Args.getString(args, 1);
         File    srcFile = new File(srcPath);
-        String  dstPath = SArgs.getString(args,2);
+        String  dstPath = Args.getString(args,2);
         File    dstFile = new File(dstPath);
         boolean status  = true;
 
@@ -556,14 +556,14 @@ public final class SModuleIO
  **************************************************************************/
 
     @TeaFunctionImplementor("file-exists?")
-    public static Object functionFileExists(final SObjFunction func,
-                                            final SContext     context,
+    public static Object functionFileExists(final TeaFunction func,
+                                            final TeaContext  context,
                                             final Object[]      args)
         throws TeaException {
 
-        SArgs.checkCount(args, 2, "path");
+        Args.checkCount(args, 2, "path");
 
-        String  path   = SArgs.getString(args, 1);
+        String  path   = Args.getString(args, 1);
         File    file   = new File(path);
         Boolean result = file.exists();
 
@@ -617,14 +617,14 @@ public final class SModuleIO
  **************************************************************************/
     
     @TeaFunctionImplementor("file-is-dir?")
-    public static Object functionIsDir(final SObjFunction func,
-                                       final SContext     context,
-                                       final Object[]     args)
+    public static Object functionIsDir(final TeaFunction func,
+                                       final TeaContext  context,
+                                       final Object[]    args)
         throws TeaException {
 
-        SArgs.checkCount(args, 2, "path");
+        Args.checkCount(args, 2, "path");
 
-        String  path   = SArgs.getString(args, 1);
+        String  path   = Args.getString(args, 1);
         File    file   = new File(path);
         Boolean result = file.isDirectory();
 
@@ -678,14 +678,14 @@ public final class SModuleIO
  **************************************************************************/
 
     @TeaFunctionImplementor("file-is-regular?")
-    public static Object functionIsRegular(final SObjFunction func,
-                                           final SContext     context,
-                                           final Object[]     args)
+    public static Object functionIsRegular(final TeaFunction func,
+                                           final TeaContext  context,
+                                           final Object[]    args)
         throws TeaException {
 
-        SArgs.checkCount(args, 2, "path");
+        Args.checkCount(args, 2, "path");
 
-        String  path   = SArgs.getString(args, 1);
+        String  path   = Args.getString(args, 1);
         File    file   = new File(path);
         Boolean result = file.isFile();
 
@@ -742,15 +742,15 @@ public final class SModuleIO
  **************************************************************************/
 
     @TeaFunctionImplementor("file-join")
-    public static Object functionJoin(final SObjFunction func,
-                                      final SContext     context,
-                                      final Object[]     args)
+    public static Object functionJoin(final TeaFunction func,
+                                      final TeaContext  context,
+                                      final Object[]    args)
         throws TeaException {
 
         StringBuilder buffer = new StringBuilder();
 
         for ( int i=1, count=args.length; i<count; ++i ) {
-            String component = SArgs.getString(args, i);
+            String component = Args.getString(args, i);
 
             if ( component.length() > 0 ) {
                 if ( buffer.length() > 0 ) {
@@ -812,14 +812,14 @@ public final class SModuleIO
  **************************************************************************/
 
     @TeaFunctionImplementor("file-mkdir")
-    public static Object functionMkdir(final SObjFunction func,
-                                       final SContext     context,
-                                       final Object[]     args)
+    public static Object functionMkdir(final TeaFunction func,
+                                       final TeaContext  context,
+                                       final Object[]    args)
         throws TeaException {
 
-        SArgs.checkCount(args, 2, "path");
+        Args.checkCount(args, 2, "path");
 
-        String  path   = SArgs.getString(args, 1);
+        String  path   = Args.getString(args, 1);
         File    dir    = new File(path);
         Boolean result = dir.mkdir();
 
@@ -878,16 +878,16 @@ public final class SModuleIO
  **************************************************************************/
 
     @TeaFunctionImplementor("file-rename")
-    public static Object functionRename(final SObjFunction func,
-                                        final SContext     context,
-                                        final Object[]     args)
+    public static Object functionRename(final TeaFunction func,
+                                        final TeaContext  context,
+                                        final Object[]    args)
         throws TeaException {
 
-        SArgs.checkCount(args, 3, "old-name new-name");
+        Args.checkCount(args, 3, "old-name new-name");
 
-        String  oldPath = SArgs.getString(args, 1);
+        String  oldPath = Args.getString(args, 1);
         File    oldFile = new File(oldPath);
-        String  newPath = SArgs.getString(args, 2);
+        String  newPath = Args.getString(args, 2);
         File    newFile = new File(newPath);
         Boolean result  = oldFile.renameTo(newFile);
 
@@ -941,14 +941,14 @@ public final class SModuleIO
  **************************************************************************/
 
     @TeaFunctionImplementor("file-size")
-    public static Object functionSize(final SObjFunction func,
-                                      final SContext     context,
-                                      final Object[]     args)
+    public static Object functionSize(final TeaFunction func,
+                                      final TeaContext  context,
+                                      final Object[]    args)
         throws TeaException {
 
-        SArgs.checkCount(args, 2, "path");
+        Args.checkCount(args, 2, "path");
 
-        String  path   = SArgs.getString(args, 1);
+        String  path   = Args.getString(args, 1);
         File    file   = new  File(path);
         long    size   = file.length();
         Integer result = Integer.valueOf((int)size);
@@ -1006,15 +1006,15 @@ public final class SModuleIO
  **************************************************************************/
 
     @TeaFunctionImplementor("file-split-path-list")
-    public static Object functionSplitPathList(final SObjFunction func,
-                                               final SContext     context,
-                                               final Object[]     args)
+    public static Object functionSplitPathList(final TeaFunction func,
+                                               final TeaContext  context,
+                                               final Object[]    args)
         throws TeaException {
 
-        SArgs.checkCount(args, 2, "string-path-list");
+        Args.checkCount(args, 2, "string-path-list");
 
-        String   pathList = SArgs.getString(args,1);
-        SObjPair result   = buildPathList(pathList);
+        String   pathList = Args.getString(args,1);
+        TeaPair result   = buildPathList(pathList);
 
         return result;
     }
@@ -1035,11 +1035,11 @@ public final class SModuleIO
  *
  **************************************************************************/
 
-    private static SObjPair buildPathList(final String pathList) {
+    private static TeaPair buildPathList(final String pathList) {
 
-        SObjPair empty    = SObjPair.emptyList();
-        SObjPair head     = empty;
-        SObjPair elem     = null;
+        TeaPair empty    = TeaPair.emptyList();
+        TeaPair head     = empty;
+        TeaPair elem     = null;
         String   pathSep  = File.pathSeparator;
 
         if ( pathList == null ) {
@@ -1050,13 +1050,13 @@ public final class SModuleIO
 
         while ( st.hasMoreTokens() ) {
             String   path = st.nextToken();
-            SObjPair node = null;
+            TeaPair node = null;
 
             if ( path.length() == 0 ) {
                 continue;
             }
             path = path.replace('|', ':');
-            node = new SObjPair(path, empty);
+            node = new TeaPair(path, empty);
  
             if ( elem == null ) {
                 head = node;
@@ -1123,14 +1123,14 @@ public final class SModuleIO
  **************************************************************************/
 
     @TeaFunctionImplementor("file-unlink")
-    public static Object functionUnlink(final SObjFunction func,
-                                        final SContext     context,
-                                        final Object[]     args)
+    public static Object functionUnlink(final TeaFunction func,
+                                        final TeaContext  context,
+                                        final Object[]    args)
         throws TeaException {
 
-        SArgs.checkCount(args, 2, "path");
+        Args.checkCount(args, 2, "path");
 
-        String  path   = SArgs.getString(args,1);
+        String  path   = Args.getString(args,1);
         File    file   = new File(path);
         Boolean result = file.delete();
 

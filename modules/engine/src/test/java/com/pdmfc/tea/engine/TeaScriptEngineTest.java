@@ -16,7 +16,7 @@
 package com.pdmfc.tea.engine;
 
 import com.pdmfc.tea.TeaConfigInfo;
-import com.pdmfc.tea.runtime.SObjFunction;
+import com.pdmfc.tea.runtime.TeaFunction;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -103,12 +103,12 @@ public class TeaScriptEngineTest {
     public void checkEvalStringImportTdbc() throws ScriptException {
 
         _e.put("tdbc-connection", null);
-        SObjFunction r = (SObjFunction) _e.get("tdbc-connection");
+        TeaFunction r = (TeaFunction) _e.get("tdbc-connection");
         assertNull(r);
 
         _e.eval("import \"tdbc/tdbc.tea\"");
 
-        r = (SObjFunction) _e.get("tdbc-connection");
+        r = (TeaFunction) _e.get("tdbc-connection");
         assertNotNull(r);
 
 
@@ -131,12 +131,12 @@ public class TeaScriptEngineTest {
 
         // the default build-in paths should not be overwritten
         _e.put("tdbc-connection", null);
-        SObjFunction of = (SObjFunction) _e.get("tdbc-connection");
+        TeaFunction of = (TeaFunction) _e.get("tdbc-connection");
         assertNull(of);
 
         _e.eval("import \"tdbc/tdbc.tea\"");
 
-        of = (SObjFunction) _e.get("tdbc-connection");
+        of = (TeaFunction) _e.get("tdbc-connection");
         assertNotNull(of);
     }
 
@@ -663,7 +663,7 @@ public class TeaScriptEngineTest {
                 +"$stderr writeln $a2NdLine ;"
                 +"if {null? $a3RdLine} { $stdout write \"EOF\" }");
         // No need for flushing, as eval calls STeaRuntime.stop()
-        // which in turns calls SModuleIO.stop() which flushes the streams.
+        // which in turns calls ModuleIO.stop() which flushes the streams.
         assertEquals("A 1st lineEOF",swOut1.toString());
         assertEquals("A 2nd line\n",swErr1.toString().replaceFirst("\r", ""));
 

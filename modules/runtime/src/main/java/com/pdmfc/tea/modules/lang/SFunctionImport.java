@@ -17,14 +17,14 @@ import com.pdmfc.tea.TeaConfigInfo;
 import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.compiler.TeaCode;
 import com.pdmfc.tea.compiler.TeaCompiler;
-import com.pdmfc.tea.runtime.SArgs;
-import com.pdmfc.tea.runtime.SContext;
+import com.pdmfc.tea.runtime.Args;
+import com.pdmfc.tea.runtime.TeaContext;
 import com.pdmfc.tea.runtime.SNoSuchVarException;
 import com.pdmfc.tea.runtime.SNumArgException;
-import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.SObjNull;
-import com.pdmfc.tea.runtime.SObjPair;
-import com.pdmfc.tea.runtime.SObjSymbol;
+import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.runtime.TeaNull;
+import com.pdmfc.tea.runtime.TeaPair;
+import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.TeaEnvironment;
 
@@ -102,7 +102,7 @@ import com.pdmfc.tea.runtime.TeaEnvironment;
 
 final class SFunctionImport
     extends Object
-    implements SObjFunction {
+    implements TeaFunction {
 
 
 
@@ -113,8 +113,8 @@ final class SFunctionImport
     // The name of the Tea global variable with the list of directory
     // names where the "import" function looks for Tea
     // source files.
-    public static final SObjSymbol LIB_VAR   =
-        SObjSymbol.addSymbol(TeaConfigInfo.get(PROP_LIB_VAR));
+    public static final TeaSymbol LIB_VAR   =
+        TeaSymbol.addSymbol(TeaConfigInfo.get(PROP_LIB_VAR));
 
     // The environment where the code in the imported files will be
     // executed. Each imported file will executed in a separate
@@ -161,17 +161,17 @@ final class SFunctionImport
  *
  **************************************************************************/
 
-    public Object exec(final SObjFunction func,
-                       final SContext     context,
-                       final Object[]     args)
+    public Object exec(final TeaFunction func,
+                       final TeaContext     context,
+                       final Object[]    args)
         throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "file");
         }
 
-        String     fileName = SArgs.getString(args, 1);
-        Object     result   = SObjNull.NULL;
+        String     fileName = Args.getString(args, 1);
+        Object     result   = TeaNull.NULL;
         ImportItem item     = _itemsByPath.get(fileName);
 
         if ( item != null ) {
@@ -199,15 +199,15 @@ final class SFunctionImport
  *
  **************************************************************************/
 
-    private Object searchAndImport(final SContext context,
+    private Object searchAndImport(final TeaContext context,
                                    final String   fileName)
         throws TeaException {
 
         Object   result  = null;
-        SObjPair urlList = null;        
+        TeaPair urlList = null;        
 
         try {
-            urlList = (SObjPair)context.getVar(LIB_VAR);
+            urlList = (TeaPair)context.getVar(LIB_VAR);
         } catch (SNoSuchVarException e1) {
             // Variable TEA_LIBRARY has not been defined...
         } catch (ClassCastException e2) {
@@ -215,7 +215,7 @@ final class SFunctionImport
         } 
 
         if ( urlList == null ) {
-            urlList = new SObjPair(".", new SObjPair());
+            urlList = new TeaPair(".", new TeaPair());
         }
 
         for ( Iterator i=urlList.iterator(); i.hasNext(); ) {
@@ -368,8 +368,8 @@ final class SFunctionImport
                     ? _file.lastModified()
                     : System.currentTimeMillis();
 
-                SContext globalContext = _environment.getGlobalContext();
-                SContext execContext   = globalContext.newChild();
+                TeaContext globalContext = _environment.getGlobalContext();
+                TeaContext execContext   = globalContext.newChild();
                 
                 result = code.exec(execContext);
             }
@@ -402,7 +402,7 @@ final class SFunctionImport
                 throw new SRuntimeException(msg, fmtArgs);
             }
 
-            Object result = SObjNull.NULL;
+            Object result = TeaNull.NULL;
 
             if ( _isFile ) {
                 long    lastModified  = _file.lastModified();

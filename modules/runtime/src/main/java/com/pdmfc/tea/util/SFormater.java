@@ -9,7 +9,7 @@ package com.pdmfc.tea.util;
 import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypeException;
-import com.pdmfc.tea.runtime.STypes;
+import com.pdmfc.tea.runtime.Types;
 
 
 
@@ -334,7 +334,7 @@ public abstract class SFormater
             }
         } catch (ClassCastException e) {
             String   fmt     = "wrong argument type - {0}";
-            Object[] fmtArgs = { STypes.getTypeName(arg) };
+            Object[] fmtArgs = { Types.getTypeName(arg) };
             throw new STypeException(fmt, fmtArgs);
         }
     }

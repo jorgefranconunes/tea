@@ -8,8 +8,8 @@ package com.pdmfc.tea.compiler;
 
 import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.compiler.SWord;
-import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SObjFunction;
+import com.pdmfc.tea.runtime.TeaContext;
+import com.pdmfc.tea.runtime.TeaFunction;
 import com.pdmfc.tea.runtime.SRuntimeException;
 
 
@@ -74,7 +74,7 @@ abstract class SStatement
  *
  * Executes this statement. The first word must be either a symbol
  * refering to a variable containing an <code>{@link
- * SObjFunction}</code>, or an <code>{@link SObjFunction}</code>
+ * TeaFunction}</code>, or an <code>{@link TeaFunction}</code>
  * object.
  *
  * <p>The following steps are followed, in this order:</p>
@@ -100,10 +100,10 @@ abstract class SStatement
  * <li>While evaluating one of the arguments.</li>
  *
  * <li>The first word was a symbol but either there was no variable
- * with that name or it did not contain an <TT>SObjFunction</TT>.</li>
+ * with that name or it did not contain an <TT>TeaFunction</TT>.</li>
  *
- * <li>The first word was neither an <TT>SObjSymbol</TT> nor a
- * <TT>SObjFunction</TT>.</li>
+ * <li>The first word was neither an <TT>TeaSymbol</TT> nor a
+ * <TT>TeaFunction</TT>.</li>
  *
  * <li>an exception was raised during the execution of the command.</li>
  *
@@ -111,7 +111,7 @@ abstract class SStatement
  *
  **************************************************************************/
 
-    public abstract Object exec(SContext context)
+    public abstract Object exec(TeaContext context)
         throws TeaException;
 
 
@@ -283,13 +283,13 @@ abstract class SStatement
  *
  **************************************************************************/
 
-        public final Object exec(final SContext context)
+        public final Object exec(final TeaContext context)
             throws TeaException {
 
             int            numArgs  = _wordCount;
             SStatement.Node node     = _wordsHead._next;
             Object[]       args     = new Object[numArgs];
-            SObjFunction   function = _firstWord.toFunction(context);
+            TeaFunction   function = _firstWord.toFunction(context);
 
             args[0] = function;
 
@@ -402,10 +402,10 @@ abstract class SStatement
  *
  **************************************************************************/
 
-        public Object exec(final SContext context)
+        public Object exec(final TeaContext context)
             throws TeaException {
 
-            SObjFunction function = _word0.toFunction(context);
+            TeaFunction function = _word0.toFunction(context);
             Object[]     args     = {
                 function,
             };
@@ -469,10 +469,10 @@ abstract class SStatement
  *
  **************************************************************************/
 
-        public Object exec(final SContext context)
+        public Object exec(final TeaContext context)
             throws TeaException {
 
-            SObjFunction function = _word0.toFunction(context);
+            TeaFunction function = _word0.toFunction(context);
             Object[]     args     = {
                 function,
                 _word1.get(context)
@@ -540,10 +540,10 @@ abstract class SStatement
  *
  **************************************************************************/
 
-        public Object exec(final SContext context)
+        public Object exec(final TeaContext context)
             throws TeaException {
 
-            SObjFunction function = _word0.toFunction(context);
+            TeaFunction function = _word0.toFunction(context);
             Object[]     args     = {
                 function,
                 _word1.get(context),
@@ -615,10 +615,10 @@ abstract class SStatement
  *
  **************************************************************************/
 
-        public Object exec(final SContext context)
+        public Object exec(final TeaContext context)
             throws TeaException {
 
-            SObjFunction function = _word0.toFunction(context);
+            TeaFunction function = _word0.toFunction(context);
             Object[]     args     = {
                 function,
                 _word1.get(context),
@@ -692,10 +692,10 @@ abstract class SStatement
  *
  **************************************************************************/
 
-        public Object exec(final SContext context)
+        public Object exec(final TeaContext context)
             throws TeaException {
 
-            SObjFunction function = _word0.toFunction(context);
+            TeaFunction function = _word0.toFunction(context);
             Object[]     args     = {
                 function,
                 _word1.get(context),

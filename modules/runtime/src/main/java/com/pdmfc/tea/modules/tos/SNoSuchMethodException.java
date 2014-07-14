@@ -6,7 +6,7 @@
 
 package com.pdmfc.tea.modules.tos;
 
-import com.pdmfc.tea.runtime.SObjSymbol;
+import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.SRuntimeException;
 
 
@@ -34,7 +34,7 @@ public final class SNoSuchMethodException
  *
  **************************************************************************/
 
-   public SNoSuchMethodException(final SObjSymbol symbol,
+   public SNoSuchMethodException(final TeaSymbol symbol,
                                  final String     className) {
 
       super("class "

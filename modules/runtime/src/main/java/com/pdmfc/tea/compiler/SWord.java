@@ -7,8 +7,8 @@
 package com.pdmfc.tea.compiler;
 
 import com.pdmfc.tea.TeaException;
-import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SObjFunction;
+import com.pdmfc.tea.runtime.TeaContext;
+import com.pdmfc.tea.runtime.TeaFunction;
 
 
 
@@ -41,7 +41,7 @@ interface SWord {
  *
  **************************************************************************/
 
-    Object get(SContext context)
+    Object get(TeaContext context)
         throws TeaException;
 
 
@@ -60,7 +60,7 @@ interface SWord {
  *
  **************************************************************************/
 
-    SObjFunction toFunction(SContext context)
+    TeaFunction toFunction(TeaContext context)
         throws TeaException;
 
 }

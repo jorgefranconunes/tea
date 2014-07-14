@@ -7,7 +7,7 @@
 package com.pdmfc.tea.runtime;
 
 import com.pdmfc.tea.runtime.SFlowControlException;
-import com.pdmfc.tea.runtime.SObjNull;
+import com.pdmfc.tea.runtime.TeaNull;
 
 
 
@@ -59,7 +59,7 @@ public final class SBreakException
 
     public SBreakException() {
 
-        this(SObjNull.NULL);
+        this(TeaNull.NULL);
     }
 
 

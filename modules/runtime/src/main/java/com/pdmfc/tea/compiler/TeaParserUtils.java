@@ -17,7 +17,7 @@ package com.pdmfc.tea.compiler;
  *
  **************************************************************************/
 
-public final class STeaParserUtils
+public final class TeaParserUtils
     extends Object {
 
 
@@ -30,7 +30,7 @@ public final class STeaParserUtils
  *
  **************************************************************************/
 
-    private STeaParserUtils() {
+    private TeaParserUtils() {
 
         // Nothing to do.
     }

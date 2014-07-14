@@ -14,11 +14,11 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import com.pdmfc.tea.runtime.SArgs;
-import com.pdmfc.tea.runtime.SObjBlock;
-import com.pdmfc.tea.runtime.SObjNull;
-import com.pdmfc.tea.runtime.SObjPair;
-import com.pdmfc.tea.runtime.SObjSymbol;
+import com.pdmfc.tea.runtime.Args;
+import com.pdmfc.tea.runtime.TeaBlock;
+import com.pdmfc.tea.runtime.TeaNull;
+import com.pdmfc.tea.runtime.TeaPair;
+import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.STypeException;
 
 
@@ -31,7 +31,7 @@ import com.pdmfc.tea.runtime.STypeException;
  *
  **************************************************************************/
 
-public final class SArgsTest
+public final class ArgsTest
     extends Object {
 
 
@@ -52,7 +52,7 @@ public final class SArgsTest
             Object[].class,
             Integer.TYPE
         };
-        Method method = SArgs.class.getMethod(methodName, paramTypes);
+        Method method = Args.class.getMethod(methodName, paramTypes);
 
         Object[]  args       = { value };
         Object    result     = null;
@@ -104,7 +104,7 @@ public final class SArgsTest
     public void getStringWithError02()
         throws Throwable {
 
-        testGetString(SObjNull.NULL);
+        testGetString(TeaNull.NULL);
     }
 
 
@@ -127,13 +127,13 @@ public final class SArgsTest
     public void getBlock()
         throws Throwable {
 
-        SObjBlock dummyBlock =
-            new SObjBlock() {
+        TeaBlock dummyBlock =
+            new TeaBlock() {
                 @Override
-                public SContext getContext() { return null; }
+                public TeaContext getContext() { return null; }
 
                 @Override
-                public Object exec(final SContext context) { return null; }
+                public Object exec(final TeaContext context) { return null; }
 
                 @Override
                 public Object exec() { return null; }
@@ -156,7 +156,7 @@ public final class SArgsTest
     public void getBlockWithError02()
         throws Throwable {
 
-        testGetBlock(SObjNull.NULL);
+        testGetBlock(TeaNull.NULL);
     }
 
 
@@ -198,7 +198,7 @@ public final class SArgsTest
     public void getNumberWithError02()
         throws Throwable {
 
-        testGetNumber(SObjNull.NULL);
+        testGetNumber(TeaNull.NULL);
     }
 
 
@@ -221,7 +221,7 @@ public final class SArgsTest
     public void getPair()
         throws Throwable {
 
-        SObjPair dummyPair = new SObjPair();
+        TeaPair dummyPair = new TeaPair();
 
         testGetPair(dummyPair);
         testGetPair(null);
@@ -240,7 +240,7 @@ public final class SArgsTest
     public void getPairWithError02()
         throws Throwable {
 
-        testGetPair(SObjNull.NULL);
+        testGetPair(TeaNull.NULL);
     }
 
 
@@ -263,7 +263,7 @@ public final class SArgsTest
     public void getSymbol()
         throws Throwable {
 
-        SObjSymbol dummySymbol = SObjSymbol.addSymbol("dummy");
+        TeaSymbol dummySymbol = TeaSymbol.addSymbol("dummy");
 
         testGetSymbol(dummySymbol);
         testGetSymbol(null);
@@ -282,7 +282,7 @@ public final class SArgsTest
     public void getSymbolWithError02()
         throws Throwable {
 
-        testGetSymbol(SObjNull.NULL);
+        testGetSymbol(TeaNull.NULL);
     }
 
 }

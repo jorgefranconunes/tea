@@ -8,13 +8,13 @@ package com.pdmfc.tea.util;
 
 import java.util.List;
 
-import com.pdmfc.tea.runtime.SContext;
+import com.pdmfc.tea.runtime.TeaContext;
 import com.pdmfc.tea.runtime.SNoSuchVarException;
-import com.pdmfc.tea.runtime.SObjPair;
-import com.pdmfc.tea.runtime.SObjSymbol;
-import com.pdmfc.tea.runtime.SObjVar;
+import com.pdmfc.tea.runtime.TeaPair;
+import com.pdmfc.tea.runtime.TeaSymbol;
+import com.pdmfc.tea.runtime.TeaVar;
 import com.pdmfc.tea.runtime.SRuntimeException;
-import com.pdmfc.tea.runtime.STypes;
+import com.pdmfc.tea.runtime.Types;
 
 
 
@@ -54,27 +54,27 @@ public final class SListUtils
  * <code>varName</code> is not defined it will return null.
  *
  * @exception SRuntimeException Throw if the Tea variable
- * <code>varName</code> does not contain an <code>SObjPair</code> instance.
+ * <code>varName</code> does not contain an <code>TeaPair</code> instance.
  *
  **************************************************************************/
 
-    public static SObjPair getListHead(final SContext   context,
-                                       final SObjSymbol varName)
+    public static TeaPair getListHead(final TeaContext  context,
+                                       final TeaSymbol varName)
         throws SRuntimeException {
 
-        SObjPair result = null;
-        SObjVar  var    = context.getVarObjectIfPossible(varName);
+        TeaPair result = null;
+        TeaVar  var    = context.getVarObjectIfPossible(varName);
 
         if ( var != null ) {
             Object value = var.get();
             
-            if ( !(value instanceof SObjPair) ) {
+            if ( !(value instanceof TeaPair) ) {
                 String   msg = "Var \"{0}\" should contain a pair, not a {1}";
-                Object[] fmtArgs = { varName, STypes.getTypeName(value) };
+                Object[] fmtArgs = { varName, Types.getTypeName(value) };
                 throw new SRuntimeException(msg, fmtArgs);
             }
 
-            result = (SObjPair)value;
+            result = (TeaPair)value;
         }
 
         return result;
@@ -94,26 +94,26 @@ public final class SListUtils
  *
  **************************************************************************/
 
-    public static void prepend(final SContext   context,
-                               final SObjSymbol varName,
+    public static void prepend(final TeaContext  context,
+                               final TeaSymbol varName,
                                final Object     element)
         throws SRuntimeException {
 
-        SObjVar var = context.getVarObjectIfPossible(varName);
+        TeaVar var = context.getVarObjectIfPossible(varName);
 
         if ( var != null ) {
             Object   value = var.get();
-            SObjPair head  = null;
+            TeaPair head  = null;
             
             try {
-                head = (SObjPair)value;
+                head = (TeaPair)value;
             } catch (ClassCastException e) {
                 String   msg = "Var \"{0}\" should contain a pair, not a {1}";
-                Object[] fmtArgs = { varName, STypes.getTypeName(value) };
+                Object[] fmtArgs = { varName, Types.getTypeName(value) };
                 throw new SRuntimeException(msg, fmtArgs);
             }
 
-            SObjPair newHead = new SObjPair(element, head);
+            TeaPair newHead = new TeaPair(element, head);
 
             var.set(newHead);
         } else {
@@ -131,14 +131,14 @@ public final class SListUtils
  *
  **************************************************************************/
 
-    public static SObjPair buildTeaList(final List<?> list) {
+    public static TeaPair buildTeaList(final List<?> list) {
 
-        SObjPair empty = SObjPair.emptyList();
-        SObjPair head  = empty;
-        SObjPair elem  = null;
+        TeaPair empty = TeaPair.emptyList();
+        TeaPair head  = empty;
+        TeaPair elem  = null;
 
         for ( Object item : list ) {
-            SObjPair node = new SObjPair(item, empty);
+            TeaPair node = new TeaPair(item, empty);
  
             if ( elem == null ) {
                 head = node;

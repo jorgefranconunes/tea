@@ -17,10 +17,10 @@ import com.pdmfc.tea.modules.net.SSocketBase;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.tos.STosUtil;
-import com.pdmfc.tea.runtime.SArgs;
-import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SObjSymbol;
-import com.pdmfc.tea.runtime.SObjFunction;
+import com.pdmfc.tea.runtime.Args;
+import com.pdmfc.tea.runtime.TeaContext;
+import com.pdmfc.tea.runtime.TeaSymbol;
+import com.pdmfc.tea.runtime.TeaFunction;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SRuntimeException;
 
@@ -45,8 +45,8 @@ public final class SPlainServerSocket
     private ServerSocket      _serverSocket = null;
 
     private static final String     CLASS_NAME   = "TServerSocketPlain";
-    private static final SObjSymbol CLASS_NAME_S =
-        SObjSymbol.addSymbol(CLASS_NAME);
+    private static final TeaSymbol CLASS_NAME_S =
+        TeaSymbol.addSymbol(CLASS_NAME);
 
 
 
@@ -114,16 +114,16 @@ public final class SPlainServerSocket
  *
  **************************************************************************/
 
-    public Object constructor(final SObjFunction obj,
-                              final SContext     context,
-                              final Object[]     args)
+    public Object constructor(final TeaFunction obj,
+                              final TeaContext     context,
+                              final Object[]    args)
         throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "port-number");
         }
         
-        _port = SArgs.getInt(args,2).intValue();
+        _port = Args.getInt(args,2).intValue();
 
         return obj;
     }
@@ -158,9 +158,9 @@ public final class SPlainServerSocket
  *
  **************************************************************************/
 
-    public Object accept(final SObjFunction obj,
-                         final SContext     context,
-                         final Object[]     args)
+    public Object accept(final TeaFunction obj,
+                         final TeaContext     context,
+                         final Object[]    args)
         throws TeaException {
 
         if ( _serverSocket == null ) {
@@ -215,9 +215,9 @@ public final class SPlainServerSocket
  *
  **************************************************************************/
 
-    public Object close(final SObjFunction obj,
-                        final SContext     context,
-                        final Object[]     args)
+    public Object close(final TeaFunction obj,
+                        final TeaContext     context,
+                        final Object[]    args)
         throws TeaException {
 
         try {
@@ -259,7 +259,7 @@ public final class SPlainServerSocket
  *
  **************************************************************************/
 
-    public static Object newInstance(final SContext context,
+    public static Object newInstance(final TeaContext context,
                                      final Object[] args)
         throws TeaException {
 

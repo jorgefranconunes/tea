@@ -42,14 +42,14 @@ tea-autoload list-sort   "tea/lists/lists.tea"
 #
 # TOS module.
 #
-tea-autoload-module class "com.pdmfc.tea.modules.tos.SModuleTos"
-tea-autoload-module new "com.pdmfc.tea.modules.tos.SModuleTos"
-tea-autoload-module method "com.pdmfc.tea.modules.tos.SModuleTos"
-tea-autoload-module load-class "com.pdmfc.tea.modules.tos.SModuleTos"
-tea-autoload-module class-base-of "com.pdmfc.tea.modules.tos.SModuleTos"
-tea-autoload-module class-of "com.pdmfc.tea.modules.tos.SModuleTos"
-tea-autoload-module class-is-a "com.pdmfc.tea.modules.tos.SModuleTos"
-tea-autoload-module class-get-name "com.pdmfc.tea.modules.tos.SModuleTos"
+tea-autoload-module class "com.pdmfc.tea.modules.tos.ModuleTos"
+tea-autoload-module new "com.pdmfc.tea.modules.tos.ModuleTos"
+tea-autoload-module method "com.pdmfc.tea.modules.tos.ModuleTos"
+tea-autoload-module load-class "com.pdmfc.tea.modules.tos.ModuleTos"
+tea-autoload-module class-base-of "com.pdmfc.tea.modules.tos.ModuleTos"
+tea-autoload-module class-of "com.pdmfc.tea.modules.tos.ModuleTos"
+tea-autoload-module class-is-a "com.pdmfc.tea.modules.tos.ModuleTos"
+tea-autoload-module class-get-name "com.pdmfc.tea.modules.tos.ModuleTos"
  
 
 
@@ -79,7 +79,7 @@ tea-autoload close-output-file $deprecatedIOModuleFile
 # TDBC module.
 #
 define tdbcModuleSrc [file-join "tdbc" "tdbc.tea"]
-define tdbcModuleBin "com.pdmfc.tea.modules.tdbc.SModuleTdbc"
+define tdbcModuleBin "com.pdmfc.tea.modules.tdbc.ModuleTdbc"
 
 tea-autoload tdbc-set-default                $tdbcModuleSrc
 tea-autoload tdbc-default-connection         $tdbcModuleSrc
@@ -132,7 +132,7 @@ tea-autoload-native-class TFileInput  "com.pdmfc.tea.modules.io.SFileInput"
 tea-autoload-native-class TFileOutput "com.pdmfc.tea.modules.io.SFileOutput"
 tea-autoload-native-class TUrlInput   "com.pdmfc.tea.modules.io.SUrlInput"
 
-tea-autoload-module glob "com.pdmfc.tea.modules.regexp.SModuleRegexp"
+tea-autoload-module glob "com.pdmfc.tea.modules.regexp.ModuleRegexp"
 tea-autoload file-unlink-recursive "io/io.tea"
 tea-autoload file-make-path "io/io.tea"
 
@@ -145,7 +145,7 @@ tea-autoload file-make-path "io/io.tea"
 # XML module
 #
 
-tea-autoload-module xml-encode "com.pdmfc.tea.modules.xml.SModuleXml"
+tea-autoload-module xml-encode "com.pdmfc.tea.modules.xml.ModuleXml"
 
 tea-autoload-native-class TXmlParser "com.pdmfc.tea.modules.xml.SXmlParser"
 
@@ -168,8 +168,8 @@ tea-autoload xml-get-next-element        "xml/utils.tea"
 # HTML module
 #
 
-tea-autoload-module html-encode "com.pdmfc.tea.modules.html.SModuleHtml"
-tea-autoload-module url-encode  "com.pdmfc.tea.modules.html.SModuleHtml"
+tea-autoload-module html-encode "com.pdmfc.tea.modules.html.ModuleHtml"
+tea-autoload-module url-encode  "com.pdmfc.tea.modules.html.ModuleHtml"
 tea-autoload url-build "html/url.tea"
 
 
@@ -180,12 +180,12 @@ tea-autoload url-build "html/url.tea"
 # RegExp module.
 #
 
-tea-autoload-module regexp-pattern "com.pdmfc.tea.modules.regexp.SModuleRegexp"
-tea-autoload-module regsub "com.pdmfc.tea.modules.regexp.SModuleRegexp"
-tea-autoload-module matches? "com.pdmfc.tea.modules.regexp.SModuleRegexp"
-tea-autoload-module matches "com.pdmfc.tea.modules.regexp.SModuleRegexp"
-tea-autoload-module regexp "com.pdmfc.tea.modules.regexp.SModuleRegexp"
-tea-autoload-module str-split "com.pdmfc.tea.modules.regexp.SModuleRegexp"
+tea-autoload-module regexp-pattern "com.pdmfc.tea.modules.regexp.ModuleRegexp"
+tea-autoload-module regsub "com.pdmfc.tea.modules.regexp.ModuleRegexp"
+tea-autoload-module matches? "com.pdmfc.tea.modules.regexp.ModuleRegexp"
+tea-autoload-module matches "com.pdmfc.tea.modules.regexp.ModuleRegexp"
+tea-autoload-module regexp "com.pdmfc.tea.modules.regexp.ModuleRegexp"
+tea-autoload-module str-split "com.pdmfc.tea.modules.regexp.ModuleRegexp"
 
 
 
@@ -225,10 +225,10 @@ tea-autoload TServerSocket "net/TServerSocket.tea"
 # Reflect module.
 #
 
-tea-autoload-module java-get-value    "com.pdmfc.tea.modules.reflect.SModuleReflect"
-tea-autoload-module java-get-method   "com.pdmfc.tea.modules.reflect.SModuleReflect"
-tea-autoload-module java-exec-method  "com.pdmfc.tea.modules.reflect.SModuleReflect"
-tea-autoload-module java-new-instance "com.pdmfc.tea.modules.reflect.SModuleReflect"
+tea-autoload-module java-get-value    "com.pdmfc.tea.modules.reflect.ModuleReflect"
+tea-autoload-module java-get-method   "com.pdmfc.tea.modules.reflect.ModuleReflect"
+tea-autoload-module java-exec-method  "com.pdmfc.tea.modules.reflect.ModuleReflect"
+tea-autoload-module java-new-instance "com.pdmfc.tea.modules.reflect.ModuleReflect"
 
 
 

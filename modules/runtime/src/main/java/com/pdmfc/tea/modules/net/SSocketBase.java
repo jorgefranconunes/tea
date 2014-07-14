@@ -17,9 +17,9 @@ import com.pdmfc.tea.modules.io.SOutput;
 import com.pdmfc.tea.modules.net.SSocketFactory;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
-import com.pdmfc.tea.runtime.SArgs;
-import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SObjFunction;
+import com.pdmfc.tea.runtime.Args;
+import com.pdmfc.tea.runtime.TeaContext;
+import com.pdmfc.tea.runtime.TeaFunction;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SRuntimeException;
 
@@ -71,7 +71,7 @@ public class SSocketBase
  *
  **************************************************************************/
 
-    void initialize(final SContext context)
+    void initialize(final TeaContext context)
         throws TeaException {
 
         _input  = SInput.newInstance(context);
@@ -88,17 +88,17 @@ public class SSocketBase
  *
  **************************************************************************/
 
-    public Object connect(final SObjFunction obj,
-                          final SContext     context,
-                          final Object[]     args)
+    public Object connect(final TeaFunction obj,
+                          final TeaContext     context,
+                          final Object[]    args)
         throws TeaException {
 
         if ( args.length != 4 ) {
             throw new SNumArgException(args, "host port");
         }
 
-        String host = SArgs.getString(args, 2);
-        int    port = SArgs.getInt(args, 3).intValue();
+        String host = Args.getString(args, 2);
+        int    port = Args.getInt(args, 3).intValue();
 
         try {
             close();
@@ -165,9 +165,9 @@ public class SSocketBase
  *
  **************************************************************************/
 
-    public Object close(final SObjFunction obj,
-                        final SContext     context,
-                        final Object[]     args)
+    public Object close(final TeaFunction obj,
+                        final TeaContext     context,
+                        final Object[]    args)
         throws TeaException {
 
         close();
@@ -230,9 +230,9 @@ public class SSocketBase
  *
  **************************************************************************/
 
-    public Object getInput(final SObjFunction obj,
-                           final SContext     context,
-                           final Object[]     args)
+    public Object getInput(final TeaFunction obj,
+                           final TeaContext     context,
+                           final Object[]    args)
         throws TeaException {
 
         return _input;
@@ -248,9 +248,9 @@ public class SSocketBase
  *
  **************************************************************************/
 
-    public Object getOutput(final SObjFunction obj,
-                            final SContext     context,
-                            final Object[]     args)
+    public Object getOutput(final TeaFunction obj,
+                            final TeaContext     context,
+                            final Object[]    args)
         throws TeaException {
 
         return _output;

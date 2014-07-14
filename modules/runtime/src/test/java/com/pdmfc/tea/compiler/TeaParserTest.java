@@ -15,7 +15,7 @@ import java.io.UnsupportedEncodingException;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import com.pdmfc.tea.compiler.STeaParserUtils;
+import com.pdmfc.tea.compiler.TeaParserUtils;
 
 
 
@@ -85,7 +85,7 @@ public class TeaParserTest
             String stringLiteral = testData.getStringLiteral();
             String stringValue   = testData.getStringValue();
             String actualString  =
-                STeaParserUtils.parseStringLiteral(stringLiteral);
+                TeaParserUtils.parseStringLiteral(stringLiteral);
 
             assertEquals(stringValue, actualString);
         }

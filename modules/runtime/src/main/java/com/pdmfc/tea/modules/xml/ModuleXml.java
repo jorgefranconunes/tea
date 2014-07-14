@@ -7,9 +7,9 @@
 package com.pdmfc.tea.modules.xml;
 
 import com.pdmfc.tea.TeaException;
-import com.pdmfc.tea.runtime.SContext;
+import com.pdmfc.tea.runtime.TeaContext;
 import com.pdmfc.tea.runtime.SNumArgException;
-import com.pdmfc.tea.runtime.SObjFunction;
+import com.pdmfc.tea.runtime.TeaFunction;
 import com.pdmfc.tea.runtime.STypeException;
 import com.pdmfc.tea.runtime.TeaFunctionImplementor;
 import com.pdmfc.tea.runtime.TeaEnvironment;
@@ -39,7 +39,7 @@ import com.pdmfc.tea.runtime.TeaModule;
  *
  **************************************************************************/
 
-public final class SModuleXml
+public final class ModuleXml
     extends Object
     implements TeaModule {
 
@@ -53,7 +53,7 @@ public final class SModuleXml
  *
  **************************************************************************/
 
-    public SModuleXml() {
+    public ModuleXml() {
 
         // Nothing to do.
     }
@@ -171,9 +171,9 @@ public final class SModuleXml
  **************************************************************************/
 
     @TeaFunctionImplementor("xml-encode")
-    public static Object functionXmlEncode(final SObjFunction func,
-                                           final SContext     context,
-                                           final Object[]     args)
+    public static Object functionXmlEncode(final TeaFunction func,
+                                           final TeaContext     context,
+                                           final Object[]    args)
         throws TeaException {
 
         if ( args.length != 2 ) {

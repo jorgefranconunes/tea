@@ -15,9 +15,9 @@ import com.pdmfc.tea.modules.reflect.SFunctionNewProxy;
 import com.pdmfc.tea.modules.reflect.SMethodFinder;
 import com.pdmfc.tea.modules.reflect.SReflectUtils;
 import com.pdmfc.tea.modules.reflect.STeaJavaTypes;
-import com.pdmfc.tea.runtime.SContext;
+import com.pdmfc.tea.runtime.TeaContext;
 import com.pdmfc.tea.runtime.SNumArgException;
-import com.pdmfc.tea.runtime.SObjFunction;
+import com.pdmfc.tea.runtime.TeaFunction;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.TeaFunctionImplementor;
 import com.pdmfc.tea.runtime.TeaEnvironment;
@@ -111,7 +111,7 @@ import com.pdmfc.tea.runtime.TeaModule;
 //*    </Enumeration>
 //* </EnumDescription>
 //*
-//* <EnumLabel>Tea symbols (com.pdmfc.tea.runtime.SObjSymbol)</EnumLabel>
+//* <EnumLabel>Tea symbols (com.pdmfc.tea.runtime.TeaSymbol)</EnumLabel>
 //* <EnumDescription>
 //* Are converted to java.lang.String.  Examples of Tea value
 //* literal/expressions and corresponding Java type:
@@ -140,7 +140,7 @@ import com.pdmfc.tea.runtime.TeaModule;
 //*    </Enumeration>
 //* </EnumDescription>
 //*
-//* <EnumLabel>Tea lists (com.pdmfc.tea.runtime.SObjPair)</EnumLabel>
+//* <EnumLabel>Tea lists (com.pdmfc.tea.runtime.TeaPair)</EnumLabel>
 //* <EnumDescription>
 //* Are converted to java.util.ArrayList. Each element in the list is
 //* recursively converted according to these rules. Examples of Tea
@@ -200,7 +200,7 @@ import com.pdmfc.tea.runtime.TeaModule;
  *
  **************************************************************************/
 
-public final class SModuleReflect
+public final class ModuleReflect
     extends Object
     implements TeaModule {
 
@@ -214,7 +214,7 @@ public final class SModuleReflect
  *
  **************************************************************************/
 
-   public SModuleReflect() {
+   public ModuleReflect() {
 
        // Nothing to do.
    }
@@ -339,9 +339,9 @@ public final class SModuleReflect
  **************************************************************************/
 
     @TeaFunctionImplementor("java-get-value")
-    public static Object functionGetValue(final SObjFunction func,
-                                          final SContext     context,
-                                          final Object[]     args)
+    public static Object functionGetValue(final TeaFunction func,
+                                          final TeaContext  context,
+                                          final Object[]    args)
         throws TeaException {
 
         if ( args.length != 3 ) {
@@ -427,9 +427,9 @@ public final class SModuleReflect
  **************************************************************************/
 
     @TeaFunctionImplementor("java-set-value")
-    public static Object functionSetValue(final SObjFunction func,
-                                          final SContext     context,
-                                          final Object[]     args)
+    public static Object functionSetValue(final TeaFunction func,
+                                          final TeaContext  context,
+                                          final Object[]    args)
         throws TeaException {
 
         if ( args.length != 4 ) {
@@ -524,9 +524,9 @@ public final class SModuleReflect
  **************************************************************************/
 
     @TeaFunctionImplementor("java-get-method")
-    public static Object functionGetMethod(final SObjFunction func,
-                                           final SContext     context,
-                                           final Object[]     args)
+    public static Object functionGetMethod(final TeaFunction func,
+                                           final TeaContext  context,
+                                           final Object[]    args)
         throws TeaException {
 
         if ( args.length < 3 ) {
@@ -548,10 +548,10 @@ public final class SModuleReflect
         final int    functionArgCount = paramTypes.length + 1;
 
         Object result =
-            new SObjFunction() {
-                public Object exec(final SObjFunction func,
-                                   final SContext     context,
-                                   final Object[]     args)
+            new TeaFunction() {
+                public Object exec(final TeaFunction func,
+                                   final TeaContext  context,
+                                   final Object[]    args)
                     throws TeaException {
 
                     if ( args.length != functionArgCount ) {
@@ -648,9 +648,9 @@ public final class SModuleReflect
  **************************************************************************/
 
     @TeaFunctionImplementor("java-new-instance")
-    public static Object functionNewInstance(final SObjFunction func,
-                                             final SContext     context,
-                                             final Object[]     args)
+    public static Object functionNewInstance(final TeaFunction func,
+                                             final TeaContext  context,
+                                             final Object[]    args)
         throws TeaException {
 
         if ( args.length < 2 ) {
@@ -755,9 +755,9 @@ public final class SModuleReflect
  **************************************************************************/
 
     @TeaFunctionImplementor("java-exec-method")
-    public static Object functionExecMethod(final SObjFunction func,
-                                            final SContext     context,
-                                            final Object[]     args)
+    public static Object functionExecMethod(final TeaFunction func,
+                                            final TeaContext  context,
+                                            final Object[]    args)
         throws TeaException {
 
         if ( args.length < 3 ) {

@@ -22,7 +22,7 @@ import java.lang.annotation.Target;
  * <p>This annotaion is intended to be used only on methods with the
  * following signature:</p>
  *
- * <code>Object aMethod(SObjFunction, SContext, Object[])</code>
+ * <code>Object aMethod(TeaFunction, TeaContext, Object[])</code>
  *
  * <p>The annotated methods can be either class methods or instance
  * methods.</p>

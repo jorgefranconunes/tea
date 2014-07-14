@@ -6,7 +6,7 @@
 
 package com.pdmfc.tea.modules.tos;
 
-import com.pdmfc.tea.runtime.SObjSymbol;
+import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.SRuntimeException;
 
 
@@ -31,7 +31,7 @@ public final class SNoSuchClassException
  *
  **************************************************************************/
 
-   public SNoSuchClassException(final SObjSymbol symbol) {
+   public SNoSuchClassException(final TeaSymbol symbol) {
 
        String msg = "class \"{0}\" has not been defined";
 
@@ -48,7 +48,7 @@ public final class SNoSuchClassException
  **************************************************************************/
 
    public SNoSuchClassException(final Object[]   args,
-                                final SObjSymbol symbol) {
+                                final TeaSymbol symbol) {
 
        String msg = "class \"{0}\" has not been defined";
 

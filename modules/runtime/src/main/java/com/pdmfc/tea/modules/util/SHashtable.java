@@ -14,11 +14,11 @@ import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.tos.STosUtil;
-import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.SObjNull;
-import com.pdmfc.tea.runtime.SObjPair;
-import com.pdmfc.tea.runtime.SObjSymbol;
+import com.pdmfc.tea.runtime.TeaContext;
+import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.runtime.TeaNull;
+import com.pdmfc.tea.runtime.TeaPair;
+import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.SNumArgException;
 
 
@@ -57,8 +57,8 @@ public final class SHashtable
 
 
     private static final String     CLASS_NAME   = "THashtable";
-    private static final SObjSymbol CLASS_NAME_S =
-        SObjSymbol.addSymbol(CLASS_NAME);
+    private static final TeaSymbol CLASS_NAME_S =
+        TeaSymbol.addSymbol(CLASS_NAME);
 
     private Map<Object,Object> _hashtable = null;
 
@@ -162,9 +162,9 @@ public final class SHashtable
  *
  **************************************************************************/
 
-    public Object constructor(final SObjFunction obj,
-                              final SContext     context,
-                              final Object[]     args)
+    public Object constructor(final TeaFunction obj,
+                              final TeaContext     context,
+                              final Object[]    args)
         throws TeaException {
 
         return obj;
@@ -219,9 +219,9 @@ public final class SHashtable
  *
  **************************************************************************/
 
-    public Object put(final SObjFunction obj,
-                      final SContext     context,
-                      final Object[]     args)
+    public Object put(final TeaFunction obj,
+                      final TeaContext     context,
+                      final Object[]    args)
         throws TeaException {
 
         if ( args.length != 4 ) {
@@ -278,9 +278,9 @@ public final class SHashtable
  *
  **************************************************************************/
 
-    public Object get(final SObjFunction obj,
-                      final SContext     context,
-                      final Object[]     args)
+    public Object get(final TeaFunction obj,
+                      final TeaContext     context,
+                      final Object[]    args)
         throws TeaException {
         
         if ( args.length != 3 ) {
@@ -289,7 +289,7 @@ public final class SHashtable
 
         Object result = _hashtable.get(args[2]);
 
-        return (result==null) ? SObjNull.NULL : result;
+        return (result==null) ? TeaNull.NULL : result;
     }
 
 
@@ -331,18 +331,18 @@ public final class SHashtable
  *
  **************************************************************************/
 
-    public Object getKeys(final SObjFunction obj,
-                          final SContext     context,
-                          final Object[]     args)
+    public Object getKeys(final TeaFunction obj,
+                          final TeaContext     context,
+                          final Object[]    args)
         throws TeaException {
 
-        SObjPair    empty   = SObjPair.emptyList();
-        SObjPair    head    = empty;
-        SObjPair    element = null;
+        TeaPair    empty   = TeaPair.emptyList();
+        TeaPair    head    = empty;
+        TeaPair    element = null;
 
         for ( Iterator i=_hashtable.keySet().iterator(); i.hasNext(); ) {
             Object   key  = i.next();
-            SObjPair node = new SObjPair(key, empty);
+            TeaPair node = new TeaPair(key, empty);
 
             if ( element == null ) {
                 head = node;
@@ -394,18 +394,18 @@ public final class SHashtable
  *
  **************************************************************************/
 
-    public Object getElements(final SObjFunction obj,
-                              final SContext     context,
-                              final Object[]     args)
+    public Object getElements(final TeaFunction obj,
+                              final TeaContext     context,
+                              final Object[]    args)
         throws TeaException {
 
-        SObjPair   empty     = SObjPair.emptyList();
-        SObjPair   head      = empty;
-        SObjPair   element   = null;
+        TeaPair   empty     = TeaPair.emptyList();
+        TeaPair   head      = empty;
+        TeaPair   element   = null;
 
         for ( Iterator i= _hashtable.values().iterator(); i.hasNext(); ) {
             Object   value = i.next();
-            SObjPair node  = new SObjPair(value, empty);
+            TeaPair node  = new TeaPair(value, empty);
 
             if ( element == null ) {
                 head = node;
@@ -457,9 +457,9 @@ public final class SHashtable
  *
  **************************************************************************/
 
-    public Object isKey(final SObjFunction obj,
-                        final SContext     context,
-                        final Object[]     args)
+    public Object isKey(final TeaFunction obj,
+                        final TeaContext     context,
+                        final Object[]    args)
         throws TeaException {
 
         if ( args.length != 3 ) {
@@ -507,9 +507,9 @@ public final class SHashtable
  *
  **************************************************************************/
 
-    public Object clear(final SObjFunction obj,
-                        final SContext     context,
-                        final Object[]     args)
+    public Object clear(final TeaFunction obj,
+                        final TeaContext     context,
+                        final Object[]    args)
         throws TeaException {
 
         _hashtable.clear();
@@ -563,9 +563,9 @@ public final class SHashtable
  *
  **************************************************************************/
 
-    public Object remove(final SObjFunction obj,
-                         final SContext     context,
-                         final Object[]     args)
+    public Object remove(final TeaFunction obj,
+                         final TeaContext     context,
+                         final Object[]    args)
         throws TeaException {
 
         int keyCount = args.length - 2;
@@ -616,7 +616,7 @@ public final class SHashtable
  *
  **************************************************************************/
 
-    public static SHashtable newInstance(final SContext context)
+    public static SHashtable newInstance(final TeaContext context)
         throws TeaException {
 
         STosClass  theClass = STosUtil.getClass(context, CLASS_NAME_S);
@@ -647,7 +647,7 @@ public final class SHashtable
  *
  **************************************************************************/
 
-    public static SHashtable newInstance(final SContext           context,
+    public static SHashtable newInstance(final TeaContext           context,
                                          final Map<Object,Object> contents)
         throws TeaException {
 

@@ -7,14 +7,14 @@
 package com.pdmfc.tea.modules.tos;
 
 import com.pdmfc.tea.TeaException;
-import com.pdmfc.tea.runtime.SContext;
+import com.pdmfc.tea.runtime.TeaContext;
 import com.pdmfc.tea.runtime.SBreakException;
 import com.pdmfc.tea.runtime.SContinueException;
-import com.pdmfc.tea.runtime.SObjBlock;
-import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.SObjNull;
-import com.pdmfc.tea.runtime.SObjPair;
-import com.pdmfc.tea.runtime.SObjSymbol;
+import com.pdmfc.tea.runtime.TeaBlock;
+import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.runtime.TeaNull;
+import com.pdmfc.tea.runtime.TeaPair;
+import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.SReturnException;
 
 
@@ -30,20 +30,20 @@ import com.pdmfc.tea.runtime.SReturnException;
 
 public final class STosMethodVarArg
     extends Object
-    implements SObjFunction {
+    implements TeaFunction {
 
 
 
 
-    private SObjSymbol _argName;
+    private TeaSymbol _argName;
 
     // The TOS method body.
-    private SObjBlock _body;
+    private TeaBlock _body;
 
     private int _level;
 
-    private static final SObjSymbol SYMBOL_THIS =SObjSymbol.addSymbol("this");
-    private static final SObjSymbol SYMBOL_SUPER=SObjSymbol.addSymbol("super");
+    private static final TeaSymbol SYMBOL_THIS =TeaSymbol.addSymbol("this");
+    private static final TeaSymbol SYMBOL_SUPER=TeaSymbol.addSymbol("super");
 
 
 
@@ -66,9 +66,9 @@ public final class STosMethodVarArg
  **************************************************************************/
 
     public STosMethodVarArg(final STosClass  theClass,
-                            final SObjSymbol methodName,
-                            final SObjSymbol argName,
-                            final SObjBlock  body) {
+                            final TeaSymbol methodName,
+                            final TeaSymbol argName,
+                            final TeaBlock  body) {
 
         _argName = argName;
         _body    = body;
@@ -98,15 +98,15 @@ public final class STosMethodVarArg
  *
  **************************************************************************/
 
-    public Object exec(final SObjFunction func,
-                       final SContext     context,
-                       final Object[]     args)
+    public Object exec(final TeaFunction func,
+                       final TeaContext     context,
+                       final Object[]    args)
         throws TeaException {
 
         STosObj   obj          = (STosObj)func;
-        SContext memberContext = obj.members(_level).clone(_body.getContext());
-        SContext procContext   = memberContext.newChild();
-        Object   result        = SObjNull.NULL;
+        TeaContext memberContext = obj.members(_level).clone(_body.getContext());
+        TeaContext procContext   = memberContext.newChild();
+        Object   result        = TeaNull.NULL;
 
         // Initializes the "this" and "super", if aplicable, local variables:
         procContext.newVar(SYMBOL_THIS, obj.selfObj());
@@ -115,12 +115,12 @@ public final class STosMethodVarArg
         }
 
         // Initializes the formal parameters with the actual values.
-        SObjPair emptyList = SObjPair.emptyList();
-        SObjPair head      = emptyList;
-        SObjPair element   = null;
+        TeaPair emptyList = TeaPair.emptyList();
+        TeaPair head      = emptyList;
+        TeaPair element   = null;
 
         for ( int i=2; i<args.length; i++ ) {
-            SObjPair node = new SObjPair(args[i], emptyList);
+            TeaPair node = new TeaPair(args[i], emptyList);
 
             if ( element == null ) {
                 head = node;

@@ -10,9 +10,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import com.pdmfc.tea.TeaException;
-import com.pdmfc.tea.runtime.SArgs;
-import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SObjFunction;
+import com.pdmfc.tea.runtime.Args;
+import com.pdmfc.tea.runtime.TeaContext;
+import com.pdmfc.tea.runtime.TeaFunction;
 import com.pdmfc.tea.runtime.STypeException;
 import com.pdmfc.tea.runtime.TeaEnvironment;
 import com.pdmfc.tea.runtime.TeaFunctionImplementor;
@@ -42,7 +42,7 @@ import com.pdmfc.tea.runtime.TeaModule;
  *
  **************************************************************************/
 
-public final class SModuleHtml 
+public final class ModuleHtml 
     extends Object
     implements TeaModule {
 
@@ -62,7 +62,7 @@ public final class SModuleHtml
  *
  **************************************************************************/
 
-    public SModuleHtml() {
+    public ModuleHtml() {
 
         // Nothing to do.
     }
@@ -180,12 +180,12 @@ public final class SModuleHtml
  **************************************************************************/
 
     @TeaFunctionImplementor("html-encode")
-    public static Object functionHtmlEncode(final SObjFunction func,
-                                            final SContext     context,
-                                            final Object[]     args)
+    public static Object functionHtmlEncode(final TeaFunction func,
+                                            final TeaContext  context,
+                                            final Object[]    args)
         throws TeaException {
 
-        SArgs.checkCount(args, 2, "object");
+        Args.checkCount(args, 2, "object");
 
         String result = null;
         Object arg    = args[1];
@@ -285,12 +285,12 @@ public final class SModuleHtml
  **************************************************************************/
 
     @TeaFunctionImplementor("url-encode")
-    public static Object functionUrlEncode(final SObjFunction func,
-                                           final SContext     context,
-                                           final Object[]     args)
+    public static Object functionUrlEncode(final TeaFunction func,
+                                           final TeaContext  context,
+                                           final Object[]    args)
         throws TeaException {
 
-        SArgs.checkCount(args, 2, "object");
+        Args.checkCount(args, 2, "object");
 
         String result   = null;
         Object arg      = args[1];

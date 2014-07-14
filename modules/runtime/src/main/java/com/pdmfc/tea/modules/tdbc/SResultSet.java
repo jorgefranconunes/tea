@@ -19,15 +19,15 @@ import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.tos.STosUtil;
 import com.pdmfc.tea.modules.util.SDate;
-import com.pdmfc.tea.runtime.SArgs;
-import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.SObjNull;
-import com.pdmfc.tea.runtime.SObjSymbol;
+import com.pdmfc.tea.runtime.Args;
+import com.pdmfc.tea.runtime.TeaContext;
+import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.runtime.TeaNull;
+import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypeException;
-import com.pdmfc.tea.runtime.STypes;
+import com.pdmfc.tea.runtime.Types;
 
 
 
@@ -78,8 +78,8 @@ public final class SResultSet
 
 
     private static final String     CLASS_NAME   = "TResultSet";
-    private static final SObjSymbol CLASS_NAME_S =
-        SObjSymbol.addSymbol(CLASS_NAME);
+    private static final TeaSymbol CLASS_NAME_S =
+        TeaSymbol.addSymbol(CLASS_NAME);
 
     private ResultSet         _resultSet  = null;
     private ResultSetMetaData _metaData   = null;
@@ -178,7 +178,7 @@ public final class SResultSet
  *
  **************************************************************************/
 
-    public static SResultSet newInstance(final SContext context)
+    public static SResultSet newInstance(final TeaContext context)
         throws TeaException {
 
         STosObj rSet = STosUtil.newInstance(CLASS_NAME_S, context);
@@ -219,9 +219,9 @@ public final class SResultSet
  *
  **************************************************************************/
 
-    public Object constructor(final SObjFunction obj,
-                              final SContext     context,
-                              final Object[]     args)
+    public Object constructor(final TeaFunction obj,
+                              final TeaContext     context,
+                              final Object[]    args)
         throws TeaException {
 
         return obj;
@@ -260,9 +260,9 @@ public final class SResultSet
  *
  **************************************************************************/
 
-    public Object hasRows(final SObjFunction obj,
-                          final SContext     context,
-                          final Object[]     args)
+    public Object hasRows(final TeaFunction obj,
+                          final TeaContext     context,
+                          final Object[]    args)
         throws SRuntimeException {
 
         checkResultSet();
@@ -308,9 +308,9 @@ public final class SResultSet
  *
  **************************************************************************/
 
-    public Object next(final SObjFunction obj,
-                       final SContext     context,
-                       final Object[]     args)
+    public Object next(final TeaFunction obj,
+                       final TeaContext     context,
+                       final Object[]    args)
         throws SRuntimeException {
 
         checkResultSet();
@@ -379,9 +379,9 @@ public final class SResultSet
  *
  **************************************************************************/
 
-    public Object hasMoreRows(final SObjFunction obj,
-                              final SContext     context,
-                              final Object[]     args)
+    public Object hasMoreRows(final TeaFunction obj,
+                              final TeaContext     context,
+                              final Object[]    args)
         throws SRuntimeException {
 
         checkResultSet();
@@ -438,16 +438,16 @@ public final class SResultSet
  *
  **************************************************************************/
 
-    public Object skip(final SObjFunction obj,
-                       final SContext     context,
-                       final Object[]     args)
+    public Object skip(final TeaFunction obj,
+                       final TeaContext     context,
+                       final Object[]    args)
         throws SRuntimeException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "count");
         }
 
-        int count = SArgs.getInt(args,2).intValue();
+        int count = Args.getInt(args,2).intValue();
 
         try {
             skip(count);
@@ -554,9 +554,9 @@ public final class SResultSet
  *
  **************************************************************************/
 
-    public Object getInt(final SObjFunction obj,
-                         final SContext     context,
-                         final Object[]     args)
+    public Object getInt(final TeaFunction obj,
+                         final TeaContext     context,
+                         final Object[]    args)
         throws SRuntimeException {
 
       if ( args.length != 3 ) {
@@ -614,7 +614,7 @@ public final class SResultSet
         }
 
         throw new STypeException("index must be an int or a string, not a {0}",
-                                 STypes.getTypeName(indexObj));
+                                 Types.getTypeName(indexObj));
     }
 
 
@@ -674,9 +674,9 @@ public final class SResultSet
  *
  **************************************************************************/
 
-    public Object getFloat(final SObjFunction obj,
-                           final SContext     context,
-                           final Object[]     args)
+    public Object getFloat(final TeaFunction obj,
+                           final TeaContext     context,
+                           final Object[]    args)
         throws SRuntimeException {
 
       if ( args.length != 3 ) {
@@ -734,7 +734,7 @@ public final class SResultSet
         }
 
         throw new STypeException("index must be an int or a string, not a {0}",
-                                 STypes.getTypeName(indexObj));
+                                 Types.getTypeName(indexObj));
     }
 
 
@@ -793,9 +793,9 @@ public final class SResultSet
  *
  **************************************************************************/
 
-    public Object getString(final SObjFunction obj,
-                            final SContext     context,
-                            final Object[]     args)
+    public Object getString(final TeaFunction obj,
+                            final TeaContext     context,
+                            final Object[]    args)
         throws SRuntimeException {
 
         if ( args.length != 3 ) {
@@ -811,7 +811,7 @@ public final class SResultSet
             throw new SRuntimeException(e);
         }
 
-        return (value==null) ? SObjNull.NULL : value;
+        return (value==null) ? TeaNull.NULL : value;
     }
 
 
@@ -853,7 +853,7 @@ public final class SResultSet
         }
 
         throw new STypeException("index must be an int or a string, not a {0}",
-                                 STypes.getTypeName(indexObj));
+                                 Types.getTypeName(indexObj));
     }
 
 
@@ -914,8 +914,8 @@ public final class SResultSet
  *
  **************************************************************************/
 
-    public Object getDate(final SObjFunction obj,
-                          final SContext   context,
+    public Object getDate(final TeaFunction obj,
+                          final TeaContext  context,
                           final Object[]   args)
         throws TeaException {
 
@@ -937,7 +937,7 @@ public final class SResultSet
             throw new SRuntimeException(e);
         }
 
-        return (result==null) ? SObjNull.NULL : result;
+        return (result==null) ? TeaNull.NULL : result;
     }
 
 
@@ -979,7 +979,7 @@ public final class SResultSet
         }
 
         throw new STypeException("index must be an int or a string, not a {0}",
-                                 STypes.getTypeName(indexObj));
+                                 Types.getTypeName(indexObj));
     }
 
 
@@ -1009,9 +1009,9 @@ public final class SResultSet
  *
  **************************************************************************/
 
-    public Object close(final SObjFunction obj,
-                        final SContext     context,
-                        final Object[]     args)
+    public Object close(final TeaFunction obj,
+                        final TeaContext     context,
+                        final Object[]    args)
         throws TeaException {
 
         try {
@@ -1101,9 +1101,9 @@ public final class SResultSet
  *
  **************************************************************************/
 
-    public Object getColumnCount(final SObjFunction obj,
-                                 final SContext     context,
-                                 final Object[]     args)
+    public Object getColumnCount(final TeaFunction obj,
+                                 final TeaContext     context,
+                                 final Object[]    args)
         throws TeaException {
 
         checkResultSet();
@@ -1159,16 +1159,16 @@ public final class SResultSet
  *
  **************************************************************************/
 
-    public Object getColumnName(final SObjFunction obj,
-                                final SContext     context,
-                                final Object[]     args)
+    public Object getColumnName(final TeaFunction obj,
+                                final TeaContext     context,
+                                final Object[]    args)
         throws SRuntimeException {
 
       if ( args.length != 3 ) {
           throw new SNumArgException(args, "column-index");
       }
 
-      int    index  = SArgs.getInt(args,2).intValue();
+      int    index  = Args.getInt(args,2).intValue();
       String result = null;
 
       try {

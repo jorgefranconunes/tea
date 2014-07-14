@@ -7,11 +7,11 @@
 package com.pdmfc.tea.runtime;
 
 import com.pdmfc.tea.TeaException;
-import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SObjBlock;
-import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.SObjNull;
-import com.pdmfc.tea.runtime.SObjSymbol;
+import com.pdmfc.tea.runtime.TeaContext;
+import com.pdmfc.tea.runtime.TeaBlock;
+import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.runtime.TeaNull;
+import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SBreakException;
 import com.pdmfc.tea.runtime.SContinueException;
@@ -40,22 +40,22 @@ import com.pdmfc.tea.runtime.SReturnException;
 
 public final class SLambdaFunction
     extends Object
-    implements SObjFunction {
+    implements TeaFunction {
 
 
 
 
     // Names of formal arguments.
-    private SObjSymbol[] _argNames = null;
+    private TeaSymbol[] _argNames = null;
 
     // Formal argument count plus 1.
     private int _argCountPlusOne = -1;
 
     // The Tea function body.
-    private SObjBlock _body = null;
+    private TeaBlock _body = null;
 
     //
-    private SContext _bodyContext = null;
+    private TeaContext _bodyContext = null;
 
 
 
@@ -71,8 +71,8 @@ public final class SLambdaFunction
  *
  **************************************************************************/
 
-   public SLambdaFunction(final SObjSymbol[] argNames,
-                          final SObjBlock    body) {
+   public SLambdaFunction(final TeaSymbol[] argNames,
+                          final TeaBlock    body) {
 
       _argNames        = argNames;
       _argCountPlusOne = argNames.length + 1;
@@ -103,17 +103,17 @@ public final class SLambdaFunction
  *
  **************************************************************************/
 
-    public Object exec(final SObjFunction func,
-                       final SContext     context,
-                       final Object[]     args)
+    public Object exec(final TeaFunction func,
+                       final TeaContext     context,
+                       final Object[]    args)
         throws TeaException {
 
         if ( args.length != _argCountPlusOne ) {
             throw new SNumArgException(args, parametersText());
         }
 
-        SContext funcContext = new SContext(_bodyContext);
-        Object   result      = SObjNull.NULL;
+        TeaContext funcContext = new TeaContext(_bodyContext);
+        Object   result      = TeaNull.NULL;
 
         // Initializes the actual arguments.
         int i = _argCountPlusOne;

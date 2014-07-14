@@ -10,9 +10,9 @@ import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.tos.SList;
 import com.pdmfc.tea.modules.tos.SNoSuchMethodException;
 import com.pdmfc.tea.modules.tos.STosObj;
-import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.SObjSymbol;
+import com.pdmfc.tea.runtime.TeaContext;
+import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.SNoSuchVarException;
 
 
@@ -36,7 +36,7 @@ public class STosClass
     private STosClass _superClass;
 
     // List of member names (symbols)
-    private SList<SObjSymbol> _members;
+    private SList<TeaSymbol> _members;
 
     // The level down in the class hierarchy (0 => no base class)
     private int _level;
@@ -45,7 +45,7 @@ public class STosClass
     private SMethodSet _methods;
 
     // The constructor proc.
-    private SObjFunction _constructor;
+    private TeaFunction _constructor;
 
     // Name of the class. Just used for informational purposes.
     private String _name;
@@ -58,8 +58,8 @@ public class STosClass
     /**
      * The constructor method name.
      */
-    public static final SObjSymbol CONSTRUCTOR_NAME =
-        SObjSymbol.addSymbol("constructor");
+    public static final TeaSymbol CONSTRUCTOR_NAME =
+        TeaSymbol.addSymbol("constructor");
 
 
 
@@ -77,7 +77,7 @@ public class STosClass
  **************************************************************************/
 
     public STosClass(final STosClass         superClass,
-                     final SList<SObjSymbol> members) {
+                     final SList<TeaSymbol> members) {
 
         _name        = null;
         _superClass  = superClass;
@@ -97,11 +97,11 @@ public class STosClass
  * Defines a new TOS class with no base class.
  *
  * @param members Array with the member names. It must be a
- * <code>Vector</code> of <code>SObjSymbol</code> objects.
+ * <code>Vector</code> of <code>TeaSymbol</code> objects.
  *
  **************************************************************************/
 
-    public STosClass(final SList<SObjSymbol> members) {
+    public STosClass(final SList<TeaSymbol> members) {
 
         this(null, members);
     }
@@ -121,7 +121,7 @@ public class STosClass
 
     public STosClass(final STosClass superClass) {
 
-        this(superClass, new SList<SObjSymbol>());
+        this(superClass, new SList<TeaSymbol>());
     }
 
 
@@ -136,7 +136,7 @@ public class STosClass
 
     public STosClass() {
 
-        this(null, new SList<SObjSymbol>());
+        this(null, new SList<TeaSymbol>());
     }
 
 
@@ -172,7 +172,7 @@ public class STosClass
  *
  **************************************************************************/
 
-    public final SList<SObjSymbol> memberNames() {
+    public final SList<TeaSymbol> memberNames() {
 
         return _members;
     }
@@ -235,7 +235,7 @@ public class STosClass
  *
  **************************************************************************/
 
-    public final STosObj newInstance(final SContext context,
+    public final STosObj newInstance(final TeaContext context,
                                      final Object[] args)
         throws TeaException {
 
@@ -259,13 +259,13 @@ public class STosClass
  * @param methodName A symbol standing for the name of the method
  * being defined.
  *
- * @param method A reference to the <code>SObjFunction</code> object
+ * @param method A reference to the <code>TeaFunction</code> object
  * that implements the TOS method.
  *
  **************************************************************************/
 
-    public final void addMethod(final SObjSymbol   methodName,
-                                final SObjFunction method) {
+    public final void addMethod(final TeaSymbol   methodName,
+                                final TeaFunction method) {
 
         _methods.newVar(methodName, method);
     }
@@ -284,15 +284,15 @@ public class STosClass
  * @param methodName A symbol standing for the name of the method
  * being defined.
  *
- * @param method A reference to the <code>SObjFunction</code> object
+ * @param method A reference to the <code>TeaFunction</code> object
  * that implements the TOS method.
  *
  **************************************************************************/
 
     public final void addMethod(final String       methodName,
-                                final SObjFunction method) {
+                                final TeaFunction method) {
 
-        addMethod(SObjSymbol.addSymbol(methodName), method);
+        addMethod(TeaSymbol.addSymbol(methodName), method);
     }
 
 
@@ -303,12 +303,12 @@ public class STosClass
  *
  * Associates a constructor with this TOS class.
  *
- * @param method A reference to the <code>{@link SObjFunction}</code>
+ * @param method A reference to the <code>{@link TeaFunction}</code>
  * object that implements the constructor.
  *
  **************************************************************************/
 
-    public final void addConstructor(final SObjFunction method) {
+    public final void addConstructor(final TeaFunction method) {
 
         addMethod(CONSTRUCTOR_NAME, method);
         _constructor = method;
@@ -320,12 +320,12 @@ public class STosClass
 
 /**************************************************************************
  *
- * Retrieves the <code>SObjFunction</code> object that implements the
+ * Retrieves the <code>TeaFunction</code> object that implements the
  * method referenced by the symbol <code>methodName</code>. An
  * exception is thrown if that method has not been defined for this
  * class.
  *
- * @return The <code>SObjFunction</code> object that implements the
+ * @return The <code>TeaFunction</code> object that implements the
  * specified method.
  *
  * @exception com.pdmfc.tea.modules.tos.SNoSuchMethodException Thrown
@@ -333,11 +333,11 @@ public class STosClass
  *
  **************************************************************************/
 
-    public final SObjFunction getMethod(final SObjSymbol methodName)
+    public final TeaFunction getMethod(final TeaSymbol methodName)
         throws SNoSuchMethodException {
 
         try {
-            return (SObjFunction)_methods.getVar(methodName);
+            return (TeaFunction)_methods.getVar(methodName);
         } catch (SNoSuchVarException e) {
             throw new SNoSuchMethodException(methodName, _name);
         }
@@ -360,7 +360,7 @@ public class STosClass
  *
  **************************************************************************/
 
-    public final SObjFunction getConstructor() {
+    public final TeaFunction getConstructor() {
 
         return _constructor;
     }
@@ -434,7 +434,7 @@ public class STosClass
  **************************************************************************/
 
     private static final class SMethodSet
-        extends SContext {
+        extends TeaContext {
 
 
 

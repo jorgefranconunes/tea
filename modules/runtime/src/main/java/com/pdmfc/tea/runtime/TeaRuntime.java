@@ -16,8 +16,8 @@ import com.pdmfc.tea.TeaError;
 import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.compiler.TeaCode;
 import com.pdmfc.tea.compiler.TeaCompiler;
-import com.pdmfc.tea.runtime.SArgvUtils;
-import com.pdmfc.tea.runtime.SContext;
+import com.pdmfc.tea.runtime.ArgvUtils;
+import com.pdmfc.tea.runtime.TeaContext;
 import com.pdmfc.tea.runtime.SLibVarUtils;
 import com.pdmfc.tea.runtime.TeaEnvironment;
 import com.pdmfc.tea.runtime.TeaEnvironmentImpl;
@@ -52,11 +52,11 @@ public final class TeaRuntime
         TeaConfigInfo.get("com.pdmfc.tea.coreImportDir");
 
     private static final String[] CORE_MODULES = {
-        "com.pdmfc.tea.modules.io.SModuleIO",
-        "com.pdmfc.tea.modules.lang.SModuleLang",
-        "com.pdmfc.tea.modules.list.SModuleList",
-        "com.pdmfc.tea.modules.math.SModuleMath",
-        "com.pdmfc.tea.modules.string.SModuleString"
+        "com.pdmfc.tea.modules.io.ModuleIO",
+        "com.pdmfc.tea.modules.lang.ModuleLang",
+        "com.pdmfc.tea.modules.list.ModuleList",
+        "com.pdmfc.tea.modules.math.ModuleMath",
+        "com.pdmfc.tea.modules.string.ModuleString"
     };
 
 
@@ -76,7 +76,7 @@ public final class TeaRuntime
     private TeaRuntimeConfig _config             = null;
     private List<String>     _allImportLocations = null;
 
-    // List of SModule instances. These were registered by calls to
+    // List of TeaModule instances. These were registered by calls to
     // addModule(...) before the first start.
     private List<TeaModule> _modules = new ArrayList<TeaModule>();
 
@@ -169,9 +169,9 @@ public final class TeaRuntime
  **************************************************************************/
 
     @Deprecated
-    public SContext getToplevelContext() {
+    public TeaContext getToplevelContext() {
 
-        SContext globalContext = _environment.getGlobalContext();
+        TeaContext globalContext = _environment.getGlobalContext();
 
         return globalContext;
     }
@@ -274,7 +274,7 @@ public final class TeaRuntime
                 doStart();
             }
 
-            SContext globalContext = _environment.getGlobalContext();
+            TeaContext globalContext = _environment.getGlobalContext();
 
             result = code.exec(globalContext);
         } finally {
@@ -329,9 +329,9 @@ public final class TeaRuntime
         String[]     argv            = _config.getArgv();
         List<String> importLocations = _config.getImportLocationList();
 
-        SContext globalContext = _environment.getGlobalContext();
+        TeaContext globalContext = _environment.getGlobalContext();
 
-        SArgvUtils.setArgv(globalContext, argv0, argv);
+        ArgvUtils.setArgv(globalContext, argv0, argv);
         setupLibVar(importLocations);
         setupModules(_modules);
     }
@@ -353,7 +353,7 @@ public final class TeaRuntime
         _allImportLocations.addAll(locations);
         _allImportLocations.add(CORE_IMPORT_DIR);
 
-        SContext globalContext = _environment.getGlobalContext();
+        TeaContext globalContext = _environment.getGlobalContext();
 
         SLibVarUtils.setupLibVar(globalContext, _allImportLocations);
     }
@@ -397,7 +397,7 @@ public final class TeaRuntime
 
         for ( String dirPath : dirList ) {
             String   path          = INIT_FILE;
-            SContext globalContext = _environment.getGlobalContext();
+            TeaContext globalContext = _environment.getGlobalContext();
             TeaCode  code          = null;
             
             try {

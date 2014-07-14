@@ -18,10 +18,10 @@ import com.pdmfc.tea.modules.tdbc.SResultSet;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.tos.STosUtil;
-import com.pdmfc.tea.runtime.SArgs;
-import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.SObjSymbol;
+import com.pdmfc.tea.runtime.Args;
+import com.pdmfc.tea.runtime.TeaContext;
+import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SRuntimeException;
 
@@ -59,8 +59,8 @@ public class SStatement
 
 
     private static final String     CLASS_NAME   = "TStatement";
-    private static final SObjSymbol CLASS_NAME_S =
-        SObjSymbol.addSymbol(CLASS_NAME);
+    private static final TeaSymbol CLASS_NAME_S =
+        TeaSymbol.addSymbol(CLASS_NAME);
 
     private   Statement        _statement   = null;
     protected List<SResultSet> _resultSets  = new ArrayList<SResultSet>();
@@ -143,7 +143,7 @@ public class SStatement
  *
  **************************************************************************/
 
-    public static SStatement newInstance(final SContext context)
+    public static SStatement newInstance(final TeaContext context)
         throws TeaException {
 
         STosObj stat = STosUtil.newInstance(CLASS_NAME_S, context);
@@ -187,9 +187,9 @@ public class SStatement
  *
  **************************************************************************/
 
-    public Object constructor(final SObjFunction obj,
-                              final SContext     context,
-                              final Object[]     args)
+    public Object constructor(final TeaFunction obj,
+                              final TeaContext     context,
+                              final Object[]    args)
         throws TeaException {
 
         return obj;
@@ -247,9 +247,9 @@ public class SStatement
  *
  **************************************************************************/
 
-    public Object query(final SObjFunction obj,
-                        final SContext     context,
-                        final Object[]     args)
+    public Object query(final TeaFunction obj,
+                        final TeaContext     context,
+                        final Object[]    args)
         throws TeaException {
 
         checkStatement();
@@ -258,7 +258,7 @@ public class SStatement
             throw new SNumArgException(args, "sqlStatement");
         }
 
-        String     sql     = SArgs.getString(args, 2);
+        String     sql     = Args.getString(args, 2);
         ResultSet  rSet    = null;
         SResultSet tosRSet = null;
 
@@ -325,9 +325,9 @@ public class SStatement
  *
  **************************************************************************/
 
-    public Object update(final SObjFunction obj,
-                         final SContext     context,
-                         final Object[]     args)
+    public Object update(final TeaFunction obj,
+                         final TeaContext     context,
+                         final Object[]    args)
         throws TeaException {
 
         checkStatement();
@@ -336,7 +336,7 @@ public class SStatement
             throw new SNumArgException(args, "sqlStatement");
         }
 
-        String sql    = SArgs.getString(args, 2);
+        String sql    = Args.getString(args, 2);
         int    result = 0;
 
         try {
@@ -402,9 +402,9 @@ public class SStatement
  *
  **************************************************************************/
 
-    public Object execute(final SObjFunction obj,
-                          final SContext     context,
-                          final Object[]     args)
+    public Object execute(final TeaFunction obj,
+                          final TeaContext     context,
+                          final Object[]    args)
         throws TeaException {
 
         checkStatement();
@@ -413,7 +413,7 @@ public class SStatement
             throw new SNumArgException(args, "sqlStatement");
         }
 
-        String  sql    = SArgs.getString(args, 2);
+        String  sql    = Args.getString(args, 2);
         boolean result = false;
 
         try {
@@ -465,9 +465,9 @@ public class SStatement
  *
  **************************************************************************/
 
-    public final Object getResultSet(final SObjFunction obj,
-                                     final SContext     context,
-                                     final Object[]     args)
+    public final Object getResultSet(final TeaFunction obj,
+                                     final TeaContext     context,
+                                     final Object[]    args)
         throws TeaException {
 
         checkStatement();
@@ -528,9 +528,9 @@ public class SStatement
  *
  **************************************************************************/
 
-    public final Object getMoreResults(final SObjFunction obj,
-                                       final SContext     context,
-                                       final Object[]     args)
+    public final Object getMoreResults(final TeaFunction obj,
+                                       final TeaContext     context,
+                                       final Object[]    args)
         throws TeaException {
 
         checkStatement();
@@ -589,9 +589,9 @@ public class SStatement
  *
  **************************************************************************/
 
-    public final Object getFetchSize(final SObjFunction obj,
-                                     final SContext     context,
-                                     final Object[]     args)
+    public final Object getFetchSize(final TeaFunction obj,
+                                     final TeaContext     context,
+                                     final Object[]    args)
         throws TeaException {
 
         checkStatement();
@@ -653,9 +653,9 @@ public class SStatement
  *
  **************************************************************************/
 
-    public final Object setFetchSize(final SObjFunction obj,
-                                     final SContext     context,
-                                     final Object[]     args)
+    public final Object setFetchSize(final TeaFunction obj,
+                                     final TeaContext     context,
+                                     final Object[]    args)
         throws TeaException {
 
         checkStatement();
@@ -665,7 +665,7 @@ public class SStatement
             throw new SNumArgException(args, "numberOfRows");
         }
 
-        int numberOfRows = SArgs.getInt(args, 2).intValue();
+        int numberOfRows = Args.getInt(args, 2).intValue();
 
         try {
             _statement.setFetchSize(numberOfRows);
@@ -712,9 +712,9 @@ public class SStatement
  *
  **************************************************************************/
 
-    public final Object close(final SObjFunction obj,
-                              final SContext     context,
-                              final Object[]     args)
+    public final Object close(final TeaFunction obj,
+                              final TeaContext     context,
+                              final Object[]    args)
         throws TeaException {
 
         try {

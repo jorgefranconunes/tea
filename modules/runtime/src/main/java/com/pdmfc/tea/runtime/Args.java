@@ -9,7 +9,7 @@ package com.pdmfc.tea.runtime;
 import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.STypeException;
-import com.pdmfc.tea.runtime.STypes;
+import com.pdmfc.tea.runtime.Types;
 
 
 
@@ -22,7 +22,7 @@ import com.pdmfc.tea.runtime.STypes;
  *
  **************************************************************************/
 
-public final class SArgs
+public final class Args
     extends Object {
 
 
@@ -35,7 +35,7 @@ public final class SArgs
  *
  **************************************************************************/
 
-    private SArgs() {
+    private Args() {
 
         // Nothing to do.
     }
@@ -191,7 +191,7 @@ public final class SArgs
 
 /**************************************************************************
  *
- * Tries to convert argument <TT>index</TT> into a SObjBlock. If that
+ * Tries to convert argument <TT>index</TT> into a TeaBlock. If that
  * argument is not a block, an exception is thrown.
  *
  * @param args Array of <TT>Object</TT>, supposed to be the arguments
@@ -200,18 +200,18 @@ public final class SArgs
  * @param index The index of the argument to convert.
  *
  * @exception STypeException Thrown if <TT>args[index]</TT> is not a
- * SObjBlock.
+ * TeaBlock.
  *
  **************************************************************************/
 
-    public static SObjBlock getBlock(final Object[] args,
+    public static TeaBlock getBlock(final Object[] args,
                                      final int      index)
         throws STypeException {
 
-        SObjBlock result = null;
+        TeaBlock result = null;
 
         try {
-            result = (SObjBlock)args[index];
+            result = (TeaBlock)args[index];
         } catch ( ClassCastException e ) {
             throw new STypeException(args, index, "block");
         }
@@ -260,7 +260,7 @@ public final class SArgs
 
 /**************************************************************************
  *
- * Tries to convert argument <TT>index</TT> into a SObjPair. If that
+ * Tries to convert argument <TT>index</TT> into a TeaPair. If that
  * argument is not a pair, an exception is thrown.
  *
  * @param args Array of <TT>Object</TT>, supposed to be the arguments
@@ -269,18 +269,18 @@ public final class SArgs
  * @param index The index of the argument to convert.
  *
  * @exception STypeException Thrown if <TT>args[index]</TT> is not a
- * SObjPair.
+ * TeaPair.
  *
  **************************************************************************/
 
-    public static SObjPair getPair(final Object[] args,
+    public static TeaPair getPair(final Object[] args,
                                    final int      index)
         throws STypeException {
 
-        SObjPair result = null;
+        TeaPair result = null;
 
         try {
-            result = (SObjPair)args[index];
+            result = (TeaPair)args[index];
         } catch ( ClassCastException e ) {
             throw new STypeException(args, index, "pair");
         }
@@ -295,7 +295,7 @@ public final class SArgs
 /**************************************************************************
  *
  * This is an utility method, to be used by derived classes. It tries to
- * convert argument <TT>index</TT> into a SObjSymbol. If that argument is
+ * convert argument <TT>index</TT> into a TeaSymbol. If that argument is
  * not a pair, an exception is thrown.
  *
  * @param args Array of <TT>Object</TT>, supposed to be the arguments
@@ -304,18 +304,18 @@ public final class SArgs
  * @param index The index of the argument to convert.
  *
  * @exception STypeException Thrown if <code>args[index]</code> is not
- * a <code>SObjSymbol</code>.
+ * a <code>TeaSymbol</code>.
  *
  **************************************************************************/
 
-    public static SObjSymbol getSymbol(final Object[] args,
+    public static TeaSymbol getSymbol(final Object[] args,
                                        final int      index)
         throws STypeException {
 
-        SObjSymbol result = null;
+        TeaSymbol result = null;
 
         try {
-            result = (SObjSymbol)args[index];
+            result = (TeaSymbol)args[index];
         } catch ( ClassCastException e ) {
             throw new STypeException(args, index, "symbol");
         }
@@ -470,12 +470,12 @@ public final class SArgs
 /**************************************************************************
  *
  * This is an utility method, to be used by derived classes. It tries
- * to convert argument <TT>index</TT> into a SObjFunction.
+ * to convert argument <TT>index</TT> into a TeaFunction.
  *
- * If <TT>args[index]</TT> is a SObjFunction then everything is fine.
- * If <TT>args[index]</TT> is a SObjSymbol then a variable with the
+ * If <TT>args[index]</TT> is a TeaFunction then everything is fine.
+ * If <TT>args[index]</TT> is a TeaSymbol then a variable with the
  * some name is searched in <TT>context</TT>. If it does not exists or
- * if it does not contain a <TT>SObjFunction</TT> an exception is
+ * if it does not contain a <TT>TeaFunction</TT> an exception is
  * thrown.
  *
  * @param args Array of <TT>Object</TT>, supposed to be the arguments
@@ -484,43 +484,43 @@ public final class SArgs
  * @param index The index of the argument to convert.
  *
  * @exception com.pdmfc.tea.TeaException Thrown if
- * <TT>args[index]</TT> is neither a <TT>SObjFunction</TT> nor a
- * <TT>SObjSymbol</TT>
+ * <TT>args[index]</TT> is neither a <TT>TeaFunction</TT> nor a
+ * <TT>TeaSymbol</TT>
  *
  **************************************************************************/
 
-    public static SObjFunction getFunction(final SContext context,
+    public static TeaFunction getFunction(final TeaContext context,
                                            final Object[]  args,
                                            final int       index)
         throws TeaException {
 
-        SObjFunction result = null;
+        TeaFunction result = null;
         Object       arg    = args[index];
 
-        if ( arg instanceof SObjFunction ) {
-            result = (SObjFunction)arg;
+        if ( arg instanceof TeaFunction ) {
+            result = (TeaFunction)arg;
         } else {
-            if ( !(arg instanceof SObjSymbol) ) {
+            if ( !(arg instanceof TeaSymbol) ) {
                 throw new STypeException(args, index, "function or a symbol");
             } else {
-                SObjSymbol symbol = (SObjSymbol)arg;
+                TeaSymbol symbol = (TeaSymbol)arg;
                 Object     value  = null;
 
                 try {
                     value = context.getVar(symbol);
                 } catch ( SNoSuchVarException e ) {
-                    value = STypes.getVarWithEffort(context, symbol);
+                    value = Types.getVarWithEffort(context, symbol);
                 }
 
-                if ( value instanceof SObjFunction ) {
-                    result = (SObjFunction)value;
+                if ( value instanceof TeaFunction ) {
+                    result = (TeaFunction)value;
                 } else {
                     String msg =
                         "variable {0} should contain a function, not a {1}";
                     throw new SRuntimeException(args,
                                                 msg,
                                                 arg,
-                                                STypes.getTypeName(value));
+                                                Types.getTypeName(value));
                 }
             }
         }

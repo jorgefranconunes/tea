@@ -17,8 +17,8 @@ import java.util.Map;
 
 import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.reflect.STeaJavaTypes;
-import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SObjSymbol;
+import com.pdmfc.tea.runtime.TeaContext;
+import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypeException;
 
@@ -216,7 +216,7 @@ final class SReflectUtils
 
     public static Object invokeMethod(final Object   javaObj,
                                       final Method   method,
-                                      final SContext context,
+                                      final TeaContext context,
                                       final Object[] methodArgs) 
         throws TeaException {
 
@@ -276,8 +276,8 @@ final class SReflectUtils
         if (args[index] instanceof String) {
             return (String)args[index];
         }
-        if (args[index] instanceof SObjSymbol) {
-            return ((SObjSymbol)args[index]).getName();
+        if (args[index] instanceof TeaSymbol) {
+            return ((TeaSymbol)args[index]).getName();
         }
 
         throw new STypeException(args, index, "string or a symbol");

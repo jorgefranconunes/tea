@@ -13,8 +13,8 @@ import java.lang.reflect.Method;
 import java.util.StringTokenizer;
 
 import com.pdmfc.tea.TeaException;
-import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SObjFunction;
+import com.pdmfc.tea.runtime.TeaContext;
+import com.pdmfc.tea.runtime.TeaFunction;
 import com.pdmfc.tea.runtime.SRuntimeException;
 
 
@@ -29,7 +29,7 @@ import com.pdmfc.tea.runtime.SRuntimeException;
 
 public final class SJavaMethod
     extends Object
-    implements SObjFunction {
+    implements TeaFunction {
 
 
 
@@ -39,7 +39,7 @@ public final class SJavaMethod
         System.getProperty("line.separator");
 
     private static final Class[] PARAM_TYPES = new Class[] {
-        SObjFunction.class, SContext.class, Object[].class
+        TeaFunction.class, TeaContext.class, Object[].class
     };
 
     private Method _javaMethod = null;
@@ -94,9 +94,9 @@ public final class SJavaMethod
  *
  **************************************************************************/
 
-    public Object exec(final SObjFunction obj,
-                       final SContext     context,
-                       final Object[]     args)
+    public Object exec(final TeaFunction obj,
+                       final TeaContext     context,
+                       final Object[]    args)
         throws TeaException {
 
         if ( _javaMethod == null ) {

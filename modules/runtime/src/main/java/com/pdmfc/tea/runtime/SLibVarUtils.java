@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.pdmfc.tea.TeaConfigInfo;
-import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SObjPair;
-import com.pdmfc.tea.runtime.SObjSymbol;
+import com.pdmfc.tea.runtime.TeaContext;
+import com.pdmfc.tea.runtime.TeaPair;
+import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.util.SListUtils;
 
@@ -40,8 +40,8 @@ public final class SLibVarUtils
     private static final String VAR_LIBRARY   =
         TeaConfigInfo.get("com.pdmfc.tea.libraryVarName");
 
-    private static final SObjSymbol SYMBOL_LIBRARY =
-        SObjSymbol.addSymbol(VAR_LIBRARY);
+    private static final TeaSymbol SYMBOL_LIBRARY =
+        TeaSymbol.addSymbol(VAR_LIBRARY);
 
 
 
@@ -66,7 +66,7 @@ public final class SLibVarUtils
  *
  **************************************************************************/
 
-    public static void setupLibVar(final SContext     context,
+    public static void setupLibVar(final TeaContext     context,
                                    final List<String> locations) {
 
         // Remove empty strings from the received list.
@@ -78,7 +78,7 @@ public final class SLibVarUtils
             }
         }
 
-        SObjPair teaLocations  = SListUtils.buildTeaList(myLocations);
+        TeaPair teaLocations  = SListUtils.buildTeaList(myLocations);
 
         context.newVar(VAR_LIBRARY, teaLocations);
     }
@@ -93,7 +93,7 @@ public final class SLibVarUtils
  *
  **************************************************************************/
 
-    public static void prependImportLocation(final SContext context,
+    public static void prependImportLocation(final TeaContext context,
                                              final String   location) {
 
         try {
@@ -102,7 +102,7 @@ public final class SLibVarUtils
             // Either TEA_LIBRARY does not exist or it does not point
             // to a list. Either way, we will recreate it with a
             // single element.
-            SObjPair head = new SObjPair(location, SObjPair.emptyList());
+            TeaPair head = new TeaPair(location, TeaPair.emptyList());
 
             context.newVar(SYMBOL_LIBRARY, head);
         }

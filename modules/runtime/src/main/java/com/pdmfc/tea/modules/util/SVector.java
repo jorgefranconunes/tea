@@ -13,15 +13,15 @@ import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.tos.STosUtil;
-import com.pdmfc.tea.runtime.SArgs;
-import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.SObjNull;
-import com.pdmfc.tea.runtime.SObjPair;
-import com.pdmfc.tea.runtime.SObjSymbol;
+import com.pdmfc.tea.runtime.Args;
+import com.pdmfc.tea.runtime.TeaContext;
+import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.runtime.TeaNull;
+import com.pdmfc.tea.runtime.TeaPair;
+import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SRuntimeException;
-import com.pdmfc.tea.runtime.STypes;
+import com.pdmfc.tea.runtime.Types;
 
 
 
@@ -61,12 +61,12 @@ public final class SVector
 
 
     private static final String     CLASS_NAME   = "TVector";
-    private static final SObjSymbol CLASS_NAME_S =
-        SObjSymbol.addSymbol(CLASS_NAME);
+    private static final TeaSymbol CLASS_NAME_S =
+        TeaSymbol.addSymbol(CLASS_NAME);
 
     private List<Object> _vector   = null;
-    private SContext     _context  = null;
-    private SObjFunction _compFunc = null;
+    private TeaContext     _context  = null;
+    private TeaFunction _compFunc = null;
 
 
 
@@ -177,9 +177,9 @@ public final class SVector
  *
  **************************************************************************/
 
-    public Object constructor(final SObjFunction obj,
-                              final SContext     context,
-                              final Object[]     args)
+    public Object constructor(final TeaFunction obj,
+                              final TeaContext     context,
+                              final Object[]    args)
         throws SRuntimeException {
 
         if ( (args.length!=2) && (args.length!=3) ) {
@@ -241,9 +241,9 @@ public final class SVector
  *
  **************************************************************************/
 
-    public Object push(final SObjFunction obj,
-                       final SContext     context,
-                       final Object[]     args)
+    public Object push(final TeaFunction obj,
+                       final TeaContext     context,
+                       final Object[]    args)
         throws SRuntimeException {
 
         return append(obj, context, args);
@@ -293,9 +293,9 @@ public final class SVector
  *
  **************************************************************************/
 
-    public Object append(final SObjFunction obj,
-                         final SContext     context,
-                         final Object[]     args)
+    public Object append(final TeaFunction obj,
+                         final TeaContext     context,
+                         final Object[]    args)
         throws SRuntimeException {
 
         if ( args.length < 3 ) {
@@ -354,9 +354,9 @@ public final class SVector
  *
  **************************************************************************/
 
-    public Object init(final SObjFunction obj,
-                       final SContext     context,
-                       final Object[]     args) {
+    public Object init(final TeaFunction obj,
+                       final TeaContext     context,
+                       final Object[]    args) {
 
         int newSize = args.length - 2;
 
@@ -405,9 +405,9 @@ public final class SVector
  *
  **************************************************************************/
 
-    public Object getSize(final SObjFunction obj,
-                          final SContext     context,
-                          final Object[]     args) {
+    public Object getSize(final TeaFunction obj,
+                          final TeaContext     context,
+                          final Object[]    args) {
 
         int size = _vector.size();
 
@@ -460,16 +460,16 @@ public final class SVector
  *
  **************************************************************************/
 
-    public Object resize(final SObjFunction obj,
-                         final SContext     context,
-                         final Object[]     args)
+    public Object resize(final TeaFunction obj,
+                         final TeaContext     context,
+                         final Object[]    args)
         throws SRuntimeException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "size");
         }
 
-        int newSize = SArgs.getInt(args,2).intValue();
+        int newSize = Args.getInt(args,2).intValue();
 
         if ( newSize < 0 ) {
             String msg = "size must be an integer equal or greater than zero";
@@ -480,7 +480,7 @@ public final class SVector
 
         if ( newSize > oldSize ) {
             for ( int i=oldSize; i<newSize; i++ ) {
-                _vector.add(SObjNull.NULL);
+                _vector.add(TeaNull.NULL);
             }
         } else {
             for ( int i=oldSize; (i--)>newSize; ) {
@@ -534,9 +534,9 @@ public final class SVector
  *
  **************************************************************************/
 
-    public Object getAt(final SObjFunction obj,
-                        final SContext     context,
-                        final Object[]     args)
+    public Object getAt(final TeaFunction obj,
+                        final TeaContext     context,
+                        final Object[]    args)
         throws SRuntimeException {
 
         if ( args.length != 3 ) {
@@ -544,7 +544,7 @@ public final class SVector
         }
 
         Object result = null;
-        int    index  = SArgs.getInt(args,2).intValue();
+        int    index  = Args.getInt(args,2).intValue();
 
         try {
             result = _vector.get(index);
@@ -605,9 +605,9 @@ public final class SVector
  *
  **************************************************************************/
 
-    public Object setAt(final SObjFunction obj,
-                        final SContext     context,
-                        final Object[]     args)
+    public Object setAt(final TeaFunction obj,
+                        final TeaContext     context,
+                        final Object[]    args)
         throws SRuntimeException {
 
         if ( args.length != 4 ) {
@@ -615,7 +615,7 @@ public final class SVector
         }
 
         Object elem  = args[2];
-        int    index = SArgs.getInt(args,3).intValue();
+        int    index = Args.getInt(args,3).intValue();
 
         try {
             _vector.set(index, elem);
@@ -666,16 +666,16 @@ public final class SVector
  *
  **************************************************************************/
 
-    public Object getElements(final SObjFunction obj,
-                              final SContext     context,
-                              final Object[]     args) {
+    public Object getElements(final TeaFunction obj,
+                              final TeaContext     context,
+                              final Object[]    args) {
 
-        SObjPair    empty  = SObjPair.emptyList();
-        SObjPair    head   = empty;
-        SObjPair    node   = null;
+        TeaPair    empty  = TeaPair.emptyList();
+        TeaPair    head   = empty;
+        TeaPair    node   = null;
 
         for ( Object value : _vector ) {
-            SObjPair newNode = new SObjPair(value, empty);
+            TeaPair newNode = new TeaPair(value, empty);
 
             if ( node == null ) {
                 head = newNode;
@@ -726,9 +726,9 @@ public final class SVector
  *
  **************************************************************************/
 
-    public Object pop(final SObjFunction obj,
-                      final SContext     context,
-                      final Object[]     args)
+    public Object pop(final TeaFunction obj,
+                      final TeaContext     context,
+                      final Object[]    args)
         throws SRuntimeException {
 
         int    lastIndex = _vector.size() - 1;
@@ -779,9 +779,9 @@ public final class SVector
  *
  **************************************************************************/
 
-    public Object clear(final SObjFunction obj,
-                        final SContext     context,
-                        final Object[]     args) {
+    public Object clear(final TeaFunction obj,
+                        final TeaContext     context,
+                        final Object[]    args) {
 
         _vector.clear();
 
@@ -834,9 +834,9 @@ public final class SVector
  *
  **************************************************************************/
 
-    public Object sort(final SObjFunction obj,
-                       final SContext     context,
-                       final Object[]     args)
+    public Object sort(final TeaFunction obj,
+                       final TeaContext     context,
+                       final Object[]    args)
         throws TeaException {
 
         if ( args.length != 3 ) {
@@ -846,7 +846,7 @@ public final class SVector
         int size = _vector.size();
 
         if ( size > 1 ) {
-             _compFunc = SArgs.getFunction(context, args, 2);
+             _compFunc = Args.getFunction(context, args, 2);
              _context  = context;
              quicksort(_vector, 0, size-1);
              _compFunc = null;
@@ -927,7 +927,7 @@ public final class SVector
             result = (Number)value;
         } catch (ClassCastException e) {
             String msg = "comparison function must return a number, not a {0}";
-            throw new SRuntimeException(msg, STypes.getTypeName(value));
+            throw new SRuntimeException(msg, Types.getTypeName(value));
         }
 
         return result.intValue();
@@ -972,7 +972,7 @@ public final class SVector
  *
  **************************************************************************/
 
-    public static SVector newInstance(final SContext context)
+    public static SVector newInstance(final TeaContext context)
         throws TeaException {
 
         STosClass theClass = STosUtil.getClass(context, CLASS_NAME_S);
@@ -1003,7 +1003,7 @@ public final class SVector
  *
  **************************************************************************/
 
-    public static SVector newInstance(final SContext     context,
+    public static SVector newInstance(final TeaContext     context,
                                       final List<Object> contents)
         throws TeaException {
 

@@ -6,8 +6,8 @@
 
 package com.pdmfc.tea.runtime;
 
-import com.pdmfc.tea.runtime.SObjSymbol;
-import com.pdmfc.tea.runtime.SObjVar;
+import com.pdmfc.tea.runtime.TeaSymbol;
+import com.pdmfc.tea.runtime.TeaVar;
 import com.pdmfc.tea.runtime.SNoSuchVarException;
 
 
@@ -23,17 +23,17 @@ import com.pdmfc.tea.runtime.SNoSuchVarException;
  *
  **************************************************************************/
 
-public class SContext
+public class TeaContext
     extends Object {
 
 
 
 
 
-    private SContext _parent = null;
+    private TeaContext _parent = null;
 
     // The buckets in the hash table.
-    private SVarSet[] _varTable = null;
+    private VarSet[] _varTable = null;
 
     // The number of variables currently defined in this context.
     private int _varCount = 0;
@@ -58,7 +58,7 @@ public class SContext
  *
  **************************************************************************/
 
-    public SContext() {
+    public TeaContext() {
 
         _parent = null;
     }
@@ -80,7 +80,7 @@ public class SContext
  *
  **************************************************************************/
 
-    protected SContext(final SContext parent) {
+    protected TeaContext(final TeaContext parent) {
 
         _parent = parent;
     }
@@ -97,9 +97,9 @@ public class SContext
  *
  **************************************************************************/
 
-    public final SContext newChild() {
+    public final TeaContext newChild() {
 
-        SContext result = new SContext(this);
+        TeaContext result = new TeaContext(this);
 
         return result;
     }
@@ -114,9 +114,9 @@ public class SContext
  *
  **************************************************************************/
 
-    public final SContext clone(final SContext parent) {
+    public final TeaContext clone(final TeaContext parent) {
 
-        SContext result = new SContext(parent);
+        TeaContext result = new TeaContext(parent);
 
         result._varTable      = _varTable;
         result._varCount      = _varCount;
@@ -139,7 +139,7 @@ public class SContext
  *
  **************************************************************************/
 
-    public final SContext getParent() {
+    public final TeaContext getParent() {
 
         return _parent;
     }
@@ -156,7 +156,7 @@ public class SContext
 
     private void initHashtable() {
 
-        _varTable      = new SVarSet[INITIAL_CAPACITY];
+        _varTable      = new VarSet[INITIAL_CAPACITY];
         _hashThreshold = (int)(INITIAL_CAPACITY * HASH_LOAD_FACTOR);
     }
 
@@ -193,7 +193,7 @@ public class SContext
  *
  **************************************************************************/
 
-    public final boolean isDefined(final SObjSymbol name) {
+    public final boolean isDefined(final TeaSymbol name) {
 
         if ( _varTable == null ) {
             if (_parent != null) {
@@ -204,11 +204,11 @@ public class SContext
         }
       
         // Search for a variable with that name.
-        SVarSet[] table = _varTable;
+        VarSet[] table = _varTable;
         int       hash  = name.hashCode();
         int       index = (hash & 0x7FFFFFFF) % table.length;
         
-        for ( SVarSet entry=table[index]; entry!=null; entry=entry._next ) {
+        for ( VarSet entry=table[index]; entry!=null; entry=entry._next ) {
             if ( entry._symbolHash == hash ) {
                 // We found it!
                 return true;
@@ -242,10 +242,10 @@ public class SContext
  *
  **************************************************************************/
 
-    public final SObjVar newVar(final String name,
+    public final TeaVar newVar(final String name,
                                 final Object value) {
 
-        return newVar(SObjSymbol.addSymbol(name), value);
+        return newVar(TeaSymbol.addSymbol(name), value);
     }
 
 
@@ -262,7 +262,7 @@ public class SContext
  *
  **************************************************************************/
 
-    public final SObjVar newVar(final SObjSymbol name,
+    public final TeaVar newVar(final TeaSymbol name,
                                 final Object     value) {
 
         if ( _varTable == null ) {
@@ -270,11 +270,11 @@ public class SContext
         }
       
         // First check if there is already a variable with that name.
-        SVarSet[] table = _varTable;
+        VarSet[] table = _varTable;
         int       hash  = name.hashCode();
         int       index = (hash & 0x7FFFFFFF) % table.length;
 
-        for ( SVarSet entry=table[index]; entry!=null; entry=entry._next ) {
+        for ( VarSet entry=table[index]; entry!=null; entry=entry._next ) {
             if ( entry._symbolHash == hash ) {
                 // There was already a variable with the same name:
                 entry._value = value;
@@ -283,7 +283,7 @@ public class SContext
         }
 
         // There is no variable with that name, so create the new entry:
-        SVarSet entry = new SVarSet();
+        VarSet entry = new VarSet();
 
         entry._symbolHash = hash;
         entry._value      = value;
@@ -313,16 +313,16 @@ public class SContext
     private void rehashHashtable() {
 
         int     prevCapacity = _varTable.length;
-        SVarSet prevTable[]  = _varTable;
+        VarSet prevTable[]  = _varTable;
         int     newCapacity  = prevCapacity * 2 + 1;
-        SVarSet newTable[]   = new SVarSet[newCapacity];
+        VarSet newTable[]   = new VarSet[newCapacity];
 
         _hashThreshold = (int)(newCapacity * HASH_LOAD_FACTOR);
         _varTable      = newTable;
 
         for ( int i=prevCapacity; i-->0; ) {
-            for ( SVarSet prev=prevTable[i]; prev!=null; ) {
-                SVarSet entry = prev;
+            for ( VarSet prev=prevTable[i]; prev!=null; ) {
+                VarSet entry = prev;
                 int     index = (entry._symbolHash & 0x7FFFFFFF) % newCapacity;
 
                 prev            = prev._next;
@@ -351,7 +351,7 @@ public class SContext
  *
  **************************************************************************/
 
-    public final void setVar(final SObjSymbol name,
+    public final void setVar(final TeaSymbol name,
                              final Object     value) 
         throws SNoSuchVarException {
 
@@ -365,11 +365,11 @@ public class SContext
         }
       
         // Search for a variable with that name.
-        SVarSet[] table = _varTable;
+        VarSet[] table = _varTable;
         int       hash  = name.hashCode();
         int       index = (hash & 0x7FFFFFFF) % table.length;
         
-        for ( SVarSet entry=table[index]; entry!=null; entry=entry._next ) {
+        for ( VarSet entry=table[index]; entry!=null; entry=entry._next ) {
             if ( entry._symbolHash == hash ) {
                 // We found it!
                 entry._value = value;
@@ -408,7 +408,7 @@ public class SContext
  *
  **************************************************************************/
 
-   public final Object getVar(final SObjSymbol name) 
+   public final Object getVar(final TeaSymbol name) 
          throws SNoSuchVarException {
 
         if ( _varTable == null ) {
@@ -420,11 +420,11 @@ public class SContext
         }
       
         // Search for a variable with that name.
-        SVarSet[] table = _varTable;
+        VarSet[] table = _varTable;
         int       hash  = name.hashCode();
         int       index = (hash & 0x7FFFFFFF) % table.length;
         
-        for ( SVarSet entry=table[index]; entry!=null; entry=entry._next ) {
+        for ( VarSet entry=table[index]; entry!=null; entry=entry._next ) {
             if ( entry._symbolHash == hash ) {
                 // We found it!
                 return entry._value;
@@ -462,10 +462,10 @@ public class SContext
  *
  **************************************************************************/
 
-    public final SObjVar getVarObject(final SObjSymbol name) 
+    public final TeaVar getVarObject(final TeaSymbol name) 
         throws SNoSuchVarException {
 
-        SObjVar result = getVarObjectIfPossible(name);
+        TeaVar result = getVarObjectIfPossible(name);
 
         if ( result == null ) {
             throw new SNoSuchVarException(name);
@@ -492,9 +492,9 @@ public class SContext
  *
  **************************************************************************/
 
-    public final SObjVar getVarObjectIfPossible(final SObjSymbol name)  {
+    public final TeaVar getVarObjectIfPossible(final TeaSymbol name)  {
 
-        SObjVar result = null;
+        TeaVar result = null;
 
         if ( _varTable == null ) {
             if ( _parent != null ) {
@@ -502,11 +502,11 @@ public class SContext
             }
         } else {
             // Search for a variable with that name.
-            SVarSet[] table = _varTable;
+            VarSet[] table = _varTable;
             int       hash  = name.hashCode();
             int       index = (hash & 0x7FFFFFFF) % table.length;
             
-            for ( SVarSet entry=table[index]; entry!=null; entry=entry._next ){
+            for ( VarSet entry=table[index]; entry!=null; entry=entry._next ){
                 if ( entry._symbolHash == hash ) {
                     // We found it!
                     result = entry;
@@ -536,9 +536,9 @@ public class SContext
  *
  **************************************************************************/
 
-    private static final class SVarSet
+    private static final class VarSet
         extends Object
-        implements SObjVar {
+        implements TeaVar {
 
         // The hash value of the symbol object this variable is
         // associated with.
@@ -548,7 +548,7 @@ public class SContext
         private Object  _value;
         
         // The next entry in this set.
-        private SVarSet _next;
+        private VarSet _next;
 
 
 

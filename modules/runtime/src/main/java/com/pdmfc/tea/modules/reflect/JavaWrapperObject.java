@@ -12,8 +12,8 @@ import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.reflect.SMethodFinder;
 import com.pdmfc.tea.modules.reflect.SReflectUtils;
 import com.pdmfc.tea.modules.reflect.STeaJavaTypes;
-import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SObjFunction;
+import com.pdmfc.tea.runtime.TeaContext;
+import com.pdmfc.tea.runtime.TeaFunction;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SRuntimeException;
 
@@ -29,7 +29,7 @@ import com.pdmfc.tea.runtime.SRuntimeException;
 
 final class JavaWrapperObject
     extends Object
-    implements SObjFunction {
+    implements TeaFunction {
 
 
 
@@ -80,9 +80,9 @@ final class JavaWrapperObject
  **************************************************************************/
 
     @Override
-    public Object exec(final SObjFunction func,
-                       final SContext     context,
-                       final Object[]     args)
+    public Object exec(final TeaFunction func,
+                       final TeaContext     context,
+                       final Object[]    args)
         throws TeaException {
 
         if ( args.length < 2 ) {

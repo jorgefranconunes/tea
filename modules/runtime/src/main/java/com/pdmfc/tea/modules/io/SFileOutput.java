@@ -14,10 +14,10 @@ import com.pdmfc.tea.modules.io.SOutput;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.tos.STosUtil;
-import com.pdmfc.tea.runtime.SArgs;
-import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.SObjSymbol;
+import com.pdmfc.tea.runtime.Args;
+import com.pdmfc.tea.runtime.TeaContext;
+import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.SRuntimeException;
 
 
@@ -55,8 +55,8 @@ public final class SFileOutput
 
       
     private static final String     CLASS_NAME   = "TFileOutput";
-    private static final SObjSymbol CLASS_NAME_S =
-        SObjSymbol.addSymbol(CLASS_NAME);
+    private static final TeaSymbol CLASS_NAME_S =
+        TeaSymbol.addSymbol(CLASS_NAME);
 
 
 
@@ -135,18 +135,18 @@ public final class SFileOutput
  *
  **************************************************************************/
 
-    public Object constructor(final SObjFunction obj,
-                              final SContext     context,
-                              final Object[]     args)
+    public Object constructor(final TeaFunction obj,
+                              final TeaContext     context,
+                              final Object[]    args)
         throws SRuntimeException {
         
         int numArgs = args.length;
 
-        SArgs.checkBetween(args, 3, 4, "path [append]");
+        Args.checkBetween(args, 3, 4, "path [append]");
 
-        String           fileName  = SArgs.getString(args,2);
+        String           fileName  = Args.getString(args,2);
         boolean          append    =
-            (numArgs==3) ? false : SArgs.getBoolean(args,3).booleanValue();
+            (numArgs==3) ? false : Args.getBoolean(args,3).booleanValue();
         FileOutputStream outStream = null;
 
         try {
@@ -194,7 +194,7 @@ public final class SFileOutput
  *
  **************************************************************************/
 
-    public static SFileOutput newInstance(final SContext context,
+    public static SFileOutput newInstance(final TeaContext context,
                                           final Object[] args)
         throws TeaException {
 

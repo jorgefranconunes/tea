@@ -15,11 +15,11 @@ import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.tos.STosUtil;
-import com.pdmfc.tea.runtime.SArgs;
-import com.pdmfc.tea.runtime.SContext;
+import com.pdmfc.tea.runtime.Args;
+import com.pdmfc.tea.runtime.TeaContext;
 import com.pdmfc.tea.runtime.SNumArgException;
-import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.SObjSymbol;
+import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypeException;
 
@@ -59,8 +59,8 @@ public final class SDate
 
 
     private static final String     CLASS_NAME   = "TDate";
-    private static final SObjSymbol CLASS_NAME_S =
-        SObjSymbol.addSymbol(CLASS_NAME);
+    private static final TeaSymbol CLASS_NAME_S =
+        TeaSymbol.addSymbol(CLASS_NAME);
 
     private Calendar _calendar = new GregorianCalendar();
 
@@ -287,9 +287,9 @@ public final class SDate
  *
  **************************************************************************/
 
-    public Object constructor(final SObjFunction obj,
-                              final SContext     context,
-                              final Object[]     args)
+    public Object constructor(final TeaFunction obj,
+                              final TeaContext  context,
+                              final Object[]    args)
         throws SRuntimeException {
 
         int      numArgs = args.length;
@@ -308,20 +308,20 @@ public final class SDate
             }
             break;
         case 5 :
-            _calendar.set(SArgs.getInt(args, 2).intValue(),
-                          SArgs.getInt(args, 3).intValue() - 1,
-                          SArgs.getInt(args, 4).intValue(),
+            _calendar.set(Args.getInt(args, 2).intValue(),
+                          Args.getInt(args, 3).intValue() - 1,
+                          Args.getInt(args, 4).intValue(),
                           0,
                           0,
                           0);
             break;
         case 8 :
-            _calendar.set(SArgs.getInt(args, 2).intValue(),
-                          SArgs.getInt(args, 3).intValue() - 1,
-                          SArgs.getInt(args, 4).intValue(),
-                          SArgs.getInt(args, 5).intValue(),
-                          SArgs.getInt(args, 6).intValue(),
-                          SArgs.getInt(args, 7).intValue());
+            _calendar.set(Args.getInt(args, 2).intValue(),
+                          Args.getInt(args, 3).intValue() - 1,
+                          Args.getInt(args, 4).intValue(),
+                          Args.getInt(args, 5).intValue(),
+                          Args.getInt(args, 6).intValue(),
+                          Args.getInt(args, 7).intValue());
             break;
         default :
             String usage = "[TDate] | [year month day [hour minute second]]";
@@ -371,9 +371,9 @@ public final class SDate
  *
  **************************************************************************/
 
-    public Object getYear(final SObjFunction obj,
-                          final SContext     context,
-                          final Object[]     args) {
+    public Object getYear(final TeaFunction obj,
+                          final TeaContext  context,
+                          final Object[]    args) {
 
         int year = _calendar.get(Calendar.YEAR);
 
@@ -420,9 +420,9 @@ public final class SDate
  *
  **************************************************************************/
 
-    public Object getMonth(final SObjFunction obj,
-                           final SContext     context,
-                           final Object[]     args) {
+    public Object getMonth(final TeaFunction obj,
+                           final TeaContext  context,
+                           final Object[]    args) {
 
         int month = _calendar.get(Calendar.MONTH) + 1;
 
@@ -469,9 +469,9 @@ public final class SDate
  *
  **************************************************************************/
 
-    public Object getDay(final SObjFunction obj,
-                         final SContext     context,
-                         final Object[]     args) {
+    public Object getDay(final TeaFunction obj,
+                         final TeaContext  context,
+                         final Object[]    args) {
 
         int day = _calendar.get(Calendar.DAY_OF_MONTH);
 
@@ -518,9 +518,9 @@ public final class SDate
  *
  **************************************************************************/
 
-    public Object getHour(final SObjFunction obj,
-                          final SContext     context,
-                          final Object[]     args) {
+    public Object getHour(final TeaFunction obj,
+                          final TeaContext  context,
+                          final Object[]    args) {
 
         int hour = _calendar.get(Calendar.HOUR_OF_DAY);
 
@@ -567,9 +567,9 @@ public final class SDate
  *
  **************************************************************************/
 
-    public Object getMinute(final SObjFunction obj,
-                            final SContext     context,
-                            final Object[]     args) {
+    public Object getMinute(final TeaFunction obj,
+                            final TeaContext  context,
+                            final Object[]    args) {
 
         int minute = _calendar.get(Calendar.MINUTE);
 
@@ -616,9 +616,9 @@ public final class SDate
  *
  **************************************************************************/
 
-    public Object getSecond(final SObjFunction obj,
-                            final SContext     context,
-                            final Object[]     args) {
+    public Object getSecond(final TeaFunction obj,
+                            final TeaContext  context,
+                            final Object[]    args) {
 
         int second = _calendar.get(Calendar.SECOND);
 
@@ -664,9 +664,9 @@ public final class SDate
  *
  **************************************************************************/
 
-    public Object getDayOfWeek(final SObjFunction obj,
-                               final SContext     context,
-                               final Object[]     args) {
+    public Object getDayOfWeek(final TeaFunction obj,
+                               final TeaContext  context,
+                               final Object[]    args) {
 
         int day = _calendar.get(Calendar.DAY_OF_WEEK) - 1;
 
@@ -754,9 +754,9 @@ public final class SDate
  *
  **************************************************************************/
 
-    public Object setDate(final SObjFunction obj,
-                          final SContext     context,
-                          final Object[]     args)
+    public Object setDate(final TeaFunction obj,
+                          final TeaContext  context,
+                          final Object[]    args)
         throws SRuntimeException {
 
         int numArgs = args.length;
@@ -773,20 +773,20 @@ public final class SDate
             }
             break;
         case 5 :
-            _calendar.set(SArgs.getInt(args, 2).intValue(),
-                          SArgs.getInt(args, 3).intValue() - 1,
-                          SArgs.getInt(args, 4).intValue(),
+            _calendar.set(Args.getInt(args, 2).intValue(),
+                          Args.getInt(args, 3).intValue() - 1,
+                          Args.getInt(args, 4).intValue(),
                           0,
                           0,
                           0);
             break;
         case 8 :
-            _calendar.set(SArgs.getInt(args, 2).intValue(),
-                          SArgs.getInt(args, 3).intValue() - 1,
-                          SArgs.getInt(args, 4).intValue(),
-                          SArgs.getInt(args, 5).intValue(),
-                          SArgs.getInt(args, 6).intValue(),
-                          SArgs.getInt(args, 7).intValue());
+            _calendar.set(Args.getInt(args, 2).intValue(),
+                          Args.getInt(args, 3).intValue() - 1,
+                          Args.getInt(args, 4).intValue(),
+                          Args.getInt(args, 5).intValue(),
+                          Args.getInt(args, 6).intValue(),
+                          Args.getInt(args, 7).intValue());
             break;
         default :
             String usage = "TDate | year month day [hour minute second]";
@@ -844,18 +844,18 @@ public final class SDate
  *
  **************************************************************************/
 
-    public Object setTime(final SObjFunction obj,
-                          final SContext     context,
-                          final Object[]     args)
+    public Object setTime(final TeaFunction obj,
+                          final TeaContext  context,
+                          final Object[]    args)
         throws SRuntimeException {
 
         if ( args.length != 5 ) {
             throw new SNumArgException(args, "hour minute second");
         }
 
-        _calendar.set(Calendar.HOUR_OF_DAY, SArgs.getInt(args,2).intValue());
-        _calendar.set(Calendar.MINUTE, SArgs.getInt(args,3).intValue());
-        _calendar.set(Calendar.SECOND, SArgs.getInt(args,4).intValue());
+        _calendar.set(Calendar.HOUR_OF_DAY, Args.getInt(args,2).intValue());
+        _calendar.set(Calendar.MINUTE, Args.getInt(args,3).intValue());
+        _calendar.set(Calendar.SECOND, Args.getInt(args,4).intValue());
 
         return obj;
     }
@@ -904,16 +904,16 @@ public final class SDate
  *
  **************************************************************************/
 
-    public Object format(final SObjFunction obj,
-                         final SContext     context,
-                         final Object[]     args)
+    public Object format(final TeaFunction obj,
+                         final TeaContext  context,
+                         final Object[]    args)
         throws SRuntimeException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "format-string");
         }
 
-        String           fmt       = SArgs.getString(args, 2);
+        String           fmt       = Args.getString(args, 2);
         SimpleDateFormat formatter = null;
         String           result    = null;
 
@@ -971,9 +971,9 @@ public final class SDate
  *
  **************************************************************************/
 
-    public Object compare(final SObjFunction obj,
-                          final SContext     context,
-                          final Object[]     args)
+    public Object compare(final TeaFunction obj,
+                          final TeaContext  context,
+                          final Object[]    args)
         throws TeaException {
 
         if ( args.length != 3 ) {
@@ -1035,9 +1035,9 @@ public final class SDate
  *
  **************************************************************************/
 
-    public Object before(final SObjFunction obj,
-                         final SContext     context,
-                         final Object[]     args)
+    public Object before(final TeaFunction obj,
+                         final TeaContext  context,
+                         final Object[]    args)
         throws TeaException {
 
         if ( args.length != 3 ) {
@@ -1091,9 +1091,9 @@ public final class SDate
  *
  **************************************************************************/
 
-    public Object after(final SObjFunction obj,
-                        final SContext     context,
-                        final Object[]     args)
+    public Object after(final TeaFunction obj,
+                        final TeaContext  context,
+                        final Object[]    args)
         throws TeaException {
 
         if ( args.length != 3 ) {
@@ -1147,9 +1147,9 @@ public final class SDate
  *
  **************************************************************************/
 
-    public Object same(final SObjFunction obj,
-                       final SContext     context,
-                       final Object[]     args)
+    public Object same(final TeaFunction obj,
+                       final TeaContext  context,
+                       final Object[]    args)
         throws TeaException {
 
         if ( args.length != 3 ) {
@@ -1212,9 +1212,9 @@ public final class SDate
  *
  **************************************************************************/
 
-    public Object notSame(final SObjFunction obj,
-                          final SContext     context,
-                          final Object[]     args)
+    public Object notSame(final TeaFunction obj,
+                          final TeaContext  context,
+                          final Object[]    args)
         throws TeaException {
 
         if ( args.length != 3 ) {
@@ -1292,7 +1292,7 @@ public final class SDate
  *
  **************************************************************************/
 
-    public static SDate newInstance(final SContext context)
+    public static SDate newInstance(final TeaContext context)
         throws TeaException {
 
         STosObj date = STosUtil.newInstance(CLASS_NAME_S, context);

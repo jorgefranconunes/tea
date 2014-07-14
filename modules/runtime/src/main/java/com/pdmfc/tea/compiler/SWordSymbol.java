@@ -8,9 +8,9 @@ package com.pdmfc.tea.compiler;
 
 import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.compiler.SWord;
-import com.pdmfc.tea.runtime.SObjSymbol;
-import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SObjFunction;
+import com.pdmfc.tea.runtime.TeaSymbol;
+import com.pdmfc.tea.runtime.TeaContext;
+import com.pdmfc.tea.runtime.TeaFunction;
 
 
 
@@ -30,7 +30,7 @@ final class SWordSymbol
 
 
 
-    private SObjSymbol _symbol = null;
+    private TeaSymbol _symbol = null;
 
 
 
@@ -44,7 +44,7 @@ final class SWordSymbol
 
     public SWordSymbol(final String name) {
 
-        _symbol = SObjSymbol.addSymbol(name);
+        _symbol = TeaSymbol.addSymbol(name);
     }
 
 
@@ -57,7 +57,7 @@ final class SWordSymbol
  *
  **************************************************************************/
 
-    public Object get(final SContext context) {
+    public Object get(final TeaContext context) {
 
         return _symbol;
     }
@@ -72,7 +72,7 @@ final class SWordSymbol
  *
  **************************************************************************/
 
-    public SObjSymbol getSymbol() {
+    public TeaSymbol getSymbol() {
 
         return _symbol;
     }
@@ -87,10 +87,10 @@ final class SWordSymbol
  *
  **************************************************************************/
 
-    public SObjFunction toFunction(final SContext context)
+    public TeaFunction toFunction(final TeaContext context)
         throws TeaException {
 
-        SObjFunction result = SWordSubstUtils.toFunction(_symbol, context);
+        TeaFunction result = SWordSubstUtils.toFunction(_symbol, context);
 
         return result;
     }

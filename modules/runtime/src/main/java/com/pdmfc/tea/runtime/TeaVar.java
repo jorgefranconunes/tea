@@ -16,7 +16,7 @@ package com.pdmfc.tea.runtime;
  *
  **************************************************************************/
 
-public interface SObjVar {
+public interface TeaVar {
 
 
 

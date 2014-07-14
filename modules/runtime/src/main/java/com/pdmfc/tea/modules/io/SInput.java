@@ -17,10 +17,10 @@ import com.pdmfc.tea.modules.io.SIOException;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.tos.STosUtil;
-import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.SObjNull;
-import com.pdmfc.tea.runtime.SObjSymbol;
+import com.pdmfc.tea.runtime.TeaContext;
+import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.runtime.TeaNull;
+import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.SRuntimeException;
 
 
@@ -71,8 +71,8 @@ public class SInput
 
       
     private static final String     CLASS_NAME   = "TInput";
-    private static final SObjSymbol CLASS_NAME_S =
-        SObjSymbol.addSymbol(CLASS_NAME);
+    private static final TeaSymbol CLASS_NAME_S =
+        TeaSymbol.addSymbol(CLASS_NAME);
 
 
 
@@ -113,9 +113,9 @@ public class SInput
  *
  **************************************************************************/
 
-    public Object constructor(final SObjFunction obj,
-                              final SContext     context,
-                              final Object[]     args)
+    public Object constructor(final TeaFunction obj,
+                              final TeaContext     context,
+                              final Object[]    args)
         throws TeaException {
 
         return obj;
@@ -216,9 +216,9 @@ public class SInput
  *
  **************************************************************************/
 
-    public Object readln(final SObjFunction obj,
-                         final SContext     context,
-                         final Object[]     args)
+    public Object readln(final TeaFunction obj,
+                         final TeaContext     context,
+                         final Object[]    args)
         throws SIOException {
 
         String result = null;
@@ -229,7 +229,7 @@ public class SInput
             throw new SIOException(e);
         }
 
-        return (result==null) ? SObjNull.NULL : result;
+        return (result==null) ? TeaNull.NULL : result;
     }
 
 
@@ -341,9 +341,9 @@ public class SInput
  *
  **************************************************************************/
 
-    public Object close(final SObjFunction obj,
-                        final SContext     context,
-                        final Object[]     args)
+    public Object close(final TeaFunction obj,
+                        final TeaContext     context,
+                        final Object[]    args)
         throws SIOException {
 
         try {
@@ -408,7 +408,7 @@ public class SInput
  *
  **************************************************************************/
 
-    public static SInput newInstance(final SContext context)
+    public static SInput newInstance(final TeaContext context)
         throws TeaException {
 
         STosObj input = STosUtil.newInstance(CLASS_NAME_S, context);

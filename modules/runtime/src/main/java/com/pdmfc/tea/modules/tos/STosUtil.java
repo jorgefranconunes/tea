@@ -9,9 +9,9 @@ package com.pdmfc.tea.modules.tos;
 import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.SNoSuchClassException;
-import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.SObjSymbol;
+import com.pdmfc.tea.runtime.TeaContext;
+import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.SNoSuchVarException;
 import com.pdmfc.tea.runtime.STypeException;
 
@@ -35,8 +35,8 @@ public final class STosUtil
     /**
      * The name of variable with the missing function callback action.
      */
-    public static final SObjSymbol CALLBACK_NAME =
-        SObjSymbol.addSymbol("TEA_NOCLASS_CALLBACK");
+    public static final TeaSymbol CALLBACK_NAME =
+        TeaSymbol.addSymbol("TEA_NOCLASS_CALLBACK");
 
 
 
@@ -112,21 +112,21 @@ public final class STosUtil
  *
  **************************************************************************/
 
-    public static STosClass getClass(final SContext context,
+    public static STosClass getClass(final TeaContext context,
                                      final Object[] args,
                                      final int      index)
         throws TeaException {
 
         Object ref = args[index];
 
-        if ( ref instanceof SObjSymbol ) {
+        if ( ref instanceof TeaSymbol ) {
             try {
-                ref = context.getVar((SObjSymbol)ref);
+                ref = context.getVar((TeaSymbol)ref);
             } catch ( SNoSuchVarException e ) {
                 try {
-                    ref = getClassWithEffort(context, (SObjSymbol)ref);
+                    ref = getClassWithEffort(context, (TeaSymbol)ref);
                 } catch ( SNoSuchVarException e2 ) {
-                    throw new SNoSuchClassException(args, (SObjSymbol)ref);
+                    throw new SNoSuchClassException(args, (TeaSymbol)ref);
                 }
             }
         }
@@ -152,8 +152,8 @@ public final class STosUtil
  *
  **************************************************************************/
 
-    public static STosClass getClass(final SContext   context,
-                                     final SObjSymbol className)
+    public static STosClass getClass(final TeaContext  context,
+                                     final TeaSymbol className)
         throws TeaException  {
 
         Object classObject;
@@ -186,18 +186,18 @@ public final class STosUtil
  *
  **************************************************************************/
 
-    private static Object getClassWithEffort(final SContext   context,
-                                             final SObjSymbol name)
+    private static Object getClassWithEffort(final TeaContext  context,
+                                             final TeaSymbol name)
         throws TeaException {
 
-        SObjFunction callbackFunc = null;
+        TeaFunction callbackFunc = null;
         Object[]     callbackArgs = new Object[2];
      
         callbackArgs[0] = CALLBACK_NAME;
         callbackArgs[1] = name;
     
         try {
-            callbackFunc = (SObjFunction)context.getVar(CALLBACK_NAME);
+            callbackFunc = (TeaFunction)context.getVar(CALLBACK_NAME);
         } catch ( ClassCastException e1 ) {
             // Variable TEA_NOCLASS_CALLBACK does not containg a Tea function.
             throw new SNoSuchVarException(name);
@@ -221,8 +221,8 @@ public final class STosUtil
  *
  **************************************************************************/
 
-    public static STosObj newInstance(final SObjSymbol className,
-                                      final SContext   context,
+    public static STosObj newInstance(final TeaSymbol className,
+                                      final TeaContext  context,
                                       final Object[]   constructorArgs)
         throws TeaException {
 
@@ -242,8 +242,8 @@ public final class STosUtil
  *
  **************************************************************************/
 
-    public static STosObj newInstance(final SObjSymbol className,
-                                      final SContext   context) 
+    public static STosObj newInstance(final TeaSymbol className,
+                                      final TeaContext  context) 
         throws TeaException {
 
         Object[] constructorArgs = new Object[2];

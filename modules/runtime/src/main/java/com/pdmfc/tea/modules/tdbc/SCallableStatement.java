@@ -19,12 +19,12 @@ import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.tos.STosUtil;
 import com.pdmfc.tea.modules.util.SDate;
-import com.pdmfc.tea.runtime.SArgs;
-import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.SObjNull;
-import com.pdmfc.tea.runtime.SObjSymbol;
-import com.pdmfc.tea.runtime.SObjVar;
+import com.pdmfc.tea.runtime.Args;
+import com.pdmfc.tea.runtime.TeaContext;
+import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.runtime.TeaNull;
+import com.pdmfc.tea.runtime.TeaSymbol;
+import com.pdmfc.tea.runtime.TeaVar;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SRuntimeException;
 
@@ -63,8 +63,8 @@ public final class SCallableStatement
 
 
     private static final String     CLASS_NAME   = "TCallableStatement";
-    private static final SObjSymbol CLASS_NAME_S =
-        SObjSymbol.addSymbol(CLASS_NAME);
+    private static final TeaSymbol CLASS_NAME_S =
+        TeaSymbol.addSymbol(CLASS_NAME);
 
     private CallableStatement   _callStat = null;
     private List<SOutParameter> _outList  = new ArrayList<SOutParameter>();
@@ -127,7 +127,7 @@ public final class SCallableStatement
  *
  **************************************************************************/
 
-    public static SStatement newInstance(final SContext context)
+    public static SStatement newInstance(final TeaContext context)
         throws TeaException {
 
         STosObj callStat = STosUtil.newInstance(CLASS_NAME_S, context);
@@ -156,9 +156,9 @@ public final class SCallableStatement
  *
  **************************************************************************/
 
-    public Object constructor(final SObjFunction obj,
-                              final SContext     context,
-                              final Object[]     args)
+    public Object constructor(final TeaFunction obj,
+                              final TeaContext     context,
+                              final Object[]    args)
         throws TeaException {
 
         return obj;
@@ -214,17 +214,17 @@ public final class SCallableStatement
  *
  **************************************************************************/
 
-    public Object registerString(final SObjFunction obj,
-                                 final SContext     context,
-                                 final Object[]     args)
+    public Object registerString(final TeaFunction obj,
+                                 final TeaContext     context,
+                                 final Object[]    args)
         throws SRuntimeException {
 
         if ( args.length != 4 ) {
             throw new SNumArgException(args, "index symbol");
         }
 
-        int     index = SArgs.getInt(args,2).intValue();
-        SObjVar var   = context.getVarObject(SArgs.getSymbol(args,3));
+        int     index = Args.getInt(args,2).intValue();
+        TeaVar var   = context.getVarObject(Args.getSymbol(args,3));
 
         try {
             registerOutString(index, var);
@@ -249,13 +249,13 @@ public final class SCallableStatement
  * @param index The index of the output parameter. The first is 1, the
  * second 2, ...
  *
- * @param var The <TT>SObjVar</TT> that will receive the value of the
+ * @param var The <TT>TeaVar</TT> that will receive the value of the
  * output parameter after the statement is called.
  *
  **************************************************************************/
 
     private void registerOutString(final int     index,
-                                   final SObjVar var)
+                                   final TeaVar var)
         throws SQLException {
 
         _callStat.registerOutParameter(index, Types.VARCHAR);
@@ -313,17 +313,17 @@ public final class SCallableStatement
  *
  **************************************************************************/
 
-    public Object registerInt(final SObjFunction obj,
-                              final SContext     context,
-                              final Object[]     args)
+    public Object registerInt(final TeaFunction obj,
+                              final TeaContext     context,
+                              final Object[]    args)
         throws SRuntimeException {
 
         if ( args.length != 4 ) {
             throw new SNumArgException(args, "index symbol");
         }
 
-        int     index = SArgs.getInt(args,2).intValue();
-        SObjVar var   = context.getVarObject(SArgs.getSymbol(args,3));
+        int     index = Args.getInt(args,2).intValue();
+        TeaVar var   = context.getVarObject(Args.getSymbol(args,3));
 
         try {
             registerOutInt(index, var);
@@ -348,13 +348,13 @@ public final class SCallableStatement
  * @param index The index of the output parameter. The first is 1, the
  * second 2, ...
  *
- * @param var The <TT>SObjVar</TT> that will receive the value of the
+ * @param var The <TT>TeaVar</TT> that will receive the value of the
  * output parameter after the statement is called.
  *
  **************************************************************************/
 
     private void registerOutInt(final int     index,
-                                final SObjVar var)
+                                final TeaVar var)
         throws SQLException {
 
         _callStat.registerOutParameter(index, Types.INTEGER);
@@ -412,17 +412,17 @@ public final class SCallableStatement
  *
  **************************************************************************/
 
-    public Object registerFloat(final SObjFunction obj,
-                                final SContext     context,
-                                final Object[]     args)
+    public Object registerFloat(final TeaFunction obj,
+                                final TeaContext     context,
+                                final Object[]    args)
         throws SRuntimeException {
 
         if ( args.length != 4 ) {
             throw new SNumArgException(args, "index symbol");
         }
 
-        int     index = SArgs.getInt(args,2).intValue();
-        SObjVar var   = context.getVarObject(SArgs.getSymbol(args,3));
+        int     index = Args.getInt(args,2).intValue();
+        TeaVar var   = context.getVarObject(Args.getSymbol(args,3));
 
         try {
             registerOutFloat(index, var);
@@ -447,13 +447,13 @@ public final class SCallableStatement
  * @param index The index of the output parameter. The first is 1, the
  * second 2, ...
  *
- * @param var The <TT>SObjVar</TT> that will receive the value of the
+ * @param var The <TT>TeaVar</TT> that will receive the value of the
  * output parameter after the statement is called.
  *
  **************************************************************************/
 
     private void registerOutFloat(final int     index,
-                                  final SObjVar var)
+                                  final TeaVar var)
         throws SQLException {
 
         _callStat.registerOutParameter(index, Types.DOUBLE);
@@ -511,18 +511,18 @@ public final class SCallableStatement
  *
  **************************************************************************/
 
-    public Object registerDate(final SObjFunction obj,
-                               final SContext     context,
-                               final Object[]     args)
+    public Object registerDate(final TeaFunction obj,
+                               final TeaContext     context,
+                               final Object[]    args)
         throws SRuntimeException {
 
         if ( args.length != 4 ) {
             throw new SNumArgException(args, "index symbol");
         }
 
-        int        index   = SArgs.getInt(args,2).intValue();
-        SObjSymbol varName = SArgs.getSymbol(args,3);
-        SObjVar    var     = context.getVarObject(varName);
+        int        index   = Args.getInt(args,2).intValue();
+        TeaSymbol varName = Args.getSymbol(args,3);
+        TeaVar    var     = context.getVarObject(varName);
 
         try {
             registerOutDate(index, var, context);
@@ -547,14 +547,14 @@ public final class SCallableStatement
  * @param index The index of the output parameter. The first is 1, the
  * second 2, ...
  *
- * @param var The <TT>SObjVar</TT> that will receive the value of the
+ * @param var The <TT>TeaVar</TT> that will receive the value of the
  * output parameter after the statement is called.
  *
  **************************************************************************/
 
     private void registerOutDate(final int      index,
-                                 final SObjVar   var,
-                                 final SContext context)
+                                 final TeaVar   var,
+                                 final TeaContext context)
         throws SQLException {
 
         _callStat.registerOutParameter(index, Types.TIMESTAMP);
@@ -597,9 +597,9 @@ public final class SCallableStatement
  *
  **************************************************************************/
 
-    public Object fetchOutParameters(final SObjFunction obj,
-                                     final SContext     context,
-                                     final Object[]     args)
+    public Object fetchOutParameters(final TeaFunction obj,
+                                     final TeaContext     context,
+                                     final Object[]    args)
         throws TeaException {
 
          try {
@@ -631,7 +631,7 @@ public final class SCallableStatement
 
 
         protected int     _index = 0;
-        protected SObjVar _var   = null;
+        protected TeaVar _var   = null;
 
 
 
@@ -644,7 +644,7 @@ public final class SCallableStatement
  **************************************************************************/
 
         SOutParameter(final int     index,
-                      final SObjVar var) {
+                      final TeaVar var) {
 
             _index = index;
             _var   = var;
@@ -691,7 +691,7 @@ public final class SCallableStatement
  **************************************************************************/
 
         public SOutParameterString(final int     index,
-                                   final SObjVar var) {
+                                   final TeaVar var) {
 
             super(index, var);
         }
@@ -739,7 +739,7 @@ public final class SCallableStatement
  **************************************************************************/
 
         public SOutParameterInt(final int     index,
-                                final SObjVar var) {
+                                final TeaVar var) {
 
             super(index, var);
         }
@@ -787,7 +787,7 @@ public final class SCallableStatement
  **************************************************************************/
 
         public SOutParameterFloat(final int     index,
-                                  final SObjVar var) {
+                                  final TeaVar var) {
 
             super(index, var);
         }
@@ -828,7 +828,7 @@ public final class SCallableStatement
 
 
 
-        private SContext _context = null;
+        private TeaContext _context = null;
 
 
 
@@ -841,8 +841,8 @@ public final class SCallableStatement
  **************************************************************************/
 
         public SOutParameterDate(final int      index,
-                                 final SObjVar  var,
-                                 final SContext context) {
+                                 final TeaVar  var,
+                                 final TeaContext context) {
 
             super(index, var);
 
@@ -875,7 +875,7 @@ public final class SCallableStatement
             if ( result != null ) {
                 _var.set(result);
             } else {
-                _var.set(SObjNull.NULL);
+                _var.set(TeaNull.NULL);
             }
         }
 

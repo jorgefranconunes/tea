@@ -9,7 +9,7 @@ package com.pdmfc.tea.runtime;
 import java.nio.charset.Charset;
 
 import com.pdmfc.tea.TeaException;
-import com.pdmfc.tea.runtime.SContext;
+import com.pdmfc.tea.runtime.TeaContext;
 
 
 
@@ -59,7 +59,7 @@ public interface TeaEnvironment {
  *
  **************************************************************************/
 
-    SContext getGlobalContext();
+    TeaContext getGlobalContext();
 
 
 

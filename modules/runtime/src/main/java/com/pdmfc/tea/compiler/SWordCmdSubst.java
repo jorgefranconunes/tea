@@ -10,8 +10,8 @@ import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.compiler.TeaCode;
 import com.pdmfc.tea.compiler.SWord;
 import com.pdmfc.tea.compiler.SWordSubstUtils;
-import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SObjFunction;
+import com.pdmfc.tea.runtime.TeaContext;
+import com.pdmfc.tea.runtime.TeaFunction;
 
 
 
@@ -74,7 +74,7 @@ final class SWordCmdSubst
  *
  **************************************************************************/
 
-    public Object get(final SContext context)
+    public Object get(final TeaContext context)
         throws TeaException {
 
         return _code.exec(context);
@@ -90,11 +90,11 @@ final class SWordCmdSubst
  *
  **************************************************************************/
 
-    public SObjFunction toFunction(final SContext context)
+    public TeaFunction toFunction(final TeaContext context)
         throws TeaException {
 
         Object       obj    = _code.exec(context);
-        SObjFunction result = SWordSubstUtils.toFunction(obj, context);
+        TeaFunction result = SWordSubstUtils.toFunction(obj, context);
 
         return result;
     }

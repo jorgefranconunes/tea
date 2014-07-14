@@ -9,9 +9,9 @@ package com.pdmfc.tea.compiler;
 import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.compiler.SWord;
 import com.pdmfc.tea.compiler.SWordSubstUtils;
-import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.SObjSymbol;
+import com.pdmfc.tea.runtime.TeaContext;
+import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.runtime.TeaSymbol;
 
 
 
@@ -34,7 +34,7 @@ final class SWordVarSubst
 
 
 
-    private SObjSymbol _symbol = null;
+    private TeaSymbol _symbol = null;
 
 
 
@@ -50,7 +50,7 @@ final class SWordVarSubst
 
     public SWordVarSubst(final String name) {
 
-        _symbol = SObjSymbol.addSymbol(name);
+        _symbol = TeaSymbol.addSymbol(name);
     }
 
 
@@ -63,7 +63,7 @@ final class SWordVarSubst
  *
  **************************************************************************/
 
-    public SWordVarSubst(final SObjSymbol symbol) {
+    public SWordVarSubst(final TeaSymbol symbol) {
 
         _symbol = symbol;
     }
@@ -87,7 +87,7 @@ final class SWordVarSubst
  *
  **************************************************************************/
 
-    public Object get(final SContext context)
+    public Object get(final TeaContext context)
         throws TeaException {
 
         return context.getVar(_symbol);
@@ -103,11 +103,11 @@ final class SWordVarSubst
  *
  **************************************************************************/
 
-    public SObjFunction toFunction(final SContext context)
+    public TeaFunction toFunction(final TeaContext context)
         throws TeaException {
 
         Object       obj    = context.getVar(_symbol);
-        SObjFunction result = SWordSubstUtils.toFunction(obj, context);
+        TeaFunction result = SWordSubstUtils.toFunction(obj, context);
 
         return result;
     }

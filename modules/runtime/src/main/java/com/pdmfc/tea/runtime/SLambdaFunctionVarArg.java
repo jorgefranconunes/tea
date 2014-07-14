@@ -7,12 +7,12 @@
 package com.pdmfc.tea.runtime;
 
 import com.pdmfc.tea.TeaException;
-import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SObjBlock;
-import com.pdmfc.tea.runtime.SObjPair;
-import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.SObjNull;
-import com.pdmfc.tea.runtime.SObjSymbol;
+import com.pdmfc.tea.runtime.TeaContext;
+import com.pdmfc.tea.runtime.TeaBlock;
+import com.pdmfc.tea.runtime.TeaPair;
+import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.runtime.TeaNull;
+import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.SBreakException;
 import com.pdmfc.tea.runtime.SContinueException;
 import com.pdmfc.tea.runtime.SReturnException;
@@ -39,14 +39,14 @@ import com.pdmfc.tea.runtime.SReturnException;
 
 public final class SLambdaFunctionVarArg
     extends Object
-    implements SObjFunction {
+    implements TeaFunction {
 
 
 
 
 
-   private SObjSymbol _argName = null;
-   private SObjBlock  _body    = null;
+   private TeaSymbol _argName = null;
+   private TeaBlock  _body    = null;
 
 
 
@@ -64,8 +64,8 @@ public final class SLambdaFunctionVarArg
  *
  **************************************************************************/
 
-    public SLambdaFunctionVarArg(final SObjSymbol argName,
-                                 final SObjBlock  body) {
+    public SLambdaFunctionVarArg(final TeaSymbol argName,
+                                 final TeaBlock  body) {
 
         _argName = argName;
         _body    = body;
@@ -94,22 +94,22 @@ public final class SLambdaFunctionVarArg
  *
  **************************************************************************/
 
-    public Object exec(final SObjFunction obj,
-                       final SContext     context,
-                       final Object[]     args)
+    public Object exec(final TeaFunction obj,
+                       final TeaContext     context,
+                       final Object[]    args)
         throws TeaException {
 
-        SContext funcContext = new SContext(_body.getContext());
-        Object   result      = SObjNull.NULL;
-        SObjPair emptyList   = SObjPair.emptyList();
-        SObjPair head        = emptyList;
-        SObjPair element     = null;
+        TeaContext funcContext = new TeaContext(_body.getContext());
+        Object   result      = TeaNull.NULL;
+        TeaPair emptyList   = TeaPair.emptyList();
+        TeaPair head        = emptyList;
+        TeaPair element     = null;
 
         // Creates the list with the actual function arguments.  The
         // loop starts at 1 because args[0] contains the function
         // being called (or a symbol with its name).
         for ( int i=1; i<args.length; i++ ) {
-            SObjPair node = new SObjPair(args[i], emptyList);
+            TeaPair node = new TeaPair(args[i], emptyList);
 
             if ( element == null ) {
                 head = node;

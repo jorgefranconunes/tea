@@ -8,9 +8,9 @@ package com.pdmfc.tea.compiler;
 
 import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.compiler.SStatement;
-import com.pdmfc.tea.runtime.SContext;
+import com.pdmfc.tea.runtime.TeaContext;
 import com.pdmfc.tea.runtime.SFlowControlException;
-import com.pdmfc.tea.runtime.SObjNull;
+import com.pdmfc.tea.runtime.TeaNull;
 import com.pdmfc.tea.runtime.SRuntimeException;
 
 
@@ -74,10 +74,10 @@ public final class TeaCode
  *
  **************************************************************************/
 
-    public Object exec(final SContext context)
+    public Object exec(final TeaContext context)
         throws TeaException {
 
-        Object value = SObjNull.NULL;
+        Object value = TeaNull.NULL;
 
         for ( SCodeNode node=_statsHead; node!=null; node=node._next ) {
             SStatement statement = node._element;

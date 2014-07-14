@@ -7,7 +7,7 @@
 package com.pdmfc.tea.runtime;
 
 import com.pdmfc.tea.TeaException;
-import com.pdmfc.tea.runtime.SContext;
+import com.pdmfc.tea.runtime.TeaContext;
 
 
 
@@ -19,7 +19,7 @@ import com.pdmfc.tea.runtime.SContext;
  *
  **************************************************************************/
 
-public interface SObjFunction  {
+public interface TeaFunction  {
 
 
 
@@ -29,7 +29,7 @@ public interface SObjFunction  {
  *
  * Executes the command.
  *
- * @param func The <code>SObjFunction</code> that led to call this
+ * @param func The <code>TeaFunction</code> that led to call this
  * function. Most of the time is the same as the <code>this</code>
  * object.
  *
@@ -44,8 +44,8 @@ public interface SObjFunction  {
  *
  **************************************************************************/
 
-    Object exec(SObjFunction func,
-                SContext     context,
+    Object exec(TeaFunction func,
+                TeaContext     context,
                 Object[]     args)
         throws TeaException;
 

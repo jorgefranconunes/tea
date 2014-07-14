@@ -16,7 +16,7 @@ package com.pdmfc.tea.runtime;
  *
  **************************************************************************/
 
-public final class SObjByteArray
+public final class TeaByteArray
     extends Object {
 
 
@@ -39,7 +39,7 @@ public final class SObjByteArray
  *
  **************************************************************************/
 
-   public SObjByteArray() {
+   public TeaByteArray() {
 
        setContents(new byte[0], 0, 0);
    }
@@ -55,7 +55,7 @@ public final class SObjByteArray
  *
  **************************************************************************/
 
-   public SObjByteArray(final byte[] bytes) {
+   public TeaByteArray(final byte[] bytes) {
 
        setContents(bytes, 0, bytes.length);
    }
@@ -70,7 +70,7 @@ public final class SObjByteArray
  *
  **************************************************************************/
 
-   public SObjByteArray(final byte[] bytes,
+   public TeaByteArray(final byte[] bytes,
                         final int    offset,
                         final int    count) {
 

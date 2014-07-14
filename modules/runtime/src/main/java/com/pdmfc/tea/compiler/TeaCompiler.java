@@ -20,7 +20,6 @@ import com.pdmfc.tea.compiler.TeaCode;
 import com.pdmfc.tea.compiler.TeaCompileException;
 import com.pdmfc.tea.compiler.CompilerStream;
 import com.pdmfc.tea.compiler.SStatement;
-import com.pdmfc.tea.compiler.STeaParserUtils;
 import com.pdmfc.tea.compiler.SWordBlock;
 import com.pdmfc.tea.compiler.SWordCmdSubst;
 import com.pdmfc.tea.compiler.SWordFloat;
@@ -29,6 +28,7 @@ import com.pdmfc.tea.compiler.SWordList;
 import com.pdmfc.tea.compiler.SWordLong;
 import com.pdmfc.tea.compiler.SWordSymbol;
 import com.pdmfc.tea.compiler.SWordVarSubst;
+import com.pdmfc.tea.compiler.TeaParserUtils;
 import com.pdmfc.tea.util.SInputSourceFactory;
 
 
@@ -793,7 +793,7 @@ public final class TeaCompiler
             compileError(msg, line, onFileMsg());
         }
 
-        String result = STeaParserUtils.parseStringLiteral(name.toString());
+        String result = TeaParserUtils.parseStringLiteral(name.toString());
 
         return result;
     }

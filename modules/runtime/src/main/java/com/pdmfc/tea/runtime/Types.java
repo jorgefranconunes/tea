@@ -22,7 +22,7 @@ import com.pdmfc.tea.runtime.SNoSuchVarException;
  *
  **************************************************************************/
 
-public final class STypes
+public final class Types
     extends Object {
 
 
@@ -30,8 +30,8 @@ public final class STypes
 
 
     // The name of variable with the missing function callback action.
-    private static final SObjSymbol CALLBACK_NAME =
-        SObjSymbol.addSymbol("TEA_NOFUNC_CALLBACK");
+    private static final TeaSymbol CALLBACK_NAME =
+        TeaSymbol.addSymbol("TEA_NOFUNC_CALLBACK");
 
     private static final String TYPE_BLOCK    = "Block";
     private static final String TYPE_BOOL     = "Boolean";
@@ -57,7 +57,7 @@ public final class STypes
  *
  **************************************************************************/
 
-    private STypes() {
+    private Types() {
 
         // Nothing to do.
     }
@@ -111,7 +111,7 @@ public final class STypes
 
     public static String getTypeName(final Class aClass) {
 
-        if ( SObjBlock.class.isAssignableFrom(aClass) ) {
+        if ( TeaBlock.class.isAssignableFrom(aClass) ) {
             return TYPE_BLOCK;
         }
         if ( Boolean.class.isAssignableFrom(aClass) ) {
@@ -126,19 +126,19 @@ public final class STypes
         if ( STosObj.class.isAssignableFrom(aClass) ) {
             return TYPE_TOSOBJ;
         }
-        if ( SObjFunction.class.isAssignableFrom(aClass) ) {
+        if ( TeaFunction.class.isAssignableFrom(aClass) ) {
             return TYPE_FUNC;
         }
-        if ( SObjPair.class.isAssignableFrom(aClass) ) {
+        if ( TeaPair.class.isAssignableFrom(aClass) ) {
             return TYPE_PAIR;
         }
         if ( String.class.isAssignableFrom(aClass) ) {
             return TYPE_STRING;
         }
-        if ( SObjSymbol.class.isAssignableFrom(aClass) ) {
+        if ( TeaSymbol.class.isAssignableFrom(aClass) ) {
             return TYPE_SYMBOL;
         }
-        if ( SObjNull.class.isAssignableFrom(aClass) ) {
+        if ( TeaNull.class.isAssignableFrom(aClass) ) {
             return TYPE_NULL;
         }
         if ( STosClass.class.isAssignableFrom(aClass) ) {
@@ -168,18 +168,18 @@ public final class STypes
  *
  **************************************************************************/
 
-    public static Object getVarWithEffort(final SContext   context,
-                                          final SObjSymbol name)
+    public static Object getVarWithEffort(final TeaContext  context,
+                                          final TeaSymbol name)
         throws TeaException {
 
-        SObjFunction callbackFunc = null;
+        TeaFunction callbackFunc = null;
         Object[]     callbackArgs = new Object[2];
 
         callbackArgs[0] = CALLBACK_NAME;
         callbackArgs[1] = name;
     
         try {
-            callbackFunc = (SObjFunction)context.getVar(CALLBACK_NAME);
+            callbackFunc = (TeaFunction)context.getVar(CALLBACK_NAME);
         } catch (ClassCastException e1) {
             // Variable TEA_NOFUNC_CALLBACK does not contain a Tea function.
             throw new SNoSuchVarException(name);

@@ -10,20 +10,19 @@ import java.text.MessageFormat;
 import java.util.Iterator;
 
 import com.pdmfc.tea.TeaException;
-import com.pdmfc.tea.compiler.STeaParserUtils;
-import com.pdmfc.tea.modules.math.SModuleMath;
+import com.pdmfc.tea.compiler.TeaParserUtils;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.util.SDate;
-import com.pdmfc.tea.runtime.SArgs;
-import com.pdmfc.tea.runtime.SContext;
+import com.pdmfc.tea.runtime.Args;
+import com.pdmfc.tea.runtime.TeaContext;
 import com.pdmfc.tea.runtime.SNumArgException;
-import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.SObjNull;
-import com.pdmfc.tea.runtime.SObjPair;
-import com.pdmfc.tea.runtime.SObjSymbol;
+import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.runtime.TeaNull;
+import com.pdmfc.tea.runtime.TeaPair;
+import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypeException;
-import com.pdmfc.tea.runtime.STypes;
+import com.pdmfc.tea.runtime.Types;
 import com.pdmfc.tea.runtime.TeaEnvironment;
 import com.pdmfc.tea.runtime.TeaFunctionImplementor;
 import com.pdmfc.tea.runtime.TeaModule;
@@ -57,9 +56,28 @@ import com.pdmfc.tea.util.SFormater;
  *
  **************************************************************************/
 
-public final class SModuleString
+public final class ModuleString
     extends Object
     implements TeaModule {
+
+
+
+
+
+    /**
+     * The value zero.
+     */
+    private static final Integer ZERO = Integer.valueOf(0);
+
+    /** 
+     * The value one.
+     */
+    private static final Integer ONE = Integer.valueOf(1);
+
+    /**
+     * The value minus one.
+     */
+    private static final Integer MINUS_ONE = Integer.valueOf(-1);
 
 
 
@@ -79,7 +97,7 @@ public final class SModuleString
  *
  **************************************************************************/
 
-   public SModuleString() {
+   public ModuleString() {
 
        // Nothing to do.
    }
@@ -202,17 +220,17 @@ public final class SModuleString
  **************************************************************************/
 
     @TeaFunctionImplementor("str-printf")
-    public Object functionPrintf(final SObjFunction func,
-                                 final SContext     context,
-                                 final Object[]     args)
+    public Object functionPrintf(final TeaFunction func,
+                                 final TeaContext  context,
+                                 final Object[]    args)
         throws TeaException {
 
-        SArgs.checkAtLeast(args, 2, "string [object ...]");
+        Args.checkAtLeast(args, 2, "string [object ...]");
 
         _formatResult.setLength(0);
 
         try {
-            _formater.format(SArgs.getString(args,1), args, 2);
+            _formater.format(Args.getString(args,1), args, 2);
         } catch ( SNumArgException e1 ) {
             throw new SRuntimeException(args, e1.getMessage());
         } catch ( STypeException e2 ) {
@@ -274,14 +292,14 @@ public final class SModuleString
  **************************************************************************/
 
     @TeaFunctionImplementor("str-fmt")
-    public Object functionFmt(final SObjFunction func,
-                              final SContext context,
+    public Object functionFmt(final TeaFunction func,
+                              final TeaContext context,
                               final Object[]   args)
         throws TeaException {
 
-        SArgs.checkAtLeast(args, 2, "string [object ...]");
+        Args.checkAtLeast(args, 2, "string [object ...]");
 
-        String   fmt         = SArgs.getString(args, 1);
+        String   fmt         = Args.getString(args, 1);
         int      fmtArgCount = args.length - 2;
         Object[] fmtArgs     = new Object[fmtArgCount];
         String   result      = null;
@@ -371,14 +389,14 @@ public final class SModuleString
  **************************************************************************/
 
     @TeaFunctionImplementor("str-upper")
-    public static Object functionUpper(final SObjFunction func,
-                                       final SContext     context,
-                                       final Object[]     args)
+    public static Object functionUpper(final TeaFunction func,
+                                       final TeaContext  context,
+                                       final Object[]    args)
         throws TeaException {
 
-        SArgs.checkCount(args, 2, "string");
+        Args.checkCount(args, 2, "string");
 
-        String str    = SArgs.getString(args, 1);
+        String str    = Args.getString(args, 1);
         String result = str.toUpperCase();
 
         return result;
@@ -431,14 +449,14 @@ public final class SModuleString
  **************************************************************************/
 
     @TeaFunctionImplementor("str-lower")
-    public static Object functionLower(final SObjFunction func,
-                                       final SContext     context,
-                                       final Object[]     args)
+    public static Object functionLower(final TeaFunction func,
+                                       final TeaContext  context,
+                                       final Object[]    args)
         throws TeaException {
 
-        SArgs.checkCount(args, 2, "string");
+        Args.checkCount(args, 2, "string");
 
-        String str    = SArgs.getString(args,1);
+        String str    = Args.getString(args,1);
         String result = str.toLowerCase();
 
         return result;
@@ -496,14 +514,14 @@ public final class SModuleString
  **************************************************************************/
 
     @TeaFunctionImplementor("str-cmp")
-    public static Object functionCompare(final SObjFunction func,
-                                         final SContext     context,
-                                         final Object[]     args)
+    public static Object functionCompare(final TeaFunction func,
+                                         final TeaContext  context,
+                                         final Object[]    args)
         throws TeaException {
 
-        return compare(SModuleMath.MINUS_ONE,
-                       SModuleMath.ZERO,
-                       SModuleMath.ONE,
+        return compare(MINUS_ONE,
+                       ZERO,
+                       ONE,
                        func,
                        context,
                        args);
@@ -560,9 +578,9 @@ public final class SModuleString
  **************************************************************************/
 
     @TeaFunctionImplementor("str>")
-    public static Object functionGt(final SObjFunction func,
-                                    final SContext     context,
-                                    final Object[]     args)
+    public static Object functionGt(final TeaFunction func,
+                                    final TeaContext  context,
+                                    final Object[]    args)
         throws TeaException {
 
         return compare(Boolean.FALSE,
@@ -626,9 +644,9 @@ public final class SModuleString
  **************************************************************************/
 
     @TeaFunctionImplementor("str>=")
-    public static Object functionGe(final SObjFunction func,
-                                    final SContext     context,
-                                    final Object[]     args)
+    public static Object functionGe(final TeaFunction func,
+                                    final TeaContext  context,
+                                    final Object[]    args)
         throws TeaException {
 
         return compare(Boolean.FALSE,
@@ -690,9 +708,9 @@ public final class SModuleString
  **************************************************************************/
 
     @TeaFunctionImplementor("str==")
-    public static Object functionEq(final SObjFunction func,
-                                    final SContext     context,
-                                    final Object[]     args)
+    public static Object functionEq(final TeaFunction func,
+                                    final TeaContext  context,
+                                    final Object[]    args)
         throws TeaException {
 
         return compare(Boolean.FALSE,
@@ -754,9 +772,9 @@ public final class SModuleString
  **************************************************************************/
 
     @TeaFunctionImplementor("str!=")
-    public static Object functionNe(final SObjFunction func,
-                                    final SContext     context,
-                                    final Object[]     args)
+    public static Object functionNe(final TeaFunction func,
+                                    final TeaContext  context,
+                                    final Object[]    args)
         throws TeaException {
 
         return compare(Boolean.TRUE,
@@ -820,9 +838,9 @@ public final class SModuleString
  **************************************************************************/
 
     @TeaFunctionImplementor("str<")
-    public static Object functionLt(final SObjFunction func,
-                                    final SContext     context,
-                                    final Object[]     args)
+    public static Object functionLt(final TeaFunction func,
+                                    final TeaContext  context,
+                                    final Object[]    args)
         throws TeaException {
 
         return compare(Boolean.TRUE,
@@ -886,9 +904,9 @@ public final class SModuleString
  **************************************************************************/
 
     @TeaFunctionImplementor("str<=")
-    public static Object functionLe(final SObjFunction func,
-                                    final SContext     context,
-                                    final Object[]     args)
+    public static Object functionLe(final TeaFunction func,
+                                    final TeaContext  context,
+                                    final Object[]    args)
         throws TeaException {
 
         return compare(Boolean.TRUE,
@@ -931,15 +949,15 @@ public final class SModuleString
     private static Object compare(final Object       lt,
                                   final Object       eq,
                                   final Object       gt,
-                                  final SObjFunction func,
-                                  final SContext     context,
-                                  final Object[]     args)
+                                  final TeaFunction func,
+                                  final TeaContext  context,
+                                  final Object[]    args)
         throws TeaException {
 
-        SArgs.checkCount(args, 3, "string1 string2");
+        Args.checkCount(args, 3, "string1 string2");
 
-        String  op1        = SArgs.getString(args,1);
-        String  op2        = SArgs.getString(args,2);
+        String  op1        = Args.getString(args,1);
+        String  op2        = Args.getString(args,2);
         int     comparison = op1.compareTo(op2);
         Object  result     = null;
 
@@ -1001,18 +1019,18 @@ public final class SModuleString
  **************************************************************************/
 
     @TeaFunctionImplementor("str-cat")
-    public static Object functionCat(final SObjFunction func,
-                                     final SContext     context,
-                                     final Object[]     args)
+    public static Object functionCat(final TeaFunction func,
+                                     final TeaContext  context,
+                                     final Object[]    args)
         throws TeaException {
 
-        SArgs.checkAtLeast(args, 2, "string ...");
+        Args.checkAtLeast(args, 2, "string ...");
 
-        String        arg1   = SArgs.getString(args,1);
+        String        arg1   = Args.getString(args,1);
         StringBuilder buffer = new StringBuilder(arg1);
 
         for ( int i=2; i<args.length; i++ ) {
-            String arg = SArgs.getString(args, i);
+            String arg = Args.getString(args, i);
             buffer.append(arg);
         }
 
@@ -1073,15 +1091,15 @@ public final class SModuleString
  **************************************************************************/
 
     @TeaFunctionImplementor("str-ends-with?")
-    public static  Object functionEndsWith(final SObjFunction func,
-                                           final SContext     context,
-                                           final Object[]     args)
+    public static  Object functionEndsWith(final TeaFunction func,
+                                           final TeaContext  context,
+                                           final Object[]    args)
         throws TeaException {
 
-        SArgs.checkCount(args, 3, "string1 string2");
+        Args.checkCount(args, 3, "string1 string2");
 
-        String str1    = SArgs.getString(args,1);
-        String str2    = SArgs.getString(args,2);
+        String str1    = Args.getString(args,1);
+        String str2    = Args.getString(args,2);
         Boolean result = Boolean.valueOf(str1.endsWith(str2));
 
         return result;
@@ -1139,15 +1157,15 @@ public final class SModuleString
  **************************************************************************/
 
     @TeaFunctionImplementor("str-starts-with?")
-    public static Object functionStartsWith(final SObjFunction func,
-                                            final SContext     context,
-                                            final Object[]     args)
+    public static Object functionStartsWith(final TeaFunction func,
+                                            final TeaContext  context,
+                                            final Object[]    args)
         throws TeaException {
 
-        SArgs.checkCount(args, 3, "string1 string2");
+        Args.checkCount(args, 3, "string1 string2");
 
-        String  str1   = SArgs.getString(args,1);
-        String  str2   = SArgs.getString(args,2);
+        String  str1   = Args.getString(args,1);
+        String  str2   = Args.getString(args,2);
         Boolean result = Boolean.valueOf(str1.startsWith(str2));
 
         return result;
@@ -1214,17 +1232,17 @@ public final class SModuleString
  **************************************************************************/
 
     @TeaFunctionImplementor("str-index-of")
-    public static Object functionIndexOf(final SObjFunction func,
-                                         final SContext     context,
-                                         final Object[]     args)
+    public static Object functionIndexOf(final TeaFunction func,
+                                         final TeaContext  context,
+                                         final Object[]    args)
         throws TeaException {
 
-        SArgs.checkBetween(args,3,4, "string sub-string [start-index]");
+        Args.checkBetween(args,3,4, "string sub-string [start-index]");
 
-        String str1       = SArgs.getString(args,1);
-        String str2       = SArgs.getString(args,2);
+        String str1       = Args.getString(args,1);
+        String str2       = Args.getString(args,2);
         int    startIndex =
-            (args.length==4) ? SArgs.getInt(args,3).intValue() : 0;
+            (args.length==4) ? Args.getInt(args,3).intValue() : 0;
         int     indexOf   = str1.indexOf(str2, startIndex);
         Integer result    = Integer.valueOf(indexOf);
 
@@ -1292,17 +1310,17 @@ public final class SModuleString
  **************************************************************************/
 
     @TeaFunctionImplementor("str-last-index-of")
-    public static Object functionLastIndexOf(final SObjFunction func,
-                                             final SContext     context,
-                                             final Object[]     args)
+    public static Object functionLastIndexOf(final TeaFunction func,
+                                             final TeaContext  context,
+                                             final Object[]    args)
         throws TeaException {
 
-        SArgs.checkBetween(args,3,4, "string sub-string [start-index]");
+        Args.checkBetween(args,3,4, "string sub-string [start-index]");
 
-        String str1       = SArgs.getString(args,1);
-        String str2       = SArgs.getString(args,2);
+        String str1       = Args.getString(args,1);
+        String str2       = Args.getString(args,2);
         int    startIndex =
-            (args.length==4) ? SArgs.getInt(args,3).intValue() : str1.length();
+            (args.length==4) ? Args.getInt(args,3).intValue() : str1.length();
         int    indexOf    = str1.lastIndexOf(str2, startIndex);
         int    result     = Integer.valueOf(indexOf);
         
@@ -1355,14 +1373,14 @@ public final class SModuleString
  **************************************************************************/
 
     @TeaFunctionImplementor("str-len")
-    public static Object functionLen(final SObjFunction func,
-                                     final SContext     context,
-                                     final Object[]     args)
+    public static Object functionLen(final TeaFunction func,
+                                     final TeaContext  context,
+                                     final Object[]    args)
         throws TeaException {
 
-        SArgs.checkCount(args, 2, "string");
+        Args.checkCount(args, 2, "string");
 
-        String  str    = SArgs.getString(args,1);
+        String  str    = Args.getString(args,1);
         int     strLen = str.length();
         Integer result = Integer.valueOf(strLen);
 
@@ -1438,18 +1456,18 @@ public final class SModuleString
  **************************************************************************/
 
     @TeaFunctionImplementor("str-substring")
-    public static Object functionSubString(final SObjFunction func,
-                                           final SContext     context,
-                                           final Object[]     args)
+    public static Object functionSubString(final TeaFunction func,
+                                           final TeaContext  context,
+                                           final Object[]    args)
         throws TeaException {
 
-        SArgs.checkBetween(args, 3, 4, "string start-index [end-index]");
+        Args.checkBetween(args, 3, 4, "string start-index [end-index]");
 
-        String str    = SArgs.getString(args,1);
-        int    start  = SArgs.getInt(args,2).intValue();
+        String str    = Args.getString(args,1);
+        int    start  = Args.getInt(args,2).intValue();
         int    size   = str.length();
         int    end    =
-            (args.length==4) ? SArgs.getInt(args,3).intValue() : size;
+            (args.length==4) ? Args.getInt(args,3).intValue() : size;
         String result = null;
 
         if ( start < 0 ) {
@@ -1515,14 +1533,14 @@ public final class SModuleString
  **************************************************************************/
 
     @TeaFunctionImplementor("str-trim")
-    public static Object functionTrim(final SObjFunction func,
-                                      final SContext     context,
-                                      final Object[]     args)
+    public static Object functionTrim(final TeaFunction func,
+                                      final TeaContext  context,
+                                      final Object[]    args)
         throws TeaException {
 
-        SArgs.checkCount(args, 2, "string");
+        Args.checkCount(args, 2, "string");
 
-        String arg    = SArgs.getString(args,1);
+        String arg    = Args.getString(args,1);
         String result = arg.trim();
 
         return result;
@@ -1582,15 +1600,15 @@ public final class SModuleString
  **************************************************************************/
 
     @TeaFunctionImplementor("str-join")
-    public static Object functionJoin(final SObjFunction func,
-                                      final SContext     context,
-                                      final Object[]     args)
+    public static Object functionJoin(final TeaFunction func,
+                                      final TeaContext  context,
+                                      final Object[]    args)
         throws TeaException {
 
-        SArgs.checkCount(args, 3, "string-list string");
+        Args.checkCount(args, 3, "string-list string");
 
-        SObjPair list      = SArgs.getPair(args,1);
-        String   separator = SArgs.getString(args,2);
+        TeaPair list      = Args.getPair(args,1);
+        String   separator = Args.getString(args,2);
         Iterator i         = list.iterator();
 
         if ( !i.hasNext() ) {
@@ -1613,7 +1631,7 @@ public final class SModuleString
                 throw new STypeException(args,
                                          msg,
                                          String.valueOf(index),
-                                         STypes.getTypeName(element));
+                                         Types.getTypeName(element));
             }
 
             buffer.append(str);
@@ -1671,14 +1689,14 @@ public final class SModuleString
  **************************************************************************/
 
     @TeaFunctionImplementor("str-empty?")
-    public static Object functionEmpty(final SObjFunction func,
-                                       final SContext     context,
-                                       final Object[]     args)
+    public static Object functionEmpty(final TeaFunction func,
+                                       final TeaContext  context,
+                                       final Object[]    args)
         throws TeaException {
 
-        SArgs.checkCount(args, 2, "string");
+        Args.checkCount(args, 2, "string");
 
-        String  str     = SArgs.getString(args,1);
+        String  str     = Args.getString(args,1);
         boolean isEmpty = str.isEmpty();
         Boolean result  = Boolean.valueOf(isEmpty);
 
@@ -1732,14 +1750,14 @@ public final class SModuleString
  **************************************************************************/
 
     @TeaFunctionImplementor("str-not-empty?")
-    public static Object functionNotEmpty(final SObjFunction func,
-                                          final SContext     context,
-                                          final Object[]     args)
+    public static Object functionNotEmpty(final TeaFunction func,
+                                          final TeaContext  context,
+                                          final Object[]    args)
         throws TeaException {
 
-        SArgs.checkCount(args, 2, "string");
+        Args.checkCount(args, 2, "string");
 
-        String  str        = SArgs.getString(args,1);
+        String  str        = Args.getString(args,1);
         boolean isNotEmpty = !str.isEmpty();
         Boolean result     = Boolean.valueOf(isNotEmpty);
 
@@ -1793,14 +1811,14 @@ public final class SModuleString
  **************************************************************************/
 
     @TeaFunctionImplementor("symbol->string")
-    public static Object functionSymbolToString(final SObjFunction func,
-                                                final SContext context,
+    public static Object functionSymbolToString(final TeaFunction func,
+                                                final TeaContext context,
                                                 final Object[]   args)
         throws TeaException {
 
-        SArgs.checkCount(args, 2, "symbol");
+        Args.checkCount(args, 2, "symbol");
 
-        SObjSymbol symbol = SArgs.getSymbol(args, 1);
+        TeaSymbol symbol = Args.getSymbol(args, 1);
         String     result = symbol.getName();
 
         return result;
@@ -1862,20 +1880,20 @@ public final class SModuleString
  **************************************************************************/
 
     @TeaFunctionImplementor("string->int")
-    public static Object functionStringToInt(final SObjFunction func,
-                                             final SContext     context,
-                                             final Object[]     args)
+    public static Object functionStringToInt(final TeaFunction func,
+                                             final TeaContext  context,
+                                             final Object[]    args)
         throws TeaException {
 
-        SArgs.checkCount(args, 2, "string");
+        Args.checkCount(args, 2, "string");
 
         Object result = null;
-        String str    = SArgs.getString(args, 1);
+        String str    = Args.getString(args, 1);
 
         try {
             result = Integer.valueOf(str);
         } catch ( NumberFormatException e ) {
-            result = SObjNull.NULL;
+            result = TeaNull.NULL;
         }
 
         return result;
@@ -1930,20 +1948,20 @@ public final class SModuleString
  **************************************************************************/
 
     @TeaFunctionImplementor("string->float")
-    public static Object functionStringToFloat(final SObjFunction func,
-                                               final SContext     context,
-                                               final Object[]     args)
+    public static Object functionStringToFloat(final TeaFunction func,
+                                               final TeaContext  context,
+                                               final Object[]    args)
         throws TeaException {
 
-        SArgs.checkCount(args, 2, "string");
+        Args.checkCount(args, 2, "string");
 
         Object result = null;
-        String str    = SArgs.getString(args,1);
+        String str    = Args.getString(args,1);
 
         try {
             result = Double.valueOf(str);
         } catch ( NumberFormatException e ) {
-            result = SObjNull.NULL;
+            result = TeaNull.NULL;
         }
 
         return result;
@@ -1998,14 +2016,14 @@ public final class SModuleString
  **************************************************************************/
 
     @TeaFunctionImplementor("int->string")
-    public static Object functionIntToString(final SObjFunction func,
-                                             final SContext     context,
-                                             final Object[]     args)
+    public static Object functionIntToString(final TeaFunction func,
+                                             final TeaContext  context,
+                                             final Object[]    args)
         throws TeaException {
 
-        SArgs.checkCount(args, 2, "integer");
+        Args.checkCount(args, 2, "integer");
 
-        Number value  = SArgs.getNumber(args, 1);
+        Number value  = Args.getNumber(args, 1);
         String result = String.valueOf(value.intValue());
 
         return result;
@@ -2059,14 +2077,14 @@ public final class SModuleString
  **************************************************************************/
 
     @TeaFunctionImplementor("float->string")
-    public static Object functionFloatToString(final SObjFunction func,
-                                               final SContext     context,
-                                               final Object[]     args)
+    public static Object functionFloatToString(final TeaFunction func,
+                                               final TeaContext  context,
+                                               final Object[]    args)
         throws TeaException {
 
-        SArgs.checkCount(args, 2, "float");
+        Args.checkCount(args, 2, "float");
 
-        Number value  = SArgs.getNumber(args, 1);
+        Number value  = Args.getNumber(args, 1);
         String result = String.valueOf(value.doubleValue());
 
         return result;
@@ -2137,15 +2155,15 @@ public final class SModuleString
  **************************************************************************/
 
     @TeaFunctionImplementor("str-unescape")
-    public static Object functionUnescape(final SObjFunction func,
-                                          final SContext     context,
-                                          final Object[]     args)
+    public static Object functionUnescape(final TeaFunction func,
+                                          final TeaContext  context,
+                                          final Object[]    args)
         throws TeaException {
 
-        SArgs.checkCount(args, 2, "string");
+        Args.checkCount(args, 2, "string");
 
-        String str    = SArgs.getString(args, 1);
-        String result = STeaParserUtils.parseStringLiteral(str);
+        String str    = Args.getString(args, 1);
+        String result = TeaParserUtils.parseStringLiteral(str);
 
         return result;
     }

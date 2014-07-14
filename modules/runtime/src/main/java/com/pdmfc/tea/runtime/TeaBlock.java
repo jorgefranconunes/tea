@@ -7,7 +7,7 @@
 package com.pdmfc.tea.runtime;
 
 import com.pdmfc.tea.TeaException;
-import com.pdmfc.tea.runtime.SContext;
+import com.pdmfc.tea.runtime.TeaContext;
 
 
 
@@ -20,7 +20,7 @@ import com.pdmfc.tea.runtime.SContext;
  *
  **************************************************************************/
 
-public interface SObjBlock {
+public interface TeaBlock {
 
 
 
@@ -35,7 +35,7 @@ public interface SObjBlock {
  *
  **************************************************************************/
 
-    SContext getContext();
+    TeaContext getContext();
 
 
 
@@ -55,7 +55,7 @@ public interface SObjBlock {
  *
  **************************************************************************/
 
-    Object exec(SContext aContext)
+    Object exec(TeaContext aContext)
         throws TeaException;
 
 

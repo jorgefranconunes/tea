@@ -17,7 +17,7 @@ package com.pdmfc.tea.runtime;
  *
  **************************************************************************/
 
-public final class SObjNull
+public final class TeaNull
     extends Object {
 
 
@@ -27,7 +27,7 @@ public final class SObjNull
     /**
      * The Tea null object.
      */
-    public static final Object NULL = new SObjNull();
+    public static final Object NULL = new TeaNull();
 
 
 
@@ -40,7 +40,7 @@ public final class SObjNull
  *
  **************************************************************************/
 
-    private SObjNull() {
+    private TeaNull() {
 
         // Nothing to do.
     }

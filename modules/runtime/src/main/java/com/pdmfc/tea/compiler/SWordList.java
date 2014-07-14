@@ -10,9 +10,9 @@ import java.util.List;
 
 import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.compiler.SWord;
-import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.SObjPair;
+import com.pdmfc.tea.runtime.TeaContext;
+import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.runtime.TeaPair;
 import com.pdmfc.tea.runtime.SRuntimeException;
 
 
@@ -60,16 +60,16 @@ final class SWordList
  *
  **************************************************************************/
 
-    public Object get(final SContext context)
+    public Object get(final TeaContext context)
         throws TeaException {
 
-        SObjPair empty = new SObjPair(null, null);
-        SObjPair head  = empty;
-        SObjPair elem  = null;
+        TeaPair empty = new TeaPair(null, null);
+        TeaPair head  = empty;
+        TeaPair elem  = null;
 
         for ( SWord word : _list ) {
             Object   car  = word.get(context);
-            SObjPair node = new SObjPair(car, empty);
+            TeaPair node = new TeaPair(car, empty);
             
             if ( elem == null ) {
                 head = node;
@@ -92,7 +92,7 @@ final class SWordList
  *
  **************************************************************************/
 
-    public SObjFunction toFunction(final SContext context)
+    public TeaFunction toFunction(final TeaContext context)
         throws TeaException {
 
         throw new SRuntimeException("a list can not be used as a function");

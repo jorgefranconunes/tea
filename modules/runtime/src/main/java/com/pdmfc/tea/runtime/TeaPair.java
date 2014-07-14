@@ -21,7 +21,7 @@ import com.pdmfc.tea.runtime.SEmptyListException;
  *
  **************************************************************************/
 
-public final class SObjPair
+public final class TeaPair
     extends Object
     implements Iterable {
 
@@ -33,7 +33,7 @@ public final class SObjPair
     private Object _car = null;
 
     /** The right hand side object of the pair. */
-    private SObjPair _cdr = null;
+    private TeaPair _cdr = null;
 
 
 
@@ -45,7 +45,7 @@ public final class SObjPair
  *
  **************************************************************************/
 
-    public SObjPair() {
+    public TeaPair() {
 
         this(null, null);
     }
@@ -64,8 +64,8 @@ public final class SObjPair
  *
  **************************************************************************/
 
-    public SObjPair(final Object   car,
-                    final SObjPair cdr) {
+    public TeaPair(final Object   car,
+                    final TeaPair cdr) {
 
         _car = car;
         _cdr = cdr;
@@ -79,14 +79,14 @@ public final class SObjPair
  *
  * Creates a pair representing an empty list.
  *
- * @return A newly created <code>SObjPair</code> object representing
+ * @return A newly created <code>TeaPair</code> object representing
  * the empty list.
  *
  **************************************************************************/
 
-    public static SObjPair emptyList() {
+    public static TeaPair emptyList() {
 
-        return new SObjPair();
+        return new TeaPair();
     }
 
 
@@ -136,7 +136,7 @@ public final class SObjPair
  *
  **************************************************************************/
 
-    public SObjPair setCar(final Object car ) {
+    public TeaPair setCar(final Object car ) {
 
         _car = car;
 
@@ -158,7 +158,7 @@ public final class SObjPair
  *
  **************************************************************************/
 
-    public SObjPair cdr()
+    public TeaPair cdr()
         throws SEmptyListException {
 
         if ( _cdr == null ) {
@@ -178,7 +178,7 @@ public final class SObjPair
  *
  **************************************************************************/
 
-    public SObjPair setCdr(final SObjPair cdr) {
+    public TeaPair setCdr(final TeaPair cdr) {
 
         _cdr = cdr;
 
@@ -200,7 +200,7 @@ public final class SObjPair
     public int length() {
 
         int      numNodes = 0;
-        SObjPair node     = this;
+        TeaPair node     = this;
 
         while ( node._car != null ) {
             numNodes++;
@@ -218,7 +218,7 @@ public final class SObjPair
  *
  * Builds an <code>java.util.Iterator</code> that will orderly
  * iterator over the elements in the list whose head is this
- * <code>SObjPair</code> object.
+ * <code>TeaPair</code> object.
  *
  * @return A newly created <code>java.util.Iterator</code> object that
  * will iterate over the list elements.
@@ -245,7 +245,7 @@ public final class SObjPair
         implements Iterator {
 
 
-        private SObjPair _node = null;
+        private TeaPair _node = null;
 
 
 
@@ -257,7 +257,7 @@ public final class SObjPair
  *
  **************************************************************************/
 
-        public SPairIterator(final SObjPair node) {
+        public SPairIterator(final TeaPair node) {
 
             _node = node;
             if ( (_node!=null) && (_node._car==null) ) {
@@ -293,7 +293,7 @@ public final class SObjPair
         public Object next() {
 
             if ( (_node==null) || (_node._car==null) ) {
-                throw new NoSuchElementException("SObjPairIterator");
+                throw new NoSuchElementException("TeaPairIterator");
             }
             Object element = _node._car;
 

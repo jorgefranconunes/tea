@@ -19,10 +19,10 @@ import com.pdmfc.tea.engine.TeaScriptEngine;
 import com.pdmfc.tea.modules.reflect.STeaJavaTypes;
 import com.pdmfc.tea.modules.util.SDate;
 import com.pdmfc.tea.modules.util.SHashtable;
-import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SObjNull;
-import com.pdmfc.tea.runtime.SObjPair;
-import com.pdmfc.tea.runtime.SObjSymbol;
+import com.pdmfc.tea.runtime.TeaContext;
+import com.pdmfc.tea.runtime.TeaNull;
+import com.pdmfc.tea.runtime.TeaPair;
+import com.pdmfc.tea.runtime.TeaSymbol;
 
 
 
@@ -64,14 +64,14 @@ public class SModuleReflectTest {
      */
     @Test
     public void testJava2Tea() throws Exception {
-        // In current implementation of SModuleReflect + TeaScriptEngine,
-        // we must run a script to force the STeaRuntime initialization
-        // before we can test SModuleReflect.java2Tea() regarding convertions
+        // In current implementation of ModuleReflect + TeaScriptEngine,
+        // we must run a script to force the TeaRuntime initialization
+        // before we can test ModuleReflect.java2Tea() regarding convertions
         // to STosObj that require autoloading.
         assertEquals(_engine.eval("is 123"), 123);
 
         // java2Tea needs a Tea context
-        SContext context = _engine.getTeaRuntime().getToplevelContext();
+        TeaContext context = _engine.getTeaRuntime().getToplevelContext();
 
         // an incomplete list of values/objects that are not converted by java2Tea
         Object anIdentityArray[] = {
@@ -80,9 +80,9 @@ public class SModuleReflectTest {
             123L, // Long
             123.0, // Double
             "aString", // String
-            SObjNull.NULL, // Tea runtime
-            SObjPair.emptyList(), // Tea runtime
-            SObjSymbol.getSymbol("is") // Tea runtime
+            TeaNull.NULL, // Tea runtime
+            TeaPair.emptyList(), // Tea runtime
+            TeaSymbol.getSymbol("is") // Tea runtime
         };
         for (Object obj : anIdentityArray) {
             Object result = STeaJavaTypes.java2Tea(obj, context);
@@ -100,9 +100,9 @@ public class SModuleReflectTest {
         String s = "hello";
         m.put("k2", s);
         SHashtable tm = (SHashtable)STeaJavaTypes.java2Tea(m, context);
-        Object args[] = {tm, SObjSymbol.getSymbol("get"), "k1"};
+        Object args[] = {tm, TeaSymbol.getSymbol("get"), "k1"};
         assertEquals(Double.valueOf(1.0d), (Double) tm.get(tm, context, args));
-        Object args2[] = {tm, SObjSymbol.getSymbol("get"), "k2"};
+        Object args2[] = {tm, TeaSymbol.getSymbol("get"), "k2"};
         assertSame(s, tm.get(tm, context, args2));
 
         // Date

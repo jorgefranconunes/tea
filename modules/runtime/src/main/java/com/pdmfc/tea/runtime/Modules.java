@@ -16,10 +16,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.pdmfc.tea.TeaException;
-import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.SObjPair;
-import com.pdmfc.tea.runtime.SObjSymbol;
+import com.pdmfc.tea.runtime.TeaContext;
+import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.runtime.TeaPair;
+import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.TeaEnvironment;
 import com.pdmfc.tea.runtime.TeaFunctionImplementor;
@@ -78,29 +78,12 @@ final class Modules
     public Modules add(final TeaModule module)
         throws TeaException {
 
-        initializeModule(module);
-
+        module.init(_environment);
+        buildModuleFunctions(_environment, module);
         _modules.add(module);
         startModule(module);
 
         return this;
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-    private void initializeModule(final TeaModule module)
-        throws TeaException {
-
-        module.init(_environment);
-        buildModuleFunctions(_environment, module);
     }
 
 
@@ -125,7 +108,7 @@ final class Modules
                 method.getAnnotation(annotationClass);
 
             if ( annotation != null ) {
-                SObjFunction function     = buildTeaFunction(module, method);
+                TeaFunction function     = buildTeaFunction(module, method);
                 String       functionName = annotation.value();
 
                 environment.addGlobalVar(functionName, function);
@@ -143,12 +126,12 @@ final class Modules
  *
  **************************************************************************/
 
-    private static SObjFunction buildTeaFunction(final TeaModule module,
+    private static TeaFunction buildTeaFunction(final TeaModule module,
                                                  final Method    method) {
 
         checkMethodSignature(method);
 
-        SObjFunction function = new ModuleMethodTeaFunction(module, method);
+        TeaFunction function = new ModuleMethodTeaFunction(module, method);
 
         return function;
     }
@@ -174,9 +157,9 @@ final class Modules
 
         if ( argTypes.length != 3 ) {
             isOk = false;
-        } else if ( !SObjFunction.class.isAssignableFrom(argTypes[0]) ) {
+        } else if ( !TeaFunction.class.isAssignableFrom(argTypes[0]) ) {
             isOk = false;
-        } else if ( !SContext.class.isAssignableFrom(argTypes[1]) ) {
+        } else if ( !TeaContext.class.isAssignableFrom(argTypes[1]) ) {
             isOk = false;
         } else if ( !argTypes[2].isArray() ) {
             isOk = false;
@@ -280,7 +263,7 @@ final class Modules
 
     private static final class ModuleMethodTeaFunction
         extends Object
-        implements SObjFunction {
+        implements TeaFunction {
 
 
 
@@ -317,9 +300,9 @@ final class Modules
  **************************************************************************/
 
         @Override
-        public Object exec(final SObjFunction function,
-                           final SContext     context,
-                           final Object[]     args)
+        public Object exec(final TeaFunction function,
+                           final TeaContext     context,
+                           final Object[]    args)
             throws TeaException {
 
             Object        result = null;

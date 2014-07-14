@@ -89,7 +89,7 @@ public final class STypeException
                           final String   expectedTypeDescription) {
 
         String msgFmt = "argument {0} should be a {1}, not a {2}";
-        String actualTypeDescription = STypes.getTypeName(args[argIndex]);
+        String actualTypeDescription = Types.getTypeName(args[argIndex]);
 
         initForFunction(args,
                         msgFmt,

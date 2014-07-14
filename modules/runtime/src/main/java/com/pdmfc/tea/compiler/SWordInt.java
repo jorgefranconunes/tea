@@ -8,8 +8,8 @@ package com.pdmfc.tea.compiler;
 
 import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.compiler.SWord;
-import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SObjFunction;
+import com.pdmfc.tea.runtime.TeaContext;
+import com.pdmfc.tea.runtime.TeaFunction;
 import com.pdmfc.tea.runtime.SRuntimeException;
 
 
@@ -67,7 +67,7 @@ final class SWordInt
  *
  **************************************************************************/
 
-    public Object get(final SContext context) {
+    public Object get(final TeaContext context) {
 
         return _value;
     }
@@ -82,7 +82,7 @@ final class SWordInt
  *
  **************************************************************************/
 
-    public SObjFunction toFunction(final SContext context)
+    public TeaFunction toFunction(final TeaContext context)
         throws TeaException {
 
         String msg = "an integer can not be used as a function";

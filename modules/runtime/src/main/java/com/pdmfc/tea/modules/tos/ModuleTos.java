@@ -12,17 +12,17 @@ import java.util.Map;
 
 import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.tos.SList;
-import com.pdmfc.tea.runtime.SArgs;
-import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SObjBlock;
-import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.SObjNull;
-import com.pdmfc.tea.runtime.SObjPair;
-import com.pdmfc.tea.runtime.SObjSymbol;
+import com.pdmfc.tea.runtime.Args;
+import com.pdmfc.tea.runtime.TeaContext;
+import com.pdmfc.tea.runtime.TeaBlock;
+import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.runtime.TeaNull;
+import com.pdmfc.tea.runtime.TeaPair;
+import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypeException;
-import com.pdmfc.tea.runtime.STypes;
+import com.pdmfc.tea.runtime.Types;
 import com.pdmfc.tea.runtime.TeaFunctionImplementor;
 import com.pdmfc.tea.runtime.TeaEnvironment;
 import com.pdmfc.tea.runtime.TeaModule;
@@ -55,7 +55,7 @@ import com.pdmfc.tea.runtime.TeaModule;
  *
  **************************************************************************/
 
-public final class SModuleTos
+public final class ModuleTos
     extends Object
     implements TeaModule {
 
@@ -80,7 +80,7 @@ public final class SModuleTos
  *
  **************************************************************************/
 
-   public SModuleTos() {
+   public ModuleTos() {
 
        // Nothing to do.
    }
@@ -218,9 +218,9 @@ public final class SModuleTos
  **************************************************************************/
 
     @TeaFunctionImplementor("class")
-    public Object functionClass(final SObjFunction func,
-                                final SContext     context,
-                                final Object[]     args)
+    public Object functionClass(final TeaFunction func,
+                                final TeaContext  context,
+                                final Object[]    args)
         throws TeaException {
 
         if ( (args.length<3) || (args.length>4) ) {
@@ -228,23 +228,23 @@ public final class SModuleTos
             throw new SNumArgException(args, usage);
         }
 
-        SObjSymbol className          = SArgs.getSymbol(args, 1);
+        TeaSymbol className          = Args.getSymbol(args, 1);
         STosClass  baseClass          =
             (args.length==3) ? null : STosUtil.getClass(context,args,2);
-        SObjPair          memberList  =
-            SArgs.getPair(args, (args.length==3)? 2 : 3);
-        SList<SObjSymbol> memberNames =
-            new SList<SObjSymbol>();
+        TeaPair          memberList  =
+            Args.getPair(args, (args.length==3)? 2 : 3);
+        SList<TeaSymbol> memberNames =
+            new SList<TeaSymbol>();
 
-        for ( SObjPair e=memberList; !e.isEmpty(); e=e.cdr() ) {
+        for ( TeaPair e=memberList; !e.isEmpty(); e=e.cdr() ) {
             try {
-                SObjSymbol memberName = (SObjSymbol)e.car();
+                TeaSymbol memberName = (TeaSymbol)e.car();
                 memberNames.prepend(memberName);
             } catch ( ClassCastException exception ) {
                 String msg = "found a {0} when expecting a Symbol";
                 throw new SRuntimeException(args,
                                             msg,
-                                            STypes.getTypeName(e.car()));
+                                            Types.getTypeName(e.car()));
             }
         }
 
@@ -310,9 +310,9 @@ public final class SModuleTos
  **************************************************************************/
 
     @TeaFunctionImplementor("new-class")
-    public Object functionNewClass(final SObjFunction func,
-                                   final SContext     context,
-                                   final Object[]     args)
+    public Object functionNewClass(final TeaFunction func,
+                                   final TeaContext  context,
+                                   final Object[]    args)
         throws TeaException {
 
         if ( (args.length<2) || (args.length>3) ) {
@@ -321,32 +321,32 @@ public final class SModuleTos
         }
 
         STosClass         baseClass   = null;
-        SObjPair          memberList  = null;
-        SList<SObjSymbol> memberNames = new SList<SObjSymbol>();
+        TeaPair          memberList  = null;
+        SList<TeaSymbol> memberNames = new SList<TeaSymbol>();
         STosClass         result      = null;
 
         switch ( args.length ) {
         case 2:
             baseClass  = null;
-            memberList = SArgs.getPair(args, 1);
+            memberList = Args.getPair(args, 1);
             break;
         case 3 :
             baseClass  = STosUtil.getClass(context, args, 1);
-            memberList = SArgs.getPair(args, 2);
+            memberList = Args.getPair(args, 2);
             break;
         default :
             throw new SNumArgException(args, "[base-class] list-of-members");
         }
 
-        for ( SObjPair e=memberList; !e.isEmpty(); e=e.cdr() ) {
+        for ( TeaPair e=memberList; !e.isEmpty(); e=e.cdr() ) {
             try {
-                SObjSymbol memberName = (SObjSymbol)e.car();
+                TeaSymbol memberName = (TeaSymbol)e.car();
                 memberNames.prepend(memberName);
             } catch ( ClassCastException exception ) {
                 String msg = "found a {0} when expecting a Symbol";
                 throw new SRuntimeException(args,
                                             msg,
-                                            STypes.getTypeName(e.car()));
+                                            Types.getTypeName(e.car()));
             }
         }
 
@@ -405,9 +405,9 @@ public final class SModuleTos
  **************************************************************************/
 
     @TeaFunctionImplementor("new")
-    public static Object functionNew(final SObjFunction func,
-                                     final SContext     context,
-                                     final Object[]     args)
+    public static Object functionNew(final TeaFunction func,
+                                     final TeaContext  context,
+                                     final Object[]    args)
         throws TeaException {
 
         if ( args.length < 2 ) {
@@ -477,9 +477,9 @@ public final class SModuleTos
  **************************************************************************/
 
     @TeaFunctionImplementor("method")
-    public static Object functionMethod(final SObjFunction func,
-                                        final SContext     context,
-                                        final Object[]     args)
+    public static Object functionMethod(final TeaFunction func,
+                                        final TeaContext  context,
+                                        final Object[]    args)
         throws TeaException {
 
         if ( args.length != 5 ) {
@@ -489,17 +489,17 @@ public final class SModuleTos
 
         Object params = args[3];
 
-        if ( params instanceof SObjPair ) {
+        if ( params instanceof TeaPair ) {
             fixedArgsMethod(context, args);
         } else {
-            if ( params instanceof SObjSymbol ) {
+            if ( params instanceof TeaSymbol ) {
                 varArgsMethod(context, args);
             } else {
                 throw new STypeException(args, 3, "symbol or list of symbols");
             }
         }
 
-        return SObjNull.NULL;
+        return TeaNull.NULL;
     }
 
 
@@ -512,21 +512,21 @@ public final class SModuleTos
  *
  **************************************************************************/
 
-    private static void fixedArgsMethod(final SContext context,
+    private static void fixedArgsMethod(final TeaContext context,
                                         final Object[] args)
         throws TeaException {
         
         STosClass    methodClass = STosUtil.getClass(context, args, 1);
-        SObjSymbol   methodName  = SArgs.getSymbol(args, 2);
-        SObjPair     paramList   = SArgs.getPair(args, 3);
-        SObjBlock    body        = SArgs.getBlock(args, 4);
+        TeaSymbol   methodName  = Args.getSymbol(args, 2);
+        TeaPair     paramList   = Args.getPair(args, 3);
+        TeaBlock    body        = Args.getBlock(args, 4);
         int          numParam    = paramList.length();
-        SObjSymbol[] parameters  = new SObjSymbol[numParam];
+        TeaSymbol[] parameters  = new TeaSymbol[numParam];
         Iterator     it          = paramList.iterator();
 
         for ( int i=0; it.hasNext(); i++) {
             try {
-                parameters[i] = (SObjSymbol)it.next();
+                parameters[i] = (TeaSymbol)it.next();
             } catch (ClassCastException e1) {
                 String msg = "formal parameters must be symbols";
                 throw new SRuntimeException(args, msg);
@@ -553,15 +553,15 @@ public final class SModuleTos
  *
  **************************************************************************/
 
-    private static void varArgsMethod(final SContext context,
+    private static void varArgsMethod(final TeaContext context,
                                       final Object[] args)
         throws TeaException {
 
         STosClass    methodClass = STosUtil.getClass(context, args, 1);
-        SObjSymbol   methodName  = SArgs.getSymbol(args, 2);
-        SObjSymbol   symbol      = SArgs.getSymbol(args, 3);
-        SObjBlock    body        = SArgs.getBlock(args, 4);
-        SObjFunction method      = new STosMethodVarArg(methodClass,
+        TeaSymbol   methodName  = Args.getSymbol(args, 2);
+        TeaSymbol   symbol      = Args.getSymbol(args, 3);
+        TeaBlock    body        = Args.getBlock(args, 4);
+        TeaFunction method      = new STosMethodVarArg(methodClass,
                                                         methodName,
                                                         symbol,
                                                         body);
@@ -619,16 +619,16 @@ public final class SModuleTos
  **************************************************************************/
 
     @TeaFunctionImplementor("load-class")
-    public Object functionLoadClass(final SObjFunction func,
-                                    final SContext     context,
-                                    final Object[]     args)
+    public Object functionLoadClass(final TeaFunction func,
+                                    final TeaContext  context,
+                                    final Object[]    args)
         throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "java-class-name");
         }
 
-        String    className = SArgs.getString(args,1);
+        String    className = Args.getString(args,1);
         Class     javaClass = null;
         STosClass tosClass  = _tosClasses.get(className);
         String    msg       = null;
@@ -715,9 +715,9 @@ public final class SModuleTos
  **************************************************************************/
 
     @TeaFunctionImplementor("class-base-of")
-    public static Object functionBaseOf(final SObjFunction func,
-                                        final SContext     context,
-                                        final Object[]     args)
+    public static Object functionBaseOf(final TeaFunction func,
+                                        final TeaContext  context,
+                                        final Object[]    args)
         throws TeaException {
 
         if ( args.length != 2 ) {
@@ -727,7 +727,7 @@ public final class SModuleTos
         STosClass tosClass  = STosUtil.getClass(context, args, 1);
         STosClass baseClass = tosClass.getSuperClass();
 
-        return (baseClass==null) ? SObjNull.NULL : baseClass;
+        return (baseClass==null) ? TeaNull.NULL : baseClass;
     }
 
 
@@ -776,9 +776,9 @@ public final class SModuleTos
  **************************************************************************/
 
     @TeaFunctionImplementor("class-of")
-    public static Object functionClassOf(final SObjFunction func,
-                                         final SContext     context,
-                                         final Object[]     args)
+    public static Object functionClassOf(final TeaFunction func,
+                                         final TeaContext  context,
+                                         final Object[]    args)
         throws TeaException {
 
         if ( args.length != 2 ) {
@@ -852,9 +852,9 @@ public final class SModuleTos
  **************************************************************************/
 
     @TeaFunctionImplementor("class-is-a")
-    public static Object functionIsA(final SObjFunction func,
-                                     final SContext     context,
-                                     final Object[]     args)
+    public static Object functionIsA(final TeaFunction func,
+                                     final TeaContext  context,
+                                     final Object[]    args)
         throws TeaException {
 
         if ( args.length != 3 ) {
@@ -922,9 +922,9 @@ public final class SModuleTos
  **************************************************************************/
 
     @TeaFunctionImplementor("class-get-name")
-    public static Object functionGetName(final SObjFunction func,
-                                         final SContext     context,
-                                         final Object[]     args)
+    public static Object functionGetName(final TeaFunction func,
+                                         final TeaContext  context,
+                                         final Object[]    args)
         throws TeaException {
 
         if ( args.length != 2 ) {
@@ -982,9 +982,9 @@ public final class SModuleTos
  **************************************************************************/
 
     @TeaFunctionImplementor("tos-obj?")
-    public static Object functionIsTosObj(final SObjFunction func,
-                                          final SContext     context,
-                                          final Object[]     args)
+    public static Object functionIsTosObj(final TeaFunction func,
+                                          final TeaContext  context,
+                                          final Object[]    args)
         throws TeaException {
 
         if ( args.length != 2 ) {

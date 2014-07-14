@@ -15,11 +15,11 @@ import java.util.regex.PatternSyntaxException;
 
 import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.runtime.TeaModule;
-import com.pdmfc.tea.runtime.SArgs;
-import com.pdmfc.tea.runtime.SContext;
+import com.pdmfc.tea.runtime.Args;
+import com.pdmfc.tea.runtime.TeaContext;
 import com.pdmfc.tea.runtime.SNumArgException;
-import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.SObjPair;
+import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.runtime.TeaPair;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypeException;
 import com.pdmfc.tea.runtime.TeaFunctionImplementor;
@@ -53,7 +53,7 @@ import com.pdmfc.tea.runtime.TeaEnvironment;
  *
  **************************************************************************/
 
-public final class SModuleRegexp
+public final class ModuleRegexp
     extends Object
     implements TeaModule {
 
@@ -67,7 +67,7 @@ public final class SModuleRegexp
  *
  **************************************************************************/
 
-    public SModuleRegexp() {
+    public ModuleRegexp() {
 
         // Nothing to do.
     }
@@ -191,9 +191,9 @@ public final class SModuleRegexp
  **************************************************************************/
 
     @TeaFunctionImplementor("regexp-pattern")
-    public static Object functionPattern(final SObjFunction func,
-                                         final SContext     context,
-                                         final Object[]     args)
+    public static Object functionPattern(final TeaFunction func,
+                                         final TeaContext  context,
+                                         final Object[]    args)
         throws TeaException {
 
         if ( args.length != 2 ) {
@@ -270,9 +270,9 @@ public final class SModuleRegexp
  **************************************************************************/
 
     @TeaFunctionImplementor("glob")
-    public Object functionGlob(final SObjFunction func,
-                               final SContext     context,
-                               final Object[]     args)
+    public Object functionGlob(final TeaFunction func,
+                               final TeaContext  context,
+                               final Object[]    args)
         throws TeaException {
 
         int numArgs = args.length;
@@ -281,7 +281,7 @@ public final class SModuleRegexp
             throw new SNumArgException(args,"dir-name regexp [regexp ...]");
         }
 
-        String          dirName   = SArgs.getString(args, 1);
+        String          dirName   = Args.getString(args, 1);
         File            directory = new File(dirName);
         final Pattern[] patterns  = new Pattern[numArgs-2];
 
@@ -301,11 +301,11 @@ public final class SModuleRegexp
                 }
             };
         String[] fileNames = directory.list(filter);
-        SObjPair head      = SObjPair.emptyList();
+        TeaPair head      = TeaPair.emptyList();
 
         if ( fileNames != null ) {
             for ( int i=fileNames.length; (i--)>0; ) {
-                head = new SObjPair(fileNames[i], head);
+                head = new TeaPair(fileNames[i], head);
             }
         }
 
@@ -369,9 +369,9 @@ public final class SModuleRegexp
  **************************************************************************/
 
     @TeaFunctionImplementor("regsub")
-    public static Object functionRegsub(final SObjFunction func,
-                                        final SContext     context,
-                                        final Object[]     args)
+    public static Object functionRegsub(final TeaFunction func,
+                                        final TeaContext  context,
+                                        final Object[]    args)
         throws TeaException {
 
         if ( args.length != 4 ) {
@@ -379,8 +379,8 @@ public final class SModuleRegexp
         }
 
         Pattern pattern  = getPattern(args,1);
-        String  subst    = SArgs.getString(args,2);
-        String  input    = SArgs.getString(args,3);
+        String  subst    = Args.getString(args,2);
+        String  input    = Args.getString(args,3);
         Matcher matcher  = pattern.matcher(input);
         String  result   = matcher.replaceAll(subst);
 
@@ -442,9 +442,9 @@ public final class SModuleRegexp
  **************************************************************************/
 
     @TeaFunctionImplementor("matches?")
-    public static Object functionMatches(final SObjFunction func,
-                                         final SContext     context,
-                                         final Object[]     args)
+    public static Object functionMatches(final TeaFunction func,
+                                         final TeaContext  context,
+                                         final Object[]    args)
         throws TeaException {
 
         if ( args.length != 3 ) {
@@ -452,7 +452,7 @@ public final class SModuleRegexp
         }
 
         Pattern pattern  = getPattern(args,1);
-        String  input    = SArgs.getString(args,2);
+        String  input    = Args.getString(args,2);
         Matcher matcher  = pattern.matcher(input);
         Boolean result   = matcher.matches() ? Boolean.TRUE : Boolean.FALSE;
 
@@ -525,9 +525,9 @@ public final class SModuleRegexp
  **************************************************************************/
 
     @TeaFunctionImplementor("regexp")
-    public static Object functionRegexp(final SObjFunction func,
-                                        final SContext     context,
-                                        final Object[]     args)
+    public static Object functionRegexp(final TeaFunction func,
+                                        final TeaContext  context,
+                                        final Object[]    args)
         throws TeaException {
 
         if ( args.length != 3 ) {
@@ -535,15 +535,15 @@ public final class SModuleRegexp
         }
 
         Pattern  pattern  = getPattern(args,1);
-        String   aString  = SArgs.getString(args,2);
+        String   aString  = Args.getString(args,2);
         Matcher  matcher  = pattern.matcher(aString);
-        SObjPair head     = null;
-        SObjPair tail     = null;
+        TeaPair head     = null;
+        TeaPair tail     = null;
 
         while ( matcher.find() ) {
             MatchResult match = matcher.toMatchResult();
-            SObjPair    elem  = buildMatch(match);
-            SObjPair    node  = new SObjPair(elem,null);
+            TeaPair    elem  = buildMatch(match);
+            TeaPair    node  = new TeaPair(elem,null);
 
             if ( head == null ) {
                 head = node;
@@ -553,9 +553,9 @@ public final class SModuleRegexp
             tail = node;
         }
         if ( tail != null ) {
-            tail.setCdr(SObjPair.emptyList());
+            tail.setCdr(TeaPair.emptyList());
         } else {
-            head = SObjPair.emptyList();
+            head = TeaPair.emptyList();
         }
 
         return head;
@@ -575,18 +575,18 @@ public final class SModuleRegexp
  *    A <TT>REMatch</TT> object representing a match.
  *
  * @return
- *    An <TT>SObjPair</TT> that is the first element in a list.
+ *    An <TT>TeaPair</TT> that is the first element in a list.
  *
  **************************************************************************/
 
-   private static SObjPair buildMatch(final MatchResult result) {
+   private static TeaPair buildMatch(final MatchResult result) {
 
-      SObjPair head  = new SObjPair(result.group(),null);
-      SObjPair tail  = head;
+      TeaPair head  = new TeaPair(result.group(),null);
+      TeaPair tail  = head;
 
       for ( int i=1, count=result.groupCount(); i<=count; ++i ) {
          String   subExpr = result.group(i);
-         SObjPair node    = new SObjPair(subExpr,null);
+         TeaPair node    = new TeaPair(subExpr,null);
 
          if ( head == null ) {
             head = node;
@@ -595,7 +595,7 @@ public final class SModuleRegexp
          }
          tail = node;
       }
-      tail.setCdr(SObjPair.emptyList());
+      tail.setCdr(TeaPair.emptyList());
 
       return head;
    }
@@ -659,31 +659,31 @@ public final class SModuleRegexp
  **************************************************************************/
 
     @TeaFunctionImplementor("str-split")
-    public static Object functionSplit(final SObjFunction func,
-                                       final SContext     context,
-                                       final Object[]     args)
+    public static Object functionSplit(final TeaFunction func,
+                                       final TeaContext  context,
+                                       final Object[]    args)
         throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "string split-string");
         }
 
-        String str = SArgs.getString(args,1);
+        String str = Args.getString(args,1);
 
         if ( str.length() == 0 ) {
-            return SObjPair.emptyList();
+            return TeaPair.emptyList();
         }
 
         Pattern            pattern = getPattern(args,2);
         int                index   = 0;
         Matcher            matcher = pattern.matcher(str);
-        SObjPair           head    = null;
-        SObjPair           tail    = null;
+        TeaPair           head    = null;
+        TeaPair           tail    = null;
 
         while ( matcher.find() ) {
             MatchResult  match = matcher.toMatchResult();
             String       part  = str.substring(index, match.start());
-            SObjPair     node  = new SObjPair(part,null);
+            TeaPair     node  = new TeaPair(part,null);
             
             if ( head == null ) {
                 head = node;
@@ -695,7 +695,7 @@ public final class SModuleRegexp
         }
 
         String   part  = str.substring(index);
-        SObjPair node  = new SObjPair(part,null);
+        TeaPair node  = new TeaPair(part,null);
 
         if ( head == null ) {
             head = node;
@@ -703,7 +703,7 @@ public final class SModuleRegexp
             tail.setCdr(node);
         }
         tail = node;
-        tail.setCdr(SObjPair.emptyList());
+        tail.setCdr(TeaPair.emptyList());
 
         return head;
     }

@@ -14,10 +14,10 @@ import com.pdmfc.tea.modules.io.SInput;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.tos.STosUtil;
-import com.pdmfc.tea.runtime.SArgs;
-import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.SObjSymbol;
+import com.pdmfc.tea.runtime.Args;
+import com.pdmfc.tea.runtime.TeaContext;
+import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.util.SInputSource;
@@ -58,8 +58,8 @@ public final class SUrlInput
 
       
     private static final String     CLASS_NAME   = "TUrlInput";
-    private static final SObjSymbol CLASS_NAME_S =
-        SObjSymbol.addSymbol(CLASS_NAME);
+    private static final TeaSymbol CLASS_NAME_S =
+        TeaSymbol.addSymbol(CLASS_NAME);
 
 
 
@@ -111,16 +111,16 @@ public final class SUrlInput
  *
  **************************************************************************/
 
-    public Object constructor(final SObjFunction obj,
-                              final SContext     context,
-                              final Object[]     args)
+    public Object constructor(final TeaFunction obj,
+                              final TeaContext     context,
+                              final Object[]    args)
         throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "file-name");
         }
 
-        String      url   = SArgs.getString(args,2);
+        String      url   = Args.getString(args,2);
         InputStream input = null;
 
         try {
@@ -164,7 +164,7 @@ public final class SUrlInput
  *
  **************************************************************************/
 
-    public static SUrlInput newInstance(final SContext context,
+    public static SUrlInput newInstance(final TeaContext context,
                                         final Object[] args)
         throws TeaException {
 

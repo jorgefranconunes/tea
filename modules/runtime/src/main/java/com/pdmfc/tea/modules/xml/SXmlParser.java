@@ -15,10 +15,10 @@ import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.tos.STosUtil;
-import com.pdmfc.tea.runtime.SArgs;
-import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.SObjSymbol;
+import com.pdmfc.tea.runtime.Args;
+import com.pdmfc.tea.runtime.TeaContext;
+import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.SNumArgException;
 
 
@@ -54,8 +54,8 @@ public final class SXmlParser
 
     
     private static final String     CLASS_NAME   = "TXmlParser";
-    private static final SObjSymbol CLASS_NAME_S =
-        SObjSymbol.addSymbol(CLASS_NAME);
+    private static final TeaSymbol CLASS_NAME_S =
+        TeaSymbol.addSymbol(CLASS_NAME);
 
     // The XML parser.
     private XMLReader _parser = null;
@@ -141,9 +141,9 @@ public final class SXmlParser
  *
  **************************************************************************/
 
-    public Object constructor(final SObjFunction obj,
-                              final SContext     context,
-                              final Object[]     args)
+    public Object constructor(final TeaFunction obj,
+                              final TeaContext     context,
+                              final Object[]    args)
         throws TeaException {
 
         switch ( args.length ) {
@@ -211,16 +211,16 @@ public final class SXmlParser
  *
  **************************************************************************/
 
-    public Object setNativeParser(final SObjFunction obj,
-                                  final SContext     context,
-                                  final Object[]     args)
+    public Object setNativeParser(final TeaFunction obj,
+                                  final TeaContext     context,
+                                  final Object[]    args)
         throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "java-class-name");
         }
 
-        String parserClassName = SArgs.getString(args, 2);
+        String parserClassName = Args.getString(args, 2);
 
         setNativeParser(parserClassName);
 
@@ -264,9 +264,9 @@ public final class SXmlParser
  *
  **************************************************************************/
 
-    public Object parse(final SObjFunction obj,
-                        final SContext     context,
-                        final Object[]     args)
+    public Object parse(final TeaFunction obj,
+                        final TeaContext     context,
+                        final Object[]    args)
         throws TeaException {
 
         SXmlParserParse parseMethod = new SXmlParserParse();
@@ -300,9 +300,9 @@ public final class SXmlParser
  *
  **************************************************************************/
 
-    public Object startDocument(final SObjFunction obj,
-                                final SContext     context,
-                                final Object[]     args)
+    public Object startDocument(final TeaFunction obj,
+                                final TeaContext     context,
+                                final Object[]    args)
         throws TeaException {
 
         return obj;
@@ -332,9 +332,9 @@ public final class SXmlParser
  *
  **************************************************************************/
 
-    public Object endDocument(final SObjFunction obj,
-                              final SContext     context,
-                              final Object[]     args)
+    public Object endDocument(final TeaFunction obj,
+                              final TeaContext     context,
+                              final Object[]    args)
         throws TeaException {
 
         return obj;
@@ -377,9 +377,9 @@ public final class SXmlParser
  *
  **************************************************************************/
 
-    public Object startElement(final SObjFunction obj,
-                               final SContext     context,
-                               final Object[]     args)
+    public Object startElement(final TeaFunction obj,
+                               final TeaContext     context,
+                               final Object[]    args)
         throws TeaException {
 
         return obj;
@@ -414,9 +414,9 @@ public final class SXmlParser
  *
  **************************************************************************/
 
-    public Object endElement(final SObjFunction obj,
-                             final SContext     context,
-                             final Object[]     args)
+    public Object endElement(final TeaFunction obj,
+                             final TeaContext     context,
+                             final Object[]    args)
         throws TeaException {
 
         return obj;
@@ -451,9 +451,9 @@ public final class SXmlParser
  *
  **************************************************************************/
 
-    public Object characters(final SObjFunction obj,
-                             final SContext     context,
-                             final Object[]     args)
+    public Object characters(final TeaFunction obj,
+                             final TeaContext     context,
+                             final Object[]    args)
         throws TeaException {
 
         return obj;
@@ -495,9 +495,9 @@ public final class SXmlParser
  *
  **************************************************************************/
 
-    public Object processingInstruction(final SObjFunction obj,
-                                        final SContext     context,
-                                        final Object[]     args)
+    public Object processingInstruction(final TeaFunction obj,
+                                        final TeaContext     context,
+                                        final Object[]    args)
         throws TeaException {
 
         return obj;
@@ -539,9 +539,9 @@ public final class SXmlParser
  *
  **************************************************************************/
 
-    public Object setHandler(final SObjFunction obj,
-                             final SContext     context,
-                             final Object[]     args)
+    public Object setHandler(final TeaFunction obj,
+                             final TeaContext     context,
+                             final Object[]    args)
         throws TeaException {
 
         if ( args.length != 3 ) {
@@ -578,7 +578,7 @@ public final class SXmlParser
  *
  **************************************************************************/
 
-    public static SXmlParser newInstance(final SContext context,
+    public static SXmlParser newInstance(final TeaContext context,
                                          final Object[] args)
         throws TeaException {
 

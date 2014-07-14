@@ -23,13 +23,13 @@ import org.xml.sax.SAXParseException;
 import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.io.SInput;
 import com.pdmfc.tea.modules.tos.STosObj;
-import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.SObjNull;
-import com.pdmfc.tea.runtime.SObjSymbol;
+import com.pdmfc.tea.runtime.TeaContext;
+import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.runtime.TeaNull;
+import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SRuntimeException;
-import com.pdmfc.tea.runtime.STypes;
+import com.pdmfc.tea.runtime.Types;
 import com.pdmfc.tea.modules.util.SHashtable;
 
 
@@ -51,26 +51,26 @@ final class SXmlParserParse
 
 
     // The symbols for the TOS methods that may be called.
-    private static final SObjSymbol START_DOC  =
-        SObjSymbol.addSymbol("startDocument");
-    private static final SObjSymbol END_DOC    =
-        SObjSymbol.addSymbol("endDocument");
-    private static final SObjSymbol START_ELEM =
-        SObjSymbol.addSymbol("startElement");
-    private static final SObjSymbol END_ELEM   =
-        SObjSymbol.addSymbol("endElement");
-    private static final SObjSymbol CHARS      =
-        SObjSymbol.addSymbol("characters");
-    private static final SObjSymbol PROC_INST  =
-        SObjSymbol.addSymbol("processingInstruction");
+    private static final TeaSymbol START_DOC  =
+        TeaSymbol.addSymbol("startDocument");
+    private static final TeaSymbol END_DOC    =
+        TeaSymbol.addSymbol("endDocument");
+    private static final TeaSymbol START_ELEM =
+        TeaSymbol.addSymbol("startElement");
+    private static final TeaSymbol END_ELEM   =
+        TeaSymbol.addSymbol("endElement");
+    private static final TeaSymbol CHARS      =
+        TeaSymbol.addSymbol("characters");
+    private static final TeaSymbol PROC_INST  =
+        TeaSymbol.addSymbol("processingInstruction");
     
     // The TOS methods that may be called.
-    private SObjFunction _startDocumentMethod = null;
-    private SObjFunction _endDocumentMethod   = null;
-    private SObjFunction _startElementMethod  = null;
-    private SObjFunction _endElementMethod    = null;
-    private SObjFunction _charactersMethod    = null;
-    private SObjFunction _procInstMethod      = null;         
+    private TeaFunction _startDocumentMethod = null;
+    private TeaFunction _endDocumentMethod   = null;
+    private TeaFunction _startElementMethod  = null;
+    private TeaFunction _endElementMethod    = null;
+    private TeaFunction _charactersMethod    = null;
+    private TeaFunction _procInstMethod      = null;         
 
     // The argument arrays passed to the called TOS methods.
     private Object[] _args2 = new Object[2];
@@ -79,7 +79,7 @@ final class SXmlParserParse
 
     // The TOS object whose "parse" method is being executed.
     private STosObj           _handler         = null;
-    private SContext          _context        = null;
+    private TeaContext          _context        = null;
     private SAXParseException _parseException = null;
 
 
@@ -214,9 +214,9 @@ final class SXmlParserParse
  *
  **************************************************************************/
 
-      public Object exec(final SObjFunction obj,
-                         final SContext     context,
-                         final Object[]     args)
+      public Object exec(final TeaFunction obj,
+                         final TeaContext     context,
+                         final Object[]    args)
          throws TeaException {
 
          if ( args.length != 3 ) {
@@ -238,13 +238,13 @@ final class SXmlParserParse
                  tosInput = (SInput)((STosObj)input).part(0);
              } catch (ClassCastException e) {
                  String   msg     = "expected String or TInput, not a {0}";
-                 Object[] fmtArgs = { STypes.getTypeName(input) };
+                 Object[] fmtArgs = { Types.getTypeName(input) };
                  throw new SRuntimeException(args, msg, fmtArgs);
              }
              inputSource = new InputSource(tosInput.getReader());
          } else {
              String   msg     = "expected String or TInput, not a {0}";
-             Object[] fmtArgs = { STypes.getTypeName(input) };
+             Object[] fmtArgs = { Types.getTypeName(input) };
              throw new SRuntimeException(args, msg, fmtArgs);
          }
 
@@ -270,7 +270,7 @@ final class SXmlParserParse
  *
  **************************************************************************/
 
-    private void parse(final SContext    context,
+    private void parse(final TeaContext    context,
                        final XMLReader   parser,
                        final InputSource input)
         throws TeaException {
@@ -563,7 +563,7 @@ final class SXmlParserParse
             _args4[0] = _handler;
             _args4[1] = PROC_INST;
             _args4[2] = target;
-            _args4[3] = (data==null) ? SObjNull.NULL : data;
+            _args4[3] = (data==null) ? TeaNull.NULL : data;
             _procInstMethod.exec(_handler, _context, _args4);
         } catch (TeaException e) {
             throw new SAXException(e);

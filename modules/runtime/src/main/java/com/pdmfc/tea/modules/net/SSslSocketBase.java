@@ -8,9 +8,9 @@ package com.pdmfc.tea.modules.net;
 
 import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.tos.STosClass;
-import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.SObjSymbol;
+import com.pdmfc.tea.runtime.TeaContext;
+import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.runtime.TeaSymbol;
 
 
 
@@ -52,8 +52,8 @@ public class SSslSocketBase
 
 
     private static final String     CLASS_NAME   = "TSslSocketBase";
-    private static final SObjSymbol CLASS_NAME_S =
-        SObjSymbol.addSymbol(CLASS_NAME);
+    private static final TeaSymbol CLASS_NAME_S =
+        TeaSymbol.addSymbol(CLASS_NAME);
 
 
 
@@ -81,9 +81,9 @@ public class SSslSocketBase
  *
  **************************************************************************/
 
-    public Object constructor(final SObjFunction obj,
-                              final SContext     context,
-                              final Object[]     args)
+    public Object constructor(final TeaFunction obj,
+                              final TeaContext     context,
+                              final Object[]    args)
         throws TeaException {
 
         initialize(context);

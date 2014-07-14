@@ -19,11 +19,11 @@ import com.pdmfc.tea.modules.io.SIOException;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.tos.STosUtil;
-import com.pdmfc.tea.runtime.SArgs;
-import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SObjByteArray;
-import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.SObjSymbol;
+import com.pdmfc.tea.runtime.Args;
+import com.pdmfc.tea.runtime.TeaContext;
+import com.pdmfc.tea.runtime.TeaByteArray;
+import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.STypeException;
@@ -65,8 +65,8 @@ public class SOutput
 
       
     private static final String     CLASS_NAME   = "TOutput";
-    private static final SObjSymbol CLASS_NAME_S =
-        SObjSymbol.addSymbol(CLASS_NAME);
+    private static final TeaSymbol CLASS_NAME_S =
+        TeaSymbol.addSymbol(CLASS_NAME);
 
     /* The output stream of this object. */
     private OutputStream _outputStream = null; // can be null under JSR-223
@@ -109,9 +109,9 @@ public class SOutput
  *
  **************************************************************************/
 
-    public Object constructor(final SObjFunction obj,
-                              final SContext     context,
-                              final Object[]     args)
+    public Object constructor(final TeaFunction obj,
+                              final TeaContext     context,
+                              final Object[]    args)
         throws TeaException {
 
         return obj;
@@ -210,16 +210,16 @@ public class SOutput
  *
  **************************************************************************/
 
-    public Object setLineBuffering(final SObjFunction obj,
-                                   final SContext     context,
-                                   final Object[]     args)
+    public Object setLineBuffering(final TeaFunction obj,
+                                   final TeaContext     context,
+                                   final Object[]    args)
         throws SRuntimeException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "boolean-flag");
         }
 
-        boolean flag = SArgs.getBoolean(args,2).booleanValue();
+        boolean flag = Args.getBoolean(args,2).booleanValue();
 
         setLineBuffering(flag);
 
@@ -284,9 +284,9 @@ public class SOutput
  *
  **************************************************************************/
 
-    public Object write(final SObjFunction obj,
-                        final SContext     context,
-                        final Object[]     args)
+    public Object write(final TeaFunction obj,
+                        final TeaContext     context,
+                        final Object[]    args)
         throws SRuntimeException {
 
         int numArgs = args.length;
@@ -311,8 +311,8 @@ public class SOutput
                     write(((Double)arg).doubleValue());
                     continue;
                 }
-                if ( arg instanceof SObjByteArray ) {
-                    write((SObjByteArray)arg);
+                if ( arg instanceof TeaByteArray ) {
+                    write((TeaByteArray)arg);
                     continue;
                 }
             } catch (IOException e) {
@@ -357,7 +357,7 @@ public class SOutput
  *
  **************************************************************************/
 
-    public void write(final SObjByteArray bytes)
+    public void write(final TeaByteArray bytes)
         throws IOException {
 
         write(bytes.getBytes(), bytes.getOffset(), bytes.getCount());
@@ -482,9 +482,9 @@ public class SOutput
  *
  **************************************************************************/
 
-    public Object writeln(final SObjFunction obj,
-                          final SContext     context,
-                          final Object[]     args)
+    public Object writeln(final TeaFunction obj,
+                          final TeaContext     context,
+                          final Object[]    args)
         throws SRuntimeException {
 
         write(obj, context, args);
@@ -649,9 +649,9 @@ public class SOutput
  *
  **************************************************************************/
 
-    public Object printf(final SObjFunction obj,
-                         final SContext     context,
-                         final Object[]     args)
+    public Object printf(final TeaFunction obj,
+                         final TeaContext     context,
+                         final Object[]    args)
         throws TeaException {
 
         if ( args.length < 3 ) {
@@ -659,7 +659,7 @@ public class SOutput
         }
 
         try {
-            printf(SArgs.getString(args,2), args, 3);
+            printf(Args.getString(args,2), args, 3);
         } catch (IOException e) {
             throw new SIOException(e);
         }
@@ -733,8 +733,8 @@ public class SOutput
  *
  **************************************************************************/
 
-    public Object flush(final SObjFunction obj,
-                        final SContext     context,
+    public Object flush(final TeaFunction obj,
+                        final TeaContext     context,
                         final Object []    args)
         throws SIOException {
 
@@ -840,9 +840,9 @@ public class SOutput
  *
  **************************************************************************/
 
-    public Object close(final SObjFunction obj,
-                        final SContext     context,
-                        final Object[]     args)
+    public Object close(final TeaFunction obj,
+                        final TeaContext     context,
+                        final Object[]    args)
         throws SIOException{
 
         try {
@@ -912,7 +912,7 @@ public class SOutput
  *
  **************************************************************************/
 
-    public static SOutput newInstance(final SContext context)
+    public static SOutput newInstance(final TeaContext context)
         throws TeaException {
 
         STosObj output = STosUtil.newInstance(CLASS_NAME_S, context);

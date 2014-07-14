@@ -31,11 +31,11 @@ import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.compiler.TeaCode;
 import com.pdmfc.tea.compiler.TeaCompileException;
 import com.pdmfc.tea.compiler.TeaCompiler;
-import com.pdmfc.tea.runtime.SArgs;
-import com.pdmfc.tea.runtime.SContext;
+import com.pdmfc.tea.runtime.Args;
+import com.pdmfc.tea.runtime.TeaContext;
 import com.pdmfc.tea.runtime.SNoSuchVarException;
-import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.SObjSymbol;
+import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.TeaRuntime;
 import com.pdmfc.tea.runtime.TeaRuntimeConfig;
@@ -280,7 +280,7 @@ public final class TeaScriptEngine
  * variables with the same name.  The values of the attributes are
  * converted into Tea using {@link
  * com.pdmfc.tea.modules.reflect.STeaJavaTypes#java2Tea(java.lang.Object,
- * com.pdmfc.tea.runtime.SContext)}.  (The top level Tea context
+ * com.pdmfc.tea.runtime.TeaContext)}.  (The top level Tea context
  * associated with the <code>scriptContext</code> is used for fetching
  * TOS classes when converting some specific classes of java objects
  * to TOS objects.  Ex: a <code>java.util.Date</code> is converted to
@@ -501,15 +501,15 @@ public final class TeaScriptEngine
         throws ScriptException {
 
         TeaRuntime teaRuntime = this.context2TeaGlobals(this.getContext());
-        SContext teaContext = teaRuntime.getToplevelContext();
-        SObjSymbol nameSymbol = SObjSymbol.getSymbol(name);
+        TeaContext teaContext = teaRuntime.getToplevelContext();
+        TeaSymbol nameSymbol = TeaSymbol.getSymbol(name);
         try {
             Object[] newArgs = new Object[args.length + 1];
             newArgs[0] = nameSymbol;
             for (int i = 0; i < args.length; i++) {
                 newArgs[i + 1] = STeaJavaTypes.java2Tea(args[i], teaContext);
             }
-            SObjFunction obj    = SArgs.getFunction(teaContext, newArgs, 0);
+            TeaFunction obj    = Args.getFunction(teaContext, newArgs, 0);
             Object       result =
                 STeaJavaTypes.tea2Java(obj.exec(obj, teaContext, newArgs));
             return result;
@@ -555,8 +555,8 @@ public final class TeaScriptEngine
         throws ScriptException {
 
         TeaRuntime teaRuntime = this.context2TeaGlobals(this.getContext());
-        SContext teaContext = teaRuntime.getToplevelContext();
-        SObjSymbol nameSymbol = SObjSymbol.getSymbol(name);
+        TeaContext teaContext = teaRuntime.getToplevelContext();
+        TeaSymbol nameSymbol = TeaSymbol.getSymbol(name);
         try {
             Object[] newArgs = new Object[args.length + 2];
             newArgs[0] = thisz;
@@ -564,7 +564,7 @@ public final class TeaScriptEngine
             for (int i = 0; i < args.length; i++) {
                 newArgs[i + 2] = STeaJavaTypes.java2Tea(args[i], teaContext);
             }
-            SObjFunction obj    = SArgs.getFunction(teaContext, newArgs, 0);
+            TeaFunction obj    = Args.getFunction(teaContext, newArgs, 0);
             Object       result =
                 STeaJavaTypes.tea2Java(obj.exec(obj, teaContext, newArgs));
             return result;
@@ -860,7 +860,7 @@ public final class TeaScriptEngine
             teaRuntime.start();
 
             // Run an empty code to force first time initialization
-            // before calling SModuleReflect.java2Tea.  (There is no
+            // before calling ModuleReflect.java2Tea.  (There is no
             // public interface for doing so in TeaRuntime.)
             // Otherwise we will get errors for some convertions
             // resulting in STosObj like SDate.
@@ -870,7 +870,7 @@ public final class TeaScriptEngine
                 throw new ScriptException(ex);
             }
             
-            SContext teaContext = teaRuntime.getToplevelContext();
+            TeaContext teaContext = teaRuntime.getToplevelContext();
 
             // SCR.4.3.1 ScriptContext - $stdin, $stdout and $stderr
             // should be initialized from the appropriate
@@ -883,19 +883,19 @@ public final class TeaScriptEngine
             java.io.Reader ir = sc.getReader();
             if (ir!=null) {
                 com.pdmfc.tea.modules.io.SInput stdin =
-                    (com.pdmfc.tea.modules.io.SInput)teaContext.getVar(SObjSymbol.getSymbol("stdin"));
+                    (com.pdmfc.tea.modules.io.SInput)teaContext.getVar(TeaSymbol.getSymbol("stdin"));
                 stdin.open(ir);
             }
             java.io.Writer ow = sc.getWriter();
             if (ow!=null) {
                 com.pdmfc.tea.modules.io.SOutput stdout =
-                    (com.pdmfc.tea.modules.io.SOutput)teaContext.getVar(SObjSymbol.getSymbol("stdout"));
+                    (com.pdmfc.tea.modules.io.SOutput)teaContext.getVar(TeaSymbol.getSymbol("stdout"));
                 stdout.open(ow);
             }
             java.io.Writer ew = sc.getErrorWriter();
             if (ew!=null) {
                 com.pdmfc.tea.modules.io.SOutput stderr =
-                    (com.pdmfc.tea.modules.io.SOutput)teaContext.getVar(SObjSymbol.getSymbol("stderr"));
+                    (com.pdmfc.tea.modules.io.SOutput)teaContext.getVar(TeaSymbol.getSymbol("stderr"));
                 stderr.open(ew);
             }
 
@@ -909,7 +909,7 @@ public final class TeaScriptEngine
                             || key.startsWith("com.pdmfc.tea")) {
                         continue;
                     }
-                    SObjSymbol keySym = SObjSymbol.addSymbol(key);
+                    TeaSymbol keySym = TeaSymbol.addSymbol(key);
                     //System.out.println("GLOBAL_SCOPE to tea global " + key + "=" + b.get(key));
                     teaContext.newVar(keySym,
                                       STeaJavaTypes.java2Tea(b.get(key), teaContext));
@@ -924,7 +924,7 @@ public final class TeaScriptEngine
                             || key.startsWith("com.pdmfc.tea")) {
                         continue;
                     }
-                    SObjSymbol keySym = SObjSymbol.addSymbol(key);
+                    TeaSymbol keySym = TeaSymbol.addSymbol(key);
                     //System.out.println("ENGINE_SCOPE to tea global " + key + "=" + b.get(key));
                     teaContext.newVar(keySym,
                                       STeaJavaTypes.java2Tea(b.get(key), teaContext));
@@ -936,7 +936,7 @@ public final class TeaScriptEngine
             // holding the TeaRuntime, it creates a circular reference.
             // But so far, having a circular reference seems better than
             // letting a SimpleScriptContext discard the TeaRuntime context.
-            teaContext.newVar(SObjSymbol.addSymbol("context"),
+            teaContext.newVar(TeaSymbol.addSymbol("context"),
                               STeaJavaTypes.java2Tea(sc, teaContext));
 
             return teaRuntime;
@@ -966,7 +966,7 @@ public final class TeaScriptEngine
 
         TeaRuntime teaRuntime = this.getTeaRuntime(sc);
         try {
-            SContext teaContext = teaRuntime.getToplevelContext();
+            TeaContext teaContext = teaRuntime.getToplevelContext();
             Bindings b = sc.getBindings(ScriptContext.ENGINE_SCOPE);
             Set<String> esKeys = null;
             if (b != null) {
@@ -978,7 +978,7 @@ public final class TeaScriptEngine
                             || key.startsWith("com.pdmfc.tea")) {
                         continue;
                     }
-                    SObjSymbol keySym = SObjSymbol.addSymbol(key);
+                    TeaSymbol keySym = TeaSymbol.addSymbol(key);
                     try {
                         Object teaValue  = teaContext.getVar(keySym);
                         Object javaValue = STeaJavaTypes.tea2Java(teaValue);
@@ -1002,7 +1002,7 @@ public final class TeaScriptEngine
                             || key.startsWith("com.pdmfc.tea")) {
                         continue;
                     }
-                    SObjSymbol keySym = SObjSymbol.addSymbol(key);
+                    TeaSymbol keySym = TeaSymbol.addSymbol(key);
                     try {
                         Object teaValue  = teaContext.getVar(keySym);
                         Object javaValue = STeaJavaTypes.tea2Java(teaValue);

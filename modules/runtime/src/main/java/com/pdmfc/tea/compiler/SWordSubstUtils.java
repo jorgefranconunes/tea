@@ -7,12 +7,12 @@
 package com.pdmfc.tea.compiler;
 
 import com.pdmfc.tea.TeaException;
-import com.pdmfc.tea.runtime.SContext;
+import com.pdmfc.tea.runtime.TeaContext;
 import com.pdmfc.tea.runtime.SNoSuchVarException;
-import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.SObjSymbol;
+import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.STypeException;
-import com.pdmfc.tea.runtime.STypes;
+import com.pdmfc.tea.runtime.Types;
 
 
 
@@ -53,21 +53,21 @@ final class SWordSubstUtils
  *
  **************************************************************************/
 
-    public static SObjFunction toFunction(final Object   firstWord,
-                                          final SContext context)
+    public static TeaFunction toFunction(final Object   firstWord,
+                                          final TeaContext context)
         throws TeaException {
 
-        SObjFunction result = null;
+        TeaFunction result = null;
 
-        if ( firstWord instanceof SObjFunction ) {
-            result = (SObjFunction)firstWord;
+        if ( firstWord instanceof TeaFunction ) {
+            result = (TeaFunction)firstWord;
         } else {
             try {
-                result = toFunction((SObjSymbol)firstWord, context);
+                result = toFunction((TeaSymbol)firstWord, context);
             } catch (ClassCastException e) {
                 String msg =
                     "argument 0 should be a function or a symbol, not a {0}";
-                throw new STypeException(msg, STypes.getTypeName(firstWord));
+                throw new STypeException(msg, Types.getTypeName(firstWord));
             }
         }
 
@@ -84,8 +84,8 @@ final class SWordSubstUtils
  *
  **************************************************************************/
 
-    public static SObjFunction toFunction(final SObjSymbol firstWord,
-                                          final SContext   context)
+    public static TeaFunction toFunction(final TeaSymbol firstWord,
+                                          final TeaContext  context)
         throws TeaException {
 
         Object value = null;
@@ -93,16 +93,16 @@ final class SWordSubstUtils
         try {
             value = context.getVar(firstWord);
         } catch (SNoSuchVarException e2) {
-            value = STypes.getVarWithEffort(context, firstWord);
+            value = Types.getVarWithEffort(context, firstWord);
         }
 
-        SObjFunction result = null;
+        TeaFunction result = null;
         
         try {
-            result = (SObjFunction)value;
+            result = (TeaFunction)value;
         } catch (ClassCastException e) {
             String msg = "variable {0} should contain a function, not a {1}";
-            throw new STypeException(msg, firstWord, STypes.getTypeName(value));
+            throw new STypeException(msg, firstWord, Types.getTypeName(value));
         }
 
         return result;

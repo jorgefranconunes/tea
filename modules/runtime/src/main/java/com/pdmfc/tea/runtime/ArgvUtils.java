@@ -1,14 +1,14 @@
 /**************************************************************************
  *
- * Copyright (c) 2010-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2010-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
 package com.pdmfc.tea.runtime;
 
 import com.pdmfc.tea.TeaConfigInfo;
-import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SObjPair;
+import com.pdmfc.tea.runtime.TeaContext;
+import com.pdmfc.tea.runtime.TeaPair;
 
 
 
@@ -21,7 +21,7 @@ import com.pdmfc.tea.runtime.SObjPair;
  *
  **************************************************************************/
 
-final class SArgvUtils
+final class ArgvUtils
     extends Object {
 
 
@@ -48,7 +48,7 @@ final class SArgvUtils
  *
  **************************************************************************/
 
-    private SArgvUtils() {
+    private ArgvUtils() {
 
         // Nothing to do.
     }
@@ -63,22 +63,22 @@ final class SArgvUtils
  *
  **************************************************************************/
 
-    public static void setArgv(final SContext toplevelContext,
+    public static void setArgv(final TeaContext toplevelContext,
                                final String   argv0,
                                final String[] argv) {
 
         // Setup the "argv0" variable.
-        Object argv0Value = (argv0!=null) ? argv0 : SObjNull.NULL;
+        Object argv0Value = (argv0!=null) ? argv0 : TeaNull.NULL;
 
         toplevelContext.newVar(VAR_ARGV0, argv0Value);
 
 
         // Setup the "argv" variable.
-        SObjPair head = SObjPair.emptyList();
+        TeaPair head = TeaPair.emptyList();
 
         if ( argv != null ) {
             for (int i=argv.length-1; i>=0; --i ) {
-                head = new SObjPair(argv[i], head);
+                head = new TeaPair(argv[i], head);
             }
         } else {
             // We assume an empty list for "argv".

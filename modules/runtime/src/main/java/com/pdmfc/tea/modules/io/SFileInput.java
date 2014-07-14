@@ -14,10 +14,10 @@ import com.pdmfc.tea.modules.io.SInput;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.tos.STosUtil;
-import com.pdmfc.tea.runtime.SArgs;
-import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.SObjSymbol;
+import com.pdmfc.tea.runtime.Args;
+import com.pdmfc.tea.runtime.TeaContext;
+import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.SRuntimeException;
 
 
@@ -55,8 +55,8 @@ public final class SFileInput
 
       
     private static final String     CLASS_NAME   = "TFileInput";
-    private static final SObjSymbol CLASS_NAME_S =
-        SObjSymbol.addSymbol(CLASS_NAME);
+    private static final TeaSymbol CLASS_NAME_S =
+        TeaSymbol.addSymbol(CLASS_NAME);
 
 
 
@@ -113,14 +113,14 @@ public final class SFileInput
  *
  **************************************************************************/
 
-    public Object constructor(final SObjFunction obj,
-                              final SContext     context,
-                              final Object[]     args)
+    public Object constructor(final TeaFunction obj,
+                              final TeaContext     context,
+                              final Object[]    args)
         throws TeaException {
 
-        SArgs.checkCount(args, 3, "path");
+        Args.checkCount(args, 3, "path");
 
-        String          fileName    = SArgs.getString(args,2);
+        String          fileName    = Args.getString(args,2);
         FileInputStream aFileInput  = null;
 
         try {
@@ -168,7 +168,7 @@ public final class SFileInput
  *
  **************************************************************************/
 
-    public static SFileInput newInstance(final SContext context,
+    public static SFileInput newInstance(final TeaContext context,
                                          final Object[] args)
         throws TeaException {
 

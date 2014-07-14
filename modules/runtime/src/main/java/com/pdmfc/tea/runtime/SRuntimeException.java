@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.pdmfc.tea.TeaException;
-import com.pdmfc.tea.runtime.SObjSymbol;
+import com.pdmfc.tea.runtime.TeaSymbol;
 
 
 
@@ -144,7 +144,7 @@ public class SRuntimeException
         Object arg0 = args[0];
         String fmt  = null;
 
-        if ( arg0 instanceof SObjSymbol ) {
+        if ( arg0 instanceof TeaSymbol ) {
             fmt =
                 (new StringBuilder())
                 .append(arg0)

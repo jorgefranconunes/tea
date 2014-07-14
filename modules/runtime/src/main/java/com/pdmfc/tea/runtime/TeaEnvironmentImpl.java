@@ -10,8 +10,8 @@ import java.nio.charset.Charset;
 
 import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.runtime.Modules;
-import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SObjSymbol;
+import com.pdmfc.tea.runtime.TeaContext;
+import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.TeaEnvironment;
 
 
@@ -32,7 +32,7 @@ final class TeaEnvironmentImpl
 
 
 
-    private SContext _globalContext = null;
+    private TeaContext _globalContext = null;
     private Modules  _modules       = null;
     private Charset  _sourceCharset = null;
 
@@ -48,7 +48,7 @@ final class TeaEnvironmentImpl
 
     public TeaEnvironmentImpl(final Charset sourceCharset) {
 
-        _globalContext = new SContext();
+        _globalContext = new TeaContext();
         _modules       = new Modules(this);
         _sourceCharset = sourceCharset;
 
@@ -71,7 +71,7 @@ final class TeaEnvironmentImpl
     public TeaEnvironment addGlobalVar(final String varName,
                                        final Object varValue) {
 
-        SObjSymbol varSymbol = SObjSymbol.addSymbol(varName);
+        TeaSymbol varSymbol = TeaSymbol.addSymbol(varName);
 
         _globalContext.newVar(varSymbol, varValue);
 
@@ -89,7 +89,7 @@ final class TeaEnvironmentImpl
  **************************************************************************/
 
     @Override
-    public SContext getGlobalContext() {
+    public TeaContext getGlobalContext() {
 
         return _globalContext;
     }

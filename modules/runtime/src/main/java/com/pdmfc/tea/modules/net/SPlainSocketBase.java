@@ -10,9 +10,9 @@ import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.net.SPlainSocketFactory;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosUtil;
-import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.SObjSymbol;
+import com.pdmfc.tea.runtime.TeaContext;
+import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.SRuntimeException;
 
 
@@ -52,8 +52,8 @@ public final class SPlainSocketBase
 
 
     private static final String     CLASS_NAME   = "TSocketBase";
-    private static final SObjSymbol CLASS_NAME_S =
-        SObjSymbol.addSymbol(CLASS_NAME);
+    private static final TeaSymbol CLASS_NAME_S =
+        TeaSymbol.addSymbol(CLASS_NAME);
 
 
 
@@ -81,9 +81,9 @@ public final class SPlainSocketBase
  *
  **************************************************************************/
 
-    public Object constructor(final SObjFunction obj,
-                              final SContext     context,
-                              final Object[]     args)
+    public Object constructor(final TeaFunction obj,
+                              final TeaContext     context,
+                              final Object[]    args)
         throws TeaException {
 
         initialize(context);
@@ -215,7 +215,7 @@ public final class SPlainSocketBase
  *
  **************************************************************************/
 
-    public static SPlainSocketBase newInstance(final SContext context)
+    public static SPlainSocketBase newInstance(final TeaContext context)
         throws TeaException {
 
         SPlainSocketBase socket = null;

@@ -6,7 +6,7 @@
 
 package com.pdmfc.tea.runtime;
 
-import com.pdmfc.tea.runtime.SObjSymbol;
+import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.SRuntimeException;
 
 
@@ -31,12 +31,12 @@ public final class SNoSuchVarException
  *
  * Initializes the message from the name of the given symbol.
  *
- * @param symbol An <TT>SObjSymbol</TT> for whom there was no variable
+ * @param symbol An <TT>TeaSymbol</TT> for whom there was no variable
  * defined in the current context.
  *
  **************************************************************************/
 
-   public SNoSuchVarException(final SObjSymbol symbol) {
+   public SNoSuchVarException(final TeaSymbol symbol) {
 
       super("Variable '"
             + symbol.getName()

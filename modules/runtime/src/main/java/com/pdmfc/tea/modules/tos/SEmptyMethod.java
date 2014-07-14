@@ -7,9 +7,9 @@
 package com.pdmfc.tea.modules.tos;
 
 import com.pdmfc.tea.TeaException;
-import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.SObjNull;
+import com.pdmfc.tea.runtime.TeaContext;
+import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.runtime.TeaNull;
 
 
 
@@ -23,13 +23,13 @@ import com.pdmfc.tea.runtime.SObjNull;
 
 final class SEmptyMethod
     extends Object
-    implements SObjFunction {
+    implements TeaFunction {
 
 
 
 
 
-    private static SObjFunction _singleton = null;
+    private static TeaFunction _singleton = null;
 
 
 
@@ -41,12 +41,12 @@ final class SEmptyMethod
  *
  **************************************************************************/
 
-      public Object exec(final SObjFunction obj,
-                         final SContext     context,
-                         final Object[]     args)
+      public Object exec(final TeaFunction obj,
+                         final TeaContext     context,
+                         final Object[]    args)
          throws TeaException {
 
-         return SObjNull.NULL;
+         return TeaNull.NULL;
       }
 
 
@@ -60,7 +60,7 @@ final class SEmptyMethod
  *
  **************************************************************************/
 
-    public static SObjFunction singleton() {
+    public static TeaFunction singleton() {
 
         if ( _singleton == null ) {
             _singleton = new SEmptyMethod();

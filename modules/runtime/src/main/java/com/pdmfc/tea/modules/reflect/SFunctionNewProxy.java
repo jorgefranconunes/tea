@@ -14,9 +14,9 @@ import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.reflect.JavaWrapperObject;
 import com.pdmfc.tea.modules.reflect.SReflectUtils;
 import com.pdmfc.tea.modules.reflect.STeaJavaTypes;
-import com.pdmfc.tea.runtime.SArgs;
-import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SObjFunction;
+import com.pdmfc.tea.runtime.Args;
+import com.pdmfc.tea.runtime.TeaContext;
+import com.pdmfc.tea.runtime.TeaFunction;
 import com.pdmfc.tea.runtime.SRuntimeException;
 
 
@@ -71,7 +71,7 @@ import com.pdmfc.tea.runtime.SRuntimeException;
 
 public final class SFunctionNewProxy
     extends Object
-    implements SObjFunction {
+    implements TeaFunction {
 
 
 
@@ -99,15 +99,15 @@ public final class SFunctionNewProxy
  **************************************************************************/
 
     @Override
-    public Object exec(final SObjFunction function,
-                       final SContext     context,
-                       final Object[]     args)
+    public Object exec(final TeaFunction function,
+                       final TeaContext     context,
+                       final Object[]    args)
         throws TeaException {
 
         String usageMessage = "function javaInterface [javaInterface ...]";
-        SArgs.checkAtLeast(args, 3, usageMessage);
+        Args.checkAtLeast(args, 3, usageMessage);
 
-        SObjFunction proxyFunction  = SArgs.getFunction(context, args, 1);
+        TeaFunction proxyFunction  = Args.getFunction(context, args, 1);
         int          interfaceCount = args.length-2;
         Class<?>[]   javaInterfaces = new Class<?>[interfaceCount];
 
@@ -135,8 +135,8 @@ public final class SFunctionNewProxy
  *
  **************************************************************************/
 
-    private InvocationHandler createHandler(final SObjFunction proxyFunction,
-                                            final SContext     context) {
+    private InvocationHandler createHandler(final TeaFunction proxyFunction,
+                                            final TeaContext     context) {
 
         InvocationHandler result =
             new InvocationHandler() {
@@ -162,10 +162,10 @@ public final class SFunctionNewProxy
  *
  **************************************************************************/
 
-    private static Object invokeProxyMethod(final SObjFunction proxyFunction,
-                                            final SContext     context,
+    private static Object invokeProxyMethod(final TeaFunction proxyFunction,
+                                            final TeaContext     context,
                                             final Method       method,
-                                            final Object[]     args) {
+                                            final Object[]    args) {
 
         Object        result = null;
         TeaException error  = null;
@@ -201,10 +201,10 @@ public final class SFunctionNewProxy
  *
  **************************************************************************/
 
-    private static Object doInvokeProxyMethod(final SObjFunction proxyFunction,
-                                              final SContext     context,
+    private static Object doInvokeProxyMethod(final TeaFunction proxyFunction,
+                                              final TeaContext     context,
                                               final Method       method,
-                                              final Object[]     args)
+                                              final Object[]    args)
         throws TeaException {
 
         int      argCount         = (args==null) ? 0 : args.length;

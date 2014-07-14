@@ -7,10 +7,10 @@
 package com.pdmfc.tea.modules.tos;
 
 import com.pdmfc.tea.TeaException;
-import com.pdmfc.tea.runtime.SArgs;
-import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.SObjSymbol;
+import com.pdmfc.tea.runtime.Args;
+import com.pdmfc.tea.runtime.TeaContext;
+import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.SRuntimeException;
 
 
@@ -22,7 +22,7 @@ import com.pdmfc.tea.runtime.SRuntimeException;
  * This class implements a TOS method that when invoked for the first
  * time loads and creates an instance of another class. That instance
  * will then replace the TOS method that had just been invoked. The
- * loaded class must be derived from <code>SObjFunction</code> and it
+ * loaded class must be derived from <code>TeaFunction</code> and it
  * must represent a TOS method for the same TOS class the
  * <code>SMethodLoader</code> had been a method of.
  *
@@ -30,14 +30,14 @@ import com.pdmfc.tea.runtime.SRuntimeException;
 
 public final class SMethodLoader
     extends Object
-    implements SObjFunction {
+    implements TeaFunction {
 
 
 
 
 
    private String       _className;
-   private SObjFunction _method;
+   private TeaFunction _method;
 
 
 
@@ -89,9 +89,9 @@ public final class SMethodLoader
  *
  **************************************************************************/
 
-   public Object exec(final SObjFunction obj,
-                      final SContext     context,
-                      final Object[]     args)
+   public Object exec(final TeaFunction obj,
+                      final TeaContext     context,
+                      final Object[]    args)
       throws TeaException {
 
       if ( _method != null ) {
@@ -100,7 +100,7 @@ public final class SMethodLoader
 
       STosObj    object     = (STosObj)obj;
       STosClass  objClass   = object.getTosClass();
-      SObjSymbol methodName = SArgs.getSymbol(args,1);
+      TeaSymbol methodName = Args.getSymbol(args,1);
 
       _method = instantiateProc(_className);
       objClass.addMethod(methodName, _method);
@@ -116,7 +116,7 @@ public final class SMethodLoader
  *
  * Instantiates an object of the class whose name is given as
  * argument. That class must be derived from the
- * <code>SObjFunction</code> class. The constructor with no arguments
+ * <code>TeaFunction</code> class. The constructor with no arguments
  * is invoked.
  *
  * @param className The name of the class of the object to be
@@ -127,14 +127,14 @@ public final class SMethodLoader
  *
  **************************************************************************/
 
-   private static SObjFunction instantiateProc(final String className)
+   private static TeaFunction instantiateProc(final String className)
       throws SRuntimeException {
 
-      SObjFunction proc = null;
+      TeaFunction proc = null;
       String       msg  = null;
 
       try {
-         proc = (SObjFunction)Class.forName(className).newInstance();
+         proc = (TeaFunction)Class.forName(className).newInstance();
       } catch ( ClassNotFoundException e1 ) {
          msg = "could not find class '" + className + "'";
       } catch ( InstantiationException e2 ) {
@@ -143,7 +143,7 @@ public final class SMethodLoader
          msg = "class '" + className
              + "' or its initializer are not accessible";
       } catch ( ClassCastException e4 ) {
-         msg = "class '" + className + "' does not implement SObjFunction";
+         msg = "class '" + className + "' does not implement TeaFunction";
       } catch ( NoSuchMethodError e5 ) {
          msg = "class '" + className + "' does not have a default constructor";
       }

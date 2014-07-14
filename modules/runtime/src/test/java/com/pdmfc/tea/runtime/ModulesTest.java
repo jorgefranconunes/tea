@@ -10,9 +10,9 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 import com.pdmfc.tea.TeaException;
-import com.pdmfc.tea.runtime.SContext;
-import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.SObjSymbol;
+import com.pdmfc.tea.runtime.TeaContext;
+import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.TeaEnvironment;
 import com.pdmfc.tea.runtime.TeaEnvironmentImpl;
 import com.pdmfc.tea.runtime.TeaFunctionImplementor;
@@ -45,15 +45,15 @@ public final class ModulesTest
     public void addModuleWithTeaFunctionAnnotation()
         throws TeaException {
 
-        SObjSymbol     myFunctionName = SObjSymbol.addSymbol("my-function");
+        TeaSymbol     myFunctionName = TeaSymbol.addSymbol("my-function");
         TeaEnvironment environment    = buildTeaEnvironment();
         Modules        modules        = new Modules(environment);
-        SContext       context        = environment.getGlobalContext();
+        TeaContext       context        = environment.getGlobalContext();
         TeaModule      myModule       = new MyTestModule();
 
         modules.add(myModule);
 
-        SObjFunction myFunction = (SObjFunction)context.getVar(myFunctionName);
+        TeaFunction myFunction = (TeaFunction)context.getVar(myFunctionName);
 
         assertNotNull(myFunction);
 
@@ -70,9 +70,9 @@ public final class ModulesTest
 
 
         @TeaFunctionImplementor("my-function")
-        public static Object myFunction(final SObjFunction func,
-                                        final SContext     context,
-                                        final Object[]     args)
+        public static Object myFunction(final TeaFunction func,
+                                        final TeaContext     context,
+                                        final Object[]    args)
             throws TeaException {
             String argument = (String)args[1];
             String result   = argument + " - YES";
@@ -94,14 +94,14 @@ public final class ModulesTest
     public void addModuleWithTeaFunctionAnnotationFailure01()
         throws TeaException {
 
-        SObjSymbol     myFunctionName = SObjSymbol.addSymbol("my-function");
+        TeaSymbol     myFunctionName = TeaSymbol.addSymbol("my-function");
         TeaEnvironment environment    = buildTeaEnvironment();
         Modules        modules        = new Modules(environment);
         TeaModule      myModule       = new MyTestModuleFailure01();
 
         modules.add(myModule);
 
-        fail("SModule.addModule(...) failed to fail!");
+        fail("TeaModule.addModule(...) failed to fail!");
     }
 
 
@@ -130,14 +130,14 @@ public final class ModulesTest
     public void addModuleWithTeaFunctionAnnotationFailure02()
         throws TeaException {
 
-        SObjSymbol     myFunctionName = SObjSymbol.addSymbol("my-function");
+        TeaSymbol     myFunctionName = TeaSymbol.addSymbol("my-function");
         TeaEnvironment environment    = buildTeaEnvironment();
         Modules        modules        = new Modules(environment);
         TeaModule      myModule       = new MyTestModuleFailure02();
 
         modules.add(myModule);
 
-        fail("SModule.addModule(...) failed to fail!");
+        fail("TeaModule.addModule(...) failed to fail!");
     }
 
 
@@ -146,9 +146,9 @@ public final class ModulesTest
 
 
         @TeaFunctionImplementor("my-function")
-        public static Object myFunction(final SObjFunction function,
+        public static Object myFunction(final TeaFunction function,
                                         final Object       wrongType,
-                                        final Object[]     args)
+                                        final Object[]    args)
             throws TeaException {
             throw new IllegalStateException("Should not be here!");
         }
@@ -168,14 +168,14 @@ public final class ModulesTest
     public void addModuleWithTeaFunctionAnnotationFailure03()
         throws TeaException {
 
-        SObjSymbol     myFunctionName = SObjSymbol.addSymbol("my-function");
+        TeaSymbol     myFunctionName = TeaSymbol.addSymbol("my-function");
         TeaEnvironment environment    = buildTeaEnvironment();
         Modules        modules        = new Modules(environment);
         TeaModule      myModule       = new MyTestModuleFailure03();
 
         modules.add(myModule);
 
-        fail("SModule.addModule(...) failed to fail!");
+        fail("TeaModule.addModule(...) failed to fail!");
     }
 
 
@@ -184,8 +184,8 @@ public final class ModulesTest
 
 
         @TeaFunctionImplementor("my-function")
-        public static Object myFunction(final SObjFunction function,
-                                        final SContext     context,
+        public static Object myFunction(final TeaFunction function,
+                                        final TeaContext     context,
                                         final Object       wrongType)
             throws TeaException {
             throw new IllegalStateException("Should not be here!");
@@ -206,15 +206,15 @@ public final class ModulesTest
     public void addModuleWithTeaFunctionAnnotationTeaException()
         throws TeaException {
 
-        SObjSymbol     myFunctionName = SObjSymbol.addSymbol("my-function");
+        TeaSymbol     myFunctionName = TeaSymbol.addSymbol("my-function");
         TeaEnvironment environment    = buildTeaEnvironment();
         Modules        modules        = new Modules(environment);
-        SContext       context        = environment.getGlobalContext();
+        TeaContext       context        = environment.getGlobalContext();
         TeaModule      myModule       = new MyTestModuleTeaException();
 
         modules.add(myModule);
 
-        SObjFunction myFunction = (SObjFunction)context.getVar(myFunctionName);
+        TeaFunction myFunction = (TeaFunction)context.getVar(myFunctionName);
 
         assertNotNull(myFunction);
 
@@ -231,9 +231,9 @@ public final class ModulesTest
 
 
         @TeaFunctionImplementor("my-function")
-        public static Object myFunction(final SObjFunction func,
-                                        final SContext     context,
-                                        final Object[]     args)
+        public static Object myFunction(final TeaFunction func,
+                                        final TeaContext     context,
+                                        final Object[]    args)
             throws TeaException {
 
             throw new TeaException("Oops...");
@@ -256,15 +256,15 @@ public final class ModulesTest
     public void addModuleWithTeaFunctionAnnotationJavaException()
         throws TeaException {
 
-        SObjSymbol     myFunctionName = SObjSymbol.addSymbol("my-function");
+        TeaSymbol     myFunctionName = TeaSymbol.addSymbol("my-function");
         TeaEnvironment environment    = buildTeaEnvironment();
         Modules        modules        = new Modules(environment);
-        SContext       context        = environment.getGlobalContext();
+        TeaContext       context        = environment.getGlobalContext();
         TeaModule      myModule       = new MyTestModuleJavaException();
 
         modules.add(myModule);
 
-        SObjFunction myFunction = (SObjFunction)context.getVar(myFunctionName);
+        TeaFunction myFunction = (TeaFunction)context.getVar(myFunctionName);
 
         assertNotNull(myFunction);
 
@@ -281,9 +281,9 @@ public final class ModulesTest
 
 
         @TeaFunctionImplementor("my-function")
-        public static Object myFunction(final SObjFunction func,
-                                        final SContext     context,
-                                        final Object[]     args)
+        public static Object myFunction(final TeaFunction func,
+                                        final TeaContext     context,
+                                        final Object[]    args)
             throws TeaException {
 
             throw new IllegalStateException("Oops...");
@@ -313,7 +313,7 @@ public final class ModulesTest
 
 /**************************************************************************
  *
- * An empty implementation of SModule, used by other test classes.
+ * An empty implementation of TeaModule, used by other test classes.
  *
  **************************************************************************/
 

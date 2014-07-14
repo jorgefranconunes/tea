@@ -30,14 +30,14 @@ import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.util.SDate;
 import com.pdmfc.tea.modules.util.SHashtable;
 import com.pdmfc.tea.modules.util.SVector;
-import com.pdmfc.tea.runtime.SContext;
+import com.pdmfc.tea.runtime.TeaContext;
 import com.pdmfc.tea.runtime.SLambdaFunction;
-import com.pdmfc.tea.runtime.SObjBlock;
-import com.pdmfc.tea.runtime.SObjByteArray;
-import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.SObjNull;
-import com.pdmfc.tea.runtime.SObjPair;
-import com.pdmfc.tea.runtime.SObjSymbol;
+import com.pdmfc.tea.runtime.TeaBlock;
+import com.pdmfc.tea.runtime.TeaByteArray;
+import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.runtime.TeaNull;
+import com.pdmfc.tea.runtime.TeaPair;
+import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.SRuntimeException;
 
 
@@ -79,11 +79,11 @@ public final class STeaJavaTypes
  ***************************************************************************/
 
     public static Object java2Tea(final Object   obj,
-                                  final SContext context)
+                                  final TeaContext context)
         throws TeaException {
         
         if ( null == obj ) {
-            return SObjNull.NULL;
+            return TeaNull.NULL;
         }
         if ( obj instanceof Date ) {
             try {
@@ -155,12 +155,12 @@ public final class STeaJavaTypes
         // object is inadvertly converted twice by java2Tea.
         if (obj instanceof STosObj
                 || obj instanceof SLambdaFunction
-                || obj instanceof SObjBlock
-                || obj instanceof SObjByteArray
-                || obj instanceof SObjFunction
-                || obj instanceof SObjNull
-                || obj instanceof SObjPair
-                || obj instanceof SObjSymbol
+                || obj instanceof TeaBlock
+                || obj instanceof TeaByteArray
+                || obj instanceof TeaFunction
+                || obj instanceof TeaNull
+                || obj instanceof TeaPair
+                || obj instanceof TeaSymbol
                 || obj instanceof JavaWrapperObject) {
             return obj;
         }
@@ -180,7 +180,7 @@ public final class STeaJavaTypes
  ***************************************************************************/
 
     private static SHashtable javaMap2Tea(final Map<Object,Object> map,
-                                          final SContext           context)
+                                          final TeaContext           context)
         throws TeaException {
 
         SHashtable         teaObj = null;
@@ -215,18 +215,18 @@ public final class STeaJavaTypes
  *
  ***************************************************************************/
     
-    private static SObjPair javaList2Tea(final List<Object> list,
-                                         final SContext     context)
+    private static TeaPair javaList2Tea(final List<Object> list,
+                                         final TeaContext     context)
         throws TeaException {
 
         int      size = list.size();
-        SObjPair head = SObjPair.emptyList();
+        TeaPair head = TeaPair.emptyList();
 
         for ( int i=size; (i--)>0; ) {
             Object value    = list.get(i);
             Object teaValue = java2Tea(value, context);
             
-            head = new SObjPair(teaValue, head);
+            head = new TeaPair(teaValue, head);
         }
 
         return head;
@@ -242,18 +242,18 @@ public final class STeaJavaTypes
  *
  ***************************************************************************/
     
-    private static SObjPair javaArray2Tea(final Object   anArrayObj,
-                                          final SContext context)
+    private static TeaPair javaArray2Tea(final Object   anArrayObj,
+                                          final TeaContext context)
         throws TeaException {
 
         int      size = Array.getLength(anArrayObj);
-        SObjPair head = SObjPair.emptyList();
+        TeaPair head = TeaPair.emptyList();
 
         for ( int i=size; (i--)>0; ) {
             Object value    = Array.get(anArrayObj, i);
             Object teaValue = java2Tea(value, context);
             
-            head = new SObjPair(teaValue, head);
+            head = new TeaPair(teaValue, head);
         }
 
         return head;
@@ -272,7 +272,7 @@ public final class STeaJavaTypes
     public static Object tea2Java(final Object obj)
         throws TeaException {
 
-        if ( obj == SObjNull.NULL ) {
+        if ( obj == TeaNull.NULL ) {
             return null;
         }
 
@@ -291,11 +291,11 @@ public final class STeaJavaTypes
         if  ( obj instanceof Boolean ) {
             return obj;
         }
-        if  ( obj instanceof SObjSymbol ) {
-            return ((SObjSymbol)obj).getName();
+        if  ( obj instanceof TeaSymbol ) {
+            return ((TeaSymbol)obj).getName();
         }
-        if ( obj instanceof SObjPair ) {
-            return teaList2List((SObjPair)obj);
+        if ( obj instanceof TeaPair ) {
+            return teaList2List((TeaPair)obj);
         }
         if ( obj instanceof JavaWrapperObject ) {
             return ((JavaWrapperObject)obj).getWrappedObject();
@@ -338,7 +338,7 @@ public final class STeaJavaTypes
  *
  ***************************************************************************/
     
-    private static List teaList2List(final SObjPair head)
+    private static List teaList2List(final TeaPair head)
         throws TeaException {
         
         List<Object> list = new ArrayList<Object>();

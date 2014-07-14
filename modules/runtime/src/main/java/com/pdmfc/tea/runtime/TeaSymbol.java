@@ -20,7 +20,7 @@ import java.util.Map;
  *
  **************************************************************************/
 
-public final class SObjSymbol
+public final class TeaSymbol
     extends Object {
 
 
@@ -34,8 +34,8 @@ public final class SObjSymbol
     private int    _hashCode;
 
     // The set of all existing symbols.
-    private static Map<String,SObjSymbol> _nameSet =
-        new HashMap<String,SObjSymbol>();
+    private static Map<String,TeaSymbol> _nameSet =
+        new HashMap<String,TeaSymbol>();
 
     // The number of declared symbols. Used to generate hash codes. */
     private static int _symbolCount = 0;
@@ -53,8 +53,8 @@ public final class SObjSymbol
  *
  **************************************************************************/
 
-    private SObjSymbol(final String name,
-                       final int    hash) {
+    private TeaSymbol(final String name,
+                      final int    hash) {
 
         _name     = name;
         _hashCode = hash;
@@ -69,7 +69,7 @@ public final class SObjSymbol
  * The hash code of this object. It is set when the object is
  * initialized.  There is no nee to reimplement the
  * <code>equals()</code> method because there are no to
- * <code>SObjSymbol</code> instances with the same name, so comparison
+ * <code>TeaSymbol</code> instances with the same name, so comparison
  * for equality can be made on an object basis.
  *
  * @return The hash code of this object.
@@ -134,7 +134,7 @@ public final class SObjSymbol
  *
  **************************************************************************/
 
-    public static synchronized SObjSymbol getSymbol(final String name) {
+    public static synchronized TeaSymbol getSymbol(final String name) {
 
         return _nameSet.get(name);
     }
@@ -155,12 +155,12 @@ public final class SObjSymbol
  *
  **************************************************************************/
 
-    public static synchronized SObjSymbol addSymbol(final String name) {
+    public static synchronized TeaSymbol addSymbol(final String name) {
 
-        SObjSymbol symbol = _nameSet.get(name);
+        TeaSymbol symbol = _nameSet.get(name);
 
         if ( symbol == null ) {
-            symbol = new SObjSymbol(name, _symbolCount++);
+            symbol = new TeaSymbol(name, _symbolCount++);
             _nameSet.put(name, symbol);
         }
 

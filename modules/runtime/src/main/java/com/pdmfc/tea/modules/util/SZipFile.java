@@ -15,11 +15,11 @@ import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.io.SInput;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
-import com.pdmfc.tea.runtime.SArgs;
-import com.pdmfc.tea.runtime.SContext;
+import com.pdmfc.tea.runtime.Args;
+import com.pdmfc.tea.runtime.TeaContext;
 import com.pdmfc.tea.runtime.SNumArgException;
-import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.SObjPair;
+import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.runtime.TeaPair;
 import com.pdmfc.tea.runtime.SRuntimeException;
 
 
@@ -108,9 +108,9 @@ public final class SZipFile
  *
  **************************************************************************/
 
-    public Object constructor(final SObjFunction obj,
-                              final SContext     context,
-                              final Object[]     args)
+    public Object constructor(final TeaFunction obj,
+                              final TeaContext     context,
+                              final Object[]    args)
         throws TeaException {
 
         switch ( args.length ) {
@@ -161,16 +161,16 @@ public final class SZipFile
  *
  **************************************************************************/
 
-    public Object open(final SObjFunction obj,
-                       final SContext     context,
-                       final Object[]     args)
+    public Object open(final TeaFunction obj,
+                       final TeaContext     context,
+                       final Object[]    args)
         throws TeaException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "pathName");
         }
 
-        String fileName = SArgs.getString(args, 2);
+        String fileName = Args.getString(args, 2);
         
         if ( _zipFile != null ) {
             try {
@@ -220,9 +220,9 @@ public final class SZipFile
  *
  **************************************************************************/
 
-    public Object close(final SObjFunction obj,
-                        final SContext     context,
-                        final Object[]     args)
+    public Object close(final TeaFunction obj,
+                        final TeaContext     context,
+                        final Object[]    args)
         throws TeaException {
 
         if ( args.length != 2 ) {
@@ -269,9 +269,9 @@ public final class SZipFile
  *
  **************************************************************************/
 
-    public Object getEntryNames(final SObjFunction obj,
-                                final SContext     context,
-                                final Object[]     args)
+    public Object getEntryNames(final TeaFunction obj,
+                                final TeaContext     context,
+                                final Object[]    args)
         throws TeaException {
 
         if ( args.length != 2 ) {
@@ -281,15 +281,15 @@ public final class SZipFile
             throw new SRuntimeException("zip file is not opened");
         }
 
-        SObjPair    empty  = SObjPair.emptyList();
-        SObjPair    head   = empty;
-        SObjPair    node   = null;
+        TeaPair    empty  = TeaPair.emptyList();
+        TeaPair    head   = empty;
+        TeaPair    node   = null;
         Enumeration elems  = _zipFile.entries();
 
         while ( elems.hasMoreElements() ) {
             ZipEntry entry   = (ZipEntry)elems.nextElement();
             String   value   = entry.getName();
-            SObjPair newNode = new SObjPair(value, empty);
+            TeaPair newNode = new TeaPair(value, empty);
 
             if ( node == null ) {
                 head = newNode;
@@ -330,9 +330,9 @@ public final class SZipFile
  *
  **************************************************************************/
 
-    public Object getInput(final SObjFunction obj,
-                           final SContext     context,
-                           final Object[]     args)
+    public Object getInput(final TeaFunction obj,
+                           final TeaContext     context,
+                           final Object[]    args)
         throws TeaException {
 
         if ( args.length != 3 ) {
@@ -342,7 +342,7 @@ public final class SZipFile
             throw new SRuntimeException("zip file is not opened");
         }
 
-        String   entryName = SArgs.getString(args, 2);
+        String   entryName = Args.getString(args, 2);
         ZipEntry entry     = _zipFile.getEntry(entryName);
         SInput   input     = SInput.newInstance(context);
 
@@ -398,9 +398,9 @@ public final class SZipFile
  *
  **************************************************************************/
 
-    public Object isDirectory(final SObjFunction obj,
-                              final SContext     context,
-                              final Object[]     args)
+    public Object isDirectory(final TeaFunction obj,
+                              final TeaContext     context,
+                              final Object[]    args)
         throws TeaException {
 
         if ( args.length != 3 ) {
@@ -410,7 +410,7 @@ public final class SZipFile
             throw new SRuntimeException("zip file is not opened");
         }
 
-        String   entryName = SArgs.getString(args, 2);
+        String   entryName = Args.getString(args, 2);
         ZipEntry entry     = _zipFile.getEntry(entryName);
         Boolean  result    = Boolean.FALSE;
 

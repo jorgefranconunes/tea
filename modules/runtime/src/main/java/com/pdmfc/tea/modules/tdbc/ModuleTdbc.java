@@ -10,11 +10,11 @@ import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.tdbc.SConnectionClass;
 import com.pdmfc.tea.modules.tos.SJavaClass;
 import com.pdmfc.tea.modules.tos.STosClass;
-import com.pdmfc.tea.runtime.SArgs;
-import com.pdmfc.tea.runtime.SContext;
+import com.pdmfc.tea.runtime.Args;
+import com.pdmfc.tea.runtime.TeaContext;
 import com.pdmfc.tea.runtime.SNumArgException;
-import com.pdmfc.tea.runtime.SObjFunction;
-import com.pdmfc.tea.runtime.SObjNull;
+import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.runtime.TeaNull;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.TeaFunctionImplementor;
 import com.pdmfc.tea.runtime.TeaEnvironment;
@@ -44,7 +44,7 @@ import com.pdmfc.tea.runtime.TeaModule;
  *
  **************************************************************************/
 
-public final class SModuleTdbc
+public final class ModuleTdbc
     extends Object
     implements TeaModule {
 
@@ -64,7 +64,7 @@ public final class SModuleTdbc
  *
  **************************************************************************/
 
-   public SModuleTdbc() {
+   public ModuleTdbc() {
 
        // Nothing to do.
    }
@@ -197,16 +197,16 @@ public final class SModuleTdbc
  **************************************************************************/
 
     @TeaFunctionImplementor("tdbc-register-driver")
-    public static Object functionRegisterDriver(final SObjFunction func,
-                                                final SContext     context,
-                                                final Object[]     args)
+    public static Object functionRegisterDriver(final TeaFunction func,
+                                                final TeaContext  context,
+                                                final Object[]    args)
         throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "className");
         }
 
-        String className = SArgs.getString(args,1);
+        String className = Args.getString(args,1);
 
         try {
             Class.forName(className);
@@ -215,7 +215,7 @@ public final class SModuleTdbc
             throw new SRuntimeException(args, msg, className);
         }
 
-        return SObjNull.NULL;
+        return TeaNull.NULL;
     }
 
 
@@ -265,16 +265,16 @@ public final class SModuleTdbc
  **************************************************************************/
 
     @TeaFunctionImplementor("sql-encode")
-    public static Object functionSqlEncode(final SObjFunction func,
-                                           final SContext     context,
-                                           final Object[]     args)
+    public static Object functionSqlEncode(final TeaFunction func,
+                                           final TeaContext  context,
+                                           final Object[]    args)
         throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "string");
         }
 
-        String str    = SArgs.getString(args, 1);
+        String str    = Args.getString(args, 1);
         String result = sqlEncode(str);
 
         return result;
@@ -355,9 +355,9 @@ public final class SModuleTdbc
  **************************************************************************/
 
     @TeaFunctionImplementor("tdbc-get-open-connections-count")
-    public Object functionGetOpenConnCount(final SObjFunction func,
-                                           final SContext     context,
-                                           final Object[]     args)
+    public Object functionGetOpenConnCount(final TeaFunction func,
+                                           final TeaContext  context,
+                                           final Object[]    args)
         throws TeaException {
 
         int     count  = _connClass.getOpenConnectionsCount();
@@ -410,14 +410,14 @@ public final class SModuleTdbc
  **************************************************************************/
 
     @TeaFunctionImplementor("tdbc-close-all-connections")
-    public Object functionCloseAllConn(final SObjFunction func,
-                                       final SContext     context,
-                                       final Object[]     args)
+    public Object functionCloseAllConn(final TeaFunction func,
+                                       final TeaContext  context,
+                                       final Object[]    args)
         throws TeaException {
 
         _connClass.closeAll();
 
-        return SObjNull.NULL;
+        return TeaNull.NULL;
     }
 
 
