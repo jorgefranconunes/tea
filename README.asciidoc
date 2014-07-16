@@ -14,8 +14,8 @@ This development tree is for the 4.y.z master development branch.
 
 == Pre-Requisites
 
-* JDK 1.6
-* Maven 3.0.x
+* JDK 1.7
+* Maven 3.0+
 
 
 

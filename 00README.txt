@@ -44,7 +44,7 @@ gunzip -c tea-4.xx.yy.tar.gz | tar xvf -
 
 
 4. Ensure the JAVA_HOME environment variable is set. It should point
-to a Java 6 or later JRE. Aletrnatively you can run the tools under
+to a Java 7 or later JRE. Aletrnatively you can run the tools under
 the "bin" folder passing them a --jre=PATH option pointing to the JRE
 binary.
 
