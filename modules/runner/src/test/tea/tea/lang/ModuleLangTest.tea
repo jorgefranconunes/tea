@@ -958,3 +958,38 @@ tunit-testsuite if-test {
     
 }
 
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite is-test {
+    
+    
+    tunit-test-error tooFewArgs {
+        
+        is
+    }
+    
+    
+    tunit-test-error tooManyArgs {
+        
+        is 2 3
+    }
+    
+    
+    tunit-test allOk {
+        
+        define input  123
+        define result [is $input]
+        
+        tunit-assert-equals $input $result
+    }
+    
+}
+

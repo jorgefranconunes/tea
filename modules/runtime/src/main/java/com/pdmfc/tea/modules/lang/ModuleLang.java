@@ -1549,8 +1549,8 @@ public final class ModuleLang
 
 //* 
 //* <TeaFunction name="is"
-//*                 arguments="value"
-//*             module="tea.lang">
+//*              arguments="value"
+//*              module="tea.lang">
 //*
 //* <Overview>
 //* Identity function.
@@ -1594,11 +1594,11 @@ public final class ModuleLang
                                     final Object[]    args)
         throws TeaException {
 
-        if ( args.length != 2 ) {
-            throw new SNumArgException(args, "object");
-        }
+        Args.checkCount(args, 2, "object");
 
-        return args[1];
+        Object result = args[1];
+
+        return result;
     }
 
 
