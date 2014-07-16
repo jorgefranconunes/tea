@@ -9,6 +9,7 @@ package com.pdmfc.tea.engine;
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
+import java.io.StringReader;
 import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
 import java.util.ArrayList;
@@ -184,7 +185,7 @@ public final class TeaScriptEngine
 
         try {
             _compiler = new TeaCompiler();
-            _emptyCode = _compiler.compile("");
+            _emptyCode = compileFromString("");
         } catch ( TeaCompileException ex ) {
             // This can never happen. But we can't go on if it does.
             throw new RuntimeException(ex);
@@ -464,12 +465,17 @@ public final class TeaScriptEngine
     public CompiledScript compile(final String script)
         throws ScriptException {
 
+        TeaCode teaCode = null;
+
         try {
-            return new TeaCompiledScript(this,
-                                         this.getCompiler().compile(script));
-        } catch ( Exception e ) {
+            teaCode = compileFromString(script);
+        } catch ( TeaCompileException e ) {
             throw new ScriptException(e);
         }
+
+        TeaCompiledScript compiledScript = new TeaCompiledScript(this, teaCode);
+
+        return compiledScript;
     }
 
 
@@ -1068,6 +1074,35 @@ public final class TeaScriptEngine
             return ex.getMessage();
         }
     }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    private TeaCode compileFromString(final String script)
+        throws TeaCompileException {
+
+        TeaCode result = null;
+
+        try (
+            Reader reader = new StringReader(script)
+        ) {
+            result = _compiler.compile(reader, null);
+        } catch ( IOException e ) {
+            // This should never happen...
+            throw new IllegalStateException(e);
+        }
+
+        return result;
+    }
+
+
 }
 
 

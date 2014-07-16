@@ -136,28 +136,6 @@ public final class TeaCode
 
 
 
-
-/**************************************************************************
- *
- * This is used for debugging. At the moment it is rather slow.
- *
- * @param out A stream where the message will be sent to.
- *
- * @param ident Number of padding white spaces inserted into the left.
- *
- **************************************************************************/
-
-//    public final void prettyPrint(PrintStream out, int indent) {
-//
-//        for (  SCodeNode node=_statsHead; node!=null; node=node._next ) {
-//            node._element.prettyPrint(out, indent);
-//        }
-//    }
-
-
-
-
-
 /**************************************************************************
  *
  * Nodes of a linked list.

@@ -6,7 +6,10 @@
 
 package com.pdmfc.tea.tools.runner;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.IOException;
+import java.io.Reader;
 import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
 
@@ -19,6 +22,7 @@ import com.pdmfc.tea.runtime.TeaRuntime;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.TeaRuntimeConfig;
 import com.pdmfc.tea.tools.runner.TeaRunnerArgs;
+import com.pdmfc.tea.util.SInputSourceFactory;
 
 
 
@@ -207,13 +211,38 @@ public final class TeaRunner
         TeaCompiler compiler = new TeaCompiler();
         TeaCode     code     = null;
 
-        if ( scriptPath == null ) {
-            code = compiler.compile(System.in, charset, null);
-        } else {
-            code = compiler.compile(scriptPath, charset, scriptPath);
-        }
+        try ( Reader reader = buildReader(scriptPath, charset) ) {
+            code = compiler.compile(reader, scriptPath);
+        } 
 
         return code;
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    private static Reader buildReader(final String  path,
+                                      final Charset charset)
+        throws IOException  {
+
+        Reader reader = null;
+
+        if ( path == null ) {
+            reader =
+                new BufferedReader(new InputStreamReader(System.in, charset));
+        } else {
+            reader =
+                SInputSourceFactory.openReader(path, charset);
+        }
+
+        return reader;
     }
 
 
@@ -239,6 +268,8 @@ public final class TeaRunner
                 Object[] fmtArgs = { charsetName };
                 throw new TeaException(msg, fmtArgs);
             }
+        } else {
+            charset = Charset.defaultCharset();
         }
 
         return charset;

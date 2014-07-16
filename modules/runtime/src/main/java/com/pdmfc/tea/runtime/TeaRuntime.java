@@ -7,6 +7,7 @@
 package com.pdmfc.tea.runtime;
 
 import java.io.IOException;
+import java.io.Reader;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,7 @@ import com.pdmfc.tea.runtime.TeaEnvironment;
 import com.pdmfc.tea.runtime.TeaEnvironmentImpl;
 import com.pdmfc.tea.runtime.TeaModule;
 import com.pdmfc.tea.runtime.TeaRuntimeConfig;
+import com.pdmfc.tea.util.SInputSourceFactory;
 
 
 
@@ -400,8 +402,11 @@ public final class TeaRuntime
             TeaContext globalContext = _environment.getGlobalContext();
             TeaCode  code          = null;
             
-            try {
-                code = compiler.compile(dirPath, path, sourceCharset, path);
+            try (
+                Reader reader =
+                   SInputSourceFactory.openReader(dirPath, path, sourceCharset);
+            ) {
+                code = compiler.compile(reader, path);
                 code.exec(globalContext);
             } catch ( IOException e ) {
                 // The given path does not exist or is not

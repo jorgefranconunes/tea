@@ -8,6 +8,7 @@ package com.pdmfc.tea.modules.lang;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Reader;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -27,6 +28,7 @@ import com.pdmfc.tea.runtime.TeaPair;
 import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.TeaEnvironment;
+import com.pdmfc.tea.util.SInputSourceFactory;
 
 
 
@@ -352,8 +354,11 @@ final class SFunctionImport
             Charset sourceCharset = _environment.getSourceCharset();
             TeaCode code          = null;
             
-            try {
-                code = _compiler.compile(path, sourceCharset, _importPath);
+            try (
+                 Reader reader =
+                     SInputSourceFactory.openReader(path, sourceCharset)
+             ) {
+                code = _compiler.compile(reader, _importPath);
             } catch (IOException e) {
                 // The path does not exist or is not accessible.
             }

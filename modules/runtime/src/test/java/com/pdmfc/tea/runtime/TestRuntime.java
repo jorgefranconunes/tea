@@ -8,6 +8,9 @@ package com.pdmfc.tea.runtime;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
 import java.text.MessageFormat;
 
 import com.pdmfc.tea.TeaException;
@@ -113,8 +116,35 @@ public class TestRuntime
     public Object eval(final String script)
         throws TeaException {
 
-        TeaCode code   = _compiler.compile(script);
+        TeaCode code   = compileFromString(script);
         Object  result = _teaRuntime.execute(code);
+
+        return result;
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    private TeaCode compileFromString(final String script)
+        throws TeaException {
+
+        TeaCode result = null;
+
+        try (
+            Reader reader = new StringReader(script)
+        ) {
+            result = _compiler.compile(reader, null);
+        } catch ( IOException e ) {
+            // This should never happen...
+            throw new IllegalStateException(e);
+        }
 
         return result;
     }

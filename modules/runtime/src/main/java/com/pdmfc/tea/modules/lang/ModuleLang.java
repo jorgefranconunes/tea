@@ -45,6 +45,7 @@ import com.pdmfc.tea.runtime.Types;
 import com.pdmfc.tea.runtime.TeaEnvironment;
 import com.pdmfc.tea.runtime.TeaFunctionImplementor;
 import com.pdmfc.tea.runtime.TeaModule;
+import com.pdmfc.tea.util.SInputSourceFactory;
 
 
 
@@ -3258,8 +3259,11 @@ public final class ModuleLang
         if ( arg instanceof String ) {
             String fileName = (String)arg;
             
-            try {
-                program  = _compiler.compile(fileName, charset, fileName);
+            try (
+                 Reader reader =
+                     SInputSourceFactory.openReader(fileName, charset)
+             ) {
+                program  = _compiler.compile(reader, fileName);
             } catch ( IOException e ) {
                 String   msg     = "Failed to read \"{0}\" - {1}";
                 Object[] fmtArgs = { fileName, e.getMessage() };
@@ -3281,7 +3285,7 @@ public final class ModuleLang
                 try { ((SInput)arg).close(); } catch ( IOException e ) {/* */}
             }
         } else {
-            String msg = "argument 1 must be string or input stream, not {0}";
+            String msg = "argument 1 must be string or input stream, not a {0}";
             Object[] fmtArgs = { Types.getTypeName(arg) };
             throw new STypeException(msg, fmtArgs);
         }
