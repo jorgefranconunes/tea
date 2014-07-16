@@ -993,3 +993,48 @@ tunit-testsuite is-test {
     
 }
 
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite type-predicates-test {
+    
+    
+    define test-predicate ( testName predicate object notObject ) {
+        
+        tunit-test-error [str-fmt "{0}-tooFewArgs" $testName] {
+            $predicate
+        }
+        
+        tunit-test-error [str-fmt "{0}-tooManyArgs" $testName] {
+            $predicate $object 3
+        }
+        
+        tunit-test [str-fmt "{0}-isTrue" $testName] {
+            tunit-assert [$predicate $object]
+        }
+        
+        tunit-test [str-fmt "{0}-isFalse" $testName] {
+            tunit-assert [not [$predicate $notObject]]
+        }
+    }
+    
+    
+    test-predicate block-test    $block?    {} 123
+    test-predicate bool-test     $bool?     $true 123
+    test-predicate float-test    $float?    1.2 3
+    test-predicate function-test $function? $is 123
+    test-predicate int-test      $int?      1 2.3
+    test-predicate pair-test     $pair?     () 123
+    test-predicate string-test   $string?   "123" 123
+    test-predicate symbol-test   $symbol?   HelloWorld 123
+    test-predicate not-null-test $not-null? 123 $null
+    test-predicate null-test     $null?     $null 123
+}
+

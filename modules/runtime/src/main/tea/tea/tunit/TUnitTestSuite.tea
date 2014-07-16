@@ -73,13 +73,13 @@ method TUnitTestSuite prepareToRunTests () {
     }
     
     define tunit-test ( name block ) {
-        define testcaseName [symbol->string $name]
+        define testcaseName [str-fmt "{0}" $name]
         define testcase     [TUnitTestCase::regularTest $testcaseName $block]
         append $testcase $testcaseList
     }
     
     define tunit-test-error ( name block ) {
-        define testcaseName [symbol->string $name]
+        define testcaseName [str-fmt "{0}" $name]
         define testcase     [TUnitTestCase::errorTest $testcaseName $block]
         append $testcase $testcaseList
     }

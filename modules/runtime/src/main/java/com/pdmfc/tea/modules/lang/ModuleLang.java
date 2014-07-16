@@ -1607,22 +1607,25 @@ public final class ModuleLang
 
 /**************************************************************************
  *
- * 
+ * The common implementation of all predicates that check if its
+ * argument is of a given type.
  *
  **************************************************************************/
 
-    private static Object typeCheck(final Class<?> type,
-                                    final Object[] args)
+    private static Boolean checkType(final Class<?> expectedType,
+                                     final Object[] args)
         throws TeaException {
 
-        if ( args.length != 2 ) {
-            throw new SNumArgException(args, "obj");
-        }
+        Args.checkCount(args, 2, "object");
 
-        return
-            type.isAssignableFrom(args[1].getClass())
+        Object  objectToCheck = args[1];
+        Class   actualType    = objectToCheck.getClass();
+        Boolean result        =
+            expectedType.isAssignableFrom(actualType)
             ? Boolean.TRUE
             : Boolean.FALSE;
+
+        return result;
     }
 
 
@@ -1631,8 +1634,8 @@ public final class ModuleLang
 
 //* 
 //* <TeaFunction name="block?"
-//*                 arguments="value"
-//*             module="tea.lang">
+//*              arguments="value"
+//*              module="tea.lang">
 //*
 //* <Overview>
 //* Checks if a given object is a code block.
@@ -1677,7 +1680,7 @@ public final class ModuleLang
                                          final Object[]    args)
         throws TeaException {
 
-        return typeCheck(TeaBlock.class, args);
+        return checkType(TeaBlock.class, args);
     }
 
 
@@ -1686,8 +1689,8 @@ public final class ModuleLang
 
 //* 
 //* <TeaFunction name="bool?"
-//*                 arguments="value"
-//*             module="tea.lang">
+//*              arguments="value"
+//*              module="tea.lang">
 //*
 //* <Overview>
 //* Checks if a given object is a boolean value.
@@ -1732,7 +1735,7 @@ public final class ModuleLang
                                            final Object[]    args)
         throws TeaException {
 
-        return typeCheck(Boolean.class, args);
+        return checkType(Boolean.class, args);
     }
 
 
@@ -1741,8 +1744,8 @@ public final class ModuleLang
 
 //* 
 //* <TeaFunction name="float?"
-//*                 arguments="value"
-//*             module="tea.lang">
+//*              arguments="value"
+//*              module="tea.lang">
 //*
 //* <Overview>
 //* Checks if a given object is a float object.
@@ -1787,7 +1790,7 @@ public final class ModuleLang
                                          final Object[]    args)
         throws TeaException {
 
-        return typeCheck(Double.class, args);
+        return checkType(Double.class, args);
     }
 
 
@@ -1795,8 +1798,8 @@ public final class ModuleLang
 
 //* 
 //* <TeaFunction name="function?"
-//*                 arguments="value"
-//*             module="tea.lang">
+//*              arguments="value"
+//*              module="tea.lang">
 //*
 //* <Overview>
 //* Checks if a given object is a function object.
@@ -1841,7 +1844,7 @@ public final class ModuleLang
                                             final Object[]    args)
         throws TeaException {
 
-        return typeCheck(TeaFunction.class, args);
+        return checkType(TeaFunction.class, args);
     }
 
 
@@ -1850,8 +1853,8 @@ public final class ModuleLang
 
 //* 
 //* <TeaFunction name="int?"
-//*                 arguments="value"
-//*             module="tea.lang">
+//*              arguments="value"
+//*              module="tea.lang">
 //*
 //* <Overview>
 //* Checks if a given object is an integer  object.
@@ -1896,7 +1899,7 @@ public final class ModuleLang
                                        final Object[]    args)
         throws TeaException {
         
-        return typeCheck(Integer.class, args);
+        return checkType(Integer.class, args);
     }
 
 
@@ -1905,8 +1908,8 @@ public final class ModuleLang
 
 //* 
 //* <TeaFunction name="pair?"
-//*                 arguments="value"
-//*             module="tea.lang">
+//*              arguments="value"
+//*              module="tea.lang">
 //*
 //* <Overview>
 //* Checks if a given object is a pair  object.
@@ -1951,7 +1954,7 @@ public final class ModuleLang
                                         final Object[]    args)
         throws TeaException {
         
-        return typeCheck(TeaPair.class, args);
+        return checkType(TeaPair.class, args);
     }
 
 
@@ -1960,8 +1963,8 @@ public final class ModuleLang
 
 //* 
 //* <TeaFunction name="string?"
-//*                 arguments="value"
-//*             module="tea.lang">
+//*              arguments="value"
+//*              module="tea.lang">
 //*
 //* <Overview>
 //* Checks if a given object is a string object.
@@ -2006,7 +2009,7 @@ public final class ModuleLang
                                           final Object[]    args)
         throws TeaException {
         
-        return typeCheck(String.class, args);
+        return checkType(String.class, args);
     }
 
 
@@ -2015,8 +2018,8 @@ public final class ModuleLang
 
 //* 
 //* <TeaFunction name="symbol?"
-//*                 arguments="value"
-//*             module="tea.lang">
+//*              arguments="value"
+//*              module="tea.lang">
 //*
 //* <Overview>
 //* Checks if a given object is a symbol object.
@@ -2061,7 +2064,7 @@ public final class ModuleLang
                                           final Object[]    args)
         throws TeaException {
         
-        return typeCheck(TeaSymbol.class, args);
+        return checkType(TeaSymbol.class, args);
     }
 
 
@@ -2070,8 +2073,8 @@ public final class ModuleLang
 
 //* 
 //* <TeaFunction name="not-null?"
-//*                 arguments="value"
-//*             module="tea.lang">
+//*              arguments="value"
+//*              module="tea.lang">
 //*
 //* <Overview>
 //* Checks if a given object is not the null object.
@@ -2115,12 +2118,12 @@ public final class ModuleLang
                                            final TeaContext  context,
                                            final Object[]    args)
         throws TeaException {
-        
-        if ( args.length != 2 ) {
-            throw new SNumArgException(args, "object");
-        }
 
-        return (args[1]==TeaNull.NULL) ? Boolean.FALSE : Boolean.TRUE;
+        Args.checkCount(args, 2, "object");
+
+        Boolean result = (args[1]!=TeaNull.NULL) ? Boolean.TRUE : Boolean.FALSE;
+
+        return result;
     }
 
 
@@ -2193,8 +2196,8 @@ public final class ModuleLang
 
 //* 
 //* <TeaFunction name="null?"
-//*                 arguments="value"
-//*             module="tea.lang">
+//*              arguments="value"
+//*              module="tea.lang">
 //*
 //* <Overview>
 //* Checks if a given object is the null object.
@@ -2239,11 +2242,11 @@ public final class ModuleLang
                                         final Object[]   args)
         throws TeaException {
 
-        if ( args.length != 2 ) {
-            throw new SNumArgException(args, "object");
-        }
+        Args.checkCount(args, 2, "object");
 
-        return (args[1]==TeaNull.NULL) ? Boolean.TRUE : Boolean.FALSE;
+        Boolean result = (args[1]==TeaNull.NULL) ? Boolean.TRUE : Boolean.FALSE;
+
+        return result;
     }
 
 
