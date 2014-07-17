@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -28,7 +28,7 @@ import com.pdmfc.tea.runtime.TeaFunction;
 import com.pdmfc.tea.runtime.TeaNull;
 import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.SNumArgException;
-import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaRunException;
 import com.pdmfc.tea.runtime.Types;
 import com.pdmfc.tea.modules.util.SHashtable;
 
@@ -239,20 +239,20 @@ final class SXmlParserParse
              } catch (ClassCastException e) {
                  String   msg     = "expected String or TInput, not a {0}";
                  Object[] fmtArgs = { Types.getTypeName(input) };
-                 throw new SRuntimeException(args, msg, fmtArgs);
+                 throw new TeaRunException(args, msg, fmtArgs);
              }
              inputSource = new InputSource(tosInput.getReader());
          } else {
              String   msg     = "expected String or TInput, not a {0}";
              Object[] fmtArgs = { Types.getTypeName(input) };
-             throw new SRuntimeException(args, msg, fmtArgs);
+             throw new TeaRunException(args, msg, fmtArgs);
          }
 
          if ( _handler == null ) {
              _handler = parser;
          }
          if ( nativeParser == null ) {
-             throw new SRuntimeException("no native parser");
+             throw new TeaRunException("no native parser");
          }
 
          parse(context, nativeParser, inputSource);
@@ -294,7 +294,7 @@ final class SXmlParserParse
          } catch (SAXException e1) {
             error = (TeaException)e1.getException();
          } catch (java.io.IOException e2) {
-            error = new SRuntimeException("problems reading input ("
+            error = new TeaRunException("problems reading input ("
                                           + e2.getMessage() + ")");
          }
 
@@ -313,7 +313,7 @@ final class SXmlParserParse
          if ( _parseException != null ) {
              String msg =  _parseException.getMessage()
                  + " (" + _parseException.getLineNumber() + ")";
-             SRuntimeException anException = new SRuntimeException(msg);
+             TeaRunException anException = new TeaRunException(msg);
              _parseException = null;
              throw anException;
          }
@@ -697,13 +697,13 @@ final class SXmlParserParse
  * @return A string representing a valid URL referencing the file
  * whose name was given as argument.
  *
- * @exception com.pdmfc.tea.runtime.SRuntimeException Thrown if the
+ * @exception com.pdmfc.tea.runtime.TeaRunException Thrown if the
  * <TT>fileName</TT> argument contains a badly formed URL.
  *
  **************************************************************************/
 
       private String createUrl(final String fileName)
-         throws SRuntimeException {
+         throws TeaRunException {
 
          try {
             return (new URL(fileName)).toString();
@@ -714,7 +714,7 @@ final class SXmlParserParse
             return (new URL("file:"
                             + (new File(fileName)).getAbsolutePath())).toString();
          } catch (MalformedURLException e) {
-            throw new SRuntimeException("Malformed URL (" + fileName + ")");
+            throw new TeaRunException("Malformed URL (" + fileName + ")");
          }
       }
 

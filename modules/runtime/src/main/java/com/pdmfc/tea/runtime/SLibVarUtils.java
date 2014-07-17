@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2010-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2010-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -9,11 +9,11 @@ package com.pdmfc.tea.runtime;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pdmfc.tea.TeaConfigInfo;
+import com.pdmfc.tea.TeaConfig;
 import com.pdmfc.tea.runtime.TeaContext;
 import com.pdmfc.tea.runtime.TeaPair;
 import com.pdmfc.tea.runtime.TeaSymbol;
-import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaRunException;
 import com.pdmfc.tea.util.SListUtils;
 
 
@@ -38,7 +38,7 @@ public final class SLibVarUtils
     // names where the <code>import</code> function looks for Tea
     // source files.
     private static final String VAR_LIBRARY   =
-        TeaConfigInfo.get("com.pdmfc.tea.libraryVarName");
+        TeaConfig.get("com.pdmfc.tea.libraryVarName");
 
     private static final TeaSymbol SYMBOL_LIBRARY =
         TeaSymbol.addSymbol(VAR_LIBRARY);
@@ -98,7 +98,7 @@ public final class SLibVarUtils
 
         try {
             SListUtils.prepend(context, SYMBOL_LIBRARY, location);
-        } catch (SRuntimeException e) {
+        } catch ( TeaRunException e ) {
             // Either TEA_LIBRARY does not exist or it does not point
             // to a list. Either way, we will recreate it with a
             // single element.

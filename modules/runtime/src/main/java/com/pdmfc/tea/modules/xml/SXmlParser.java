@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -11,7 +11,7 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 import com.pdmfc.tea.TeaException;
-import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaRunException;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.tos.STosUtil;
@@ -95,7 +95,7 @@ public final class SXmlParser
  **************************************************************************/
 
     public void setNativeParser(final String parserClassName)
-        throws SRuntimeException {
+        throws TeaRunException {
 
         try {
             if ( parserClassName != null ) {
@@ -103,10 +103,10 @@ public final class SXmlParser
             } else {
                 _parser = XMLReaderFactory.createXMLReader();
             }
-        } catch (SAXException e) {
+        } catch ( SAXException e ) {
             String   msg     = "Failed to create XML parser - {0} - {1}";
             Object[] fmtArgs = { e.getClass().getName(), e.getMessage() };
-            throw new SRuntimeException(msg, fmtArgs);
+            throw new TeaRunException(msg, fmtArgs);
         }
     }
 
@@ -170,7 +170,7 @@ public final class SXmlParser
  **************************************************************************/
 
     public XMLReader getParser()
-        throws SRuntimeException {
+        throws TeaRunException {
 
         if ( _parser == null ) {
             setNativeParser(null);
@@ -585,7 +585,7 @@ public final class SXmlParser
         STosObj parser = STosUtil.newInstance(CLASS_NAME_S, context);
 
         if ( !(parser instanceof SXmlParser) ) {
-            throw new SRuntimeException("invalid {0} class", CLASS_NAME);
+            throw new TeaRunException("invalid {0} class", CLASS_NAME);
         }
 
         return (SXmlParser)parser;

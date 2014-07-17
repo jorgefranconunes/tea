@@ -15,7 +15,7 @@ import com.pdmfc.tea.runtime.TeaContext;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.TeaFunction;
 import com.pdmfc.tea.runtime.TeaNull;
-import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaRunException;
 import com.pdmfc.tea.runtime.TeaFunctionImplementor;
 import com.pdmfc.tea.runtime.TeaEnvironment;
 import com.pdmfc.tea.runtime.TeaModule;
@@ -212,7 +212,7 @@ public final class ModuleTdbc
             Class.forName(className);
         } catch (ClassNotFoundException e) {
             String msg = "could not load class \"{0}\"";
-            throw new SRuntimeException(args, msg, className);
+            throw new TeaRunException(args, msg, className);
         }
 
         return TeaNull.NULL;

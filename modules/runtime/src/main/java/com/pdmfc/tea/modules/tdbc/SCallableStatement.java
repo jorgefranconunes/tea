@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -26,7 +26,7 @@ import com.pdmfc.tea.runtime.TeaNull;
 import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.TeaVar;
 import com.pdmfc.tea.runtime.SNumArgException;
-import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaRunException;
 
 
 
@@ -133,7 +133,7 @@ public final class SCallableStatement
         STosObj callStat = STosUtil.newInstance(CLASS_NAME_S, context);
 
         if ( !(callStat instanceof SCallableStatement) ) {
-            throw new SRuntimeException("invalid " + CLASS_NAME + " class");
+            throw new TeaRunException("invalid " + CLASS_NAME + " class");
         }
 
         return (SStatement)callStat;
@@ -217,7 +217,7 @@ public final class SCallableStatement
     public Object registerString(final TeaFunction obj,
                                  final TeaContext     context,
                                  final Object[]    args)
-        throws SRuntimeException {
+        throws TeaRunException {
 
         if ( args.length != 4 ) {
             throw new SNumArgException(args, "index symbol");
@@ -228,8 +228,8 @@ public final class SCallableStatement
 
         try {
             registerOutString(index, var);
-        } catch (SQLException e) {
-            throw new SRuntimeException(e);
+        } catch ( SQLException e ) {
+            throw new TeaRunException(e);
         }
         
         return obj;
@@ -316,7 +316,7 @@ public final class SCallableStatement
     public Object registerInt(final TeaFunction obj,
                               final TeaContext     context,
                               final Object[]    args)
-        throws SRuntimeException {
+        throws TeaRunException {
 
         if ( args.length != 4 ) {
             throw new SNumArgException(args, "index symbol");
@@ -327,8 +327,8 @@ public final class SCallableStatement
 
         try {
             registerOutInt(index, var);
-        } catch (SQLException e) {
-            throw new SRuntimeException(e);
+        } catch ( SQLException e ) {
+            throw new TeaRunException(e);
         }
         
         return obj;
@@ -415,7 +415,7 @@ public final class SCallableStatement
     public Object registerFloat(final TeaFunction obj,
                                 final TeaContext     context,
                                 final Object[]    args)
-        throws SRuntimeException {
+        throws TeaRunException {
 
         if ( args.length != 4 ) {
             throw new SNumArgException(args, "index symbol");
@@ -426,8 +426,8 @@ public final class SCallableStatement
 
         try {
             registerOutFloat(index, var);
-        } catch (SQLException e) {
-            throw new SRuntimeException(e);
+        } catch ( SQLException e ) {
+            throw new TeaRunException(e);
         }
         
         return obj;
@@ -514,7 +514,7 @@ public final class SCallableStatement
     public Object registerDate(final TeaFunction obj,
                                final TeaContext     context,
                                final Object[]    args)
-        throws SRuntimeException {
+        throws TeaRunException {
 
         if ( args.length != 4 ) {
             throw new SNumArgException(args, "index symbol");
@@ -526,8 +526,8 @@ public final class SCallableStatement
 
         try {
             registerOutDate(index, var, context);
-        } catch (SQLException e) {
-            throw new SRuntimeException(e);
+        } catch ( SQLException e ) {
+            throw new TeaRunException(e);
         }
         
         return obj;
@@ -606,8 +606,8 @@ public final class SCallableStatement
             for ( SOutParameter outParam : _outList ) {
                 outParam.retrieve(_callStat);
             }
-         } catch (SQLException e) {
-             throw new SRuntimeException(e);
+         } catch ( SQLException e ) {
+             throw new TeaRunException(e);
          }
 
         return obj;

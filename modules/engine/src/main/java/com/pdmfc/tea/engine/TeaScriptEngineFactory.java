@@ -12,20 +12,25 @@ import java.util.Arrays;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineFactory;
 
-import com.pdmfc.tea.TeaConfigInfo;
+import com.pdmfc.tea.TeaConfig;
+import com.pdmfc.tea.runtime.TeaRuntime;
+import com.pdmfc.tea.runtime.TeaRuntimeConfig;
+import com.pdmfc.tea.runtime.TeaRuntimeFactory;
 
 
 
 
 
-/**
+/**************************************************************************
+ *
  * The official factory provided for instantiating a {@link
  * TeaScriptEngine} from a
  * <code>javax.script.ScriptEngineManager</code>.
  * 
  * @since 4.0.0
  *
- */
+ **************************************************************************/
+
 public final class TeaScriptEngineFactory
     extends Object
     implements ScriptEngineFactory {
@@ -40,9 +45,18 @@ public final class TeaScriptEngineFactory
 
     final private List<String> _names = Arrays.asList("tea", "Tea", "Tea Engine");
 
+    private TeaRuntimeFactory _teaRuntimeFactory =
+        new TeaRuntimeFactory();
 
 
 
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
 
     public TeaScriptEngineFactory() {
 
@@ -53,10 +67,15 @@ public final class TeaScriptEngineFactory
 
 
 
-    /**
-     * @return A string, "Tea Engine".
-     */
+/**************************************************************************
+ *
+ * @return A string, "Tea Engine".
+ *
+ **************************************************************************/
+
+    @Override
     public String getEngineName() {
+
         return "Tea Engine";
     }
 
@@ -64,23 +83,32 @@ public final class TeaScriptEngineFactory
 
 
 
-    /**
-     * @return A string in the format "x.y.z". Since Tea 4, this
-     * value is the same as the Tea version.
-     */
+/**************************************************************************
+ *
+ * @return A string in the format "x.y.z". Since Tea 4, this value is
+ * the same as the Tea version.
+ *
+ **************************************************************************/
+
+    @Override
     public String getEngineVersion() {
-        // Since Tea 4, that the engine version is the same as the language version
-        return TeaConfigInfo.get("com.pdmfc.tea.version");
+
+        return TeaConfig.get("com.pdmfc.tea.version");
     }
 
 
 
 
 
-    /**
-     * @return A List<String> with ("tea", "Tea", "Tea Engine").
-     */
+/**************************************************************************
+ *
+ * @return A List<String> with ("tea", "Tea", "Tea Engine").
+ *
+ **************************************************************************/
+
+    @Override
     public List<String> getExtensions() {
+
         return _extensions;
     }
 
@@ -88,10 +116,15 @@ public final class TeaScriptEngineFactory
 
 
 
-    /**
-     * @return A List<String> with ("application/x-tea").
-     */
+/**************************************************************************
+ *
+ * @return A List<String> with ("application/x-tea").
+ *
+ **************************************************************************/
+
+    @Override
     public List<String> getMimeTypes() {
+
         return _mimeTypes;
     }
 
@@ -99,10 +132,15 @@ public final class TeaScriptEngineFactory
 
 
 
-    /**
-     * @return A List<String> with ("tea").
-     */
+/**************************************************************************
+ *
+ * @return A List<String> with ("tea").
+ *
+ **************************************************************************/
+
+    @Override
     public List<String> getNames() {
+
         return _names;
     }
 
@@ -110,10 +148,15 @@ public final class TeaScriptEngineFactory
 
 
 
-    /**
-     * @return A string, "Tea".
-     */
+/**************************************************************************
+ *
+ * @return A string, "Tea".
+ *
+ **************************************************************************/
+
+    @Override
     public String getLanguageName() {
+
         return "Tea";
     }
 
@@ -121,47 +164,62 @@ public final class TeaScriptEngineFactory
 
 
 
-    /**
-     * @return A string in the format "x.y.z" containing the Tea
-     * version number (which is now the same as the Tea Engine
-     * version number).
-     */
+/**************************************************************************
+ *
+ * @return A string in the format "x.y.z" containing the Tea version
+ * number (which is now the same as the Tea Engine version number).
+ *
+ **************************************************************************/
+
+    @Override
     public String getLanguageVersion() {
-        return TeaConfigInfo.get("com.pdmfc.tea.version");
+
+        return TeaConfig.get("com.pdmfc.tea.version");
     }
 
 
 
 
 
-    public Object getParameter(final String aKey) {
+ /**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
 
-        if (aKey.equals(ScriptEngine.ENGINE)) {
-            return getEngineName();
-        }
-        if (aKey.equals(ScriptEngine.ENGINE_VERSION)) {
-            return getEngineVersion();
-        }
-        if (aKey.equals(ScriptEngine.NAME)) {
-            return getEngineName();
-        }
-        if (aKey.equals(ScriptEngine.LANGUAGE)) {
-            return getLanguageName();
-        }
-        if (aKey.equals(ScriptEngine.LANGUAGE_VERSION)) {
-            return getLanguageVersion();
-        }
-        if (aKey.equals("THREADING")) {
-            return null;
+    @Override
+   public Object getParameter(final String aKey) {
+
+       Object result = null;
+
+        if ( aKey.equals(ScriptEngine.ENGINE) ) {
+            result = getEngineName();
+        } else if ( aKey.equals(ScriptEngine.ENGINE_VERSION) ) {
+            result = getEngineVersion();
+        } else if ( aKey.equals(ScriptEngine.NAME) ) {
+            result = getEngineName();
+        } else if ( aKey.equals(ScriptEngine.LANGUAGE) ) {
+            result =  getLanguageName();
+        } if ( aKey.equals(ScriptEngine.LANGUAGE_VERSION) ) {
+            result = getLanguageVersion();
+        } else if ( aKey.equals("THREADING") ) {
+            result = null;
         }
         
-        return null;
+        return result;
     }
 
 
 
 
 
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    @Override
     public String getMethodCallSyntax(final String objectName,
                                       final String methodName,
                                       final String ... args) {
@@ -187,6 +245,13 @@ public final class TeaScriptEngineFactory
 
 
 
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    @Override
     public String getOutputStatement(final String message) {
 
         // TODO: really escape \ and " in the message ?
@@ -200,6 +265,13 @@ public final class TeaScriptEngineFactory
 
 
 
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    @Override
     public String getProgram(final String ... statements) {
 
         StringBuffer sb = new StringBuffer();
@@ -214,14 +286,49 @@ public final class TeaScriptEngineFactory
 
 
 
-    /**
-     * Tea runtime initialization is delayed until you try to evaluate some Tea
-     * code.
-     * @see TeaCompiledScript#eval(ScriptContext scriptContext)
-     */
+/**************************************************************************
+ *
+ * Tea runtime initialization is delayed until you try to evaluate
+ * some Tea code.
+ *
+ * @see TeaCompiledScript#eval(ScriptContext scriptContext)
+ *
+ **************************************************************************/
+
+    @Override
     public ScriptEngine getScriptEngine() {
 
         return new TeaScriptEngine(this);
     }
 
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    public TeaRuntime newTeaRuntime(final TeaRuntimeConfig config) {
+
+        TeaRuntime result = _teaRuntimeFactory.newTeaRuntime(config);
+
+        return result;
+    }
+
+
 }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+

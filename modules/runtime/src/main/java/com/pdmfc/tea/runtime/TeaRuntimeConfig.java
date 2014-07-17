@@ -12,6 +12,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import com.pdmfc.tea.runtime.TeaModule;
+
 
 
 
@@ -30,10 +32,11 @@ public final class TeaRuntimeConfig
 
 
 
-    private String       _argv0              = null;
-    private String[]     _argv               = null;
-    private Charset      _sourceCharset      = null;
-    private List<String> _importLocationList = null;
+    private String          _argv0              = null;
+    private String[]        _argv               = null;
+    private Charset         _sourceCharset      = null;
+    private List<String>    _importLocationList = null;
+    private List<TeaModule> _modules            = null;
 
 
 
@@ -53,9 +56,13 @@ public final class TeaRuntimeConfig
 
         List<String> importlocationListCopy =
             new ArrayList<String>(builder._importLocationList);
-
         _importLocationList =
             Collections.unmodifiableList(importlocationListCopy);
+
+        List<TeaModule> modulesCopy =
+            new ArrayList<TeaModule>(builder._modules);
+        _modules =
+            Collections.unmodifiableList(modulesCopy);
     }
 
 
@@ -128,6 +135,21 @@ public final class TeaRuntimeConfig
  *
  **************************************************************************/
 
+    public List<TeaModule> getModules() {
+
+        return _modules;
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
     public static final class Builder
         extends Object {
 
@@ -139,6 +161,7 @@ public final class TeaRuntimeConfig
         private String[]     _argv               = {};
         private Charset      _sourceCharset      = null;
         private List<String> _importLocationList = new ArrayList<String>();
+        private List<TeaModule> _modules = new ArrayList<TeaModule>();
 
 
 
@@ -231,6 +254,23 @@ public final class TeaRuntimeConfig
             } else {
                 _importLocationList.clear();
             }
+
+            return this;
+        }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+        public Builder addModule(final TeaModule... modules) {
+
+            Collections.addAll(_modules, modules);
 
             return this;
         }

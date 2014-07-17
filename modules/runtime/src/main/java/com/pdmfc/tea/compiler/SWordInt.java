@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -10,7 +10,7 @@ import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.compiler.SWord;
 import com.pdmfc.tea.runtime.TeaContext;
 import com.pdmfc.tea.runtime.TeaFunction;
-import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaRunException;
 
 
 
@@ -86,7 +86,7 @@ final class SWordInt
         throws TeaException {
 
         String msg = "an integer can not be used as a function";
-        throw new SRuntimeException(msg);
+        throw new TeaRunException(msg);
     }
 
 

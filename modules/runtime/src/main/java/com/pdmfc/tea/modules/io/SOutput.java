@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2013 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -25,7 +25,7 @@ import com.pdmfc.tea.runtime.TeaByteArray;
 import com.pdmfc.tea.runtime.TeaFunction;
 import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.SNumArgException;
-import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaRunException;
 import com.pdmfc.tea.runtime.STypeException;
 import com.pdmfc.tea.util.SFormater;
 
@@ -213,7 +213,7 @@ public class SOutput
     public Object setLineBuffering(final TeaFunction obj,
                                    final TeaContext     context,
                                    final Object[]    args)
-        throws SRuntimeException {
+        throws TeaRunException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "boolean-flag");
@@ -287,7 +287,7 @@ public class SOutput
     public Object write(final TeaFunction obj,
                         final TeaContext     context,
                         final Object[]    args)
-        throws SRuntimeException {
+        throws TeaRunException {
 
         int numArgs = args.length;
         
@@ -485,7 +485,7 @@ public class SOutput
     public Object writeln(final TeaFunction obj,
                           final TeaContext     context,
                           final Object[]    args)
-        throws SRuntimeException {
+        throws TeaRunException {
 
         write(obj, context, args);
 
@@ -918,7 +918,7 @@ public class SOutput
         STosObj output = STosUtil.newInstance(CLASS_NAME_S, context);
 
         if ( !(output instanceof SOutput) ) {
-            throw new SRuntimeException("invalid " + CLASS_NAME + " class");
+            throw new TeaRunException("invalid " + CLASS_NAME + " class");
         }
 
         return (SOutput)output;

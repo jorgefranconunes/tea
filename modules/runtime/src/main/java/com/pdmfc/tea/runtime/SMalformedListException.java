@@ -1,12 +1,12 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDM1FC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDM1FC, All Rights Reserved.
  *
  **************************************************************************/
 
 package com.pdmfc.tea.runtime;
 
-import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaRunException;
 
 
 
@@ -21,7 +21,7 @@ import com.pdmfc.tea.runtime.SRuntimeException;
  **************************************************************************/
 
 public final class SMalformedListException
-    extends SRuntimeException {
+    extends TeaRunException {
 
 
 

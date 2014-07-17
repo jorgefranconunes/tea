@@ -20,7 +20,7 @@ import com.pdmfc.tea.runtime.TeaContext;
 import com.pdmfc.tea.runtime.TeaFunction;
 import com.pdmfc.tea.runtime.TeaPair;
 import com.pdmfc.tea.runtime.TeaSymbol;
-import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaRunException;
 import com.pdmfc.tea.runtime.TeaEnvironment;
 import com.pdmfc.tea.runtime.TeaFunctionImplementor;
 import com.pdmfc.tea.runtime.TeaModule;
@@ -315,10 +315,10 @@ final class Modules
                 if ( cause instanceof TeaException ) {
                     error = (TeaException)cause;
                 } else {
-                    error = new SRuntimeException(cause);
+                    error = new TeaRunException(cause);
                 }
             } catch ( IllegalAccessException e ) {
-                error = new SRuntimeException(e);
+                error = new TeaRunException(e);
             }
 
             if ( error != null ) {

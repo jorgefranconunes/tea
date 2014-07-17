@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -11,7 +11,7 @@ import com.pdmfc.tea.runtime.Args;
 import com.pdmfc.tea.runtime.TeaContext;
 import com.pdmfc.tea.runtime.TeaFunction;
 import com.pdmfc.tea.runtime.TeaSymbol;
-import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaRunException;
 
 
 
@@ -128,7 +128,7 @@ public final class SMethodLoader
  **************************************************************************/
 
    private static TeaFunction instantiateProc(final String className)
-      throws SRuntimeException {
+      throws TeaRunException {
 
       TeaFunction proc = null;
       String       msg  = null;
@@ -149,7 +149,7 @@ public final class SMethodLoader
       }
 
       if ( msg != null ) {
-         throw new SRuntimeException(msg);
+         throw new TeaRunException(msg);
       }
 
       return proc;

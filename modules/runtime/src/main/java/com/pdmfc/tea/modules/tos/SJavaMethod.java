@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -15,7 +15,7 @@ import java.util.StringTokenizer;
 import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.runtime.TeaContext;
 import com.pdmfc.tea.runtime.TeaFunction;
-import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaRunException;
 
 
 
@@ -60,10 +60,10 @@ public final class SJavaMethod
 
         try {
             _javaMethod = javaClass.getMethod(javaMethodName, PARAM_TYPES);
-        } catch (NoSuchMethodException e1) {
+        } catch ( NoSuchMethodException e1 ) {
             _errorMsg = "Java class " + javaClass.getName()
                 + " has no " + javaMethodName + " method";
-        } catch (SecurityException e2) {
+        } catch ( SecurityException e2 ) {
             _errorMsg = "Java class " + javaClass.getName()
                 + " has no accessible " + javaMethodName + " method";
         }
@@ -100,7 +100,7 @@ public final class SJavaMethod
         throws TeaException {
 
         if ( _javaMethod == null ) {
-            throw new SRuntimeException(_errorMsg);
+            throw new TeaRunException(_errorMsg);
         }
 
         Object   target     = ((STosObj)obj).part(0);
@@ -108,11 +108,11 @@ public final class SJavaMethod
 
         try {
             return _javaMethod.invoke(target, targetArgs);
-        } catch (IllegalAccessException e1) {
+        } catch ( IllegalAccessException e1 ) {
             internalError(e1);
-        } catch (IllegalArgumentException e2) {
+        } catch ( IllegalArgumentException e2 ) {
             internalError(e2);
-        } catch (InvocationTargetException e3) {
+        } catch ( InvocationTargetException e3 ) {
             Throwable error = e3.getTargetException();
             if ( error instanceof TeaException ) {
                 throw (TeaException)error;
@@ -136,10 +136,10 @@ public final class SJavaMethod
  **************************************************************************/
 
     private void internalError(final Throwable error)
-        throws SRuntimeException {
+        throws TeaRunException {
 
-        SRuntimeException rtError  =
-            new SRuntimeException("internal error - {0} - {1}",
+        TeaRunException rtError  =
+            new TeaRunException("internal error - {0} - {1}",
                                   new Object[] { error.getClass().getName(),
                                                  error.getMessage() });
         StringWriter    buffer     = new StringWriter();

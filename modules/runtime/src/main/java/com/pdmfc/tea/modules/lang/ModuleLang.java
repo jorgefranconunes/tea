@@ -18,10 +18,8 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Properties;
 
-import com.pdmfc.tea.TeaConfigInfo;
+import com.pdmfc.tea.TeaConfig;
 import com.pdmfc.tea.TeaException;
-import com.pdmfc.tea.compiler.TeaCode;
-import com.pdmfc.tea.compiler.TeaCompiler;
 import com.pdmfc.tea.modules.io.SInput;
 import com.pdmfc.tea.modules.util.SHashtable;
 import com.pdmfc.tea.runtime.Args;
@@ -39,12 +37,13 @@ import com.pdmfc.tea.runtime.TeaPair;
 import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.TeaVar;
 import com.pdmfc.tea.runtime.SReturnException;
-import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaRunException;
 import com.pdmfc.tea.runtime.STypeException;
 import com.pdmfc.tea.runtime.Types;
 import com.pdmfc.tea.runtime.TeaEnvironment;
 import com.pdmfc.tea.runtime.TeaFunctionImplementor;
 import com.pdmfc.tea.runtime.TeaModule;
+import com.pdmfc.tea.runtime.TeaScript;
 import com.pdmfc.tea.util.SInputSourceFactory;
 
 
@@ -95,10 +94,6 @@ public final class ModuleLang
 
     private TeaEnvironment _environment = null;
 
-    // These are used by the implementation of the Tea "source"
-    // function.
-    private TeaCompiler _compiler = new TeaCompiler();
-
     // These are used by the implementation of the Tea "load-function"
     // function.
     private Map<String,TeaFunction> _funcs =
@@ -140,7 +135,7 @@ public final class ModuleLang
         environment.addGlobalVar("false", Boolean.FALSE);
         environment.addGlobalVar("null",  TeaNull.NULL);
         environment.addGlobalVar(TEA_VERSION_VAR,
-                                 TeaConfigInfo.get(PROP_TEA_VERSION));
+                                 TeaConfig.get(PROP_TEA_VERSION));
 
         environment.addGlobalVar("import", new SFunctionImport(environment));
 
@@ -462,7 +457,7 @@ public final class ModuleLang
 
         try {
             value = block.exec(scope);
-        } catch ( SRuntimeException e ) {
+        } catch ( TeaRunException e ) {
             value  = e.getMessage();
             result = Boolean.TRUE;
             error  = e;
@@ -494,8 +489,8 @@ public final class ModuleLang
             if ( error != null ) {
                 String stackTraceStr = null;
 
-                if ( error instanceof SRuntimeException ) {
-                    stackTraceStr = ((SRuntimeException)error).getFullMessage();
+                if ( error instanceof TeaRunException ) {
+                    stackTraceStr = ((TeaRunException)error).getFullMessage();
                 } else {
                      stackTraceStr = stackTraceToString(error);
                 }
@@ -980,7 +975,7 @@ public final class ModuleLang
                 parameters[i] = (TeaSymbol)paramName;
             } catch ( ClassCastException e1 ) {
                 String msg = "formal parameter {0} must be a symbol, not a {1}";
-                throw new SRuntimeException(args,
+                throw new TeaRunException(args,
                                             msg,
                                             i,
                                             Types.getTypeName(paramName));
@@ -1153,7 +1148,7 @@ public final class ModuleLang
 
         String msg = Args.getString(args, 1);
 
-        throw new SRuntimeException(msg);
+        throw new TeaRunException(msg);
     }
 
 
@@ -2553,7 +2548,7 @@ public final class ModuleLang
                 msg = "class '" + className + "' does not have a default constructor";
             }
             if ( msg != null ) {
-                throw new SRuntimeException(msg);
+                throw new TeaRunException(msg);
             }
             _funcs.put(className, teaFunc);
         }
@@ -2648,7 +2643,7 @@ public final class ModuleLang
                     procArgs[i+1] = iterators[i].next();
                 } catch ( NoSuchElementException e ) {
                     String msg = "lists with diferent sizes";
-                    throw new SRuntimeException(args, msg);
+                    throw new TeaRunException(args, msg);
                 }
             }
             TeaPair node = new TeaPair(proc.exec(proc, context, procArgs),
@@ -2787,7 +2782,7 @@ public final class ModuleLang
                 argList = (TeaPair)o;
             } catch ( ClassCastException e ) {
                 String msg = "arg 2, element {0} must be a list, not a {1}";
-                throw new SRuntimeException(args,
+                throw new TeaRunException(args,
                                             msg,
                                             iterCount,
                                             Types.getTypeName(o));
@@ -2809,7 +2804,7 @@ public final class ModuleLang
                 argList = (TeaPair)o;
             } catch ( ClassCastException e ) {
                 String msg = "arg 2, element {0} must be a list, not a {1}";
-                throw new SRuntimeException(args,
+                throw new TeaRunException(args,
                                             msg,
                                             iterCount,
                                             Types.getTypeName(o));
@@ -2836,7 +2831,7 @@ public final class ModuleLang
 
     private static void fillArgs(final Object[] args,
                                  final TeaPair argList)
-        throws SRuntimeException {
+        throws TeaRunException {
 
         int      argCount = args.length;
         Iterator iterator = argList.iterator();
@@ -2845,7 +2840,7 @@ public final class ModuleLang
             try {
                 args[i] = iterator.next();
             } catch ( NoSuchElementException e ) {
-                throw new SRuntimeException("argument list too short");
+                throw new TeaRunException("argument list too short");
             }
         }
     }
@@ -3128,10 +3123,8 @@ public final class ModuleLang
                                  final Object[]    args)
         throws TeaException {
 
-        TeaCode  program       = compileFromSource(context, args);
-        TeaContext globalContext = _environment.getGlobalContext();
-        TeaContext runContext    = globalContext.newChild();
-        Object   result        = program.exec(runContext);
+        TeaScript script = compileFromSource(context, args);
+        Object    result  = script.execute();
 
         return result;
     }
@@ -3214,20 +3207,23 @@ public final class ModuleLang
                                   final Object[]    args)
         throws TeaException {
 
-        final TeaCode   program      = compileFromSource(context, args);
+        final TeaScript   script       = compileFromSource(context, args);
         final TeaContext  blockContext = _environment.getGlobalContext();
-        TeaBlock       result       =
+        final TeaBlock    result       =
             new TeaBlock() {
+                @Override
                 public TeaContext getContext() {
                     return blockContext;
                 }
+                @Override
                 public Object exec(final TeaContext context)
                     throws TeaException {
-                    return program.exec(context);
+                    return script.execute();
                 }
+                @Override
                 public Object exec()
                     throws TeaException {
-                    return program.exec(blockContext.newChild());
+                    return script.execute();
                 }
             };
 
@@ -3244,17 +3240,17 @@ public final class ModuleLang
  *
  **************************************************************************/
 
-    private TeaCode compileFromSource(final TeaContext context,
-                                      final Object[] args)
+    private TeaScript compileFromSource(final TeaContext context,
+                                        final Object[] args)
         throws TeaException {
 
         if ( args.length != 2 ) {
             throw new SNumArgException(args, "file");
         }
         
-        Object  arg     = args[1];
-        Charset charset = _environment.getSourceCharset();
-        TeaCode program = null;
+        Object    arg     = args[1];
+        Charset   charset = _environment.getSourceCharset();
+        TeaScript script  = null;
 
         if ( arg instanceof String ) {
             String fileName = (String)arg;
@@ -3263,24 +3259,24 @@ public final class ModuleLang
                  Reader reader =
                      SInputSourceFactory.openReader(fileName, charset)
              ) {
-                program  = _compiler.compile(reader, fileName);
+                script  = _environment.compile(reader, fileName);
             } catch ( IOException e ) {
                 String   msg     = "Failed to read \"{0}\" - {1}";
                 Object[] fmtArgs = { fileName, e.getMessage() };
-                throw new SRuntimeException(msg, fmtArgs);
+                throw new TeaRunException(msg, fmtArgs);
             }
         } else if ( arg instanceof SInput ) {
             Reader input = ((SInput)arg).getReader();
             if ( input == null ) {
-                throw new SRuntimeException("input stream is closed");
+                throw new TeaRunException("input stream is closed");
             }
 
             try {
-                program = _compiler.compile(input, null);
+                script = _environment.compile(input, null);
             } catch ( IOException e ) {
                 String   msg     = "Failed to read input stream - {0}";
                 Object[] fmtArgs = { e.getMessage() };
-                throw new SRuntimeException(msg, fmtArgs);
+                throw new TeaRunException(msg, fmtArgs);
             } finally {
                 try { ((SInput)arg).close(); } catch ( IOException e ) {/* */}
             }
@@ -3290,7 +3286,7 @@ public final class ModuleLang
             throw new STypeException(msg, fmtArgs);
         }
 
-        return program;
+        return script;
     }
 
 
@@ -3370,7 +3366,7 @@ public final class ModuleLang
         try {
             proc = Runtime.getRuntime().exec(cmdArgs);
         } catch ( IOException e ) {
-            throw new SRuntimeException(e);
+            throw new TeaRunException(e);
         }
         input = proc.getInputStream();
 
@@ -3379,13 +3375,13 @@ public final class ModuleLang
                 System.out.write(buffer, 0, count);
             }
         } catch ( IOException e ) {
-            throw new SRuntimeException(e);
+            throw new TeaRunException(e);
         }
 
         try {
             status = proc.waitFor();
         } catch ( InterruptedException e ) {
-            throw new SRuntimeException(e);
+            throw new TeaRunException(e);
         }
 
         return Integer.valueOf(status);
@@ -3697,7 +3693,7 @@ public final class ModuleLang
         String key = Args.getString(args, 1);
 
         if ( key.length() == 0 ) {
-            throw new SRuntimeException(args, "Empty property name");
+            throw new TeaRunException(args, "Empty property name");
         }
 
         String value = null;
@@ -3707,7 +3703,7 @@ public final class ModuleLang
         } catch ( RuntimeException e ) {
             String   msg = "Failed to get system property \"{0}\" - {1} - {2}";
             Object[] fmtArgs = { key, e.getClass().getName(), e.getMessage() };
-            throw new SRuntimeException(args, msg, fmtArgs);
+            throw new TeaRunException(args, msg, fmtArgs);
         }
 
         return (value==null) ? TeaNull.NULL : value;
@@ -3780,7 +3776,7 @@ public final class ModuleLang
         String value = Args.getString(args, 2);
 
         if ( key.length() == 0 ) {
-            throw new SRuntimeException(args, "Empty property name");
+            throw new TeaRunException(args, "Empty property name");
         }
 
         String prevValue = null;
@@ -3790,7 +3786,7 @@ public final class ModuleLang
         } catch ( RuntimeException e ) {
             String   msg = "Failed to set system property \"{0}\" - {1} - {2}";
             Object[] fmtArgs = { key, e.getClass().getName(), e.getMessage() };
-            throw new SRuntimeException(args, msg, fmtArgs);
+            throw new TeaRunException(args, msg, fmtArgs);
         }
 
         return (prevValue==null) ? TeaNull.NULL : prevValue;

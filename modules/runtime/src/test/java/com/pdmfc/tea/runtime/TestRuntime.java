@@ -14,10 +14,10 @@ import java.io.StringReader;
 import java.text.MessageFormat;
 
 import com.pdmfc.tea.TeaException;
-import com.pdmfc.tea.compiler.TeaCode;
-import com.pdmfc.tea.compiler.TeaCompiler;
 import com.pdmfc.tea.runtime.TeaRuntime;
 import com.pdmfc.tea.runtime.TeaRuntimeConfig;
+import com.pdmfc.tea.runtime.TeaRuntimeFactory;
+import com.pdmfc.tea.runtime.TeaScript;
 
 
 
@@ -37,8 +37,7 @@ public class TestRuntime
 
 
 
-    private TeaRuntime  _teaRuntime = null;
-    private TeaCompiler _compiler   = null;
+    private TeaRuntime _teaRuntime = null;
 
 
 
@@ -52,10 +51,10 @@ public class TestRuntime
 
     public TestRuntime() {
 
+        TeaRuntimeFactory factory = new TeaRuntimeFactory();
         TeaRuntimeConfig config = TeaRuntimeConfig.Builder.start().build();
 
-        _teaRuntime = new TeaRuntime(config);
-        _compiler   = new TeaCompiler();
+        _teaRuntime = factory.newTeaRuntime(config);
     }
 
 
@@ -68,7 +67,8 @@ public class TestRuntime
  *
  **************************************************************************/
 
-    public void start() {
+    public void start()
+        throws TeaException {
 
         _teaRuntime.start();
     }
@@ -113,11 +113,11 @@ public class TestRuntime
  *
  **************************************************************************/
 
-    public Object eval(final String script)
+    public Object eval(final String scriptString)
         throws TeaException {
 
-        TeaCode code   = compileFromString(script);
-        Object  result = _teaRuntime.execute(code);
+        TeaScript script = compileFromString(scriptString);
+        Object    result = script.execute();
 
         return result;
     }
@@ -132,15 +132,15 @@ public class TestRuntime
  *
  **************************************************************************/
 
-    private TeaCode compileFromString(final String script)
+    private TeaScript compileFromString(final String script)
         throws TeaException {
 
-        TeaCode result = null;
+        TeaScript result = null;
 
         try (
             Reader reader = new StringReader(script)
         ) {
-            result = _compiler.compile(reader, null);
+            result = _teaRuntime.compile(reader, null);
         } catch ( IOException e ) {
             // This should never happen...
             throw new IllegalStateException(e);

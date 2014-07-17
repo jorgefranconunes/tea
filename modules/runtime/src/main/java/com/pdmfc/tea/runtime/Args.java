@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2010-2013 PDMFC, All Rights Reserved.
+ * Copyright (c) 2010-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -517,10 +517,10 @@ public final class Args
                 } else {
                     String msg =
                         "variable {0} should contain a function, not a {1}";
-                    throw new SRuntimeException(args,
-                                                msg,
-                                                arg,
-                                                Types.getTypeName(value));
+                    throw new TeaRunException(args,
+                                              msg,
+                                              arg,
+                                              Types.getTypeName(value));
                 }
             }
         }

@@ -14,13 +14,13 @@ import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
 
 import com.pdmfc.tea.TeaException;
-import com.pdmfc.tea.compiler.TeaCode;
-import com.pdmfc.tea.compiler.TeaCompiler;
 import com.pdmfc.tea.runtime.SExitException;
 import com.pdmfc.tea.runtime.SFlowControlException;
+import com.pdmfc.tea.runtime.TeaRunException;
 import com.pdmfc.tea.runtime.TeaRuntime;
-import com.pdmfc.tea.runtime.SRuntimeException;
 import com.pdmfc.tea.runtime.TeaRuntimeConfig;
+import com.pdmfc.tea.runtime.TeaRuntimeFactory;
+import com.pdmfc.tea.runtime.TeaScript;
 import com.pdmfc.tea.tools.runner.TeaRunnerArgs;
 import com.pdmfc.tea.util.SInputSourceFactory;
 
@@ -109,7 +109,7 @@ public final class TeaRunner
         if ( isOk ) {
             try {
                 shellArgs = TeaRunnerArgs.parse(args);
-            } catch (TeaException e) {
+            } catch ( TeaException e ) {
                 isOk     = false;
                 errorMsg = e.getMessage();
             }
@@ -121,7 +121,7 @@ public final class TeaRunner
             } catch ( IOException e ) {
                 isOk     = false;
                 errorMsg = "Failed to read script - " + e.getMessage();
-            }  catch ( SRuntimeException e ) {
+            }  catch ( TeaRunException e ) {
                 isOk     = false;
                 errorMsg = e.getFullMessage();
             } catch ( TeaException e ) {
@@ -165,7 +165,6 @@ public final class TeaRunner
         int              retVal     = 0;
         String           scriptPath = args.getScriptPath();
         Charset          charset    = findCharset(args.getEncoding());
-        TeaCode          code       = compileScript(scriptPath, charset);
         TeaRuntimeConfig config     =
             TeaRuntimeConfig.Builder.start()
             .setArgv0(scriptPath)
@@ -174,20 +173,23 @@ public final class TeaRunner
             .setImportLocationList(args.getLibraryList())
             .build();
 
-        TeaRuntime context = new TeaRuntime(config);
+        TeaRuntimeFactory factory    = new TeaRuntimeFactory();
+        TeaRuntime        teaRuntime = factory.newTeaRuntime(config);
+        TeaScript         script     =
+            compileScript(teaRuntime, scriptPath, charset);
 
-        context.start();
+        teaRuntime.start();
 
         try {
-            context.execute(code);
-        } catch (SExitException e2) {
+            script.execute();
+        } catch ( SExitException e2 ) {
             retVal = e2.getExitValue().intValue();
-        } catch (SFlowControlException e3) {
+        } catch ( SFlowControlException e3 ) {
             // Just ignore it. Somebody did a "return", "break" or
             // "continue" outside of a function or loop.
         } finally {
-            context.stop();
-            context.end();
+            teaRuntime.stop();
+            teaRuntime.end();
         }
 
         return retVal;
@@ -203,19 +205,19 @@ public final class TeaRunner
  *
  **************************************************************************/
 
-    private static TeaCode compileScript(final String  scriptPath,
-                                         final Charset charset)
+    private static TeaScript compileScript(final TeaRuntime teaRuntime,
+                                           final String     scriptPath,
+                                           final Charset    charset)
         throws IOException,
                TeaException {
 
-        TeaCompiler compiler = new TeaCompiler();
-        TeaCode     code     = null;
+        TeaScript script = null;
 
         try ( Reader reader = buildReader(scriptPath, charset) ) {
-            code = compiler.compile(reader, scriptPath);
+            script = teaRuntime.compile(reader, scriptPath);
         } 
 
-        return code;
+        return script;
     }
 
 

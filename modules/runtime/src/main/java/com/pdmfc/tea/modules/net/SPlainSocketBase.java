@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2002-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2002-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -13,7 +13,7 @@ import com.pdmfc.tea.modules.tos.STosUtil;
 import com.pdmfc.tea.runtime.TeaContext;
 import com.pdmfc.tea.runtime.TeaFunction;
 import com.pdmfc.tea.runtime.TeaSymbol;
-import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaRunException;
 
 
 
@@ -223,10 +223,10 @@ public final class SPlainSocketBase
         try {
             socket =
                 (SPlainSocketBase)STosUtil.newInstance(CLASS_NAME_S, context);
-        } catch (ClassCastException e) {
+        } catch ( ClassCastException e ) {
             String   msg     = "invalid \"{0}\" class";
             Object[] fmtArgs = { CLASS_NAME };
-            throw new SRuntimeException(msg, fmtArgs);
+            throw new TeaRunException(msg, fmtArgs);
         }
 
         return socket;

@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -19,7 +19,7 @@ import com.pdmfc.tea.runtime.TeaContext;
 import com.pdmfc.tea.runtime.TeaFunction;
 import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.SNumArgException;
-import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaRunException;
 import com.pdmfc.tea.util.SInputSource;
 import com.pdmfc.tea.util.SInputSourceFactory;
 
@@ -128,10 +128,10 @@ public final class SUrlInput
                 SInputSourceFactory.createInputSource(url);
 
             input = inputSource.openStream();
-        } catch (IOException e) {
+        } catch ( IOException e ) {
             String   msg     = "URL \"{0}\" could not be opened for reading";
             Object[] fmtArgs = { url, e.getMessage() };
-            throw new SRuntimeException(msg, fmtArgs);
+            throw new TeaRunException(msg, fmtArgs);
         }
 
         open(input);
@@ -171,7 +171,7 @@ public final class SUrlInput
         STosObj input = STosUtil.newInstance(CLASS_NAME_S, context, args);
 
         if ( !(input instanceof SUrlInput) ) {
-            throw new SRuntimeException("invalid ''{0}'' class", CLASS_NAME);
+            throw new TeaRunException("invalid ''{0}'' class", CLASS_NAME);
         }
 
         return (SUrlInput)input;

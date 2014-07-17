@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -21,7 +21,7 @@ import com.pdmfc.tea.runtime.Args;
 import com.pdmfc.tea.runtime.TeaContext;
 import com.pdmfc.tea.runtime.TeaFunction;
 import com.pdmfc.tea.runtime.SNumArgException;
-import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaRunException;
 
 
 
@@ -271,7 +271,7 @@ public class SSocketBase
         throws TeaException {
 
         if ( _sockFactory == null ) {
-            throw new SRuntimeException("internal socket factory not set");
+            throw new TeaRunException("internal socket factory not set");
         }
 
         Socket sock = null;
@@ -281,7 +281,7 @@ public class SSocketBase
         } catch (IOException e) {
             String   msg     = "unable to crete socket - {0}";
             Object[] fmtArgs = { e.getMessage() };
-            throw new SRuntimeException(msg, fmtArgs);
+            throw new TeaRunException(msg, fmtArgs);
         }
 
         return sock;

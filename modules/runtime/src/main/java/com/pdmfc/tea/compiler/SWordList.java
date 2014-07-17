@@ -13,7 +13,7 @@ import com.pdmfc.tea.compiler.SWord;
 import com.pdmfc.tea.runtime.TeaContext;
 import com.pdmfc.tea.runtime.TeaFunction;
 import com.pdmfc.tea.runtime.TeaPair;
-import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaRunException;
 
 
 
@@ -95,7 +95,7 @@ final class SWordList
     public TeaFunction toFunction(final TeaContext context)
         throws TeaException {
 
-        throw new SRuntimeException("a list can not be used as a function");
+        throw new TeaRunException("a list can not be used as a function");
     }
 
 

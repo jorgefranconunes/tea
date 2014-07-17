@@ -6,7 +6,7 @@
 
 package com.pdmfc.tea.runtime;
 
-import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaRunException;
 
 
 
@@ -20,7 +20,7 @@ import com.pdmfc.tea.runtime.SRuntimeException;
  **************************************************************************/
 
 public final class SArithmeticException
-    extends SRuntimeException {
+    extends TeaRunException {
 
 
 

@@ -20,7 +20,7 @@ import com.pdmfc.tea.runtime.TeaContext;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.TeaFunction;
 import com.pdmfc.tea.runtime.TeaPair;
-import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaRunException;
 import com.pdmfc.tea.runtime.STypeException;
 import com.pdmfc.tea.runtime.TeaFunctionImplementor;
 import com.pdmfc.tea.runtime.TeaEnvironment;
@@ -744,10 +744,10 @@ public final class ModuleRegexp
             String patternStr = (String)theArg;
             try {
                 return Pattern.compile(patternStr);
-            } catch (PatternSyntaxException e){
+            } catch ( PatternSyntaxException e ){
                 String   msg     = "malformed pattern ({0})";
                 Object[] fmtArgs = { e.getMessage() };
-                throw new SRuntimeException(args, msg, fmtArgs);
+                throw new TeaRunException(args, msg, fmtArgs);
             }
         }
 

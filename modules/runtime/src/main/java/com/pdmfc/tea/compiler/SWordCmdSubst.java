@@ -77,7 +77,7 @@ final class SWordCmdSubst
     public Object get(final TeaContext context)
         throws TeaException {
 
-        return _code.exec(context);
+        return _code.execute(context);
     }
 
 
@@ -93,39 +93,11 @@ final class SWordCmdSubst
     public TeaFunction toFunction(final TeaContext context)
         throws TeaException {
 
-        Object       obj    = _code.exec(context);
+        Object      obj    = _code.execute(context);
         TeaFunction result = SWordSubstUtils.toFunction(obj, context);
 
         return result;
     }
-
-
-
-
-
-
-/**************************************************************************
- *
- * This is used for debugging. At the moment it is rather slow.
- *
- * @param out A stream where the message will be sent to.
- *
- * @param ident Number of padding white spaces inserted into the left.
- *
- **************************************************************************/
-
-//    public void prettyPrint(PrintStream out,
-//                            int         indent) {
-//
-//        out.println("[");
-//        _code.prettyPrint(out, indent+4);
-//
-//        for ( int i=0; i<indent; i++ ) {
-//            out.print(' ');
-//        }
-//
-//        out.print("]");
-//    }
 
 
 }

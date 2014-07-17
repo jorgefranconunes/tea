@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -10,7 +10,7 @@ import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.compiler.SWord;
 import com.pdmfc.tea.runtime.TeaContext;
 import com.pdmfc.tea.runtime.TeaFunction;
-import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaRunException;
 
 
 
@@ -85,30 +85,8 @@ final class SWordFloat
     public TeaFunction toFunction(final TeaContext context)
         throws TeaException {
 
-        throw new SRuntimeException("a float can not be used as a function");
+        throw new TeaRunException("a float can not be used as a function");
     }
-
-
-
-
-
-/**************************************************************************
- *
- * This is used for debugging. At the moment it is rather slow.
- *
- * @param out
- *    A stream where the message will be sent to.
- *
- * @param ident
- *    Number of padding white spaces inserted into the left.
- *
- **************************************************************************/
-
-    // public void prettyPrint(final PrintStream out,
-    //                         final int         indent) {
-        
-    //     out.print(_value + "d");
-    // }
 
 
 }

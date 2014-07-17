@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -22,7 +22,7 @@ import com.pdmfc.tea.runtime.TeaContext;
 import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.TeaFunction;
 import com.pdmfc.tea.runtime.SNumArgException;
-import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaRunException;
 
 
 
@@ -166,7 +166,7 @@ public final class SPlainServerSocket
         if ( _serverSocket == null ) {
             try {
                 _serverSocket = new ServerSocket(_port);
-            } catch (IOException e) {
+            } catch ( IOException e ) {
                 throw new SIOException("failed to create server socket: "
                                        + e.getMessage());
             }
@@ -177,7 +177,7 @@ public final class SPlainServerSocket
 
         try {
             sock = _serverSocket.accept();
-        } catch (IOException e) {
+        } catch ( IOException e ) {
             throw new SIOException("failed to accept on server socket: "
                                    + e.getMessage());
         }
@@ -222,7 +222,7 @@ public final class SPlainServerSocket
 
         try {
             close();
-        } catch (IOException e) {
+        } catch ( IOException e ) {
             throw new SIOException("failed to close socket: " 
                                    + e.getMessage());
         }
@@ -266,7 +266,7 @@ public final class SPlainServerSocket
         STosObj servSock = STosUtil.newInstance(CLASS_NAME_S, context, args);
 
         if ( !(servSock instanceof SPlainServerSocket) ) {
-            throw new SRuntimeException("invalid {0} class", CLASS_NAME);
+            throw new TeaRunException("invalid {0} class", CLASS_NAME);
         }
 
         return servSock;

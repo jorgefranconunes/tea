@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2005-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2005-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeSet;
 
-import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaRunException;
 
 
 
@@ -85,7 +85,7 @@ final class SMethodFinder
     
     public static Constructor<?> findConstructor(final Class<?>   klass,
                                                  final Class<?>[] paramTypes)
-        throws SRuntimeException {
+        throws TeaRunException {
 
         Constructor<?> result = null;
 
@@ -93,7 +93,7 @@ final class SMethodFinder
             result = doFindConstructor(klass, paramTypes);
         } catch (NoSuchMethodException e) {
             String paramsTxt = buildTypesDescription(paramTypes);
-            throw new SRuntimeException("could not find constructor for '"
+            throw new TeaRunException("could not find constructor for '"
                                         + klass.getName()
                                         + "(" + paramsTxt + ")'");
         }
@@ -194,15 +194,15 @@ final class SMethodFinder
                                     final String     methodName,
                                     final Class<?>[] paramTypes,
                                     final boolean    useVariants)
-        throws SRuntimeException {
+        throws TeaRunException {
 
         Method result = null;
 
         try {
             result = doFindMethod(klass, methodName, paramTypes, useVariants);
         } catch ( NoSuchMethodException e ) {
-            throw new SRuntimeException("could not find method '"
-                                        + methodName + "'");
+            throw new TeaRunException("could not find method '"
+                                      + methodName + "'");
         }
 
         return result;

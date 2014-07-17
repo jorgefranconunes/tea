@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -26,7 +26,7 @@ import com.pdmfc.tea.runtime.TeaSymbol;
  *
  **************************************************************************/
 
-public class SRuntimeException
+public class TeaRunException
     extends TeaException {
 
 
@@ -47,7 +47,7 @@ public class SRuntimeException
  *
  **************************************************************************/
 
-    protected SRuntimeException() {
+    protected TeaRunException() {
 
         // Nothing to do.
     }
@@ -63,7 +63,7 @@ public class SRuntimeException
  *
  **************************************************************************/
 
-    public SRuntimeException(final String    msgFmt,
+    public TeaRunException(final String    msgFmt,
                              final Object... fmtArgs) {
 
         init(msgFmt, fmtArgs);
@@ -87,7 +87,7 @@ public class SRuntimeException
  *
  **************************************************************************/
  
-    public SRuntimeException(final Object[]  args,
+    public TeaRunException(final Object[]  args,
                              final String    msgFmt,
                              final Object... fmtArgs) {
 
@@ -108,7 +108,7 @@ public class SRuntimeException
  *
  **************************************************************************/
 
-    public SRuntimeException(final Throwable e) {
+    public TeaRunException(final Throwable e) {
 
         String errorType = e.getClass().getName();
         String errorText = e.getMessage();

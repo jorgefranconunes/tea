@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2013 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -20,7 +20,7 @@ import com.pdmfc.tea.runtime.TeaContext;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.TeaFunction;
 import com.pdmfc.tea.runtime.TeaSymbol;
-import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaRunException;
 import com.pdmfc.tea.runtime.STypeException;
 
 
@@ -113,9 +113,9 @@ public final class SDate
  *
  * Initializes the object with the date represented by the string
  * argument. The string can only have size 6, 8, 12 or 14, otherwise a
- * <TT>SRuntimeException</TT> is thrown.
+ * <TT>TeaRunException</TT> is thrown.
  *
- * @throws SRuntimeException When the string does not have size 6, 8,
+ * @throws TeaRunException When the string does not have size 6, 8,
  *12 or 14, or one of the string components does not represent a valid
  *integer.
  *
@@ -123,7 +123,7 @@ public final class SDate
 
     @SuppressWarnings("fallthrough")
     public void initFromString(final String str)
-        throws SRuntimeException {
+        throws TeaRunException {
 
         boolean ok    = true;
         int     size  = str.length();
@@ -161,11 +161,11 @@ public final class SDate
             default :
                 ok = false;
             }
-        } catch ( NumberFormatException e) {
+        } catch ( NumberFormatException e ) {
             ok = false;
         }
         if ( !ok ) {
-            throw new SRuntimeException("invalid date string (" + str + ")");
+            throw new TeaRunException("invalid date string (" + str + ")");
         }
 
         _calendar.set(year, month, day, hour, min, sec);
@@ -290,7 +290,7 @@ public final class SDate
     public Object constructor(final TeaFunction obj,
                               final TeaContext  context,
                               final Object[]    args)
-        throws SRuntimeException {
+        throws TeaRunException {
 
         int      numArgs = args.length;
 
@@ -757,7 +757,7 @@ public final class SDate
     public Object setDate(final TeaFunction obj,
                           final TeaContext  context,
                           final Object[]    args)
-        throws SRuntimeException {
+        throws TeaRunException {
 
         int numArgs = args.length;
 
@@ -847,7 +847,7 @@ public final class SDate
     public Object setTime(final TeaFunction obj,
                           final TeaContext  context,
                           final Object[]    args)
-        throws SRuntimeException {
+        throws TeaRunException {
 
         if ( args.length != 5 ) {
             throw new SNumArgException(args, "hour minute second");
@@ -907,7 +907,7 @@ public final class SDate
     public Object format(final TeaFunction obj,
                          final TeaContext  context,
                          final Object[]    args)
-        throws SRuntimeException {
+        throws TeaRunException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "format-string");
@@ -920,10 +920,10 @@ public final class SDate
         try {
             formatter = new SimpleDateFormat(fmt);
             result = formatter.format(_calendar.getTime());
-        } catch (IllegalArgumentException e) {
+        } catch ( IllegalArgumentException e ) {
             String   msg     = "Failed to format date - {0}";
             Object[] fmtArgs = { e.getMessage() };
-            throw new SRuntimeException(msg, fmtArgs);
+            throw new TeaRunException(msg, fmtArgs);
         }
 
         return result;
@@ -1262,7 +1262,7 @@ public final class SDate
 
         try {
             return (SDate)((STosObj)tosDate).part(0);
-        } catch (ClassCastException e) {
+        } catch ( ClassCastException e ) {
             throw new STypeException(args, index, CLASS_NAME);
         }
     }
@@ -1298,7 +1298,7 @@ public final class SDate
         STosObj date = STosUtil.newInstance(CLASS_NAME_S, context);
 
         if ( !(date instanceof SDate) ) {
-            throw new SRuntimeException("invalid {0} class", CLASS_NAME);
+            throw new TeaRunException("invalid {0} class", CLASS_NAME);
         }
 
         return (SDate)date;

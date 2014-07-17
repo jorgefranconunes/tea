@@ -20,7 +20,7 @@ import com.pdmfc.tea.runtime.TeaNull;
 import com.pdmfc.tea.runtime.TeaPair;
 import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.SNumArgException;
-import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaRunException;
 import com.pdmfc.tea.runtime.STypeException;
 import com.pdmfc.tea.runtime.Types;
 import com.pdmfc.tea.runtime.TeaFunctionImplementor;
@@ -242,7 +242,7 @@ public final class ModuleTos
                 memberNames.prepend(memberName);
             } catch ( ClassCastException exception ) {
                 String msg = "found a {0} when expecting a Symbol";
-                throw new SRuntimeException(args,
+                throw new TeaRunException(args,
                                             msg,
                                             Types.getTypeName(e.car()));
             }
@@ -344,7 +344,7 @@ public final class ModuleTos
                 memberNames.prepend(memberName);
             } catch ( ClassCastException exception ) {
                 String msg = "found a {0} when expecting a Symbol";
-                throw new SRuntimeException(args,
+                throw new TeaRunException(args,
                                             msg,
                                             Types.getTypeName(e.car()));
             }
@@ -527,9 +527,9 @@ public final class ModuleTos
         for ( int i=0; it.hasNext(); i++) {
             try {
                 parameters[i] = (TeaSymbol)it.next();
-            } catch (ClassCastException e1) {
+            } catch ( ClassCastException e1 ) {
                 String msg = "formal parameters must be symbols";
-                throw new SRuntimeException(args, msg);
+                throw new TeaRunException(args, msg);
             }
         }
 
@@ -641,25 +641,25 @@ public final class ModuleTos
                 } else {
                     tosClass = new SJavaClass(javaClass);
                 }
-            } catch (ClassNotFoundException e1) {
+            } catch ( ClassNotFoundException e1 ) {
                 msg = "could not find class '" + className + "'";
-            } catch (IllegalArgumentException e2) {
+            } catch ( IllegalArgumentException e2 ) {
                 msg = "illegal initializer for class '" + className + "'";
-            } catch (IllegalAccessException e3) {
+            } catch ( IllegalAccessException e3 ) {
                 msg = "class '" + className+"' or its initializer are not accessible";
-            } catch (ClassCastException e4) {
+            } catch ( ClassCastException e4 ) {
                 msg = "class '" + className + "' singleton is not of class STosClass";
-            } catch (NoSuchMethodError e5) {
+            } catch ( NoSuchMethodError e5 ) {
                 msg = "class '" + className + "' does not have the correct initializer";
-            } catch (InstantiationException e6) {
+            } catch ( InstantiationException e6 ) {
                 msg = "instatiation of class '" + className + "' failed";
-            } catch (ExceptionInInitializerError e8) {
+            } catch ( ExceptionInInitializerError e8 ) {
                 msg = "initializer for class '" + className + "' failed";
-            } catch (SecurityException e10) {
+            } catch ( SecurityException e10 ) {
                 msg = "access to class '" + className + "' information is denied";
             }
             if ( msg != null ) {
-                throw new SRuntimeException(msg);
+                throw new TeaRunException(msg);
             }
             _tosClasses.put(className, tosClass);
         }

@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2013 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -18,7 +18,7 @@ import com.pdmfc.tea.runtime.Args;
 import com.pdmfc.tea.runtime.TeaContext;
 import com.pdmfc.tea.runtime.TeaFunction;
 import com.pdmfc.tea.runtime.TeaSymbol;
-import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaRunException;
 
 
 
@@ -125,9 +125,9 @@ public final class SFileInput
 
         try {
             aFileInput = new FileInputStream(fileName);
-        } catch (FileNotFoundException e1) {
+        } catch ( FileNotFoundException e1 ) {
             String msg = "file ''{0}'' could not be opened";
-            throw new SRuntimeException(msg, fileName);
+            throw new TeaRunException(msg, fileName);
         }
 
         open(aFileInput);
@@ -176,7 +176,7 @@ public final class SFileInput
 
         if ( !(input instanceof SFileInput) ) {
             String msg = "invalid \"{0}\" class";
-            throw new SRuntimeException(msg, CLASS_NAME);
+            throw new TeaRunException(msg, CLASS_NAME);
         }
 
         return (SFileInput)input;

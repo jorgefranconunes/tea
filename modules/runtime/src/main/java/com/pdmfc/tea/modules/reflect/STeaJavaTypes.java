@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2005-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2005-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -38,7 +38,7 @@ import com.pdmfc.tea.runtime.TeaFunction;
 import com.pdmfc.tea.runtime.TeaNull;
 import com.pdmfc.tea.runtime.TeaPair;
 import com.pdmfc.tea.runtime.TeaSymbol;
-import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaRunException;
 
 
 
@@ -90,7 +90,7 @@ public final class STeaJavaTypes
                 SDate teaObj = SDate.newInstance(context);
                 teaObj.initFromDate((Date)obj);
                 return teaObj;
-            } catch (TeaException e) {
+            } catch ( TeaException e ) {
                 throw new TeaException(e);
             }
         }
@@ -130,8 +130,8 @@ public final class STeaJavaTypes
             SResultSet teaObj = SResultSet.newInstance(context);
             try {
                 teaObj.setResultSet((ResultSet) obj);
-            } catch (SQLException e) {
-                throw new SRuntimeException(e);
+            } catch ( SQLException e ) {
+                throw new TeaRunException(e);
             }
             return teaObj;
         }
@@ -189,7 +189,7 @@ public final class STeaJavaTypes
         try {
             teaObj = SHashtable.newInstance(context);
             teaMap = teaObj.getInternalMap();
-        } catch (TeaException e) {
+        } catch ( TeaException e ) {
             throw new TeaException(e);
         }
         

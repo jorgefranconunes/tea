@@ -13,7 +13,7 @@ import com.pdmfc.tea.runtime.SNoSuchVarException;
 import com.pdmfc.tea.runtime.TeaPair;
 import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.TeaVar;
-import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaRunException;
 import com.pdmfc.tea.runtime.Types;
 
 
@@ -53,14 +53,14 @@ public final class SListUtils
  * Fetches the pair at the head of the list. If the Tea variable
  * <code>varName</code> is not defined it will return null.
  *
- * @exception SRuntimeException Throw if the Tea variable
+ * @exception TeaRunException Throw if the Tea variable
  * <code>varName</code> does not contain an <code>TeaPair</code> instance.
  *
  **************************************************************************/
 
     public static TeaPair getListHead(final TeaContext  context,
                                        final TeaSymbol varName)
-        throws SRuntimeException {
+        throws TeaRunException {
 
         TeaPair result = null;
         TeaVar  var    = context.getVarObjectIfPossible(varName);
@@ -71,7 +71,7 @@ public final class SListUtils
             if ( !(value instanceof TeaPair) ) {
                 String   msg = "Var \"{0}\" should contain a pair, not a {1}";
                 Object[] fmtArgs = { varName, Types.getTypeName(value) };
-                throw new SRuntimeException(msg, fmtArgs);
+                throw new TeaRunException(msg, fmtArgs);
             }
 
             result = (TeaPair)value;
@@ -89,7 +89,7 @@ public final class SListUtils
  * Prepends an element to the list pointed to by the given variable
  * and changes the variable to point to the new head of the list.
  *
- * @exception SRuntimeException Thrown if no Tea variable named
+ * @exception TeaRunException Thrown if no Tea variable named
  * <code>varName</code> is defined.
  *
  **************************************************************************/
@@ -97,7 +97,7 @@ public final class SListUtils
     public static void prepend(final TeaContext  context,
                                final TeaSymbol varName,
                                final Object     element)
-        throws SRuntimeException {
+        throws TeaRunException {
 
         TeaVar var = context.getVarObjectIfPossible(varName);
 
@@ -107,10 +107,10 @@ public final class SListUtils
             
             try {
                 head = (TeaPair)value;
-            } catch (ClassCastException e) {
+            } catch ( ClassCastException e ) {
                 String   msg = "Var \"{0}\" should contain a pair, not a {1}";
                 Object[] fmtArgs = { varName, Types.getTypeName(value) };
-                throw new SRuntimeException(msg, fmtArgs);
+                throw new TeaRunException(msg, fmtArgs);
             }
 
             TeaPair newHead = new TeaPair(element, head);

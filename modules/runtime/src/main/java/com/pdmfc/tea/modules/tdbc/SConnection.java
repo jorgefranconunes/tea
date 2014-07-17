@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -28,7 +28,7 @@ import com.pdmfc.tea.runtime.TeaContext;
 import com.pdmfc.tea.runtime.TeaFunction;
 import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.SNumArgException;
-import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaRunException;
 
 
 
@@ -280,10 +280,10 @@ public final class SConnection
 
         try {
             connect(url, name, passwd);
-        } catch (SQLException e) {
+        } catch ( SQLException e ) {
             // This connection is now as good as closed.
             fireClosedEvent();
-            throw new SRuntimeException(e);
+            throw new TeaRunException(e);
         }
 
         return obj;
@@ -318,7 +318,7 @@ public final class SConnection
         
         try {
             close();
-        } catch (SQLException e) {
+        } catch ( SQLException e ) {
             // Never mind...
         }
         
@@ -407,8 +407,8 @@ public final class SConnection
 
         try {
             stat = _connection.createStatement();
-        } catch (SQLException e) {
-            throw new SRuntimeException(e);
+        } catch ( SQLException e ) {
+            throw new TeaRunException(e);
         }
         tosStat = SStatement.newInstance(context);
         tosStat.setStatement(stat);
@@ -486,8 +486,8 @@ public final class SConnection
 
         try {
             result = prepareStatement(context, sql);
-        } catch (SQLException e) {
-            throw new SRuntimeException(e);
+        } catch ( SQLException e ) {
+            throw new TeaRunException(e);
         }
 
         return result;
@@ -616,8 +616,8 @@ public final class SConnection
 
         try {
             clbStat = _connection.prepareCall(sql);
-        } catch (SQLException e) {
-            throw new SRuntimeException(e);
+        } catch ( SQLException e ) {
+            throw new TeaRunException(e);
         }
         stat = (SCallableStatement)SCallableStatement.newInstance(context);
         stat.setCallableStatement(clbStat);
@@ -685,8 +685,8 @@ public final class SConnection
 
         try {
             _connection.commit();
-        } catch (SQLException e) {
-            throw new SRuntimeException(e);
+        } catch ( SQLException e ) {
+            throw new TeaRunException(e);
         }
 
         return obj;
@@ -748,7 +748,7 @@ public final class SConnection
     public Object autocommit(final TeaFunction obj,
                              final TeaContext     context,
                              final Object[]    args)
-        throws SRuntimeException {
+        throws TeaRunException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "autocommit-flag");
@@ -758,8 +758,8 @@ public final class SConnection
 
         try {
             autocommit(flag);
-        } catch (SQLException e) {
-            throw new SRuntimeException(e);
+        } catch ( SQLException e ) {
+            throw new TeaRunException(e);
         }
 
         return obj;
@@ -773,7 +773,7 @@ public final class SConnection
  *
  * 
  *
- * @exception com.pdmfc.tea.runtime.SRuntimeException Thrown if there
+ * @exception com.pdmfc.tea.runtime.TeaRunException Thrown if there
  * were any problems.
  *
  * @exception java.sql.SQLException
@@ -781,7 +781,7 @@ public final class SConnection
  **************************************************************************/
 
     private void autocommit(final boolean flag)
-        throws SRuntimeException,
+        throws TeaRunException,
                SQLException {
 
         checkConnection();
@@ -836,14 +836,14 @@ public final class SConnection
     public Object rollback(final TeaFunction obj,
                            final TeaContext     context,
                            final Object[]    args)
-        throws SRuntimeException {
+        throws TeaRunException {
 
         checkConnection();
 
         try {
             _connection.rollback();
-        } catch (SQLException e) {
-            throw new SRuntimeException(e);
+        } catch ( SQLException e ) {
+            throw new TeaRunException(e);
         }
 
         return obj;
@@ -895,8 +895,8 @@ public final class SConnection
 
         try {
             close();
-        } catch (SQLException e) {
-            throw new SRuntimeException(e);
+        } catch ( SQLException e ) {
+            throw new TeaRunException(e);
         }
 
         return obj;
@@ -933,7 +933,7 @@ public final class SConnection
         for ( SStatement stat : myStatements ) {
             try {
                 stat.close();
-            } catch (SQLException e) {
+            } catch ( SQLException e ) {
                 // There should be a way to log the error message
                 // somewhere.
             }
@@ -941,7 +941,7 @@ public final class SConnection
 
         try {
             _connection.rollback();
-        } catch (SQLException e) {
+        } catch ( SQLException e ) {
             // There should be a way to log the error message
             // somewhere.
         }
@@ -996,16 +996,16 @@ public final class SConnection
  * Checks if the database connection is currently opened. If that is
  * not the case then an exception is thrown.
  *
- * @exception SRuntimeException Thrown if the database connection is
+ * @exception TeaRunException Thrown if the database connection is
  * not currently opened.
  *
  **************************************************************************/
 
     private void checkConnection()
-        throws SRuntimeException {
+        throws TeaRunException {
 
         if ( _connection == null ) {
-            throw new SRuntimeException("connection is closed");
+            throw new TeaRunException("connection is closed");
         }
     }
 

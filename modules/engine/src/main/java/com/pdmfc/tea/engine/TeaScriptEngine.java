@@ -21,7 +21,6 @@ import javax.script.AbstractScriptEngine;
 import javax.script.Bindings;
 import javax.script.Compilable;
 import javax.script.CompiledScript;
-import javax.script.Invocable;
 import javax.script.SimpleBindings;
 import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
@@ -29,17 +28,16 @@ import javax.script.ScriptEngineFactory;
 import javax.script.ScriptException;
 
 import com.pdmfc.tea.TeaException;
-import com.pdmfc.tea.compiler.TeaCode;
 import com.pdmfc.tea.compiler.TeaCompileException;
-import com.pdmfc.tea.compiler.TeaCompiler;
 import com.pdmfc.tea.runtime.Args;
 import com.pdmfc.tea.runtime.TeaContext;
 import com.pdmfc.tea.runtime.SNoSuchVarException;
 import com.pdmfc.tea.runtime.TeaFunction;
 import com.pdmfc.tea.runtime.TeaSymbol;
-import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaRunException;
 import com.pdmfc.tea.runtime.TeaRuntime;
 import com.pdmfc.tea.runtime.TeaRuntimeConfig;
+import com.pdmfc.tea.runtime.TeaScript;
 import com.pdmfc.tea.modules.reflect.STeaJavaTypes;
 
 
@@ -52,8 +50,6 @@ import com.pdmfc.tea.modules.reflect.STeaJavaTypes;
  * <code>javax.script.ScriptEngine</code> for Tea 4.
  * 
  * This the core class of this implementation of JSR-223 for Tea.
- * Most of the optional functionality is implemented, except for
- * the <code>getInterface</code> methods.
  * 
  * <p>The use of <code>javax.script.SimpleScriptContext</code> is
  * supported, and the full execution context ({@link TeaRuntime}) is
@@ -90,8 +86,7 @@ import com.pdmfc.tea.modules.reflect.STeaJavaTypes;
 
 public final class TeaScriptEngine
     extends AbstractScriptEngine
-    implements Compilable,
-               Invocable {
+    implements Compilable {
 
 
 
@@ -144,53 +139,7 @@ public final class TeaScriptEngine
     public static final String KEY_ENCODING =
             "com.pdmfc.tea.engine.encoding";
 
-    /**
-     * A single {@link TeaCompiler} is used to compile
-     * Tea code into an internal representation
-     * {@link TeaCode}.
-     */
-    private TeaCompiler _compiler;
-
-    /**
-     * An empty compiled code. Used internally to force initialization
-     * of the {@link TeaRuntime} for the first time.
-     */
-    private TeaCode _emptyCode;
-
-    /**
-     * Reference the factory that instantiated this object.
-     */
-    private volatile TeaScriptEngineFactory _factory;
-
-
-
-
-
-/**************************************************************************
- *
- * This is the default constructor that gets called when this object
- * is instantiated by the programmer directly.
- * 
- * The {@link #_factory} field remains uninitialized,
- * unless you call {@link #getFactory()}.
- *  
- * As we are not allowed to throw a <code>javax.script.ScriptException</code>,
- * the Tea runtime initialization (associated with the default
- * <code>ScriptContext</code>) is delayed until the first evaluation of
- * Tea code.
- *
- **************************************************************************/
-
-    public TeaScriptEngine() {
-
-        try {
-            _compiler = new TeaCompiler();
-            _emptyCode = compileFromString("");
-        } catch ( TeaCompileException ex ) {
-            // This can never happen. But we can't go on if it does.
-            throw new RuntimeException(ex);
-        }
-    }
+    private TeaScriptEngineFactory _factory = null;
 
 
 
@@ -208,11 +157,9 @@ public final class TeaScriptEngine
  * @see #TeaScriptEngine()
  **************************************************************************/
 
-    public TeaScriptEngine(final TeaScriptEngineFactory aFactory) {
+    public TeaScriptEngine(final TeaScriptEngineFactory factory) {
 
-        this();
-
-        _factory = aFactory;
+        _factory = factory;
     }
 
 
@@ -237,24 +184,6 @@ public final class TeaScriptEngine
     public Bindings createBindings() {
 
         return new SimpleBindings();
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * Gets the internal Tea compiler instance.
- * 
- * @return An instance of {@link TeaCompiler}. There is only one per
- * engine.
- *
- **************************************************************************/
-
-    public TeaCompiler getCompiler() {
-
-        return _compiler;
     }
 
 
@@ -334,7 +263,7 @@ public final class TeaScriptEngine
                        final ScriptContext scriptContext)
         throws ScriptException {
 
-        CompiledScript code   = this.compile(script);
+        CompiledScript code   = compile(script);
         Object         result = code.eval(scriptContext);
 
         return result;
@@ -402,11 +331,6 @@ public final class TeaScriptEngine
     @Override
     public ScriptEngineFactory getFactory() {
 
-        synchronized (this) {
-            if (_factory == null) {
-                _factory = new TeaScriptEngineFactory();
-            }
-        }
         return _factory;
     }
 
@@ -452,7 +376,8 @@ public final class TeaScriptEngine
  *
  * Compile a script.
  *
- * @param script a string with the complete Tea script source to compile.
+ * @param scriptString a string with the complete Tea script source to
+ * compile.
  *
  * @return an instance of a {@link TeaCompiledScript}.
  *
@@ -462,164 +387,20 @@ public final class TeaScriptEngine
  **************************************************************************/
 
     @Override
-    public CompiledScript compile(final String script)
+    public CompiledScript compile(final String scriptString)
         throws ScriptException {
 
-        TeaCode teaCode = null;
+        TeaScript script = null;
 
         try {
-            teaCode = compileFromString(script);
+            script = compileFromString(scriptString);
         } catch ( TeaCompileException e ) {
             throw new ScriptException(e);
         }
 
-        TeaCompiledScript compiledScript = new TeaCompiledScript(this, teaCode);
+        TeaCompiledScript compiledScript = new TeaCompiledScript(this, script);
 
         return compiledScript;
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * Invoke a Tea global function in this engine's default script context.
- *
- * See {@link #eval(java.lang.String, javax.script.ScriptContext) }
- * for more details on Tea script execution.
- * 
- * @param name a Tea global variable must exist with this name,
- * and its value must be a function.
- *
- * @param args an array of java objects which are converted to Tea
- * function arguments.
- *
- * @return the value returned by the function converted to java.
- *
- * @throws ScriptException 
- *
- **************************************************************************/
-
-    @Override
-    public Object invokeFunction(final String name,
-                                 final Object... args)
-        throws ScriptException {
-
-        TeaRuntime teaRuntime = this.context2TeaGlobals(this.getContext());
-        TeaContext teaContext = teaRuntime.getToplevelContext();
-        TeaSymbol nameSymbol = TeaSymbol.getSymbol(name);
-        try {
-            Object[] newArgs = new Object[args.length + 1];
-            newArgs[0] = nameSymbol;
-            for (int i = 0; i < args.length; i++) {
-                newArgs[i + 1] = STeaJavaTypes.java2Tea(args[i], teaContext);
-            }
-            TeaFunction obj    = Args.getFunction(teaContext, newArgs, 0);
-            Object       result =
-                STeaJavaTypes.tea2Java(obj.exec(obj, teaContext, newArgs));
-            return result;
-        } catch (TeaException e) {
-            throw new ScriptException(e);
-        } finally {
-            // retrived updated global vars to Bindings.
-            this.teaGlobals2Context(this.getContext());
-        }
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * Invoke a method in a Tea object in this engine's default script
- * context.
- *
- * See {@link #eval(java.lang.String, javax.script.ScriptContext)}
- * for more details on Tea script execution.
- *
- * @param thisz a reference to a global variable's value that must
- * represent a TOS object.
- *
- * @param name a string with the name of the TOS class instance
- * method to call.
- *
- * @param args an array of java objects which are converted to Tea
- * method arguments.
- *
- * @return the value returned by the method converted to java.
- *
- * @throws ScriptException
- *
- **************************************************************************/
-
-    @Override
-    public Object invokeMethod(final Object thisz,
-                               final String name,
-                               final Object... args)
-        throws ScriptException {
-
-        TeaRuntime teaRuntime = this.context2TeaGlobals(this.getContext());
-        TeaContext teaContext = teaRuntime.getToplevelContext();
-        TeaSymbol nameSymbol = TeaSymbol.getSymbol(name);
-        try {
-            Object[] newArgs = new Object[args.length + 2];
-            newArgs[0] = thisz;
-            newArgs[1] = nameSymbol;
-            for (int i = 0; i < args.length; i++) {
-                newArgs[i + 2] = STeaJavaTypes.java2Tea(args[i], teaContext);
-            }
-            TeaFunction obj    = Args.getFunction(teaContext, newArgs, 0);
-            Object       result =
-                STeaJavaTypes.tea2Java(obj.exec(obj, teaContext, newArgs));
-            return result;
-        } catch (TeaException e) {
-            throw new ScriptException(e);
-        } finally {
-            // retrived updated global vars to Bindings.
-            this.teaGlobals2Context(this.getContext());
-        }
-
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * Unsupported yet.
- *
- * @throws UnsupportedOperationException
- *
- **************************************************************************/
-
-    @Override
-    public <T> T getInterface(final Class<T> clasz) {
-
-        // TODO
-        throw new UnsupportedOperationException("Not yet implemented.");
-    }
-
-
-
-
-
-/**************************************************************************
- *
- * Unsupported yet.
- *
- * @throws java.lang.UnsupportedOperationException
- *
- **************************************************************************/
-
-    @Override
-    public <T> T getInterface(final Object   thisz,
-                              final Class<T> clasz) {
-
-        // TODO
-        throw new UnsupportedOperationException("Not yet implemented.");
     }
 
 
@@ -646,7 +427,7 @@ public final class TeaScriptEngine
     public void end()
         throws ScriptException {
 
-        this.getTeaRuntime().end();
+        getTeaRuntime().end();
     }
 
 
@@ -668,10 +449,10 @@ public final class TeaScriptEngine
  *
  **************************************************************************/
 
-    public TeaRuntime getTeaRuntime()
+    private TeaRuntime getTeaRuntime()
         throws ScriptException {
 
-        return this.getTeaRuntime(this.getContext());
+        return getTeaRuntime(getContext());
     }
     
 
@@ -717,7 +498,7 @@ public final class TeaScriptEngine
                     .setImportLocationList(getImportLocationList(sc))
                     .build();
 
-                teaRuntime = new TeaRuntime(config);
+                teaRuntime = _factory.newTeaRuntime(config);
 
                 sc.setAttribute(KEY_RUNTIME, teaRuntime, ScriptContext.ENGINE_SCOPE);
             }
@@ -861,7 +642,7 @@ public final class TeaScriptEngine
         throws ScriptException {
 
         try {
-            TeaRuntime teaRuntime = this.getTeaRuntime(sc);
+            TeaRuntime teaRuntime = getTeaRuntime(sc);
             // prepare the context for execution of code.
             teaRuntime.start();
 
@@ -870,11 +651,11 @@ public final class TeaScriptEngine
             // public interface for doing so in TeaRuntime.)
             // Otherwise we will get errors for some convertions
             // resulting in STosObj like SDate.
-            try {
-                teaRuntime.execute(_emptyCode);
-            } catch (TeaException ex) {
-                throw new ScriptException(ex);
-            }
+            // try {
+            //     teaRuntime.execute(_emptyCode);
+            // } catch (TeaException ex) {
+            //     throw new ScriptException(ex);
+            // }
             
             TeaContext teaContext = teaRuntime.getToplevelContext();
 
@@ -967,10 +748,10 @@ public final class TeaScriptEngine
  *
  **************************************************************************/
 
-    public void teaGlobals2Context(final ScriptContext sc)
+    void teaGlobals2Context(final ScriptContext sc)
         throws ScriptException {
 
-        TeaRuntime teaRuntime = this.getTeaRuntime(sc);
+        TeaRuntime teaRuntime = getTeaRuntime(sc);
         try {
             TeaContext teaContext = teaRuntime.getToplevelContext();
             Bindings b = sc.getBindings(ScriptContext.ENGINE_SCOPE);
@@ -1047,7 +828,7 @@ public final class TeaScriptEngine
  * while using this framework.
  *
  * If the cause of the <code>ScriptException</code> is a {@link
- * SRuntimeException} then there is probably underlying Tea script
+ * TeaRunException} then there is probably underlying Tea script
  * stack trace information which is included in the returned
  * string value (where the list of messages in the stack trace is
  * separated by a newline).  If not, it just returns the message
@@ -1057,7 +838,7 @@ public final class TeaScriptEngine
  * execution of a Tea script thrown while using this framework.
  *
  * @return A string with the message obtained from
- * {@link SRuntimeException#getFullMessage} or
+ * {@link TeaRunException#getFullMessage} or
  * <code>ex.getCause().getMessage()</code>.
  *
  **************************************************************************/
@@ -1066,10 +847,10 @@ public final class TeaScriptEngine
 
         Throwable e = ex.getCause();
 
-        if (e != null && e instanceof SRuntimeException) {
+        if (e != null && e instanceof TeaRunException) {
             // the full message preserves line numbers in the text of the
             // message itself.
-            return ((SRuntimeException)e).getFullMessage();
+            return ((TeaRunException)e).getFullMessage();
         } else {
             return ex.getMessage();
         }
@@ -1085,15 +866,17 @@ public final class TeaScriptEngine
  *
  **************************************************************************/
 
-    private TeaCode compileFromString(final String script)
-        throws TeaCompileException {
+    private TeaScript compileFromString(final String script)
+        throws ScriptException,
+               TeaCompileException {
 
-        TeaCode result = null;
+        TeaRuntime teaRuntime = getTeaRuntime();
+        TeaScript  result     = null;
 
         try (
             Reader reader = new StringReader(script)
         ) {
-            result = _compiler.compile(reader, null);
+            result = teaRuntime.compile(reader, null);
         } catch ( IOException e ) {
             // This should never happen...
             throw new IllegalStateException(e);

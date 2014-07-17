@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2005-2012 PDMFC, All Rights Reserved.
+ * Copyright (c) 2005-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -19,7 +19,7 @@ import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.reflect.STeaJavaTypes;
 import com.pdmfc.tea.runtime.TeaContext;
 import com.pdmfc.tea.runtime.TeaSymbol;
-import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaRunException;
 import com.pdmfc.tea.runtime.STypeException;
 
 
@@ -95,20 +95,20 @@ final class SReflectUtils
     public static Object getFieldValue(final Class<?> klass, 
                                        final Object   obj, 
                                        final String   memberName)
-        throws SRuntimeException {
+        throws TeaRunException {
 
         Object result = null;
 
         try {
             result = doGetFieldValue(klass, obj, memberName);
-        } catch (NoSuchFieldException e) {
-            throw new SRuntimeException("could not find member ''{0}''",
+        } catch ( NoSuchFieldException e ) {
+            throw new TeaRunException("could not find member ''{0}''",
                                         memberName);
-        } catch (IllegalAccessException e) {
-            throw new SRuntimeException("cannot access member ''{0}''",
+        } catch ( IllegalAccessException e ) {
+            throw new TeaRunException("cannot access member ''{0}''",
                                         memberName);
-        } catch (NullPointerException e) {
-            throw new SRuntimeException("member ''{0}''",memberName);
+        } catch ( NullPointerException e ) {
+            throw new TeaRunException("member ''{0}''",memberName);
         }
         
         return result;
@@ -153,20 +153,20 @@ final class SReflectUtils
                                        final Object   obj, 
                                        final String   memberName,
                                        final Object   value)
-        throws SRuntimeException {
+        throws TeaRunException {
 
         Object result = null;
 
         try {
             result = doSetFieldValue(klass, obj, memberName, value);
-        } catch (NoSuchFieldException e) {
-            throw new SRuntimeException("could not find member ''{0}''",
+        } catch ( NoSuchFieldException e ) {
+            throw new TeaRunException("could not find member ''{0}''",
                                         memberName);
-        } catch (IllegalAccessException e) {
-            throw new SRuntimeException("cannot access member ''{0}''",
+        } catch ( IllegalAccessException e ) {
+            throw new TeaRunException("cannot access member ''{0}''",
                                         memberName);
-        } catch (NullPointerException e) {
-            throw new SRuntimeException("member ''{0}'' is not static",
+        } catch ( NullPointerException e ) {
+            throw new TeaRunException("member ''{0}'' is not static",
                                         memberName);
         }
 
@@ -230,15 +230,15 @@ final class SReflectUtils
             e.printStackTrace(pw);
             pw.close();
             String msg = "cannot access method \"{0}\" - stack trace: {1}";
-             throw new SRuntimeException(msg, method.getName(), sw.toString());
+             throw new TeaRunException(msg, method.getName(), sw.toString());
         } catch ( NullPointerException e ) {
             String msg = "method {0}#{1} is not static";
-            throw new SRuntimeException(msg,
+            throw new TeaRunException(msg,
                                         method.getDeclaringClass().getName(),
                                         method.getName());
         } catch ( IllegalArgumentException e ) {
             String msg = "method {0}#{1} invoked with illegal arguments - {2}";
-            throw new SRuntimeException(msg,
+            throw new TeaRunException(msg,
                                         method.getDeclaringClass().getName(),
                                         method.getName());
         } catch ( InvocationTargetException e ) {
@@ -250,7 +250,7 @@ final class SReflectUtils
             if ( cause instanceof TeaException ) {
                 throw (TeaException)cause;
             } else {
-                throw new SRuntimeException(cause);
+                throw new TeaRunException(cause);
             }
          }
 
@@ -303,14 +303,14 @@ final class SReflectUtils
  *
  * @return The Java class object with the given name.
  *
- * @exception SRuntimeException Thrown if there is no Java accessible
+ * @exception TeaRunException Thrown if there is no Java accessible
  * Java class with the given name.
  *
  **************************************************************************/
 
     public static Class<?> getClassForName(final Object[] args,
                                            final int      index)
-        throws SRuntimeException {
+        throws TeaRunException {
 
         String    className = getStringOrSymbol(args, index);
         Class<?>  result    = null;
@@ -324,10 +324,10 @@ final class SReflectUtils
                 result = Class.forName(className);
             } catch ( ClassNotFoundException e ) {
                 String msg = "could not load class \"{0}\"";
-                throw new SRuntimeException(args, msg, className);    
-            } catch (UnsupportedClassVersionError e) {
+                throw new TeaRunException(args, msg, className);    
+            } catch ( UnsupportedClassVersionError e ) {
                 String msg = "Bad version number in .class file \"{0}\"";
-                throw new SRuntimeException(args, msg, className);
+                throw new TeaRunException(args, msg, className);
             }
         }
 

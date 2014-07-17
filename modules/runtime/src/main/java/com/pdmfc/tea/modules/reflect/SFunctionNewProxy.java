@@ -17,7 +17,7 @@ import com.pdmfc.tea.modules.reflect.STeaJavaTypes;
 import com.pdmfc.tea.runtime.Args;
 import com.pdmfc.tea.runtime.TeaContext;
 import com.pdmfc.tea.runtime.TeaFunction;
-import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaRunException;
 
 
 
@@ -179,8 +179,8 @@ public final class SFunctionNewProxy
         if ( error != null ) {
             String errorMessage = null;
 
-            if ( error instanceof SRuntimeException ) {
-                errorMessage = ((SRuntimeException)error).getFullMessage();
+            if ( error instanceof TeaRunException ) {
+                errorMessage = ((TeaRunException)error).getFullMessage();
             } else {
                 errorMessage = error.getMessage();
             }
@@ -244,7 +244,7 @@ public final class SFunctionNewProxy
 
     private Object createProxy(final Class<?>[]        javaInterfaces,
                                final InvocationHandler handler)
-        throws SRuntimeException {
+        throws TeaRunException {
 
         Object      result      = null;
         ClassLoader classLoader = this.getClass().getClassLoader();
@@ -255,7 +255,7 @@ public final class SFunctionNewProxy
         } catch ( IllegalArgumentException e ) {
             String   msg     = "Failed to create proxy instance - {0}";
             Object[] fmtArgs = { e.getMessage() };
-            throw new SRuntimeException(msg, fmtArgs);
+            throw new TeaRunException(msg, fmtArgs);
         }
 
         return result;

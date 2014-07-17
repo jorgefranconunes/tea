@@ -1,13 +1,14 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
+ * Copyright (c) 2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
-package com.pdmfc.tea.modules.tos;
+package com.pdmfc.tea.runtime;
 
-import com.pdmfc.tea.runtime.TeaSymbol;
-import com.pdmfc.tea.runtime.TeaRunException;
+import com.pdmfc.tea.runtime.TeaRuntime;
+import com.pdmfc.tea.runtime.TeaRuntimeImpl;
+import com.pdmfc.tea.runtime.TeaRuntimeConfig;
 
 
 
@@ -19,24 +20,9 @@ import com.pdmfc.tea.runtime.TeaRunException;
  *
  **************************************************************************/
 
-public final class SNoSuchClassException
-    extends TeaRunException {
+public final class TeaRuntimeFactory
+    extends Object {
 
-
-
-
-/**************************************************************************
- *
- * 
- *
- **************************************************************************/
-
-   public SNoSuchClassException(final TeaSymbol symbol) {
-
-       String msg = "class \"{0}\" has not been defined";
-
-       init(msg, symbol.getName());
-   }
 
 
 
@@ -47,13 +33,27 @@ public final class SNoSuchClassException
  *
  **************************************************************************/
 
-   public SNoSuchClassException(final Object[]   args,
-                                final TeaSymbol symbol) {
+    public TeaRuntimeFactory() {
 
-       String msg = "class \"{0}\" has not been defined";
+        // Nothing to do.
+    }
 
-       initForFunction(args, msg, symbol.getName());
-   }
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    public TeaRuntime newTeaRuntime(final TeaRuntimeConfig config) {
+
+        TeaRuntime teaRuntime = new TeaRuntimeImpl(config);
+
+        return teaRuntime;
+    }
 
 
 }
@@ -62,12 +62,9 @@ public final class SNoSuchClassException
 
 
 
-
 /**************************************************************************
  *
  * 
  *
  **************************************************************************/
-
-
 

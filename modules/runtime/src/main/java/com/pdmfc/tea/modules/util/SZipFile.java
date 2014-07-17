@@ -20,7 +20,7 @@ import com.pdmfc.tea.runtime.TeaContext;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.TeaFunction;
 import com.pdmfc.tea.runtime.TeaPair;
-import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaRunException;
 
 
 
@@ -175,15 +175,15 @@ public final class SZipFile
         if ( _zipFile != null ) {
             try {
                 _zipFile.close();
-            } catch (IOException e) {
+            } catch ( IOException e ) {
                 // Never mind about it.
             }
         }
 
         try {
             _zipFile = new ZipFile(fileName);
-        } catch (IOException e) {
-            throw new SRuntimeException("failed to open zip file " + fileName
+        } catch ( IOException e ) {
+            throw new TeaRunException("failed to open zip file " + fileName
                                         + " : " + e.getMessage());
         }
 
@@ -226,13 +226,13 @@ public final class SZipFile
         throws TeaException {
 
         if ( args.length != 2 ) {
-            throw new SRuntimeException("no arguments are needed");
+            throw new TeaRunException("no arguments are needed");
         }
         
         if ( _zipFile != null ) {
             try {
                 _zipFile.close();
-            } catch (IOException e) {
+            } catch ( IOException e ) {
                 // Never mind about it.
             }
         }
@@ -275,10 +275,10 @@ public final class SZipFile
         throws TeaException {
 
         if ( args.length != 2 ) {
-            throw new SRuntimeException("no arguments are needed");
+            throw new TeaRunException("no arguments are needed");
         }
         if ( _zipFile == null ) {
-            throw new SRuntimeException("zip file is not opened");
+            throw new TeaRunException("zip file is not opened");
         }
 
         TeaPair    empty  = TeaPair.emptyList();
@@ -336,10 +336,10 @@ public final class SZipFile
         throws TeaException {
 
         if ( args.length != 3 ) {
-            throw new SRuntimeException("entryName");
+            throw new TeaRunException("entryName");
         }
         if ( _zipFile == null ) {
-            throw new SRuntimeException("zip file is not opened");
+            throw new TeaRunException("zip file is not opened");
         }
 
         String   entryName = Args.getString(args, 2);
@@ -347,14 +347,14 @@ public final class SZipFile
         SInput   input     = SInput.newInstance(context);
 
         if ( entry == null ) {
-            throw new SRuntimeException("entry '" + entryName
+            throw new TeaRunException("entry '" + entryName
                                         + "' does not exist");
         }
 
         try {
             input.open(_zipFile.getInputStream(entry));
-        } catch (IOException e) {
-            throw new SRuntimeException("failed to access entry '"
+        } catch ( IOException e ) {
+            throw new TeaRunException("failed to access entry '"
                                         + entryName + "'");
         }
 
@@ -404,10 +404,10 @@ public final class SZipFile
         throws TeaException {
 
         if ( args.length != 3 ) {
-            throw new SRuntimeException("entryName");
+            throw new TeaRunException("entryName");
         }
         if ( _zipFile == null ) {
-            throw new SRuntimeException("zip file is not opened");
+            throw new TeaRunException("zip file is not opened");
         }
 
         String   entryName = Args.getString(args, 2);
@@ -415,7 +415,7 @@ public final class SZipFile
         Boolean  result    = Boolean.FALSE;
 
         if ( entry == null ) {
-            throw new SRuntimeException("entry \"{0}\" does not exist",
+            throw new TeaRunException("entry \"{0}\" does not exist",
                                         entryName);
         }
 

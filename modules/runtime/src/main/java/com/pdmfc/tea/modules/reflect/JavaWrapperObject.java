@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2005-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2005-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -15,7 +15,7 @@ import com.pdmfc.tea.modules.reflect.STeaJavaTypes;
 import com.pdmfc.tea.runtime.TeaContext;
 import com.pdmfc.tea.runtime.TeaFunction;
 import com.pdmfc.tea.runtime.SNumArgException;
-import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaRunException;
 
 
 
@@ -125,7 +125,7 @@ final class JavaWrapperObject
  **************************************************************************/
 
     public Object getValue(final String memberName) 
-        throws SRuntimeException {
+        throws TeaRunException {
 
         Object result =
             SReflectUtils.getFieldValue(_javaObjectType, 
@@ -147,7 +147,7 @@ final class JavaWrapperObject
 
     public Object setValue(final String memberName,
                            final Object newValue) 
-        throws SRuntimeException {
+        throws TeaRunException {
 
         Object result =
             SReflectUtils.setFieldValue(_javaObjectType,

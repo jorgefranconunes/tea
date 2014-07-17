@@ -12,9 +12,8 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 
 import com.pdmfc.tea.TeaException;
-import com.pdmfc.tea.compiler.TeaCode;
 import com.pdmfc.tea.modules.reflect.STeaJavaTypes;
-import com.pdmfc.tea.runtime.TeaRuntime;
+import com.pdmfc.tea.runtime.TeaScript;
 
 
 
@@ -38,8 +37,8 @@ public final class TeaCompiledScript
 
 
 
-    private TeaScriptEngine    _engine;
-    private TeaCode            _code;
+    private TeaScriptEngine _engine;
+    private TeaScript       _code;
 
 
 
@@ -52,7 +51,7 @@ public final class TeaCompiledScript
      * @param code The compiled code wrapped by this class.
      */
     public TeaCompiledScript(final TeaScriptEngine engine,
-                             final TeaCode         code) {
+                             final TeaScript       code) {
         _engine = engine;
         _code   = code;
     }
@@ -82,28 +81,12 @@ public final class TeaCompiledScript
         throws ScriptException {
 
         try {
-            //System.out.println("teaCompiledScript.eval("+scriptContext+")");
+            _engine.context2TeaGlobals(scriptContext);
 
-            TeaRuntime teaRuntime = _engine.context2TeaGlobals(scriptContext);
-
-            //TeaBindings b = (TeaBindings)scriptContext.getBindings(ScriptContext.ENGINE_SCOPE);
-            //TeaRuntime context    = b.getMyRuntime();
-            //TeaRuntime context    = TeaScriptEngine.getRuntime(scriptContext);
-            //System.out.println("eval TeaRuntime="+teaRuntime);
-
-            // put Bindings as global vars, and prepare the context for execution
-            
-
-            // Run the code
-            Object result = teaRuntime.execute(_code); // Tea 3.1.2 or higher.
+            Object result = _code.execute();
 
             return STeaJavaTypes.tea2Java(result);
         } catch (TeaException e) {
-            //System.out.println("eval exception "+e.getMessage());
-            //for(StackTraceElement ste : e.getStackTrace()) {
-            //    System.out.println(ste.toString());
-            //}
-            //throw TeaScriptEngine.teaException2ScriptException(e);
             throw new ScriptException(e);
         } finally {
             // retrived updated global vars to Bindings.

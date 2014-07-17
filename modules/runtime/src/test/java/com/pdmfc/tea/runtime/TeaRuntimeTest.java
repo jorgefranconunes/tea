@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
+import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.runtime.TeaRuntime;
 import com.pdmfc.tea.runtime.TeaRuntimeConfig;
 
@@ -48,7 +49,7 @@ public final class TeaRuntimeTest
 
         TeaRuntimeConfig config = TeaRuntimeConfig.Builder.start().build();
 
-        _runtime = new TeaRuntime(config);
+        _runtime = new TeaRuntimeImpl(config);
     }
 
 
@@ -94,7 +95,8 @@ public final class TeaRuntimeTest
  **************************************************************************/
 
     @Test
-    public void startAndStop() {
+    public void startAndStop()
+        throws TeaException {
 
         _runtime.start();
         _runtime.stop();
@@ -102,7 +104,8 @@ public final class TeaRuntimeTest
 
 
     @Test(expected=IllegalStateException.class)
-    public void startTwice() {
+    public void startTwice()
+        throws TeaException {
 
         _runtime.start();
         _runtime.start();
@@ -117,7 +120,8 @@ public final class TeaRuntimeTest
 
 
     @Test(expected=IllegalStateException.class)
-    public void stopTwice() {
+    public void stopTwice()
+        throws TeaException {
 
         _runtime.start();
         _runtime.stop();
@@ -141,7 +145,8 @@ public final class TeaRuntimeTest
 
 
     @Test(expected=IllegalStateException.class)
-    public void endAfterStart() {
+    public void endAfterStart()
+        throws TeaException {
 
         _runtime.start();
         _runtime.end();
@@ -149,7 +154,8 @@ public final class TeaRuntimeTest
 
 
     @Test
-    public void endAfterStop() {
+    public void endAfterStop()
+        throws TeaException {
 
         _runtime.start();
         _runtime.stop();

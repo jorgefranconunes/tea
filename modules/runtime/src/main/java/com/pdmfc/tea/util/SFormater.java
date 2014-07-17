@@ -1,13 +1,13 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2012 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
 package com.pdmfc.tea.util;
 
 import com.pdmfc.tea.TeaException;
-import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaRunException;
 import com.pdmfc.tea.runtime.STypeException;
 import com.pdmfc.tea.runtime.Types;
 
@@ -389,7 +389,7 @@ public abstract class SFormater
             return _args[_argIndex++];
         } catch (ArrayIndexOutOfBoundsException e) {
             String msg = "missing arguments requested by format string";
-            throw new SRuntimeException(msg);
+            throw new TeaRunException(msg);
         }
     }
 

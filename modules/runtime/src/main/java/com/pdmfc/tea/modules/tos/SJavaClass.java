@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -15,7 +15,7 @@ import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.runtime.TeaContext;
 import com.pdmfc.tea.runtime.TeaFunction;
-import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaRunException;
 
 
 
@@ -54,7 +54,7 @@ public final class SJavaClass
  **************************************************************************/
 
     public SJavaClass(final String javaClassName)
-        throws SRuntimeException {
+        throws TeaRunException {
 
         this(getJavaClass(javaClassName));
     }
@@ -70,13 +70,13 @@ public final class SJavaClass
  **************************************************************************/
 
     public SJavaClass(final Class javaClass)
-        throws SRuntimeException {
+        throws TeaRunException {
 
         _javaClass     = javaClass;
         _javaClassCtor = getJavaClassConstructor(_javaClass);
 
         if (  !STosObj.class.isAssignableFrom(_javaClass) ) {
-            throw new SRuntimeException("Java class " + javaClass.getName()
+            throw new TeaRunException("Java class " + javaClass.getName()
                                         + " must be derived from "
                                         + STosObj.class.getName());
         }
@@ -95,22 +95,22 @@ public final class SJavaClass
  **************************************************************************/
 
     private static Class getJavaClass(final String javaClassName)
-        throws SRuntimeException {
+        throws TeaRunException {
 
         Class javaClass = null;
 
         try {
             javaClass = Class.forName(javaClassName);
-        } catch (ExceptionInInitializerError e1) {
-            throw new SRuntimeException("failed to initialize Java class "
+        } catch ( ExceptionInInitializerError e1 ) {
+            throw new TeaRunException("failed to initialize Java class "
                                         + javaClassName
                                         + " (" + e1.getMessage() + ")");
-        } catch (LinkageError e2) {
-            throw new SRuntimeException("failed to link Java class "
+        } catch ( LinkageError e2 ) {
+            throw new TeaRunException("failed to link Java class "
                                         + javaClassName
                                         + " (" + e2.getMessage() + ")");
-        } catch (ClassNotFoundException e3) {
-            throw new SRuntimeException("failed to find Java class "
+        } catch ( ClassNotFoundException e3 ) {
+            throw new TeaRunException("failed to find Java class "
                                         + javaClassName
                                         + " (" + e3.getMessage() + ")");
         }
@@ -129,18 +129,18 @@ public final class SJavaClass
  **************************************************************************/
 
     private static Constructor getJavaClassConstructor(final Class<?> javaClass)
-        throws SRuntimeException {
+        throws TeaRunException {
 
         Constructor ctor = null;
 
         try {
             ctor = javaClass.getConstructor(CTOR_TYPES);
-        } catch (NoSuchMethodException e1) {
+        } catch ( NoSuchMethodException e1 ) {
             String msg = "missing constuctor in class ''{0}''";
-            throw new SRuntimeException(msg, javaClass.getName());
-        } catch (SecurityException e2) {
+            throw new TeaRunException(msg, javaClass.getName());
+        } catch ( SecurityException e2 ) {
             String msg = "no access to constuctor of class ''{0}''";
-            throw new SRuntimeException(msg, javaClass.getName());
+            throw new TeaRunException(msg, javaClass.getName());
         }
 
         return ctor;
@@ -157,7 +157,7 @@ public final class SJavaClass
  **************************************************************************/
 
     private void createMethods(final Class javaClass)
-        throws SRuntimeException {
+        throws TeaRunException {
 
         Class superClass = javaClass.getSuperclass();
 
@@ -179,7 +179,7 @@ public final class SJavaClass
  **************************************************************************/
 
     private void createDeclaredMethods(final Class javaClass)
-        throws SRuntimeException {
+        throws TeaRunException {
 
         Method[] methods = getJavaClassMethods(javaClass);
 
@@ -216,7 +216,7 @@ public final class SJavaClass
  **************************************************************************/
 
     private static Method[] getJavaClassMethods(final Class javaClass)
-        throws SRuntimeException {
+        throws TeaRunException {
 
         Method[] methods = null;
 
@@ -225,8 +225,8 @@ public final class SJavaClass
             // We do not call Class.getDeclaredMethods() because it
             // throws SecurityException when running inside
             // JavaWebStart.
-        } catch (SecurityException e) {
-            throw new SRuntimeException("no access to methods of Java class "
+        } catch ( SecurityException e ) {
+            throw new TeaRunException("no access to methods of Java class "
                                         + javaClass.getName());
         }
 
@@ -251,9 +251,9 @@ public final class SJavaClass
         try {
             getNameMethod = javaClass.getMethod(GET_NAME_METHOD,
                                                 GET_NAME_METHOD_TYPES);
-        } catch (NoSuchMethodException e1) {
+        } catch ( NoSuchMethodException e1 ) {
             // Ignore it.
-        } catch (SecurityException e2) {
+        } catch ( SecurityException e2 ) {
             // Ignore it.
         }
 
@@ -261,15 +261,15 @@ public final class SJavaClass
             try {
                 tosClassName =
                     (String)getNameMethod.invoke(null, GET_NAME_METHOD_ARGS);
-            } catch (IllegalAccessException e1) {
+            } catch ( IllegalAccessException e1 ) {
                 // The same as not existing the named method.
-            } catch (IllegalArgumentException e2) {
+            } catch ( IllegalArgumentException e2 ) {
                 // The same as not existing the named method.
-            } catch (InvocationTargetException e3) {
+            } catch ( InvocationTargetException e3 ) {
                 // The same as not existing the named method.
-            } catch (NullPointerException e4) {
+            } catch ( NullPointerException e4 ) {
                 // The same as not existing the named method.
-            } catch (ClassCastException e5) {
+            } catch ( ClassCastException e5 ) {
                 // The same as not existing the named method.
             }
         }
@@ -296,19 +296,19 @@ public final class SJavaClass
 
         try {
             obj = (STosObj)_javaClassCtor.newInstance(new Object[] {this});
-        } catch (InstantiationException e1) {
-            throw new SRuntimeException("failed to instantiate Java class " 
+        } catch ( InstantiationException e1 ) {
+            throw new TeaRunException("failed to instantiate Java class " 
                                         + _javaClass.getName()
                                         + "(" + e1.getMessage() + ")");
-        } catch (IllegalAccessException e2) {
-            throw new SRuntimeException("failed to instantiate Java class " 
+        } catch ( IllegalAccessException e2 ) {
+            throw new TeaRunException("failed to instantiate Java class " 
                                         + _javaClass.getName()
                                         + "(" + e2.getMessage() + ")");
-        } catch (IllegalArgumentException e3) {
-            throw new SRuntimeException("failed to instantiate Java class " 
+        } catch ( IllegalArgumentException e3 ) {
+            throw new TeaRunException("failed to instantiate Java class " 
                                         + _javaClass.getName()
                                         + "(" + e3.getMessage() + ")");
-        } catch (InvocationTargetException e4) {
+        } catch ( InvocationTargetException e4 ) {
             Throwable error = e4.getTargetException();
             if ( error instanceof TeaException ) {
                 throw (TeaException)error;
@@ -331,9 +331,9 @@ public final class SJavaClass
  **************************************************************************/
 
     private static void internalError(final Throwable error)
-        throws SRuntimeException {
+        throws TeaRunException {
 
-        throw new SRuntimeException("internal error - "
+        throw new TeaRunException("internal error - "
                                     + error.getClass().getName()
                                     + " - " + error.getMessage());
     }

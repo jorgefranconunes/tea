@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -25,7 +25,7 @@ import com.pdmfc.tea.runtime.TeaFunction;
 import com.pdmfc.tea.runtime.TeaNull;
 import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.SNumArgException;
-import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaRunException;
 import com.pdmfc.tea.runtime.STypeException;
 import com.pdmfc.tea.runtime.Types;
 
@@ -184,7 +184,7 @@ public final class SResultSet
         STosObj rSet = STosUtil.newInstance(CLASS_NAME_S, context);
 
         if ( !(rSet instanceof SResultSet) ) {
-            throw new SRuntimeException("invalid " + CLASS_NAME + " class");
+            throw new TeaRunException("invalid " + CLASS_NAME + " class");
         }
 
         return (SResultSet)rSet;
@@ -263,7 +263,7 @@ public final class SResultSet
     public Object hasRows(final TeaFunction obj,
                           final TeaContext     context,
                           final Object[]    args)
-        throws SRuntimeException {
+        throws TeaRunException {
 
         checkResultSet();
 
@@ -311,7 +311,7 @@ public final class SResultSet
     public Object next(final TeaFunction obj,
                        final TeaContext     context,
                        final Object[]    args)
-        throws SRuntimeException {
+        throws TeaRunException {
 
         checkResultSet();
 
@@ -326,8 +326,8 @@ public final class SResultSet
             } else {
                 gotIt = _atEnd ? false : _resultSet.next();
             }
-        } catch (SQLException e) {
-            throw new SRuntimeException(e);
+        } catch ( SQLException e ) {
+            throw new TeaRunException(e);
         } finally {
             _rowWasRead = false;
         }
@@ -382,7 +382,7 @@ public final class SResultSet
     public Object hasMoreRows(final TeaFunction obj,
                               final TeaContext     context,
                               final Object[]    args)
-        throws SRuntimeException {
+        throws TeaRunException {
 
         checkResultSet();
 
@@ -392,8 +392,8 @@ public final class SResultSet
 
         try {
             _rowWasRead = _atEnd ? false : _resultSet.next();
-        } catch (SQLException e) {
-            throw new SRuntimeException(e);
+        } catch ( SQLException e ) {
+            throw new TeaRunException(e);
         }
       
         if ( !_rowWasRead ) {
@@ -441,7 +441,7 @@ public final class SResultSet
     public Object skip(final TeaFunction obj,
                        final TeaContext     context,
                        final Object[]    args)
-        throws SRuntimeException {
+        throws TeaRunException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "count");
@@ -451,8 +451,8 @@ public final class SResultSet
 
         try {
             skip(count);
-        } catch (SQLException e) {
-            throw new SRuntimeException(e);
+        } catch ( SQLException e ) {
+            throw new TeaRunException(e);
         }
 
         return obj;
@@ -472,7 +472,7 @@ public final class SResultSet
  **************************************************************************/
 
     private void skip(final int rowsToSkip)
-        throws SRuntimeException,
+        throws TeaRunException,
                SQLException {
 
         checkResultSet();
@@ -557,7 +557,7 @@ public final class SResultSet
     public Object getInt(final TeaFunction obj,
                          final TeaContext     context,
                          final Object[]    args)
-        throws SRuntimeException {
+        throws TeaRunException {
 
       if ( args.length != 3 ) {
           throw new SNumArgException(args, "column-index");
@@ -568,8 +568,8 @@ public final class SResultSet
 
       try {
           value = getInt(indexObj);
-      } catch (SQLException e) {
-          throw new SRuntimeException(e);
+      } catch ( SQLException e ) {
+          throw new TeaRunException(e);
       }
 
       return Integer.valueOf(value);
@@ -595,13 +595,13 @@ public final class SResultSet
  **************************************************************************/
 
     private int getInt(final Object indexObj)
-        throws SRuntimeException,
+        throws TeaRunException,
                SQLException  {
 
         checkResultSet();
 
         if ( _atEnd ) {
-            throw new SRuntimeException("no more rows");
+            throw new TeaRunException("no more rows");
         }
 
         if ( indexObj instanceof Integer ) {
@@ -677,7 +677,7 @@ public final class SResultSet
     public Object getFloat(final TeaFunction obj,
                            final TeaContext     context,
                            final Object[]    args)
-        throws SRuntimeException {
+        throws TeaRunException {
 
       if ( args.length != 3 ) {
           throw new SNumArgException(args, "column-index");
@@ -688,8 +688,8 @@ public final class SResultSet
 
       try {
           value = getFloat(indexObj);
-      } catch (SQLException e) {
-          throw new SRuntimeException(e);
+      } catch ( SQLException e ) {
+          throw new TeaRunException(e);
       }
 
       return new Double(value);
@@ -715,13 +715,13 @@ public final class SResultSet
  **************************************************************************/
 
     private double getFloat(final Object indexObj)
-        throws SRuntimeException,
+        throws TeaRunException,
                SQLException {
 
         checkResultSet();
 
         if ( _atEnd ) {
-            throw new SRuntimeException("no more rows");
+            throw new TeaRunException("no more rows");
         }
 
         if ( indexObj instanceof Integer ) {
@@ -796,7 +796,7 @@ public final class SResultSet
     public Object getString(final TeaFunction obj,
                             final TeaContext     context,
                             final Object[]    args)
-        throws SRuntimeException {
+        throws TeaRunException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "column-index");
@@ -807,8 +807,8 @@ public final class SResultSet
 
         try {
             value = getString(indexObj);
-        } catch (SQLException e) {
-            throw new SRuntimeException(e);
+        } catch ( SQLException e ) {
+            throw new TeaRunException(e);
         }
 
         return (value==null) ? TeaNull.NULL : value;
@@ -834,13 +834,13 @@ public final class SResultSet
  **************************************************************************/
 
     private String getString(final Object indexObj)
-        throws SRuntimeException,
+        throws TeaRunException,
                SQLException {
 
         checkResultSet();
 
         if ( _atEnd ) {
-            throw new SRuntimeException("no more rows");
+            throw new TeaRunException("no more rows");
         }
 
         if ( indexObj instanceof Integer ) {
@@ -933,8 +933,8 @@ public final class SResultSet
                 result = SDate.newInstance(context);
                 result.initFromDate(date);
             }
-        } catch (SQLException e) {
-            throw new SRuntimeException(e);
+        } catch ( SQLException e ) {
+            throw new TeaRunException(e);
         }
 
         return (result==null) ? TeaNull.NULL : result;
@@ -960,13 +960,13 @@ public final class SResultSet
  **************************************************************************/
 
     private Date getDate(final Object indexObj)
-        throws SRuntimeException,
+        throws TeaRunException,
                SQLException {
 
         checkResultSet();
 
         if ( _atEnd ) {
-            throw new SRuntimeException("no more rows");
+            throw new TeaRunException("no more rows");
         }
 
         if ( indexObj instanceof Integer ) {
@@ -1016,8 +1016,8 @@ public final class SResultSet
 
         try {
             close();
-        } catch (SQLException e) {
-            throw new SRuntimeException(e);
+        } catch ( SQLException e ) {
+            throw new TeaRunException(e);
         }
 
         return obj;
@@ -1115,8 +1115,8 @@ public final class SResultSet
                 _metaData = _resultSet.getMetaData();
             }
             result = _metaData.getColumnCount();
-        } catch (SQLException e) {
-            throw new SRuntimeException(e);
+        } catch ( SQLException e ) {
+            throw new TeaRunException(e);
         }
 
         return Integer.valueOf(result);
@@ -1162,7 +1162,7 @@ public final class SResultSet
     public Object getColumnName(final TeaFunction obj,
                                 final TeaContext     context,
                                 final Object[]    args)
-        throws SRuntimeException {
+        throws TeaRunException {
 
       if ( args.length != 3 ) {
           throw new SNumArgException(args, "column-index");
@@ -1173,8 +1173,8 @@ public final class SResultSet
 
       try {
           result = getColumnName(index);
-      } catch (SQLException e) {
-          throw new SRuntimeException(e);
+      } catch ( SQLException e ) {
+          throw new TeaRunException(e);
       }
 
       return result;
@@ -1200,7 +1200,7 @@ public final class SResultSet
  **************************************************************************/
 
     String getColumnName(final int index)
-        throws SRuntimeException,
+        throws TeaRunException,
                SQLException {
 
         checkResultSet();
@@ -1223,10 +1223,10 @@ public final class SResultSet
  **************************************************************************/
 
     private void checkResultSet()
-        throws SRuntimeException {
+        throws TeaRunException {
 
         if ( _resultSet == null ) {
-            throw new SRuntimeException("result set is closed");
+            throw new TeaRunException("result set is closed");
         }
     }
 

@@ -14,10 +14,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import com.pdmfc.tea.TeaConfigInfo;
+import com.pdmfc.tea.TeaConfig;
 import com.pdmfc.tea.TeaException;
-import com.pdmfc.tea.compiler.TeaCode;
-import com.pdmfc.tea.compiler.TeaCompiler;
 import com.pdmfc.tea.runtime.Args;
 import com.pdmfc.tea.runtime.TeaContext;
 import com.pdmfc.tea.runtime.SNoSuchVarException;
@@ -26,8 +24,9 @@ import com.pdmfc.tea.runtime.TeaFunction;
 import com.pdmfc.tea.runtime.TeaNull;
 import com.pdmfc.tea.runtime.TeaPair;
 import com.pdmfc.tea.runtime.TeaSymbol;
-import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaRunException;
 import com.pdmfc.tea.runtime.TeaEnvironment;
+import com.pdmfc.tea.runtime.TeaScript;
 import com.pdmfc.tea.util.SInputSourceFactory;
 
 
@@ -116,7 +115,7 @@ final class SFunctionImport
     // names where the "import" function looks for Tea
     // source files.
     public static final TeaSymbol LIB_VAR   =
-        TeaSymbol.addSymbol(TeaConfigInfo.get(PROP_LIB_VAR));
+        TeaSymbol.addSymbol(TeaConfig.get(PROP_LIB_VAR));
 
     // The environment where the code in the imported files will be
     // executed. Each imported file will executed in a separate
@@ -184,7 +183,7 @@ final class SFunctionImport
 
         if ( result == null ) {
             String msg = "could not import file \"{0}\"";
-            throw new SRuntimeException(args, msg, fileName);
+            throw new TeaRunException(args, msg, fileName);
         }
 
         return result;
@@ -293,8 +292,6 @@ final class SFunctionImport
         private boolean _isFile         = false;
         private File    _file           = null;
 
-        // Used to compile the code in the imported files.
-        private TeaCompiler _compiler = new TeaCompiler();
 
 
 
@@ -349,22 +346,22 @@ final class SFunctionImport
         public Object tryToPerformImport()
             throws TeaException {
 
-            Object  result        = null;
-            String  path          = _fullPath;
-            Charset sourceCharset = _environment.getSourceCharset();
-            TeaCode code          = null;
+            Object    result        = null;
+            String    path          = _fullPath;
+            Charset   sourceCharset = _environment.getSourceCharset();
+            TeaScript script        = null;
             
             try (
                  Reader reader =
                      SInputSourceFactory.openReader(path, sourceCharset)
              ) {
-                code = _compiler.compile(reader, _importPath);
+                script = _environment.compile(reader, _importPath);
             } catch (IOException e) {
                 // The path does not exist or is not accessible.
             }
 
             // If the input has been opened, try to execute the file.
-            if ( code != null ) {
+            if ( script != null ) {
                 // Record the import timestamp right now to prevent
                 // eventual infinite recursion (if this file is
                 // imported again while executing).
@@ -372,11 +369,8 @@ final class SFunctionImport
                     _isFile
                     ? _file.lastModified()
                     : System.currentTimeMillis();
-
-                TeaContext globalContext = _environment.getGlobalContext();
-                TeaContext execContext   = globalContext.newChild();
                 
-                result = code.exec(execContext);
+                result = script.execute();
             }
 
             return result;
@@ -404,7 +398,7 @@ final class SFunctionImport
             if ( _lastImportTime == 0 ) {
                 String   msg     = "file \"{0}\" has changed path";
                 Object[] fmtArgs = { _importPath }; 
-                throw new SRuntimeException(msg, fmtArgs);
+                throw new TeaRunException(msg, fmtArgs);
             }
 
             Object result = TeaNull.NULL;
@@ -421,7 +415,7 @@ final class SFunctionImport
                 if ( !fileExists ) {
                     String   msg     = "file \"{0}\" no longer exists";
                     Object[] fmtArgs = { _importPath }; 
-                    throw new SRuntimeException(msg, fmtArgs);
+                    throw new TeaRunException(msg, fmtArgs);
                 }
             }
 

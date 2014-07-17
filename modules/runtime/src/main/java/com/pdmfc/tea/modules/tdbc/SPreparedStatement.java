@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2012 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -24,7 +24,7 @@ import com.pdmfc.tea.runtime.TeaFunction;
 import com.pdmfc.tea.runtime.TeaNull;
 import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.SNumArgException;
-import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaRunException;
 
 
 
@@ -139,7 +139,7 @@ public class SPreparedStatement
         STosObj prepStat = STosUtil.newInstance(CLASS_NAME_S, context);
 
         if ( !(prepStat instanceof SPreparedStatement) ) {
-            throw new SRuntimeException("invalid " + CLASS_NAME + " class");
+            throw new TeaRunException("invalid " + CLASS_NAME + " class");
         }
 
         return (SStatement)prepStat;
@@ -220,8 +220,8 @@ public class SPreparedStatement
             tosRSet.setResultSet(rSet);
             tosRSet.addClosedListener(this);
             _resultSets.add(tosRSet);
-        } catch (SQLException e) {
-            throw new SRuntimeException(e);
+        } catch ( SQLException e ) {
+            throw new TeaRunException(e);
         }
 
         return tosRSet;
@@ -273,8 +273,8 @@ public class SPreparedStatement
 
         try {
             result = _prepStat.executeUpdate();
-        } catch (SQLException e) {
-            throw new SRuntimeException(e);
+        } catch ( SQLException e ) {
+            throw new TeaRunException(e);
         }
 
         return Integer.valueOf(result);
@@ -320,8 +320,8 @@ public class SPreparedStatement
 
         try {
             result = _prepStat.execute();
-        } catch (SQLException e) {
-            throw new SRuntimeException(e);
+        } catch ( SQLException e ) {
+            throw new TeaRunException(e);
         }
 
         return result ? Boolean.TRUE : Boolean.FALSE;
@@ -380,7 +380,7 @@ public class SPreparedStatement
     public Object setInt(final TeaFunction obj,
                          final TeaContext     context,
                          final Object[]    args)
-        throws SRuntimeException {
+        throws TeaRunException {
 
         if ( args.length != 4 ) {
             throw new SNumArgException(args, "index value");
@@ -395,8 +395,8 @@ public class SPreparedStatement
             } else {
                 setInt(index, Args.getInt(args,3).intValue());
             }
-        } catch (SQLException e) {
-            throw new SRuntimeException(e);
+        } catch ( SQLException e ) {
+            throw new TeaRunException(e);
         }
 
         return obj;
@@ -488,7 +488,7 @@ public class SPreparedStatement
     public Object setFloat(final TeaFunction obj,
                            final TeaContext     context,
                            final Object[]    args)
-        throws SRuntimeException {
+        throws TeaRunException {
 
         if ( args.length != 4 ) {
             throw new SNumArgException(args, "index value");
@@ -503,8 +503,8 @@ public class SPreparedStatement
             } else {
                 setDouble(index, Args.getFloat(args,3).doubleValue());
             }
-        } catch (SQLException e) {
-            throw new SRuntimeException(e);
+        } catch ( SQLException e ) {
+            throw new TeaRunException(e);
         }
 
         return obj;
@@ -610,8 +610,8 @@ public class SPreparedStatement
             } else {
                 setString(index, Args.getString(args,3));
             }
-        } catch (SQLException e) {
-            throw new SRuntimeException(e);
+        } catch ( SQLException e ) {
+            throw new TeaRunException(e);
         }
 
         return obj;
@@ -719,8 +719,8 @@ public class SPreparedStatement
             } else {
                 setTimestamp(index, SDate.getDate(args,3));
             }
-        } catch (SQLException e) {
-            throw new SRuntimeException(e);
+        } catch ( SQLException e ) {
+            throw new TeaRunException(e);
         }
 
         return obj;

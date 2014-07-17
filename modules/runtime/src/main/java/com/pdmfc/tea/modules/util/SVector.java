@@ -20,7 +20,7 @@ import com.pdmfc.tea.runtime.TeaNull;
 import com.pdmfc.tea.runtime.TeaPair;
 import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.SNumArgException;
-import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaRunException;
 import com.pdmfc.tea.runtime.Types;
 
 
@@ -180,7 +180,7 @@ public final class SVector
     public Object constructor(final TeaFunction obj,
                               final TeaContext     context,
                               final Object[]    args)
-        throws SRuntimeException {
+        throws TeaRunException {
 
         if ( (args.length!=2) && (args.length!=3) ) {
             throw new SNumArgException(args, "[size]");
@@ -244,7 +244,7 @@ public final class SVector
     public Object push(final TeaFunction obj,
                        final TeaContext     context,
                        final Object[]    args)
-        throws SRuntimeException {
+        throws TeaRunException {
 
         return append(obj, context, args);
     }
@@ -296,7 +296,7 @@ public final class SVector
     public Object append(final TeaFunction obj,
                          final TeaContext     context,
                          final Object[]    args)
-        throws SRuntimeException {
+        throws TeaRunException {
 
         if ( args.length < 3 ) {
             throw new SNumArgException(args, "object");
@@ -463,7 +463,7 @@ public final class SVector
     public Object resize(final TeaFunction obj,
                          final TeaContext     context,
                          final Object[]    args)
-        throws SRuntimeException {
+        throws TeaRunException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "size");
@@ -473,7 +473,7 @@ public final class SVector
 
         if ( newSize < 0 ) {
             String msg = "size must be an integer equal or greater than zero";
-            throw new SRuntimeException(msg);
+            throw new TeaRunException(msg);
         }
 
         int oldSize = _vector.size();
@@ -537,7 +537,7 @@ public final class SVector
     public Object getAt(final TeaFunction obj,
                         final TeaContext     context,
                         final Object[]    args)
-        throws SRuntimeException {
+        throws TeaRunException {
 
         if ( args.length != 3 ) {
             throw new SNumArgException(args, "index");
@@ -548,11 +548,11 @@ public final class SVector
 
         try {
             result = _vector.get(index);
-        } catch (IndexOutOfBoundsException e) {
+        } catch ( IndexOutOfBoundsException e ) {
             String   msg    = "index {0} out of bounds for vector of size {1}";
             Object[] msgFmt =
                 { String.valueOf(index), String.valueOf(_vector.size()) };
-            throw new SRuntimeException(msg, msgFmt);
+            throw new TeaRunException(msg, msgFmt);
         }
 
         return result;
@@ -608,7 +608,7 @@ public final class SVector
     public Object setAt(final TeaFunction obj,
                         final TeaContext     context,
                         final Object[]    args)
-        throws SRuntimeException {
+        throws TeaRunException {
 
         if ( args.length != 4 ) {
             throw new SNumArgException(args, "object index");
@@ -619,11 +619,11 @@ public final class SVector
 
         try {
             _vector.set(index, elem);
-        } catch (IndexOutOfBoundsException e) {
+        } catch ( IndexOutOfBoundsException e ) {
             String   msg    = "index {0} out of bounds for vector of size {1}";
             Object[] msgFmt =
                 { String.valueOf(index), String.valueOf(_vector.size()) };
-            throw new SRuntimeException(msg, msgFmt);
+            throw new TeaRunException(msg, msgFmt);
         }
 
         return obj;
@@ -729,7 +729,7 @@ public final class SVector
     public Object pop(final TeaFunction obj,
                       final TeaContext     context,
                       final Object[]    args)
-        throws SRuntimeException {
+        throws TeaRunException {
 
         int    lastIndex = _vector.size() - 1;
         Object result    = null;
@@ -738,7 +738,7 @@ public final class SVector
             result = _vector.get(lastIndex);
             _vector.remove(lastIndex);
         } else {
-            throw new SRuntimeException("can not pop from an empty vector");
+            throw new TeaRunException("can not pop from an empty vector");
         }
 
         return result;
@@ -925,9 +925,9 @@ public final class SVector
 
         try {
             result = (Number)value;
-        } catch (ClassCastException e) {
+        } catch ( ClassCastException e ) {
             String msg = "comparison function must return a number, not a {0}";
-            throw new SRuntimeException(msg, Types.getTypeName(value));
+            throw new TeaRunException(msg, Types.getTypeName(value));
         }
 
         return result.intValue();

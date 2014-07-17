@@ -15,14 +15,13 @@
  **************************************************************************/
 package com.pdmfc.tea.engine;
 
-import com.pdmfc.tea.TeaConfigInfo;
+import com.pdmfc.tea.TeaConfig;
 import com.pdmfc.tea.runtime.TeaFunction;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import javax.script.Bindings;
-import javax.script.Invocable;
 import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineFactory;
@@ -233,57 +232,6 @@ public class TeaScriptEngineTest {
     }
 
     @Test
-    public void checkInvokableFunction() throws ScriptException, NoSuchMethodException {
-        // javax.script.Invocable is an optional interface, but TeaEngine
-        // supports it.
-
-        String s = "A test string!";
-
-        _e.put("V1", "not the same as A test string!");
-
-        // define a function that sets/defines a global variable.
-        _e.eval("global fhello ( arg ) { set! V1 $arg }");
-
-        // Check whether your script engine implements or not!
-        // Note that the JavaScript engine implements Invocable interface.
-        Invocable inv = (Invocable) _e;
-
-        //System.out.println("Going to invoke! _e=" + _e + " inv=" + inv);
-        // invoke the global function named "fhello"
-        inv.invokeFunction("fhello", s);
-        //System.out.println("invoked! " + _e);
-
-        String r = (String) _e.get("V1");
-
-        assertEquals(s, r);
-    }
-
-    @Test
-    public void checkInvokableMethod() throws ScriptException, NoSuchMethodException {
-
-        _e.put("obj", null); // put obj in the ENGINE_SCOPE bindings
-        _e.put("Vfresult", null); // put Vfresult in the ENGINE_SCOPE bindings
-
-        // define a function that sets/defines a global variable.
-        _e.eval("class Test ( ) ; method Test hello ( arg ) { set! Vfresult $arg } ; global obj [new Test]");        // javax.script.Invocable is an optional interface.
-
-        // Check whether your script engine implements or not!
-        // Note that the JavaScript engine implements Invocable interface.
-        Invocable inv = (Invocable) _e;
-
-        // invoke the global function named "fhello"
-        // get script object on which we want to call the method
-        Object obj = _e.get("obj");
-
-        // invoke the method named "hello" on the script object "obj"
-        inv.invokeMethod(obj, "hello", "Script Method !!");
-
-        String r = (String) _e.get("Vfresult");
-
-        assertEquals(r, "Script Method !!");
-    }
-
-    @Test
     public void checkVars() throws ScriptException {
         String s = "A test string!";
 
@@ -349,10 +297,10 @@ public class TeaScriptEngineTest {
 
 
         assertEquals("Tea Engine", f.getParameter(ScriptEngine.ENGINE));
-        assertEquals(TeaConfigInfo.get("com.pdmfc.tea.version"), f.getParameter(ScriptEngine.ENGINE_VERSION));
+        assertEquals(TeaConfig.get("com.pdmfc.tea.version"), f.getParameter(ScriptEngine.ENGINE_VERSION));
         assertEquals("Tea Engine", f.getParameter(ScriptEngine.NAME));
         assertEquals("Tea", f.getParameter(ScriptEngine.LANGUAGE));
-        assertEquals(TeaConfigInfo.get("com.pdmfc.tea.version"), f.getParameter(ScriptEngine.LANGUAGE_VERSION));
+        assertEquals(TeaConfig.get("com.pdmfc.tea.version"), f.getParameter(ScriptEngine.LANGUAGE_VERSION));
         assertNull(f.getParameter("THREADING"));
 
 //        String propKeys[] = {
@@ -370,25 +318,7 @@ public class TeaScriptEngineTest {
         //}
     }
 
-    // The following tests are adapted from an IBM article:
-    // "Invoke dynamic languages dynamically, Part 1: Introducing the Java scripting API"
-    // by Tom McQueeney (tom.mcqueeney@gmail.com)
-    // http://www.ibm.com/developerworks/java/library/j-javascripting1/
-    /**
-     * Instantiate the included  Tea script engine directly
-     * (rather than normally through the ScriptManager) to ensure there is
-     * no global scope set.
-     * <p>
-     * Does this test only works with Sun's JRE ?
-     */
-    @Test
-    public void testNoGlobalScopeForDirectInstantiation() throws Exception {
-        Class<?> c = Class.forName("com.pdmfc.tea.engine.TeaScriptEngine");
-        ScriptEngine teaEngine = (ScriptEngine) c.newInstance();
-        Bindings globalBindings =
-                teaEngine.getBindings(ScriptContext.GLOBAL_SCOPE);
-        assertNull("No global bindings should be present", globalBindings);
-    }
+
 
     /**
      * Instantiate the included  Tea script engine through the

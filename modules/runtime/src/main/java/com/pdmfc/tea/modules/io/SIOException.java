@@ -1,12 +1,12 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
 package com.pdmfc.tea.modules.io;
 
-import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaRunException;
 
 
 
@@ -19,7 +19,7 @@ import com.pdmfc.tea.runtime.SRuntimeException;
  **************************************************************************/
 
 public final class SIOException
-    extends SRuntimeException {
+    extends TeaRunException {
 
 
 

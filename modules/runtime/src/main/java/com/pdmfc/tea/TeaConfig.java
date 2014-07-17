@@ -22,7 +22,7 @@ import java.util.Properties;
  *
  **************************************************************************/
 
-public final class TeaConfigInfo
+public final class TeaConfig
     extends Object {
 
 
@@ -47,19 +47,19 @@ public final class TeaConfigInfo
 
     static {
         String      resourcePath = RES_NAME;
-        InputStream in           =
-            TeaConfigInfo.class.getResourceAsStream(resourcePath);
+        InputStream input        =
+            TeaConfig.class.getResourceAsStream(resourcePath);
 
-        if ( in != null ) {
+        if ( input != null ) {
             try {
-                _props.load(in);
+                _props.load(input);
             } catch ( IOException e ) {
                 String msg =
                     MessageFormat.format("Failed to read resource \"{0}\"",
                                          resourcePath);
                 throw new IllegalStateException(msg, e);
             } finally {
-                try { in.close(); } catch ( IOException e ) {/* */}
+                try { input.close(); } catch ( IOException e ) {/* */}
             }
         } else {
             String msg = 
@@ -79,7 +79,7 @@ public final class TeaConfigInfo
  *
  **************************************************************************/
 
-    private TeaConfigInfo() {
+    private TeaConfig() {
 
         // Nothing to do.
     }

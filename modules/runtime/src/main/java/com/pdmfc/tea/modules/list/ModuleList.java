@@ -15,7 +15,7 @@ import com.pdmfc.tea.runtime.SEmptyListException;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.TeaFunction;
 import com.pdmfc.tea.runtime.TeaPair;
-import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaRunException;
 import com.pdmfc.tea.runtime.Types;
 import com.pdmfc.tea.runtime.TeaEnvironment;
 import com.pdmfc.tea.runtime.TeaFunctionImplementor;
@@ -729,7 +729,7 @@ public final class ModuleList
         }
         
         String msg = "index out of range ({0})";
-        throw new SRuntimeException(args, msg, index);
+        throw new TeaRunException(args, msg, index);
     }
 
 

@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2012 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -21,7 +21,7 @@ import com.pdmfc.tea.runtime.TeaContext;
 import com.pdmfc.tea.runtime.TeaFunction;
 import com.pdmfc.tea.runtime.TeaNull;
 import com.pdmfc.tea.runtime.TeaSymbol;
-import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaRunException;
 
 
 
@@ -414,7 +414,7 @@ public class SInput
         STosObj input = STosUtil.newInstance(CLASS_NAME_S, context);
 
         if ( !(input instanceof SInput) ) {
-            throw new SRuntimeException("invalid ''{0}'' class", CLASS_NAME);
+            throw new TeaRunException("invalid ''{0}'' class", CLASS_NAME);
         }
 
         return (SInput)input;

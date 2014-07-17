@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -10,7 +10,7 @@ import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.compiler.SWord;
 import com.pdmfc.tea.runtime.TeaContext;
 import com.pdmfc.tea.runtime.TeaFunction;
-import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaRunException;
 
 
 
@@ -298,7 +298,7 @@ abstract class SStatement
                 try {
                     args[i] = node._element.get(context);
                     node = node._next;
-                } catch (SRuntimeException e) {
+                } catch ( TeaRunException e ) {
                     Object[] fmtArgs =
                         { String.valueOf(i), String.valueOf(getLineNumber())};
                     e.addMessage(ERR_WORD, fmtArgs);

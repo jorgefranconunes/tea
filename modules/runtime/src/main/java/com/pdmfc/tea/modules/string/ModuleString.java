@@ -20,7 +20,7 @@ import com.pdmfc.tea.runtime.TeaFunction;
 import com.pdmfc.tea.runtime.TeaNull;
 import com.pdmfc.tea.runtime.TeaPair;
 import com.pdmfc.tea.runtime.TeaSymbol;
-import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaRunException;
 import com.pdmfc.tea.runtime.STypeException;
 import com.pdmfc.tea.runtime.Types;
 import com.pdmfc.tea.runtime.TeaEnvironment;
@@ -232,9 +232,9 @@ public final class ModuleString
         try {
             _formater.format(Args.getString(args,1), args, 2);
         } catch ( SNumArgException e1 ) {
-            throw new SRuntimeException(args, e1.getMessage());
+            throw new TeaRunException(args, e1.getMessage());
         } catch ( STypeException e2 ) {
-            throw new SRuntimeException(args, e2.getMessage());
+            throw new TeaRunException(args, e2.getMessage());
         }
 
         return _formatResult.toString();
@@ -310,9 +310,9 @@ public final class ModuleString
         try {
             result = MessageFormat.format(fmt, fmtArgs);
         } catch ( Throwable e ) {
-            throw new SRuntimeException(args,
-                                        "failed to format string ({0})",
-                                        e.getMessage());
+            throw new TeaRunException(args,
+                                      "failed to format string ({0})",
+                                      e.getMessage());
         }
 
         return result;

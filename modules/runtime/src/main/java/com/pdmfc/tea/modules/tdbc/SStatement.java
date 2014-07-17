@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -23,7 +23,7 @@ import com.pdmfc.tea.runtime.TeaContext;
 import com.pdmfc.tea.runtime.TeaFunction;
 import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.SNumArgException;
-import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaRunException;
 
 
 
@@ -149,7 +149,7 @@ public class SStatement
         STosObj stat = STosUtil.newInstance(CLASS_NAME_S, context);
 
         if ( !(stat instanceof SStatement) ) {
-            throw new SRuntimeException("invalid " + CLASS_NAME + " class");
+            throw new TeaRunException("invalid " + CLASS_NAME + " class");
         }
 
         return (SStatement)stat;
@@ -266,8 +266,8 @@ public class SStatement
             rSet    = _statement.executeQuery(sql);
             tosRSet = SResultSet.newInstance(context);
             tosRSet.setResultSet(rSet);
-        } catch (SQLException e) {
-            throw new SRuntimeException(e);
+        } catch ( SQLException e ) {
+            throw new TeaRunException(e);
         }
 
         tosRSet.addClosedListener(this);
@@ -341,8 +341,8 @@ public class SStatement
 
         try {
             result = _statement.executeUpdate(sql);
-        } catch (SQLException e) {
-            throw new SRuntimeException(e);
+        } catch ( SQLException e ) {
+            throw new TeaRunException(e);
         }
 
         return Integer.valueOf(result);
@@ -418,8 +418,8 @@ public class SStatement
 
         try {
             _statement.execute(sql);
-        } catch (SQLException e) {
-            throw new SRuntimeException(e);
+        } catch ( SQLException e ) {
+            throw new TeaRunException(e);
         }
 
         return Boolean.valueOf(result);
@@ -479,8 +479,8 @@ public class SStatement
             rSet    = _statement.getResultSet();
             tosRSet = SResultSet.newInstance(context);
             tosRSet.setResultSet(rSet);
-        } catch (SQLException e) {
-            throw new SRuntimeException(e);
+        } catch ( SQLException e ) {
+            throw new TeaRunException(e);
         }
 
         return tosRSet;
@@ -543,8 +543,8 @@ public class SStatement
             } else {
                 result = Boolean.FALSE;
             }
-        } catch (SQLException e) {
-            throw new SRuntimeException(e);
+        } catch ( SQLException e ) {
+            throw new TeaRunException(e);
         }
 
         return result;
@@ -600,8 +600,8 @@ public class SStatement
 
         try {
             result = _statement.getFetchSize();
-        } catch (SQLException e) {
-            throw new SRuntimeException(e);
+        } catch ( SQLException e ) {
+            throw new TeaRunException(e);
         }
 
         return Integer.valueOf(result);
@@ -669,8 +669,8 @@ public class SStatement
 
         try {
             _statement.setFetchSize(numberOfRows);
-        } catch (SQLException e) {
-            throw new SRuntimeException(e);
+        } catch ( SQLException e ) {
+            throw new TeaRunException(e);
         }
 
         return obj;
@@ -719,8 +719,8 @@ public class SStatement
 
         try {
             close();
-        } catch (SQLException e) {
-            throw new SRuntimeException(e);
+        } catch ( SQLException e ) {
+            throw new TeaRunException(e);
         }
 
         return obj;
@@ -753,7 +753,7 @@ public class SStatement
 
             try {
                 rSet.close();
-            } catch (SQLException exc) {
+            } catch ( SQLException exc ) {
                 // There should be a way to log the error message
                 // somewhere.
             }
@@ -818,10 +818,10 @@ public class SStatement
  **************************************************************************/
 
     private void checkStatement()
-        throws SRuntimeException {
+        throws TeaRunException {
 
         if ( _statement == null ) {
-            throw new SRuntimeException("statement is closed");
+            throw new TeaRunException("statement is closed");
         }
     }
 

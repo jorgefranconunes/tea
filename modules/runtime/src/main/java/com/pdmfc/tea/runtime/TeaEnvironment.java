@@ -6,10 +6,14 @@
 
 package com.pdmfc.tea.runtime;
 
+import java.io.IOException;
+import java.io.Reader;
 import java.nio.charset.Charset;
 
 import com.pdmfc.tea.TeaException;
+import com.pdmfc.tea.compiler.TeaCompileException;
 import com.pdmfc.tea.runtime.TeaContext;
+import com.pdmfc.tea.runtime.TeaScript;
 
 
 
@@ -87,6 +91,21 @@ public interface TeaEnvironment {
 
     public TeaEnvironment addModule(TeaModule module)
         throws TeaException;
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    public TeaScript compile(final Reader reader,
+                             final String fileName)
+        throws IOException,
+               TeaCompileException;
 
 
 }

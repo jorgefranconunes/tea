@@ -6,13 +6,19 @@
 
 package com.pdmfc.tea.runtime;
 
+import java.io.IOException;
+import java.io.Reader;
 import java.nio.charset.Charset;
 
 import com.pdmfc.tea.TeaException;
+import com.pdmfc.tea.compiler.TeaCode;
+import com.pdmfc.tea.compiler.TeaCompileException;
+import com.pdmfc.tea.compiler.TeaCompiler;
 import com.pdmfc.tea.runtime.Modules;
 import com.pdmfc.tea.runtime.TeaContext;
 import com.pdmfc.tea.runtime.TeaSymbol;
 import com.pdmfc.tea.runtime.TeaEnvironment;
+import com.pdmfc.tea.runtime.TeaScript;
 
 
 
@@ -32,9 +38,10 @@ final class TeaEnvironmentImpl
 
 
 
-    private TeaContext _globalContext = null;
-    private Modules  _modules       = null;
-    private Charset  _sourceCharset = null;
+    private TeaContext  _globalContext = null;
+    private Modules     _modules       = null;
+    private Charset     _sourceCharset = null;
+    private TeaCompiler _compiler      = new TeaCompiler();
 
 
 
@@ -127,6 +134,35 @@ final class TeaEnvironmentImpl
         _modules.add(module);
 
         return this;
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * {@inheritDoc}
+ *
+ **************************************************************************/
+
+    @Override
+    public TeaScript compile(final Reader reader,
+                             final String fileName)
+        throws IOException,
+               TeaCompileException {
+
+        final TeaCode    compiledCode  = _compiler.compile(reader, fileName);
+        final TeaContext scriptContext = _globalContext.newChild();
+        final TeaScript  script        =
+            new TeaScript() {
+                public Object execute()
+                    throws TeaException {
+                    return compiledCode.execute(scriptContext);
+                }
+            };
+
+        return script;
     }
 
 

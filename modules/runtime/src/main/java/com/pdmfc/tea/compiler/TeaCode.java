@@ -11,7 +11,7 @@ import com.pdmfc.tea.compiler.SStatement;
 import com.pdmfc.tea.runtime.TeaContext;
 import com.pdmfc.tea.runtime.SFlowControlException;
 import com.pdmfc.tea.runtime.TeaNull;
-import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaRunException;
 
 
 
@@ -74,7 +74,7 @@ public final class TeaCode
  *
  **************************************************************************/
 
-    public Object exec(final TeaContext context)
+    public Object execute(final TeaContext context)
         throws TeaException {
 
         Object value = TeaNull.NULL;
@@ -83,20 +83,20 @@ public final class TeaCode
             SStatement statement = node._element;
             try {
                 value = statement.exec(context);
-            } catch (SRuntimeException e) {
+            } catch ( TeaRunException e ) {
                 int      lineNum = statement.getLineNumber();
                 Object[] fmtArgs = { String.valueOf(lineNum), _fileName };
                 String   fmtMsg  = (_fileName==null) ? ERR_STAT :ERR_STAT_FILE;
 
                 e.addMessage(fmtMsg, fmtArgs);
                 throw e;
-            } catch (SFlowControlException e) {
+            } catch ( SFlowControlException e ) {
                 throw e;
-            } catch (TeaException e) {
+            } catch ( TeaException e ) {
                 int      lineNum = statement.getLineNumber();
                 Object[] fmtArgs = { String.valueOf(lineNum), _fileName };
                 String   fmtMsg  = (_fileName==null) ? ERR_STAT :ERR_STAT_FILE;
-                SRuntimeException error = new SRuntimeException(e.getMessage());
+                TeaRunException error = new TeaRunException(e.getMessage());
 
                 error.addMessage(fmtMsg, fmtArgs);
                 throw error;                

@@ -18,7 +18,7 @@ import com.pdmfc.tea.modules.reflect.STeaJavaTypes;
 import com.pdmfc.tea.runtime.TeaContext;
 import com.pdmfc.tea.runtime.SNumArgException;
 import com.pdmfc.tea.runtime.TeaFunction;
-import com.pdmfc.tea.runtime.SRuntimeException;
+import com.pdmfc.tea.runtime.TeaRunException;
 import com.pdmfc.tea.runtime.TeaFunctionImplementor;
 import com.pdmfc.tea.runtime.TeaEnvironment;
 import com.pdmfc.tea.runtime.TeaModule;
@@ -678,15 +678,15 @@ public final class ModuleReflect
         } catch (IllegalAccessException e) {
             String paramsTxt = SMethodFinder.buildTypesDescription(paramTypes);
             String msg = "cannot access constructor for {0}({1})";
-            throw new SRuntimeException(args, msg, klass.getName(), paramsTxt);
+            throw new TeaRunException(args, msg, klass.getName(), paramsTxt);
         } catch (InstantiationException e) {
-            throw new SRuntimeException(e);
+            throw new TeaRunException(e);
         } catch (InvocationTargetException e) {
-            throw new SRuntimeException(e.getCause());
+            throw new TeaRunException(e.getCause());
         } catch (IllegalArgumentException e) {
             String paramsTxt = SMethodFinder.buildTypesDescription(paramTypes);
             String msg = "problems calling constructor for {0}({1})";
-            throw new SRuntimeException(args, msg, klass.getName(), paramsTxt);
+            throw new TeaRunException(args, msg, klass.getName(), paramsTxt);
         }
 
         Object result = STeaJavaTypes.java2Tea(javaResult, context);
