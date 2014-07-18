@@ -10,18 +10,18 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import com.pdmfc.tea.TeaContext;
+import com.pdmfc.tea.TeaEnvironment;
 import com.pdmfc.tea.TeaException;
+import com.pdmfc.tea.TeaModule;
+import com.pdmfc.tea.TeaRunException;
 import com.pdmfc.tea.modules.reflect.SFunctionNewProxy;
 import com.pdmfc.tea.modules.reflect.SMethodFinder;
 import com.pdmfc.tea.modules.reflect.SReflectUtils;
 import com.pdmfc.tea.modules.reflect.STeaJavaTypes;
-import com.pdmfc.tea.runtime.TeaContext;
-import com.pdmfc.tea.runtime.SNumArgException;
-import com.pdmfc.tea.runtime.TeaFunction;
-import com.pdmfc.tea.runtime.TeaRunException;
-import com.pdmfc.tea.runtime.TeaFunctionImplementor;
-import com.pdmfc.tea.runtime.TeaEnvironment;
-import com.pdmfc.tea.runtime.TeaModule;
+import com.pdmfc.tea.TeaNumArgException;
+import com.pdmfc.tea.TeaFunction;
+import com.pdmfc.tea.TeaFunctionImplementor;
 
 
 
@@ -111,7 +111,7 @@ import com.pdmfc.tea.runtime.TeaModule;
 //*    </Enumeration>
 //* </EnumDescription>
 //*
-//* <EnumLabel>Tea symbols (com.pdmfc.tea.runtime.TeaSymbol)</EnumLabel>
+//* <EnumLabel>Tea symbols (com.pdmfc.tea.TeaSymbol)</EnumLabel>
 //* <EnumDescription>
 //* Are converted to java.lang.String.  Examples of Tea value
 //* literal/expressions and corresponding Java type:
@@ -140,7 +140,7 @@ import com.pdmfc.tea.runtime.TeaModule;
 //*    </Enumeration>
 //* </EnumDescription>
 //*
-//* <EnumLabel>Tea lists (com.pdmfc.tea.runtime.TeaPair)</EnumLabel>
+//* <EnumLabel>Tea lists (com.pdmfc.tea.TeaPair)</EnumLabel>
 //* <EnumDescription>
 //* Are converted to java.util.ArrayList. Each element in the list is
 //* recursively converted according to these rules. Examples of Tea
@@ -345,7 +345,7 @@ public final class ModuleReflect
         throws TeaException {
 
         if ( args.length != 3 ) {
-            throw new SNumArgException(args,
+            throw new TeaNumArgException(args,
                                        "[className|wrapperObj] memberName");
         }
 
@@ -434,7 +434,7 @@ public final class ModuleReflect
 
         if ( args.length != 4 ) {
             String usage = "[className|wrapperObj] memberName value";
-            throw new SNumArgException(args, usage);
+            throw new TeaNumArgException(args, usage);
         }
 
         Object            firstArg   = args[1];
@@ -531,7 +531,7 @@ public final class ModuleReflect
 
         if ( args.length < 3 ) {
             String usage = "className methodName [argType1 [argType2 ...]]";
-            throw new SNumArgException(args, usage);
+            throw new TeaNumArgException(args, usage);
         }
 
         Class<?>   klass      = SReflectUtils.getClassForName(args, 1);
@@ -555,7 +555,7 @@ public final class ModuleReflect
                     throws TeaException {
 
                     if ( args.length != functionArgCount ) {
-                        throw new SNumArgException(args, usageMessage);
+                        throw new TeaNumArgException(args, usageMessage);
                     }
 
                     Object[] methodArgs = new Object[args.length - 1];
@@ -654,7 +654,7 @@ public final class ModuleReflect
         throws TeaException {
 
         if ( args.length < 2 ) {
-            throw new SNumArgException(args, "className [arg1 [arg2 ...]]");
+            throw new TeaNumArgException(args, "className [arg1 [arg2 ...]]");
         }
 
         Class<?>   klass      = SReflectUtils.getClassForName(args, 1);
@@ -762,7 +762,7 @@ public final class ModuleReflect
 
         if ( args.length < 3 ) {
             String usage = "className methodName [arg1 [arg2 ...]]";
-            throw new SNumArgException(args, usage);
+            throw new TeaNumArgException(args, usage);
         }
 
         Class<?>   klass      = SReflectUtils.getClassForName(args, 1);

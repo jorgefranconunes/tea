@@ -17,10 +17,10 @@ import java.util.Map;
 
 import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.reflect.STeaJavaTypes;
-import com.pdmfc.tea.runtime.TeaContext;
-import com.pdmfc.tea.runtime.TeaSymbol;
-import com.pdmfc.tea.runtime.TeaRunException;
-import com.pdmfc.tea.runtime.STypeException;
+import com.pdmfc.tea.TeaContext;
+import com.pdmfc.tea.TeaSymbol;
+import com.pdmfc.tea.TeaRunException;
+import com.pdmfc.tea.TeaTypeException;
 
 
 
@@ -271,7 +271,7 @@ final class SReflectUtils
     
     public static String getStringOrSymbol(final Object[] args,
                                            final int      index)
-        throws STypeException {
+        throws TeaTypeException {
         
         if (args[index] instanceof String) {
             return (String)args[index];
@@ -280,7 +280,7 @@ final class SReflectUtils
             return ((TeaSymbol)args[index]).getName();
         }
 
-        throw new STypeException(args, index, "string or a symbol");
+        throw new TeaTypeException(args, index, "string or a symbol");
     }
 
 

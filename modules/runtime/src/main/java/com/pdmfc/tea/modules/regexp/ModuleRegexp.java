@@ -14,16 +14,16 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 import com.pdmfc.tea.TeaException;
-import com.pdmfc.tea.runtime.TeaModule;
-import com.pdmfc.tea.runtime.Args;
-import com.pdmfc.tea.runtime.TeaContext;
-import com.pdmfc.tea.runtime.SNumArgException;
-import com.pdmfc.tea.runtime.TeaFunction;
-import com.pdmfc.tea.runtime.TeaPair;
-import com.pdmfc.tea.runtime.TeaRunException;
-import com.pdmfc.tea.runtime.STypeException;
-import com.pdmfc.tea.runtime.TeaFunctionImplementor;
-import com.pdmfc.tea.runtime.TeaEnvironment;
+import com.pdmfc.tea.TeaModule;
+import com.pdmfc.tea.Args;
+import com.pdmfc.tea.TeaContext;
+import com.pdmfc.tea.TeaNumArgException;
+import com.pdmfc.tea.TeaFunction;
+import com.pdmfc.tea.TeaPair;
+import com.pdmfc.tea.TeaRunException;
+import com.pdmfc.tea.TeaTypeException;
+import com.pdmfc.tea.TeaFunctionImplementor;
+import com.pdmfc.tea.TeaEnvironment;
 
 
 
@@ -197,7 +197,7 @@ public final class ModuleRegexp
         throws TeaException {
 
         if ( args.length != 2 ) {
-            throw new SNumArgException(args, "pattern-string");
+            throw new TeaNumArgException(args, "pattern-string");
         }
 
         return getPattern(args,1);
@@ -278,7 +278,7 @@ public final class ModuleRegexp
         int numArgs = args.length;
 
         if ( numArgs < 3 ) {
-            throw new SNumArgException(args,"dir-name regexp [regexp ...]");
+            throw new TeaNumArgException(args,"dir-name regexp [regexp ...]");
         }
 
         String          dirName   = Args.getString(args, 1);
@@ -375,7 +375,7 @@ public final class ModuleRegexp
         throws TeaException {
 
         if ( args.length != 4 ) {
-            throw new SNumArgException(args, "regex substitution input");
+            throw new TeaNumArgException(args, "regex substitution input");
         }
 
         Pattern pattern  = getPattern(args,1);
@@ -448,7 +448,7 @@ public final class ModuleRegexp
         throws TeaException {
 
         if ( args.length != 3 ) {
-            throw new SNumArgException(args, "regex input");
+            throw new TeaNumArgException(args, "regex input");
         }
 
         Pattern pattern  = getPattern(args,1);
@@ -531,7 +531,7 @@ public final class ModuleRegexp
         throws TeaException {
 
         if ( args.length != 3 ) {
-            throw new SNumArgException(args, "regex string");
+            throw new TeaNumArgException(args, "regex string");
         }
 
         Pattern  pattern  = getPattern(args,1);
@@ -665,7 +665,7 @@ public final class ModuleRegexp
         throws TeaException {
 
         if ( args.length != 3 ) {
-            throw new SNumArgException(args, "string split-string");
+            throw new TeaNumArgException(args, "string split-string");
         }
 
         String str = Args.getString(args,1);
@@ -751,7 +751,7 @@ public final class ModuleRegexp
             }
         }
 
-        throw new STypeException(args, index, "regex");
+        throw new TeaTypeException(args, index, "regex");
     }
 
 

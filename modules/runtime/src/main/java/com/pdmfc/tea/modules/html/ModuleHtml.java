@@ -10,13 +10,13 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import com.pdmfc.tea.TeaException;
-import com.pdmfc.tea.runtime.Args;
-import com.pdmfc.tea.runtime.TeaContext;
-import com.pdmfc.tea.runtime.TeaFunction;
-import com.pdmfc.tea.runtime.STypeException;
-import com.pdmfc.tea.runtime.TeaEnvironment;
-import com.pdmfc.tea.runtime.TeaFunctionImplementor;
-import com.pdmfc.tea.runtime.TeaModule;
+import com.pdmfc.tea.Args;
+import com.pdmfc.tea.TeaContext;
+import com.pdmfc.tea.TeaFunction;
+import com.pdmfc.tea.TeaTypeException;
+import com.pdmfc.tea.TeaEnvironment;
+import com.pdmfc.tea.TeaFunctionImplementor;
+import com.pdmfc.tea.TeaModule;
 
 
 
@@ -195,7 +195,7 @@ public final class ModuleHtml
         } else if ( arg instanceof Number ) {
             result = arg.toString();
         } else {
-            throw new STypeException(args, 1, "string or numeric");
+            throw new TeaTypeException(args, 1, "string or numeric");
         }
 
         return result;
@@ -300,7 +300,7 @@ public final class ModuleHtml
         } else if ( arg instanceof Number ) {
             result = arg.toString();
         } else {
-            throw new STypeException(args, 1, "string or a numeric");
+            throw new TeaTypeException(args, 1, "string or a numeric");
         }
 
         return result;

@@ -17,11 +17,11 @@ import com.pdmfc.tea.modules.io.SOutput;
 import com.pdmfc.tea.modules.net.SSocketFactory;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
-import com.pdmfc.tea.runtime.Args;
-import com.pdmfc.tea.runtime.TeaContext;
-import com.pdmfc.tea.runtime.TeaFunction;
-import com.pdmfc.tea.runtime.SNumArgException;
-import com.pdmfc.tea.runtime.TeaRunException;
+import com.pdmfc.tea.Args;
+import com.pdmfc.tea.TeaContext;
+import com.pdmfc.tea.TeaNumArgException;
+import com.pdmfc.tea.TeaFunction;
+import com.pdmfc.tea.TeaRunException;
 
 
 
@@ -94,7 +94,7 @@ public class SSocketBase
         throws TeaException {
 
         if ( args.length != 4 ) {
-            throw new SNumArgException(args, "host port");
+            throw new TeaNumArgException(args, "host port");
         }
 
         String host = Args.getString(args, 2);
@@ -102,7 +102,7 @@ public class SSocketBase
 
         try {
             close();
-        } catch (SIOException e) {
+        } catch ( SIOException e ) {
             // Just ignore it.
         }
 
@@ -110,9 +110,9 @@ public class SSocketBase
             _socket = createSocket(host, port);
             _input.open(_socket.getInputStream());
             _output.open(_socket.getOutputStream());
-        } catch (UnknownHostException e1) {
+        } catch ( UnknownHostException e1 ) {
             throw new SIOException("host \"{0}\" is unknown", host);
-        } catch (IOException e2) {
+        } catch ( IOException e2 ) {
             String msg = "could not connect to host \"{0}\" on port {1} : {2}";
             throw new SIOException(msg,
                                    host,
@@ -139,7 +139,7 @@ public class SSocketBase
 
         try {
             close();
-        } catch (SIOException e) {
+        } catch ( SIOException e ) {
             // Just ignore it.
         }
 
@@ -148,7 +148,7 @@ public class SSocketBase
         try {
             _input.open(_socket.getInputStream());
             _output.open(_socket.getOutputStream());
-        } catch (IOException e) {
+        } catch ( IOException e ) {
             throw new SIOException("could not associate with native socket: "
                                     + e.getMessage());
         }
@@ -192,26 +192,26 @@ public class SSocketBase
 
         try {
             _output.flush();
-        } catch (IOException e1) {
+        } catch ( IOException e1 ) {
             error = e1;
         }
         try {
             if ( _socket != null ) {
                 _socket.close();
             }
-        } catch (IOException e2) {
+        } catch ( IOException e2 ) {
             if ( error == null ) {
                 error = e2;
             }
         }
         try {
             _input.close();
-        } catch (IOException e3) {
+        } catch ( IOException e3 ) {
             // Ignore any error.
         }
         try {
             _output.close();
-        } catch (IOException e4) {
+        } catch ( IOException e4 ) {
             // Ignore any error.
         }
         _socket = null;
@@ -278,7 +278,7 @@ public class SSocketBase
 
         try {
             sock = _sockFactory.createSocket(host, port);
-        } catch (IOException e) {
+        } catch ( IOException e ) {
             String   msg     = "unable to crete socket - {0}";
             Object[] fmtArgs = { e.getMessage() };
             throw new TeaRunException(msg, fmtArgs);

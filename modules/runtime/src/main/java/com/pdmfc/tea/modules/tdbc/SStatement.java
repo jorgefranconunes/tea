@@ -18,12 +18,12 @@ import com.pdmfc.tea.modules.tdbc.SResultSet;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.tos.STosUtil;
-import com.pdmfc.tea.runtime.Args;
-import com.pdmfc.tea.runtime.TeaContext;
-import com.pdmfc.tea.runtime.TeaFunction;
-import com.pdmfc.tea.runtime.TeaSymbol;
-import com.pdmfc.tea.runtime.SNumArgException;
-import com.pdmfc.tea.runtime.TeaRunException;
+import com.pdmfc.tea.Args;
+import com.pdmfc.tea.TeaContext;
+import com.pdmfc.tea.TeaFunction;
+import com.pdmfc.tea.TeaSymbol;
+import com.pdmfc.tea.TeaNumArgException;
+import com.pdmfc.tea.TeaRunException;
 
 
 
@@ -255,7 +255,7 @@ public class SStatement
         checkStatement();
 
         if ( args.length != 3 ) {
-            throw new SNumArgException(args, "sqlStatement");
+            throw new TeaNumArgException(args, "sqlStatement");
         }
 
         String     sql     = Args.getString(args, 2);
@@ -333,7 +333,7 @@ public class SStatement
         checkStatement();
 
         if ( args.length != 3 ) {
-            throw new SNumArgException(args, "sqlStatement");
+            throw new TeaNumArgException(args, "sqlStatement");
         }
 
         String sql    = Args.getString(args, 2);
@@ -410,7 +410,7 @@ public class SStatement
         checkStatement();
 
         if ( args.length != 3 ) {
-            throw new SNumArgException(args, "sqlStatement");
+            throw new TeaNumArgException(args, "sqlStatement");
         }
 
         String  sql    = Args.getString(args, 2);
@@ -662,7 +662,7 @@ public class SStatement
 
 
         if ( args.length != 3 ) {
-            throw new SNumArgException(args, "numberOfRows");
+            throw new TeaNumArgException(args, "numberOfRows");
         }
 
         int numberOfRows = Args.getInt(args, 2).intValue();

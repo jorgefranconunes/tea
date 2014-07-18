@@ -13,9 +13,9 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineFactory;
 
 import com.pdmfc.tea.TeaConfig;
-import com.pdmfc.tea.runtime.TeaRuntime;
-import com.pdmfc.tea.runtime.TeaRuntimeConfig;
-import com.pdmfc.tea.runtime.TeaRuntimeFactory;
+import com.pdmfc.tea.TeaRuntime;
+import com.pdmfc.tea.TeaRuntimeConfig;
+import com.pdmfc.tea.TeaRuntimeFactory;
 
 
 

@@ -6,7 +6,7 @@
 
 package com.pdmfc.tea.modules.io;
 
-import com.pdmfc.tea.runtime.TeaRunException;
+import com.pdmfc.tea.TeaRunException;
 
 
 

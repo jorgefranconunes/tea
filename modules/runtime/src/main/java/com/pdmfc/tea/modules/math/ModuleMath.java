@@ -9,19 +9,19 @@ package com.pdmfc.tea.modules.math;
 import java.util.Random;
 
 import com.pdmfc.tea.TeaException;
-import com.pdmfc.tea.runtime.Args;
-import com.pdmfc.tea.runtime.SArithmeticException;
-import com.pdmfc.tea.runtime.TeaContext;
-import com.pdmfc.tea.runtime.TeaBlock;
-import com.pdmfc.tea.runtime.TeaFunction;
-import com.pdmfc.tea.runtime.TeaSymbol;
-import com.pdmfc.tea.runtime.TeaVar;
-import com.pdmfc.tea.runtime.SNumArgException;
-import com.pdmfc.tea.runtime.STypeException;
-import com.pdmfc.tea.runtime.Types;
-import com.pdmfc.tea.runtime.TeaEnvironment;
-import com.pdmfc.tea.runtime.TeaFunctionImplementor;
-import com.pdmfc.tea.runtime.TeaModule;
+import com.pdmfc.tea.Args;
+import com.pdmfc.tea.TeaArithmeticException;
+import com.pdmfc.tea.TeaContext;
+import com.pdmfc.tea.TeaBlock;
+import com.pdmfc.tea.TeaFunction;
+import com.pdmfc.tea.TeaSymbol;
+import com.pdmfc.tea.TeaVar;
+import com.pdmfc.tea.TeaNumArgException;
+import com.pdmfc.tea.TeaTypeException;
+import com.pdmfc.tea.Types;
+import com.pdmfc.tea.TeaEnvironment;
+import com.pdmfc.tea.TeaFunctionImplementor;
+import com.pdmfc.tea.TeaModule;
 
 
 
@@ -564,7 +564,7 @@ public final class ModuleMath
         double  op1FloatVal = op1IsFloat ? ((Double)op1).doubleValue() : 0.0;
 
         if ( !op1IsInt && !op1IsFloat ) {
-            throw new STypeException(args, 1, "numeric");
+            throw new TeaTypeException(args, 1, "numeric");
         }
 
         for ( int i=2; i<args.length; i++ ) {
@@ -576,7 +576,7 @@ public final class ModuleMath
             double  op2FloatVal = op2IsFloat ? ((Double)op2).doubleValue():0.0;
 
             if ( !op2IsInt && !op2IsFloat ) {
-                throw new STypeException(args, i, "numeric");
+                throw new TeaTypeException(args, i, "numeric");
             }
             if ( op1IsInt ) {
                 if ( op2IsInt ) {
@@ -934,10 +934,10 @@ public final class ModuleMath
                 return calcFloatOp(op, ((Double)operand).doubleValue(),args,2);
             }
         } catch ( ArithmeticException e ) {
-            SArithmeticException.raise(args, e);
+            TeaArithmeticException.raise(args, e);
         }
         
-        throw new STypeException(args, 1, "numeric");
+        throw new TeaTypeException(args, 1, "numeric");
     }
 
 
@@ -972,7 +972,7 @@ public final class ModuleMath
                                        args,
                                        i+1);
                 } else {
-                    throw new STypeException(args, i, "numeric");
+                    throw new TeaTypeException(args, i, "numeric");
                 }
             }
         }
@@ -1004,7 +1004,7 @@ public final class ModuleMath
             if ( operand instanceof Number ) {
                 result = doOp(op, result, ((Number)operand).doubleValue());
             } else {
-                throw new STypeException(args, i, "numeric");
+                throw new TeaTypeException(args, i, "numeric");
             }
         }
 
@@ -1138,7 +1138,7 @@ public final class ModuleMath
                 result = operand;
             }
         } else {
-            throw new STypeException(args, 1, "float or an int");
+            throw new TeaTypeException(args, 1, "float or an int");
         }
 
         return result;
@@ -1209,7 +1209,7 @@ public final class ModuleMath
         try {
             result = dividend % divisor;
         } catch ( ArithmeticException e ) {
-            SArithmeticException.raise(args, e);
+            TeaArithmeticException.raise(args, e);
         }
 
         return Integer.valueOf(result);
@@ -1303,7 +1303,7 @@ public final class ModuleMath
                     return obj;
                 }
             } else {
-                throw new STypeException(args, i, "bool or a block");
+                throw new TeaTypeException(args, i, "bool or a block");
             }
         }
 
@@ -1379,7 +1379,7 @@ public final class ModuleMath
                     return Boolean.TRUE;
                 }
             } else {
-                throw new STypeException(args, i, "bool or a block");
+                throw new TeaTypeException(args, i, "bool or a block");
             }
         }
 
@@ -1439,7 +1439,7 @@ public final class ModuleMath
         throws TeaException {
 
         if ( args.length != 2 ) {
-            throw new SNumArgException(args, "boolean");
+            throw new TeaNumArgException(args, "boolean");
         }
 
         boolean operand = Args.getBoolean(args,1).booleanValue();
@@ -1503,7 +1503,7 @@ public final class ModuleMath
         throws TeaException {
 
         if ( args.length != 2 ) {
-            throw new SNumArgException(args, "value");
+            throw new TeaNumArgException(args, "value");
         }
         Object arg = args[1];
 
@@ -1514,7 +1514,7 @@ public final class ModuleMath
             return new Double(Math.abs(((Double)arg).floatValue()));
         }
 
-        throw new STypeException(args, 1, "int or a float");
+        throw new TeaTypeException(args, 1, "int or a float");
     }
 
 
@@ -1570,7 +1570,7 @@ public final class ModuleMath
         throws TeaException {
 
         if ( args.length != 2 ) {
-            throw new SNumArgException(args, "value");
+            throw new TeaNumArgException(args, "value");
         }
 
         double operand = Args.getFloat(args, 1).doubleValue();
@@ -1632,7 +1632,7 @@ public final class ModuleMath
         throws TeaException {
 
         if ( args.length != 2 ) {
-            throw new SNumArgException(args, "value");
+            throw new TeaNumArgException(args, "value");
         }
 
         double operand = Args.getFloat(args, 1).doubleValue();
@@ -1694,7 +1694,7 @@ public final class ModuleMath
         throws TeaException {
 
         if ( args.length != 2 ) {
-            throw new SNumArgException(args, "value");
+            throw new TeaNumArgException(args, "value");
         }
 
         double operand = Args.getNumber(args, 1).doubleValue();
@@ -1756,7 +1756,7 @@ public final class ModuleMath
         throws TeaException {
 
         if ( args.length != 2 ) {
-            throw new SNumArgException(args, "value");
+            throw new TeaNumArgException(args, "value");
         }
 
         double result = 0;
@@ -1764,7 +1764,7 @@ public final class ModuleMath
         try {
             result = Math.sqrt(Args.getNumber(args,1).doubleValue());
         } catch (ArithmeticException e) {
-            SArithmeticException.raise(args, e);
+            TeaArithmeticException.raise(args, e);
         }
 
         return new Double(result);
@@ -1849,7 +1849,7 @@ public final class ModuleMath
         throws TeaException {
 
         if ( args.length < 2 ) {
-            throw new SNumArgException(args, "value ...");
+            throw new TeaNumArgException(args, "value ...");
         }
         Object valueObj = args[1];
 
@@ -1861,7 +1861,7 @@ public final class ModuleMath
             double operand1 = ((Double)valueObj).doubleValue();
             return calcExtremeDouble(comparator, operand1, args, 2);
         }
-        throw new STypeException(args, 1, "int or a float");
+        throw new TeaTypeException(args, 1, "int or a float");
     }
 
 
@@ -1879,7 +1879,7 @@ public final class ModuleMath
                                          final int         input,
                                          final Object[]    args,
                                          final int         firstIndex)
-        throws STypeException{
+        throws TeaTypeException{
 
         int min = input;
 
@@ -1897,7 +1897,7 @@ public final class ModuleMath
             if ( valueObj instanceof Double ) {
                 return calcExtremeDouble(comparator, min, args, i);
             }
-            throw new STypeException(args, i, "int or a float");
+            throw new TeaTypeException(args, i, "int or a float");
         }
 
         return Integer.valueOf(min);
@@ -1918,7 +1918,7 @@ public final class ModuleMath
                                             final double      input,
                                             final Object[]    args,
                                             final int         firstIndex)
-        throws STypeException{
+        throws TeaTypeException{
 
         double min = input;
 
@@ -1932,7 +1932,7 @@ public final class ModuleMath
                     min = value;
                 }
             } else {
-                throw new STypeException(args, i, "int or a float");
+                throw new TeaTypeException(args, i, "int or a float");
             }
         }
         return new Double(min);
@@ -2009,7 +2009,7 @@ public final class ModuleMath
             return Integer.valueOf(Args.getNumber(args, 1).intValue());
         }
 
-        throw new SNumArgException(args, "[symbol] value");
+        throw new TeaNumArgException(args, "[symbol] value");
     }
 
 
@@ -2127,7 +2127,7 @@ public final class ModuleMath
         throws TeaException {
 
       if ( args.length != 3 ) {
-         throw new SNumArgException(args, "symbol value");
+         throw new TeaNumArgException(args, "symbol value");
       }
 
       TeaSymbol symbol = Args.getSymbol(args, 1);
@@ -2208,7 +2208,7 @@ public final class ModuleMath
         throws TeaException {
 
         if ( args.length != 3 ) {
-            throw new SNumArgException(args, "symbol value");
+            throw new TeaNumArgException(args, "symbol value");
         }
 
         TeaSymbol symbol  = Args.getSymbol(args, 1);
@@ -2304,7 +2304,7 @@ public final class ModuleMath
         throws TeaException {
 
         if ( args.length != 3 ) {
-            throw new SNumArgException(args, "symbol value");
+            throw new TeaNumArgException(args, "symbol value");
         }
 
         TeaSymbol symbol  = Args.getSymbol(args, 1);
@@ -2400,7 +2400,7 @@ public final class ModuleMath
         throws TeaException {
 
         if ( args.length != 3 ) {
-            throw new SNumArgException(args, "symbol value");
+            throw new TeaNumArgException(args, "symbol value");
         }
 
         TeaSymbol symbol  = Args.getSymbol(args, 1);
@@ -2496,7 +2496,7 @@ public final class ModuleMath
         throws TeaException {
 
         if ( args.length != 3 ) {
-            throw new SNumArgException(args, "symbol value");
+            throw new TeaNumArgException(args, "symbol value");
         }
 
         TeaSymbol symbol  = Args.getSymbol(args, 1);
@@ -2587,7 +2587,7 @@ public final class ModuleMath
         throws TeaException {
 
         if ( args.length != 2 ) {
-            throw new SNumArgException(args, "symbol");
+            throw new TeaNumArgException(args, "symbol");
         }
 
         TeaSymbol symbol  = Args.getSymbol(args, 1);
@@ -2677,7 +2677,7 @@ public final class ModuleMath
         throws TeaException {
 
         if ( args.length != 2 ) {
-            throw new SNumArgException(args, "symbol");
+            throw new TeaNumArgException(args, "symbol");
         }
 
         TeaSymbol symbol  = Args.getSymbol(args, 1);
@@ -2755,7 +2755,7 @@ public final class ModuleMath
         throws TeaException {
 
         if ( args.length != 2 ) {
-            throw new SNumArgException(args, "value");
+            throw new TeaNumArgException(args, "value");
         }
 
         int value  = Args.getInt(args, 1).intValue();
@@ -3016,7 +3016,7 @@ public final class ModuleMath
         throws TeaException {
 
         if ( args.length != 3 ) {
-            throw new SNumArgException(args, "value shift");
+            throw new TeaNumArgException(args, "value shift");
         }
 
         int value = Args.getInt(args, 1).intValue();
@@ -3083,7 +3083,7 @@ public final class ModuleMath
         throws TeaException {
 
         if ( args.length != 3 ) {
-            throw new SNumArgException(args, "value shift");
+            throw new TeaNumArgException(args, "value shift");
         }
 
         int value = Args.getInt(args, 1).intValue();
@@ -3163,7 +3163,7 @@ public final class ModuleMath
         throws TeaException {
 
         if ( args.length != 3 ) {
-            throw new SNumArgException(args, "symbol value");
+            throw new TeaNumArgException(args, "symbol value");
         }
 
         TeaSymbol symbol  = Args.getSymbol(args, 1);
@@ -3258,7 +3258,7 @@ public final class ModuleMath
         throws TeaException {
 
         if ( args.length != 3 ) {
-            throw new SNumArgException(args, "symbol value");
+            throw new TeaNumArgException(args, "symbol value");
         }
 
         TeaSymbol symbol  = Args.getSymbol(args, 1);
@@ -3353,7 +3353,7 @@ public final class ModuleMath
         throws TeaException {
 
         if ( args.length != 3 ) {
-            throw new SNumArgException(args, "symbol value");
+            throw new TeaNumArgException(args, "symbol value");
         }
 
         TeaSymbol symbol  = Args.getSymbol(args, 1);
@@ -3448,7 +3448,7 @@ public final class ModuleMath
         throws TeaException {
 
         if ( args.length != 3 ) {
-            throw new SNumArgException(args, "symbol value");
+            throw new TeaNumArgException(args, "symbol value");
         }
 
         TeaSymbol symbol = Args.getSymbol(args, 1);
@@ -3543,7 +3543,7 @@ public final class ModuleMath
         throws TeaException {
 
         if ( args.length != 3 ) {
-            throw new SNumArgException(args, "symbol value");
+            throw new TeaNumArgException(args, "symbol value");
         }
 
         TeaSymbol symbol = Args.getSymbol(args, 1);

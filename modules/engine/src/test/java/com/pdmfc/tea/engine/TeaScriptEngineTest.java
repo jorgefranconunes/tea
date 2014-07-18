@@ -16,7 +16,7 @@
 package com.pdmfc.tea.engine;
 
 import com.pdmfc.tea.TeaConfig;
-import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.TeaFunction;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;

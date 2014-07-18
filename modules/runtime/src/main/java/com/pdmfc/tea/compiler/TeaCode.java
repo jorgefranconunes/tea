@@ -8,10 +8,10 @@ package com.pdmfc.tea.compiler;
 
 import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.compiler.SStatement;
-import com.pdmfc.tea.runtime.TeaContext;
-import com.pdmfc.tea.runtime.SFlowControlException;
-import com.pdmfc.tea.runtime.TeaNull;
-import com.pdmfc.tea.runtime.TeaRunException;
+import com.pdmfc.tea.TeaContext;
+import com.pdmfc.tea.TeaFlowControlException;
+import com.pdmfc.tea.TeaNull;
+import com.pdmfc.tea.TeaRunException;
 
 
 
@@ -90,7 +90,7 @@ public final class TeaCode
 
                 e.addMessage(fmtMsg, fmtArgs);
                 throw e;
-            } catch ( SFlowControlException e ) {
+            } catch ( TeaFlowControlException e ) {
                 throw e;
             } catch ( TeaException e ) {
                 int      lineNum = statement.getLineNumber();

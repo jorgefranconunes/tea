@@ -17,8 +17,8 @@
 package com.pdmfc.tea.modules.util;
 
 import com.pdmfc.tea.engine.TeaScriptEngine;
-import com.pdmfc.tea.runtime.TeaContext;
-import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.TeaContext;
+import com.pdmfc.tea.TeaFunction;
 import java.util.Date;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;

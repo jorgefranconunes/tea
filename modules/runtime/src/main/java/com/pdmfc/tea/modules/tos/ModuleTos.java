@@ -12,20 +12,20 @@ import java.util.Map;
 
 import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.tos.SList;
-import com.pdmfc.tea.runtime.Args;
-import com.pdmfc.tea.runtime.TeaContext;
-import com.pdmfc.tea.runtime.TeaBlock;
-import com.pdmfc.tea.runtime.TeaFunction;
-import com.pdmfc.tea.runtime.TeaNull;
-import com.pdmfc.tea.runtime.TeaPair;
-import com.pdmfc.tea.runtime.TeaSymbol;
-import com.pdmfc.tea.runtime.SNumArgException;
-import com.pdmfc.tea.runtime.TeaRunException;
-import com.pdmfc.tea.runtime.STypeException;
-import com.pdmfc.tea.runtime.Types;
-import com.pdmfc.tea.runtime.TeaFunctionImplementor;
-import com.pdmfc.tea.runtime.TeaEnvironment;
-import com.pdmfc.tea.runtime.TeaModule;
+import com.pdmfc.tea.Args;
+import com.pdmfc.tea.TeaContext;
+import com.pdmfc.tea.TeaBlock;
+import com.pdmfc.tea.TeaFunction;
+import com.pdmfc.tea.TeaNull;
+import com.pdmfc.tea.TeaPair;
+import com.pdmfc.tea.TeaSymbol;
+import com.pdmfc.tea.TeaNumArgException;
+import com.pdmfc.tea.TeaRunException;
+import com.pdmfc.tea.TeaTypeException;
+import com.pdmfc.tea.Types;
+import com.pdmfc.tea.TeaFunctionImplementor;
+import com.pdmfc.tea.TeaEnvironment;
+import com.pdmfc.tea.TeaModule;
 
 
 
@@ -225,7 +225,7 @@ public final class ModuleTos
 
         if ( (args.length<3) || (args.length>4) ) {
             String usage = "class-name [base-class] list-of-members";
-            throw new SNumArgException(args, usage);
+            throw new TeaNumArgException(args, usage);
         }
 
         TeaSymbol className          = Args.getSymbol(args, 1);
@@ -316,7 +316,7 @@ public final class ModuleTos
         throws TeaException {
 
         if ( (args.length<2) || (args.length>3) ) {
-            throw new SNumArgException(args,
+            throw new TeaNumArgException(args,
                                        "[base-class] list-of-members");
         }
 
@@ -335,7 +335,7 @@ public final class ModuleTos
             memberList = Args.getPair(args, 2);
             break;
         default :
-            throw new SNumArgException(args, "[base-class] list-of-members");
+            throw new TeaNumArgException(args, "[base-class] list-of-members");
         }
 
         for ( TeaPair e=memberList; !e.isEmpty(); e=e.cdr() ) {
@@ -411,7 +411,7 @@ public final class ModuleTos
         throws TeaException {
 
         if ( args.length < 2 ) {
-            throw new SNumArgException(args, "class-name [constructor-args]");
+            throw new TeaNumArgException(args, "class-name [constructor-args]");
         }
 
         return STosUtil.getClass(context, args, 1).newInstance(context, args);
@@ -484,7 +484,7 @@ public final class ModuleTos
 
         if ( args.length != 5 ) {
             String usage = "class-name method-name formal-param body";
-            throw new SNumArgException(args, usage);
+            throw new TeaNumArgException(args, usage);
         }
 
         Object params = args[3];
@@ -495,7 +495,7 @@ public final class ModuleTos
             if ( params instanceof TeaSymbol ) {
                 varArgsMethod(context, args);
             } else {
-                throw new STypeException(args, 3, "symbol or list of symbols");
+                throw new TeaTypeException(args, 3, "symbol or list of symbols");
             }
         }
 
@@ -625,7 +625,7 @@ public final class ModuleTos
         throws TeaException {
 
         if ( args.length != 2 ) {
-            throw new SNumArgException(args, "java-class-name");
+            throw new TeaNumArgException(args, "java-class-name");
         }
 
         String    className = Args.getString(args,1);
@@ -721,7 +721,7 @@ public final class ModuleTos
         throws TeaException {
 
         if ( args.length != 2 ) {
-            throw new SNumArgException(args, "classObject");
+            throw new TeaNumArgException(args, "classObject");
         }
 
         STosClass tosClass  = STosUtil.getClass(context, args, 1);
@@ -782,7 +782,7 @@ public final class ModuleTos
         throws TeaException {
 
         if ( args.length != 2 ) {
-            throw new SNumArgException(args, "tosObject");
+            throw new TeaNumArgException(args, "tosObject");
         }
 
         return STosUtil.getTosObj(args,1).getTosClass();
@@ -858,7 +858,7 @@ public final class ModuleTos
         throws TeaException {
 
         if ( args.length != 3 ) {
-            throw new SNumArgException(args, "class1 class2");
+            throw new TeaNumArgException(args, "class1 class2");
         }
 
         STosClass tosClass1 = STosUtil.getClass(context, args, 1);
@@ -928,7 +928,7 @@ public final class ModuleTos
         throws TeaException {
 
         if ( args.length != 2 ) {
-            throw new SNumArgException(args, "classObject");
+            throw new TeaNumArgException(args, "classObject");
         }
 
         return STosUtil.getClass(context, args, 1).getName();
@@ -988,7 +988,7 @@ public final class ModuleTos
         throws TeaException {
 
         if ( args.length != 2 ) {
-            throw new SNumArgException(args, "value");
+            throw new TeaNumArgException(args, "value");
         }
 
         Object  value  = args[1];

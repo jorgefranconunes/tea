@@ -14,10 +14,10 @@ import java.io.StringReader;
 import java.text.MessageFormat;
 
 import com.pdmfc.tea.TeaException;
-import com.pdmfc.tea.runtime.TeaRuntime;
-import com.pdmfc.tea.runtime.TeaRuntimeConfig;
-import com.pdmfc.tea.runtime.TeaRuntimeFactory;
-import com.pdmfc.tea.runtime.TeaScript;
+import com.pdmfc.tea.TeaRuntime;
+import com.pdmfc.tea.TeaRuntimeConfig;
+import com.pdmfc.tea.TeaRuntimeFactory;
+import com.pdmfc.tea.TeaScript;
 
 
 

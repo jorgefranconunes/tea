@@ -22,28 +22,28 @@ import com.pdmfc.tea.TeaConfig;
 import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.io.SInput;
 import com.pdmfc.tea.modules.util.SHashtable;
-import com.pdmfc.tea.runtime.Args;
-import com.pdmfc.tea.runtime.SBreakException;
-import com.pdmfc.tea.runtime.TeaContext;
-import com.pdmfc.tea.runtime.SContinueException;
-import com.pdmfc.tea.runtime.SExitException;
-import com.pdmfc.tea.runtime.SLambdaFunction;
-import com.pdmfc.tea.runtime.SLambdaFunctionVarArg;
-import com.pdmfc.tea.runtime.SNumArgException;
-import com.pdmfc.tea.runtime.TeaBlock;
-import com.pdmfc.tea.runtime.TeaFunction;
-import com.pdmfc.tea.runtime.TeaNull;
-import com.pdmfc.tea.runtime.TeaPair;
-import com.pdmfc.tea.runtime.TeaSymbol;
-import com.pdmfc.tea.runtime.TeaVar;
-import com.pdmfc.tea.runtime.SReturnException;
-import com.pdmfc.tea.runtime.TeaRunException;
-import com.pdmfc.tea.runtime.STypeException;
-import com.pdmfc.tea.runtime.Types;
-import com.pdmfc.tea.runtime.TeaEnvironment;
-import com.pdmfc.tea.runtime.TeaFunctionImplementor;
-import com.pdmfc.tea.runtime.TeaModule;
-import com.pdmfc.tea.runtime.TeaScript;
+import com.pdmfc.tea.Args;
+import com.pdmfc.tea.TeaBreakException;
+import com.pdmfc.tea.TeaContext;
+import com.pdmfc.tea.TeaContinueException;
+import com.pdmfc.tea.TeaExitException;
+import com.pdmfc.tea.runtime.LambdaFunction;
+import com.pdmfc.tea.runtime.LambdaFunctionVarArg;
+import com.pdmfc.tea.TeaNumArgException;
+import com.pdmfc.tea.TeaBlock;
+import com.pdmfc.tea.TeaFunction;
+import com.pdmfc.tea.TeaNull;
+import com.pdmfc.tea.TeaPair;
+import com.pdmfc.tea.TeaSymbol;
+import com.pdmfc.tea.TeaVar;
+import com.pdmfc.tea.TeaReturnException;
+import com.pdmfc.tea.TeaRunException;
+import com.pdmfc.tea.TeaTypeException;
+import com.pdmfc.tea.Types;
+import com.pdmfc.tea.TeaEnvironment;
+import com.pdmfc.tea.TeaFunctionImplementor;
+import com.pdmfc.tea.TeaModule;
+import com.pdmfc.tea.TeaScript;
 import com.pdmfc.tea.util.SInputSourceFactory;
 
 
@@ -354,7 +354,7 @@ public final class ModuleLang
 
         Object breakValue = (args.length==2) ? args[1] : TeaNull.NULL;
 
-        throw new SBreakException(breakValue);
+        throw new TeaBreakException(breakValue);
     }
 
 
@@ -461,16 +461,16 @@ public final class ModuleLang
             value  = e.getMessage();
             result = Boolean.TRUE;
             error  = e;
-        } catch ( SReturnException e ) {
+        } catch ( TeaReturnException e ) {
             // This is not an error.
             value = e.getReturnValue();
-        } catch ( SBreakException e ) {
+        } catch ( TeaBreakException e ) {
             // This is not an error.
             value = e.getBreakValue();
-        } catch ( SContinueException e ) {
+        } catch ( TeaContinueException e ) {
             // This is not an error.
             value = TeaNull.NULL;
-        } catch ( SExitException e ) {
+        } catch ( TeaExitException e ) {
             value = e.getExitValue();
         } catch ( TeaException e ) {
             value  = e.getMessage();
@@ -602,7 +602,7 @@ public final class ModuleLang
             Object condition = evalCondArg(args[i]);
 
             if ( !(condition instanceof Boolean) ) {
-                throw new STypeException(args, i, "boolean or a block");
+                throw new TeaTypeException(args, i, "boolean or a block");
             }
 
             if ( ((Boolean)condition).booleanValue() ) {
@@ -687,7 +687,7 @@ public final class ModuleLang
 
         Args.checkCount(args, 1, "No args required");
 
-        throw new SContinueException();
+        throw new TeaContinueException();
     }
 
 
@@ -932,7 +932,7 @@ public final class ModuleLang
         } else if ( formalParam instanceof TeaSymbol ) {
             result = newVarArgsFunction((TeaSymbol)formalParam, body);
         } else {
-            throw new STypeException(args, 2, "symbol or a symbol list");
+            throw new TeaTypeException(args, 2, "symbol or a symbol list");
         }
 
         return result;
@@ -982,7 +982,7 @@ public final class ModuleLang
             }
         }
 
-        TeaFunction result = new SLambdaFunction(parameters, body);
+        TeaFunction result = new LambdaFunction(parameters, body);
 
         return result;
     }
@@ -1008,7 +1008,7 @@ public final class ModuleLang
                                                    final TeaBlock  body)
         throws TeaException {
 
-        TeaFunction result = new SLambdaFunctionVarArg(symbol, body);
+        TeaFunction result = new LambdaFunctionVarArg(symbol, body);
 
         return result;
     }
@@ -1087,7 +1087,7 @@ public final class ModuleLang
                 System.out.print(((Boolean)arg).booleanValue() ? "1" : "0");
             } else {
                 String msg = "could not print argument {0} is of type {1}";
-                throw new STypeException(msg, i, Types.getTypeName(arg));
+                throw new TeaTypeException(msg, i, Types.getTypeName(arg));
             }
         }
         System.out.println();
@@ -1274,7 +1274,7 @@ public final class ModuleLang
         Integer retVal =
             (args.length==1) ? Integer.valueOf(0) : Args.getInt(args,1);
         
-        throw new SExitException(retVal);
+        throw new TeaExitException(retVal);
     }
 
 
@@ -1370,10 +1370,10 @@ public final class ModuleLang
                 var.set(element);
                 try {
                     result = block.exec(newContext);
-                } catch ( SBreakException e1 ) {
+                } catch ( TeaBreakException e1 ) {
                     result  = e1.getBreakValue();
                     break;
-                } catch ( SContinueException e2 ) {
+                } catch ( TeaContinueException e2 ) {
                     // Just continue for the next element.
                 }
             }
@@ -1525,7 +1525,7 @@ public final class ModuleLang
       
         if ( !(condition instanceof Boolean) ) {
             String expectedTypes = "boolean or a block returning a boolean";
-            throw new STypeException(args, 1, expectedTypes);
+            throw new TeaTypeException(args, 1, expectedTypes);
         }
         
         Object result =
@@ -2180,7 +2180,7 @@ public final class ModuleLang
         throws TeaException {
 
         if ( args.length != 3 ) {
-            throw new SNumArgException(args, "obj1 obj2");
+            throw new TeaNumArgException(args, "obj1 obj2");
         }
 
         return args[1].equals(args[2]) ? Boolean.FALSE : Boolean.TRUE;
@@ -2303,7 +2303,7 @@ public final class ModuleLang
         throws TeaException {
 
         if ( args.length != 3 ) {
-            throw new SNumArgException(args, "obj1 obj2");
+            throw new TeaNumArgException(args, "obj1 obj2");
         }
 
         return args[1].equals(args[2]) ? Boolean.TRUE : Boolean.FALSE;
@@ -2366,7 +2366,7 @@ public final class ModuleLang
         throws TeaException {
 
         if ( args.length != 3 ) {
-            throw new SNumArgException(args, "formal-parameters block");
+            throw new TeaNumArgException(args, "formal-parameters block");
         }
 
         Object       formalParam  = args[1];
@@ -2378,7 +2378,7 @@ public final class ModuleLang
         } else if ( formalParam instanceof TeaSymbol ) {
             result = newVarArgsFunction((TeaSymbol)formalParam, body);
         } else {
-            throw new STypeException(args, 1, "symbol or a symbol list");
+            throw new TeaTypeException(args, 1, "symbol or a symbol list");
         }
 
         return result;
@@ -2434,7 +2434,7 @@ public final class ModuleLang
         throws TeaException {
 
         if ( args.length != 2 ) {
-            throw new SNumArgException(args, "java-package-name");
+            throw new TeaNumArgException(args, "java-package-name");
         }
 
         String    moduleClassName = Args.getString(args, 1);
@@ -2524,7 +2524,7 @@ public final class ModuleLang
         throws TeaException {
 
         if ( args.length != 2 ) {
-            throw new SNumArgException(args, "java-class-name");
+            throw new TeaNumArgException(args, "java-class-name");
         }
 
         String       className = Args.getString(args,1);
@@ -2626,7 +2626,7 @@ public final class ModuleLang
         throws TeaException {
 
         if ( args.length < 3 ) {
-            throw new SNumArgException(args, "procedure list1 ...");
+            throw new TeaNumArgException(args, "procedure list1 ...");
         }
         
         TeaFunction proc      = Args.getFunction(context, args, 1);
@@ -2761,7 +2761,7 @@ public final class ModuleLang
         throws TeaException {
 
         if ( args.length != 3 ) {
-            throw new SNumArgException(args, "procedure list-of-arg-list");
+            throw new TeaNumArgException(args, "procedure list-of-arg-list");
         }
 
         TeaFunction proc       = Args.getFunction(context, args, 1);
@@ -2893,7 +2893,7 @@ public final class ModuleLang
                                         final Object[]    args)
         throws TeaException {
 
-        throw new SReturnException((args.length>1) ? args[1] : TeaNull.NULL);
+        throw new TeaReturnException((args.length>1) ? args[1] : TeaNull.NULL);
     }
 
 
@@ -2960,7 +2960,7 @@ public final class ModuleLang
         throws TeaException {
 
         if ( args.length != 3 ) {
-            throw new SNumArgException(args, "symbol value");
+            throw new TeaNumArgException(args, "symbol value");
         }
 
         TeaSymbol varName = Args.getSymbol(args, 1);
@@ -3025,7 +3025,7 @@ public final class ModuleLang
         throws TeaException {
 
         if ( args.length != 2 ) {
-            throw new SNumArgException(args, "millis-to-sleep");
+            throw new TeaNumArgException(args, "millis-to-sleep");
         }
 
         Boolean result      = Boolean.TRUE;
@@ -3245,7 +3245,7 @@ public final class ModuleLang
         throws TeaException {
 
         if ( args.length != 2 ) {
-            throw new SNumArgException(args, "file");
+            throw new TeaNumArgException(args, "file");
         }
         
         Object    arg     = args[1];
@@ -3283,7 +3283,7 @@ public final class ModuleLang
         } else {
             String msg = "argument 1 must be string or input stream, not a {0}";
             Object[] fmtArgs = { Types.getTypeName(arg) };
-            throw new STypeException(msg, fmtArgs);
+            throw new TeaTypeException(msg, fmtArgs);
         }
 
         return script;
@@ -3348,7 +3348,7 @@ public final class ModuleLang
         throws TeaException {
 
         if ( args.length < 2 ) {
-            throw new SNumArgException(args, "command [arg ...]");
+            throw new TeaNumArgException(args, "command [arg ...]");
         }
 
         String[] cmdArgs = new String[args.length-1];
@@ -3445,7 +3445,7 @@ public final class ModuleLang
         throws TeaException {
 
         if ( (args.length<2) || (args.length>3) ) {
-            throw new SNumArgException(args, "block [count]");
+            throw new TeaNumArgException(args, "block [count]");
         }
 
         TeaBlock block        = Args.getBlock(args, 1);
@@ -3536,7 +3536,7 @@ public final class ModuleLang
         throws TeaException {
 
         if ( args.length != 3 ) {
-            throw new SNumArgException(args, "condition body-block");
+            throw new TeaNumArgException(args, "condition body-block");
         }
 
         Object condition = args[1];
@@ -3579,14 +3579,14 @@ public final class ModuleLang
             try {
                 condValue = ((Boolean)condition).booleanValue();
             } catch ( ClassCastException e ) {
-                throw new STypeException(args, 1, "block returning a bool");
+                throw new TeaTypeException(args, 1, "block returning a bool");
             }
             if ( condValue ) {
                 try {
                     result = block.exec(bodyContext);
-                } catch ( SContinueException e1 ) {
+                } catch ( TeaContinueException e1 ) {
                     // Continue from the beggining of the block.
-                } catch ( SBreakException e2 ) {
+                } catch ( TeaBreakException e2 ) {
                     // Stop looping.
                     result  = e2.getBreakValue();
                     break;
@@ -3620,9 +3620,9 @@ public final class ModuleLang
         while ( true ) {
             try {
                 result = block.exec(newContext);
-            } catch ( SContinueException e1 ) {
+            } catch ( TeaContinueException e1 ) {
                 // Continue from the beggining of the block.
-            } catch ( SBreakException e2 ) {
+            } catch ( TeaBreakException e2 ) {
                 // Stop looping.
                 result  = e2.getBreakValue();
                 break;
@@ -3687,7 +3687,7 @@ public final class ModuleLang
         throws TeaException {
 
         if ( args.length != 2 ) {
-            throw new SNumArgException(args, "propertyName");
+            throw new TeaNumArgException(args, "propertyName");
         }
 
         String key = Args.getString(args, 1);
@@ -3769,7 +3769,7 @@ public final class ModuleLang
         throws TeaException {
 
         if ( args.length != 3 ) {
-            throw new SNumArgException(args, "propertyName propertyValue");
+            throw new TeaNumArgException(args, "propertyName propertyValue");
         }
 
         String key   = Args.getString(args, 1);

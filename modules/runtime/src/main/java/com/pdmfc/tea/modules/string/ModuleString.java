@@ -13,19 +13,19 @@ import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.compiler.TeaParserUtils;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.util.SDate;
-import com.pdmfc.tea.runtime.Args;
-import com.pdmfc.tea.runtime.TeaContext;
-import com.pdmfc.tea.runtime.SNumArgException;
-import com.pdmfc.tea.runtime.TeaFunction;
-import com.pdmfc.tea.runtime.TeaNull;
-import com.pdmfc.tea.runtime.TeaPair;
-import com.pdmfc.tea.runtime.TeaSymbol;
-import com.pdmfc.tea.runtime.TeaRunException;
-import com.pdmfc.tea.runtime.STypeException;
-import com.pdmfc.tea.runtime.Types;
-import com.pdmfc.tea.runtime.TeaEnvironment;
-import com.pdmfc.tea.runtime.TeaFunctionImplementor;
-import com.pdmfc.tea.runtime.TeaModule;
+import com.pdmfc.tea.Args;
+import com.pdmfc.tea.TeaContext;
+import com.pdmfc.tea.TeaNumArgException;
+import com.pdmfc.tea.TeaFunction;
+import com.pdmfc.tea.TeaNull;
+import com.pdmfc.tea.TeaPair;
+import com.pdmfc.tea.TeaSymbol;
+import com.pdmfc.tea.TeaRunException;
+import com.pdmfc.tea.TeaTypeException;
+import com.pdmfc.tea.Types;
+import com.pdmfc.tea.TeaEnvironment;
+import com.pdmfc.tea.TeaFunctionImplementor;
+import com.pdmfc.tea.TeaModule;
 import com.pdmfc.tea.util.SFormater;
 
 
@@ -231,9 +231,9 @@ public final class ModuleString
 
         try {
             _formater.format(Args.getString(args,1), args, 2);
-        } catch ( SNumArgException e1 ) {
+        } catch ( TeaNumArgException e1 ) {
             throw new TeaRunException(args, e1.getMessage());
-        } catch ( STypeException e2 ) {
+        } catch ( TeaTypeException e2 ) {
             throw new TeaRunException(args, e2.getMessage());
         }
 
@@ -1628,7 +1628,7 @@ public final class ModuleString
                 str = (String)element;
             } catch ( ClassCastException e ) {
                 String msg = "list element {0} should be a string, not a {1}";
-                throw new STypeException(args,
+                throw new TeaTypeException(args,
                                          msg,
                                          String.valueOf(index),
                                          Types.getTypeName(element));

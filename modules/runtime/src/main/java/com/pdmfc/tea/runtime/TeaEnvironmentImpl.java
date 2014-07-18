@@ -12,13 +12,14 @@ import java.nio.charset.Charset;
 
 import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.compiler.TeaCode;
-import com.pdmfc.tea.compiler.TeaCompileException;
+import com.pdmfc.tea.TeaCompileException;
 import com.pdmfc.tea.compiler.TeaCompiler;
 import com.pdmfc.tea.runtime.Modules;
-import com.pdmfc.tea.runtime.TeaContext;
-import com.pdmfc.tea.runtime.TeaSymbol;
-import com.pdmfc.tea.runtime.TeaEnvironment;
-import com.pdmfc.tea.runtime.TeaScript;
+import com.pdmfc.tea.TeaContext;
+import com.pdmfc.tea.TeaEnvironment;
+import com.pdmfc.tea.TeaModule;
+import com.pdmfc.tea.TeaScript;
+import com.pdmfc.tea.TeaSymbol;
 
 
 

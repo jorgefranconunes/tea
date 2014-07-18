@@ -16,17 +16,17 @@ import java.util.Map;
 
 import com.pdmfc.tea.TeaConfig;
 import com.pdmfc.tea.TeaException;
-import com.pdmfc.tea.runtime.Args;
-import com.pdmfc.tea.runtime.TeaContext;
-import com.pdmfc.tea.runtime.SNoSuchVarException;
-import com.pdmfc.tea.runtime.SNumArgException;
-import com.pdmfc.tea.runtime.TeaFunction;
-import com.pdmfc.tea.runtime.TeaNull;
-import com.pdmfc.tea.runtime.TeaPair;
-import com.pdmfc.tea.runtime.TeaSymbol;
-import com.pdmfc.tea.runtime.TeaRunException;
-import com.pdmfc.tea.runtime.TeaEnvironment;
-import com.pdmfc.tea.runtime.TeaScript;
+import com.pdmfc.tea.Args;
+import com.pdmfc.tea.TeaContext;
+import com.pdmfc.tea.TeaNoSuchVarException;
+import com.pdmfc.tea.TeaNumArgException;
+import com.pdmfc.tea.TeaFunction;
+import com.pdmfc.tea.TeaNull;
+import com.pdmfc.tea.TeaPair;
+import com.pdmfc.tea.TeaSymbol;
+import com.pdmfc.tea.TeaRunException;
+import com.pdmfc.tea.TeaEnvironment;
+import com.pdmfc.tea.TeaScript;
 import com.pdmfc.tea.util.SInputSourceFactory;
 
 
@@ -168,7 +168,7 @@ final class SFunctionImport
         throws TeaException {
 
         if ( args.length != 2 ) {
-            throw new SNumArgException(args, "file");
+            throw new TeaNumArgException(args, "file");
         }
 
         String     fileName = Args.getString(args, 1);
@@ -209,9 +209,9 @@ final class SFunctionImport
 
         try {
             urlList = (TeaPair)context.getVar(LIB_VAR);
-        } catch (SNoSuchVarException e1) {
+        } catch ( TeaNoSuchVarException e1 ) {
             // Variable TEA_LIBRARY has not been defined...
-        } catch (ClassCastException e2) {
+        } catch ( ClassCastException e2 ) {
             // Variable TEA_LIBRARY does not contain a list...
         } 
 
@@ -224,7 +224,7 @@ final class SFunctionImport
 
             try {
                 baseDir = (String)i.next();
-            } catch (ClassCastException e3) {
+            } catch ( ClassCastException e3 ) {
                 // One of the elements of the TEA_LIBRARY list is not
                 // a string. Just ignore it and continue with the next
                 // element. We should probably blow up...
@@ -356,7 +356,7 @@ final class SFunctionImport
                      SInputSourceFactory.openReader(path, sourceCharset)
              ) {
                 script = _environment.compile(reader, _importPath);
-            } catch (IOException e) {
+            } catch ( IOException e ) {
                 // The path does not exist or is not accessible.
             }
 

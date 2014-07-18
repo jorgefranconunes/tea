@@ -23,12 +23,12 @@ import com.pdmfc.tea.modules.tdbc.SStatement;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.tos.STosUtil;
-import com.pdmfc.tea.runtime.Args;
-import com.pdmfc.tea.runtime.TeaContext;
-import com.pdmfc.tea.runtime.TeaFunction;
-import com.pdmfc.tea.runtime.TeaSymbol;
-import com.pdmfc.tea.runtime.SNumArgException;
-import com.pdmfc.tea.runtime.TeaRunException;
+import com.pdmfc.tea.Args;
+import com.pdmfc.tea.TeaContext;
+import com.pdmfc.tea.TeaFunction;
+import com.pdmfc.tea.TeaSymbol;
+import com.pdmfc.tea.TeaNumArgException;
+import com.pdmfc.tea.TeaRunException;
 
 
 
@@ -206,7 +206,7 @@ public final class SConnection
         case 5 :
             return connect(obj, context, args);
         default :
-            throw new SNumArgException(args, "[url [username password]]");
+            throw new TeaNumArgException(args, "[url [username password]]");
         }
     }
 
@@ -271,7 +271,7 @@ public final class SConnection
         throws TeaException {
 
         if ( (args.length!=3) && (args.length!=5) ) {
-            throw new SNumArgException(args, "url [username password]");
+            throw new TeaNumArgException(args, "url [username password]");
         }
 
         String url    = Args.getString(args,2);
@@ -478,7 +478,7 @@ public final class SConnection
         throws TeaException {
 
         if ( args.length != 3 ) {
-            throw new SNumArgException(args, "sql-statement");
+            throw new TeaNumArgException(args, "sql-statement");
         }
 
         String sql    = Args.getString(args, 2);
@@ -580,7 +580,7 @@ public final class SConnection
         throws TeaException {
 
         if ( args.length != 3 ) {
-            throw new SNumArgException(args, "sql-statement");
+            throw new TeaNumArgException(args, "sql-statement");
         }
 
         String sql    = Args.getString(args, 2);
@@ -751,7 +751,7 @@ public final class SConnection
         throws TeaRunException {
 
         if ( args.length != 3 ) {
-            throw new SNumArgException(args, "autocommit-flag");
+            throw new TeaNumArgException(args, "autocommit-flag");
         }
 
         boolean flag = Args.getBoolean(args, 2).booleanValue();
@@ -773,7 +773,7 @@ public final class SConnection
  *
  * 
  *
- * @exception com.pdmfc.tea.runtime.TeaRunException Thrown if there
+ * @exception com.pdmfc.tea.TeaRunException Thrown if there
  * were any problems.
  *
  * @exception java.sql.SQLException

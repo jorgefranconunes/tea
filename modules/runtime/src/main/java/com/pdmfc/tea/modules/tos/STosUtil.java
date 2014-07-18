@@ -9,11 +9,11 @@ package com.pdmfc.tea.modules.tos;
 import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.SNoSuchClassException;
-import com.pdmfc.tea.runtime.TeaContext;
-import com.pdmfc.tea.runtime.TeaFunction;
-import com.pdmfc.tea.runtime.TeaSymbol;
-import com.pdmfc.tea.runtime.SNoSuchVarException;
-import com.pdmfc.tea.runtime.STypeException;
+import com.pdmfc.tea.TeaContext;
+import com.pdmfc.tea.TeaFunction;
+import com.pdmfc.tea.TeaSymbol;
+import com.pdmfc.tea.TeaNoSuchVarException;
+import com.pdmfc.tea.TeaTypeException;
 
 
 
@@ -71,7 +71,7 @@ public final class STosUtil
  * @return The element at the <code>index</code> position of the
  * <code>args</code> array.
  *
- * @exception com.pdmfc.tea.runtime.STypeException Throw if the
+ * @exception com.pdmfc.tea.TeaTypeException Throw if the
  * element at the <code>index</code> position of the <code>args</code>
  * array is not an <code>STosObj</code>.
  *
@@ -79,12 +79,12 @@ public final class STosUtil
 
     public static STosObj getTosObj(final Object[] args,
                                     final int      index)
-        throws STypeException {
+        throws TeaTypeException {
 
         try {
             return (STosObj)args[index];
         } catch ( ClassCastException e ) {
-            throw new STypeException(args, index, "TOS object");
+            throw new TeaTypeException(args, index, "TOS object");
       }
     }
 
@@ -122,10 +122,10 @@ public final class STosUtil
         if ( ref instanceof TeaSymbol ) {
             try {
                 ref = context.getVar((TeaSymbol)ref);
-            } catch ( SNoSuchVarException e ) {
+            } catch ( TeaNoSuchVarException e ) {
                 try {
                     ref = getClassWithEffort(context, (TeaSymbol)ref);
-                } catch ( SNoSuchVarException e2 ) {
+                } catch ( TeaNoSuchVarException e2 ) {
                     throw new SNoSuchClassException(args, (TeaSymbol)ref);
                 }
             }
@@ -134,7 +134,7 @@ public final class STosUtil
             return (STosClass)ref;
         }
 
-        throw new STypeException(args, index, "symbol or a class");
+        throw new TeaTypeException(args, index, "symbol or a class");
     }
 
 
@@ -160,17 +160,17 @@ public final class STosUtil
 
         try {
             classObject = context.getVar(className);
-        } catch ( SNoSuchVarException e ) {
+        } catch ( TeaNoSuchVarException e ) {
             try {
                 classObject = getClassWithEffort(context, className);
-            } catch ( SNoSuchVarException e2 ) {
+            } catch ( TeaNoSuchVarException e2 ) {
                 throw new SNoSuchClassException(className);
             }
         }
         try {
             return (STosClass)classObject;
         } catch ( ClassCastException e ) {
-            throw new STypeException("Variable "
+            throw new TeaTypeException("Variable "
                                      + className.getName()
                                      + " does not contain a class object.");
         }
@@ -200,10 +200,10 @@ public final class STosUtil
             callbackFunc = (TeaFunction)context.getVar(CALLBACK_NAME);
         } catch ( ClassCastException e1 ) {
             // Variable TEA_NOCLASS_CALLBACK does not containg a Tea function.
-            throw new SNoSuchVarException(name);
-        } catch ( SNoSuchVarException e2 ) {
+            throw new TeaNoSuchVarException(name);
+        } catch ( TeaNoSuchVarException e2 ) {
             // Variable TEA_NOCLASS_CALLBACK is not defined.
-            throw new SNoSuchVarException(name);
+            throw new TeaNoSuchVarException(name);
         }
 
         callbackFunc.exec(callbackFunc, context, callbackArgs);

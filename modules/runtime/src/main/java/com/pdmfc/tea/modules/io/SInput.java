@@ -17,11 +17,11 @@ import com.pdmfc.tea.modules.io.SIOException;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.tos.STosUtil;
-import com.pdmfc.tea.runtime.TeaContext;
-import com.pdmfc.tea.runtime.TeaFunction;
-import com.pdmfc.tea.runtime.TeaNull;
-import com.pdmfc.tea.runtime.TeaSymbol;
-import com.pdmfc.tea.runtime.TeaRunException;
+import com.pdmfc.tea.TeaContext;
+import com.pdmfc.tea.TeaFunction;
+import com.pdmfc.tea.TeaNull;
+import com.pdmfc.tea.TeaSymbol;
+import com.pdmfc.tea.TeaRunException;
 
 
 
@@ -225,7 +225,7 @@ public class SInput
 
         try {
             result = readln();
-        } catch (IOException e) {
+        } catch ( IOException e ) {
             throw new SIOException(e);
         }
 
@@ -348,7 +348,7 @@ public class SInput
 
         try {
             close();
-        } catch (IOException e) {
+        } catch ( IOException e ) {
             throw new SIOException(e);
         }
 
@@ -375,7 +375,7 @@ public class SInput
         if ( _inputReader != null ) {
             try {
                 _inputReader.close();
-            } catch (IOException e) {
+            } catch ( IOException e ) {
                 _inputReader = null;
                 throw e;
             }

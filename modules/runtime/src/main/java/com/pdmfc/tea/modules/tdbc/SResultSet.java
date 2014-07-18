@@ -19,15 +19,15 @@ import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.tos.STosUtil;
 import com.pdmfc.tea.modules.util.SDate;
-import com.pdmfc.tea.runtime.Args;
-import com.pdmfc.tea.runtime.TeaContext;
-import com.pdmfc.tea.runtime.TeaFunction;
-import com.pdmfc.tea.runtime.TeaNull;
-import com.pdmfc.tea.runtime.TeaSymbol;
-import com.pdmfc.tea.runtime.SNumArgException;
-import com.pdmfc.tea.runtime.TeaRunException;
-import com.pdmfc.tea.runtime.STypeException;
-import com.pdmfc.tea.runtime.Types;
+import com.pdmfc.tea.Args;
+import com.pdmfc.tea.TeaContext;
+import com.pdmfc.tea.TeaFunction;
+import com.pdmfc.tea.TeaNull;
+import com.pdmfc.tea.TeaSymbol;
+import com.pdmfc.tea.TeaNumArgException;
+import com.pdmfc.tea.TeaRunException;
+import com.pdmfc.tea.TeaTypeException;
+import com.pdmfc.tea.Types;
 
 
 
@@ -444,7 +444,7 @@ public final class SResultSet
         throws TeaRunException {
 
         if ( args.length != 3 ) {
-            throw new SNumArgException(args, "count");
+            throw new TeaNumArgException(args, "count");
         }
 
         int count = Args.getInt(args,2).intValue();
@@ -560,7 +560,7 @@ public final class SResultSet
         throws TeaRunException {
 
       if ( args.length != 3 ) {
-          throw new SNumArgException(args, "column-index");
+          throw new TeaNumArgException(args, "column-index");
       }
 
       Object indexObj = args[2];
@@ -613,7 +613,7 @@ public final class SResultSet
             return _resultSet.getInt(columnName);
         }
 
-        throw new STypeException("index must be an int or a string, not a {0}",
+        throw new TeaTypeException("index must be an int or a string, not a {0}",
                                  Types.getTypeName(indexObj));
     }
 
@@ -680,7 +680,7 @@ public final class SResultSet
         throws TeaRunException {
 
       if ( args.length != 3 ) {
-          throw new SNumArgException(args, "column-index");
+          throw new TeaNumArgException(args, "column-index");
       }
 
       Object indexObj = args[2];
@@ -733,7 +733,7 @@ public final class SResultSet
             return _resultSet.getDouble(columnName);
         }
 
-        throw new STypeException("index must be an int or a string, not a {0}",
+        throw new TeaTypeException("index must be an int or a string, not a {0}",
                                  Types.getTypeName(indexObj));
     }
 
@@ -799,7 +799,7 @@ public final class SResultSet
         throws TeaRunException {
 
         if ( args.length != 3 ) {
-            throw new SNumArgException(args, "column-index");
+            throw new TeaNumArgException(args, "column-index");
         }
 
         Object indexObj = args[2];
@@ -852,7 +852,7 @@ public final class SResultSet
             return _resultSet.getString(columnName);
         }
 
-        throw new STypeException("index must be an int or a string, not a {0}",
+        throw new TeaTypeException("index must be an int or a string, not a {0}",
                                  Types.getTypeName(indexObj));
     }
 
@@ -920,7 +920,7 @@ public final class SResultSet
         throws TeaException {
 
         if ( args.length != 3 ) {
-            throw new SNumArgException(args, "column-index");
+            throw new TeaNumArgException(args, "column-index");
         }
 
         Object indexObj = args[2];
@@ -978,7 +978,7 @@ public final class SResultSet
             return _resultSet.getTimestamp(columnName);
         }
 
-        throw new STypeException("index must be an int or a string, not a {0}",
+        throw new TeaTypeException("index must be an int or a string, not a {0}",
                                  Types.getTypeName(indexObj));
     }
 
@@ -1165,7 +1165,7 @@ public final class SResultSet
         throws TeaRunException {
 
       if ( args.length != 3 ) {
-          throw new SNumArgException(args, "column-index");
+          throw new TeaNumArgException(args, "column-index");
       }
 
       int    index  = Args.getInt(args,2).intValue();

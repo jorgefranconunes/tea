@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.pdmfc.tea.compiler.TeaCode;
-import com.pdmfc.tea.compiler.TeaCompileException;
+import com.pdmfc.tea.TeaCompileException;
 import com.pdmfc.tea.compiler.CompilerStream;
 import com.pdmfc.tea.compiler.SStatement;
 import com.pdmfc.tea.compiler.SWordBlock;

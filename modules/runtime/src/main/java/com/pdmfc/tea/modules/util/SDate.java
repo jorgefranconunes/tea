@@ -15,13 +15,13 @@ import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.tos.STosUtil;
-import com.pdmfc.tea.runtime.Args;
-import com.pdmfc.tea.runtime.TeaContext;
-import com.pdmfc.tea.runtime.SNumArgException;
-import com.pdmfc.tea.runtime.TeaFunction;
-import com.pdmfc.tea.runtime.TeaSymbol;
-import com.pdmfc.tea.runtime.TeaRunException;
-import com.pdmfc.tea.runtime.STypeException;
+import com.pdmfc.tea.Args;
+import com.pdmfc.tea.TeaContext;
+import com.pdmfc.tea.TeaNumArgException;
+import com.pdmfc.tea.TeaFunction;
+import com.pdmfc.tea.TeaSymbol;
+import com.pdmfc.tea.TeaRunException;
+import com.pdmfc.tea.TeaTypeException;
 
 
 
@@ -304,7 +304,7 @@ public final class SDate
             } else if ( dateArg instanceof String ) {
                 initFromString((String)dateArg);
             } else {
-                throw new STypeException(args, 2, "TDate or a String");
+                throw new TeaTypeException(args, 2, "TDate or a String");
             }
             break;
         case 5 :
@@ -325,7 +325,7 @@ public final class SDate
             break;
         default :
             String usage = "[TDate] | [year month day [hour minute second]]";
-            throw new SNumArgException(args, usage);
+            throw new TeaNumArgException(args, usage);
         }
         _calendar.set(Calendar.MILLISECOND, 0);
 
@@ -769,7 +769,7 @@ public final class SDate
             } else if ( dateArg instanceof String ) {
                 initFromString((String)dateArg);
             } else {
-                throw new STypeException(args, 2, "TDate or a String");
+                throw new TeaTypeException(args, 2, "TDate or a String");
             }
             break;
         case 5 :
@@ -790,7 +790,7 @@ public final class SDate
             break;
         default :
             String usage = "TDate | year month day [hour minute second]";
-            throw new SNumArgException(args, usage);
+            throw new TeaNumArgException(args, usage);
         }
         
         return obj;
@@ -850,7 +850,7 @@ public final class SDate
         throws TeaRunException {
 
         if ( args.length != 5 ) {
-            throw new SNumArgException(args, "hour minute second");
+            throw new TeaNumArgException(args, "hour minute second");
         }
 
         _calendar.set(Calendar.HOUR_OF_DAY, Args.getInt(args,2).intValue());
@@ -910,7 +910,7 @@ public final class SDate
         throws TeaRunException {
 
         if ( args.length != 3 ) {
-            throw new SNumArgException(args, "format-string");
+            throw new TeaNumArgException(args, "format-string");
         }
 
         String           fmt       = Args.getString(args, 2);
@@ -977,7 +977,7 @@ public final class SDate
         throws TeaException {
 
         if ( args.length != 3 ) {
-            throw new SNumArgException(args, CLASS_NAME);
+            throw new TeaNumArgException(args, CLASS_NAME);
         }
         
         Calendar when   = getDate(args, 2)._calendar;
@@ -1041,7 +1041,7 @@ public final class SDate
         throws TeaException {
 
         if ( args.length != 3 ) {
-            throw new SNumArgException(args, CLASS_NAME);
+            throw new TeaNumArgException(args, CLASS_NAME);
         }
         
         Calendar when = getDate(args, 2)._calendar;
@@ -1097,7 +1097,7 @@ public final class SDate
         throws TeaException {
 
         if ( args.length != 3 ) {
-            throw new SNumArgException(args, CLASS_NAME);
+            throw new TeaNumArgException(args, CLASS_NAME);
         }
         
         Calendar when = getDate(args, 2)._calendar;
@@ -1153,7 +1153,7 @@ public final class SDate
         throws TeaException {
 
         if ( args.length != 3 ) {
-            throw new SNumArgException(args, CLASS_NAME);
+            throw new TeaNumArgException(args, CLASS_NAME);
         }
 
         Calendar cal  = _calendar;
@@ -1218,7 +1218,7 @@ public final class SDate
         throws TeaException {
 
         if ( args.length != 3 ) {
-            throw new SNumArgException(args, CLASS_NAME);
+            throw new TeaNumArgException(args, CLASS_NAME);
         }
 
         Calendar cal  = _calendar;
@@ -1249,21 +1249,21 @@ public final class SDate
  *
  * @param index The index of the argument to convert.
  *
- * @exception STypeException Thrown if <code>args[index]</code> is not
+ * @exception TeaTypeException Thrown if <code>args[index]</code> is not
  * a SDate
  *
  **************************************************************************/
 
     public static SDate getDate(final Object[] args,
                                 final int      index)
-        throws STypeException {
+        throws TeaTypeException {
 
         Object tosDate = args[index];
 
         try {
             return (SDate)((STosObj)tosDate).part(0);
         } catch ( ClassCastException e ) {
-            throw new STypeException(args, index, CLASS_NAME);
+            throw new TeaTypeException(args, index, CLASS_NAME);
         }
     }
 

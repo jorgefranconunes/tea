@@ -17,12 +17,12 @@ import com.pdmfc.tea.modules.net.SSocketBase;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.tos.STosUtil;
-import com.pdmfc.tea.runtime.Args;
-import com.pdmfc.tea.runtime.TeaContext;
-import com.pdmfc.tea.runtime.TeaSymbol;
-import com.pdmfc.tea.runtime.TeaFunction;
-import com.pdmfc.tea.runtime.SNumArgException;
-import com.pdmfc.tea.runtime.TeaRunException;
+import com.pdmfc.tea.Args;
+import com.pdmfc.tea.TeaContext;
+import com.pdmfc.tea.TeaSymbol;
+import com.pdmfc.tea.TeaFunction;
+import com.pdmfc.tea.TeaNumArgException;
+import com.pdmfc.tea.TeaRunException;
 
 
 
@@ -120,7 +120,7 @@ public final class SPlainServerSocket
         throws TeaException {
 
         if ( args.length != 3 ) {
-            throw new SNumArgException(args, "port-number");
+            throw new TeaNumArgException(args, "port-number");
         }
         
         _port = Args.getInt(args,2).intValue();

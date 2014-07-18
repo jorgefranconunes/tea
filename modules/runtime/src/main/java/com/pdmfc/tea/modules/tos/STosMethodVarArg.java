@@ -7,15 +7,15 @@
 package com.pdmfc.tea.modules.tos;
 
 import com.pdmfc.tea.TeaException;
-import com.pdmfc.tea.runtime.TeaContext;
-import com.pdmfc.tea.runtime.SBreakException;
-import com.pdmfc.tea.runtime.SContinueException;
-import com.pdmfc.tea.runtime.TeaBlock;
-import com.pdmfc.tea.runtime.TeaFunction;
-import com.pdmfc.tea.runtime.TeaNull;
-import com.pdmfc.tea.runtime.TeaPair;
-import com.pdmfc.tea.runtime.TeaSymbol;
-import com.pdmfc.tea.runtime.SReturnException;
+import com.pdmfc.tea.TeaContext;
+import com.pdmfc.tea.TeaBreakException;
+import com.pdmfc.tea.TeaContinueException;
+import com.pdmfc.tea.TeaBlock;
+import com.pdmfc.tea.TeaFunction;
+import com.pdmfc.tea.TeaNull;
+import com.pdmfc.tea.TeaPair;
+import com.pdmfc.tea.TeaSymbol;
+import com.pdmfc.tea.TeaReturnException;
 
 
 
@@ -134,11 +134,11 @@ public final class STosMethodVarArg
 
         try {
             result = _body.exec(procContext);
-        } catch (SReturnException e1) {
+        } catch (TeaReturnException e1) {
             result = e1.getReturnValue();
-        } catch (SBreakException e2) {
+        } catch (TeaBreakException e2) {
             result = e2.getBreakValue();
-        } catch (SContinueException e3) {
+        } catch (TeaContinueException e3) {
             // We will treat this as a return with a null.
         }
 

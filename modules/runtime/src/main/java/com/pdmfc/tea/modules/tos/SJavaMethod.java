@@ -13,9 +13,9 @@ import java.lang.reflect.Method;
 import java.util.StringTokenizer;
 
 import com.pdmfc.tea.TeaException;
-import com.pdmfc.tea.runtime.TeaContext;
-import com.pdmfc.tea.runtime.TeaFunction;
-import com.pdmfc.tea.runtime.TeaRunException;
+import com.pdmfc.tea.TeaContext;
+import com.pdmfc.tea.TeaFunction;
+import com.pdmfc.tea.TeaRunException;
 
 
 

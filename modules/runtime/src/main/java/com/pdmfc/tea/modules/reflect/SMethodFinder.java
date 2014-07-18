@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeSet;
 
-import com.pdmfc.tea.runtime.TeaRunException;
+import com.pdmfc.tea.TeaRunException;
 
 
 
@@ -91,7 +91,7 @@ final class SMethodFinder
 
         try {
             result = doFindConstructor(klass, paramTypes);
-        } catch (NoSuchMethodException e) {
+        } catch ( NoSuchMethodException e ) {
             String paramsTxt = buildTypesDescription(paramTypes);
             throw new TeaRunException("could not find constructor for '"
                                         + klass.getName()

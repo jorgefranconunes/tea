@@ -11,15 +11,15 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 import com.pdmfc.tea.TeaException;
-import com.pdmfc.tea.runtime.TeaRunException;
+import com.pdmfc.tea.TeaRunException;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.tos.STosUtil;
-import com.pdmfc.tea.runtime.Args;
-import com.pdmfc.tea.runtime.TeaContext;
-import com.pdmfc.tea.runtime.TeaFunction;
-import com.pdmfc.tea.runtime.TeaSymbol;
-import com.pdmfc.tea.runtime.SNumArgException;
+import com.pdmfc.tea.Args;
+import com.pdmfc.tea.TeaContext;
+import com.pdmfc.tea.TeaFunction;
+import com.pdmfc.tea.TeaSymbol;
+import com.pdmfc.tea.TeaNumArgException;
 
 
 
@@ -153,7 +153,7 @@ public final class SXmlParser
             setNativeParser(obj, context, args);
             break;
         default :
-            throw new SNumArgException(args, "[native-parser-class-name]");
+            throw new TeaNumArgException(args, "[native-parser-class-name]");
         }
 
         return obj;
@@ -217,7 +217,7 @@ public final class SXmlParser
         throws TeaException {
 
         if ( args.length != 3 ) {
-            throw new SNumArgException(args, "java-class-name");
+            throw new TeaNumArgException(args, "java-class-name");
         }
 
         String parserClassName = Args.getString(args, 2);
@@ -545,7 +545,7 @@ public final class SXmlParser
         throws TeaException {
 
         if ( args.length != 3 ) {
-            throw new SNumArgException(args, "event-handler");
+            throw new TeaNumArgException(args, "event-handler");
         }
 
         _handler = STosUtil.getTosObj(args, 2);

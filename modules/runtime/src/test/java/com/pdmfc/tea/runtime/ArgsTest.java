@@ -14,12 +14,13 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import com.pdmfc.tea.runtime.Args;
-import com.pdmfc.tea.runtime.TeaBlock;
-import com.pdmfc.tea.runtime.TeaNull;
-import com.pdmfc.tea.runtime.TeaPair;
-import com.pdmfc.tea.runtime.TeaSymbol;
-import com.pdmfc.tea.runtime.STypeException;
+import com.pdmfc.tea.Args;
+import com.pdmfc.tea.TeaContext;
+import com.pdmfc.tea.TeaBlock;
+import com.pdmfc.tea.TeaNull;
+import com.pdmfc.tea.TeaPair;
+import com.pdmfc.tea.TeaSymbol;
+import com.pdmfc.tea.TeaTypeException;
 
 
 
@@ -92,7 +93,7 @@ public final class ArgsTest
     }
 
 
-    @Test(expected=STypeException.class)
+    @Test(expected=TeaTypeException.class)
     public void getStringWithError01()
         throws Throwable {
 
@@ -100,7 +101,7 @@ public final class ArgsTest
     }
 
 
-    @Test(expected=STypeException.class)
+    @Test(expected=TeaTypeException.class)
     public void getStringWithError02()
         throws Throwable {
 
@@ -144,7 +145,7 @@ public final class ArgsTest
     }
 
 
-    @Test(expected=STypeException.class)
+    @Test(expected=TeaTypeException.class)
     public void getBlockWithError01()
         throws Throwable {
 
@@ -152,7 +153,7 @@ public final class ArgsTest
     }
 
 
-    @Test(expected=STypeException.class)
+    @Test(expected=TeaTypeException.class)
     public void getBlockWithError02()
         throws Throwable {
 
@@ -186,7 +187,7 @@ public final class ArgsTest
     }
 
 
-    @Test(expected=STypeException.class)
+    @Test(expected=TeaTypeException.class)
     public void getNumberWithError01()
         throws Throwable {
 
@@ -194,7 +195,7 @@ public final class ArgsTest
     }
 
 
-    @Test(expected=STypeException.class)
+    @Test(expected=TeaTypeException.class)
     public void getNumberWithError02()
         throws Throwable {
 
@@ -228,7 +229,7 @@ public final class ArgsTest
     }
 
 
-    @Test(expected=STypeException.class)
+    @Test(expected=TeaTypeException.class)
     public void getPairWithError01()
         throws Throwable {
 
@@ -236,7 +237,7 @@ public final class ArgsTest
     }
 
 
-    @Test(expected=STypeException.class)
+    @Test(expected=TeaTypeException.class)
     public void getPairWithError02()
         throws Throwable {
 
@@ -270,7 +271,7 @@ public final class ArgsTest
     }
 
 
-    @Test(expected=STypeException.class)
+    @Test(expected=TeaTypeException.class)
     public void getSymbolWithError01()
         throws Throwable {
 
@@ -278,7 +279,7 @@ public final class ArgsTest
     }
 
 
-    @Test(expected=STypeException.class)
+    @Test(expected=TeaTypeException.class)
     public void getSymbolWithError02()
         throws Throwable {
 

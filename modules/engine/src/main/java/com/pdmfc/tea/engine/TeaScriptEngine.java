@@ -28,16 +28,16 @@ import javax.script.ScriptEngineFactory;
 import javax.script.ScriptException;
 
 import com.pdmfc.tea.TeaException;
-import com.pdmfc.tea.compiler.TeaCompileException;
-import com.pdmfc.tea.runtime.Args;
-import com.pdmfc.tea.runtime.TeaContext;
-import com.pdmfc.tea.runtime.SNoSuchVarException;
-import com.pdmfc.tea.runtime.TeaFunction;
-import com.pdmfc.tea.runtime.TeaSymbol;
-import com.pdmfc.tea.runtime.TeaRunException;
-import com.pdmfc.tea.runtime.TeaRuntime;
-import com.pdmfc.tea.runtime.TeaRuntimeConfig;
-import com.pdmfc.tea.runtime.TeaScript;
+import com.pdmfc.tea.TeaRuntime;
+import com.pdmfc.tea.TeaRuntimeConfig;
+import com.pdmfc.tea.TeaCompileException;
+import com.pdmfc.tea.Args;
+import com.pdmfc.tea.TeaContext;
+import com.pdmfc.tea.TeaNoSuchVarException;
+import com.pdmfc.tea.TeaFunction;
+import com.pdmfc.tea.TeaSymbol;
+import com.pdmfc.tea.TeaRunException;
+import com.pdmfc.tea.TeaScript;
 import com.pdmfc.tea.modules.reflect.STeaJavaTypes;
 
 
@@ -210,7 +210,7 @@ public final class TeaScriptEngine
  * variables with the same name.  The values of the attributes are
  * converted into Tea using {@link
  * com.pdmfc.tea.modules.reflect.STeaJavaTypes#java2Tea(java.lang.Object,
- * com.pdmfc.tea.runtime.TeaContext)}.  (The top level Tea context
+ * com.pdmfc.tea.TeaContext)}.  (The top level Tea context
  * associated with the <code>scriptContext</code> is used for fetching
  * TOS classes when converting some specific classes of java objects
  * to TOS objects.  Ex: a <code>java.util.Date</code> is converted to
@@ -306,7 +306,7 @@ public final class TeaScriptEngine
             while (reader.read(ca) >= 0) {
                 cb.append(ca);
             }
-        } catch (IOException e) {
+        } catch ( IOException e ) {
             throw new ScriptException(e);
         }
         return this.eval(cb.toString(), scriptContext);
@@ -362,7 +362,7 @@ public final class TeaScriptEngine
             while (reader.read(ca) >= 0) {
                 cb.append(ca);
             }
-        } catch (IOException e) {
+        } catch ( IOException e ) {
             throw new ScriptException(e);
         }
         return this.compile(cb.toString());
@@ -547,7 +547,7 @@ public final class TeaScriptEngine
             argv = new String[oArgv.length];
             try {
                 System.arraycopy(oArgv, 0, argv, 0, argv.length);
-            } catch (ArrayStoreException e) {
+            } catch ( ArrayStoreException e ) {
                 String msg = "javax.script.argv must be an array of strings";
                 throw new ScriptException(msg);
             }
@@ -653,7 +653,7 @@ public final class TeaScriptEngine
             // resulting in STosObj like SDate.
             // try {
             //     teaRuntime.execute(_emptyCode);
-            // } catch (TeaException ex) {
+            // } catch ( TeaException ex ) {
             //     throw new ScriptException(ex);
             // }
             
@@ -727,7 +727,7 @@ public final class TeaScriptEngine
                               STeaJavaTypes.java2Tea(sc, teaContext));
 
             return teaRuntime;
-        } catch (TeaException e) {
+        } catch ( TeaException e ) {
             throw new ScriptException(e);
         }
     }
@@ -770,7 +770,7 @@ public final class TeaScriptEngine
                         Object teaValue  = teaContext.getVar(keySym);
                         Object javaValue = STeaJavaTypes.tea2Java(teaValue);
                         b.put(key, javaValue);
-                    } catch (SNoSuchVarException ex) {
+                    } catch ( TeaNoSuchVarException ex ) {
                         // Should we do something?...
                     }
                 }
@@ -794,20 +794,20 @@ public final class TeaScriptEngine
                         Object teaValue  = teaContext.getVar(keySym);
                         Object javaValue = STeaJavaTypes.tea2Java(teaValue);
                         b.put(key, javaValue);
-                    } catch (SNoSuchVarException ex) {
+                    } catch ( TeaNoSuchVarException ex ) {
                         // Should we do something?...
                     }
                 }
             }
 
-        } catch (TeaException e) {
+        } catch ( TeaException e ) {
             throw new ScriptException(e);
         } finally {
             // no more Tea code ought to be executed without calling
             // start
             try {
                 teaRuntime.stop();
-            } catch (IllegalStateException ex) {
+            } catch ( IllegalStateException ex ) {
                 // If an error ocurred before initialization of
                 // TeaRuntime we ignore it, but we attempted to stop
                 // it anyway.

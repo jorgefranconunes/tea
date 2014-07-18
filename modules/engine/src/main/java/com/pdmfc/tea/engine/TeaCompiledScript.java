@@ -13,7 +13,7 @@ import javax.script.ScriptException;
 
 import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.reflect.STeaJavaTypes;
-import com.pdmfc.tea.runtime.TeaScript;
+import com.pdmfc.tea.TeaScript;
 
 
 

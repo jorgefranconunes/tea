@@ -6,8 +6,8 @@
 
 package com.pdmfc.tea.modules.tos;
 
-import com.pdmfc.tea.runtime.TeaSymbol;
-import com.pdmfc.tea.runtime.TeaRunException;
+import com.pdmfc.tea.TeaSymbol;
+import com.pdmfc.tea.TeaRunException;
 
 
 

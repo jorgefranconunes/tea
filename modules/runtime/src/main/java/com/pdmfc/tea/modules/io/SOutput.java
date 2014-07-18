@@ -19,14 +19,14 @@ import com.pdmfc.tea.modules.io.SIOException;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.tos.STosUtil;
-import com.pdmfc.tea.runtime.Args;
-import com.pdmfc.tea.runtime.TeaContext;
-import com.pdmfc.tea.runtime.TeaByteArray;
-import com.pdmfc.tea.runtime.TeaFunction;
-import com.pdmfc.tea.runtime.TeaSymbol;
-import com.pdmfc.tea.runtime.SNumArgException;
-import com.pdmfc.tea.runtime.TeaRunException;
-import com.pdmfc.tea.runtime.STypeException;
+import com.pdmfc.tea.Args;
+import com.pdmfc.tea.TeaContext;
+import com.pdmfc.tea.TeaByteArray;
+import com.pdmfc.tea.TeaFunction;
+import com.pdmfc.tea.TeaSymbol;
+import com.pdmfc.tea.TeaRunException;
+import com.pdmfc.tea.TeaNumArgException;
+import com.pdmfc.tea.TeaTypeException;
 import com.pdmfc.tea.util.SFormater;
 
 
@@ -135,7 +135,7 @@ public class SOutput
 
         try {
             close();
-        } catch (IOException e) {
+        } catch ( IOException e ) {
             // Just ignore it...
         }
         _outputStream = new BufferedOutputStream(out);
@@ -163,7 +163,7 @@ public class SOutput
 
         try {
             close();
-        } catch (IOException e) {
+        } catch ( IOException e ) {
             // Just ignore it...
         }
         _outputStream = null;
@@ -216,7 +216,7 @@ public class SOutput
         throws TeaRunException {
 
         if ( args.length != 3 ) {
-            throw new SNumArgException(args, "boolean-flag");
+            throw new TeaNumArgException(args, "boolean-flag");
         }
 
         boolean flag = Args.getBoolean(args,2).booleanValue();
@@ -315,11 +315,11 @@ public class SOutput
                     write((TeaByteArray)arg);
                     continue;
                 }
-            } catch (IOException e) {
+            } catch ( IOException e ) {
                 throw new SIOException(e);
             }
 
-            throw new STypeException(args, i, "string or numeric");
+            throw new TeaTypeException(args, i, "string or numeric");
         }
 
         return obj;
@@ -491,7 +491,7 @@ public class SOutput
 
         try {
             writeln();
-        } catch (IOException e) {
+        } catch ( IOException e ) {
             throw new SIOException(e);
         }
 
@@ -655,12 +655,12 @@ public class SOutput
         throws TeaException {
 
         if ( args.length < 3 ) {
-            throw new SNumArgException(args, "format-string [...]");
+            throw new TeaNumArgException(args, "format-string [...]");
         }
 
         try {
             printf(Args.getString(args,2), args, 3);
-        } catch (IOException e) {
+        } catch ( IOException e ) {
             throw new SIOException(e);
         }
 
@@ -740,7 +740,7 @@ public class SOutput
 
         try {
             flush();
-        } catch (IOException e) {
+        } catch ( IOException e ) {
             throw new SIOException(e);
         }
 
@@ -847,7 +847,7 @@ public class SOutput
 
         try {
             close();
-        } catch (IOException e) {
+        } catch ( IOException e ) {
             throw new SIOException(e);
         }
 
@@ -876,7 +876,7 @@ public class SOutput
         if ( _outputStream != null ) {
             try {
                 _outputStream.close();
-            } catch (IOException e) {
+            } catch ( IOException e ) {
                 // Just ignore it.
             }
             _outputStream = null;

@@ -12,10 +12,10 @@ import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.reflect.SMethodFinder;
 import com.pdmfc.tea.modules.reflect.SReflectUtils;
 import com.pdmfc.tea.modules.reflect.STeaJavaTypes;
-import com.pdmfc.tea.runtime.TeaContext;
-import com.pdmfc.tea.runtime.TeaFunction;
-import com.pdmfc.tea.runtime.SNumArgException;
-import com.pdmfc.tea.runtime.TeaRunException;
+import com.pdmfc.tea.TeaContext;
+import com.pdmfc.tea.TeaFunction;
+import com.pdmfc.tea.TeaNumArgException;
+import com.pdmfc.tea.TeaRunException;
 
 
 
@@ -86,7 +86,7 @@ final class JavaWrapperObject
         throws TeaException {
 
         if ( args.length < 2 ) {
-            throw new SNumArgException(args, "methodName [arg1 [arg2 ...]]");
+            throw new TeaNumArgException(args, "methodName [arg1 [arg2 ...]]");
         }
 
         String   methodName = SReflectUtils.getStringOrSymbol(args,1);

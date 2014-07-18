@@ -30,15 +30,15 @@ import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.util.SDate;
 import com.pdmfc.tea.modules.util.SHashtable;
 import com.pdmfc.tea.modules.util.SVector;
-import com.pdmfc.tea.runtime.TeaContext;
-import com.pdmfc.tea.runtime.SLambdaFunction;
-import com.pdmfc.tea.runtime.TeaBlock;
-import com.pdmfc.tea.runtime.TeaByteArray;
-import com.pdmfc.tea.runtime.TeaFunction;
-import com.pdmfc.tea.runtime.TeaNull;
-import com.pdmfc.tea.runtime.TeaPair;
-import com.pdmfc.tea.runtime.TeaSymbol;
-import com.pdmfc.tea.runtime.TeaRunException;
+import com.pdmfc.tea.TeaContext;
+import com.pdmfc.tea.runtime.LambdaFunction;
+import com.pdmfc.tea.TeaBlock;
+import com.pdmfc.tea.TeaByteArray;
+import com.pdmfc.tea.TeaFunction;
+import com.pdmfc.tea.TeaNull;
+import com.pdmfc.tea.TeaPair;
+import com.pdmfc.tea.TeaSymbol;
+import com.pdmfc.tea.TeaRunException;
 
 
 
@@ -154,7 +154,7 @@ public final class STeaJavaTypes
         // It can happen, if by intermixed java/Tea programming, a Tea value
         // object is inadvertly converted twice by java2Tea.
         if (obj instanceof STosObj
-                || obj instanceof SLambdaFunction
+                || obj instanceof LambdaFunction
                 || obj instanceof TeaBlock
                 || obj instanceof TeaByteArray
                 || obj instanceof TeaFunction

@@ -14,12 +14,12 @@ import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.tos.STosClass;
 import com.pdmfc.tea.modules.tos.STosObj;
 import com.pdmfc.tea.modules.tos.STosUtil;
-import com.pdmfc.tea.runtime.TeaContext;
-import com.pdmfc.tea.runtime.TeaFunction;
-import com.pdmfc.tea.runtime.TeaNull;
-import com.pdmfc.tea.runtime.TeaPair;
-import com.pdmfc.tea.runtime.TeaSymbol;
-import com.pdmfc.tea.runtime.SNumArgException;
+import com.pdmfc.tea.TeaContext;
+import com.pdmfc.tea.TeaFunction;
+import com.pdmfc.tea.TeaNull;
+import com.pdmfc.tea.TeaPair;
+import com.pdmfc.tea.TeaSymbol;
+import com.pdmfc.tea.TeaNumArgException;
 
 
 
@@ -225,7 +225,7 @@ public final class SHashtable
         throws TeaException {
 
         if ( args.length != 4 ) {
-            throw new SNumArgException(args, "key value");
+            throw new TeaNumArgException(args, "key value");
         }
 
         _hashtable.put(args[2], args[3]);
@@ -284,7 +284,7 @@ public final class SHashtable
         throws TeaException {
         
         if ( args.length != 3 ) {
-            throw new SNumArgException(args, "key");
+            throw new TeaNumArgException(args, "key");
         }
 
         Object result = _hashtable.get(args[2]);
@@ -463,7 +463,7 @@ public final class SHashtable
         throws TeaException {
 
         if ( args.length != 3 ) {
-            throw new SNumArgException(args, "key");
+            throw new TeaNumArgException(args, "key");
         }
 
         Object key = args[2];

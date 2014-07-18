@@ -14,13 +14,13 @@ import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
 
 import com.pdmfc.tea.TeaException;
-import com.pdmfc.tea.runtime.SExitException;
-import com.pdmfc.tea.runtime.SFlowControlException;
-import com.pdmfc.tea.runtime.TeaRunException;
-import com.pdmfc.tea.runtime.TeaRuntime;
-import com.pdmfc.tea.runtime.TeaRuntimeConfig;
-import com.pdmfc.tea.runtime.TeaRuntimeFactory;
-import com.pdmfc.tea.runtime.TeaScript;
+import com.pdmfc.tea.TeaRuntime;
+import com.pdmfc.tea.TeaRuntimeConfig;
+import com.pdmfc.tea.TeaRuntimeFactory;
+import com.pdmfc.tea.TeaExitException;
+import com.pdmfc.tea.TeaFlowControlException;
+import com.pdmfc.tea.TeaRunException;
+import com.pdmfc.tea.TeaScript;
 import com.pdmfc.tea.tools.runner.TeaRunnerArgs;
 import com.pdmfc.tea.util.SInputSourceFactory;
 
@@ -182,9 +182,9 @@ public final class TeaRunner
 
         try {
             script.execute();
-        } catch ( SExitException e2 ) {
+        } catch ( TeaExitException e2 ) {
             retVal = e2.getExitValue().intValue();
-        } catch ( SFlowControlException e3 ) {
+        } catch ( TeaFlowControlException e3 ) {
             // Just ignore it. Somebody did a "return", "break" or
             // "continue" outside of a function or loop.
         } finally {

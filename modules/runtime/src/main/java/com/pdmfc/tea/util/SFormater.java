@@ -7,9 +7,9 @@
 package com.pdmfc.tea.util;
 
 import com.pdmfc.tea.TeaException;
-import com.pdmfc.tea.runtime.TeaRunException;
-import com.pdmfc.tea.runtime.STypeException;
-import com.pdmfc.tea.runtime.Types;
+import com.pdmfc.tea.TeaRunException;
+import com.pdmfc.tea.TeaTypeException;
+import com.pdmfc.tea.Types;
 
 
 
@@ -335,7 +335,7 @@ public abstract class SFormater
         } catch (ClassCastException e) {
             String   fmt     = "wrong argument type - {0}";
             Object[] fmtArgs = { Types.getTypeName(arg) };
-            throw new STypeException(fmt, fmtArgs);
+            throw new TeaTypeException(fmt, fmtArgs);
         }
     }
 
@@ -377,7 +377,7 @@ public abstract class SFormater
 
 /**************************************************************************
  *
- * @exception com.pdmfc.tea.runtime.SNumArgException
+ * @exception com.pdmfc.tea.TeaNumArgException
  *    Thrown if there were no more arguments to fetch.
  *
  **************************************************************************/

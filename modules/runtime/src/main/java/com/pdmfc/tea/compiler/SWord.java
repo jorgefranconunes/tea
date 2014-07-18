@@ -1,14 +1,14 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
 package com.pdmfc.tea.compiler;
 
 import com.pdmfc.tea.TeaException;
-import com.pdmfc.tea.runtime.TeaContext;
-import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.TeaContext;
+import com.pdmfc.tea.TeaFunction;
 
 
 

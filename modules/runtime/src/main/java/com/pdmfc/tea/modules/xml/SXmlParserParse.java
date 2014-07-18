@@ -23,13 +23,13 @@ import org.xml.sax.SAXParseException;
 import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.io.SInput;
 import com.pdmfc.tea.modules.tos.STosObj;
-import com.pdmfc.tea.runtime.TeaContext;
-import com.pdmfc.tea.runtime.TeaFunction;
-import com.pdmfc.tea.runtime.TeaNull;
-import com.pdmfc.tea.runtime.TeaSymbol;
-import com.pdmfc.tea.runtime.SNumArgException;
-import com.pdmfc.tea.runtime.TeaRunException;
-import com.pdmfc.tea.runtime.Types;
+import com.pdmfc.tea.TeaContext;
+import com.pdmfc.tea.TeaFunction;
+import com.pdmfc.tea.TeaNull;
+import com.pdmfc.tea.TeaSymbol;
+import com.pdmfc.tea.TeaNumArgException;
+import com.pdmfc.tea.TeaRunException;
+import com.pdmfc.tea.Types;
 import com.pdmfc.tea.modules.util.SHashtable;
 
 
@@ -220,7 +220,7 @@ final class SXmlParserParse
          throws TeaException {
 
          if ( args.length != 3 ) {
-            throw new SNumArgException(args, "xml-file");
+            throw new TeaNumArgException(args, "xml-file");
          }
 
          STosObj       parser       = (STosObj)obj;
@@ -697,7 +697,7 @@ final class SXmlParserParse
  * @return A string representing a valid URL referencing the file
  * whose name was given as argument.
  *
- * @exception com.pdmfc.tea.runtime.TeaRunException Thrown if the
+ * @exception com.pdmfc.tea.TeaRunException Thrown if the
  * <TT>fileName</TT> argument contains a badly formed URL.
  *
  **************************************************************************/

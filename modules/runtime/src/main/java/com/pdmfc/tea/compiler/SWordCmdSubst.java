@@ -10,8 +10,8 @@ import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.compiler.TeaCode;
 import com.pdmfc.tea.compiler.SWord;
 import com.pdmfc.tea.compiler.SWordSubstUtils;
-import com.pdmfc.tea.runtime.TeaContext;
-import com.pdmfc.tea.runtime.TeaFunction;
+import com.pdmfc.tea.TeaContext;
+import com.pdmfc.tea.TeaFunction;
 
 
 

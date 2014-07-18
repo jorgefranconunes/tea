@@ -14,18 +14,17 @@ import java.util.Collections;
 import java.util.List;
 
 import com.pdmfc.tea.TeaConfig;
-import com.pdmfc.tea.TeaError;
 import com.pdmfc.tea.TeaException;
-import com.pdmfc.tea.compiler.TeaCompileException;
+import com.pdmfc.tea.TeaRuntime;
+import com.pdmfc.tea.TeaRuntimeConfig;
+import com.pdmfc.tea.TeaCompileException;
 import com.pdmfc.tea.runtime.ArgvUtils;
-import com.pdmfc.tea.runtime.TeaContext;
-import com.pdmfc.tea.runtime.SLibVarUtils;
-import com.pdmfc.tea.runtime.TeaEnvironment;
+import com.pdmfc.tea.TeaContext;
+import com.pdmfc.tea.runtime.LibVarUtils;
+import com.pdmfc.tea.TeaEnvironment;
 import com.pdmfc.tea.runtime.TeaEnvironmentImpl;
-import com.pdmfc.tea.runtime.TeaModule;
-import com.pdmfc.tea.runtime.TeaRuntime;
-import com.pdmfc.tea.runtime.TeaRuntimeConfig;
-import com.pdmfc.tea.runtime.TeaScript;
+import com.pdmfc.tea.TeaModule;
+import com.pdmfc.tea.TeaScript;
 import com.pdmfc.tea.util.SInputSourceFactory;
 
 
@@ -38,7 +37,7 @@ import com.pdmfc.tea.util.SInputSourceFactory;
  *
  **************************************************************************/
 
-final class TeaRuntimeImpl
+public final class TeaRuntimeImpl
     extends Object
     implements TeaRuntime {
 
@@ -291,7 +290,7 @@ final class TeaRuntimeImpl
 
         TeaContext globalContext = _environment.getGlobalContext();
 
-        SLibVarUtils.setupLibVar(globalContext, _allImportLocations);
+        LibVarUtils.setupLibVar(globalContext, _allImportLocations);
     }
 
 

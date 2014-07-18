@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2013 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -10,10 +10,10 @@ import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.modules.tos.SList;
 import com.pdmfc.tea.modules.tos.SNoSuchMethodException;
 import com.pdmfc.tea.modules.tos.STosObj;
-import com.pdmfc.tea.runtime.TeaContext;
-import com.pdmfc.tea.runtime.TeaFunction;
-import com.pdmfc.tea.runtime.TeaSymbol;
-import com.pdmfc.tea.runtime.SNoSuchVarException;
+import com.pdmfc.tea.TeaContext;
+import com.pdmfc.tea.TeaFunction;
+import com.pdmfc.tea.TeaSymbol;
+import com.pdmfc.tea.TeaNoSuchVarException;
 
 
 
@@ -338,7 +338,7 @@ public class STosClass
 
         try {
             return (TeaFunction)_methods.getVar(methodName);
-        } catch (SNoSuchVarException e) {
+        } catch ( TeaNoSuchVarException e ) {
             throw new SNoSuchMethodException(methodName, _name);
         }
     }

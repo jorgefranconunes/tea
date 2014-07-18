@@ -8,13 +8,13 @@ package com.pdmfc.tea.util;
 
 import java.util.List;
 
-import com.pdmfc.tea.runtime.TeaContext;
-import com.pdmfc.tea.runtime.SNoSuchVarException;
-import com.pdmfc.tea.runtime.TeaPair;
-import com.pdmfc.tea.runtime.TeaSymbol;
-import com.pdmfc.tea.runtime.TeaVar;
-import com.pdmfc.tea.runtime.TeaRunException;
-import com.pdmfc.tea.runtime.Types;
+import com.pdmfc.tea.TeaContext;
+import com.pdmfc.tea.TeaNoSuchVarException;
+import com.pdmfc.tea.TeaPair;
+import com.pdmfc.tea.TeaSymbol;
+import com.pdmfc.tea.TeaVar;
+import com.pdmfc.tea.TeaRunException;
+import com.pdmfc.tea.Types;
 
 
 
@@ -117,7 +117,7 @@ public final class SListUtils
 
             var.set(newHead);
         } else {
-            throw new SNoSuchVarException(varName);
+            throw new TeaNoSuchVarException(varName);
         }
     }
 

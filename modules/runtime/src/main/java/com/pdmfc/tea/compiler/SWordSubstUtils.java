@@ -1,18 +1,18 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2011 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
 package com.pdmfc.tea.compiler;
 
 import com.pdmfc.tea.TeaException;
-import com.pdmfc.tea.runtime.TeaContext;
-import com.pdmfc.tea.runtime.SNoSuchVarException;
-import com.pdmfc.tea.runtime.TeaFunction;
-import com.pdmfc.tea.runtime.TeaSymbol;
-import com.pdmfc.tea.runtime.STypeException;
-import com.pdmfc.tea.runtime.Types;
+import com.pdmfc.tea.TeaContext;
+import com.pdmfc.tea.TeaNoSuchVarException;
+import com.pdmfc.tea.TeaFunction;
+import com.pdmfc.tea.TeaSymbol;
+import com.pdmfc.tea.TeaTypeException;
+import com.pdmfc.tea.Types;
 
 
 
@@ -64,10 +64,10 @@ final class SWordSubstUtils
         } else {
             try {
                 result = toFunction((TeaSymbol)firstWord, context);
-            } catch (ClassCastException e) {
+            } catch ( ClassCastException e ) {
                 String msg =
                     "argument 0 should be a function or a symbol, not a {0}";
-                throw new STypeException(msg, Types.getTypeName(firstWord));
+                throw new TeaTypeException(msg, Types.getTypeName(firstWord));
             }
         }
 
@@ -92,7 +92,7 @@ final class SWordSubstUtils
 
         try {
             value = context.getVar(firstWord);
-        } catch (SNoSuchVarException e2) {
+        } catch ( TeaNoSuchVarException e2 ) {
             value = Types.getVarWithEffort(context, firstWord);
         }
 
@@ -100,9 +100,9 @@ final class SWordSubstUtils
         
         try {
             result = (TeaFunction)value;
-        } catch (ClassCastException e) {
+        } catch ( ClassCastException e ) {
             String msg = "variable {0} should contain a function, not a {1}";
-            throw new STypeException(msg, firstWord, Types.getTypeName(value));
+            throw new TeaTypeException(msg, firstWord, Types.getTypeName(value));
         }
 
         return result;
