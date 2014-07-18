@@ -4,7 +4,7 @@
  *
  **************************************************************************/
 
-package com.pdmfc.tea.runtime;
+package com.pdmfc.tea;
 
 import com.pdmfc.tea.TeaFlowControlException;
 import com.pdmfc.tea.TeaNull;
