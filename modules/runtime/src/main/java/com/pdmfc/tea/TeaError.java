@@ -43,13 +43,12 @@ public final class TeaError
 
 /**************************************************************************
  *
- * Throws a newly created <code>CliException</code>
+ * Throws a newly created <code>TeaError</code> exception.
  *
  **************************************************************************/
 
     public static void raise(final String    msgFmt,
-                             final Object... fmtArgs)
-        throws TeaError {
+                             final Object... fmtArgs) {
 
         String msg = null;
 

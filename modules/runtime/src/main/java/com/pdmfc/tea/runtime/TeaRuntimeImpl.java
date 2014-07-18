@@ -21,7 +21,6 @@ import com.pdmfc.tea.TeaCompileException;
 import com.pdmfc.tea.runtime.ArgvUtils;
 import com.pdmfc.tea.TeaContext;
 import com.pdmfc.tea.runtime.LibVarUtils;
-import com.pdmfc.tea.TeaEnvironment;
 import com.pdmfc.tea.runtime.TeaEnvironmentImpl;
 import com.pdmfc.tea.TeaModule;
 import com.pdmfc.tea.TeaScript;

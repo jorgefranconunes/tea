@@ -55,20 +55,11 @@ public final class ModuleMath
 
 
 
-    /**
-     * The value zero.
-     */
+    //The value zero.
     private static final Integer ZERO = Integer.valueOf(0);
 
-    /** 
-     * The value one.
-     */
+    // The value one.
     private static final Integer ONE = Integer.valueOf(1);
-
-    /**
-     * The value minus one.
-     */
-    private static final Integer MINUS_ONE = Integer.valueOf(-1);
 
     
     /**

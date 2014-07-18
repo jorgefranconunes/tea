@@ -77,7 +77,7 @@ public interface TeaEnvironment {
  *
  **************************************************************************/
 
-    public Charset getSourceCharset();
+    Charset getSourceCharset();
 
 
 
@@ -89,7 +89,7 @@ public interface TeaEnvironment {
  *
  **************************************************************************/
 
-    public TeaEnvironment addModule(TeaModule module)
+    TeaEnvironment addModule(TeaModule module)
         throws TeaException;
 
 
@@ -102,8 +102,8 @@ public interface TeaEnvironment {
  *
  **************************************************************************/
 
-    public TeaScript compile(final Reader reader,
-                             final String fileName)
+    TeaScript compile(final Reader reader,
+                      final String fileName)
         throws IOException,
                TeaCompileException;
 

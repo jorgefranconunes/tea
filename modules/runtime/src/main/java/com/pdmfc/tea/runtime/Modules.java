@@ -18,8 +18,6 @@ import java.util.List;
 import com.pdmfc.tea.TeaException;
 import com.pdmfc.tea.TeaContext;
 import com.pdmfc.tea.TeaFunction;
-import com.pdmfc.tea.TeaPair;
-import com.pdmfc.tea.TeaSymbol;
 import com.pdmfc.tea.TeaRunException;
 import com.pdmfc.tea.TeaEnvironment;
 import com.pdmfc.tea.TeaFunctionImplementor;

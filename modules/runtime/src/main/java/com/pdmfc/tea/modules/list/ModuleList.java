@@ -16,7 +16,6 @@ import com.pdmfc.tea.TeaNumArgException;
 import com.pdmfc.tea.TeaFunction;
 import com.pdmfc.tea.TeaPair;
 import com.pdmfc.tea.TeaRunException;
-import com.pdmfc.tea.Types;
 import com.pdmfc.tea.TeaEnvironment;
 import com.pdmfc.tea.TeaFunctionImplementor;
 import com.pdmfc.tea.TeaModule;
