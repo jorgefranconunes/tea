@@ -2128,8 +2128,8 @@ public final class ModuleLang
 
 //* 
 //* <TeaFunction name="not-same?"
-//*                 arguments="object1 object2"
-//*             module="tea.lang">
+//*              arguments="object1 object2"
+//*              module="tea.lang">
 //*
 //* <Overview>
 //* Checks if two objects are not the same object.
@@ -2179,11 +2179,14 @@ public final class ModuleLang
                                            final Object[]    args)
         throws TeaException {
 
-        if ( args.length != 3 ) {
-            throw new TeaNumArgException(args, "obj1 obj2");
-        }
+        Args.checkCount(args, 3, "obj1 obj2");
 
-        return args[1].equals(args[2]) ? Boolean.FALSE : Boolean.TRUE;
+        Object  operand1  = args[1];
+        Object  operand2  = args[2];
+        boolean isNotSame = !operand1.equals(operand2);
+        Boolean result    = isNotSame ? Boolean.TRUE : Boolean.FALSE;
+
+        return result;
     }
 
 
@@ -2251,8 +2254,8 @@ public final class ModuleLang
 
 //* 
 //* <TeaFunction name="same?"
-//*                 arguments="object1 object2"
-//*             module="tea.lang">
+//*              arguments="object1 object2"
+//*              module="tea.lang">
 //*
 //* <Overview>
 //* Checks if two objects are the same object.
@@ -2302,11 +2305,14 @@ public final class ModuleLang
                                         final Object[]    args)
         throws TeaException {
 
-        if ( args.length != 3 ) {
-            throw new TeaNumArgException(args, "obj1 obj2");
-        }
+        Args.checkCount(args, 3, "obj1 obj2");
 
-        return args[1].equals(args[2]) ? Boolean.TRUE : Boolean.FALSE;
+        Object  operand1 = args[1];
+        Object  operand2 = args[2];
+        boolean isSame   = operand1.equals(operand2);
+        Boolean result   = isSame ? Boolean.TRUE : Boolean.FALSE;
+
+        return result;
     }
 
 

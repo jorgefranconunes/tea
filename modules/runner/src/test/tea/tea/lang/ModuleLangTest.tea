@@ -1038,3 +1038,70 @@ tunit-testsuite type-predicates-test {
     test-predicate null-test     $null?     $null 123
 }
 
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite same-test {
+    
+    
+    define basic-test-bipredicate ( testName bipredicate  ) {
+        
+        tunit-test-error [str-fmt "{0}-tooFewArgs1" $testName] {
+            $bipredicate
+        }
+        
+        tunit-test-error [str-fmt "{0}-tooFewArgs2" $testName] {
+            $bipredicate one
+        }
+        
+        tunit-test-error [str-fmt "{0}-tooManyArgs" $testName] {
+            $bipredicate one two three
+        }
+    }
+    
+    
+    define test-check ( testName arg1 arg2 isSame ) {
+        
+        test-check-generic \
+                [str-fmt "{0}-same" $testName] \
+                $same? \
+                $arg1 \
+                $arg2 \
+                $isSame
+        
+        test-check-generic \
+                [str-fmt "{0}-not-same" $testName] \
+                $not-same? \
+                $arg1 \
+                $arg2 \
+                [not $isSame]
+    }
+    
+    
+    define test-check-generic ( testName bipredicate arg1 arg2 expectedResult ) {
+        
+        tunit-test $testName {
+            if $expectedResult {
+                tunit-assert [$bipredicate $arg1 $arg2]
+            } {
+                tunit-assert [not [$bipredicate $arg1 $arg2]]
+            }
+        }
+    }
+    
+    
+    basic-test-bipredicate same-test $same?
+    basic-test-bipredicate not-same-test $not-same?
+    
+    test-check equal-strings "hello" "hello" $true
+    test-check nonequal-strings "hello" "world" $false
+    
+}
+
