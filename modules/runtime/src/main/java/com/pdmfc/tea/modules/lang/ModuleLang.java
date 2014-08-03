@@ -879,7 +879,7 @@ public final class ModuleLang
  *
  **************************************************************************/
 
-    private static Object functionDefineVar(final TeaContext     varContext,
+    private static Object functionDefineVar(final TeaContext  varContext,
                                             final TeaFunction func,
                                             final TeaContext  context,
                                             final Object[]    args)
@@ -2371,11 +2371,9 @@ public final class ModuleLang
                                         final Object[]    args)
         throws TeaException {
 
-        if ( args.length != 3 ) {
-            throw new TeaNumArgException(args, "formal-parameters block");
-        }
+        Args.checkCount(args, 3, "formal-parameters block");
 
-        Object       formalParam  = args[1];
+        Object      formalParam  = args[1];
         TeaBlock    body         = Args.getBlock(args, 2);
         TeaFunction result       = null;
 

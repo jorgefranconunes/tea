@@ -1105,3 +1105,94 @@ tunit-testsuite same-test {
     
 }
 
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite lambda-test {
+    
+    
+    tunit-test-error tooFewArgs1 {
+        
+        lambda
+    }
+    
+    
+    tunit-test-error tooFewArgs2 {
+        
+        lambda ()
+    }
+    
+    
+    tunit-test-error tooManyArgs {
+        
+        lambda () {} oops
+    }
+    
+    
+    tunit-test-error invalidArgType1 {
+        
+        lambda 123 {}
+    }
+    
+    
+    tunit-test-error invalidArgType2 {
+        
+        lambda () oops
+    }
+    
+    
+    tunit-test fixedArgs1 {
+        
+        define myFunc [lambda () { is 123 }]
+        
+        tunit-assert [function? $myFunc]
+        tunit-assert-equals 123 [$myFunc]
+    }
+    
+    
+    tunit-test fixedArgs2 {
+        
+        define myFunc [lambda ( arg ) { is $arg }]
+        
+        tunit-assert [function? $myFunc]
+        tunit-assert-equals 123 [$myFunc 123]
+        tunit-assert-null [$myFunc $null]
+    }
+    
+    
+    tunit-test varArgs1 {
+        
+        define myFunc [lambda args { length $args }]
+        
+        tunit-assert [function? $myFunc]
+        tunit-assert-equals 0 [$myFunc]
+        tunit-assert-equals 1 [$myFunc "hello"]
+        tunit-assert-equals 2 [$myFunc "hello" "world"]
+        tunit-assert-equals 3 [$myFunc "hello" "world" "goodbye"]
+    }
+    
+    
+    tunit-test varArgs2 {
+        
+        define myFunc [lambda args { is $args }]
+        
+        tunit-assert [function? $myFunc]
+        
+        define result [$myFunc 4 3 2 1]
+        
+        tunit-assert [pair? $result]
+        tunit-assert-equals 4 [nth $result 0]
+        tunit-assert-equals 3 [nth $result 1]
+        tunit-assert-equals 2 [nth $result 2]
+        tunit-assert-equals 1 [nth $result 3]
+    }
+    
+}
+
