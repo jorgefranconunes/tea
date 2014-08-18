@@ -131,6 +131,9 @@ performing a build.
             <showWarnings>true</showWarnings>
             <compilerArgument>-Xlint</compilerArgument>
             <compilerArgument>-Xlint:-serial</compilerArgument>
+
+	    <!-- Hack... -->
+	    <useIncrementalCompilation>false</useIncrementalCompilation>
           </configuration>
         </plugin>
 

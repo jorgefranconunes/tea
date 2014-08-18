@@ -2394,8 +2394,8 @@ public final class ModuleLang
 
 //* 
 //* <TeaFunction name="load"
-//*                 arguments="javaClassName"
-//*             module="tea.lang">
+//*              arguments="javaClassName"
+//*              module="tea.lang">
 //*
 //* <Overview>
 //* Dynamically loads new Tea functions and objects from a Java class.
@@ -2437,9 +2437,7 @@ public final class ModuleLang
                                final Object[]    args)
         throws TeaException {
 
-        if ( args.length != 2 ) {
-            throw new TeaNumArgException(args, "java-package-name");
-        }
+        Args.checkCount(args, 2, "java-package-name");
 
         String    moduleClassName = Args.getString(args, 1);
         TeaModule module          = newModule(moduleClassName);
