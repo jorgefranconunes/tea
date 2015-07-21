@@ -140,9 +140,9 @@ define print-header ( outputStream classDoc ) {
     define header [printer-html-get header]
 
     $outputStream write [str-fmt $HTML_DOC_PREFIX $now [$classDoc getName]]
-    $outputStream printf $NAVIGATION_BAR	\
-				[$classDoc getModuleName]	\
-				$header
+    $outputStream printf $NAVIGATION_BAR        \
+                                [$classDoc getModuleName]        \
+                                $header
 }
 
 
@@ -186,16 +186,16 @@ define print-inheritance-tree ( outputStream classDoc ) {
     define baseClass [$classDoc getBaseClass]
 
     if { not-null? $baseClass } {
-	$outputStream writeln "<P><TT>"
-	$outputStream write [html-encode [$classDoc getName]]
-	while { not-null? $baseClass } {
-	    define name [$baseClass getName]
-	    $outputStream printf " -> <A HREF=\"class-%s.html\">%s</A>"	\
-					[url-encode $name]		\
-					[html-encode $name]
-	    set! baseClass [$baseClass getBaseClass]
-	}
-	$outputStream writeln "</TT></P>"
+        $outputStream writeln "<P><TT>"
+        $outputStream write [html-encode [$classDoc getName]]
+        while { not-null? $baseClass } {
+            define name [$baseClass getName]
+            $outputStream printf " -> <A HREF=\"class-%s.html\">%s</A>"        \
+                                        [url-encode $name]                \
+                                        [html-encode $name]
+            set! baseClass [$baseClass getBaseClass]
+        }
+        $outputStream writeln "</TT></P>"
     }
 }
 
@@ -213,18 +213,18 @@ define print-summary ( outputStream classDoc ) {
 
     $outputStream printf $SUMMARY_PREFIX "Method Summary"
     foreach methodDoc [$classDoc getMethodDocs] {
-	define methodName [$methodDoc getName]
+        define methodName [$methodDoc getName]
 
-	$outputStream printf $SUMMARY_LINE_PREFIX
-	foreach formalArgs [$methodDoc getPrototypes] {
-	    $outputStream printf $PROTOTYPES_ITEM			\
-					[url-encode $methodName]	\
-					[html-encode $methodName]	\
-					[html-encode $formalArgs]
-	}
-	$outputStream write $WHITE_SPACE
-	[$methodDoc getOverview] print $outputStream
-	$outputStream write $SUMMARY_LINE_SUFFIX
+        $outputStream printf $SUMMARY_LINE_PREFIX
+        foreach formalArgs [$methodDoc getPrototypes] {
+            $outputStream printf $PROTOTYPES_ITEM                        \
+                                        [url-encode $methodName]        \
+                                        [html-encode $methodName]        \
+                                        [html-encode $formalArgs]
+        }
+        $outputStream write $WHITE_SPACE
+        [$methodDoc getOverview] print $outputStream
+        $outputStream write $SUMMARY_LINE_SUFFIX
     }
     $outputStream printf $SUMMARY_SUFFIX
 }
@@ -243,7 +243,7 @@ define print-detail ( outputStream classDoc ) {
 
     $outputStream printf $DETAIL_PREFIX "Method Detail"
     foreach methodDoc [$classDoc getMethodDocs] {
-	$methodDoc print $outputStream
+        $methodDoc print $outputStream
     }
     $outputStream printf $DETAIL_SUFFIX
 }
@@ -263,9 +263,9 @@ define print-footer ( outputStream classDoc ) {
     define footer [printer-html-get footer]
     define bottom [printer-html-get bottom]
 
-    $outputStream printf $NAVIGATION_BAR			\
-				[$classDoc getModuleName]	\
-				$footer
+    $outputStream printf $NAVIGATION_BAR                        \
+                                [$classDoc getModuleName]        \
+                                $footer
     $outputStream writeln $bottom
     $outputStream write $HTML_DOC_SUFIX
 }

@@ -116,9 +116,9 @@ method DocProducer generateDocs ( fileList outputDir ) {
 method DocProducer process ( name ) {
 
     if { file-is-dir? $name } {
-	$this processDir $name
+        $this processDir $name
     } {
-	$this processFile $name
+        $this processFile $name
     }
 }
 
@@ -137,22 +137,22 @@ method DocProducer processDir ( dirName ) {
     $stdout writeln "Processing directory " $dirName
 
     foreach fileName [glob $dirName ".*"] {
-	if $_mustStop {
-	    break
-	}
-	define path [file-join $dirName $fileName]
+        if $_mustStop {
+            break
+        }
+        define path [file-join $dirName $fileName]
 
-	if { file-is-dir? $path } {
+        if { file-is-dir? $path } {
             if { matches? $_namesToSkip $fileName } {
-	        $stdout writeln "Skipping directory " $path
+                $stdout writeln "Skipping directory " $path
             } {
-	        $this processDir $path
+                $this processDir $path
             }
-	} {
-	    if { matches? $_knownFileTypes $fileName } {
-		$this processFile $path
-	    }
-	}
+        } {
+            if { matches? $_knownFileTypes $fileName } {
+                $this processFile $path
+            }
+        }
     }
 }
 

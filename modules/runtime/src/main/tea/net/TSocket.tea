@@ -101,15 +101,15 @@ method TSocket constructor args {
         == $argCount 0 } {
         # Nothing to to.
     } {
-	== $argCount 1 } {
-	set! _sock   [nth $args 0]
+        == $argCount 1 } {
+        set! _sock   [nth $args 0]
         set! _input  [$_sock getInput]
         set! _output [$_sock getOutput]
     } {
-	== $argCount 2 } {
+        == $argCount 2 } {
         apply $this open $args
     } {
-	error "Args: [host port]"
+        error "Args: [host port]"
     }
 }
 
@@ -459,15 +459,15 @@ method TSocket open args {
     define argCount [length $args]
 
     cond {
-	== $argCount 1 } {
-	set! _sock [nth $args 0]
+        == $argCount 1 } {
+        set! _sock [nth $args 0]
     } {
-	== $argCount 2 } {
+        == $argCount 2 } {
         map define ( host port ) $args
         set! _sock [new TSocketBase]
         $_sock connect $host $port
     } {
-	error "Args: host port"
+        error "Args: host port"
     }
     
     set! _input  [$_sock getInput]

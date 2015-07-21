@@ -63,9 +63,9 @@
 global file-unlink-recursive ( pathName ) {
 
     if { file-is-dir? $pathName } {
-	and {apply and [map [lambda (b) {is {file-unlink-recursive [file-join $pathName $b]} }] [glob $pathName ".*"]]} { file-unlink $pathName }
+        and {apply and [map [lambda (b) {is {file-unlink-recursive [file-join $pathName $b]} }] [glob $pathName ".*"]]} { file-unlink $pathName }
     } {
-	file-unlink $pathName
+        file-unlink $pathName
     }
 }
 
@@ -76,7 +76,7 @@ global file-unlink-recursive ( pathName ) {
 ###########################################################################
 ## 
 ## <TeaFunction name="file-make-path"
-## 		arguments="[path ...]"
+##                 arguments="[path ...]"
 ##              module="tea.io">
 ##
 ## <Overview>
@@ -127,11 +127,11 @@ global file-make-path args {
 define mkdir-p ( path ) {
 
     if { not [file-exists? $path] } {
-	define parentDir [file-dirname $path]
+        define parentDir [file-dirname $path]
 
-	if { and {not-null? $parentDir} {mkdir-p $parentDir} } {
-	    file-mkdir $path
-	} $false
+        if { and {not-null? $parentDir} {mkdir-p $parentDir} } {
+            file-mkdir $path
+        } $false
     } $true
 }
 

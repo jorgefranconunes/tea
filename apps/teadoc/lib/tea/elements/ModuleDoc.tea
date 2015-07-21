@@ -66,7 +66,7 @@ class ModuleDoc (
 method ModuleDoc constructor ( moduleName ) {
 
     if $_classNeedsInit {
-	ModuleDoc::init
+        ModuleDoc::init
     }
 
     set! _name               $moduleName
@@ -123,7 +123,7 @@ method ModuleDoc setOverview ( anOverview ) {
 method ModuleDoc getOverview () {
 
     if { null? $_overview } {
-	set! _overview [new Overview]
+        set! _overview [new Overview]
     }
 
     is $_overview
@@ -157,7 +157,7 @@ method ModuleDoc setDescription ( aDescription ) {
 method ModuleDoc getDescription () {
 
     if { null? $_description } {
-	set! _description [new Description]
+        set! _description [new Description]
     }
 
     is $_description
@@ -192,9 +192,9 @@ method ModuleDoc addFunctionDoc ( aFunctionDoc ) {
 method ModuleDoc getFunctionDocs () {
 
     if { not $_funcListIsOrdered } {
-	$_funcSet sort [lambda (a b) { str-cmp [$a getName] [$b getName] }]
-	set! _funcList [$_funcSet getElements]
-	set! _funcListIsOrdered $true
+        $_funcSet sort [lambda (a b) { str-cmp [$a getName] [$b getName] }]
+        set! _funcList [$_funcSet getElements]
+        set! _funcListIsOrdered $true
     }
     is $_funcList
 }
@@ -228,9 +228,9 @@ method ModuleDoc addClassDoc ( aClassDoc ) {
 method ModuleDoc getClassDocs () {
 
     if { not $_classListIsOrdered } {
-	$_classSet sort [lambda (a b) { str-cmp [$a getName] [$b getName] }]
-	set! _classList          [$_classSet getElements]
-	set! _classListIsOrdered $true
+        $_classSet sort [lambda (a b) { str-cmp [$a getName] [$b getName] }]
+        set! _classList          [$_classSet getElements]
+        set! _classListIsOrdered $true
     }
     is $_classList
 }

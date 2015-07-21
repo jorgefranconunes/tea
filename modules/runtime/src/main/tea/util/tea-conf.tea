@@ -38,8 +38,8 @@ global tea-conf-set ( moduleId paramId paramValue ) {
     define module [$_modules get $moduleId]
 
     if { null? $module } {
-	set! module [new TConfiguration]
-	$_modules put $moduleId $module
+        set! module [new TConfiguration]
+        $_modules put $moduleId $module
     }
     $module set $paramId $paramValue
 }
@@ -59,13 +59,13 @@ global tea-conf-set-configuration ( moduleId param-list ) {
     define module [$_modules get $moduleId]
 
     if { null? $module } {
-	set! module [new TConfiguration]
-	$_modules put $moduleId $module
+        set! module [new TConfiguration]
+        $_modules put $moduleId $module
     }
     foreach param $param-list {
-	define paramId    [nth $param-list 0]
-	define paramValue [nth $paran-list 1]
-	$module set $paramId $paramValue
+        define paramId    [nth $param-list 0]
+        define paramValue [nth $paran-list 1]
+        $module set $paramId $paramValue
     }
 }
 
@@ -93,11 +93,11 @@ global tea-conf-get-configuration ( moduleId ) {
     define module [$_modules get $moduleId]
 
     if { null? $module } {
-	load-module $moduleId
-	set! module [$_modules get $moduleId]
+        load-module $moduleId
+        set! module [$_modules get $moduleId]
         if { null? $module } {
-	    set! module [new TConfiguration]
-	    $_modules put $moduleId $module
+            set! module [new TConfiguration]
+            $_modules put $moduleId $module
         }
     }
     is $module
@@ -204,7 +204,7 @@ define load-module ( moduleId ) {
     define fileName [if { null? $metaConf } $null { $metaConf get $moduleId }]
 
     if { not-null? $fileName } {
-	import $fileName
+        import $fileName
     }
 }
 

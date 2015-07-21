@@ -55,8 +55,8 @@ define _docEpilogue "
 define _unsupportedFileTypeMsg "Unsupported file type."
 
 define _fileTypes (
-	( "tea"	 "## "  )
-	( "java" "//* " )	
+        ( "tea"  "## "  )
+        ( "java" "//* " )        
 )
 
 define _fileTypeInfo $null
@@ -97,8 +97,8 @@ class DocExtractor (
 ###########################################################################
 ## 
 ## <TeaMethod name="constructor"
-## 	      className="DocExtractor"
-## 	      arguments="linePrefix">
+##               className="DocExtractor"
+##               arguments="linePrefix">
 ## 
 ## <Overview>
 ## Initializes the object and specifies the string to be used as prefix
@@ -165,9 +165,9 @@ method DocExtractor process ( in outFileName ) {
 
     # Generates the innards of the output document.
     while { not-null? [set! aLine [$in readln]] } {
-	if { str-starts-with? $aLine $_linePrefix } {
-	    processLine $aLine
-	}
+        if { str-starts-with? $aLine $_linePrefix } {
+            processLine $aLine
+        }
     }
 
     if { not-null? $out } {
@@ -215,7 +215,7 @@ method DocExtractor processFile ( inFileName outFileName ) {
 ###########################################################################
 ## 
 ## <TeaFunction name="DocExtractor::processFile"
-## 		arguments="inFileName outFileName">
+##                 arguments="inFileName outFileName">
 ##
 ## <Overview>
 ## Extracts embeded documentation from a source file.
@@ -257,7 +257,7 @@ global DocExtractor::processFile ( inFileName outFileName ) {
     define fileProcessor [get-processor [file-extension $inFileName]]
 
     if { not-null? $fileProcessor } {
-	$fileProcessor processFile $inFileName $outFileName
+        $fileProcessor processFile $inFileName $outFileName
     } {
         # File is not to be processed.
         is $false
@@ -277,12 +277,12 @@ global DocExtractor::processFile ( inFileName outFileName ) {
 define get-processor ( fileExtension ) {
 
     if { null? $_fileTypeInfo } {
-	init-file-type-info
+        init-file-type-info
     }
     define fileProcessor [$_fileTypeInfo get $fileExtension]
 
 #    if { null? $fileProcessor } {
-#	error [str-format "%s ('%s')" $_unsupportedFileTypeMsg $fileExtension]
+#        error [str-format "%s ('%s')" $_unsupportedFileTypeMsg $fileExtension]
 #    }
     is $fileProcessor
 }
@@ -304,8 +304,8 @@ define init-file-type-info () {
     set! _fileTypeInfo [new THashtable]
 
     foreach info $_fileTypes {
-	map define (extension prefix) $info
-	$_fileTypeInfo put $extension [new DocExtractor $prefix]
+        map define (extension prefix) $info
+        $_fileTypeInfo put $extension [new DocExtractor $prefix]
     }
 }
 
@@ -322,14 +322,6 @@ define init-file-type-info () {
 define format-date ( aDate ) {
     
     $aDate format "yyyy/mm/dd HH:MM:ss"
-
-#    str-printf "%d/%02d/%02d %02d:%02d:%02d"	\
-#		[$aDate getYear]	\
-#		[$aDate getMonth]	\
-#		[$aDate getDay]		\
-#		[$aDate getHour]	\
-#		[$aDate getMinute]	\
-#		[$aDate getSecond]
 }
 
 

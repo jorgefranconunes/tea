@@ -60,17 +60,17 @@ public class SModuleReflectTestTopClass {
     public String _aString = "This is a member string";
 
     static {
-	List<Object> subList = new ArrayList<Object>();
-	_CTE_LIST.add("Hello");
-	_CTE_LIST.add(new Boolean(true));
-	_CTE_LIST.add(subList);
-	_CTE_LIST.add(new Integer(345));
-	subList.add("This is a subList");
-	Map<Object,Object> subHash = new HashMap<Object,Object>();
-	_CTE_MAP.put("A sub hash", subHash);
-	_CTE_MAP.put("A list", _CTE_LIST);
-	_CTE_MAP.put("A float", _CTE_FLOAT);
-	subHash.put("A String", _CTE_STRING);
+        List<Object> subList = new ArrayList<Object>();
+        _CTE_LIST.add("Hello");
+        _CTE_LIST.add(new Boolean(true));
+        _CTE_LIST.add(subList);
+        _CTE_LIST.add(new Integer(345));
+        subList.add("This is a subList");
+        Map<Object,Object> subHash = new HashMap<Object,Object>();
+        _CTE_MAP.put("A sub hash", subHash);
+        _CTE_MAP.put("A list", _CTE_LIST);
+        _CTE_MAP.put("A float", _CTE_FLOAT);
+        subHash.put("A String", _CTE_STRING);
     }
 
     private int    _b = 0;
@@ -260,7 +260,6 @@ public class SModuleReflectTestTopClass {
 
    public static int adder(Integer a, Integer b) {
 
-	   //System.out.println("public static int adder(Integer "+a+", Integer "+b+")="+(a.intValue()+b.intValue()+1));
        return a.intValue()+b.intValue()+1;
    }
 
@@ -275,7 +274,7 @@ public class SModuleReflectTestTopClass {
  **************************************************************************/
 
    public static float adder(Float a, Float b) {
-	   
+
        return (a==null ? -2 : a.floatValue())+(b==null ? -2 : b.floatValue())+2;
    }
 
@@ -363,15 +362,14 @@ public class SModuleReflectTestTopClass {
        Method[] mtds = SModuleReflectTestTopClass.class.getDeclaredMethods();
 
        for(int i=0;i<mtds.length; i++) {
-	   System.out.println(mtds[i].getName()+":\n  Params:");
-	   Class<?>[] params=mtds[i].getParameterTypes();
-	   for(int j=0;j<params.length; j++) {
-	       System.out.println("    "+params[j].getName());
-	   }
-	   System.out.println("  Returns:\n    "+mtds[i].getReturnType().getName());
+           System.out.println(mtds[i].getName()+":\n  Params:");
+           Class<?>[] params=mtds[i].getParameterTypes();
+           for(int j=0;j<params.length; j++) {
+               System.out.println("    "+params[j].getName());
+           }
+           System.out.println("  Returns:\n    "+mtds[i].getReturnType().getName());
        }
 
- 
        System.out.println("Calling getArray(String,null)");
        String[] a = getArray("s1",null);
        int i=0;
@@ -381,7 +379,6 @@ public class SModuleReflectTestTopClass {
 
        SModuleReflectTestTopClass t = new SModuleReflectTestTopClass(null);
        System.out.println("RefelectTest(null).adder(null,\"s2\")= "+t.adder(null,"s2"));
-     
    }
 
 

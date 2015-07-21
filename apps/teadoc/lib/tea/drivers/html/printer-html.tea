@@ -82,8 +82,8 @@ global printer-html-get ( optionName ) {
 global printer-html-ArgElement ( outputStream anElement ) {
 
     $outputStream write \
-            "<code><i>"				\
-            [html-encode [$anElement getName]]	\
+            "<code><i>"                                \
+            [html-encode [$anElement getName]]        \
             "</i></code>"
 }
 
@@ -150,8 +150,8 @@ global printer-html-FuncRefElement ( outputStream anElement ) {
     define funcName [$anElement getName]
 
     $outputStream printf \
-            "<code><a href=\"function-%s.html\">%s</a></code>"	\
-            [url-encode [url-encode $funcName]]		\
+            "<code><a href=\"function-%s.html\">%s</a></code>"        \
+            [url-encode [url-encode $funcName]]                \
             [html-encode $funcName]
 }
 
@@ -169,9 +169,9 @@ global printer-html-ClassRefElement ( outputStream anElement ) {
 
     define className [$anElement getName]
 
-    $outputStream printf "<tt><a href=\"class-%s.html\">%s</a></tt>"	\
-			[url-encode [url-encode $className]]		\
-			[html-encode $className]
+    $outputStream printf "<tt><a href=\"class-%s.html\">%s</a></tt>"        \
+                        [url-encode [url-encode $className]]                \
+                        [html-encode $className]
 }
 
 
@@ -191,14 +191,14 @@ global printer-html-MethodRefElement ( outputStream anElement ) {
 
     if { null? $className } {
         $outputStream printf "<tt><a href=\"#%s\">%s</a></tt>"\
-			[url-encode [url-encode $methodName]]		\
-			[html-encode $methodName]
+                        [url-encode [url-encode $methodName]]                \
+                        [html-encode $methodName]
     } {
         $outputStream printf "<tt><a href=\"class-%s.html#%s\">%s %s</a></tt>"\
-			[url-encode [url-encode $className]]		\
-			[url-encode [url-encode $methodName]]		\
-			[html-encode $className]			\
-			[html-encode $methodName]
+                        [url-encode [url-encode $className]]                \
+                        [url-encode [url-encode $methodName]]                \
+                        [html-encode $className]                        \
+                        [html-encode $methodName]
     }
 }
 
@@ -329,12 +329,12 @@ global printer-html-Enumeration ( outputStream anElement ) {
 
     $outputStream writeln "<UL>"
     foreach item [$anElement getItems] {
-	map define ( label desc ) $item
-	$outputStream write "<LI><B>"
-	print-all-elements $outputStream $label
-	$outputStream write "</B>&nbsp;-&nbsp;"
-	print-all-elements $outputStream $desc
-	$outputStream writeln "</LI>"
+        map define ( label desc ) $item
+        $outputStream write "<LI><B>"
+        print-all-elements $outputStream $label
+        $outputStream write "</B>&nbsp;-&nbsp;"
+        print-all-elements $outputStream $desc
+        $outputStream writeln "</LI>"
     }
     $outputStream writeln "</UL>"
 }
@@ -389,7 +389,7 @@ global printer-html-generic ( outputStream anElement ) {
 define print-all-elements ( outputStream anElement ) {
 
     foreach element [$anElement getElements] {
-	$element print $outputStream
+        $element print $outputStream
     }
 }
 

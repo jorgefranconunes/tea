@@ -141,8 +141,8 @@ define print-header ( outputStream moduleDoc ) {
 
 define print-description ( outputStream moduleDoc ) {
 
-    $outputStream printf $DESCRIPTION_PREFIX	\
-				[html-encode [$moduleDoc getName]]
+    $outputStream printf $DESCRIPTION_PREFIX        \
+                                [html-encode [$moduleDoc getName]]
     [$moduleDoc getDescription] print $outputStream
     define since       [$moduleDoc getSince]
     if {not-null? $since} {
@@ -170,18 +170,18 @@ define print-functions ( outputStream moduleDoc ) {
     define functionDocs [$moduleDoc getFunctionDocs]
 
     if { not-empty? $functionDocs } {
-	$outputStream printf $TABLE_HEADER "Function Summary"
-	foreach functionDoc $functionDocs {
-	    define funcName        [$functionDoc getName]
-	    define funcNameEncoded [url-encode $funcName]
-	    $outputStream printf $LINE_HEADER				     \
-					"function"			     \
-					[url-encode $funcNameEncoded]	     \
-					[html-encode $funcName]
-	    [$functionDoc getOverview] print $outputStream
-	    $outputStream printf $LINE_FOOTER
-	}
-	$outputStream printf $TABLE_FOOTER
+        $outputStream printf $TABLE_HEADER "Function Summary"
+        foreach functionDoc $functionDocs {
+            define funcName        [$functionDoc getName]
+            define funcNameEncoded [url-encode $funcName]
+            $outputStream printf $LINE_HEADER     \
+                    "function"                    \
+                    [url-encode $funcNameEncoded] \
+                    [html-encode $funcName]
+            [$functionDoc getOverview] print $outputStream
+            $outputStream printf $LINE_FOOTER
+        }
+        $outputStream printf $TABLE_FOOTER
     }
 }
 
@@ -200,18 +200,18 @@ define print-classes ( outputStream moduleDoc ) {
     define classDocs [$moduleDoc getClassDocs]
 
     if { not-empty? $classDocs } {
-	$outputStream printf $TABLE_HEADER "Class Summary"
-	foreach classDoc $classDocs {
-	    define className [$classDoc getName]
-	    define classNameEncoded [url-encode $className]
-	    $outputStream printf $LINE_HEADER				  \
-					"class"				  \
-					[url-encode $classNameEncoded]    \
-					[html-encode $className]
-	    [$classDoc getOverview] print $outputStream
-	    $outputStream printf $LINE_FOOTER
-	}
-	$outputStream printf $TABLE_FOOTER
+        $outputStream printf $TABLE_HEADER "Class Summary"
+        foreach classDoc $classDocs {
+            define className [$classDoc getName]
+            define classNameEncoded [url-encode $className]
+            $outputStream printf $LINE_HEADER                                  \
+                                        "class"                                  \
+                                        [url-encode $classNameEncoded]    \
+                                        [html-encode $className]
+            [$classDoc getOverview] print $outputStream
+            $outputStream printf $LINE_FOOTER
+        }
+        $outputStream printf $TABLE_FOOTER
     }
 }
 

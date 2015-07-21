@@ -72,15 +72,15 @@ define print-header ( outputStream methodDoc ) {
 
     define methodName [$methodDoc getName]
 
-    $outputStream printf $HEADER					\
-				[url-encode [$methodDoc getName]]	\
-				[html-encode [$methodDoc getName]]
+    $outputStream printf $HEADER                                        \
+                                [url-encode [$methodDoc getName]]        \
+                                [html-encode [$methodDoc getName]]
 
     foreach formalArgs [$methodDoc getPrototypes] {
-	$outputStream printf $PROTOTYPE_ITEM 	\
-				[html-encode [$methodDoc getClassName]]	\
-				[html-encode $methodName]	\
-				[html-encode $formalArgs]
+        $outputStream printf $PROTOTYPE_ITEM         \
+                                [html-encode [$methodDoc getClassName]]        \
+                                [html-encode $methodName]        \
+                                [html-encode $formalArgs]
     }
 
     $outputStream write "</P><DL><DD><P>"
@@ -104,22 +104,22 @@ define print-params ( outputStream methodDoc ) {
     define returnInfo [$methodDoc getReturnInfo]
 
     if { or {not-empty? $params} {not-null? $returnInfo} } {
-	$outputStream writeln "<DD><DL>"
-	if { not-empty? $params } {
-	    $outputStream writeln "<DT><SPAN CLASS=\"docParamLabel\">Parameters:</SPAN>"
-	    foreach paramInfo $params {
-		$outputStream write "<DD>"
-		$paramInfo print $outputStream
-		$outputStream writeln "</DD>"
-	    }
-	    $outputStream writeln "</DT>"
-	}
-	if { not-null? $returnInfo } {
-	    $outputStream writeln "<DT><SPAN CLASS=\"docParamLabel\">Returns:</SPAN><DD>"
-	    $returnInfo print $outputStream
-	    $outputStream writeln "</DD>"
-	}
-	$outputStream writeln "</DL></DD>"
+        $outputStream writeln "<DD><DL>"
+        if { not-empty? $params } {
+            $outputStream writeln "<DT><SPAN CLASS=\"docParamLabel\">Parameters:</SPAN>"
+            foreach paramInfo $params {
+                $outputStream write "<DD>"
+                $paramInfo print $outputStream
+                $outputStream writeln "</DD>"
+            }
+            $outputStream writeln "</DT>"
+        }
+        if { not-null? $returnInfo } {
+            $outputStream writeln "<DT><SPAN CLASS=\"docParamLabel\">Returns:</SPAN><DD>"
+            $returnInfo print $outputStream
+            $outputStream writeln "</DD>"
+        }
+        $outputStream writeln "</DL></DD>"
     }
 }
 

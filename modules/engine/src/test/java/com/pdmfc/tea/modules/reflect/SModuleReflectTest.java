@@ -178,16 +178,16 @@ public class SModuleReflectTest {
      */
     @Test
     public void testExecMethod() throws Exception {
-    	
+
         // test call to overloaded method with 2 int args
-    	// static adder int in
-    	// or
-    	// static adder Integer Integer
-    	// current version of SModuleReflect can match any of those methods
-    	// (not deterministic). TODO make SModuleReflect deterministic in this sense ?
-    	// what says JLS 15.12 ?
-    	// http://java.sun.com/docs/books/jls/third_edition/html/expressions.html#15.12
-    	Integer iResult = (Integer) _engine.eval("java-exec-method \"com.pdmfc.tea.modules.reflect.SModuleReflectTestTopClass\" adder 34 23");    	
+        // static adder int in
+        // or
+        // static adder Integer Integer
+        // current version of SModuleReflect can match any of those methods
+        // (not deterministic). TODO make SModuleReflect deterministic in this sense ?
+        // what says JLS 15.12 ?
+        // http://java.sun.com/docs/books/jls/third_edition/html/expressions.html#15.12
+        Integer iResult = (Integer) _engine.eval("java-exec-method \"com.pdmfc.tea.modules.reflect.SModuleReflectTestTopClass\" adder 34 23");
         assertTrue(iResult.equals(Integer.valueOf(34 + 23)) || iResult.equals(1 + 34 + 23));
 
 

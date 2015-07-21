@@ -23,7 +23,7 @@
 #########################################################################
 ## 
 ## <TeaFunction name="url-build"
-## 		arguments="path data"
+##              arguments="path data"
 ##              module="tea.html">
 ##
 ## <Overview>
@@ -56,15 +56,15 @@ global url-build ( path data ) {
     define contents ()
 
     foreach datum $data {
-	map define (key val) $datum
-	define item [str-cat $key "=" [url-encode $val]]
+        map define (key val) $datum
+        define item [str-cat $key "=" [url-encode $val]]
 
-	set! contents [prepend $item $contents]
+        set! contents [prepend $item $contents]
     }
 
-    if { empty? $contents }	\
-	$path {
-	str-cat $path "?" [str-join $contents "&"]
+    if { empty? $contents }        \
+        $path {
+        str-cat $path "?" [str-join $contents "&"]
     }
 }
 

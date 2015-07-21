@@ -62,14 +62,14 @@ class ClassDoc (
 ###########################################################################
 #
 # @param className
-#	String representing the class name.
+#        String representing the class name.
 #
 ###########################################################################
 
 method ClassDoc constructor ( className ) {
 
     if $_classNeedsInit {
-	ClassDoc::init
+        ClassDoc::init
     }
 
     set! _className           $className
@@ -123,8 +123,8 @@ method ClassDoc setBaseClass ( baseClass ) {
 method ClassDoc getBaseClassName () {
 
     if { null? $_baseClass } \
-	$null {
-	$_baseClass getName
+        $null {
+        $_baseClass getName
     }
 }
 
@@ -171,7 +171,7 @@ method ClassDoc setModuleName ( moduleName ) {
 method ClassDoc getModuleName () {
 
     if { null? $_moduleName } {
-	set! _moduleName "General"
+        set! _moduleName "General"
     }
 
     is $_moduleName
@@ -187,7 +187,7 @@ method ClassDoc getModuleName () {
 # description.
 #
 # @param anOverview
-#	An instance of "Overview".
+#        An instance of "Overview".
 #
 ###########################################################################
 
@@ -222,7 +222,7 @@ method ClassDoc getOverview () {
 # description.
 #
 # @param aDescription
-#	An instance of "Description".
+#        An instance of "Description".
 #
 ###########################################################################
 
@@ -257,7 +257,7 @@ method ClassDoc getDescription () {
 # a class method.
 #
 # @param aMethodDoc
-#	An instance of "MethodDoc".
+#        An instance of "MethodDoc".
 #
 ###########################################################################
 
@@ -282,9 +282,9 @@ method ClassDoc addMethodDoc ( aMethodDoc ) {
 method ClassDoc getMethodDocs () {
 
     if { not $_methodListIsOrdered } {
-	$_methodSet sort [lambda (a b) { str-cmp [$a getName] [$b getName] }]
-	set! _methodList          [$_methodSet getElements]
-	set! _methodListIsOrdered $true
+        $_methodSet sort [lambda (a b) { str-cmp [$a getName] [$b getName] }]
+        set! _methodList          [$_methodSet getElements]
+        set! _methodListIsOrdered $true
     }
     is $_methodList
 }

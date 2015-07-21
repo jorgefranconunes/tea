@@ -83,9 +83,9 @@ define print-header ( outputStream functionDoc ) {
     define header [printer-html-get header]
 
     $outputStream write [str-fmt $HTML_DOC_PREFIX $now [$functionDoc getName]]
-    $outputStream printf $NAVIGATION_BAR			\
-				[$functionDoc getModuleName]	\
-				$header
+    $outputStream printf $NAVIGATION_BAR                        \
+                                [$functionDoc getModuleName]        \
+                                $header
 }
 
 
@@ -107,7 +107,7 @@ define print-params ( outputStream functionDoc ) {
     $outputStream printf $PARAMS_HEADER $funcName
 
     foreach formalArgs [$functionDoc getPrototypes] {
-	$outputStream printf $PROTOTYPES_ITEM $funcName $formalArgs
+        $outputStream printf $PROTOTYPES_ITEM $funcName $formalArgs
     }
 
     $outputStream write "</P><DL><DD><P>"
@@ -115,22 +115,22 @@ define print-params ( outputStream functionDoc ) {
     $outputStream writeln "</P></DD>"
 
     if { or {not-empty? $params} {not-null? $returnInfo} } {
-	$outputStream writeln "<DD><DL>"
-	if { not-empty? $params } {
-	    $outputStream writeln "<DT><SPAN CLASS=\"docParamLabel\">Parameters:</SPAN>"
-	    foreach paramInfo $params {
-		$outputStream write "<DD>"
-		$paramInfo print $outputStream
-		$outputStream writeln "</DD>"
-	    }
-	    $outputStream writeln "</DT>"
-	}
-	if { not-null? $returnInfo } {
-	    $outputStream writeln "<DT><SPAN CLASS=\"docParamLabel\">Returns:</SPAN><DD>"
-	    $returnInfo print $outputStream
-	    $outputStream writeln "</DD>"
-	}
-	$outputStream writeln "</DL></DD>"
+        $outputStream writeln "<DD><DL>"
+        if { not-empty? $params } {
+            $outputStream writeln "<DT><SPAN CLASS=\"docParamLabel\">Parameters:</SPAN>"
+            foreach paramInfo $params {
+                $outputStream write "<DD>"
+                $paramInfo print $outputStream
+                $outputStream writeln "</DD>"
+            }
+            $outputStream writeln "</DT>"
+        }
+        if { not-null? $returnInfo } {
+            $outputStream writeln "<DT><SPAN CLASS=\"docParamLabel\">Returns:</SPAN><DD>"
+            $returnInfo print $outputStream
+            $outputStream writeln "</DD>"
+        }
+        $outputStream writeln "</DL></DD>"
     }
 }
 
@@ -194,9 +194,9 @@ define print-footer ( outputStream functionDoc ) {
     define footer [printer-html-get footer]
     define bottom [printer-html-get bottom]
 
-    $outputStream printf $NAVIGATION_BAR			\
-				[$functionDoc getModuleName]	\
-				$footer
+    $outputStream printf $NAVIGATION_BAR                        \
+                                [$functionDoc getModuleName]        \
+                                $footer
     $outputStream writeln $bottom
     $outputStream write $HTML_DOC_SUFIX
 }

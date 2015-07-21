@@ -67,57 +67,57 @@ import "elements/VarElement.tea"
 
 
 define START_ELEMENT_METHODS (
-	( "TeaDoc"		$null )
-	( "TeaModule"		startTeaModule )
-	( "TeaClass"		startTeaClass )
-	( "TeaMethod"		startTeaMethod )
-	( "TeaFunction"		startTeaFunction )
-	( "Prototype"   	startPrototype )
-	( "Overview"		startOverview )
-	( "Parameter"		startParameter )
-	( "Returns"		startReturns )
-	( "Since"		startSince )
-	( "Description"		startDescription )
-	( "Func"		startFunc )
-	( "FuncRef"		startFuncRef )
-	( "Class"		startFunc )
-	( "ClassRef"		startClassRef )
-	( "MethodRef"		startMethodRef )
-	( "Arg"			startArg )
-	( "Code"		startCode )
-	( "Var"			startVar )
-	( "P"			startP )
-	( "Enumeration" 	startEnumeration )
-	( "EnumItem"		$null )
-	( "EnumLabel"		startEnumLabel )
-	( "EnumDescription"	startEnumDescription )
+        ( "TeaDoc"                $null )
+        ( "TeaModule"                startTeaModule )
+        ( "TeaClass"                startTeaClass )
+        ( "TeaMethod"                startTeaMethod )
+        ( "TeaFunction"                startTeaFunction )
+        ( "Prototype"           startPrototype )
+        ( "Overview"                startOverview )
+        ( "Parameter"                startParameter )
+        ( "Returns"                startReturns )
+        ( "Since"                startSince )
+        ( "Description"                startDescription )
+        ( "Func"                startFunc )
+        ( "FuncRef"                startFuncRef )
+        ( "Class"                startFunc )
+        ( "ClassRef"                startClassRef )
+        ( "MethodRef"                startMethodRef )
+        ( "Arg"                        startArg )
+        ( "Code"                startCode )
+        ( "Var"                        startVar )
+        ( "P"                        startP )
+        ( "Enumeration"         startEnumeration )
+        ( "EnumItem"                $null )
+        ( "EnumLabel"                startEnumLabel )
+        ( "EnumDescription"        startEnumDescription )
 )
 
 define END_ELEMENT_METHODS (
-	( "TeaDoc"		$null )
-	( "TeaModule"		endDocElement )
-	( "TeaClass"		endDocElement )
-	( "TeaMethod"		endDocElement )
-	( "TeaFunction"		endDocElement )
-	( "Prototype"   	$null )
-	( "Overview"		endDocElement )
-	( "Parameter"		endDocElement )
-	( "Returns"		endDocElement )
-	( "Since"		$null )
-	( "Description"		endDocElement )
-	( "Func"		$null )
-	( "FuncRef"		$null )
-	( "Class"		$null )
-	( "ClassRef"		$null )
-	( "MethodRef"		$null )
-	( "Arg"			$null )
-	( "Code"		endDocElement )
-	( "Var"			$null )
-	( "P"			endDocElement )
-	( "Enumeration" 	endDocElement )
-	( "EnumItem"		$null )
-	( "EnumLabel"		endDocElement )
-	( "EnumDescription"	endDocElement )
+        ( "TeaDoc"                $null )
+        ( "TeaModule"                endDocElement )
+        ( "TeaClass"                endDocElement )
+        ( "TeaMethod"                endDocElement )
+        ( "TeaFunction"                endDocElement )
+        ( "Prototype"           $null )
+        ( "Overview"                endDocElement )
+        ( "Parameter"                endDocElement )
+        ( "Returns"                endDocElement )
+        ( "Since"                $null )
+        ( "Description"                endDocElement )
+        ( "Func"                $null )
+        ( "FuncRef"                $null )
+        ( "Class"                $null )
+        ( "ClassRef"                $null )
+        ( "MethodRef"                $null )
+        ( "Arg"                        $null )
+        ( "Code"                endDocElement )
+        ( "Var"                        $null )
+        ( "P"                        endDocElement )
+        ( "Enumeration"         endDocElement )
+        ( "EnumItem"                $null )
+        ( "EnumLabel"                endDocElement )
+        ( "EnumDescription"        endDocElement )
 )
 
 
@@ -164,7 +164,7 @@ class DocSet TXmlParser (
 method DocSet constructor () {
 
     if $_classNeedsInit {
-	DocSet::init
+        DocSet::init
     }
     set! _elementStack        [new TVector]
     set! _currentElement      $null
@@ -204,9 +204,9 @@ method DocSet process ( fileName ) {
 method DocSet getModuleDocs () {
 
     if { not $_moduleListIsOrdered } {
-	$_moduleSet sort [lambda (a b) { str-cmp [$a getName] [$b getName] }]
-	set! _moduleList          [$_moduleSet getElements]
-	set! _moduleListIsOrdered $true
+        $_moduleSet sort [lambda (a b) { str-cmp [$a getName] [$b getName] }]
+        set! _moduleList          [$_moduleSet getElements]
+        set! _moduleListIsOrdered $true
     }
     is $_moduleList
 }
@@ -255,7 +255,7 @@ method DocSet startElement ( name attribs ) {
     define aMethod [$_startElementMethods get $name]
 
     if { not-null? $aMethod } {
-	$this $aMethod $attribs
+        $this $aMethod $attribs
     } {
         if { $_startElementMethods isKey $name } {
             # Nothing to do if the tag name is registered.
@@ -379,7 +379,7 @@ method DocSet startTeaClass ( attribs ) {
     define moduleDoc     [$this fetchModuleDoc $moduleName]
 
     if { not-null? $baseClassName } {
-	$classDoc setBaseClass [$this fetchClassDoc $baseClassName]
+        $classDoc setBaseClass [$this fetchClassDoc $baseClassName]
     }
     $classDoc setModuleName $moduleName
     $moduleDoc addClassDoc $classDoc
@@ -753,10 +753,10 @@ method DocSet fetchModuleDoc ( moduleName ) {
     define moduleDoc [$_moduleDocs get $moduleName]
 
     if { null? $moduleDoc } {
-	set! moduleDoc [new ModuleDoc $moduleName]
-	$_moduleDocs put $moduleName $moduleDoc
-	$_moduleSet append $moduleDoc
-	set! _moduleListIsOrdered $false
+        set! moduleDoc [new ModuleDoc $moduleName]
+        $_moduleDocs put $moduleName $moduleDoc
+        $_moduleSet append $moduleDoc
+        set! _moduleListIsOrdered $false
     }
     is $moduleDoc
 }
@@ -817,10 +817,10 @@ define DocSet::init () {
     set! _endElementMethods   [new THashtable]
 
     foreach methodInfo $START_ELEMENT_METHODS {
-	apply $_startElementMethods put $methodInfo
+        apply $_startElementMethods put $methodInfo
     }
     foreach methodInfo $END_ELEMENT_METHODS {
-	apply $_endElementMethods put $methodInfo
+        apply $_endElementMethods put $methodInfo
     }
 
     set! _classNeedsInit $false

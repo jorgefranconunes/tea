@@ -56,7 +56,7 @@ class MethodDoc FunctionDoc (
 method MethodDoc constructor ( className methodName argsText ) {
 
     if $_classNeedsInit {
-	MethodDoc::init
+        MethodDoc::init
     }
 
     $super constructor $methodName $argsText

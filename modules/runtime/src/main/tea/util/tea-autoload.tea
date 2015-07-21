@@ -37,7 +37,7 @@ define _dirsToSearch $TEA_LIBRARY
 ###########################################################################
 ## 
 ## <TeaFunction name="tea-autoload"
-## 		arguments="name sourceFile"
+##                 arguments="name sourceFile"
 ##              module="tea.util">
 ##
 ## <Overview>
@@ -81,7 +81,7 @@ global tea-autoload ( functionName sourceFile ) {
 ###########################################################################
 ## 
 ## <TeaFunction name="tea-autoload-native-function"
-## 		arguments="functioName nativeCodeFunction"
+##                 arguments="functioName nativeCodeFunction"
 ##             module="tea.util">
 ##
 ## <Overview>
@@ -112,9 +112,9 @@ global tea-autoload ( functionName sourceFile ) {
 global tea-autoload-native-function ( functionName nativeCodeFunction ) {
 
     $_loaders put $functionName [
-	lambda () {
-	    global $functionName [load-function $nativeCodeFunction]
- 	}
+        lambda () {
+            global $functionName [load-function $nativeCodeFunction]
+         }
     ]
 }
 
@@ -125,7 +125,7 @@ global tea-autoload-native-function ( functionName nativeCodeFunction ) {
 ###########################################################################
 ## 
 ## <TeaFunction name="tea-autoload-native-class"
-## 		arguments="className nativeCodeClass"
+##                 arguments="className nativeCodeClass"
 ##             module="tea.util">
 ##
 ## <Overview>
@@ -156,9 +156,9 @@ global tea-autoload-native-function ( functionName nativeCodeFunction ) {
 global tea-autoload-native-class ( className nativeCodeClass ) {
 
     $_loaders put $className [
-	lambda () {
-	    global $className [load-class $nativeCodeClass]
- 	}
+        lambda () {
+            global $className [load-class $nativeCodeClass]
+         }
     ]
 }
 
@@ -169,7 +169,7 @@ global tea-autoload-native-class ( className nativeCodeClass ) {
 ###########################################################################
 ## 
 ## <TeaFunction name="tea-autoload-module"
-## 		arguments="symbol packageClass"
+##                 arguments="symbol packageClass"
 ##             module="tea.util">
 ##
 ## <Overview>
@@ -197,9 +197,9 @@ global tea-autoload-native-class ( className nativeCodeClass ) {
 global tea-autoload-module ( symbol packageClass ) {
 
     $_loaders put $symbol [
-	lambda () {
-	    load $packageClass
- 	}
+        lambda () {
+            load $packageClass
+         }
     ]
 }
 
@@ -236,28 +236,28 @@ define tea-autoload-callback ( functionName ) {
     define loader [$_loaders get $functionName]
 
     if { null? $loader } {
-	while { not-empty? $_dirsToSearch } {
-	    define urlPrefix [car $_dirsToSearch]
-	    set! _dirsToSearch [cdr $_dirsToSearch]
-	    define fullUrl   [str-cat $urlPrefix "/" $AUTOLOAD_INDEX_FILE]
+        while { not-empty? $_dirsToSearch } {
+            define urlPrefix [car $_dirsToSearch]
+            set! _dirsToSearch [cdr $_dirsToSearch]
+            define fullUrl   [str-cat $urlPrefix "/" $AUTOLOAD_INDEX_FILE]
             define input     $null
 
             catch { set! input [new TUrlInput $fullUrl] }
 
-	    if { not-null? $input } {
-		source $input
+            if { not-null? $input } {
+                source $input
                 $input close
-		set! loader [$_loaders get $functionName]
-		if { not-null? $loader } {
-		    break
-		}
-	    }
-	}
+                set! loader [$_loaders get $functionName]
+                if { not-null? $loader } {
+                    break
+                }
+            }
+        }
     }
 
     if { not-null? $loader } {
-	$loader
-	$_loaders remove $functionName
+        $loader
+        $_loaders remove $functionName
     }
 }
 

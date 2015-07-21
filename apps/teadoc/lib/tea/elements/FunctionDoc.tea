@@ -62,17 +62,17 @@ class FunctionDoc (
 ###########################################################################
 #
 # @param functionName
-#	String representing the function name.
+#        String representing the function name.
 #
 # @param formalArgs
-#	String representing the function formal parameters.
+#        String representing the function formal parameters.
 #
 ###########################################################################
 
 method FunctionDoc constructor ( functionName formalArgs ) {
 
     if $_classNeedsInit {
-	FunctionDoc::init
+        FunctionDoc::init
     }
 
     set! _prototypesList ()
@@ -154,7 +154,7 @@ method FunctionDoc setModuleName ( moduleName ) {
 method FunctionDoc getModuleName () {
 
     if { null? $_moduleName } {
-	set! _moduleName "General"
+        set! _moduleName "General"
     }
 
     is $_moduleName
@@ -170,7 +170,7 @@ method FunctionDoc getModuleName () {
 # description.
 #
 # @param anOverview
-#	An instance of "Overview".
+#        An instance of "Overview".
 #
 ###########################################################################
 
@@ -205,7 +205,7 @@ method FunctionDoc getOverview () {
 # description.
 #
 # @param aDescription
-#	An instance of "Description".
+#        An instance of "Description".
 #
 ###########################################################################
 
@@ -239,7 +239,7 @@ method FunctionDoc getDescription () {
 # Adds the representation of the description of a formal parameter.
 #
 # @param aParameter
-#	An instance of "Parameter".
+#        An instance of "Parameter".
 #
 ###########################################################################
 

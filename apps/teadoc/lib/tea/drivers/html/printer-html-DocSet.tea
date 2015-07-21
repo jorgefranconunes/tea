@@ -152,15 +152,15 @@ define print-modules ( outputStream docSet ) {
     define moduleDocs [$docSet getModuleDocs]
 
     if { not-empty? $moduleDocs } {
-	$outputStream printf $TABLE_HEADER "Modules"
-	foreach moduleDoc $moduleDocs {
-	    $outputStream printf $LINE_HEADER				     \
-					[html-encode [$moduleDoc getName]] \
-					[html-encode [$moduleDoc getName]]
-	    [$moduleDoc getOverview] print $outputStream
-	    $outputStream printf $LINE_FOOTER
-	}
-	$outputStream printf $TABLE_FOOTER
+        $outputStream printf $TABLE_HEADER "Modules"
+        foreach moduleDoc $moduleDocs {
+            $outputStream printf $LINE_HEADER                                     \
+                                        [html-encode [$moduleDoc getName]] \
+                                        [html-encode [$moduleDoc getName]]
+            [$moduleDoc getOverview] print $outputStream
+            $outputStream printf $LINE_FOOTER
+        }
+        $outputStream printf $TABLE_FOOTER
     }
 }
 

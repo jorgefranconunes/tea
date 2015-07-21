@@ -51,14 +51,14 @@ class Parameter ElementList (
 ###########################################################################
 #
 # @param name
-#	String representing the name of the formal parameter.
+#        String representing the name of the formal parameter.
 #
 ###########################################################################
 
 method Parameter constructor ( name ) {
 
     if $_classNeedsInit {
-	Parameter::init
+        Parameter::init
     }
 
     $super constructor
