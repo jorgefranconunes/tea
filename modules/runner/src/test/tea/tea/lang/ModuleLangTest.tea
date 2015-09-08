@@ -1251,3 +1251,56 @@ tunit-testsuite load-test {
     
 }
 
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite load-function-test {
+    
+    
+    tunit-test-error tooFewArgs {
+        
+        load-function
+    }
+    
+    
+    tunit-test-error tooManyArgs {
+        
+        load-function "one" "two"
+    }
+    
+    
+    tunit-test-error invalidArgType {
+        
+        load-function one
+    }
+    
+    
+    tunit-test-error nonExistingFunctionClass {
+        
+        load-function "a.class.that.does.not.Exist"
+    }
+    
+    
+    tunit-test-error wrongClass {
+        
+        load-function "com.pdmfc.tea.TeaException"
+    }
+    
+    
+    tunit-test allOk {
+        
+        define f [load-function "java.lang.String"]
+        
+        tunit-assert-equals "hello" [f]
+    }
+    
+    
+}
+

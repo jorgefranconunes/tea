@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2015 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -64,7 +64,7 @@ public class TeaRunException
  **************************************************************************/
 
     public TeaRunException(final String    msgFmt,
-                             final Object... fmtArgs) {
+                           final Object... fmtArgs) {
 
         init(msgFmt, fmtArgs);
     }
@@ -88,8 +88,8 @@ public class TeaRunException
  **************************************************************************/
  
     public TeaRunException(final Object[]  args,
-                             final String    msgFmt,
-                             final Object... fmtArgs) {
+                           final String    msgFmt,
+                           final Object... fmtArgs) {
 
         initForFunction(args, msgFmt, fmtArgs);
     }

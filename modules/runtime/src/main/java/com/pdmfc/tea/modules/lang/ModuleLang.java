@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2015 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -2525,37 +2525,36 @@ public final class ModuleLang
                                        final Object[]    args)
         throws TeaException {
 
-        if ( args.length != 2 ) {
-            throw new TeaNumArgException(args, "java-class-name");
-        }
+        Args.checkCount(args, 2, "java-class-name");
 
         String       className = Args.getString(args,1);
-        Class        javaClass = null;
-        TeaFunction teaFunc   = _funcs.get(className);
-        String       msg       = null;
+        TeaFunction teaFunction = _funcs.get(className);
 
-        if ( teaFunc == null ) {
+        if ( teaFunction == null ) {
+            Class javaClass = null;
+
             try {
                 javaClass = Class.forName(className);
-                teaFunc = (TeaFunction)javaClass.newInstance();
-            } catch ( ClassNotFoundException e1 ) {
-                msg = "could not find class '" + className + "'";
-            } catch ( InstantiationException e2 ) {
-                msg = "failed instantiation for object of class '" + className + "'";
-            } catch ( IllegalAccessException e3 ) {
-                msg = "class '" + className+"' or its initializer are not accessible";
-            } catch ( ClassCastException e4 ) {
-                msg = "class '" + className + "' is not a TeaFunction";
-            } catch ( NoSuchMethodError e5 ) {
-                msg = "class '" + className + "' does not have a default constructor";
+                teaFunction = (TeaFunction)javaClass.newInstance();
+            } catch ( ClassCastException e ) {
+                String errorMsg =
+                    "Class \"{0}\" is not a {1}";
+                throw new TeaRunException(errorMsg,
+                                          className,
+                                          TeaFunction.class.getName());
+            } catch ( Exception e ) {
+                String errorMsg =
+                    "Failed to instanciate class \"{0}\" - {1} - {2}";
+                throw new TeaRunException(errorMsg,
+                                          className,
+                                          e.getClass().getName(),
+                                          e.getMessage());
             }
-            if ( msg != null ) {
-                throw new TeaRunException(msg);
-            }
-            _funcs.put(className, teaFunc);
+
+            _funcs.put(className, teaFunction);
         }
 
-        return teaFunc;
+        return teaFunction;
     }
 
 

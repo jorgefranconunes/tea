@@ -15,7 +15,8 @@ import com.pdmfc.tea.TeaContext;
 
 /**************************************************************************
  *
- * Tea commands are represented by objects derived from this class.
+ * Tea functions are represented by objects implementing this
+ * interface.
  *
  **************************************************************************/
 
@@ -33,20 +34,20 @@ public interface TeaFunction  {
  * function. Most of the time is the same as the <code>this</code>
  * object.
  *
- * @param context The context where the command should be executed.
+ * @param context The context where the function should be executed.
  *
- * @param args Array with the arguments passed to the command.
+ * @param args Array with the arguments passed to the function.
  *
  * @return An <code>Object</code> object.
  *
- * @exception com.pdmfc.tea.TeaException Thrown if there were
- * problems executing the command.
+ * @exception com.pdmfc.tea.TeaException Thrown if there were problems
+ * executing the function.
  *
  **************************************************************************/
 
     Object exec(TeaFunction func,
-                TeaContext     context,
-                Object[]     args)
+                TeaContext  context,
+                Object[]    args)
         throws TeaException;
 
 
