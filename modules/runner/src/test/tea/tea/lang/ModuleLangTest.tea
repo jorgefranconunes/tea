@@ -1296,9 +1296,72 @@ tunit-testsuite load-function-test {
     
     tunit-test allOk {
         
-        define f [load-function "java.lang.String"]
+        define f [load-function "com.pdmfc.tea.modules.lang.TestFunction"]
         
         tunit-assert-equals "hello" [f]
+    }
+    
+    
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite map-test {
+    
+    
+    tunit-test-error tooFewArgs0 {
+        
+        map
+    }
+    
+    
+    tunit-test-error tooFewArgs1 {
+        
+        map is
+    }
+    
+    
+    tunit-test-error invalidArgType1 {
+        
+        map "what?!" ()
+    }
+    
+    
+    tunit-test-error invalidArgType2 {
+        
+        map is "what?!"
+    }
+    
+    
+    tunit-test-error listsWithDiferentSizes {
+        
+        map + (1 2 3) (4 5)
+    }
+    
+    
+    tunit-test emptyList {
+        
+        define result [map is ()]
+        
+        tunit-assert-equals 0 [length $result]
+    }
+    
+    
+    tunit-test allOk {
+        
+        define expectedResult ( 5 7 9 )
+        define result [map + ( 1 2 3 ) ( 4 5 6 )]
+        
+        tunit-assert-equals [length $expectedResult] [length $result]
+        map tunit-assert-equals $expectedResult $result
     }
     
     

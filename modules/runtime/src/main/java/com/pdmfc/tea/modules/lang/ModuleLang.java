@@ -2480,8 +2480,8 @@ public final class ModuleLang
 
 //* 
 //* <TeaFunction name="load-function"
-//*                 arguments="javaClassName"
-//*             module="tea.lang">
+//*              arguments="javaClassName"
+//*              module="tea.lang">
 //*
 //* <Overview>
 //* Dynamically loads new Tea function from a Java class.
@@ -2563,8 +2563,8 @@ public final class ModuleLang
 
 //* 
 //* <TeaFunction name="map"
-//*                 arguments="aFunction argList1 [argList2 ...]"
-//*             module="tea.lang">
+//*              arguments="aFunction argList1 [argList2 ...]"
+//*              module="tea.lang">
 //*
 //* <Overview>
 //* Invokes a a function repeatedly for a given set of arguments.
@@ -2626,29 +2626,29 @@ public final class ModuleLang
                                      final Object[]    args)
         throws TeaException {
 
-        if ( args.length < 3 ) {
-            throw new TeaNumArgException(args, "procedure list1 ...");
-        }
+        Args.checkAtLeast(args, 3, "function list1 ...");
         
-        TeaFunction proc      = Args.getFunction(context, args, 1);
-        Iterator[]   iterators = buildListOfI(args);
-        Object[]     procArgs  = new Object[args.length-1];
-        TeaPair     resHead   = TeaPair.emptyList();
-        TeaPair     resElem   = null;
+        TeaFunction function     = Args.getFunction(context, args, 1);
+        Iterator[]  iterators    = buildArrayOfIterators(args);
+        Object[]    functionArgs = new Object[args.length-1];
+        TeaPair     resHead      = TeaPair.emptyList();
+        TeaPair     resElem      = null;
         
-        procArgs[0] = args[1];
+        functionArgs[0] = args[1];
 
         while ( iterators[0].hasNext() ) {
-            for ( int i=0; i<iterators.length; i++ ) {
+            for ( int i=0, size=iterators.length; i<size; ++i ) {
                 try {
-                    procArgs[i+1] = iterators[i].next();
+                    functionArgs[i+1] = iterators[i].next();
                 } catch ( NoSuchElementException e ) {
                     String msg = "lists with diferent sizes";
                     throw new TeaRunException(args, msg);
                 }
             }
-            TeaPair node = new TeaPair(proc.exec(proc, context, procArgs),
-                                         TeaPair.emptyList());
+
+            Object element = function.exec(function, context, functionArgs);
+            TeaPair node = new TeaPair(element, TeaPair.emptyList());
+
             if ( resElem == null ) {
                 resHead = node;
             } else {
@@ -2681,12 +2681,12 @@ public final class ModuleLang
  *
  **************************************************************************/
 
-    private static Iterator[] buildListOfI(final Object[] args)
+    private static Iterator[] buildArrayOfIterators(final Object[] args)
         throws TeaException {
 
         Iterator[] iterators = new Iterator[args.length-2];
 
-        for ( int i=0; i<iterators.length; i++ ) {
+        for ( int i=0, size=iterators.length; i<size; i++ ) {
             iterators[i] = Args.getPair(args, i+2).iterator();
         }
 
