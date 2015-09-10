@@ -2695,10 +2695,12 @@ public final class ModuleLang
 
 
 
+
+
 //* 
 //* <TeaFunction name="map-apply"
-//*                 arguments="aFunction aList"
-//*             module="tea.lang">
+//*              arguments="aFunction aList"
+//*              module="tea.lang">
 //*
 //* <Overview>
 //* Repeatedly executes a function.
@@ -2761,63 +2763,72 @@ public final class ModuleLang
                                           final Object[]    args)
         throws TeaException {
 
-        if ( args.length != 3 ) {
-            throw new TeaNumArgException(args, "procedure list-of-arg-list");
-        }
+        Args.checkCount(args, 3, "function list-of-arg-list");
 
-        TeaFunction proc       = Args.getFunction(context, args, 1);
-        Iterator     iterator   = Args.getPair(args, 2).iterator();
-        int          iterCount  = -1;
-        int          numArgs    = 0;
-        Object[]     funcArgs   = null;
+        TeaFunction function   = Args.getFunction(context, args, 1);
+        Iterator    iterator   = Args.getPair(args, 2).iterator();
+        int         index      = -1;
+        int         numArgs    = 0;
+        Object[]    funcArgs   = null;
         TeaPair     emptyList  = TeaPair.emptyList();
         TeaPair     resultHead = emptyList;
         TeaPair     resultTail = null;
         TeaPair     node       = null;
 
         if ( iterator.hasNext() ) {
-            iterCount++;
+            index++;
             Object o = iterator.next();
-            TeaPair argList = null;
-            try {
-                argList = (TeaPair)o;
-            } catch ( ClassCastException e ) {
-                String msg = "arg 2, element {0} must be a list, not a {1}";
-                throw new TeaRunException(args,
-                                            msg,
-                                            iterCount,
-                                            Types.getTypeName(o));
-            }
+            TeaPair argList = getAsList(o, index);
+
             numArgs = argList.length() + 1;
             funcArgs = new Object[numArgs];
-            funcArgs[0] = proc;
+            funcArgs[0] = function;
             fillArgs(funcArgs, argList);
-            Object funcResult = proc.exec(proc, context, funcArgs);
+            Object funcResult = function.exec(function, context, funcArgs);
             resultHead = new TeaPair(funcResult, emptyList);
             resultTail = resultHead;
         }
 
         while ( iterator.hasNext() ) {
-            iterCount++;
+            index++;
             Object o = iterator.next();
-            TeaPair argList = null;
-            try {
-                argList = (TeaPair)o;
-            } catch ( ClassCastException e ) {
-                String msg = "arg 2, element {0} must be a list, not a {1}";
-                throw new TeaRunException(args,
-                                            msg,
-                                            iterCount,
-                                            Types.getTypeName(o));
-            }
+            TeaPair argList = getAsList(o, index);
+
             fillArgs(funcArgs, argList);
-            Object   funcResult = proc.exec(proc, context, funcArgs);
-            node = new TeaPair(funcResult ,emptyList);
+            Object   funcResult = function.exec(function, context, funcArgs);
+            node = new TeaPair(funcResult, emptyList);
             resultTail.setCdr(node);
             resultTail = node;
         }
 
         return resultHead;
+    }
+
+
+
+
+
+/**************************************************************************
+ *
+ * 
+ *
+ **************************************************************************/
+
+    private static TeaPair getAsList(final Object object,
+                                     final int index)
+        throws TeaRunException {
+
+        TeaPair result = null;
+
+        try {
+            result = (TeaPair)object;
+        } catch ( ClassCastException e ) {
+            String msg = "element {0} must be a list, not a {1}";
+            throw new TeaRunException(msg, index, Types.getTypeName(object));
+            
+        }
+
+        return result;
     }
 
 

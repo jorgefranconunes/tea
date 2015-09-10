@@ -1367,3 +1367,60 @@ tunit-testsuite map-test {
     
 }
 
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite map-apply-test {
+    
+    
+    tunit-test-error tooFewArgs0 {
+        
+        map-apply
+    }
+    
+    
+    tunit-test-error tooFewArgs1 {
+        
+        map-apply +
+    }
+    
+    
+    tunit-test-error invalidArgType1 {
+        
+        map-apply "what?!" ()
+    }
+    
+    
+    tunit-test-error invalidArgType2 {
+        
+        map-apply + "what?!"
+    }
+    
+    
+    tunit-test emptyList {
+        
+        define result [map-apply + ()]
+        
+        tunit-assert-equals 0 [length $result]
+    }
+    
+    
+    tunit-test allOk {
+        
+        define expectedResult ( 5 7 9 15 )
+        define result [map-apply + ( (1 4) (2 5) (3 6) (4 5 6) )]
+        
+        tunit-assert-equals [length $expectedResult] [length $result]
+        map tunit-assert-equals $expectedResult $result
+    }
+    
+    
+}
+
