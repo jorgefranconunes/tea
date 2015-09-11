@@ -1,6 +1,6 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2015 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
@@ -65,7 +65,7 @@ public final class TeaPair
  **************************************************************************/
 
     public TeaPair(final Object   car,
-                    final TeaPair cdr) {
+                   final TeaPair cdr) {
 
         _car = car;
         _cdr = cdr;
@@ -227,7 +227,7 @@ public final class TeaPair
 
     public Iterator iterator() {
 
-        return new SPairIterator(this);
+        return new TeaPair.Iterator(this);
     }
 
 
@@ -240,9 +240,9 @@ public final class TeaPair
  *
  **************************************************************************/
 
-    private static final class SPairIterator
+    private static final class Iterator
         extends Object
-        implements Iterator {
+        implements java.util.Iterator {
 
 
         private TeaPair _node = null;
@@ -257,7 +257,7 @@ public final class TeaPair
  *
  **************************************************************************/
 
-        public SPairIterator(final TeaPair node) {
+        public Iterator(final TeaPair node) {
 
             _node = node;
             if ( (_node!=null) && (_node._car==null) ) {
@@ -275,6 +275,7 @@ public final class TeaPair
  *
  **************************************************************************/
 
+        @Override
         public boolean hasNext() {
 
             return (_node!=null) && (_node._car!=null);
@@ -290,10 +291,11 @@ public final class TeaPair
  *
  **************************************************************************/
 
+        @Override
         public Object next() {
 
             if ( (_node==null) || (_node._car==null) ) {
-                throw new NoSuchElementException("TeaPairIterator");
+                throw new NoSuchElementException();
             }
             Object element = _node._car;
 
@@ -312,6 +314,7 @@ public final class TeaPair
  *
  **************************************************************************/
 
+        @Override
         public void remove() {
 
             throw new UnsupportedOperationException();

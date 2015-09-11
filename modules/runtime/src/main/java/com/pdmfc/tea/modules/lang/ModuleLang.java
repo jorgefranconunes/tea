@@ -34,6 +34,7 @@ import com.pdmfc.tea.TeaBlock;
 import com.pdmfc.tea.TeaFunction;
 import com.pdmfc.tea.TeaNull;
 import com.pdmfc.tea.TeaPair;
+import com.pdmfc.tea.TeaPairListBuilder;
 import com.pdmfc.tea.TeaSymbol;
 import com.pdmfc.tea.TeaVar;
 import com.pdmfc.tea.TeaReturnException;
@@ -2628,11 +2629,10 @@ public final class ModuleLang
 
         Args.checkAtLeast(args, 3, "function list1 ...");
         
-        TeaFunction function     = Args.getFunction(context, args, 1);
-        Iterator[]  iterators    = buildArrayOfIterators(args);
-        Object[]    functionArgs = new Object[args.length-1];
-        TeaPair     resHead      = TeaPair.emptyList();
-        TeaPair     resElem      = null;
+        TeaFunction        function     = Args.getFunction(context, args, 1);
+        Iterator[]         iterators    = buildArrayOfIterators(args);
+        Object[]           functionArgs = new Object[args.length-1];
+        TeaPairListBuilder listBuilder  = new TeaPairListBuilder();
         
         functionArgs[0] = args[1];
 
@@ -2645,19 +2645,13 @@ public final class ModuleLang
                     throw new TeaRunException(args, msg);
                 }
             }
-
-            Object element = function.exec(function, context, functionArgs);
-            TeaPair node = new TeaPair(element, TeaPair.emptyList());
-
-            if ( resElem == null ) {
-                resHead = node;
-            } else {
-                resElem.setCdr(node);
-            }
-            resElem = node;
+            Object item = function.exec(function, context, functionArgs);
+            listBuilder.append(item);
         }
 
-        return resHead;
+        TeaPair result = listBuilder.build();
+
+        return result;
     }
 
 
@@ -2765,15 +2759,12 @@ public final class ModuleLang
 
         Args.checkCount(args, 3, "function list-of-arg-list");
 
-        TeaFunction function   = Args.getFunction(context, args, 1);
-        Iterator    iterator   = Args.getPair(args, 2).iterator();
-        int         index      = -1;
-        int         numArgs    = 0;
-        Object[]    funcArgs   = null;
-        TeaPair     emptyList  = TeaPair.emptyList();
-        TeaPair     resultHead = emptyList;
-        TeaPair     resultTail = null;
-        TeaPair     node       = null;
+        TeaFunction        function   = Args.getFunction(context, args, 1);
+        Iterator           iterator   = Args.getPair(args, 2).iterator();
+        int                index      = -1;
+        int                numArgs    = 0;
+        Object[]           funcArgs   = null;
+        TeaPairListBuilder listBuilder = new TeaPairListBuilder();
 
         if ( iterator.hasNext() ) {
             index++;
@@ -2785,8 +2776,7 @@ public final class ModuleLang
             funcArgs[0] = function;
             fillArgs(funcArgs, argList);
             Object funcResult = function.exec(function, context, funcArgs);
-            resultHead = new TeaPair(funcResult, emptyList);
-            resultTail = resultHead;
+            listBuilder.append(funcResult);
         }
 
         while ( iterator.hasNext() ) {
@@ -2796,12 +2786,12 @@ public final class ModuleLang
 
             fillArgs(funcArgs, argList);
             Object   funcResult = function.exec(function, context, funcArgs);
-            node = new TeaPair(funcResult, emptyList);
-            resultTail.setCdr(node);
-            resultTail = node;
+            listBuilder.append(funcResult);
         }
 
-        return resultHead;
+        TeaPair result = listBuilder.build();
+
+        return result;
     }
 
 

@@ -1412,7 +1412,17 @@ tunit-testsuite map-apply-test {
     }
     
     
-    tunit-test allOk {
+    tunit-test allOkSameSizes {
+        
+        define expectedResult ( 5 7 9 11 )
+        define result [map-apply + ( (1 4) (2 5) (3 6) (4 7) )]
+        
+        tunit-assert-equals [length $expectedResult] [length $result]
+        map tunit-assert-equals $expectedResult $result
+    }
+    
+    
+    tunit-test allOkDifferentSizes {
         
         define expectedResult ( 5 7 9 15 )
         define result [map-apply + ( (1 4) (2 5) (3 6) (4 5 6) )]
