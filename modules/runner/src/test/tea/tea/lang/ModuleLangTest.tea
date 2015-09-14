@@ -1434,3 +1434,41 @@ tunit-testsuite map-apply-test {
     
 }
 
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite sleep-test {
+    
+    
+    tunit-test-error tooFewArgs {
+        
+        sleep
+    }
+    
+    
+    tunit-test-error invalidArgType {
+        
+        sleep "what?!"
+    }
+    
+    
+    tunit-test allOk {
+        
+        define timeToSleep 10
+        define sleepResult
+        define deltaTime [time { set! sleepResult [sleep $timeToSleep] }]
+        
+        tunit-assert $sleepResult
+        tunit-assert [>= $deltaTime $timeToSleep]
+    }
+    
+    
+}
+

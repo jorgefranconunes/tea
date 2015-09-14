@@ -2979,8 +2979,8 @@ public final class ModuleLang
 
 //* 
 //* <TeaFunction name="sleep"
-//*                 arguments="duration"
-//*             module="tea.lang">
+//*              arguments="duration"
+//*              module="tea.lang">
 //*
 //* <Overview>
 //* Suspends the execution of the current thread for a given period.
@@ -3026,9 +3026,7 @@ public final class ModuleLang
                                        final Object[]    args)
         throws TeaException {
 
-        if ( args.length != 2 ) {
-            throw new TeaNumArgException(args, "millis-to-sleep");
-        }
+        Args.checkCount(args, 2, "millis");
 
         Boolean result      = Boolean.TRUE;
         int     timeToSleep = Args.getInt(args,1).intValue();
