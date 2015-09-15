@@ -3393,8 +3393,8 @@ public final class ModuleLang
 
 //* 
 //* <TeaFunction name="time"
-//*                 arguments="aBlock count"
-//*             module="tea.lang">
+//*              arguments="aBlock count"
+//*              module="tea.lang">
 //*
 //* <Overview>
 //* Times the execution of a block.
@@ -3444,24 +3444,23 @@ public final class ModuleLang
                                       final Object[]    args)
         throws TeaException {
 
-        if ( (args.length<2) || (args.length>3) ) {
-            throw new TeaNumArgException(args, "block [count]");
-        }
+        Args.checkBetween(args, 2, 3, "block [count]");
 
-        TeaBlock block        = Args.getBlock(args, 1);
-        TeaContext  childContext = block.getContext().newChild();
-        int       count        =
+        TeaBlock   block        = Args.getBlock(args, 1);
+        TeaContext childContext = block.getContext().newChild();
+        int        count        = 
             (args.length==2) ? 1 : Args.getInt(args, 2).intValue();
-        long      startTime;
-        long      endTime;
 
-        startTime = System.currentTimeMillis();
+        long startTime = System.currentTimeMillis();
         for ( int i=0; i<count; i++ ) {
             block.exec(childContext);
         }
-        endTime = System.currentTimeMillis();
 
-        return Integer.valueOf((int)(endTime-startTime));
+        long endTime = System.currentTimeMillis();
+        long delta = endTime-startTime;
+        int result = (int) delta;
+
+        return Integer.valueOf(result);
     }
 
 

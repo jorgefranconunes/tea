@@ -1430,8 +1430,8 @@ tunit-testsuite map-apply-test {
         tunit-assert-equals [length $expectedResult] [length $result]
         map tunit-assert-equals $expectedResult $result
     }
-    
-    
+
+
 }
 
 
@@ -1468,7 +1468,79 @@ tunit-testsuite sleep-test {
         tunit-assert $sleepResult
         tunit-assert [>= $deltaTime $timeToSleep]
     }
+
+
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+tunit-testsuite time-test {
     
     
+    tunit-test-error tooFewArgs {
+        
+        time
+    }
+    
+    
+    tunit-test-error tooManyArgs {
+        
+        time {} 1 "what?!"
+    }
+    
+    
+    tunit-test-error invalidArgType1 {
+        
+        time "what?!"
+    }
+    
+    
+    tunit-test-error invalidArgType2 {
+        
+        time {} "what?!"
+    }
+    
+    
+    tunit-test timeOnce {
+        
+        define expectedValue "Hello"
+        define myVar $null
+        define deltaTime [time { set! myVar $expectedValue }]
+        
+        tunit-assert [>= $deltaTime 0]
+        tunit-assert-equals $expectedValue $myVar
+    }
+    
+    
+    tunit-test timeMany {
+        
+        define expectedValue 10
+        define myVar 0
+        define deltaTime [time { ++ myVar } $expectedValue]
+        
+        tunit-assert [>= $deltaTime 0]
+        tunit-assert-equals $expectedValue $myVar
+    }
+    
+    
+    tunit-test allOk {
+        
+        define timeToSleep 10
+        define sleepResult
+        define deltaTime [time { set! sleepResult [sleep $timeToSleep] }]
+        
+        tunit-assert $sleepResult
+        tunit-assert [>= $deltaTime $timeToSleep]
+    }
+
+
 }
 
