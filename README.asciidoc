@@ -1,3 +1,14 @@
+
+
+
+
+
+image:https://travis-ci.org/jorgefranconunes/tea.svg?branch=master["Build Status", link="https://travis-ci.org/jorgefranconunes/tea"]
+
+
+
+
+
 == The Tea Scripting Language
 
 Tea is a scripting language for the Java environment.
