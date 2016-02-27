@@ -1,0 +1,6 @@
+#
+# All JAR files in this directory are copied here as part of the
+# build. They are not part of the project source tree. 
+#
+*.jar
+

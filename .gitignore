@@ -1,7 +1,15 @@
+# Generic
 *~
 *.aux
 *.bak
 *.log
 *.out
 *.pid
+
+# Maven related
 target
+
+# Gradle related
+build
+.gradle
+

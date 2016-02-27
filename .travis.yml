@@ -1,3 +1,9 @@
+#
+# Travis CI job configuration.
+#
+# https://travis-ci.org/
+#
+
 language: java
 
 jdk:
