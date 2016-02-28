@@ -2,7 +2,7 @@
 
 <!--
 
-Copyright (c) 2014 PDMFC, All Rights Reserved.
+Copyright (c) 2014-2016 PDMFC, All Rights Reserved.
 
 
 Maven POM for the "engine" sub-project.
@@ -53,6 +53,7 @@ Maven POM for the "engine" sub-project.
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
+      <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>
 
@@ -73,6 +74,7 @@ Maven POM for the "engine" sub-project.
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
+        <version>${maven-jar-plugin.version}</version>
         <configuration>
           <archive>
             <manifest>
@@ -87,6 +89,7 @@ Maven POM for the "engine" sub-project.
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
+        <version>${maven-dependency-plugin.version}</version>
         <executions>
 
           <execution>
@@ -96,7 +99,7 @@ Maven POM for the "engine" sub-project.
               <goal>copy-dependencies</goal>
             </goals>
             <configuration>
-              <outputDirectory>../../lib/jars</outputDirectory>
+              <outputDirectory>${tea.projectRootDir}/lib/jars</outputDirectory>
               <includeScope>runtime</includeScope>
               <overWriteReleases>true</overWriteReleases>
               <overWriteSnapshots>true</overWriteSnapshots>
@@ -118,7 +121,7 @@ Maven POM for the "engine" sub-project.
                   <version>${project.version}</version>
                 </artifactItem>
               </artifactItems>
-              <outputDirectory>../../lib/jars</outputDirectory>
+              <outputDirectory>${tea.projectRootDir}/lib/jars</outputDirectory>
             </configuration>
           </execution>
 
@@ -129,17 +132,19 @@ Maven POM for the "engine" sub-project.
       <!-- Remove the final JAR also from where it was copied to
            during assembly. -->
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-clean-plugin</artifactId>
+        <version>${maven-clean-plugin.version}</version>
         <configuration>
           <filesets>
             <fileset>
-              <directory>../../lib/jars</directory>
+              <directory>${tea.projectRootDir}/lib/jars</directory>
               <includes>
                 <include>**/*.jar</include>
               </includes>
             </fileset>
             <fileset>
-              <directory>../../doc/javadoc/engine</directory>
+              <directory>${tea.projectRootDir}/doc/javadoc/engine</directory>
             </fileset>
           </filesets>
         </configuration>
@@ -177,6 +182,7 @@ Maven POM for the "engine" sub-project.
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-javadoc-plugin</artifactId>
+            <version>${maven-javadoc-plugin.version}</version>
             <executions>
               <execution>
                 <id>run-javadoc</id>

@@ -2,7 +2,7 @@
 
 <!--
 
-Copyright (c) 2014 PDMFC, All Rights Reserved.
+Copyright (c) 2014-2016 PDMFC, All Rights Reserved.
 
 
 Maven POM for the "runtime" sub-project.
@@ -47,6 +47,7 @@ Maven POM for the "runtime" sub-project.
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
+      <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>
 
@@ -68,6 +69,7 @@ Maven POM for the "runtime" sub-project.
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-resources-plugin</artifactId>
+        <version>${maven-resources-plugin.version}</version>
         <executions>
           <execution>
             <id>copy-tea-lib-resources</id>
@@ -93,6 +95,7 @@ Maven POM for the "runtime" sub-project.
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
+        <version>${maven-jar-plugin.version}</version>
         <configuration>
           <archive>
             <manifest>
@@ -105,11 +108,13 @@ Maven POM for the "runtime" sub-project.
 
       <!-- Remove stuff that we might have created. -->
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-clean-plugin</artifactId>
+        <version>${maven-clean-plugin.version}</version>
         <configuration>
           <filesets>
             <fileset>
-              <directory>../../doc/javadoc/runtime</directory>
+              <directory>${tea.projectRootDir}/doc/javadoc/runtime</directory>
             </fileset>
           </filesets>
         </configuration>
@@ -158,6 +163,7 @@ Maven POM for the "runtime" sub-project.
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-javadoc-plugin</artifactId>
+            <version>${maven-javadoc-plugin.version}</version>
             <executions>
               <execution>
                 <id>run-javadoc</id>
