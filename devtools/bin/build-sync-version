@@ -1,0 +1,300 @@
+#!/bin/bash
+###########################################################################
+#
+# Copyright (c) 2016 PDMFC, All Rights Reserved.
+#
+#
+# Updates the project version in all pom.xml files to match the
+# version defined in "conf/tea-core.conf".
+#
+###########################################################################
+
+_scriptName=$0
+_scriptDir=$(dirname $0)
+_teaHome=$(cd $_scriptDir/../..; pwd)
+
+source ${_teaHome}/lib/bash/tea-utils.sh
+source ${_teaHome}/conf/tea-core.conf
+
+
+
+
+
+PRODUCT_NAME="Tea"
+TOOL_NAME="Version updater"
+COPYRIGHT_HEADER="Copyright (c) 2016PDMFC, All Rights Reserved."
+PRODUCT_HEADER="${PRODUCT_NAME} ${TEA_VERSION} - ${TOOL_NAME}"
+
+DEFAULT_NEW_BUILD_NUMBER=SNAPSHOT
+
+_newBuildNumber=${DEFAULT_NEW_BUILD_NUMBER}
+_newVersion=
+_isQuiet=false
+_masterConfFile=${_teaHome}/conf/tea-core.conf
+_xsltprocTool=xsltproc
+
+
+
+
+
+#######################################################################
+#
+# The main script.
+#
+#######################################################################
+
+function main () {
+
+    processCliArgs "$@"
+
+    teaCheckForTools \
+        "${_xsltprocTool}"
+    
+    updateVersion
+}
+
+
+
+
+
+###########################################################################
+#
+# Processes the command line options.
+#
+###########################################################################
+
+function processCliArgs () {
+
+    for option in "$@" ; do
+	    case $option in
+	        --quiet )
+		        _isQuiet=true
+		        ;;
+            --build-number=* )
+                _newBuildNumber=$(expr "$option" : '--build-number=\(.*\)')
+                ;;
+	        --help )
+		        displayHelp
+		        exit 0
+		        ;;
+	        --*=* )
+		        option=$(expr $option : '\(--.*\)=.*')
+		        teaError "$option : unknown option. Use --help for details."
+		        ;;
+	        * )
+		        teaError "$option : unknown option. Use --help for details."
+		        ;;
+	    esac
+    done
+
+    if [ -z "$_newBuildNumber" ] ; then
+        teaError "Missing mandatory --build-number option. Use --help for details."
+    fi
+}
+
+
+
+
+
+###########################################################################
+#
+# Displays an help messages describing the configuration options.
+#
+###########################################################################
+
+function displayHelp () {
+
+    cat <<EOF
+
+${PRODUCT_HEADER}
+${COPYRIGHT_HEADER}
+
+Updates the version number in source files.
+
+Available options:
+
+--build-number=BUILD_NUMBER
+    Version number sufix. The product version is obtained by
+    concatenating the main version with the provided build number. If
+    not specified it will default to ${DEFAULT_NEW_BUILD_NUMBER}.
+
+--quiet
+	Do not show any logging messages.
+
+--help
+    Prints this help text.
+
+EOF
+}
+
+
+
+
+
+#######################################################################
+#
+# 
+#
+#######################################################################
+
+function updateVersion () {
+
+    myLog "${PRODUCT_HEADER}"
+    myLog "    Build number : ${_newBuildNumber}"
+
+    updateBuildNumberInConfigFile
+
+    local newVersion=$(source ${_masterConfFile} ; echo ${TEA_VERSION})
+    myLog "Syncing version to ${newVersion}"
+
+    updateVersionInPomFiles
+
+    myLog "Done updating build number to ${_newBuildNumber}"
+}
+
+
+
+
+
+#######################################################################
+#
+# 
+#
+#######################################################################
+
+function updateBuildNumberInConfigFile () {
+
+    local confFile=${_masterConfFile}
+
+    local tmpConfFile=${confFile}.new
+
+    sed "s/^TEA_BUILD_NUMBER=.*/TEA_BUILD_NUMBER=${_newBuildNumber}/" \
+        < ${confFile} \
+        > ${tmpConfFile}
+
+    mv ${tmpConfFile} ${confFile}
+}
+
+
+
+
+
+#######################################################################
+#
+# 
+#
+#######################################################################
+
+function updateVersionInPomFiles () {
+
+    local newVersion=$(source ${_masterConfFile} ; echo ${TEA_VERSION})
+
+    myLog "Updating POM files..."
+
+    local pomBase=${_teaHome}/modules
+    local pomFileList="
+        ${pomBase}/pom.xml
+        ${pomBase}/*/pom.xml
+"
+
+    for pomFile in ${pomFileList} ; do
+        myLog "    $(getRelativePath ${pomFile} ${pomBase})"
+        updateVersionInOnePomFile ${newVersion} ${pomFile}
+    done
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+function updateVersionInOnePomFile () {
+
+    local newVersion=$1
+    local pomFile=$2
+
+    local newPomVersion=${newVersion}
+    local newParentVersion=${newVersion}
+    local newPomFile=${pomFile}.new
+    local xsltFile=${_scriptDir}/../lib/xslt/build-sync-version/update-pom-version.xsl
+
+    ${_xsltprocTool} \
+        --stringparam NEW_POM_VERSION "${newPomVersion}" \
+        --stringparam NEW_PARENT_VERSION "${newParentVersion}" \
+        --output ${newPomFile} \
+        ${xsltFile} \
+        ${pomFile}
+
+    local xsltprocStatus=$?
+
+    if [ ${xsltprocStatus} -eq 0 ] ; then
+        mv ${newPomFile} ${pomFile}
+    else
+        rm -f ${newPomFile}
+    fi
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
+function myLog () {
+
+    if [ ${_isQuiet} != true ] ; then
+        teaLog "$@"
+    else
+        : # Show no logging.
+    fi
+}
+
+
+
+
+
+#######################################################################
+#
+# 
+#
+#######################################################################
+
+function getRelativePath () {
+
+    local path=$1
+    local basePath=$2
+
+    python -c "import os.path; print os.path.relpath('${path}', '${basePath}')"
+}
+
+
+
+
+
+#######################################################################
+#
+# 
+#
+#######################################################################
+
+main "$@"
+
+
+
+
+
+#######################################################################
+#
+# 
+#
+#######################################################################
+

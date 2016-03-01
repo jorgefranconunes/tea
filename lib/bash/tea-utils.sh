@@ -1,7 +1,7 @@
 #!/bin/bash
 ###########################################################################
 #
-# Copyright (c) 2001-2012 PDM&FC, All Rights Reserved.
+# Copyright (c) 2001-2016 PDM&FC, All Rights Reserved.
 #
 #
 # Utility functions. This script is not meant to be executed by
@@ -28,6 +28,25 @@ function teaError () {
 
     echo "***" $1 >&2
     exit 1
+}
+
+
+
+
+
+###########################################################################
+#
+# Displays a message to stdout prefixed with the current time.
+#
+# Arguments:
+#
+# 1. The message to be displayed.
+#
+###########################################################################
+
+function teaLog () {
+
+    echo $(date "+%Y-%m-%d %H:%M:%S") "$@"
 }
 
 
@@ -209,6 +228,30 @@ function teaPathSeparator () {
 	    echo ":"
 	    return
     esac
+}
+
+
+
+
+
+###########################################################################
+#
+# Checks if a set of required tools is available. If any is missing
+# outputs an error message and terminates the process.
+#
+###########################################################################
+
+function teaCheckForTools () {
+
+    local toolList="$@"
+
+    for tool in ${toolList} ; do
+        if type $tool > /dev/null 2>&1 ; then
+            : # All is ok
+        else
+            teaError "Missing \"${tool}\" tool. Please install this tool."
+        fi
+    done
 }
 
 
