@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!--
 
 Copyright (c) 2014-2016 PDMFC, All Rights Reserved.
@@ -8,12 +7,7 @@ Copyright (c) 2014-2016 PDMFC, All Rights Reserved.
 Maven POM for the "release" sub-project.
 
 -->
-
-<project
-   xmlns="http://maven.apache.org/POM/4.0.0"
-   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-                       http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0                        http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
   <packaging>pom</packaging>
@@ -91,7 +85,7 @@ Maven POM for the "release" sub-project.
                   <executable>${java.home}/bin/java</executable>
                   <arguments>
                     <argument>-classpath</argument>
-                    <classpath />
+                    <classpath/>
                     <argument>com.pdmfc.tea.tools.runner.TeaRunner</argument>
                     <argument>--encoding=${project.build.sourceEncoding}</argument>
                     <argument>--library=${tea.projectRootDir}/apps/teadoc/lib/tea</argument>
@@ -182,4 +176,3 @@ Maven POM for the "release" sub-project.
 
 
 </project>
-

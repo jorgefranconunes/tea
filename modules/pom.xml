@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!--
 
 Copyright (c) 2014-2016 PDMFC, All Rights Reserved.
@@ -9,12 +8,7 @@ Tea project main Maven POM file. See "../README.asciidoc" for details on
 performing a build.
 
 -->
-
-<project
-   xmlns="http://maven.apache.org/POM/4.0.0"
-   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-                       http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0                        http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
   <packaging>pom</packaging>
@@ -40,16 +34,16 @@ performing a build.
 
     <!-- The following are used when generating Teadoc
          documentation. -->
-    <tea.teadoc.header><![CDATA[Tea ${tea.version} Reference Documentation<b>&copy; 2014 <a href="http://www.pdmfc.com">PDM&amp;FC</a>]]></tea.teadoc.header>
+    <tea.teadoc.header>Tea ${tea.version} Reference Documentation&lt;b&gt;&amp;copy; 2014 &lt;a href="http://www.pdmfc.com"&gt;PDM&amp;amp;FC&lt;/a&gt;</tea.teadoc.header>
     <tea.teadoc.footer>${tea.teadoc.header}</tea.teadoc.footer>
-    <tea.teadoc.bottom><![CDATA[<font size="-1"><a href="mailto:info@pdmfc.com">Report a bug or request new features</a></font>]]></tea.teadoc.bottom>
+    <tea.teadoc.bottom>&lt;font size="-1"&gt;&lt;a href="mailto:info@pdmfc.com"&gt;Report a bug or request new features&lt;/a&gt;&lt;/font&gt;</tea.teadoc.bottom>
     <tea.teadoc.doctitle>Tea ${tea.version} Reference Documentation</tea.teadoc.doctitle>
     <tea.teadoc.windowtitle>${tea.teadoc.doctitle}</tea.teadoc.windowtitle>
 
     <!-- The following are used when generating Javadoc
          documentation. -->
-    <tea.javadoc.header><![CDATA[<b>Tea Java Runtime API</b><br /><b>Version ${project.version}</b>]]></tea.javadoc.header>
-    <tea.javadoc.bottom><![CDATA[<font size="-1">&copy; 2014 <a href="http://www.pdmfc.com" target="_blank">PDMFC</a>, All Rights Reserved.</font>]]></tea.javadoc.bottom>
+    <tea.javadoc.header>&lt;b&gt;Tea Java Runtime API&lt;/b&gt;&lt;br /&gt;&lt;b&gt;Version ${project.version}&lt;/b&gt;</tea.javadoc.header>
+    <tea.javadoc.bottom>&lt;font size="-1"&gt;&amp;copy; 2014 &lt;a href="http://www.pdmfc.com" target="_blank"&gt;PDMFC&lt;/a&gt;, All Rights Reserved.&lt;/font&gt;</tea.javadoc.bottom>
     <tea.javadoc.doctitle>${project.name} ${project.version}</tea.javadoc.doctitle>
     <tea.javadoc.windowtitle>${tea.javadoc.doctitle}</tea.javadoc.windowtitle>
 
@@ -411,4 +405,3 @@ performing a build.
 
 
 </project>
-
