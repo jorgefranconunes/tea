@@ -239,6 +239,7 @@ performing a build.
           <version>true</version>
           <use>true</use>
           <quiet>true</quiet>
+          <failOnError>false</failOnError>
         </configuration>
         <reportSets>
           <reportSet>
