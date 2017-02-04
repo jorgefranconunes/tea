@@ -1,7 +1,7 @@
 #!/bin/bash
 ###########################################################################
 #
-# Copyright (c) 2016 PDMFC, All Rights Reserved.
+# Copyright (c) 2016-2017 PDMFC, All Rights Reserved.
 #
 #
 # Updates the project version in all pom.xml files to match the
@@ -20,10 +20,8 @@ source ${_teaHome}/conf/tea-core.conf
 
 
 
-PRODUCT_NAME="Tea"
 TOOL_NAME="Version updater"
-COPYRIGHT_HEADER="Copyright (c) 2016PDMFC, All Rights Reserved."
-PRODUCT_HEADER="${PRODUCT_NAME} ${TEA_VERSION} - ${TOOL_NAME}"
+PRODUCT_HEADER="${TEA_PRODUCT_NAME} ${TEA_VERSION} - ${TOOL_NAME}"
 
 DEFAULT_NEW_BUILD_NUMBER=SNAPSHOT
 
@@ -49,7 +47,7 @@ function main () {
 
     teaCheckForTools \
         "${_xsltprocTool}"
-    
+
     updateVersion
 }
 
@@ -66,25 +64,25 @@ function main () {
 function processCliArgs () {
 
     for option in "$@" ; do
-	    case $option in
-	        --quiet )
-		        _isQuiet=true
-		        ;;
+        case $option in
+            --quiet )
+                _isQuiet=true
+                ;;
             --build-number=* )
                 _newBuildNumber=$(expr "$option" : '--build-number=\(.*\)')
                 ;;
-	        --help )
-		        displayHelp
-		        exit 0
-		        ;;
-	        --*=* )
-		        option=$(expr $option : '\(--.*\)=.*')
-		        teaError "$option : unknown option. Use --help for details."
-		        ;;
-	        * )
-		        teaError "$option : unknown option. Use --help for details."
-		        ;;
-	    esac
+            --help )
+                displayHelp
+                exit 0
+                ;;
+            --*=* )
+                option=$(expr $option : '\(--.*\)=.*')
+                teaError "$option : unknown option. Use --help for details."
+                ;;
+            * )
+                teaError "$option : unknown option. Use --help for details."
+                ;;
+        esac
     done
 
     if [ -z "$_newBuildNumber" ] ; then
@@ -107,7 +105,7 @@ function displayHelp () {
     cat <<EOF
 
 ${PRODUCT_HEADER}
-${COPYRIGHT_HEADER}
+${TEA_COPYRIGHT_HEADER}
 
 Updates the version number in source files.
 
@@ -119,7 +117,7 @@ Available options:
     not specified it will default to ${DEFAULT_NEW_BUILD_NUMBER}.
 
 --quiet
-	Do not show any logging messages.
+    Do not show any logging messages.
 
 --help
     Prints this help text.
@@ -193,13 +191,13 @@ function updateVersionInPomFiles () {
 
     local pomBase=${_teaHome}/modules
     local pomFileList="
-        ${pomBase}/pom.xml
-        ${pomBase}/*/pom.xml
+        pom.xml
+        $(cd ${pomBase} ; ls */pom.xml)
 "
 
     for pomFile in ${pomFileList} ; do
-        myLog "    $(getRelativePath ${pomFile} ${pomBase})"
-        updateVersionInOnePomFile ${newVersion} ${pomFile}
+        myLog "    ${pomFile}"
+        updateVersionInOnePomFile ${newVersion} ${pomBase}/${pomFile}
     done
 }
 
@@ -268,33 +266,4 @@ function myLog () {
 #
 #######################################################################
 
-function getRelativePath () {
-
-    local path=$1
-    local basePath=$2
-
-    python -c "import os.path; print os.path.relpath('${path}', '${basePath}')"
-}
-
-
-
-
-
-#######################################################################
-#
-# 
-#
-#######################################################################
-
 main "$@"
-
-
-
-
-
-#######################################################################
-#
-# 
-#
-#######################################################################
-

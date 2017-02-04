@@ -7,31 +7,29 @@ For information on configuring PMD rule sets see
 http://pmd.sourceforge.net/howtomakearuleset.html
 -->
 
-<ruleset name="DTrader PMD ruleset"
-         xmlns="http://pmd.sf.net/ruleset/1.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://pmd.sf.net/ruleset/1.0.0 http://pmd.sf.net/ruleset_xml_schema.xsd"
-         xsi:noNamespaceSchemaLocation="http://pmd.sf.net/ruleset_xml_schema.xsd">
 
-  <description>
-PMD rule set for Java code in the DTrader project.
-  </description>
+<ruleset name="Tea PMD ruleset"
+    xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
+
+  <description>PMD rule set for Java code in the Tea project.</description>
 
 
+  <!--
+     See https://pmd.github.io/pmd-5.3.5/pmd-java/rules/index.html
+     for a description of available rulesets and rules.
+  -->
+
+  <rule ref="rulesets/java/basic.xml"/>
 
 
-
-  <!-- See http://pmd.sourceforge.net/rules/basic.html for a
-       descriptions of all rules in this ruleset. We explicitly
-       enumerate all "basic" rules because we have to configure some
-       of them. -->
-
-  <rule ref="rulesets/java/basic.xml">
+  <rule ref="rulesets/java/empty.xml">
     <exclude name="EmptyCatchBlock" /> <!-- Needs config. -->
-    <exclude name="ExtendsObject" /> <!-- Me not like it. -->
   </rule>
 
-  <rule ref="rulesets/java/basic.xml/EmptyCatchBlock">
+
+  <rule ref="rulesets/java/empty.xml/EmptyCatchBlock">
     <properties>
       <!-- Allow empty catch blocks as long has they have a comment. -->
       <property name="allowCommentedBlocks" value="true" />
@@ -39,79 +37,26 @@ PMD rule set for Java code in the DTrader project.
   </rule>
 
 
-  <!-- And some of our own, to ensure Java coding conventions are
-       followed. -->
-
-  <rule name="ShouldExtendObject"
-  	language="java"
-        message="Explicitly declare class to extend Object."
-        class="net.sourceforge.pmd.lang.rule.XPathRule">
-    <description>All classes should have an extends declaration.</description>
-    <priority>4</priority>
-    <properties>
-       <property name="xpath">
-          <value>
-          <![CDATA[
-//ClassOrInterfaceDeclaration[@Interface!='true' and count(ExtendsList)=0]
-          ]]>
-          </value>
-       </property>
-    </properties>
-    <example>
-    <![CDATA[
-public class Foo { 	// Should be declared with "extends Object".
-}
-    ]]>
-    </example>
-  </rule>
-
-
-
-
-
-  <!-- See http://pmd.sourceforge.net/rules/braces.html for a
-       description of all rules in this ruleset. -->
   <rule ref="rulesets/java/braces.xml" />
 
 
-
-
-
-  <!-- See http://pmd.sourceforge.net/rules/coupling.html for a
-       description of all rules in this ruleset. -->
   <rule ref="rulesets/java/coupling.xml">
     <exclude name="LoosePackageCoupling" /> <!-- Too confusing. -->
+    <exclude name="LawOfDemeter" /> <!-- Too much noise. -->
   </rule>
 
 
-
-
-
-  <!-- See http://pmd.sourceforge.net/rules/design.html for a
-       description of all rules in this ruleset. -->
   <rule ref="rulesets/java/design.xml">
     <exclude name="ConfusingTernary" /> <!-- Me not like it. -->
     <exclude name="ImmutableField" /> <!-- Me not like it. -->
+    <exclude name="AccessorClassGeneration" /> <!-- No warning needed. -->
   </rule>
 
 
-
-
-
-  <!-- See http://pmd.sourceforge.net/rules/imports.html for a
-       description of all rules in this ruleset. -->
   <rule ref="rulesets/java/imports.xml">
     <exclude name="ImportFromSamePackage" /> <!-- Me not like it. -->
   </rule>
 
-
-
-
-
-  <!-- See http://pmd.sourceforge.net/rules/naming.html for a
-       description of all rules in this ruleset.  We explicitly
-       enumerate all "naming" rules because we have to configure some
-       of them. -->
 
   <rule ref="rulesets/java/naming.xml">
     <exclude name="ShortVariable" /> <!-- Me not like it. -->
@@ -119,8 +64,6 @@ public class Foo { 	// Should be declared with "extends Object".
     <exclude name="VariableNamingConventions" /> <!-- Needs config. -->
   </rule>
 
-  <!-- WARNING: This rule does not check if the members actually start
-       with the given preffix. Meaning it is useless... -->
   <rule ref="rulesets/java/naming.xml/VariableNamingConventions">
     <properties>
       <property name="memberPrefix" value="_" />
@@ -129,27 +72,12 @@ public class Foo { 	// Should be declared with "extends Object".
   </rule>
 
 
-
-
-
-  <!-- See http://pmd.sourceforge.net/rules/strictexception.html for a
-       description of all rules in this ruleset. -->
   <rule ref="rulesets/java/strictexception.xml" />
 
 
-
-
-
-  <!-- See http://pmd.sourceforge.net/rules/strings.html for a
-       description of all rules in this ruleset. -->
   <rule ref="rulesets/java/strings.xml" />
 
 
-
-
-
-  <!-- See http://pmd.sourceforge.net/rules/unusedcode.html for a
-       description of all rules in this ruleset. -->
   <rule ref="rulesets/java/unusedcode.xml" />
 
 </ruleset>

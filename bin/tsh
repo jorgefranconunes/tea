@@ -12,25 +12,27 @@
 _scriptDir=$(dirname $0)
 _scriptName=$(basename $0)
 
-_teaBaseDir=$(cd $_scriptDir/..; pwd)
+_teaHome=$(cd $_scriptDir/..; pwd)
 
 
 
 
 
-source ${_teaBaseDir}/lib/bash/tea-utils.sh
+source ${_teaHome}/lib/bash/tea-utils.sh
 
-teaLoadCoreConfig ${_teaBaseDir}
-
-
+teaLoadCoreConfig ${_teaHome}
 
 
 
-TEA_CORE_LIBRARY="."
-TEA_CORE_CLASSPATH="${_teaBaseDir}/lib/jars/tea-tsh-${TEA_VERSION}.jar"
 
-_teaLibrary=${TEA_CORE_LIBRARY}
-_teaClasspath=$(teaNormalizePath ${TEA_CORE_CLASSPATH})
+
+PRODUCT_HEADER="${TEA_PRODUCT_NAME} ${TEA_VERSION}"
+
+DEFAULT_CORE_LIBRARY="."
+DEFAULT_CORE_CLASSPATH="${_teaHome}/lib/jars/tea-tsh-${TEA_VERSION}.jar"
+
+_teaLibrary=${DEFAULT_CORE_LIBRARY}
+_teaClasspath=$(teaNormalizePath ${DEFAULT_CORE_CLASSPATH})
 _teaJre=${TEA_JRE}
 _teaJreOptions=""
 _teaScript=""
@@ -50,12 +52,48 @@ _argCountToSkip=0
 #
 ###########################################################################
 
+function main () {
+    parseCliOptions "$@"
+    performChecks
+
+    #
+    # Skip the original CLI arguments that were processed by
+    # parseCliOptions.
+    #
+    while [ ${_argCountToSkip} -gt 0 ] ; do
+        shift
+        _argCountToSkip=$(expr ${_argCountToSkip} - 1)
+    done
+
+    #
+    # And execute the Java tool for running a Tea script from a file.
+    #
+    exec "$_teaJre" \
+         $_teaJreOptions \
+         -classpath "$_teaClasspath" \
+         com.pdmfc.tea.tools.tsh.TeaRunner \
+         --library="$_teaLibrary" \
+         --script="$_teaScript" \
+         $_encodingOptions \
+         -- \
+         "$@"
+}
+
+
+
+
+
+###########################################################################
+#
+# 
+#
+###########################################################################
+
 function displayHeader() {
 
     cat <<EOF
-Tea ${TEA_VERSION}
-Copyright (c) 2001-2016 PDMFC, All Rights Reserved.
-
+${PRODUCT_HEADER}
+${TEA_COPYRIGHT_HEADER}
 EOF
 }
 
@@ -74,8 +112,9 @@ function displayHelp() {
     displayHeader
 
     cat <<EOF
-Runs a Tea script either from a file or from standard input. The
-command line arguments are as follows:
+
+Runs a Tea script from a file or from standard input. The command line
+arguments are as follows:
 
 tsh [option ...] [script-file] [arg ...]
 
@@ -84,8 +123,9 @@ Available options:
 --library=DIRLIST
         Colon separated list of directory pathnames or URLs. These are
         the locations where the Tea 'import' function will look for
-        files. In the case of an URL all the colons must be replaced
-        by the '|' character. This option is not mandatory.
+        files. In the case of an URL all, the colons in the URL must
+        be replaced by the '|' character. This option is not
+        mandatory.
 
 --classpath=DIRLIST
         Colon separated list of directories or JAR files pathnames. These
@@ -124,7 +164,7 @@ Available options:
 
 --help
         Prints this help text and exits.
-                  
+
 EOF
 }
 
@@ -206,7 +246,7 @@ function parseCliOptions () {
                 break
                 ;;
             esac
-        
+
         shift
         _argCountToSkip=$(expr ${_argCountToSkip} + 1)
     done
@@ -264,27 +304,4 @@ function performChecks () {
 #
 ###########################################################################
 
-parseCliOptions "$@"
-performChecks
-
-#
-# Skip the original CLI arguments that were processed by
-# parseCliOptions.
-#
-while [ ${_argCountToSkip} -gt 0 ] ; do
-    shift
-    _argCountToSkip=$(expr ${_argCountToSkip} - 1)
-done
-
-#
-# And execute the Java tool for running a Tea script from a file.
-#
-exec "$_teaJre" \
-    $_teaJreOptions \
-    -classpath "$_teaClasspath" \
-    com.pdmfc.tea.tools.tsh.TeaRunner \
-    --library="$_teaLibrary" \
-    --script="$_teaScript" \
-    $_encodingOptions \
-    -- \
-    "$@"
+main "$@"

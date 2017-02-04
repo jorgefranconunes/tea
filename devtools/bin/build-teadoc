@@ -1,7 +1,7 @@
 #!/bin/bash
 ###########################################################################
 #
-# Copyright (c) 2012-2013 PDMFC, All Rights Reserved.
+# Copyright (c) 2012-2017 PDMFC, All Rights Reserved.
 #
 #
 # Generates the Teadoc documentation of the Tea software itself.
@@ -45,11 +45,11 @@ _outputDir=
 function parseCliOptions () {
 
     for option in "$@" ; do
-	case $option in
-	    --output-dir=* )
-		_outputDir=$(expr "$option" : '--output-dir=\(.*\)')
-		;;
-	esac
+        case $option in
+            --output-dir=* )
+                _outputDir=$(expr "$option" : '--output-dir=\(.*\)')
+                ;;
+        esac
     done
 }
 

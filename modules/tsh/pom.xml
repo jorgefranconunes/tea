@@ -18,7 +18,7 @@ Maven POM for the "tsh" sub-project.
   <parent>
     <groupId>com.pdmfc.tea</groupId>
     <artifactId>tea-main</artifactId>
-    <version>4.0.0-beta09-SNAPSHOT</version>
+    <version>4.0.0-beta10-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
 
@@ -48,15 +48,6 @@ Maven POM for the "tsh" sub-project.
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>${junit.version}</version>
-      <scope>test</scope>
-    </dependency>
-
-    <!-- Required for running Cobertura instrumented classes with
-         exec-maven-plugin. -->
-    <dependency>
-      <groupId>net.sourceforge.cobertura</groupId>
-      <artifactId>cobertura</artifactId>
-      <version>${cobertura.version}</version>
       <scope>test</scope>
     </dependency>
 
@@ -160,7 +151,7 @@ Maven POM for the "tsh" sub-project.
               <directory>${tea.projectRootDir}/doc/teadoc</directory>
             </fileset>
             <fileset>
-              <directory>${tea.projectRrotDir}/doc/javadoc/runner</directory>
+              <directory>${tea.projectRrotDir}/doc/javadoc/tsh</directory>
             </fileset>
           </filesets>
         </configuration>
@@ -263,7 +254,7 @@ Maven POM for the "tsh" sub-project.
                   <arguments>
                     <argument>-classpath</argument>
                     <classpath/>
-                    <argument>com.pdmfc.tea.tools.runner.TeaRunner</argument>
+                    <argument>com.pdmfc.tea.tools.tsh.TeaRunner</argument>
                     <argument>--encoding=${project.build.sourceEncoding}</argument>
                     <argument>--library=${tea.projectRootDir}/apps/teadoc/lib/tea</argument>
                     <argument>--script=${tea.projectRootDir}/apps/teadoc/lib/tea/doc-html.tea</argument>
@@ -314,7 +305,7 @@ Maven POM for the "tsh" sub-project.
                 </goals>
                 <configuration>
                   <reportOutputDirectory>${tea.projectRootDir}/doc</reportOutputDirectory>
-                  <destDir>javadoc/runner</destDir>
+                  <destDir>javadoc/tsh</destDir>
                   <doctitle>${tea.javadoc.doctitle}</doctitle>
                   <windowtitle>${tea.javadoc.windowtitle}</windowtitle>
                   <header>${tea.javadoc.header}</header>
@@ -324,6 +315,7 @@ Maven POM for the "tsh" sub-project.
                   <version>true</version>
                   <use>true</use>
                   <quiet>true</quiet>
+                  <failOnError>false</failOnError>
                 </configuration>
               </execution>
             </executions>

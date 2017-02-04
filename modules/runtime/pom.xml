@@ -18,7 +18,7 @@ Maven POM for the "runtime" sub-project.
   <parent>
     <groupId>com.pdmfc.tea</groupId>
     <artifactId>tea-main</artifactId>
-    <version>4.0.0-beta09-SNAPSHOT</version>
+    <version>4.0.0-beta10-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
 
@@ -73,13 +73,13 @@ Maven POM for the "runtime" sub-project.
             </goals>
             <configuration>
               <outputDirectory>target/classes/lib/tea-${project.version}</outputDirectory>
-              <resources>          
+              <resources>
                 <resource>
                   <directory>src/main/tea</directory>
                   <filtering>false</filtering>
                 </resource>
-              </resources>              
-            </configuration>            
+              </resources>
+            </configuration>
           </execution>
         </executions>
       </plugin>
@@ -177,6 +177,7 @@ Maven POM for the "runtime" sub-project.
                   <version>true</version>
                   <use>true</use>
                   <quiet>true</quiet>
+                  <failOnError>false</failOnError>
                 </configuration>
               </execution>
             </executions>
