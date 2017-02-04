@@ -1,10 +1,10 @@
 /**************************************************************************
  *
- * Copyright (c) 2011-2014 PDMFC, All Rights Reserved.
+ * Copyright (c) 2011-2017 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
-package com.pdmfc.tea.tools.runner;
+package com.pdmfc.tea.tools.tsh;
 
 import java.io.File;
 import java.util.List;
@@ -15,7 +15,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 import com.pdmfc.tea.TeaException;
-import com.pdmfc.tea.tools.runner.TeaRunnerArgs;
+import com.pdmfc.tea.tools.tsh.TeaRunnerArgs;
 
 
 

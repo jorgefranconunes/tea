@@ -25,8 +25,8 @@ This development tree is for the 4.y.z master development branch.
 
 == Pre-Requisites
 
-* JDK 1.7
-* Maven 3.0+
+* JDK 1.8
+* Maven 3.3+
 
 
 
@@ -51,8 +51,8 @@ git clone git@github.com:jorgefranconunes/tea.git
 
 == Building
 
-To perform a full build just run `mvn` in the +modules+ dir of the
-working copy.
+To perform a full build just run `mvn` in the `modules` dir of the
+working area.
 
 By default unit tests are not run. To run the unit tests as part of
 the build define the system property `skipTests=false`, like this:

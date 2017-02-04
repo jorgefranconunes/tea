@@ -1,10 +1,10 @@
 /**************************************************************************
  *
- * Copyright (c) 2001-2014 PDMFC, All Rights Reserved.
+ * Copyright (c) 2001-2017 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
-package com.pdmfc.tea.tools.runner;
+package com.pdmfc.tea.tools.tsh;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -21,7 +21,7 @@ import com.pdmfc.tea.TeaExitException;
 import com.pdmfc.tea.TeaFlowControlException;
 import com.pdmfc.tea.TeaRunException;
 import com.pdmfc.tea.TeaScript;
-import com.pdmfc.tea.tools.runner.TeaRunnerArgs;
+import com.pdmfc.tea.tools.tsh.TeaRunnerArgs;
 import com.pdmfc.tea.util.SInputSourceFactory;
 
 

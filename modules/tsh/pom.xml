@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-Copyright (c) 2014-2016 PDMFC, All Rights Reserved.
+Copyright (c) 2014-2017 PDMFC, All Rights Reserved.
 
 
-Maven POM for the "runner" sub-project.
+Maven POM for the "tsh" sub-project.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0                        http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
   <packaging>jar</packaging>
 
   <groupId>com.pdmfc.tea</groupId>
-  <artifactId>tea-runner</artifactId>
+  <artifactId>tea-tsh</artifactId>
 
   <parent>
     <groupId>com.pdmfc.tea</groupId>
@@ -89,7 +89,7 @@ Maven POM for the "runner" sub-project.
         <configuration>
           <archive>
             <manifest>
-              <mainClass>com.pdmfc.tea.tools.runner.TeaRunner</mainClass>
+              <mainClass>com.pdmfc.tea.tools.tsh.TeaRunner</mainClass>
               <addClasspath>true</addClasspath>
             </manifest>
           </archive>
@@ -214,7 +214,7 @@ Maven POM for the "runner" sub-project.
                     <argument>-Dderby.stream.error.file=${project.build.directory}/derby.log</argument>
                     <argument>-classpath</argument>
                     <classpath/>
-                    <argument>com.pdmfc.tea.tools.runner.TeaRunner</argument>
+                    <argument>com.pdmfc.tea.tools.tsh.TeaRunner</argument>
                     <argument>--script=resource:/lib/tea-${project.version}/tea/tools/tunit/tunit-main.tea</argument>
                     <argument>--</argument>
                     <argument>surefireReport</argument>
@@ -342,7 +342,7 @@ Maven POM for the "runner" sub-project.
 
   <!-- More project information. -->
 
-  <name>Tea Runner Tool</name>
+  <name>Tea Shell Tool</name>
 
   <description>Utility for running Tea scripts from the command
   line.</description>

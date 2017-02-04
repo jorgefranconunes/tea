@@ -1,10 +1,10 @@
 /**************************************************************************
  *
- * Copyright (c) 2007-2014 PDMFC, All Rights Reserved.
+ * Copyright (c) 2007-2017 PDMFC, All Rights Reserved.
  *
  **************************************************************************/
 
-package com.pdmfc.tea.tools.runner;
+package com.pdmfc.tea.tools.tsh;
 
 import java.io.File;
 import java.util.ArrayList;
