@@ -1,9 +1,5 @@
-
-
-
-
-
 image:https://travis-ci.org/jorgefranconunes/tea.svg?branch=master["Build Status", link="https://travis-ci.org/jorgefranconunes/tea"]
+image:https://codecov.io/gh/jorgefranconunes/tea/branch/master/graph/badge.svg[codecov, link="https://codecov.io/gh/jorgefranconunes/tea"]
 
 
 

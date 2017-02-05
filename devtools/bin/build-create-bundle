@@ -216,7 +216,7 @@ function prepareForMaven () {
     if [ "${_isWithTests}" == false ] ; then
         _mavenOptions="-DskipTests=true ${_mavenOptions}"
     else
-        _mavenOptions="-DskipTests=false ${_mavenOptions}"
+        _mavenOptions="-DskipTests=false -Ptea-jacoco ${_mavenOptions}"
     fi
 
     if [ "${_isWithReports}" == true ] ; then

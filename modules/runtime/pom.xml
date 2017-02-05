@@ -18,7 +18,7 @@ Maven POM for the "runtime" sub-project.
   <parent>
     <groupId>com.pdmfc.tea</groupId>
     <artifactId>tea-main</artifactId>
-    <version>4.0.0-beta10-SNAPSHOT</version>
+    <version>4.0.0b10-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
 

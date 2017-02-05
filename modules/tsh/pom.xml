@@ -112,7 +112,11 @@ Maven POM for the "tsh" sub-project.
       <build>
         <plugins>
 
-          <!-- Run the TUnit tests. -->
+          <!-- Run the TUnit tests. Unfortunately these will not be
+               taken into account for code coverage by Jacoco because
+               we spawn a new JVM. The solution would be to use the
+               exec:java goal, and the TeaRunner must not do
+               System.exit(...) at the end. -->
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>exec-maven-plugin</artifactId>
