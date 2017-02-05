@@ -1,5 +1,5 @@
 Tea 4 is copyrighted software by PDMFC - Projecto, Desenvolvimento
-Manutencao, Formacao e Consultoria <info@pdmfc.com>.
-You can use it free of charge, redistribute it and/or modify it under
-either the terms of the GPL (see COPYING.txt file), or under terms of a
-specific agreement with PDMFC.
+Manutenção, Formação e Consultoria <info@pdmfc.com>.  You can use it
+free of charge, redistribute it and/or modify it under either the
+terms of the GPL (see COPYING.txt file), or under terms of a specific
+agreement with PDMFC.

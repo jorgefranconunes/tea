@@ -18,7 +18,7 @@ Maven POM for the "engine" sub-project.
   <parent>
     <groupId>com.pdmfc.tea</groupId>
     <artifactId>tea-main</artifactId>
-    <version>4.0.0-beta10-SNAPSHOT</version>
+    <version>4.0.0b10-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
 
@@ -63,7 +63,6 @@ Maven POM for the "engine" sub-project.
 
     <plugins>
 
-
       <!-- Include the appropriate manifest in the final JAR. -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -77,73 +76,6 @@ Maven POM for the "engine" sub-project.
           </archive>
         </configuration>
       </plugin>
-
-
-      <!-- Copy the final JAR to the common location. -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <version>${maven-dependency-plugin.version}</version>
-        <executions>
-
-          <execution>
-            <id>copy-dependencies</id>
-            <phase>package</phase>
-            <goals>
-              <goal>copy-dependencies</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${tea.projectRootDir}/lib/jars</outputDirectory>
-              <includeScope>runtime</includeScope>
-              <overWriteReleases>true</overWriteReleases>
-              <overWriteSnapshots>true</overWriteSnapshots>
-              <overWriteIfNewer>true</overWriteIfNewer>
-            </configuration>
-          </execution>
-
-          <execution>
-            <id>copy-goal</id>
-            <phase>package</phase>
-            <goals>
-              <goal>copy</goal>
-            </goals>
-            <configuration>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>${project.groupId}</groupId>
-                  <artifactId>${project.artifactId}</artifactId>
-                  <version>${project.version}</version>
-                </artifactItem>
-              </artifactItems>
-              <outputDirectory>${tea.projectRootDir}/lib/jars</outputDirectory>
-            </configuration>
-          </execution>
-
-        </executions>
-      </plugin>
-
-
-      <!-- Remove the final JAR also from where it was copied to
-           during assembly. -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-clean-plugin</artifactId>
-        <version>${maven-clean-plugin.version}</version>
-        <configuration>
-          <filesets>
-            <fileset>
-              <directory>${tea.projectRootDir}/lib/jars</directory>
-              <includes>
-                <include>**/*.jar</include>
-              </includes>
-            </fileset>
-            <fileset>
-              <directory>${tea.projectRootDir}/doc/javadoc/engine</directory>
-            </fileset>
-          </filesets>
-        </configuration>
-      </plugin>
-
 
     </plugins>
 
@@ -164,10 +96,12 @@ Maven POM for the "engine" sub-project.
     <profile>
       <id>tea-javadoc</id>
       <activation>
+        <!-- Disabled until we decide if docs are really to be included.
         <property>
           <name>tea.release</name>
           <value>true</value>
         </property>
+        -->
       </activation>
       <build>
         <plugins>
@@ -196,6 +130,7 @@ Maven POM for the "engine" sub-project.
                   <version>true</version>
                   <use>true</use>
                   <quiet>true</quiet>
+                  <failOnError>false</failOnError>
                 </configuration>
               </execution>
             </executions>
@@ -218,7 +153,7 @@ Maven POM for the "engine" sub-project.
 
   <description>Support for using Tea under the Java Scripting Engine
   JSR-223. See
-  http://download.oracle.com/javase/6/docs/api/javax/script/package-summary.html
+  http://docs.oracle.com/javase/8/docs/api/javax/script/package-summary.html
   for technical details.</description>
 
 

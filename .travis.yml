@@ -10,9 +10,14 @@ jdk:
   - oraclejdk8
 
 script:
-  - mvn -f modules/pom.xml -DskipTests=false
+  - ./devtools/bin/build-create-bundle --with-tests
 
 cache:
   directories:
     - $HOME/.m2
+
+addons:
+  apt:
+    packages:
+      - xsltproc
 

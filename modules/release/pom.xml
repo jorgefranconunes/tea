@@ -18,7 +18,7 @@ Maven POM for the "release" sub-project.
   <parent>
     <groupId>com.pdmfc.tea</groupId>
     <artifactId>tea-main</artifactId>
-    <version>4.0.0-beta10-SNAPSHOT</version>
+    <version>4.0.0b10-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
 
@@ -40,11 +40,82 @@ Maven POM for the "release" sub-project.
 
     <dependency>
       <groupId>${project.groupId}</groupId>
+      <artifactId>tea-engine</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>${project.groupId}</groupId>
       <artifactId>tea-tsh</artifactId>
       <version>${project.version}</version>
     </dependency>
 
   </dependencies>
+
+
+
+
+
+  <build>
+
+    <plugins>
+
+
+      <!-- Copy the final JARs and their dependencies to the location
+           expected by the command line tools and by the application
+           server. -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>${maven-dependency-plugin.version}</version>
+        <executions>
+
+          <execution>
+            <id>copy-dependencies</id>
+            <phase>package</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${tea.projectRootDir}/lib/jars</outputDirectory>
+              <includeScope>runtime</includeScope>
+              <overWriteReleases>true</overWriteReleases>
+              <overWriteSnapshots>true</overWriteSnapshots>
+              <overWriteIfNewer>true</overWriteIfNewer>
+            </configuration>
+          </execution>
+
+        </executions>
+      </plugin>
+
+      <!-- Remove everything from where it was copied to during
+           packaging. -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-clean-plugin</artifactId>
+        <version>${maven-clean-plugin.version}</version>
+        <configuration>
+          <filesets>
+            <fileset>
+              <directory>${tea.projectRootDir}/lib/jars</directory>
+              <includes>
+                <include>**/*.jar</include>
+              </includes>
+            </fileset>
+            <fileset>
+              <directory>${tea.projectRootDir}/doc</directory>
+              <includes>
+                <include>javadoc/**</include>
+                <include>teadoc/**</include>
+              </includes>
+            </fileset>
+          </filesets>
+        </configuration>
+      </plugin>
+
+    </plugins>
+
+  </build>
 
 
 
@@ -60,10 +131,12 @@ Maven POM for the "release" sub-project.
     <profile>
       <id>tea-teadoc</id>
       <activation>
+        <!-- Disabled until we decide if docs are really to be included.
         <property>
           <name>tea.release</name>
           <value>true</value>
         </property>
+        -->
       </activation>
       <build>
         <plugins>
@@ -112,9 +185,7 @@ Maven POM for the "release" sub-project.
     <!-- Profile used to create the tarball of a Tea release. This
          profile is activated when the "tea.release" system property
          has value "true". This is tipically used when building a
-         release. Note when actually creating a Tea release the
-         following profiles must also be active: tea-setup,
-         tea-teadoc, tea-javadoc. -->
+         release. -->
     <profile>
       <id>tea-build-release</id>
       <activation>
@@ -126,7 +197,7 @@ Maven POM for the "release" sub-project.
       <build>
         <plugins>
 
-          <!-- Create an assembly for the Tea release bundle.. -->
+          <!-- Create the Tea release tarball. -->
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-assembly-plugin</artifactId>
@@ -142,7 +213,7 @@ Maven POM for the "release" sub-project.
                   <finalName>tea-${project.version}</finalName>
                   <outputDirectory>${tea.projectRootDir}</outputDirectory>
                   <descriptors>
-                    <descriptor>src/main/assembly/bundle.xml</descriptor>
+                    <descriptor>src/main/assembly/release-tarball.xml</descriptor>
                   </descriptors>
                   <appendAssemblyId>false</appendAssemblyId>
                   <formats>

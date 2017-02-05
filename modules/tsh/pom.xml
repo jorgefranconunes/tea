@@ -18,7 +18,7 @@ Maven POM for the "tsh" sub-project.
   <parent>
     <groupId>com.pdmfc.tea</groupId>
     <artifactId>tea-main</artifactId>
-    <version>4.0.0-beta10-SNAPSHOT</version>
+    <version>4.0.0b10-SNAPSHOT</version>
     <relativePath>..</relativePath>
   </parent>
 
@@ -70,8 +70,6 @@ Maven POM for the "tsh" sub-project.
   <build>
 
     <plugins>
-
-
       <!-- Include the appropriate manifest in the final JAR. -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -86,78 +84,6 @@ Maven POM for the "tsh" sub-project.
           </archive>
         </configuration>
       </plugin>
-
-
-      <!-- Copy the final JAR to the location expected by the Tea
-           command line tools. -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <version>${maven-dependency-plugin.version}</version>
-        <executions>
-
-          <execution>
-            <id>copy-dependencies</id>
-            <phase>package</phase>
-            <goals>
-              <goal>copy-dependencies</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${tea.projectRootDir}/lib/jars</outputDirectory>
-              <includeScope>runtime</includeScope>
-              <overWriteReleases>true</overWriteReleases>
-              <overWriteSnapshots>true</overWriteSnapshots>
-              <overWriteIfNewer>true</overWriteIfNewer>
-            </configuration>
-          </execution>
-
-          <execution>
-            <id>copy-goal</id>
-            <phase>package</phase>
-            <goals>
-              <goal>copy</goal>
-            </goals>
-            <configuration>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>${project.groupId}</groupId>
-                  <artifactId>${project.artifactId}</artifactId>
-                  <version>${project.version}</version>
-                </artifactItem>
-              </artifactItems>
-              <outputDirectory>${tea.projectRootDir}/lib/jars</outputDirectory>
-            </configuration>
-          </execution>
-
-        </executions>
-      </plugin>
-
-
-      <!-- Remove the final JAR also from where it was copied to
-           during assembly. -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-clean-plugin</artifactId>
-        <version>${maven-clean-plugin.version}</version>
-        <configuration>
-          <filesets>
-            <fileset>
-              <directory>${tea.projectRootDir}/lib/jars</directory>
-              <includes>
-                <include>**/*.jar</include>
-              </includes>
-            </fileset>
-            <fileset>
-              <directory>${tea.projectRootDir}/doc/teadoc</directory>
-            </fileset>
-            <fileset>
-              <directory>${tea.projectRrotDir}/doc/javadoc/tsh</directory>
-            </fileset>
-          </filesets>
-        </configuration>
-      </plugin>
-
-
     </plugins>
 
 
@@ -222,71 +148,18 @@ Maven POM for the "tsh" sub-project.
     </profile>
 
 
-    <!-- Profile used to create Teadoc documentation. This profile is
-         activated when the "tea.release" system property has value
-         "true". This is tipically used when building a release. -->
-    <profile>
-      <id>tea-teadoc</id>
-      <activation>
-        <property>
-          <name>tea.release</name>
-          <value>true</value>
-        </property>
-      </activation>
-      <build>
-        <plugins>
-
-          <!-- Generate Teadoc documentation. -->
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>exec-maven-plugin</artifactId>
-            <version>${exec-maven-plugin.version}</version>
-            <executions>
-              <execution>
-                <id>run-teadoc</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>exec</goal>
-                </goals>
-                <configuration>
-                  <classpathScope>test</classpathScope>
-                  <executable>${java.home}/bin/java</executable>
-                  <arguments>
-                    <argument>-classpath</argument>
-                    <classpath/>
-                    <argument>com.pdmfc.tea.tools.tsh.TeaRunner</argument>
-                    <argument>--encoding=${project.build.sourceEncoding}</argument>
-                    <argument>--library=${tea.projectRootDir}/apps/teadoc/lib/tea</argument>
-                    <argument>--script=${tea.projectRootDir}/apps/teadoc/lib/tea/doc-html.tea</argument>
-                    <argument>--</argument>
-                    <argument>--header=${tea.teadoc.header}</argument>
-                    <argument>--footer=${tea.teadoc.footer}</argument>
-                    <argument>--bottom=${tea.teadoc.bottom}</argument>
-                    <argument>--doc-title=${tea.teadoc.doctitle}</argument>
-                    <argument>--window-title=${tea.teadoc.windowtitle}</argument>
-                    <argument>--path-list=${tea.projectRootDir}/modules/runtime/src/main</argument>
-                    <argument>--output-dir=${tea.projectRootDir}/doc/teadoc</argument>
-                  </arguments>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-
-        </plugins>
-      </build>
-    </profile>
-
-
     <!-- Profile used to create Javadoc documentation. This profile is
          activated when the "tea.release" system property has value
          "true". This is tipically used when building a release. -->
     <profile>
       <id>tea-javadoc</id>
       <activation>
+        <!-- Disabled until we decide if docs are really to be included.
         <property>
           <name>tea.release</name>
           <value>true</value>
         </property>
+        -->
       </activation>
       <build>
         <plugins>

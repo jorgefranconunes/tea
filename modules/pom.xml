@@ -15,7 +15,7 @@ performing a build.
 
   <groupId>com.pdmfc.tea</groupId>
   <artifactId>tea-main</artifactId>
-  <version>4.0.0-beta10-SNAPSHOT</version>
+  <version>4.0.0b10-SNAPSHOT</version>
 
 
 
@@ -102,6 +102,13 @@ performing a build.
 
       <plugins>
 
+        <!-- -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>${maven-clean-plugin.version}</version>
+        </plugin>
+
         <!-- Compiler configuration. -->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -182,6 +189,18 @@ performing a build.
 
 
 
+  <distributionManagement>
+    <site>
+      <id>tea.mavensite</id>
+      <name>Tea Project Maven Reports</name>
+      <url>file:///${tea.mavensite}</url>
+    </site>
+  </distributionManagement>
+
+
+
+
+
   <!-- -->
   <profiles>
 
@@ -195,13 +214,30 @@ performing a build.
           <name>tea.mavensite</name>
         </property>
       </activation>
-      <distributionManagement>
-	<site>
-	  <id>tea.mavensite</id>
-	  <name>Tea Project Maven Reports</name>
-	  <url>file:///${tea.mavensite}</url>
-	</site>
-      </distributionManagement>
+
+      <properties>
+        <skipTests>false</skipTests>
+      </properties>
+
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-site-plugin</artifactId>
+            <version>${maven-site-plugin.version}</version>
+            <executions>
+              <execution>
+                <id>deploy-maven-site</id>
+                <goals>
+                  <goal>deploy</goal>
+                </goals>
+                <phase>site</phase>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+
     </profile>
 
   </profiles>
@@ -257,19 +293,18 @@ performing a build.
           <use>true</use>
           <quiet>true</quiet>
           <failOnError>false</failOnError>
+          <aggregate>false</aggregate>
         </configuration>
         <reportSets>
           <reportSet>
+            <id>javadoc-default</id>
             <reports>
-              <report>aggregate</report>
               <report>javadoc</report>
             </reports>
           </reportSet>
         </reportSets>
       </plugin>
 
-      <!-- The JXR reporting plugin must come before the PMD and
-           Surefire reporting plugins. -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jxr-plugin</artifactId>
@@ -295,6 +330,9 @@ performing a build.
         </configuration>
       </plugin>
 
+      <!--
+         See http://maven.apache.org/plugins/maven-checkstyle-plugin/
+         for documentation. -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
